@@ -1,6 +1,11 @@
 import * as S from "./styled";
 import {Logo} from "../../components/Logo";
 import {Container} from "../../components/Container";
+import {PhoneIcon} from "../../components/Phone";
+import {FlexBox} from "../../components/FlexBox";
+import {InstagramIcon} from "../../components/Instagram";
+import {TelegramIcon} from "../../components/Telegram";
+
 
 export const Footer = () => {
     return (
@@ -11,7 +16,42 @@ export const Footer = () => {
                         <Logo/>
                     </S.Logo>
                     <S.List>
-                        list...
+                       <FlexBox style={{
+                           marginBottom: "15px"
+                       }} alignItems={"center"}>
+                           <PhoneIcon/>
+                           <S.PhoneLabel>
+                               Номера
+                           </S.PhoneLabel>
+                       </FlexBox>
+                        <FlexBox flexDirection={"column"}>
+                            <S.Phone href={"tel:+380933662869"}>
+                                +38 (093) 366 28 69
+                            </S.Phone>
+                            <S.Phone href={"tel:+380933662869"}>
+                                +38 (093) 366 28 69
+                            </S.Phone>
+                        </FlexBox>
+
+
+                        <FlexBox alignItems={"center"} >
+                            <InstagramIcon/>
+                            <S.InstagramLink>
+                                emoji_sushi
+                            </S.InstagramLink>
+                        </FlexBox>
+
+
+                        <FlexBox alignItems={"center"}>
+                            <TelegramIcon/>
+                            <S.TelegramText>
+                                Telegram
+                            </S.TelegramText>
+
+                        </FlexBox>
+
+
+
                     </S.List>
                 </S.Left>
                 <S.Right>
