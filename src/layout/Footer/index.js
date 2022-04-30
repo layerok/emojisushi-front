@@ -6,7 +6,17 @@ export const Footer = () => {
     return (
         <S.Footer>
             <Container>
-                <Logo/>
+                <S.Left>
+                    <S.Logo>
+                        <Logo/>
+                    </S.Logo>
+                    <S.List>
+                        list...
+                    </S.List>
+                </S.Left>
+                <S.Right>
+
+                </S.Right>
             </Container>
         </S.Footer>
     )
