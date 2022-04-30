@@ -1,5 +1,6 @@
 import {Header} from "../Header";
 import {Container} from "../../components/Container";
+import {Footer} from "../Footer";
 
 export const Layout = ({children}) => {
     return (
@@ -10,6 +11,7 @@ export const Layout = ({children}) => {
                     {children}
                 </Container>
             </main>
+            <Footer/>
         </>
     )
 }

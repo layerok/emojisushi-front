@@ -1,6 +1,6 @@
 import { LocationPicker } from "../../components/LocationPicker";
 import * as S from "./styled";
-import {Logo} from "../../components/Logo";
+import { Logo } from "../../components/Logo";
 
 
 export const Header = () => {
