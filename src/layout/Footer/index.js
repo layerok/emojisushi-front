@@ -6,6 +6,9 @@ import {FlexBox} from "../../components/FlexBox";
 import {InstagramIcon} from "../../components/icons/InstagramIcon";
 import {TelegramIcon} from "../../components/icons/TelegramIcon";
 import {Map, StaticMap} from "../../components/StaticMap";
+import {SvgIcon} from "../../components/svg/SvgIcon";
+import {MapPinSvg} from "../../components/svg/MapPinSvg";
+import {TelegramSvg} from "../../components/svg/TelegramSvg";
 export const Footer = () => {
     return (
         <S.Footer>
@@ -48,8 +51,6 @@ export const Footer = () => {
                             </S.TelegramText>
 
                         </FlexBox>
-
-
 
                     </S.List>
                 </S.Left>

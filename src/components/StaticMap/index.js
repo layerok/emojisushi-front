@@ -1,11 +1,14 @@
 import MapSrc from "../../assets/img/odessa-map.png";
-import {MapPinIcon} from "../icons/MapPinIcon";
+import {SvgIcon} from "../svg/SvgIcon";
+import {MapPinSvg} from "../svg/MapPinSvg";
 
 export const StaticMap = () => {
     return (
         <div>
             <img src={MapSrc} alt="map"/>
-            <MapPinIcon color={"white"}/>
+            <SvgIcon color={"white"}>
+                <MapPinSvg/>
+            </SvgIcon>
         </div>
     )
 }
