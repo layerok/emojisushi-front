@@ -1,10 +1,14 @@
+import * as S from "./styled";
 
-export const SvgIcon = ({children,color="white"}) => {
+
+export const SvgIcon = ({children,color="white", width,style={}}) => {
     return (
-        <span style={{
-            color
+        <S.Parent style={{
+            color,
+            width,
+            ...style
         }}>
             {children}
-        </span>
+        </S.Parent>
     )
 }

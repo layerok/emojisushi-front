@@ -59,6 +59,7 @@ export const Footer = () => {
                         marginLeft: "237px",
                         marginTop: "52px"
                     }}>
+
                         <StaticMap/>
 
                     </FlexBox>
