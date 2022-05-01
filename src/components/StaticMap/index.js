@@ -13,11 +13,6 @@ export const StaticMap = () => {
                     </SvgIcon>
                 </SvgButton>
             </OdessaMap>
-
-
-
-
-
         </div>
     )
 }

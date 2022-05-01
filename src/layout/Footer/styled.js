@@ -23,7 +23,7 @@ const Right = styled.div`
 `;
 
 const Logo = styled.div`
-width: 160px;
+  width: 160px;
   margin-right: 220px;
 `;
 
