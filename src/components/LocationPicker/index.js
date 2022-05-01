@@ -36,7 +36,7 @@ export const LocationPicker = () => {
         ]);
 
     useEffect(() => {
-        if (!refs.reference.current || !refs.floating.current) {
+        if (!open || !refs.reference.current || !refs.floating.current) {
             return;
         }
 
@@ -46,7 +46,7 @@ export const LocationPicker = () => {
             refs.floating.current,
             update
         );
-    }, [refs.reference, refs.floating, update]);
+    }, [refs.reference, refs.floating, update, open]);
 
     return (
         <>
