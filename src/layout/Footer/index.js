@@ -5,6 +5,7 @@ import {PhoneIcon} from "../../components/Phone";
 import {FlexBox} from "../../components/FlexBox";
 import {InstagramIcon} from "../../components/Instagram";
 import {TelegramIcon} from "../../components/Telegram";
+import {Map, StaticMap} from "../../components/StaticMap";
 
 
 export const Footer = () => {
@@ -55,6 +56,15 @@ export const Footer = () => {
                     </S.List>
                 </S.Left>
                 <S.Right>
+                    <FlexBox style={{
+                        marginLeft: "237px",
+                        marginTop: "52px"
+                    }}>
+                        <StaticMap/>
+
+                    </FlexBox>
+
+
 
                 </S.Right>
             </Container>
