@@ -11,6 +11,10 @@ const Background = styled.div`
     
 `;
 
+const MapText = styled.div`
+  margin-left: 10px;
+`;
 export {
-    Background
+    Background,
+    MapText
 }

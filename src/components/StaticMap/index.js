@@ -1,23 +1,49 @@
+import * as S from "./styled";
 import {SvgIcon} from "../svg/SvgIcon";
 import {MapPinSvg} from "../svg/MapPinSvg";
 import {SvgButton} from "../SvgButton";
-import {OdessaMap} from "../OdessaMap";
 
-export const StaticMap = () => {
+export const StaticMap = (
+    {
+        width,
+        height,
+        topLeft,
+        topRight,
+        bottomRight,
+        bottomLeft,
+        style
+    }) => {
     return (
-        <div>
-            <OdessaMap width={"350px"} height={"187px"} topLeft={"10px"} topRight={"10px"}>
-                <SvgButton>
-                    <SvgIcon color={"black"}>
-                        <MapPinSvg/>
-                    </SvgIcon>
-                </SvgButton>
-            </OdessaMap>
+        <S.Background style={
+            {
+                width,
+                height,
+                borderTopRightRadius: topRight,
+                borderTopLeftRadius: topLeft,
+                borderBottomLeftRadius: bottomLeft,
+                borderBottomRightRadius: bottomRight,
+                ...style
 
+            }
+        }>
 
+            <SvgButton>
+                <SvgIcon color={"black"}>
+                    <MapPinSvg/>
+                </SvgIcon>
+            </SvgButton>
+            <S.MapText>
+                Смотреть на <br/>карте
+            </S.MapText>
 
+        </S.Background>
 
-
-        </div>
     )
+}
+
+StaticMap.defaultProps = {
+    topLeft: "0",
+    topRight: "0",
+    bottomRight: "0",
+    bottomLeft: "0",
 }
