@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import {Container as ContainerBase} from "../../components/Container";
+
 import {Link as LinkBase} from "react-router-dom";
+import media from "../../common/custom-media";
 
 const Header = styled.header`
   background: #171717;
@@ -10,12 +11,6 @@ const Header = styled.header`
   align-items: center;
 `
 
-const Container = styled(ContainerBase)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 const Link = styled(LinkBase)`
   margin-right: 95px;
 `;
@@ -24,9 +19,24 @@ const Left = styled.div`
   display: flex;
 `;
 
+const Right = styled.div`
+`;
+
+const PcHeaderItem = styled.div`
+  margin-right: 60px;
+  display:flex;
+  align-items: center;
+  
+  ${media.lessThan("pc")`
+        display: none;
+    `
+  }
+`
+
 export {
     Header,
-    Container,
     Left,
-    Link
+    Right,
+    Link,
+    PcHeaderItem
 }

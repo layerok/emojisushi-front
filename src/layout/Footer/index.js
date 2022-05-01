@@ -1,13 +1,11 @@
 import * as S from "./styled";
 import {Logo} from "../../components/Logo";
 import {Container} from "../../components/Container";
-import {PhoneIcon} from "../../components/Phone";
+import {PhoneIcon} from "../../components/icons/PhoneIcon";
 import {FlexBox} from "../../components/FlexBox";
-import {InstagramIcon} from "../../components/Instagram";
-import {TelegramIcon} from "../../components/Telegram";
+import {InstagramIcon} from "../../components/icons/InstagramIcon";
+import {TelegramIcon} from "../../components/icons/TelegramIcon";
 import {Map, StaticMap} from "../../components/StaticMap";
-
-
 export const Footer = () => {
     return (
         <S.Footer>

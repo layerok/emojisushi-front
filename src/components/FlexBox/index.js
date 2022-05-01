@@ -1,10 +1,9 @@
-
-
 const FlexBox = (
     {
         children,
         alignItems = "start",
         flexDirection = "row",
+        justifyContent = "start",
         style = {}
     }
 ) => {
@@ -14,6 +13,7 @@ const FlexBox = (
             display: "flex",
             alignItems,
             flexDirection,
+            justifyContent,
             ...style
         }}>{children}</div>
     )
