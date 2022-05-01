@@ -1,5 +1,5 @@
 import MapSrc from "../../assets/img/odessa-map.png";
-import {MapPinIcon} from "../MapPinIcon";
+import {MapPinIcon} from "../icons/MapPinIcon";
 
 export const StaticMap = () => {
     return (

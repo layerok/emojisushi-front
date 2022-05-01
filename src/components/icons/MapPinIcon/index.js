@@ -1,5 +1,5 @@
-import {MapPinSvg} from "../MapPinSvg";
-import {SvgIcon} from "../SvgIcon";
+import {MapPinSvg} from "../../svg/MapPinSvg";
+import {SvgIcon} from "../../svg/SvgIcon";
 
 
 export const MapPinIcon = ({color="white"}) => {
