@@ -20,6 +20,8 @@ const Left = styled.div`
 `;
 
 const Right = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
 const PcHeaderItem = styled.div`
@@ -33,10 +35,15 @@ const PcHeaderItem = styled.div`
   }
 `
 
+const BurgerBtn = styled.button`
+  margin-left: 30px;
+`;
+
 export {
     Header,
     Left,
     Right,
     Link,
-    PcHeaderItem
+    PcHeaderItem,
+    BurgerBtn
 }

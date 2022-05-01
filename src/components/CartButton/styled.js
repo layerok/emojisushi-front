@@ -8,8 +8,6 @@ const CartButton = styled.button`
   border-radius: 10px;
   color: black;
   padding: 0 24px;
-  border: none;
-  cursor: pointer;
   display: inline-block;
 `;
 

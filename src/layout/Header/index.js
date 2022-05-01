@@ -28,10 +28,11 @@ export const Header = () => {
                     </S.Left>
                     <S.Right>
                         <CartButton/>
-                        <BurgerIcon/>
+                        <S.BurgerBtn>
+                            <BurgerIcon/>
+                        </S.BurgerBtn>
                     </S.Right>
                 </FlexBox>
-
             </Container>
         </S.Header>
     )
