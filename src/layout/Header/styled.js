@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 import {Link as LinkBase} from "react-router-dom";
+import media from "../../common/custom-media";
 
 const Header = styled.header`
   background: #171717;
@@ -21,10 +22,15 @@ const Left = styled.div`
 const Right = styled.div`
 `;
 
-const HeaderItem = styled.div`
+const PcHeaderItem = styled.div`
   margin-right: 60px;
   display:flex;
   align-items: center;
+  
+  ${media.lessThan("pc")`
+        display: none;
+    `
+  }
 `
 
 export {
@@ -32,5 +38,5 @@ export {
     Left,
     Right,
     Link,
-    HeaderItem
+    PcHeaderItem
 }

@@ -1,4 +1,4 @@
-import BagIconSrc from "../../assets/ui/icons/bag.svg";
+import BagIconSrc from "../../../assets/ui/icons/bag.svg";
 
 export const BagIcon = () => {
     return (

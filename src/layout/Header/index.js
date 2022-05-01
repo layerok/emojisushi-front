@@ -4,6 +4,7 @@ import { Logo } from "../../components/Logo";
 import {Container } from "../../components/Container";
 import {FlexBox} from "../../components/FlexBox";
 import {CartButton} from "../../components/CartButton";
+import {BurgerIcon} from "../../components/icons/BurgerIcon";
 
 
 export const Header = () => {
@@ -15,18 +16,19 @@ export const Header = () => {
                         <S.Link to={"/"}>
                             <Logo/>
                         </S.Link>
-                        <S.HeaderItem>
+                        <S.PcHeaderItem>
                             <LocationPicker/>
-                        </S.HeaderItem>
-                        <S.HeaderItem>
+                        </S.PcHeaderItem>
+                        <S.PcHeaderItem>
                             Контакты
-                        </S.HeaderItem>
-                        <S.HeaderItem>
+                        </S.PcHeaderItem>
+                        <S.PcHeaderItem>
                             Доставка и оплата
-                        </S.HeaderItem>
+                        </S.PcHeaderItem>
                     </S.Left>
                     <S.Right>
                         <CartButton/>
+                        <BurgerIcon/>
                     </S.Right>
                 </FlexBox>
 

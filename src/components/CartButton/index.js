@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import {BagIcon} from "../BagIcon";
+import {BagIcon} from "../icons/BagIcon";
 import {FlexBox} from "../FlexBox";
 
 export const CartButton = () => {
