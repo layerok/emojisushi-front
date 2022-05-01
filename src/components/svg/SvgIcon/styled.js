@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 
 const Parent = styled.span`
-  display: inline-block;
+  display: flex;
   svg{
     height: auto;
     width: 100%;
