@@ -4,7 +4,7 @@ export const FlexBox = (
         alignItems,
         flexDirection,
         justifyContent,
-        style = {}
+        style
     }
 ) => {
 
@@ -23,4 +23,5 @@ FlexBox.defaultProps = {
     alignItems: "start",
     flexDirection: "row",
     justifyContent: "start",
+    style: {}
 }
