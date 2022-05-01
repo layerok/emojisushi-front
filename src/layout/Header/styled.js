@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Container as ContainerBase} from "../../components/Container";
+
 import {Link as LinkBase} from "react-router-dom";
 
 const Header = styled.header`
@@ -10,12 +10,6 @@ const Header = styled.header`
   align-items: center;
 `
 
-const Container = styled(ContainerBase)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 const Link = styled(LinkBase)`
   margin-right: 95px;
 `;
@@ -24,9 +18,19 @@ const Left = styled.div`
   display: flex;
 `;
 
+const Right = styled.div`
+`;
+
+const HeaderItem = styled.div`
+  margin-right: 60px;
+  display:flex;
+  align-items: center;
+`
+
 export {
     Header,
-    Container,
     Left,
-    Link
+    Right,
+    Link,
+    HeaderItem
 }

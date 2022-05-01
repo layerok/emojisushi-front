@@ -1,10 +1,10 @@
 import * as S from "./styled";
 import {Logo} from "../../components/Logo";
 import {Container} from "../../components/Container";
-import {PhoneIcon} from "../../components/Phone";
+import {PhoneIcon} from "../../components/PhoneIcon";
 import {FlexBox} from "../../components/FlexBox";
-import {InstagramIcon} from "../../components/Instagram";
-import {TelegramIcon} from "../../components/Telegram";
+import {InstagramIcon} from "../../components/InstagramIcon";
+import {TelegramIcon} from "../../components/TelegramIcon";
 
 
 export const Footer = () => {

@@ -7,7 +7,6 @@ import {
     autoUpdate,
     useInteractions,
     useClick,
-    useHover,
     useFocus,
     useRole,
     shift,
