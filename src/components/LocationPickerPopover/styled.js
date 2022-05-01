@@ -1,9 +1,10 @@
 import styled from "styled-components";
 
-const Container = styled.div`
+const Container = styled.button`
   display: flex;
   align-items: center;
   cursor: pointer;
+  color: white;
 `;
 
 const Icon = styled.div`

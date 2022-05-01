@@ -1,9 +1,9 @@
-const FlexBox = (
+export const FlexBox = (
     {
         children,
-        alignItems = "start",
-        flexDirection = "row",
-        justifyContent = "start",
+        alignItems,
+        flexDirection,
+        justifyContent,
         style = {}
     }
 ) => {
@@ -19,6 +19,8 @@ const FlexBox = (
     )
 }
 
-export {
-    FlexBox
+FlexBox.defaultProps = {
+    alignItems: "start",
+    flexDirection: "row",
+    justifyContent: "start",
 }

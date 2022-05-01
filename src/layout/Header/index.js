@@ -1,4 +1,4 @@
-import { LocationPicker } from "../../components/LocationPicker";
+import { LocationPickerPopover } from "../../components/LocationPickerPopover";
 import * as S from "./styled";
 import { Logo } from "../../components/Logo";
 import {Container } from "../../components/Container";
@@ -18,7 +18,7 @@ export const Header = () => {
                             <Logo/>
                         </S.Link>
                         <S.PcHeaderItem>
-                            <LocationPicker/>
+                            <LocationPickerPopover/>
                         </S.PcHeaderItem>
                         <S.PcHeaderItem>
                             Контакты

@@ -5,10 +5,10 @@ export const OdessaMap = (
         children,
         width,
         height,
-        topLeft="0",
-        topRight="0",
-        bottomRight="0",
-        bottomLeft="0",
+        topLeft,
+        topRight,
+        bottomRight,
+        bottomLeft,
         style
     }) => {
     return (
@@ -29,4 +29,11 @@ export const OdessaMap = (
         </S.Background>
 
     )
+}
+
+OdessaMap.defaultProps = {
+    topLeft: "0",
+    topRight: "0",
+    bottomRight: "0",
+    bottomLeft: "0",
 }
