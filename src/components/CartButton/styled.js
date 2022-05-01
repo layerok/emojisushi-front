@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import media from "../../common/custom-media";
 
 const CartButton = styled.button`
   min-width: 170px;

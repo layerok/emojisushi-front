@@ -35,8 +35,23 @@ const PcHeaderItem = styled.div`
   }
 `
 
+const CartBtn = styled.div`
+  ${media.lessThan("tablet")`
+    display: none;
+  `}
+`;
+
+const TinyCartBtn = styled.div`
+  ${media.greaterThan("tablet")`
+    display: none;
+  `}
+`;
+
 const BurgerBtn = styled.button`
   margin-left: 30px;
+  ${media.greaterThan("pc")`
+    display: none;
+  `}
 `;
 
 export {
@@ -45,5 +60,7 @@ export {
     Right,
     Link,
     PcHeaderItem,
-    BurgerBtn
+    BurgerBtn,
+    CartBtn,
+    TinyCartBtn
 }

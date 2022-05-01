@@ -5,6 +5,7 @@ import {Container } from "../../components/Container";
 import {FlexBox} from "../../components/FlexBox";
 import {CartButton} from "../../components/CartButton";
 import {BurgerIcon} from "../../components/icons/BurgerIcon";
+import {TinyCartButton} from "../../components/TinyCartButton";
 
 
 export const Header = () => {
@@ -27,7 +28,14 @@ export const Header = () => {
                         </S.PcHeaderItem>
                     </S.Left>
                     <S.Right>
-                        <CartButton/>
+
+                        <S.CartBtn>
+                            <CartButton/>
+                        </S.CartBtn>
+                        <S.TinyCartBtn>
+                            <TinyCartButton/>
+                        </S.TinyCartBtn>
+
                         <S.BurgerBtn>
                             <BurgerIcon/>
                         </S.BurgerBtn>
