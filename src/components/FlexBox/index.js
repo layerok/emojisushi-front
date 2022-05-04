@@ -1,36 +1,23 @@
-import styled from "styled-components";
-
-const Flex = styled.div`
-  display: flex;
-  align-items: ${props => props.alignItems};
-  justify-content: ${props => props.justifyContent};
-  flex-direction: ${props => props.flexDirection};
-  
-`
+import * as S from "./styled";
 
 export const FlexBox = (
     {
-        alignItems,
-        flexDirection,
-        justifyContent,
+        alignItems = "start",
+        flexDirection = "row",
+        justifyContent = "start",
+        responsive = [],
         children,
         ...rest
     }
 ) => {
 
     return (
-        <Flex style={{
-            alignItems,
-            flexDirection,
-            justifyContent,
-            ...rest
-        }}>{children}</Flex>
+        <S.Flex
+            alignItems={alignItems}
+            flexDirection={flexDirection}
+            justifyContent={justifyContent}
+            responsive={responsive}
+            {...rest}
+        >{children}</S.Flex>
     )
-}
-
-FlexBox.defaultProps = {
-    alignItems: "start",
-    flexDirection: "row",
-    justifyContent: "start",
-    style: {}
 }
