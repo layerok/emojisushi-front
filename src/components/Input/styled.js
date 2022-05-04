@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {theme} from "styled-tools";
 
 const Input = styled.input`
   background: #1C1C1C;
@@ -10,19 +11,19 @@ const Input = styled.input`
   color: white;
 
   ::-webkit-input-placeholder {
-    color: ${props => props.theme.input.placeholder};
+    color: ${theme('input.placeholder', '#3F3F3F')};
   }
 
   ::-moz-placeholder {
-    color: ${props => props.theme.input.placeholder};
+    color: ${theme('input.placeholder', '#3F3F3F')};
   }
 
   :-ms-input-placeholder {
-    color: ${props => props.theme.input.placeholder};
+    color: ${theme('input.placeholder', '#3F3F3F')};
   }
 
   :-moz-placeholder {
-    color: ${props => props.theme.input.placeholder};
+    color: ${theme('input.placeholder', '#3F3F3F')};
   }
 `;
 
