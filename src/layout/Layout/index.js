@@ -4,21 +4,22 @@ import {Footer} from "../Footer";
 import {Banner} from "../Banner";
 import {Sidebar} from "../Sidebar";
 import * as S from "./styled";
-import {FlexBox} from "../../components/FlexBox";
 
 export const Layout = ({children, withBanner = false, withSidebar= true}) => {
     return (
         <S.Layout>
             <Header/>
-            <main>
+            <S.Main>
                 <Container>
-                    {withBanner && <Banner/>}
-                    <FlexBox>
+                    <S.Grid>
+                        {withBanner && <Banner/>}
                         {withSidebar && <Sidebar/>}
-                        {children}
-                    </FlexBox>
+                        <S.Content>
+                            {children}
+                        </S.Content>
+                    </S.Grid>
                 </Container>
-            </main>
+            </S.Main>
             <Footer/>
         </S.Layout>
     )
