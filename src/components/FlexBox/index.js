@@ -1,21 +1,30 @@
+import styled from "styled-components";
+
+const Flex = styled.div`
+  display: flex;
+  align-items: ${props => props.alignItems};
+  justify-content: ${props => props.justifyContent};
+  flex-direction: ${props => props.flexDirection};
+  
+`
+
 export const FlexBox = (
     {
-        children,
         alignItems,
         flexDirection,
         justifyContent,
-        style
+        children,
+        ...rest
     }
 ) => {
 
     return (
-        <div style={{
-            display: "flex",
+        <Flex style={{
             alignItems,
             flexDirection,
             justifyContent,
-            ...style
-        }}>{children}</div>
+            ...rest
+        }}>{children}</Flex>
     )
 }
 

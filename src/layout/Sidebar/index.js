@@ -1,9 +1,11 @@
-import {AutoComplete} from "../../components/AutoComplete";
 import * as S from "./styled";
+import {SearchInput} from "../../components/SearchInput";
+
 export const Sidebar = () => {
     return (
         <S.Sidebar>
-            <AutoComplete/>
+            <SearchInput/>
+
         </S.Sidebar>
     );
 }
