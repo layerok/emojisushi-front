@@ -56,15 +56,8 @@ export const Footer = () => {
                 </S.Left>
                 <S.Right>
                     <S.StaticMap>
-
                         <StaticMap width={"100%"} height={"100%"} topLeft={"10px"} topRight={"10px"}/>
-
-
-
                     </S.StaticMap>
-
-
-
                 </S.Right>
             </Container>
         </S.Footer>
