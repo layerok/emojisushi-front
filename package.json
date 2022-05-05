@@ -5,6 +5,9 @@
   "dependencies": {
     "@floating-ui/react-dom": "^0.6.3",
     "@floating-ui/react-dom-interactions": "^0.4.0",
+    "@huse/action-pending": "^1.1.2",
+    "@huse/boolean": "^1.1.2",
+    "@huse/debug": "^1.1.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
     "@testing-library/user-event": "^13.5.0",
