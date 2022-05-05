@@ -1,4 +1,4 @@
-import React, { cloneElement, useEffect, useState } from "react";
+import React, { cloneElement, useEffect } from "react";
 import {
     offset,
     flip,
@@ -13,10 +13,13 @@ import {
     FloatingFocusManager
 } from "@floating-ui/react-dom-interactions";
 
+import {
+    useToggle,
+} from "@huse/boolean";
+
 
 export const Popover = ({ children, render, placement }) => {
-    const [open, setOpen] = useState(false);
-
+    const [open, setOpen] = useToggle()
     const {
         x,
         y,
