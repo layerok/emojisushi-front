@@ -4,6 +4,7 @@ import {Home} from "./pages/Home";
 import 'normalize.css';
 import {theme} from "./theme";
 import {ThemeProvider} from "styled-components";
+import {ThankYou} from "./pages/ThankYou";
 
 function App() {
   return (
@@ -11,6 +12,11 @@ function App() {
           <div className="App">
               <Routes>
                   <Route path="/" element={<Home />} />
+              </Routes>
+          </div>
+          <div className="App">
+              <Routes>
+                  <Route path="/thankyou" element={<ThankYou />} />
               </Routes>
           </div>
       </ThemeProvider>
