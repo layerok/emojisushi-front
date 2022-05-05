@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import media from "../../common/custom-media";
+import {FlexBox as FlexBoxBase} from "../../components/FlexBox";
 
 const Layout = styled.div`
   display: flex;
@@ -13,36 +14,25 @@ const Main = styled.main`
   flex-grow: 1;
 `
 
-const Grid = styled.div`
-  display: grid;
-  margin-top: 40px;
-  ${media.lessThan('tablet')`
-    margin-top: 26px;
-  `}
-  grid-template-areas: 
-  "banner banner"
-  "sidebar content";
-  column-gap: 30px;
-  row-gap: 50px;
-  grid-template-columns: 255px 1fr;
-
-  ${media.lessThan('pc')`
-    grid-template-areas: 
-      "banner banner"
-      "sidebar sidebar"
-      "content content";
-    column-gap: 0px;
-    row-gap: 30px;
-  `}
-`;
-
 const Content = styled.div`
-  grid-area: content;
+  width: 100%;
+`
+
+const FlexBox = styled(FlexBoxBase)`
+    margin-top: 50px;
+    ${media.lessThan('pc')`
+        flex-direction: column;
+        margin-top: 60px;
+    `}
+
+    ${media.lessThan('tablet')`
+        margin-top: 40px;
+    `}
 `
 
 export {
     Layout,
     Main,
-    Grid,
-    Content
+    Content,
+    FlexBox
 }

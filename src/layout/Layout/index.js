@@ -4,6 +4,7 @@ import {Footer} from "../Footer";
 import {Banner} from "../Banner";
 import {Sidebar} from "../Sidebar";
 import * as S from "./styled";
+import {FlexBox} from "../../components/FlexBox";
 
 export const Layout = ({children, withBanner = false, withSidebar= true}) => {
     return (
@@ -11,13 +12,14 @@ export const Layout = ({children, withBanner = false, withSidebar= true}) => {
             <Header/>
             <S.Main>
                 <Container>
-                    <S.Grid>
                         {withBanner && <Banner/>}
-                        {withSidebar && <Sidebar/>}
-                        <S.Content>
-                            {children}
-                        </S.Content>
-                    </S.Grid>
+                        <S.FlexBox>
+                            {withSidebar && <Sidebar/>}
+                            <S.Content>
+                                {children}
+                            </S.Content>
+                        </S.FlexBox>
+
                 </Container>
             </S.Main>
             <Footer/>

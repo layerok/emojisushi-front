@@ -1,5 +1,4 @@
 import * as S from "./styled";
-import {SearchInput} from "../../components/SearchInput";
 import {useState} from "react";
 import categoriesJSON from "../../common/mock/data/categories.json";
 
@@ -10,7 +9,7 @@ export const Sidebar = () => {
     return (
         <S.Sidebar>
             <div>
-                <SearchInput/>
+                <S.SearchInput/>
             </div>
             <nav>
                 <S.Categories>

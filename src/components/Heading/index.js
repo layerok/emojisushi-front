@@ -2,11 +2,10 @@ import * as S from "./styled";
 
 export const Heading = ({children,...style}) => {
     return (
-        <S.text {
+        <S.Text {
             ...style
                 }>
             {children}
-        </S.text>
-
+        </S.Text>
     )
 }
