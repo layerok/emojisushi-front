@@ -11,11 +11,14 @@ const Layout = styled.div`
 `;
 
 const Main = styled.main`
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
 `
 
 const Content = styled.div`
   width: 100%;
+  height: 100%;
 `
 
 const FlexBox = styled(FlexBoxBase)`
