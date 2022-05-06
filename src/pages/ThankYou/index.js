@@ -3,10 +3,16 @@ import {Heading} from "../../components/Heading";
 import {CheckCircleSvg} from "../../components/svg/CheckCircleSvg";
 import {SvgIcon} from "../../components/svg/SvgIcon";
 import * as S from "./styled";
+import styles from "./styles.module.css";
 
 export const ThankYou = () => {
     return (
-        <Layout withSidebar={false} withBanner={false}>
+        <Layout withSidebar={false}
+                withBanner={false}
+                mainProps={{
+                    className: styles.thankYouLayoutMain
+                }}
+        >
             <S.Center>
                 <Heading style={
                     {
@@ -14,10 +20,10 @@ export const ThankYou = () => {
                         fontWeight: "bold"
                     }
                 }>
-                   Благодарим Вас за заказ!
+                    Благодарим Вас за заказ!
                 </Heading>
                 <SvgIcon
-                    color={"yellow"}
+                    color={"#FFE600"}
                     style={{width: "60px"}
                     }>
                     <CheckCircleSvg />

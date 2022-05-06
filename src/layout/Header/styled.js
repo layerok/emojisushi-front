@@ -9,6 +9,7 @@ const Header = styled.header`
   height: 91px;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 `
 
 const Link = styled(LinkBase)`

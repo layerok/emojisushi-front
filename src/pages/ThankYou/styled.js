@@ -7,12 +7,14 @@ const Center = styled.div`
   justify-content: center;
   align-items: center;
   height: 100%;
+  margin-bottom: 50px;
 `;
 const Text = styled.p`
   width: 469px;
   font-size: 15px;
   text-align: center;
   margin-top: 0;
+  line-height: 22px;
   ${media.lessThan("pc")`
       width: 350px;
     `
@@ -23,6 +25,7 @@ const MediumText = styled.p`
   margin-top: 20px;
   margin-bottom: 10px;
   text-align: center;
+  line-height: 18px;
   ${media.lessThan("pc")`
       width: 350px;
     `

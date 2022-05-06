@@ -3,6 +3,7 @@ import media from "../../common/custom-media";
 
 const Footer = styled.footer`
   width: 100%;
+  flex-shrink: 0;
   background-color: #171717;
   height: 239px;
   

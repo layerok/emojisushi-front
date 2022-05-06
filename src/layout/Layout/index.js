@@ -4,14 +4,21 @@ import {Footer} from "../Footer";
 import {Banner} from "../Banner";
 import {Sidebar} from "../Sidebar";
 import * as S from "./styled";
-import {FlexBox} from "../../components/FlexBox";
 
-export const Layout = ({children, withBanner = false, withSidebar= true}) => {
+export const Layout = (
+    {
+        children,
+        withBanner = false,
+        withSidebar= true,
+        mainProps = {},
+        containerProps = {},
+        ...rest
+    }) => {
     return (
-        <S.Layout>
+        <S.Layout {...rest}>
             <Header/>
-            <S.Main>
-                <Container>
+            <S.Main {...mainProps}>
+                <Container {...containerProps}>
                         {withBanner && <Banner/>}
                         <S.FlexBox>
                             {withSidebar && <Sidebar/>}
