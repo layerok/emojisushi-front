@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {prop} from "styled-tools";
 import OdessaMapSrc from "../../assets/img/odessa-map.png";
 
 const Background = styled.div`
@@ -8,7 +9,14 @@ const Background = styled.div`
     align-items: center;
     background-position: center;
     overflow: hidden;
-    
+    width: ${prop("width")};
+    height: ${prop("height")};
+    border-top-right-radius: ${prop("topRight")};
+    border-top-left-radius: ${prop("topLeft")};
+    border-bottom-left-radius: ${prop("bottomLeft")};
+    border-bottom-right-radius: ${prop("bottomRight")};
+    ${(props) => props.generateResponsive("responsive")};
+  
 `;
 
 const MapText = styled.div`

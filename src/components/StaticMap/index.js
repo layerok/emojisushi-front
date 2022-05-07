@@ -2,8 +2,10 @@ import * as S from "./styled";
 import {SvgIcon} from "../svg/SvgIcon";
 import {MapPinSvg} from "../svg/MapPinSvg";
 import {SvgButton} from "../SvgButton";
+import {withResponsive} from "../../common/hoc/withResponsive";
 
-export const StaticMap = (
+
+const StaticMapRaw = (
     {
         width,
         height,
@@ -11,21 +13,23 @@ export const StaticMap = (
         topRight,
         bottomRight,
         bottomLeft,
+        generateResponsive,
+        responsive=[],
+        mobileFirst,
         style
     }) => {
     return (
-        <S.Background style={
-            {
-                width,
-                height,
-                borderTopRightRadius: topRight,
-                borderTopLeftRadius: topLeft,
-                borderBottomLeftRadius: bottomLeft,
-                borderBottomRightRadius: bottomRight,
-                ...style
-
-            }
-        }>
+        <S.Background style={style}
+                      width={width}
+                      height={height}
+                      topRight={topRight}
+                      topLeft={topLeft}
+                      bottomLeft={bottomLeft}
+                      bottomRight={bottomRight}
+                      generateResponsive={generateResponsive}
+                      responsive={responsive}
+                      mobileFirst={mobileFirst}
+        >
 
             <SvgButton>
                 <SvgIcon color={"black"}>
@@ -41,9 +45,12 @@ export const StaticMap = (
     )
 }
 
-StaticMap.defaultProps = {
-    topLeft: "0",
-    topRight: "0",
-    bottomRight: "0",
-    bottomLeft: "0",
+StaticMapRaw.defaultProps = {
+    topLeft: "15px",
+    topRight: "15px",
+    bottomRight: "15px",
+    bottomLeft: "15px",
 }
+
+export const StaticMap = withResponsive(StaticMapRaw);
+

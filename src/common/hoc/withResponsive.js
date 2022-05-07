@@ -14,6 +14,7 @@ const generateResponsive = (prop = 'responsive', resolve = defaultResolve) => (p
     if(!props[prop]) {
         return '';
     }
+
     return props[prop].reduce((acc, item) => {
         return acc + resolve(item, props)
     }, '')
@@ -21,7 +22,7 @@ const generateResponsive = (prop = 'responsive', resolve = defaultResolve) => (p
 
 export const withResponsive = (Component) => {
     return (props) => {
-        const generateResponsiveMemo = useCallback(() => generateResponsive,[]);
+        const generateResponsiveMemo = useCallback(() => generateResponsive(),[]);
         return <Component generateResponsive={generateResponsiveMemo} {...props}/>
     };
 }

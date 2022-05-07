@@ -7,7 +7,6 @@ const Center = styled.div`
   justify-content: center;
   align-items: center;
   height: 100%;
-  margin-bottom: 50px;
 `;
 const Text = styled.p`
   width: 469px;

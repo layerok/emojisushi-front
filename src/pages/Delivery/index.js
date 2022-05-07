@@ -2,35 +2,31 @@ import {Layout} from "../../layout/Layout";
 import {Heading} from "../../components/Heading";
 import {StaticMap} from "../../components/StaticMap";
 import * as S from "./styled";
-import {FlexBox} from "../../components/FlexBox";
-
+import {breakpoints} from "../../common/custom-media";
 
 export const Delivery = () => {
     return (
         <Layout withBanner={false}
                 withSidebar={false}
         >
-            <FlexBox>
+            <S.FlexContainer>
                 <S.Left>
-                    <Heading style={
-                        {
-                            fontWeight: "Semi bold",
-                            marginBottom: "30px"
-                        }
-                    }>
-                        Доставка и оплата
-                    </Heading>
+                    <S.HeadingWrapper>
+                        <Heading style={
+                            {
+                                fontWeight: "600"
+                            }
+                        }>
+                            Доставка и оплата
+                        </Heading>
+                    </S.HeadingWrapper>
+
+
+                    <S.AdresText>
+                        Наш адрес: г. Одесса, улица Базарная 69
+                    </S.AdresText>
 
                     <S.DeliveryText>
-                        Наш адрес: г. Одесса, улица Базарная 69
-                    </S.DeliveryText>
-
-                    <S.DeliveryText style={
-                        {
-                            marginTop: "10px",
-                            width: "540px"
-                        }
-                    }>
                         Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст...
                         Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст... Какой-нибудь текст...
                     </S.DeliveryText>
@@ -38,15 +34,11 @@ export const Delivery = () => {
 
 
                 <S.Right>
-                    <StaticMap style={
-                        {
-                            width: "540px",
-                            height: "350px",
-                            borderRadius: "15px"
-                        }
-                    }/>
+                    <StaticMap width={"100%"}
+                               height={"350px"}
+                    />
                 </S.Right>
-            </FlexBox>
+            </S.FlexContainer>
 
 
         </Layout>
