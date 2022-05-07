@@ -5,7 +5,7 @@ import {PhoneIcon} from "../../components/icons/PhoneIcon";
 import {FlexBox} from "../../components/FlexBox";
 import {InstagramIcon} from "../../components/icons/InstagramIcon";
 import {TelegramIcon} from "../../components/icons/TelegramIcon";
-import { StaticMap} from "../../components/StaticMap";
+import {StaticMap} from "../../components/StaticMap";
 
 export const Footer = () => {
     return (
