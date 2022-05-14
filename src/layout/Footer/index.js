@@ -43,8 +43,9 @@ export const Footer = () => {
                             </S.InstagramLink>
                         </FlexBox>
 
-
-                        <FlexBox alignItems={"center"}>
+                        <FlexBox style={{
+                            marginTop: "10px"
+                        }} alignItems={"center"}>
                             <TelegramIcon/>
                             <S.TelegramText>
                                 Telegram

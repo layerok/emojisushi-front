@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import {theme} from "styled-tools";
 import media from "../../common/custom-media";
 import {SearchInput as SearchInputBase} from "../../components/SearchInput";
 
@@ -13,10 +12,14 @@ const Sidebar = styled.div`
 `
 
 const SearchInput = styled(SearchInputBase)`
+  width: 100%;
+  margin-bottom: 30px;
  ${media.greaterThan('tablet')`
     width: 255px;
+    margin-bottom: 0px;
  `}
 `
+
 
 export {
     Sidebar,
