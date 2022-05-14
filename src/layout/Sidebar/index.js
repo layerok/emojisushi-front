@@ -1,27 +1,23 @@
 import * as S from "./styled";
-import {useState} from "react";
-import categoriesJSON from "../../common/mock/data/categories.json";
+import {VerticalMenu} from "../VerticalMenu";
+import {useBreakpoint} from "../../common/hooks/useBreakpoint";
+import {HorizontalMenu} from "../HorizontalMenu";
+
 
 export const Sidebar = () => {
 
-    const [categories, ] = useState(categoriesJSON)
+    const breakpoint = useBreakpoint();
 
     return (
         <S.Sidebar>
             <div>
                 <S.SearchInput/>
             </div>
-            <nav>
-                <S.Categories>
-                    {
-                        categories.map((category) =>(
-                            <S.Category key={category.id}>
-                                {category.name}
-                            </S.Category>
-                        ))
-                    }
-                </S.Categories>
-            </nav>
+            {breakpoint === 'pc' ? (
+                <VerticalMenu/>
+            ): (
+                <HorizontalMenu/>
+            )}
 
         </S.Sidebar>
     );
