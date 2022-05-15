@@ -18,8 +18,8 @@ import {
 } from "@huse/boolean";
 
 
-export const Popover = ({ children, render, placement }) => {
-    const [open, setOpen] = useToggle()
+export const Popover = ({ children, render, placement, setOpen, open, ignoreMouse = false }) => {
+
     const {
         x,
         y,

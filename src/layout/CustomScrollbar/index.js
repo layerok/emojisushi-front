@@ -14,7 +14,6 @@ export const CustomScrollbars = (
         autoHideTimeout={1000}
         style={{height: height}}
         renderTrackVertical={({style: { width, ...restStyles}, ...props}) => {
-            console.log(props, restStyles);
             return (<S.TrackVertical {...props} style={{...restStyles}} />)
         }}
         renderThumbVertical={({style, ...props}) => (<S.ThumbVertical {...props} />)}
