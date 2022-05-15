@@ -12,8 +12,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: white;
   background-color: #141414;
-  overflow-x: hidden;
-
+  position: relative
 }
 
 *, *:after, *:before {

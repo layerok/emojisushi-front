@@ -6,6 +6,7 @@ import {Sidebar} from "../Sidebar";
 import * as S from "./styled";
 import {CustomScrollbars} from "../CustomScrollbar";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
+import {useWindowSize} from "react-use";
 
 export const Layout = (
     {
@@ -17,18 +18,10 @@ export const Layout = (
         ...rest
     }) => {
 
-    const breakpoint = useBreakpoint();
-    const Wrapper = ({children}) => {
-        if(breakpoint === 'pc') {
-            return <CustomScrollbars>
-                {children}
-            </CustomScrollbars>
-        }
-        return children
-    }
+    const windowSize = useWindowSize();
 
     return (
-        <Wrapper>
+        <CustomScrollbars height={windowSize.height}>
             <S.Layout {...rest}>
                 <Header/>
                 <S.Main {...mainProps}>
@@ -45,6 +38,6 @@ export const Layout = (
                 </S.Main>
                 <Footer/>
             </S.Layout>
-        </Wrapper>
+        </CustomScrollbars>
     )
 }

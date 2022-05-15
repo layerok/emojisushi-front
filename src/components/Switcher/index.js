@@ -14,24 +14,24 @@ export const Switcher = (
     }
     const Option = (
         {
-            name,
+            name: text,
             length,
             index
         }
     ) => {
         const id = useId()
-       return <>
-           <S.Input
-               length={length}
-               index={index}
-               id={id}
-               type={"radio"}
-               name={name}
-               checked={index === selectedIndex}
-               onChange={() => handleChange(index)}
-           />
-           <S.Label htmlFor={id}>{name}</S.Label>
-       </>
+        return <>
+            <S.Input
+                length={length}
+                index={index}
+                id={id}
+                type={"radio"}
+                name={name}
+                checked={index === selectedIndex}
+                onChange={() => handleChange(index)}
+            />
+            <S.Label htmlFor={id}>{text}</S.Label>
+        </>
     }
 
     return <S.Wrapper>
