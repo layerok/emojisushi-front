@@ -6,6 +6,7 @@ import {FlexBox} from "../../components/FlexBox";
 import {CartButton} from "../../components/CartButton";
 import {BurgerIcon} from "../../components/icons/BurgerIcon";
 import {TinyCartButton} from "../../components/TinyCartButton";
+import {NavLink} from "../../components/NavLink";
 
 
 export const Header = () => {
@@ -24,7 +25,9 @@ export const Header = () => {
                             Контакты
                         </S.PcHeaderItem>
                         <S.PcHeaderItem>
-                            Доставка и оплата
+                            <NavLink to={"/dostavka-i-oplata"}>
+                                Доставка и оплата
+                            </NavLink>
                         </S.PcHeaderItem>
                     </S.Left>
                     <S.Right>
