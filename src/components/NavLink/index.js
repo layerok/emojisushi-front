@@ -11,7 +11,7 @@ export function NavLink({ children, to, ...props }) {
 
     return (
         <S.Link
-                active={!!match}
+                isActive={!!match}
                 to={to}
                 {...props}
             >

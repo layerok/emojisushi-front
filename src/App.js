@@ -6,6 +6,7 @@ import {theme} from "./theme";
 import {ThemeProvider} from "styled-components";
 import {ThankYou} from "./pages/ThankYou";
 import {Delivery} from "./pages/Delivery"
+import {Checkout} from "./pages/Checkout";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/thankyou" element={<ThankYou />} />
                   <Route path="/dostavka-i-oplata" element={<Delivery />} />
+                  <Route path="/checkout" element={<Checkout />} />
               </Routes>
           </div>
       </ThemeProvider>
