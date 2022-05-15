@@ -22,6 +22,7 @@ const Image = styled.div`
   background-image: url("${prop("src")}");
   background-size: contain;
   background-position: center;
+  background-repeat: no-repeat;
   width: 190px;
   height: 122px;
   margin: 0 auto;

@@ -8,7 +8,7 @@ export const ProductsGrid = (
 ) => {
     return <S.Grid>
         {products.map((product) => {
-            return <ProductCard product={product}/>
+            return <ProductCard key={product.id} product={product}/>
         })}
     </S.Grid>
 }

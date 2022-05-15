@@ -6,8 +6,7 @@ import {ButtonOutline} from "../ButtonOutline";
 export const AddToCartButton = (
     {
         pending,
-        count,
-        width
+        count
     }
 ) => {
 

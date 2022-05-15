@@ -2,9 +2,8 @@ import * as S from "./styled";
 import {AddToCartButton} from "../AddToCartButton";
 import {Price} from "../Price";
 import {Favorite} from "../Favorite";
-import {SvgIcon} from "../svg/SvgIcon";
-import {InfoSvg} from "../svg/InfoSvg";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
+import {IngredientsTooltip} from "../IngredientsTooltip";
 
 export const ProductCard = (
     {
@@ -16,7 +15,8 @@ export const ProductCard = (
             count,
             is_favorite,
             pending,
-            image
+            image,
+            ingredients
         }
     }
 ) => {
@@ -32,9 +32,7 @@ export const ProductCard = (
         <S.Name>{name}</S.Name>
         <S.Description>
             <S.Weight>{weight}</S.Weight>
-            <SvgIcon width={iconSize} color={"#999"}>
-                <InfoSvg/>
-            </SvgIcon>
+            <IngredientsTooltip items={ingredients} iconSize={iconSize}/>
         </S.Description>
         <S.Footer>
             <Price oldPrice={old_price} newPrice={new_price}/>
