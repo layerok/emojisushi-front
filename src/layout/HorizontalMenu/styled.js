@@ -2,7 +2,8 @@ import styled from "styled-components";
 import {theme} from "styled-tools";
 
 const Categories = styled.div`
-  margin-top: 30px;
+  position: relative;
+  padding-top: 50px;
   .slick-slide {
     margin-right: 20px;
   }
@@ -12,9 +13,14 @@ const Categories = styled.div`
   }
 `
 
+const Hint = styled.div`
+  position: absolute;
+  top: 15px;
+  right: 0
+`
+
 const Category = styled.div`
   display: flex;
-  margin-top: 20px;
   text-transform: uppercase;
   line-height: 20px;
   font-weight: 500;
@@ -38,4 +44,5 @@ const Category = styled.div`
 export {
     Categories,
     Category,
+    Hint
 }

@@ -12,6 +12,7 @@ const Sidebar = styled.div`
 `
 
 const SearchInput = styled(SearchInputBase)`
+  flex-shrink: 0;
   width: 100%;
   margin-bottom: 30px;
  ${media.greaterThan('tablet')`
