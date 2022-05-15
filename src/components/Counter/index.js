@@ -7,10 +7,11 @@ export const Counter = (
     {
         count,
         handleIncrement,
-        handleDecrement
+        handleDecrement,
+        width
     }
 ) => {
-    return <S.Wrapper>
+    return <S.Wrapper width={width}>
         <SvgIcon onClick={handleDecrement} color={"black"} style={{cursor: 'pointer'}}>
             <MinusSvg/>
         </SvgIcon>

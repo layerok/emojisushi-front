@@ -21,7 +21,9 @@ export const Sidebar = () => {
             >
                 <S.SearchInput/>
                 {breakpoint !== 'pc' && (
-                    <FlexBox justifyContent={isMobile ? 'space-between': 'flex-end'}>
+                    <FlexBox justifyContent={isMobile ? 'space-between': 'flex-end'} style={{
+                        width: "100%"
+                    }}>
                         <FiltersButton text={"Фильтры"} />
                         <SortOrderButton text={"Сначала дешевые"} style={{
                             marginLeft: "30px"

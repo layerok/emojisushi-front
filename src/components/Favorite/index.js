@@ -4,11 +4,12 @@ import * as S from "./styled";
 
 export const Favorite = (
     {
-        isFavorite
+        isFavorite,
+        width = "25px"
     }
 ) => {
     return <S.Wrapper>
-        <SvgIcon width={"25px"} color={isFavorite ? "#FFE600": "white"}>
+        <SvgIcon width={width} color={isFavorite ? "#FFE600": "white"}>
             <HeartSvg/>
         </SvgIcon>
     </S.Wrapper>

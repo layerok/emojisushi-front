@@ -1,12 +1,13 @@
 import styled from "styled-components";
+import {prop} from "styled-tools";
 
 const Wrapper = styled.div`
-  width: 130px;
+  width: ${prop("width", "130px")};
   height: 40px;
   color: black;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   font-size: 20px;
   line-height: 24px;
   background: #FFE600;
@@ -21,7 +22,6 @@ const Count = styled.div`
   justify-content: center;
   border-left: 1px solid #F1DA00;
   border-right: 1px solid #F1DA00;
-  margin: 0 15px;
 `
 
 export {
