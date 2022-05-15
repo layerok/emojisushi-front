@@ -4,6 +4,8 @@ import {Footer} from "../Footer";
 import {Banner} from "../Banner";
 import {Sidebar} from "../Sidebar";
 import * as S from "./styled";
+import {CustomScrollbars} from "../CustomScrollbar";
+import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 
 export const Layout = (
     {
@@ -14,11 +16,23 @@ export const Layout = (
         containerProps = {},
         ...rest
     }) => {
+
+    const breakpoint = useBreakpoint();
+    const Wrapper = ({children}) => {
+        if(breakpoint === 'pc') {
+            return <CustomScrollbars>
+                {children}
+            </CustomScrollbars>
+        }
+        return children
+    }
+
     return (
-        <S.Layout {...rest}>
-            <Header/>
-            <S.Main {...mainProps}>
-                <Container {...containerProps}>
+        <Wrapper>
+            <S.Layout {...rest}>
+                <Header/>
+                <S.Main {...mainProps}>
+                    <Container {...containerProps}>
                         {withBanner && <Banner/>}
                         <S.FlexBox>
                             {withSidebar && <Sidebar/>}
@@ -27,9 +41,10 @@ export const Layout = (
                             </S.Content>
                         </S.FlexBox>
 
-                </Container>
-            </S.Main>
-            <Footer/>
-        </S.Layout>
+                    </Container>
+                </S.Main>
+                <Footer/>
+            </S.Layout>
+        </Wrapper>
     )
 }
