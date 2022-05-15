@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import {useState} from "react";
+import {useId, useState} from "react";
 
 export const Switcher = (
     {
@@ -15,11 +15,11 @@ export const Switcher = (
     const Option = (
         {
             name,
-            id,
             length,
             index
         }
     ) => {
+        const id = useId()
        return <>
            <S.Input
                length={length}

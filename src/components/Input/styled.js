@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import {theme} from "styled-tools";
 
+const Wrapper = styled.div`
+  position: relative;
+`;
+
 const Input = styled.input`
   background: #1C1C1C;
   box-shadow: 0 0 15px rgba(34, 34, 34, 0.3);
@@ -11,22 +15,30 @@ const Input = styled.input`
   color: white;
 
   ::-webkit-input-placeholder {
-    color: ${theme('input.placeholder', '#3F3F3F')};
+    color: ${theme('input.placeholder', '#616161')};
   }
 
   ::-moz-placeholder {
-    color: ${theme('input.placeholder', '#3F3F3F')};
+    color: ${theme('input.placeholder', '#616161')};
   }
 
   :-ms-input-placeholder {
-    color: ${theme('input.placeholder', '#3F3F3F')};
+    color: ${theme('input.placeholder', '#616161')};
   }
 
   :-moz-placeholder {
-    color: ${theme('input.placeholder', '#3F3F3F')};
+    color: ${theme('input.placeholder', '#616161')};
   }
 `;
 
+const Asterisk = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+
 export {
-    Input
+    Input,
+    Wrapper,
+    Asterisk
 }

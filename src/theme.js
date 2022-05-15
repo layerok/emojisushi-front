@@ -1,6 +1,6 @@
 export const theme = {
     input: {
-        placeholder: "#3F3F3F"
+        placeholder: "#616161"
     },
     link: {
         active: '#FFE600'
