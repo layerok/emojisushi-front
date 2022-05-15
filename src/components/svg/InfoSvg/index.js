@@ -1,0 +1,7 @@
+export const InfoSvg = () => {
+    return <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12.5 21.875C17.6777 21.875 21.875 17.6777 21.875 12.5C21.875 7.32233 17.6777 3.125 12.5 3.125C7.32233 3.125 3.125 7.32233 3.125 12.5C3.125 17.6777 7.32233 21.875 12.5 21.875Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M11.7188 11.7188H12.5V17.1875H13.2812" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M12.3047 9.17969C12.844 9.17969 13.2812 8.74247 13.2812 8.20312C13.2812 7.66378 12.844 7.22656 12.3047 7.22656C11.7653 7.22656 11.3281 7.66378 11.3281 8.20312C11.3281 8.74247 11.7653 9.17969 12.3047 9.17969Z" fill="currentColor"/>
+    </svg>
+}
