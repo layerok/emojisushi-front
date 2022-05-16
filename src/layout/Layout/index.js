@@ -5,8 +5,9 @@ import {Banner} from "../Banner";
 import {Sidebar} from "../Sidebar";
 import * as S from "./styled";
 import {CustomScrollbars} from "../CustomScrollbar";
-import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import {useWindowSize} from "react-use";
+import {useDebounce} from "../../common/hooks/useDebounce";
+import {useEffect, useState} from "react";
 
 export const Layout = (
     {
@@ -19,9 +20,17 @@ export const Layout = (
     }) => {
 
     const windowSize = useWindowSize();
+    const [height, setHeight] = useState(windowSize.height);
+    const debounceHeight = useDebounce(() => {
+        setHeight(windowSize.height)
+    }, 500)
+
+    useEffect(() => {
+        debounceHeight();
+    }, [windowSize.height])
 
     return (
-        <CustomScrollbars height={windowSize.height}>
+        <CustomScrollbars height={height}>
             <S.Layout {...rest}>
                 <Header/>
                 <S.Main {...mainProps}>
