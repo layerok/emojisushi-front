@@ -6,9 +6,11 @@ export const Button = (
     {
         children,
         width,
-        filled = false
+        filled = false,
+        padding,
+        justifyContent,
     }) => {
-    return <S.Button filled={filled} width={width}>
+    return <S.Button padding={padding} filled={filled} width={width} justifyContent={justifyContent}>
         {children}
     </S.Button>
 }
@@ -16,9 +18,9 @@ export const Button = (
 export const ButtonOutline = (
     {
         children,
-        width,
+        ...rest
     }) => {
-    return <Button filled={false} width={width}>
+    return <Button {...rest} filled={false}>
         {children}
     </Button>
 }
@@ -26,19 +28,15 @@ export const ButtonOutline = (
 export const ButtonFilled = (
     {
         children,
-        width,
+        ...rest
     }) => {
-    return <Button filled={true} width={width}>
+    return <Button {...rest} filled={true}>
         {children}
     </Button>
 }
 
-export const PendingButton = (
-    {
-        width
-    }
-) => {
-    return (<ButtonFilled width={width}>
+export const PendingButton = (props) => {
+    return (<ButtonFilled {...props}>
         <SvgIcon width={"25px"} color={"black"}>
             <SpinnerSvg/>
         </SvgIcon>

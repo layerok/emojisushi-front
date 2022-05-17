@@ -2,6 +2,7 @@ import {SvgIcon} from "../svg/SvgIcon";
 import {MinusSvg} from "../svg/MinusSvg";
 import {PlusSvg} from "../svg/PlusSvg";
 import * as S from "./styled";
+import {ButtonFilled} from "../Button";
 
 export const Counter = (
     {
@@ -11,7 +12,7 @@ export const Counter = (
         width
     }
 ) => {
-    return <S.Wrapper width={width}>
+    return <ButtonFilled justifyContent={'space-around'} padding={"7px 0"} width={width}>
         <SvgIcon onClick={handleDecrement} color={"black"} style={{cursor: 'pointer'}}>
             <MinusSvg/>
         </SvgIcon>
@@ -21,5 +22,5 @@ export const Counter = (
         <SvgIcon onClick={handleIncrement} color={"black"} style={{cursor: 'pointer'}}>
             <PlusSvg/>
         </SvgIcon>
-    </S.Wrapper>
+    </ButtonFilled>
 }

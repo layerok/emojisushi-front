@@ -1,20 +1,9 @@
 import styled from "styled-components";
 import {prop} from "styled-tools";
 
-const Wrapper = styled.div`
-  width: ${prop("width", "130px")};
-  height: 40px;
-  color: black;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+const Count = styled.div`
   font-size: 20px;
   line-height: 24px;
-  background: #FFE600;
-  border-radius: 10px;
-  
-`;
-const Count = styled.div`
   width: 38px;
   height: 25px;
   display: flex;
@@ -25,6 +14,5 @@ const Count = styled.div`
 `
 
 export {
-    Wrapper,
     Count
 }

@@ -1,16 +1,4 @@
 import styled from "styled-components";
-import media from "../../common/custom-media";
-
-const CartButton = styled.button`
-  min-width: 170px;
-  height: 40px;
-  background: #FFE600;
-  box-shadow: 0 0 15px rgba(255, 230, 0, 0.3);
-  border-radius: 10px;
-  color: black;
-  padding: 0 24px;
-  display: inline-block;
-`;
 
 const Icon = styled.div`
   margin-right: 10px;
@@ -20,6 +8,7 @@ const Icon = styled.div`
 
 const Price = styled.div`
   margin-right: 15px;
+  flex-shrink: 0;
 `;
 
 const Delimiter = styled.div`
@@ -27,6 +16,7 @@ const Delimiter = styled.div`
   width: 1px;
   background-color: #000;
   margin-right: 15px;
+  flex-shrink: 0;
 `
 
 const Count = styled.div`
@@ -36,7 +26,6 @@ const Count = styled.div`
 `;
 
 export {
-    CartButton,
     Price,
     Delimiter,
     Count,
