@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import {prop} from "styled-tools";
+import styled, {css} from "styled-components";
+import {prop, ifProp} from "styled-tools";
 
 const Button = styled.button`
   border: 1px solid #FFE600;
@@ -12,6 +12,12 @@ const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${ifProp('filled', css`
+    background: #FFE600;
+    color: black;
+    box-shadow: 0px 4px 15px rgba(255, 230, 0, 0.3);
+  `)}
 
   :hover {
     background: #FFE600;
