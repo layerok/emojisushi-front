@@ -3,7 +3,7 @@ import {prop} from "styled-tools";
 
 const Slide = styled.div`
   position: absolute;
-  width: 50%;
+  width: calc(100% / ${prop('length')});
   height: 100%;
   background: #FFE600;
   box-shadow: 0 0 15px rgba(255, 230, 0, 0.3);
