@@ -1,10 +1,11 @@
 import * as S from "./styled";
+import {cloneElement, forwardRef} from "react";
 
-export const SvgButton = ({children}) => {
+export const SvgButton = forwardRef(({children},ref) => {
     return (
-        <S.Box>
+        <S.Box ref={ref}>
 
-            {children}
+            {cloneElement(children,{ref})}
         </S.Box>
     )
-}
+})

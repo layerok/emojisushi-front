@@ -4,6 +4,7 @@ import {SvgIcon} from "../../components/svg/SvgIcon";
 import {SvgButton} from "../../components/SvgButton";
 import {InstagramSvg} from "../../components/svg/InstagramSvg";
 import {TelegramSvg} from "../../components/svg/TelegramSvg";
+import {TelegramDialog} from "../../components/dialogs/TelegramDialog";
 
 
 export const UnderVerticalMenu = () => {
@@ -24,11 +25,13 @@ export const UnderVerticalMenu = () => {
                         </SvgIcon>
                     </SvgButton>
                 </S.OneSvg>
-                <SvgButton>
-                    <SvgIcon color={'black'}>
-                        <TelegramSvg/>
-                    </SvgIcon>
-                </SvgButton>
+                <TelegramDialog>
+                    <SvgButton>
+                        <SvgIcon color={'black'}>
+                            <TelegramSvg/>
+                        </SvgIcon>
+                    </SvgButton>
+                </TelegramDialog>
             </S.SvgContainer>
 
 

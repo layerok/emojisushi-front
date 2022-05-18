@@ -7,6 +7,7 @@ import {FlexBox} from "../../components/FlexBox";
 import {SortOrderButton} from "../../components/buttons/SortOrderButton";
 import {UnderVerticalMenu} from "../UnderVerticalMenu";
 
+
 export const Sidebar = () => {
 
     const breakpoint = useBreakpoint();
