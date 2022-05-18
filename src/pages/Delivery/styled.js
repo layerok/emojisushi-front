@@ -29,7 +29,6 @@ const AdresText = styled.p`
         margin-top: 15px;   
     `
 }
-  
 `;
 
 const Left = styled.div`

@@ -5,7 +5,7 @@ import {HorizontalMenu} from "../HorizontalMenu";
 import {FiltersButton} from "../../components/buttons/FiltersButton";
 import {FlexBox} from "../../components/FlexBox";
 import {SortOrderButton} from "../../components/buttons/SortOrderButton";
-
+import {UnderVerticalMenu} from "../UnderVerticalMenu";
 
 export const Sidebar = () => {
 
@@ -34,7 +34,10 @@ export const Sidebar = () => {
 
             </FlexBox>
             {breakpoint === 'pc' ? (
-                <VerticalMenu/>
+                <>
+                    <VerticalMenu/>
+                    <UnderVerticalMenu/>
+                </>
             ): (
                 <HorizontalMenu/>
             )}

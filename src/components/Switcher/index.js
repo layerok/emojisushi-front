@@ -31,7 +31,7 @@ export const Switcher = (
                 onChange={() => handleChange(index)}
             />
             <S.Label htmlFor={id}>{text}</S.Label>
-        </>
+        </>;
     }
 
     return <S.Wrapper>
