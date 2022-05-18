@@ -54,7 +54,7 @@ export const Dialog = (
                         style={{
                             display: "grid",
                             placeItems: "center",
-                            background: "rgba(0, 0, 0, 0.3)"
+                            background: "rgba(0, 0, 0, 0.4)"
                         }}
                     >
                         <S.Container
