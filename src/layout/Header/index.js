@@ -7,6 +7,7 @@ import {CartButton} from "../../components/CartButton";
 import {BurgerIcon} from "../../components/icons/BurgerIcon";
 import {TinyCartButton} from "../../components/TinyCartButton";
 import {NavLink} from "../../components/NavLink";
+import {ContactsDialog} from "../../components/dialogs/ContactsDialog";
 
 
 export const Header = () => {
@@ -21,9 +22,17 @@ export const Header = () => {
                         <S.PcHeaderItem>
                             <LocationPickerPopover/>
                         </S.PcHeaderItem>
-                        <S.PcHeaderItem>
-                            Контакты
-                        </S.PcHeaderItem>
+
+
+                                <ContactsDialog>
+                                    <S.PcHeaderItem>
+                                        Контакты
+                                    </S.PcHeaderItem>
+
+                                </ContactsDialog>
+
+
+
                         <S.PcHeaderItem>
                             <NavLink to={"/dostavka-i-oplata"}>
                                 Доставка и оплата

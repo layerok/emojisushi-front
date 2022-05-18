@@ -14,7 +14,7 @@ const Link = styled(LinkBase)`
   
   :after {
     content: "";
-    opacity: ${ifProp('isActive', 1, 0)};
+    opacity: ${ifProp({className: 'active'}, 1, 0)};
     position: absolute;
     width: 100%;
     left: 0;

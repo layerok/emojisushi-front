@@ -41,7 +41,7 @@ export const Dialog = (
 
     return (
         <>
-            <div style={{cursor: 'pointer'}}>
+            <div style={{cursor: 'pointer', display: 'flex'}}>
                 {cloneElement(
                     children,
                     getReferenceProps({ ref: reference, ...children.props })

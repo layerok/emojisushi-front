@@ -3,7 +3,7 @@ import {cloneElement, forwardRef} from "react";
 
 export const SvgButton = forwardRef(({children, ...rest}, ref) => {
     return (
-        <S.Box ref={ref} {...rest}>
+        <S.Box {...rest} ref={ref}>
             {cloneElement(children)}
         </S.Box>
     )
