@@ -44,7 +44,7 @@ export const Switcher = (
                 key={index}
             />
         ))}
-        <S.Slide>
+        <S.Slide length={options.length}>
             {options[selectedIndex]['name']}
         </S.Slide>
     </S.Wrapper>

@@ -13,11 +13,6 @@ import {
     FloatingFocusManager
 } from "@floating-ui/react-dom-interactions";
 
-import {
-    useToggle,
-} from "@huse/boolean";
-
-
 export const Popover = ({ children, render, placement, setOpen, open, ignoreMouse = false }) => {
 
     const {

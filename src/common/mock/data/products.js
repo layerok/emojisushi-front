@@ -77,7 +77,7 @@ export const products = [
     },
     {
         id: 5,
-        name: "Ролл Филадельфия в икре",
+        name: "Ролл Филадельфия с лососем в икре",
         weight: "230г",
         new_price: "139 ₴",
         is_favorite: false,

@@ -15,7 +15,6 @@ const Background = styled.div`
     border-top-left-radius: ${prop("topLeft")};
     border-bottom-left-radius: ${prop("bottomLeft")};
     border-bottom-right-radius: ${prop("bottomRight")};
-    ${(props) => props.generateResponsive("responsive")};
   
 `;
 

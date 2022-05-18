@@ -1,7 +1,7 @@
 import * as S from "./styled";
-import {withResponsive} from "../../common/hoc/withResponsive";
+import {forwardRef} from "react";
 
-const FlexBoxRaw = (
+export const FlexBox = forwardRef((
     {
         alignItems = "start",
         flexDirection = "row",
@@ -10,18 +10,16 @@ const FlexBoxRaw = (
         responsive = [],
         children,
         ...rest
-    }
+    }, ref
 ) => {
     return (
         <S.Flex
+            ref={ref}
             alignItems={alignItems}
             flexDirection={flexDirection}
             justifyContent={justifyContent}
             mobileFirst={mobileFirst}
-            responsive={responsive}
             {...rest}
         >{children}</S.Flex>
     )
-}
-
-export const FlexBox = withResponsive(FlexBoxRaw);
+})

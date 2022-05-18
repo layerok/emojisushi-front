@@ -1,11 +1,13 @@
 import * as S from "./styled";
 import {Logo} from "../../components/Logo";
 import {Container} from "../../components/Container";
-import {PhoneIcon} from "../../components/icons/PhoneIcon";
 import {FlexBox} from "../../components/FlexBox";
-import {InstagramIcon} from "../../components/icons/InstagramIcon";
-import {TelegramIcon} from "../../components/icons/TelegramIcon";
 import {StaticMap} from "../../components/StaticMap";
+import {TelegramDialog} from "../../components/dialogs/TelegramDialog";
+import {SvgIcon} from "../../components/svg/SvgIcon";
+import {TelegramSvg} from "../../components/svg/TelegramSvg";
+import {InstagramSvg} from "../../components/svg/InstagramSvg";
+import {PhoneSvg} from "../../components/svg/PhoneSvg";
 
 export const Footer = () => {
     return (
@@ -20,7 +22,9 @@ export const Footer = () => {
                        <FlexBox style={{
                            marginBottom: "15px"
                        }} alignItems={"center"}>
-                           <PhoneIcon/>
+                           <SvgIcon width={"25px"} color={"white"}>
+                               <PhoneSvg/>
+                           </SvgIcon>
                            <S.PhoneLabel>
                                Номера
                            </S.PhoneLabel>
@@ -37,21 +41,27 @@ export const Footer = () => {
 
 
                         <FlexBox alignItems={"center"} >
-                            <InstagramIcon/>
+                            <SvgIcon width={"25px"} color={"white"}>
+                                <InstagramSvg/>
+                            </SvgIcon>
                             <S.InstagramLink>
                                 emoji_sushi
                             </S.InstagramLink>
                         </FlexBox>
+                        <TelegramDialog>
+                            <FlexBox style={{
+                                marginTop: "10px"
+                            }} alignItems={"center"}>
+                                <SvgIcon width={"25px"} color={"white"}>
+                                    <TelegramSvg/>
+                                </SvgIcon>
+                                <S.TelegramText>
+                                    Telegram
+                                </S.TelegramText>
 
-                        <FlexBox style={{
-                            marginTop: "10px"
-                        }} alignItems={"center"}>
-                            <TelegramIcon/>
-                            <S.TelegramText>
-                                Telegram
-                            </S.TelegramText>
+                            </FlexBox>
+                        </TelegramDialog>
 
-                        </FlexBox>
 
                     </S.List>
                 </S.Left>

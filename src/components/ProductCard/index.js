@@ -4,6 +4,7 @@ import {Price} from "../Price";
 import {Favorite} from "../Favorite";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import {IngredientsTooltip} from "../IngredientsTooltip";
+import { EqualHeightElement } from 'react-equal-height';
 
 export const ProductCard = (
     {
@@ -29,7 +30,9 @@ export const ProductCard = (
             <Favorite width={iconSize} isFavorite={is_favorite}/>
         </S.Favorite>
         <S.Image src={image}/>
-        <S.Name>{name}</S.Name>
+        <EqualHeightElement name={"product-name"}>
+            <S.Name>{name}</S.Name>
+        </EqualHeightElement>
         <S.Description>
             <S.Weight>{weight}</S.Weight>
             <IngredientsTooltip items={ingredients} iconSize={iconSize}/>
