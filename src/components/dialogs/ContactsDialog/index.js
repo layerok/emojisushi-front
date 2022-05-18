@@ -16,8 +16,9 @@ export const ContactsDialog = ({children}) => {
     const breakpoint = useBreakpoint();
     const width = breakpoint !== 'pc' ? "375px": false;
 
-    return <Dialog width={width}  render={() => (
+    return <Dialog width={width}  render={({close}) => (
         <div>
+
             <S.Wrapper >
                 <S.Title>Контакты</S.Title>
                 <S.Phones>
@@ -37,7 +38,7 @@ export const ContactsDialog = ({children}) => {
                             emoji_sushi
                         </span>
                     </FlexBox>
-                    <TelegramDialog>
+                    <TelegramDialog >
                         <FlexBox alignItems={"center"}>
                             <SvgIcon style={{marginRight: '10px'}} width={"25px"} color={"white"}>
                                 <TelegramSvg/>

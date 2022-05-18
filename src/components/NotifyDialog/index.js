@@ -9,10 +9,11 @@ export const NotifyDialog = (
         renderSubtitle,
         renderButton,
         renderIcon,
-        open
+        open,
+        ...rest
     }
 ) => {
-    return <Dialog alignCenter={true} open={open} render={() => (
+    return <Dialog alignCenter={true} open={open} {...rest} render={({close}) => (
         <S.Container>
             {renderIcon && renderIcon()}
             {renderTitle && (

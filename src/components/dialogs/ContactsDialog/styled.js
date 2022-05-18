@@ -33,5 +33,5 @@ export {
     Wrapper,
     Phones,
     Phone,
-    Socials
+    Socials,
 }

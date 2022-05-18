@@ -4,7 +4,7 @@ import {TelegramSvg} from "../../svg/TelegramSvg";
 import {ButtonFilled} from "../../Button";
 import {NotifyDialog} from "../../NotifyDialog";
 
-export const TelegramDialog = ({children}) => {
+export const TelegramDialog = ({children, ...rest}) => {
     return <NotifyDialog
         renderTitle={() => ("У нас появился Telegram!")}
         renderSubtitle={() => ("Нажми на кнопку чтобы первым узнавать о новых акциях.")}
@@ -18,6 +18,7 @@ export const TelegramDialog = ({children}) => {
                 Перейти в Telegram
             </ButtonFilled>
         )}
+        {...rest}
     >
         {cloneElement(children)}
     </NotifyDialog>
