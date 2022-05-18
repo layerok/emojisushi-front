@@ -28,7 +28,6 @@ export const Header = () => {
                                     <S.PcHeaderItem>
                                         Контакты
                                     </S.PcHeaderItem>
-
                                 </ContactsDialog>
 
 

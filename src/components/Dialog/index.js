@@ -15,6 +15,7 @@ import {CloseSvg} from "../svg/CloseSvg";
 export const Dialog = (
     {
         render,
+        width,
         open: passedOpen = false,
         children,
         alignCenter,
@@ -61,6 +62,7 @@ export const Dialog = (
                             {...getFloatingProps({
                                 ref: floating,
                                 alignCenter,
+                                width,
                                 "aria-labelledby": labelId,
                                 "aria-describedby": descriptionId
                             })}

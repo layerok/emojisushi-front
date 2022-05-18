@@ -1,12 +1,12 @@
 import styled, {css} from "styled-components";
 import media from "../../common/custom-media";
-import {ifProp} from "styled-tools";
+import {ifProp, prop} from "styled-tools";
 
 const Container = styled.div`
   background: #1C1C1C;
   box-shadow: 0 4px 15px rgba(28, 28, 28, 0.3);
   border-radius: 15px;
-  width: 540px;
+  width: ${ifProp('width', prop('width'), '540px' )};
 
   ${ifProp('alignCenter', css`
       display: flex;
@@ -15,7 +15,7 @@ const Container = styled.div`
   `)}
   position: relative;
   ${media.lessThan('pc')`
-    width: 350px;
+    width: ${ifProp('width', prop('width'), '350px' )};
   `}
 `;
 
