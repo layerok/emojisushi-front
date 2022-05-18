@@ -6,7 +6,6 @@ const Flex = styled.div`
   align-items: ${prop('alignItems')};
   justify-content: ${prop('justifyContent')};
   flex-direction: ${prop('flexDirection')};
-  ${(props) => props.generateResponsive()}
 `
 
 export {

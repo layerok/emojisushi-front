@@ -8,6 +8,7 @@ import {CustomScrollbars} from "../CustomScrollbar";
 import {useWindowSize} from "react-use";
 import {useDebounce} from "../../common/hooks/useDebounce";
 import {useEffect, useState} from "react";
+import {RestaurantClosed} from "../../components/dialogs/RestaurantClosed";
 
 export const Layout = (
     {
@@ -46,6 +47,7 @@ export const Layout = (
                     </Container>
                 </S.Main>
                 <Footer/>
+                <RestaurantClosed open={true}/>
             </S.Layout>
         </CustomScrollbars>
     )

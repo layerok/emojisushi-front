@@ -7,15 +7,19 @@ import {
     useRole,
     FloatingPortal,
     FloatingOverlay,
-    FloatingFocusManager
 } from "@floating-ui/react-dom-interactions";
 import * as S from "./styled";
+import {SvgIcon} from "../svg/SvgIcon";
+import {CloseSvg} from "../svg/CloseSvg";
 
-export const Dialog = ({
-                           render,
-                           open: passedOpen = false,
-                           children
-                       }) => {
+export const Dialog = (
+    {
+        render,
+        open: passedOpen = false,
+        children,
+        alignCenter,
+    }
+) => {
     const [open, setOpen] = useState(passedOpen);
 
     const { reference, floating, context } = useFloating({
@@ -32,6 +36,8 @@ export const Dialog = ({
         useRole(context),
         useDismiss(context)
     ]);
+
+    const close = () => setOpen(false);
 
     return (
         <>
@@ -51,21 +57,25 @@ export const Dialog = ({
                             background: "rgba(0, 0, 0, 0.3)"
                         }}
                     >
-                        <FloatingFocusManager context={context}>
-                            <S.Container
-                                {...getFloatingProps({
-                                    ref: floating,
-                                    "aria-labelledby": labelId,
-                                    "aria-describedby": descriptionId
-                                })}
-                            >
-                                {render({
-                                    close: () => setOpen(false),
-                                    labelId,
-                                    descriptionId
-                                })}
-                            </S.Container>
-                        </FloatingFocusManager>
+                        <S.Container
+                            {...getFloatingProps({
+                                ref: floating,
+                                alignCenter,
+                                "aria-labelledby": labelId,
+                                "aria-describedby": descriptionId
+                            })}
+                        >
+                            <S.CloseIcon onClick={() => close()}>
+                                <SvgIcon width={"35px"} color={"white"}>
+                                    <CloseSvg/>
+                                </SvgIcon>
+                            </S.CloseIcon>
+                            {render({
+                                close,
+                                labelId,
+                                descriptionId
+                            })}
+                        </S.Container>
                     </FloatingOverlay>
                 )}
             </FloatingPortal>
