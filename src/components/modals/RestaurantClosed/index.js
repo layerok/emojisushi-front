@@ -1,5 +1,5 @@
 import {SvgIcon} from "../../svg/SvgIcon";
-import {NotifyDialog} from "../../NotifyDialog";
+import {NotifyModal} from "../../NotifyModal";
 import {LowKeySvg} from "../../svg/LowKeySvg";
 
 const isClosed = ({start,end}) => {
@@ -17,7 +17,7 @@ export const RestaurantClosed = () => {
         end: [22, 45],
     });
 
-    return <NotifyDialog
+    return <NotifyModal
         open={closed}
         renderTitle={() => ("Ресторан закрыт!")}
         renderSubtitle={() => ("Время работы: 10:00-22:45")}
@@ -28,5 +28,5 @@ export const RestaurantClosed = () => {
         )}
     >
         <div></div>
-    </NotifyDialog>
+    </NotifyModal>
 }

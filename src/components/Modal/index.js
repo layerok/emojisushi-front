@@ -1,9 +1,9 @@
-import {BaseDialog} from "../BaseDialog";
+import {BaseModal} from "../BaseModal";
 import * as S from "./styled";
 import {SvgIcon} from "../svg/SvgIcon";
 import {CloseSvg} from "../svg/CloseSvg";
 
-export const Dialog = (
+export const Modal = (
     {
         children,
         alignItems = "center",
@@ -11,6 +11,7 @@ export const Dialog = (
         render,
         width,
         alignCenter,
+        ...rest
     }) => {
 
     const overlayStyles = {
@@ -20,7 +21,7 @@ export const Dialog = (
         background: "rgba(0, 0, 0, 0.4)"
     }
 
-    return <BaseDialog overlayStyles={overlayStyles} render={({close}) => (
+    return <BaseModal overlayStyles={overlayStyles} render={({close}) => (
         <S.Container width={width} alignCenter={alignCenter}>
             <S.CloseIcon onClick={() => close()}>
                 <SvgIcon width={"35px"} color={"white"}>
@@ -29,7 +30,7 @@ export const Dialog = (
             </S.CloseIcon>
             {render({close})}
         </S.Container>
-    )}>
+    )} {...rest}>
         {children}
-    </BaseDialog>
+    </BaseModal>
 }

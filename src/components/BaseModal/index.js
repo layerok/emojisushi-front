@@ -10,7 +10,7 @@ import {
 } from "@floating-ui/react-dom-interactions";
 
 
-export const BaseDialog = (
+export const BaseModal = (
     {
         render,
         overlayStyles,

@@ -3,7 +3,7 @@ import {Logo} from "../../components/Logo";
 import {Container} from "../../components/Container";
 import {FlexBox} from "../../components/FlexBox";
 import {StaticMap} from "../../components/StaticMap";
-import {TelegramDialog} from "../../components/dialogs/TelegramDialog";
+import {TelegramModal} from "../../components/modals/TelegramModal";
 import {SvgIcon} from "../../components/svg/SvgIcon";
 import {TelegramSvg} from "../../components/svg/TelegramSvg";
 import {InstagramSvg} from "../../components/svg/InstagramSvg";
@@ -48,7 +48,7 @@ export const Footer = () => {
                                 emoji_sushi
                             </S.InstagramLink>
                         </FlexBox>
-                        <TelegramDialog>
+                        <TelegramModal>
                             <FlexBox style={{
                                 marginTop: "10px"
                             }} alignItems={"center"}>
@@ -60,7 +60,7 @@ export const Footer = () => {
                                 </S.TelegramText>
 
                             </FlexBox>
-                        </TelegramDialog>
+                        </TelegramModal>
 
 
                     </S.List>

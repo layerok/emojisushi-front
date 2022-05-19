@@ -2,10 +2,10 @@ import {cloneElement} from "react";
 import {SvgIcon} from "../../svg/SvgIcon";
 import {TelegramSvg} from "../../svg/TelegramSvg";
 import {ButtonFilled} from "../../Button";
-import {NotifyDialog} from "../../NotifyDialog";
+import {NotifyModal} from "../../NotifyModal";
 
-export const TelegramDialog = ({children, ...rest}) => {
-    return <NotifyDialog
+export const TelegramModal = ({children, ...rest}) => {
+    return <NotifyModal
         renderTitle={() => ("У нас появился Telegram!")}
         renderSubtitle={() => ("Нажми на кнопку чтобы первым узнавать о новых акциях.")}
         renderIcon={() => (
@@ -21,5 +21,5 @@ export const TelegramDialog = ({children, ...rest}) => {
         {...rest}
     >
         {cloneElement(children)}
-    </NotifyDialog>
+    </NotifyModal>
 }

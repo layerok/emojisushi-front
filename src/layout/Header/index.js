@@ -7,7 +7,7 @@ import {CartButton} from "../../components/CartButton";
 import {BurgerIcon} from "../../components/icons/BurgerIcon";
 import {TinyCartButton} from "../../components/TinyCartButton";
 import {NavLink} from "../../components/NavLink";
-import {ContactsDialog} from "../../components/dialogs/ContactsDialog";
+import {ContactsModal} from "../../components/modals/ContactsModal";
 
 
 export const Header = () => {
@@ -24,11 +24,11 @@ export const Header = () => {
                         </S.PcHeaderItem>
 
 
-                                <ContactsDialog>
+                                <ContactsModal>
                                     <S.PcHeaderItem>
                                         Контакты
                                     </S.PcHeaderItem>
-                                </ContactsDialog>
+                                </ContactsModal>
 
 
 

@@ -1,8 +1,8 @@
 import {cloneElement} from "react";
-import {Dialog} from "../Dialog";
+import {Modal} from "../Modal";
 import * as S from "./styled";
 
-export const NotifyDialog = (
+export const NotifyModal = (
     {
         children,
         renderTitle,
@@ -13,7 +13,7 @@ export const NotifyDialog = (
         ...rest
     }
 ) => {
-    return <Dialog alignCenter={true} open={open} {...rest} render={({close}) => (
+    return <Modal alignCenter={true} open={open} {...rest} render={({close}) => (
         <S.Container>
             {renderIcon && renderIcon()}
             {renderTitle && (
@@ -36,5 +36,5 @@ export const NotifyDialog = (
 
     )}>
         {cloneElement(children)}
-    </Dialog>
+    </Modal>
 }

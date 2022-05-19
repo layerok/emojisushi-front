@@ -8,7 +8,7 @@ import {CustomScrollbars} from "../CustomScrollbar";
 import {useWindowSize} from "react-use";
 import {useDebounce} from "../../common/hooks/useDebounce";
 import {useEffect, useState} from "react";
-import {RestaurantClosed} from "../../components/dialogs/RestaurantClosed";
+import {RestaurantClosed} from "../../components/modals/RestaurantClosed";
 
 export const Layout = (
     {

@@ -1,4 +1,4 @@
-import {Dialog} from "../../Dialog";
+import {Modal} from "../../Modal";
 import {cloneElement} from "react";
 import phones from "../../../common/mock/data/phones.json";
 import * as S from "./styled";
@@ -8,15 +8,15 @@ import {InstagramSvg} from "../../svg/InstagramSvg";
 import {FlexBox} from "../../FlexBox";
 import {TelegramSvg} from "../../svg/TelegramSvg";
 import {StaticMap} from "../../StaticMap";
-import {TelegramDialog} from "../TelegramDialog";
+import {TelegramModal} from "../TelegramModal";
 import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
 
-export const ContactsDialog = ({children}) => {
+export const ContactsModal = ({children}) => {
 
     const breakpoint = useBreakpoint();
     const width = breakpoint !== 'pc' ? "375px": false;
 
-    return <Dialog width={width}  render={({close}) => (
+    return <Modal width={width}  render={({close}) => (
         <div>
 
             <S.Wrapper >
@@ -38,7 +38,7 @@ export const ContactsDialog = ({children}) => {
                             emoji_sushi
                         </span>
                     </FlexBox>
-                    <TelegramDialog >
+                    <TelegramModal >
                         <FlexBox alignItems={"center"}>
                             <SvgIcon style={{marginRight: '10px'}} width={"25px"} color={"white"}>
                                 <TelegramSvg/>
@@ -47,7 +47,7 @@ export const ContactsDialog = ({children}) => {
                             Telegram
                         </span>
                         </FlexBox>
-                    </TelegramDialog>
+                    </TelegramModal>
 
 
                 </S.Socials>
@@ -57,5 +57,5 @@ export const ContactsDialog = ({children}) => {
         </div>
     )}>
         {cloneElement(children)}
-    </Dialog>;
+    </Modal>;
 }
