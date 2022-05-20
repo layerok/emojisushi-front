@@ -8,6 +8,7 @@ import {BurgerIcon} from "../../components/icons/BurgerIcon";
 import {TinyCartButton} from "../../components/TinyCartButton";
 import {NavLink} from "../../components/NavLink";
 import {ContactsModal} from "../../components/modals/ContactsModal";
+import {CartModal} from "../../components/CartModal";
 
 
 export const Header = () => {
@@ -22,16 +23,11 @@ export const Header = () => {
                         <S.PcHeaderItem>
                             <LocationPickerPopover/>
                         </S.PcHeaderItem>
-
-
-                                <ContactsModal>
-                                    <S.PcHeaderItem>
-                                        Контакты
-                                    </S.PcHeaderItem>
-                                </ContactsModal>
-
-
-
+                        <ContactsModal>
+                            <S.PcHeaderItem>
+                                Контакты
+                            </S.PcHeaderItem>
+                        </ContactsModal>
                         <S.PcHeaderItem>
                             <NavLink to={"/dostavka-i-oplata"}>
                                 Доставка и оплата
@@ -39,10 +35,12 @@ export const Header = () => {
                         </S.PcHeaderItem>
                     </S.Left>
                     <S.Right>
+                        <CartModal>
+                            <S.CartBtn>
+                                <CartButton/>
+                            </S.CartBtn>
+                        </CartModal>
 
-                        <S.CartBtn>
-                            <CartButton/>
-                        </S.CartBtn>
                         <S.TinyCartBtn>
                             <TinyCartButton/>
                         </S.TinyCartBtn>

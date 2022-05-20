@@ -24,7 +24,7 @@ export const Layout = (
     const [height, setHeight] = useState(windowSize.height);
     const debounceHeight = useDebounce(() => {
         setHeight(windowSize.height)
-    }, 500)
+    }, 300)
 
     useEffect(() => {
         debounceHeight();

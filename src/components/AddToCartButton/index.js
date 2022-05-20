@@ -1,4 +1,4 @@
-import {Counter} from "../Counter";
+import {ButtonCounter} from "../Counter";
 import {PendingButton} from "../Button";
 import {ButtonOutline} from "../Button";
 
@@ -14,7 +14,7 @@ export const AddToCartButton = (
     }
 
     if(count) {
-        return <Counter count={count}/>
+        return <ButtonCounter count={count}/>
     }
 
     return <ButtonOutline>Заказать</ButtonOutline>;

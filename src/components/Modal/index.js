@@ -2,6 +2,7 @@ import {BaseModal} from "../BaseModal";
 import * as S from "./styled";
 import {SvgIcon} from "../svg/SvgIcon";
 import {CloseSvg} from "../svg/CloseSvg";
+import {CloseModalIcon} from "../CloseModalIcon";
 
 export const Modal = (
     {
@@ -23,10 +24,8 @@ export const Modal = (
 
     return <BaseModal overlayStyles={overlayStyles} render={({close}) => (
         <S.Container width={width} alignCenter={alignCenter}>
-            <S.CloseIcon onClick={() => close()}>
-                <SvgIcon width={"35px"} color={"white"}>
-                    <CloseSvg/>
-                </SvgIcon>
+            <S.CloseIcon>
+                <CloseModalIcon close={close}/>
             </S.CloseIcon>
             {render({close})}
         </S.Container>

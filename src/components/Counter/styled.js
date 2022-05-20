@@ -9,8 +9,9 @@ const Count = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-left: 1px solid #F1DA00;
-  border-right: 1px solid #F1DA00;
+  border-left: 1px solid ${prop('delimiterColor')};
+  border-right: 1px solid ${prop('delimiterColor')};
+  color: ${prop('color', 'black')}
 `
 
 export {
