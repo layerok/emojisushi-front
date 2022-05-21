@@ -6,6 +6,7 @@ export const SvgIcon = forwardRef((
     {
         children,
         color="white",
+        hoverColor,
         width,
         height,
         style={},
@@ -15,12 +16,13 @@ export const SvgIcon = forwardRef((
 ) => {
     return (
         <S.Parent style={{
-            color,
             width,
             height,
             ...style
         }}
                   ref={ref}
+                  noDomColor={color}
+                  hoverColor={hoverColor}
                   {...rest}
         >
             {children}

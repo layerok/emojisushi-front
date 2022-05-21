@@ -1,7 +1,5 @@
 import {BaseModal} from "../BaseModal";
 import * as S from "./styled";
-import {SvgIcon} from "../svg/SvgIcon";
-import {CloseSvg} from "../svg/CloseSvg";
 import {CloseModalIcon} from "../CloseModalIcon";
 
 export const Modal = (
@@ -19,7 +17,8 @@ export const Modal = (
         display: "grid",
         justifyItems,
         alignItems,
-        background: "rgba(0, 0, 0, 0.4)"
+        background: "rgba(0, 0, 0, 0.4)",
+        zIndex: 999
     }
 
     return <BaseModal overlayStyles={overlayStyles} render={({close}) => (

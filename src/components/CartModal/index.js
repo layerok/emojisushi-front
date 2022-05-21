@@ -1,7 +1,7 @@
 import {BaseModal} from "../BaseModal";
 import * as S from "./styled";
 import {products} from "../../common/mock/data/products";
-import {Counter} from "../Counter";
+import {LightCounter} from "../Counter";
 import {FlexBox} from "../FlexBox";
 import {Price} from "../Price";
 import {CloseModalIcon} from "../CloseModalIcon";
@@ -11,12 +11,7 @@ import {CustomScrollbars} from "../../layout/CustomScrollbar";
 import {useWindowSize} from "react-use";
 import {useEffect, useState} from "react";
 import {useDebounce} from "../../common/hooks/useDebounce";
-
-const overlayStyles = {
-    justifyItems: 'end',
-    background: "rgba(0, 0, 0, 0.4)",
-    display: 'grid'
-};
+import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 
 const CartItem = ({item}) => {
     return (<S.Item>
@@ -30,7 +25,7 @@ const CartItem = ({item}) => {
             </S.Item.Name>
             <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
                 <S.Item.Counter>
-                    <Counter count={1}/>
+                    <LightCounter count={1}/>
                 </S.Item.Counter>
                 <Price newPrice={item.new_price} oldPrice={item.old_price}/>
             </FlexBox>
@@ -43,9 +38,24 @@ export const CartModal = ({children}) => {
 
     const windowSize = useWindowSize();
     const [height, setHeight] = useState(windowSize.height);
+
     const debounceHeight = useDebounce(() => {
         setHeight(windowSize.height)
     }, 300)
+
+    const breakpoint = useBreakpoint();
+
+    const overlayStyles = {
+        justifyItems: breakpoint === 'mobile' ? 'center':'end',
+        alignItems: breakpoint === 'mobile' ? 'center': 'start',
+        background: "rgba(0, 0, 0, 0.4)",
+        display: 'grid',
+        zIndex: 999
+    };
+
+    // max cart items wrapper height is 500px and min is 300px
+    // 252px is sum of heights another element in cart modal
+    const finalHeight = Math.max(Math.min(height - 252, 500), 300);
 
     useEffect(() => {
         debounceHeight();
@@ -61,7 +71,7 @@ export const CartModal = ({children}) => {
             </S.Title>
 
             <S.Items>
-                <CustomScrollbars height={Math.min(height - 252, 500)}>
+                <CustomScrollbars height={finalHeight}>
                 {products.map((item, i) => (
                     <CartItem key={i} item={item}/>
                 ))}

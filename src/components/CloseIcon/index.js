@@ -13,6 +13,7 @@ export const CloseIcon = (
         width={width}
         color={color}
         onClick={onClick}
+        hoverColor={"#FFE600"}
         {...rest}
     >
         <CloseSvg/>

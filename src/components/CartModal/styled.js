@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import {prop} from "styled-tools";
+import media from "../../common/custom-media";
 
 const Wrapper = styled.div`
   position: relative;
@@ -7,6 +8,12 @@ const Wrapper = styled.div`
   background: #1C1C1C;
   box-shadow: 0 4px 15px rgba(28, 28, 28, 0.3);
   border-radius: 15px 0 0 15px;
+  
+  ${media.lessThan('tablet')`
+    border-radius: 15px 15px 0 0;
+    width: 375px;
+  `}
+  
   padding: 40px 0 31px 20px;
   flex-direction: column;
   justify-content: space-between;
@@ -25,6 +32,11 @@ const CloseIcon = styled.div`
   left: -45px;
   top: 33px;
   cursor: pointer;
+
+  ${media.lessThan('tablet')`
+    right: 20px;
+    left: auto;
+  `}
 `;
 
 const Items = styled.div`
@@ -71,6 +83,10 @@ Item.Name = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   width: 220px;
+  
+  ${media.lessThan('tablet')`
+    width: 186px;
+  `}
 `;
 
 Item.Counter = styled.div`

@@ -41,9 +41,11 @@ export const Header = () => {
                             </S.CartBtn>
                         </CartModal>
 
-                        <S.TinyCartBtn>
-                            <TinyCartButton/>
-                        </S.TinyCartBtn>
+                        <CartModal>
+                            <S.TinyCartBtn>
+                                <TinyCartButton/>
+                            </S.TinyCartBtn>
+                        </CartModal>
 
                         <S.BurgerBtn>
                             <BurgerIcon/>

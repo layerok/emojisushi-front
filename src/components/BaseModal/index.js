@@ -52,7 +52,7 @@ export const BaseModal = (
                 {open && (
                     <FloatingOverlay
                         lockScroll
-                        style={overlayStyles}
+                        style={{...overlayStyles}}
                     >
                         <div
                             {...getFloatingProps({
