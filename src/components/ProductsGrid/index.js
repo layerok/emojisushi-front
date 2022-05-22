@@ -6,6 +6,7 @@ import {FlexBox} from "../FlexBox";
 import {LoadMoreButton} from "../buttons/LoadMoreButton";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import { EqualHeight } from 'react-equal-height';
+import {SortingPopover} from "../popovers/SortingPopover";
 
 export const ProductsGrid = (
     {
@@ -17,9 +18,11 @@ export const ProductsGrid = (
         <S.Header>
             <S.Title>Роллы</S.Title>
             {breakpoint === 'pc' && (
-                <FlexBox>
+                <FlexBox >
                     <FiltersButton text={"Фильтры"}/>
-                    <SortOrderButton text={"Сначала дешевые"} style={{marginLeft: "67px"}}/>
+                    <div style={{marginLeft: "67px"}}>
+                        <SortingPopover/>
+                    </div>
                 </FlexBox>
             )}
         </S.Header>

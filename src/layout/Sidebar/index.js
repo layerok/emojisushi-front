@@ -6,6 +6,7 @@ import {FiltersButton} from "../../components/buttons/FiltersButton";
 import {FlexBox} from "../../components/FlexBox";
 import {SortOrderButton} from "../../components/buttons/SortOrderButton";
 import {UnderVerticalMenu} from "../UnderVerticalMenu";
+import {SortingPopover} from "../../components/popovers/SortingPopover";
 
 
 export const Sidebar = () => {
@@ -26,9 +27,12 @@ export const Sidebar = () => {
                         width: "100%"
                     }}>
                         <FiltersButton text={"Фильтры"} />
-                        <SortOrderButton text={"Сначала дешевые"} style={{
+                        <div style={{
                             marginLeft: "30px"
-                        }}/>
+                        }}>
+                            <SortingPopover/>
+                        </div>
+
                     </FlexBox>
                 )}
 

@@ -38,17 +38,14 @@ export const ContactsModal = ({children}) => {
                             emoji_sushi
                         </span>
                     </FlexBox>
-                    <TelegramModal >
-                        <FlexBox alignItems={"center"}>
-                            <SvgIcon style={{marginRight: '10px'}} width={"25px"} color={"white"}>
-                                <TelegramSvg/>
-                            </SvgIcon>
-                            <span>
+                    <FlexBox alignItems={"center"}>
+                        <SvgIcon style={{marginRight: '10px'}} width={"25px"} color={"white"}>
+                            <TelegramSvg/>
+                        </SvgIcon>
+                        <span>
                             Telegram
                         </span>
-                        </FlexBox>
-                    </TelegramModal>
-
+                    </FlexBox>
 
                 </S.Socials>
             </S.Wrapper>
