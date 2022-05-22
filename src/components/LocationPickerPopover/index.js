@@ -8,21 +8,21 @@ import {CaretDownSvg} from "../svg/CaretDownSvg";
 import {FlexBox} from "../FlexBox";
 
 
-export const LocationPickerPopover = () => {
+export const LocationPickerPopover = ({onSelect}) => {
 
     const [selectedIndex, setSelectedIndex] = useState(0);
 
-
-    const handleClick = (index) => {
+    const handleClick = ({index, close}) => {
         setSelectedIndex(index);
+        onSelect({close});
     }
 
     return (
         <>
-            <Popover offset={22} open={false}  render={() => (
+            <Popover offset={22} open={false}  render={({close}) => (
                 <S.Options  >
-                    {branches.map(({name, id}, i) => (
-                        <S.Option onClick={() => handleClick(i)} key={id}>
+                    {branches.map(({name, id}, index) => (
+                        <S.Option onClick={() => handleClick({index, close})} key={id}>
                             {name}
                         </S.Option>
                     ))}

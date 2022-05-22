@@ -21,7 +21,9 @@ export const Header = () => {
                             <Logo/>
                         </S.Link>
                         <S.PcHeaderItem>
-                            <LocationPickerPopover/>
+                            <LocationPickerPopover onSelect={({close}) => {
+                                close();
+                            }}/>
                         </S.PcHeaderItem>
                         <ContactsModal>
                             <S.PcHeaderItem>
