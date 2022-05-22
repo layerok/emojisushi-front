@@ -1,6 +1,6 @@
 import * as S from "./styled";
-import {SvgIcon} from "../svg/SvgIcon";
-import {SpinnerSvg} from "../svg/SpinnerSvg";
+import {SvgIcon} from "../../svg/SvgIcon";
+import {SpinnerSvg} from "../../svg/SpinnerSvg";
 
 export const Button = (
     {

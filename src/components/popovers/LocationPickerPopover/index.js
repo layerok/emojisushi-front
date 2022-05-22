@@ -1,11 +1,11 @@
 import * as S from "./styled";
-import MapLocationPinSrc from "../../assets/ui/icons/map-location-pin.svg"
+import MapLocationPinSrc from "../../../assets/ui/icons/map-location-pin.svg"
 import {Popover} from "../Popover";
-import branches from "../../common/mock/data/branches.json";
+import branches from "../../../common/mock/data/branches.json";
 import {useState} from "react";
-import {SvgIcon} from "../svg/SvgIcon";
-import {CaretDownSvg} from "../svg/CaretDownSvg";
-import {FlexBox} from "../FlexBox";
+import {SvgIcon} from "../../svg/SvgIcon";
+import {CaretDownSvg} from "../../svg/CaretDownSvg";
+import {FlexBox} from "../../FlexBox";
 
 
 export const LocationPickerPopover = ({onSelect}) => {

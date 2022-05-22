@@ -2,7 +2,7 @@ import * as S from "./styled";
 import {FlexBox} from "../FlexBox";
 import {SvgIcon} from "../svg/SvgIcon";
 import {BagSvg} from "../svg/BagSvg";
-import {ButtonFilled} from "../Button";
+import {ButtonFilled} from "../buttons/Button";
 
 export const CartButton = () => {
     return (

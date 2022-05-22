@@ -1,7 +1,7 @@
 import * as S from "./styled";
 import {NestedPopover} from "../NestedPopover";
-import {ButtonFilled, ButtonOutline} from "../Button";
-import {FlexBox} from "../FlexBox";
+import {ButtonFilled, ButtonOutline} from "../../buttons/Button";
+import {FlexBox} from "../../FlexBox";
 
 export const ConfirmActionPopover = (
     {

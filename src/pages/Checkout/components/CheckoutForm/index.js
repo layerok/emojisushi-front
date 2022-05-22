@@ -4,7 +4,7 @@ import {deliveryTypes} from "../../../../common/mock/data/deliveryTypes";
 import {Input} from "../../../../components/Input";
 import {paymentTypes} from "../../../../common/mock/data/paymentTypes";
 import {FlexBox} from "../../../../components/FlexBox";
-import {ButtonOutline} from "../../../../components/Button";
+import {ButtonOutline} from "../../../../components/buttons/Button";
 
 export const CheckoutForm = () => {
     return <S.Form>

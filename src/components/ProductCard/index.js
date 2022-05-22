@@ -1,9 +1,9 @@
 import * as S from "./styled";
-import {AddToCartButton} from "../AddToCartButton";
+import {AddToCartButton} from "../buttons/AddToCartButton";
 import {Price} from "../Price";
 import {Favorite} from "../Favorite";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
-import {IngredientsTooltip} from "../IngredientsTooltip";
+import {IngredientsTooltip} from "../tooltips/IngredientsTooltip";
 import { EqualHeightElement } from 'react-equal-height';
 
 export const ProductCard = (

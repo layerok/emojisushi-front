@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {prop} from "styled-tools";
-import media from "../../common/custom-media";
+import media from "../../../common/custom-media";
 
 const Wrapper = styled.div`
   position: relative;

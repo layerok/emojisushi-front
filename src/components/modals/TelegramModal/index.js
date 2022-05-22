@@ -1,8 +1,8 @@
 import {cloneElement} from "react";
 import {SvgIcon} from "../../svg/SvgIcon";
 import {TelegramSvg} from "../../svg/TelegramSvg";
-import {ButtonFilled} from "../../Button";
-import {NotifyModal} from "../../NotifyModal";
+import {ButtonFilled} from "../../buttons/Button";
+import {NotifyModal} from "../NotifyModal";
 
 export const TelegramModal = ({children, ...rest}) => {
     return <NotifyModal

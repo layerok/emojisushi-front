@@ -1,5 +1,5 @@
 import {SvgIcon} from "../../svg/SvgIcon";
-import {NotifyModal} from "../../NotifyModal";
+import {NotifyModal} from "../NotifyModal";
 import {LowKeySvg} from "../../svg/LowKeySvg";
 
 const isClosed = ({start,end}) => {

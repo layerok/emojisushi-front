@@ -1,4 +1,4 @@
-import {CloseIcon} from "../CloseIcon";
+import {CloseIcon} from "../../CloseIcon";
 import {forwardRef} from "react";
 
 export const CloseModalIcon = forwardRef(({close, width = "35px"}, ref) => {

@@ -1,18 +1,18 @@
 import {BaseModal} from "../BaseModal";
 import * as S from "./styled";
-import {products} from "../../common/mock/data/products";
-import {LightCounter} from "../Counter";
-import {FlexBox} from "../FlexBox";
-import {Price} from "../Price";
+import {products} from "../../../common/mock/data/products";
+import {LightCounter} from "../../Counter";
+import {FlexBox} from "../../FlexBox";
+import {Price} from "../../Price";
 import {CloseModalIcon} from "../CloseModalIcon";
-import {CloseIcon} from "../CloseIcon";
-import {ButtonOutline} from "../Button";
-import {CustomScrollbars} from "../../layout/CustomScrollbar";
+import {CloseIcon} from "../../CloseIcon";
+import {ButtonOutline} from "../../buttons/Button";
+import {CustomScrollbars} from "../../../layout/CustomScrollbar";
 import {useCounter, useWindowSize} from "react-use";
 import {useEffect, useState} from "react";
-import {useDebounce} from "../../common/hooks/useDebounce";
-import {useBreakpoint} from "../../common/hooks/useBreakpoint";
-import {ConfirmActionPopover} from "../ConfirmActionPopover";
+import {useDebounce} from "../../../common/hooks/useDebounce";
+import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
+import {ConfirmActionPopover} from "../../popovers/ConfirmActionPopover";
 
 const CartItem = ({item}) => {
     const [count, {inc, dec}] = useCounter(1, 100, 1);

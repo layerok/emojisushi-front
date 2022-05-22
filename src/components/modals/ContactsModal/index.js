@@ -1,4 +1,4 @@
-import {Modal} from "../../Modal";
+import {Modal} from "../Modal";
 import {cloneElement} from "react";
 import phones from "../../../common/mock/data/phones.json";
 import * as S from "./styled";

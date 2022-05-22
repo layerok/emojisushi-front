@@ -1,5 +1,5 @@
 import styled, {css} from "styled-components";
-import media from "../../common/custom-media";
+import media from "../../../common/custom-media";
 import {ifProp, prop} from "styled-tools";
 
 const Container = styled.div`

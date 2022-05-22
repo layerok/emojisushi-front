@@ -1,5 +1,5 @@
-import {SvgIcon} from "../svg/SvgIcon";
-import {InfoSvg} from "../svg/InfoSvg";
+import {SvgIcon} from "../../svg/SvgIcon";
+import {InfoSvg} from "../../svg/InfoSvg";
 import {AnimatedTooltip} from "../AnimatedTooltip";
 import * as S from "./styled";
 

@@ -1,4 +1,4 @@
-import { LocationPickerPopover } from "../../components/LocationPickerPopover";
+import { LocationPickerPopover } from "../../components/popovers/LocationPickerPopover";
 import * as S from "./styled";
 import { Logo } from "../../components/Logo";
 import {Container } from "../../components/Container";
@@ -8,7 +8,7 @@ import {BurgerIcon} from "../../components/icons/BurgerIcon";
 import {TinyCartButton} from "../../components/TinyCartButton";
 import {NavLink} from "../../components/NavLink";
 import {ContactsModal} from "../../components/modals/ContactsModal";
-import {CartModal} from "../../components/CartModal";
+import {CartModal} from "../../components/modals/CartModal";
 
 
 export const Header = () => {

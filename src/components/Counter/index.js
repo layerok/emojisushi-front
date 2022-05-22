@@ -2,7 +2,7 @@ import {SvgIcon} from "../svg/SvgIcon";
 import {MinusSvg} from "../svg/MinusSvg";
 import {PlusSvg} from "../svg/PlusSvg";
 import * as S from "./styled";
-import {ButtonFilled} from "../Button";
+import {ButtonFilled} from "../buttons/Button";
 import {FlexBox} from "../FlexBox";
 
 export const Counter = (

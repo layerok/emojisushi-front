@@ -1,7 +1,7 @@
 import * as S from "./styled";
 import {FlexBox} from "../../../../components/FlexBox";
 import {Price} from "../../../../components/Price";
-import {IngredientsTooltip} from "../../../../components/IngredientsTooltip";
+import {IngredientsTooltip} from "../../../../components/tooltips/IngredientsTooltip";
 import {CustomScrollbars} from "../../../../layout/CustomScrollbar";
 import {products} from "../../../../common/mock/data/products";
 import {EditButton} from "../../../../components/buttons/EditButton";

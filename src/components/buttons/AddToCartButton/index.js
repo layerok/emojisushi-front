@@ -1,4 +1,4 @@
-import {ButtonCounter} from "../Counter";
+import {ButtonCounter} from "../../Counter";
 import {PendingButton} from "../Button";
 import {ButtonOutline} from "../Button";
 
