@@ -11,6 +11,8 @@ export const DropdownPopover = (
         nameAccessor = "name",
         idAccessor = "id",
         children,
+        backgroundColor="#171717",
+        width = "100%"
     }
 ) => {
 
@@ -37,7 +39,7 @@ export const DropdownPopover = (
     return (
         <>
             <Popover offset={offset} open={open} render={({close}) => (
-                <S.Options>
+                <S.Options width={width} backgroundColor={backgroundColor}>
                     {options.map((option, index) => (
                         <S.Option onClick={() => handleSelect({index, close})} key={option[idAccessor]}>
                             {option[nameAccessor]}

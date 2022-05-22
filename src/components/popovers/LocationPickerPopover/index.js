@@ -7,13 +7,25 @@ import {FlexBox} from "../../FlexBox";
 import {DropdownPopover} from "../DropdownPopover";
 
 
-export const LocationPickerPopover = () => {
+export const LocationPickerPopover = (
+    {
+        offset = 0,
+        backgroundColor,
+        width = "211px"
+    }
+) => {
 
     return (
         <>
-            <DropdownPopover offset={22} options={branches} onSelect={({close}) => {
-                close();
-            }}>
+            <DropdownPopover
+                backgroundColor={backgroundColor}
+                width={width}
+                offset={offset}
+                options={branches}
+                onSelect={({close}) => {
+                    close();
+                }}
+            >
                 {({selectedOption}) => (
                     <S.Container>
                         <FlexBox alignItems={"center"}>

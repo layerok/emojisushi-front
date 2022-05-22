@@ -51,8 +51,6 @@ const Item = styled.div`
   padding-bottom: 20px;
   margin-top: 20px;
   border-bottom: 1px solid #4A4A4A;
-  cursor: pointer;
-  
   
   &:first-child {
     margin-top: 0;
