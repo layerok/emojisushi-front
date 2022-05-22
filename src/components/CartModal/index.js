@@ -8,15 +8,24 @@ import {CloseModalIcon} from "../CloseModalIcon";
 import {CloseIcon} from "../CloseIcon";
 import {ButtonOutline} from "../Button";
 import {CustomScrollbars} from "../../layout/CustomScrollbar";
-import {useWindowSize} from "react-use";
+import {useCounter, useWindowSize} from "react-use";
 import {useEffect, useState} from "react";
 import {useDebounce} from "../../common/hooks/useDebounce";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
+import {ConfirmActionPopover} from "../ConfirmActionPopover";
 
 const CartItem = ({item}) => {
+    const [count, {inc, dec}] = useCounter(1, 100, 1);
+
     return (<S.Item>
         <S.Item.RemoveIcon>
-            <CloseIcon color={"#4A4A4A"}/>
+            <ConfirmActionPopover onConfirm={({close}) => {
+                close();
+            }} onCancel={({close}) => {
+                close();
+            }} text={"Вы уверены что хотите удалить этот товар с корзины?"}>
+                <CloseIcon color={"#4A4A4A"}/>
+            </ConfirmActionPopover>
         </S.Item.RemoveIcon>
         <S.Item.Img src={item.image}/>
         <S.Item.Info>
@@ -25,7 +34,11 @@ const CartItem = ({item}) => {
             </S.Item.Name>
             <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
                 <S.Item.Counter>
-                    <LightCounter count={1}/>
+                    <LightCounter handleIncrement={() => {
+                        inc();
+                    }} handleDecrement={() => {
+                        dec();
+                    }} count={count}/>
                 </S.Item.Counter>
                 <Price newPrice={item.new_price} oldPrice={item.old_price}/>
             </FlexBox>

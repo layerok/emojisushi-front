@@ -6,23 +6,20 @@ import {useState} from "react";
 import {SvgIcon} from "../svg/SvgIcon";
 import {CaretDownSvg} from "../svg/CaretDownSvg";
 import {FlexBox} from "../FlexBox";
-import {useBoolean} from "@huse/boolean";
 
 
 export const LocationPickerPopover = () => {
 
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const [open, methods] = useBoolean(false);
-    const [forceClosed, setForceClosed] = useState(false);
+
 
     const handleClick = (index) => {
         setSelectedIndex(index);
-        setForceClosed(true);
     }
 
     return (
         <>
-            <Popover open={forceClosed ? false : open} setOpen={methods.toggle} render={() => (
+            <Popover offset={22} open={false}  render={() => (
                 <S.Options  >
                     {branches.map(({name, id}, i) => (
                         <S.Option onClick={() => handleClick(i)} key={id}>
@@ -32,7 +29,7 @@ export const LocationPickerPopover = () => {
 
                 </S.Options>
             )}>
-                <S.Container onClick={() => setForceClosed(false)} >
+                <S.Container>
                     <FlexBox alignItems={"center"}>
                         <S.Icon>
                             <img src={MapLocationPinSrc} alt="location picker"/>

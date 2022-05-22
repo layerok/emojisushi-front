@@ -9,8 +9,9 @@ export const Button = (
         filled = false,
         padding,
         justifyContent,
+        ...rest
     }) => {
-    return <S.Button padding={padding} filled={filled} width={width} justifyContent={justifyContent}>
+    return <S.Button padding={padding} filled={filled} width={width} justifyContent={justifyContent} {...rest}>
         {children}
     </S.Button>
 }

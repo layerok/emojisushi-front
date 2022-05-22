@@ -6,7 +6,8 @@ import {
     useInteractions,
     useRole,
     FloatingPortal,
-    FloatingOverlay,
+    FloatingNode,
+    FloatingOverlay, useFloatingNodeId,
 } from "@floating-ui/react-dom-interactions";
 
 
@@ -20,6 +21,8 @@ export const BaseModal = (
     }
 ) => {
     const [open, setOpen] = useState(passedOpen);
+
+    const nodeId = useFloatingNodeId();
 
     const { reference, floating, context } = useFloating({
         open,
@@ -41,7 +44,7 @@ export const BaseModal = (
     const close = () => setOpen(false);
 
     return (
-        <>
+        <FloatingNode id={nodeId}>
             <div style={{cursor: 'pointer', display: 'flex'}}>
                 {cloneElement(
                     children,
@@ -70,6 +73,6 @@ export const BaseModal = (
                     </FloatingOverlay>
                 )}
             </FloatingPortal>
-        </>
+        </FloatingNode>
     );
 };

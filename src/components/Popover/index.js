@@ -1,4 +1,4 @@
-import React, { cloneElement, useEffect } from "react";
+import React, {cloneElement, useEffect, useState} from "react";
 import {
     offset,
     flip,
@@ -10,10 +10,21 @@ import {
     useDismiss,
     useId,
     useClick,
-    FloatingFocusManager
+    FloatingFocusManager,
+    FloatingNode,
+    useFloatingNodeId
 } from "@floating-ui/react-dom-interactions";
 
-export const Popover = ({ children, render, placement, setOpen, open, ignoreMouse = false }) => {
+export const Popover = (
+    {
+        children,
+        render,
+        placement,
+        offset: passedOffset = 0,
+        open: passedOpen = false
+    }) => {
+    const [open, setOpen] = useState(passedOpen);
+    const nodeId = useFloatingNodeId();
 
     const {
         x,
@@ -27,7 +38,7 @@ export const Popover = ({ children, render, placement, setOpen, open, ignoreMous
     } = useFloating({
         open,
         onOpenChange: setOpen,
-        middleware: [offset(22), flip(), shift()],
+        middleware: [offset(passedOffset), flip(), shift()],
         placement
     });
 
@@ -48,7 +59,7 @@ export const Popover = ({ children, render, placement, setOpen, open, ignoreMous
     }, [open, update, refs.reference, refs.floating]);
 
     return (
-        <>
+        <FloatingNode id={nodeId}>
             {cloneElement(
                 children,
                 getReferenceProps({ ref: reference, ...children.props })
@@ -67,7 +78,8 @@ export const Popover = ({ children, render, placement, setOpen, open, ignoreMous
                             style: {
                                 position: strategy,
                                 top: y ?? "",
-                                left: x ?? ""
+                                left: x ?? "",
+                                zIndex: 999
                             },
                             "aria-labelledby": labelId,
                             "aria-describedby": descriptionId
@@ -83,6 +95,6 @@ export const Popover = ({ children, render, placement, setOpen, open, ignoreMous
                     </div>
                 </FloatingFocusManager>
             )}
-        </>
+        </FloatingNode>
     );
 };
