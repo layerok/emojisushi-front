@@ -11,22 +11,21 @@ import {StaticMap} from "../../StaticMap";
 import {TelegramModal} from "../TelegramModal";
 import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
 
-export const ContactsModal = ({children}) => {
+export const ContactsModal = ({children, onClick = () => {}}) => {
 
     const breakpoint = useBreakpoint();
     const width = breakpoint !== 'pc' ? "375px": false;
 
-    return <Modal width={width}  render={({close}) => (
+    return <Modal width={width} onClick={onClick} render={({close}) => (
         <div>
-
             <S.Wrapper >
                 <S.Title>Контакты</S.Title>
                 <S.Phones>
                     <SvgIcon style={{marginRight: '11px'}} width={"25px"} color={"white"}>
                         <PhoneSvg/>
                     </SvgIcon>
-                    {phones.map((phone) => (
-                        <S.Phone>{phone}</S.Phone>
+                    {phones.map((phone, i) => (
+                        <S.Phone key={i}>{phone}</S.Phone>
                     ))}
                 </S.Phones>
                 <S.Socials>
@@ -52,7 +51,7 @@ export const ContactsModal = ({children}) => {
             <StaticMap style={{marginTop: '30px'}} height={"220px"}/>
 
         </div>
-    )}>
+    )} >
         {cloneElement(children)}
     </Modal>;
 }

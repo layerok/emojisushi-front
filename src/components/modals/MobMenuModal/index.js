@@ -4,7 +4,6 @@ import * as S from "./styled";
 import {ContactsModal} from "../ContactsModal";
 import {NavLink} from "../../NavLink";
 import {FlexBox} from "../../FlexBox";
-import {Favorite} from "../../Favorite";
 import {LocationPickerPopover} from "../../popovers/LocationPickerPopover";
 import {SvgIcon} from "../../svg/SvgIcon";
 import {HeartSvg} from "../../svg/HeartSvg";
@@ -17,13 +16,15 @@ export const MobMenuModal = ({children}) => {
         display: 'grid',
         zIndex: 999
     };
-    return <BaseModal overlayStyles={overlayStyles} render={() => (
+    return <BaseModal overlayStyles={overlayStyles} render={({close}) => (
         <S.Wrapper>
             <S.Item>
                 <LocationPickerPopover width={"226px"} backgroundColor={"#1C1C1C"}/>
             </S.Item>
             <S.Item>
-            <ContactsModal>
+            <ContactsModal onClick={() => {
+                close();
+            }}>
                 <div>Контакты</div>
             </ContactsModal>
             </S.Item>
