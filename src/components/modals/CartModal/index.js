@@ -13,6 +13,7 @@ import {useEffect, useState} from "react";
 import {useDebounce} from "../../../common/hooks/useDebounce";
 import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
 import {ConfirmActionPopover} from "../../popovers/ConfirmActionPopover";
+import { useNavigate } from "react-router-dom";
 
 const CartItem = ({item}) => {
     const [count, {inc, dec}] = useCounter(1, 100, 1);
@@ -48,7 +49,7 @@ const CartItem = ({item}) => {
 
 
 export const CartModal = ({children}) => {
-
+    const navigate = useNavigate();
     const windowSize = useWindowSize();
     const [height, setHeight] = useState(windowSize.height);
 
@@ -97,7 +98,9 @@ export const CartModal = ({children}) => {
                     <Price newPrice={"308 ₴"}/>
                 </FlexBox>
                 <S.Button>
-                    <ButtonOutline width={"100%"}>
+                    <ButtonOutline onClick={() => {
+                        navigate('/checkout');
+                    }} width={"100%"}>
                         Оформить заказ
                     </ButtonOutline>
                 </S.Button>
