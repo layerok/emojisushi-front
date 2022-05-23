@@ -37,15 +37,16 @@ export const ContactsModal = ({children, onClick = () => {}}) => {
                             emoji_sushi
                         </span>
                     </FlexBox>
-                    <FlexBox alignItems={"center"}>
-                        <SvgIcon style={{marginRight: '10px'}} width={"25px"} color={"white"}>
-                            <TelegramSvg/>
-                        </SvgIcon>
-                        <span>
+                    <TelegramModal>
+                        <FlexBox alignItems={"center"}>
+                            <SvgIcon style={{marginRight: '10px'}} width={"25px"} color={"white"}>
+                                <TelegramSvg/>
+                            </SvgIcon>
+                            <span>
                             Telegram
                         </span>
-                    </FlexBox>
-
+                        </FlexBox>
+                    </TelegramModal>
                 </S.Socials>
             </S.Wrapper>
             <StaticMap style={{marginTop: '30px'}} height={"220px"}/>
