@@ -6,6 +6,7 @@ import {FlexBox} from "../FlexBox";
 import {LoadMoreButton} from "../buttons/LoadMoreButton";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import { EqualHeight } from 'react-equal-height';
+import {FiltersModal} from "../modals/FiltersModal";
 
 export const ProductsGrid = (
     {
@@ -18,7 +19,9 @@ export const ProductsGrid = (
             <S.Title>Роллы</S.Title>
             {breakpoint === 'pc' && (
                 <FlexBox>
-                    <FiltersButton text={"Фильтры"}/>
+                    <FiltersModal>
+                        <FiltersButton text={"Фильтры"}/>
+                    </FiltersModal>
                     <SortOrderButton text={"Сначала дешевые"} style={{marginLeft: "67px"}}/>
                 </FlexBox>
             )}
