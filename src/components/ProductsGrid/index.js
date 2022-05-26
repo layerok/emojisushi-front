@@ -1,12 +1,12 @@
 import {ProductCard} from "../ProductCard";
 import * as S from "./styled";
 import {FiltersButton} from "../buttons/FiltersButton";
-import {SortOrderButton} from "../buttons/SortOrderButton";
 import {FlexBox} from "../FlexBox";
 import {LoadMoreButton} from "../buttons/LoadMoreButton";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import { EqualHeight } from 'react-equal-height';
 import {FiltersModal} from "../modals/FiltersModal";
+import {SortingPopover} from "../popovers/SortingPopover";
 
 export const ProductsGrid = (
     {
@@ -18,11 +18,13 @@ export const ProductsGrid = (
         <S.Header>
             <S.Title>Роллы</S.Title>
             {breakpoint === 'pc' && (
-                <FlexBox>
+                <FlexBox >
                     <FiltersModal>
                         <FiltersButton text={"Фильтры"}/>
                     </FiltersModal>
-                    <SortOrderButton text={"Сначала дешевые"} style={{marginLeft: "67px"}}/>
+                    <div style={{marginLeft: "67px"}}>
+                        <SortingPopover/>
+                    </div>
                 </FlexBox>
             )}
         </S.Header>

@@ -13,6 +13,7 @@ const Slide = styled.div`
   justify-content: center;
   align-items: center;
   transition: left 0.3s ease-out;
+  user-select: none;
 `;
 const Wrapper = styled.div`
   position: relative;
@@ -29,6 +30,7 @@ const Label = styled.label`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  user-select: none;
 `;
 
 const Input = styled.input`

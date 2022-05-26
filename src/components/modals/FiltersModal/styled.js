@@ -3,6 +3,8 @@ import styled from "styled-components";
 const Wrapper = styled.div`
   width: 540px;
   height: 250px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Text = styled.p`
@@ -19,10 +21,11 @@ const FilterMagnifier = styled.div`
 `;
 
 const CheckboxWrapper = styled.div`
-  margin-top: 65px;
   display: flex;
-  flex-direction: row;
-`
+  flex-wrap: wrap;
+  padding-left: 18px;
+  padding-top: 30px;
+`;
 
 export {
     Wrapper,

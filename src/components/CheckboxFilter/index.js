@@ -7,14 +7,12 @@ export const CheckboxFilter = ({children}) => {
     const id = useId()
     return (
         <FlexBox>
-            <S.Wrapper>
                 <S.CheckBoxWrapper>
                     <S.CheckBox id={id} type="checkbox"/>
                     <S.Label htmlFor={id}>
                         {children}
                     </S.Label>
                 </S.CheckBoxWrapper>
-            </S.Wrapper>
         </FlexBox>
     )
 }

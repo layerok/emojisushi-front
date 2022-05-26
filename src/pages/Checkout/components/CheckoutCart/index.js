@@ -1,16 +1,17 @@
 import * as S from "./styled";
 import {FlexBox} from "../../../../components/FlexBox";
 import {Price} from "../../../../components/Price";
-import {IngredientsTooltip} from "../../../../components/IngredientsTooltip";
+import {IngredientsTooltip} from "../../../../components/tooltips/IngredientsTooltip";
 import {CustomScrollbars} from "../../../../layout/CustomScrollbar";
 import {products} from "../../../../common/mock/data/products";
-import {EditButton} from "../../../../components/buttons/EditButton";
+import {EditCartButton} from "../../../../components/buttons/EditCartButton";
+import {CartModal} from "../../../../components/modals/CartModal";
 
 export const CheckoutCart = () => {
     return <S.Wrapper>
             <CustomScrollbars height={362}>
-                {products.map(({name, image, weight, ingredients,old_price, new_price}) => (
-                    <S.Item>
+                {products.map(({name, image, weight, ingredients,old_price, new_price, id}) => (
+                    <S.Item key={id}>
                         <S.Image src={image}/>
                         <S.Content>
                             <S.Name>{name}</S.Name>
@@ -30,9 +31,11 @@ export const CheckoutCart = () => {
                 ))}
 
             </CustomScrollbars>
-            <S.EditButton>
-                <EditButton/>
-            </S.EditButton>
+            <CartModal>
+                <S.EditButton>
+                    <EditCartButton/>
+                </S.EditButton>
+            </CartModal>
         </S.Wrapper>;
 
 
