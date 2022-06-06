@@ -16,7 +16,7 @@ export const ProductCard = (
             count,
             is_favorite,
             pending,
-            image,
+            image_sets,
             ingredients
         }
     }
@@ -29,12 +29,12 @@ export const ProductCard = (
         <S.Favorite>
             <Favorite width={iconSize} isFavorite={is_favorite}/>
         </S.Favorite>
-        <S.Image src={image}/>
+        <S.Image src={image_sets?.[0]?.images?.[0]?.path}/>
         <EqualHeightElement name={"product-name"}>
             <S.Name>{name}</S.Name>
         </EqualHeightElement>
         <S.Description>
-            <S.Weight>{weight}</S.Weight>
+            <S.Weight>{weight} г</S.Weight>
             <IngredientsTooltip items={ingredients} iconSize={iconSize}/>
         </S.Description>
         <S.Footer>
