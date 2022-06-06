@@ -1,5 +1,4 @@
 import * as S from "./styled";
-import {Logo} from "../../components/Logo";
 import {Container} from "../../components/Container";
 import {FlexBox} from "../../components/FlexBox";
 import {StaticMap} from "../../components/StaticMap";
@@ -8,6 +7,7 @@ import {SvgIcon} from "../../components/svg/SvgIcon";
 import {TelegramSvg} from "../../components/svg/TelegramSvg";
 import {InstagramSvg} from "../../components/svg/InstagramSvg";
 import {PhoneSvg} from "../../components/svg/PhoneSvg";
+import {LogoSvg} from "../../components/svg/LogoSvg";
 
 export const Footer = () => {
     return (
@@ -15,10 +15,11 @@ export const Footer = () => {
             <Container>
                 <S.Left>
                     <S.Logo>
-                        <Logo/>
+                        <SvgIcon color={"#FFE600"}>
+                            <LogoSvg/>
+                        </SvgIcon>
                     </S.Logo>
                     <S.List>
-
                        <FlexBox style={{
                            marginBottom: "15px"
                        }} alignItems={"center"}>

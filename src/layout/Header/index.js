@@ -1,6 +1,5 @@
 import { LocationPickerPopover } from "../../components/popovers/LocationPickerPopover";
 import * as S from "./styled";
-import { Logo } from "../../components/Logo";
 import {Container } from "../../components/Container";
 import {FlexBox} from "../../components/FlexBox";
 import {CartButton} from "../../components/CartButton";
@@ -11,6 +10,7 @@ import {CartModal} from "../../components/modals/CartModal";
 import {MobMenuModal} from "../../components/modals/MobMenuModal";
 import {SvgIcon} from "../../components/svg/SvgIcon";
 import {BurgerSvg} from "../../components/svg/BurgerSvg";
+import {LogoSvg} from "../../components/svg/LogoSvg";
 
 
 export const Header = () => {
@@ -20,7 +20,9 @@ export const Header = () => {
                 <FlexBox justifyContent={"space-between"} alignItems={"center"}>
                     <S.Left>
                         <S.Link to={"/"}>
-                            <Logo/>
+                            <SvgIcon color={"#FFE600"}>
+                                <LogoSvg/>
+                            </SvgIcon>
                         </S.Link>
                         <S.PcHeaderItem>
                             <LocationPickerPopover offset={22}/>

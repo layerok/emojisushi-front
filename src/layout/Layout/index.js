@@ -4,24 +4,24 @@ import {Footer} from "../Footer";
 import {Banner} from "../Banner";
 import {Sidebar} from "../Sidebar";
 import * as S from "./styled";
-import {CustomScrollbars} from "../CustomScrollbar";
-import {useWindowSize} from "react-use";
-import {useDebounce} from "../../common/hooks/useDebounce";
-import {useEffect, useState} from "react";
 import {RestaurantClosed} from "../../components/modals/RestaurantClosed";
+import {Preloader} from "../Preloader";
+import {inject, observer} from "mobx-react";
 
-export const Layout = (
+export const LayoutRaw = (
     {
         children,
         withBanner = false,
         withSidebar= true,
         mainProps = {},
         containerProps = {},
+        AppStore: {loading},
         ...rest
     }) => {
 
     return (
         <S.Layout {...rest}>
+            {loading && (<Preloader/>)}
             <Header/>
             <S.Main {...mainProps}>
                 <Container {...containerProps}>
@@ -32,7 +32,6 @@ export const Layout = (
                             {children}
                         </S.Content>
                     </S.FlexBox>
-
                 </Container>
             </S.Main>
             <Footer/>
@@ -40,3 +39,5 @@ export const Layout = (
         </S.Layout>
     )
 }
+
+export const Layout = inject('AppStore')(observer(LayoutRaw));

@@ -6,15 +6,19 @@ import {useParams} from "react-router-dom";
 
 export const CategoryRaw = (
     {
-        ProductsStore
+        ProductsStore,
+        AppStore
     }
 ) => {
 
     const {categorySlug} = useParams();
 
     useEffect(() => {
+        AppStore.setLoading(true);
         ProductsStore.fetchItems({
             category_slug: categorySlug
+        }).then(() => {
+            AppStore.setLoading(false);
         });
     }, [categorySlug])
     return (
@@ -24,4 +28,4 @@ export const CategoryRaw = (
     );
 }
 
-export const Category = inject('ProductsStore')(observer(CategoryRaw))
+export const Category = inject('ProductsStore', 'AppStore')(observer(CategoryRaw))

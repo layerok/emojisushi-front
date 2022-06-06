@@ -8,7 +8,7 @@ class Products {
     items = [];
 
     fetchItems = (params = {}) => {
-        MenuServiceInstance.getProducts(params).then(res => {
+        return MenuServiceInstance.getProducts(params).then(res => {
             this.setItems(res.data.data);
         });
     }

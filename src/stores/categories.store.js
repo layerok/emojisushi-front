@@ -9,7 +9,7 @@ class Categories {
     name = "Меню";
 
     fetchItems = () => {
-        MenuServiceInstance.getCategories().then(res => {
+        return MenuServiceInstance.getCategories().then(res => {
             this.setItems(res.data.data);
         });
     }

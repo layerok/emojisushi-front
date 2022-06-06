@@ -7,7 +7,7 @@ const Layout = styled.div`
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
-  
+  position: relative;
 `;
 
 const Main = styled.main`

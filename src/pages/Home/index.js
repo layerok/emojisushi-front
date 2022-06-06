@@ -5,13 +5,17 @@ import {useEffect} from "react";
 
 export const HomeRaw = (
     {
-        ProductsStore
+        ProductsStore,
+        AppStore
     }
 ) => {
     useEffect(() => {
+        AppStore.setLoading(true);
         ProductsStore.fetchItems({
             offset: 0,
             limit: 25
+        }).then(() => {
+            AppStore.setLoading(false);
         });
     }, [])
     return (
@@ -21,4 +25,4 @@ export const HomeRaw = (
     );
 }
 
-export const Home = inject('ProductsStore')(observer(HomeRaw))
+export const Home = inject('ProductsStore', 'AppStore')(observer(HomeRaw))
