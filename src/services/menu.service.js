@@ -1,18 +1,18 @@
 import {client} from "../clients/client";
 
-class MenuService {
-    getProducts(params) {
+class Menu {
+    getProducts(params = {}) {
         return client.get('products', {
             params
         });
     }
-    getCategories(params) {
+    getCategories(params = {}) {
         return client.get('categories', {
             params
         });
     }
 }
 
-const MenuServiceInstance = new MenuService();
+const MenuService = new Menu();
 
-export default MenuServiceInstance;
+export default MenuService;

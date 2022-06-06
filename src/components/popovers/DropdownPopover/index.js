@@ -10,22 +10,21 @@ export const DropdownPopover = (
         open = false,
         nameAccessor = "name",
         idAccessor = "id",
+        selectedIndex,
         children,
         backgroundColor="#171717",
         width = "100%"
     }
 ) => {
 
-    const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedOption, setSelectedOption] = useState(options[selectedIndex]);
 
     useEffect(() => {
         setSelectedOption(options[selectedIndex]);
-    }, [selectedIndex])
+    }, [selectedIndex, options])
 
-    const handleSelect = ({index, close}) => {
-        setSelectedIndex(index);
-        onSelect && onSelect({close, selectedOption});
+    const handleSelect = ({ close, option, index}) => {
+        onSelect && onSelect({close, option, index});
     }
 
     const renderChildren = () => {
@@ -41,7 +40,7 @@ export const DropdownPopover = (
             <Popover offset={offset} open={open} render={({close}) => (
                 <S.Options width={width} backgroundColor={backgroundColor}>
                     {options.map((option, index) => (
-                        <S.Option onClick={() => handleSelect({index, close})} key={option[idAccessor]}>
+                        <S.Option onClick={() => handleSelect({close, option, index})} key={option[idAccessor]}>
                             {option[nameAccessor]}
                         </S.Option>
                     ))}
@@ -49,7 +48,7 @@ export const DropdownPopover = (
                 </S.Options>
             )}>
                 <div style={{cursor: 'pointer'}}>
-                    {renderChildren()}
+                    {options.length > 0 && selectedOption && renderChildren()}
                 </div>
 
             </Popover>

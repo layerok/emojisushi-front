@@ -1,17 +1,18 @@
 import * as S from "./styled";
 import MapLocationPinSrc from "../../../assets/ui/icons/map-location-pin.svg"
-import branches from "../../../common/mock/data/branches.json";
 import {SvgIcon} from "../../svg/SvgIcon";
 import {CaretDownSvg} from "../../svg/CaretDownSvg";
 import {FlexBox} from "../../FlexBox";
 import {DropdownPopover} from "../DropdownPopover";
+import {inject, observer} from "mobx-react";
 
 
-export const LocationPickerPopover = (
+export const LocationPickerPopoverRaw = (
     {
         offset = 0,
         backgroundColor,
-        width = "211px"
+        width = "211px",
+        SpotsStore
     }
 ) => {
 
@@ -21,8 +22,10 @@ export const LocationPickerPopover = (
                 backgroundColor={backgroundColor}
                 width={width}
                 offset={offset}
-                options={branches}
-                onSelect={({close}) => {
+                options={SpotsStore.items}
+                selectedIndex={SpotsStore.selectedIndex}
+                onSelect={({close, option, index}) => {
+                    SpotsStore.setSelectedIndex(index)
                     close();
                 }}
             >
@@ -49,3 +52,6 @@ export const LocationPickerPopover = (
         </>
     );
 }
+
+
+export const LocationPickerPopover = inject('SpotsStore')(observer(LocationPickerPopoverRaw))
