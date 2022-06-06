@@ -1,5 +1,6 @@
 import {DropdownPopover} from "../DropdownPopover";
 import {SortOrderButton} from "../../buttons/SortOrderButton";
+import {useState} from "react";
 
 const SORTING_OPTIONS = [
     {
@@ -25,7 +26,9 @@ const SORTING_OPTIONS = [
 ]
 
 export const SortingPopover = () => {
-    return <DropdownPopover options={SORTING_OPTIONS} onSelect={({close}) => {
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    return <DropdownPopover options={SORTING_OPTIONS} selectedIndex={selectedIndex} onSelect={({close, index}) => {
+        setSelectedIndex(index);
         close();
     }}>
         {({selectedOption}) => (
