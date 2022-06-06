@@ -2,18 +2,21 @@ import {Layout} from "../../layout/Layout";
 import {ProductsGrid} from "../../components/ProductsGrid";
 import {inject, observer} from "mobx-react";
 import {useEffect} from "react";
+import {useParams} from "react-router-dom";
 
-export const HomeRaw = (
+export const CategoryRaw = (
     {
         ProductsStore
     }
 ) => {
+
+    const {categorySlug} = useParams();
+
     useEffect(() => {
         ProductsStore.fetchItems({
-            offset: 0,
-            limit: 25
+            category_slug: categorySlug
         });
-    }, [])
+    }, [categorySlug])
     return (
         <Layout withBanner={true}>
             <ProductsGrid/>
@@ -21,4 +24,4 @@ export const HomeRaw = (
     );
 }
 
-export const Home = inject('ProductsStore')(observer(HomeRaw))
+export const Category = inject('ProductsStore')(observer(CategoryRaw))

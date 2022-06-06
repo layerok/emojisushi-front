@@ -11,16 +11,14 @@ import {inject, observer} from "mobx-react";
 
 const ProductsGridRaw = (
     {
-        products,
-        MenuStore: {
-            category_name
-        }
+        CategoriesStore,
+        ProductsStore
     }
 ) => {
     const breakpoint = useBreakpoint();
     return <>
         <S.Header>
-            <S.Title>{category_name}</S.Title>
+            <S.Title>{CategoriesStore.name}</S.Title>
             {breakpoint === 'pc' && (
                 <FlexBox >
                     <FiltersModal>
@@ -34,7 +32,7 @@ const ProductsGridRaw = (
         </S.Header>
         <EqualHeight>
             <S.Grid>
-                {products.map((product) => {
+                {ProductsStore.items.map((product) => {
                     return <ProductCard key={product.id} product={product}/>
                 })}
             </S.Grid>
@@ -46,4 +44,4 @@ const ProductsGridRaw = (
     </>
 }
 
-export const ProductsGrid = inject('MenuStore')(observer(ProductsGridRaw));
+export const ProductsGrid = inject('CategoriesStore', 'ProductsStore')(observer(ProductsGridRaw));

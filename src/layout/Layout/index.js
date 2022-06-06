@@ -20,35 +20,23 @@ export const Layout = (
         ...rest
     }) => {
 
-    const windowSize = useWindowSize();
-    const [height, setHeight] = useState(windowSize.height);
-    const debounceHeight = useDebounce(() => {
-        setHeight(windowSize.height)
-    }, 300)
-
-    useEffect(() => {
-        debounceHeight();
-    }, [windowSize.height])
-
     return (
-        <CustomScrollbars height={height}>
-            <S.Layout {...rest}>
-                <Header/>
-                <S.Main {...mainProps}>
-                    <Container {...containerProps}>
-                        {withBanner && <Banner/>}
-                        <S.FlexBox>
-                            {withSidebar && <Sidebar/>}
-                            <S.Content>
-                                {children}
-                            </S.Content>
-                        </S.FlexBox>
+        <S.Layout {...rest}>
+            <Header/>
+            <S.Main {...mainProps}>
+                <Container {...containerProps}>
+                    {withBanner && <Banner/>}
+                    <S.FlexBox>
+                        {withSidebar && <Sidebar/>}
+                        <S.Content>
+                            {children}
+                        </S.Content>
+                    </S.FlexBox>
 
-                    </Container>
-                </S.Main>
-                <Footer/>
-                <RestaurantClosed open={true}/>
-            </S.Layout>
-        </CustomScrollbars>
+                </Container>
+            </S.Main>
+            <Footer/>
+            <RestaurantClosed open={true}/>
+        </S.Layout>
     )
 }

@@ -1,5 +1,7 @@
-import {MenuStore} from "./menu.store";
+import {CategoriesStore} from "./categories.store";
+import {ProductsStore} from "./products.store";
 
 export const stores = {
-    MenuStore
+    CategoriesStore: CategoriesStore,
+    ProductsStore: ProductsStore,
 }

@@ -1,5 +1,6 @@
-import styled from "styled-components";
-import {theme} from "styled-tools";
+import styled, {css} from "styled-components";
+import {ifProp, theme} from "styled-tools";
+import {NavLink} from "react-router-dom";
 
 const Categories = styled.div`
   position: relative;
@@ -19,16 +20,18 @@ const Hint = styled.div`
   right: 0
 `
 
-const Category = styled.div`
+const Category = styled(NavLink)`
   display: flex;
   text-transform: uppercase;
   line-height: 20px;
   font-weight: 500;
   cursor: pointer;
-
-
+  color: white;
+  text-decoration: none;
+  
   &:hover {
-    color: ${theme('link.active')}
+    color: ${theme('link.active')};
+    border: 1px solid ${theme('link.active')};
   }
 
   flex-shrink: 0;
@@ -36,9 +39,11 @@ const Category = styled.div`
   border-radius: 5px;
   padding: 9px 23px;
 
-  &:hover {
-    border: 1px solid ${theme('link.active')}
-  }
+  ${ifProp("isActive", css`
+    color: ${theme('link.active')};
+    border: 1px solid ${theme('link.active')};
+  `)}
+  
 `
 
 export {

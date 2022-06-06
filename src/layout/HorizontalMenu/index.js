@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick-theme.css";
 import {SvgIcon} from "../../components/svg/SvgIcon";
 import {HorizontalArrowsSvg} from "../../components/svg/HorizontalArrowsSvg";
 import {FlexBox} from "../../components/FlexBox";
+import {useParams} from "react-router-dom";
 
 const HorizontalMenu = (
     {
@@ -18,6 +19,7 @@ const HorizontalMenu = (
         variableWidth: true,
         swipeToSlide: true
     }
+    const {categorySlug} = useParams();
     return (
         <nav>
             <S.Categories>
@@ -32,11 +34,14 @@ const HorizontalMenu = (
 
                 <Slider {...settings}>
                     {
-                        categories.map((category) =>(
-                            <S.Category key={category.id}>
-                                {category.name}
-                            </S.Category>
-                        ))
+                        categories.map((category) => {
+                            const active = categorySlug === category.slug;
+                            return (
+                                <S.Category to={'/category/' + category.slug} isActive={active} key={category.id}>
+                                    {category.name}
+                                </S.Category>
+                            )
+                        })
                     }
                 </Slider>
 

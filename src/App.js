@@ -7,6 +7,7 @@ import {ThemeProvider} from "styled-components";
 import {ThankYou} from "./pages/ThankYou";
 import {Delivery} from "./pages/Delivery"
 import {Checkout} from "./pages/Checkout";
+import {Category} from "./pages/Category";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <div className="App">
               <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path="/category/:categorySlug" element={<Category />} />
                   <Route path="/thankyou" element={<ThankYou />} />
                   <Route path="/dostavka-i-oplata" element={<Delivery />} />
                   <Route path="/checkout" element={<Checkout />} />

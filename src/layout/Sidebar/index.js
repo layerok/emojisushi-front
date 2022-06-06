@@ -9,13 +9,9 @@ import {SortingPopover} from "../../components/popovers/SortingPopover";
 import {inject, observer} from "mobx-react";
 import {useEffect} from "react";
 
-
 export const SidebarRaw = (
     {
-        MenuStore: {
-            categories,
-            fetchCategories
-        }
+        CategoriesStore
     }
 ) => {
 
@@ -23,7 +19,7 @@ export const SidebarRaw = (
     const isMobile = breakpoint === 'mobile';
 
     useEffect(() => {
-        fetchCategories();
+        CategoriesStore.fetchItems();
     }, [])
 
     return (
@@ -49,15 +45,15 @@ export const SidebarRaw = (
             </FlexBox>
             {breakpoint === 'pc' ? (
                 <>
-                    <VerticalMenu categories={categories}/>
+                    <VerticalMenu categories={CategoriesStore.items}/>
                     <UnderVerticalMenu/>
                 </>
             ): (
-                <HorizontalMenu categories={categories}/>
+                <HorizontalMenu categories={CategoriesStore.items}/>
             )}
 
         </S.Sidebar>
     );
 }
 
-export const Sidebar = inject('MenuStore')(observer(SidebarRaw));
+export const Sidebar = inject('CategoriesStore')(observer(SidebarRaw));

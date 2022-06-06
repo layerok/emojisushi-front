@@ -25,14 +25,15 @@ export const ProductCard = (
     const isMobile = breakpoint === 'mobile';
     const iconSize = isMobile ? '33px': '25px';
     const ingredients = (description && description.split(',')) || [];
-    const oldPrice = additional_prices?.[0]?.price_formatted;
-    const newPrice = prices?.[0]?.price_formatted;
+    const oldPrice = additional_prices.length > 0 ? additional_prices[0].price_formatted: undefined;
+    const newPrice = prices.length > 0 ? prices[0].price_formatted: undefined;
+    const img = (image_sets.length > 0 && image_sets[0] && image_sets[0].images.length > 0) ? image_sets[0].images[0].path : "default_image";
 
     return <S.Wrapper>
         <S.Favorite>
             <Favorite width={iconSize} isFavorite={is_favorite}/>
         </S.Favorite>
-        <S.Image src={image_sets?.[0]?.images?.[0]?.path}/>
+        <S.Image src={img}/>
         <EqualHeightElement name={"product-name"}>
             <S.Name>{name}</S.Name>
         </EqualHeightElement>
