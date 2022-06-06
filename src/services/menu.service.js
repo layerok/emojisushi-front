@@ -1,8 +1,15 @@
 import {client} from "../clients/client";
 
 class MenuService {
-    getProducts() {
-        return client.get('products');
+    getProducts(params) {
+        return client.get('products', {
+            params
+        });
+    }
+    getCategories(params) {
+        return client.get('categories', {
+            params
+        });
     }
 }
 

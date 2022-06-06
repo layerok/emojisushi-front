@@ -7,16 +7,20 @@ import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import { EqualHeight } from 'react-equal-height';
 import {FiltersModal} from "../modals/FiltersModal";
 import {SortingPopover} from "../popovers/SortingPopover";
+import {inject, observer} from "mobx-react";
 
-export const ProductsGrid = (
+const ProductsGridRaw = (
     {
-        products
+        products,
+        MenuStore: {
+            category_name
+        }
     }
 ) => {
     const breakpoint = useBreakpoint();
     return <>
         <S.Header>
-            <S.Title>Роллы</S.Title>
+            <S.Title>{category_name}</S.Title>
             {breakpoint === 'pc' && (
                 <FlexBox >
                     <FiltersModal>
@@ -41,3 +45,5 @@ export const ProductsGrid = (
         </S.Footer>
     </>
 }
+
+export const ProductsGrid = inject('MenuStore')(observer(ProductsGridRaw));

@@ -4,15 +4,27 @@ import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import {HorizontalMenu} from "../HorizontalMenu";
 import {FiltersButton} from "../../components/buttons/FiltersButton";
 import {FlexBox} from "../../components/FlexBox";
-import {SortOrderButton} from "../../components/buttons/SortOrderButton";
 import {UnderVerticalMenu} from "../UnderVerticalMenu";
 import {SortingPopover} from "../../components/popovers/SortingPopover";
+import {inject, observer} from "mobx-react";
+import {useEffect} from "react";
 
 
-export const Sidebar = () => {
+export const SidebarRaw = (
+    {
+        MenuStore: {
+            categories,
+            fetchCategories
+        }
+    }
+) => {
 
     const breakpoint = useBreakpoint();
     const isMobile = breakpoint === 'mobile';
+
+    useEffect(() => {
+        fetchCategories();
+    }, [])
 
     return (
         <S.Sidebar>
@@ -32,21 +44,20 @@ export const Sidebar = () => {
                         }}>
                             <SortingPopover/>
                         </div>
-
                     </FlexBox>
                 )}
-
-
             </FlexBox>
             {breakpoint === 'pc' ? (
                 <>
-                    <VerticalMenu/>
+                    <VerticalMenu categories={categories}/>
                     <UnderVerticalMenu/>
                 </>
             ): (
-                <HorizontalMenu/>
+                <HorizontalMenu categories={categories}/>
             )}
 
         </S.Sidebar>
     );
 }
+
+export const Sidebar = inject('MenuStore')(observer(SidebarRaw));

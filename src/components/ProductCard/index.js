@@ -11,19 +11,22 @@ export const ProductCard = (
         product: {
             name,
             weight,
-            old_price,
-            new_price,
+            prices,
+            additional_prices,
             count,
             is_favorite,
             pending,
             image_sets,
-            ingredients
+            description
         }
     }
 ) => {
     const breakpoint = useBreakpoint();
     const isMobile = breakpoint === 'mobile';
     const iconSize = isMobile ? '33px': '25px';
+    const ingredients = (description && description.split(',')) || [];
+    const oldPrice = additional_prices?.[0]?.price_formatted;
+    const newPrice = prices?.[0]?.price_formatted;
 
     return <S.Wrapper>
         <S.Favorite>
@@ -35,10 +38,10 @@ export const ProductCard = (
         </EqualHeightElement>
         <S.Description>
             <S.Weight>{weight} г</S.Weight>
-            <IngredientsTooltip items={ingredients} iconSize={iconSize}/>
+            {ingredients.length !== 0 && (<IngredientsTooltip items={ingredients} iconSize={iconSize}/>)}
         </S.Description>
         <S.Footer>
-            <Price oldPrice={old_price} newPrice={new_price}/>
+            <Price oldPrice={oldPrice} newPrice={newPrice}/>
             <AddToCartButton width={isMobile ? '177px': '130px'} count={count} pending={pending}/>
         </S.Footer>
     </S.Wrapper>;

@@ -1,9 +1,11 @@
 import * as S from "./styled";
-import categoriesJSON from "../../common/mock/data/categories.json";
-import {useState} from "react";
 
-const VerticalMenu = () => {
-    const [categories, ] = useState(categoriesJSON)
+const VerticalMenu = (
+    {
+        categories = []
+    }
+) => {
+
     return (
         <nav>
             <S.Categories>
