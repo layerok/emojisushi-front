@@ -12,6 +12,7 @@ const Button = styled.button`
   display: flex;
   justify-content: ${prop('justifyContent', 'center')};
   align-items: center;
+  user-select: none;
 
   ${ifProp('filled', css`
     background: #FFE600;
