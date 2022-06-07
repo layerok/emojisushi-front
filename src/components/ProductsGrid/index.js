@@ -42,7 +42,7 @@ const ProductsGridRaw = (
                 </FlexBox>
             )}
         </S.Header>
-        <EqualHeight>
+        <EqualHeight updateOnChange={breakpoint}>
             <S.Grid>
                 {ProductsStore.items.map((product) => {
                     return <ProductCard key={product.id} product={product}/>
