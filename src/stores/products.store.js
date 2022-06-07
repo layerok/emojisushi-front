@@ -1,4 +1,4 @@
-import MenuServiceInstance from "../services/menu.service";
+import MenuService from "../services/menu.service";
 import {makeAutoObservable} from "mobx";
 
 class Products {
@@ -6,15 +6,32 @@ class Products {
         makeAutoObservable(this);
     }
     items = [];
+    meta = {};
+    offset = 25;
+    loading = false;
 
     fetchItems = (params = {}) => {
-        return MenuServiceInstance.getProducts(params).then(res => {
+        this.setLoading(true);
+        return MenuService.getProducts(params).then(res => {
             this.setItems(res.data.data);
+            this.setMeta(res.data.meta);
+        }).finally(() => {
+            this.setLoading(false);
+        }).catch(() => {
+            this.setLoading(false);
         });
     }
 
     setItems = (products) => {
         this.items = products;
+    }
+
+    setMeta = (meta) => {
+        this.meta = meta;
+    }
+
+    setLoading = (state) => {
+        this.loading = state;
     }
 
 }

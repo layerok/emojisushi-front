@@ -11,14 +11,26 @@ import {inject, observer} from "mobx-react";
 
 const ProductsGridRaw = (
     {
-        CategoriesStore,
-        ProductsStore
+        ProductsStore,
+        title = "Меню",
+        categorySlug
     }
 ) => {
     const breakpoint = useBreakpoint();
+    const handleLoadMore = () => {
+
+        const settings = {
+            offset: 0,
+            limit: ProductsStore.items.length + ProductsStore.offset,
+        }
+        if(categorySlug) {
+            settings.category_slug = categorySlug;
+        }
+        ProductsStore.fetchItems(settings);
+    }
     return <>
         <S.Header>
-            <S.Title>{CategoriesStore.name}</S.Title>
+            <S.Title>{title}</S.Title>
             {breakpoint === 'pc' && (
                 <FlexBox >
                     <FiltersModal>
@@ -37,11 +49,13 @@ const ProductsGridRaw = (
                 })}
             </S.Grid>
         </EqualHeight>
+        {ProductsStore.meta.total > ProductsStore.items.length && (
+            <S.Footer>
+                <LoadMoreButton loading={ProductsStore.loading} style={{cursor: 'pointer'}} text={"Показать еще..."} onClick={handleLoadMore}/>
+            </S.Footer>
+        )}
 
-        <S.Footer>
-            <LoadMoreButton text={"Показать еще..."}/>
-        </S.Footer>
     </>
 }
 
-export const ProductsGrid = inject('CategoriesStore', 'ProductsStore')(observer(ProductsGridRaw));
+export const ProductsGrid = inject('CategoriesStore', 'ProductsStore', 'AppStore')(observer(ProductsGridRaw));

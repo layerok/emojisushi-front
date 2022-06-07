@@ -6,12 +6,15 @@ class Categories {
         makeAutoObservable(this);
     }
     items = [];
-    name = "Меню";
 
     fetchItems = () => {
         return MenuServiceInstance.getCategories().then(res => {
             this.setItems(res.data.data);
         });
+    }
+
+    setName = (name) => {
+        this.name = name;
     }
 
     setItems = (categories) => {
