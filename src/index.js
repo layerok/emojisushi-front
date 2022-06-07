@@ -6,6 +6,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'mobx-react';
 import { stores } from './stores/stores';
+import {SessionService} from './services/session.service';
+
+SessionService.init();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

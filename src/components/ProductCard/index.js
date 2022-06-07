@@ -5,7 +5,6 @@ import {Favorite} from "../Favorite";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import {IngredientsTooltip} from "../tooltips/IngredientsTooltip";
 import { EqualHeightElement } from 'react-equal-height';
-import {useWindowSize} from "react-use";
 
 export const ProductCard = (
     {
