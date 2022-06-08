@@ -12,6 +12,14 @@ class Cart {
             params
         })
     }
+
+    removeCartProduct(cart_product_id) {
+        return client.get('cart/remove', {
+            params: {
+                cart_product_id
+            }
+        })
+    }
 }
 
 const CartService = new Cart();

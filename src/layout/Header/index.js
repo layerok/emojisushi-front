@@ -52,13 +52,13 @@ const HeaderRaw = (
                         </S.PcHeaderItem>
                     </S.Left>
                     <S.Right>
-                        <CartModal total={CartStore.total} products={CartStore.items}>
+                        <CartModal>
                             <S.CartBtn>
                                 <CartButton count={CartStore.totalQuantity} total={CartStore.total}/>
                             </S.CartBtn>
                         </CartModal>
 
-                        <CartModal total={CartStore.total} products={CartStore.items}>
+                        <CartModal>
                             <S.TinyCartBtn>
                                 <TinyCartButton/>
                             </S.TinyCartBtn>

@@ -5,7 +5,6 @@ export const Price = (
     {
         oldPrice,
         newPrice,
-        isSale,
     }
 ) => {
     return (<FlexBox flexDirection={"column"}>

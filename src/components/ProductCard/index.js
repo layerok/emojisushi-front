@@ -6,6 +6,7 @@ import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import {IngredientsTooltip} from "../tooltips/IngredientsTooltip";
 import { EqualHeightElement } from 'react-equal-height';
 import {inject, observer} from "mobx-react";
+import {getProductMainImage} from "../../utils/utils";
 
 const ProductCardRaw = (
     {
@@ -28,7 +29,7 @@ const ProductCardRaw = (
     const ingredients = (description && description.split(',')) || [];
     const oldPrice = additional_prices.length > 0 ? additional_prices[0].price_formatted: undefined;
     const newPrice = prices.length > 0 ? prices[0].price_formatted: undefined;
-    const img = (image_sets.length > 0 && image_sets[0] && image_sets[0].images.length > 0) ? image_sets[0].images[0].path : "default_image";
+    const img = getProductMainImage({image_sets});
     const cartProduct = CartStore.items.find((cartProduct) => cartProduct.product_id === id);
     const count = cartProduct?.quantity || 0;
 

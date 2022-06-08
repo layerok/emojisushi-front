@@ -42,6 +42,19 @@ class Cart {
         });
     }
 
+    removeCartProduct(cart_product_id) {
+        this.setLoading(true);
+        return CartService.removeCartProduct(cart_product_id).then((res) => {
+            this.setItems(res.data.data);
+            this.setTotal(res.data.meta.total)
+            this.setTotalQuantity(res.data.meta.totalQuantity);
+        }).finally(() => {
+            this.setLoading(false);
+        }).catch(() => {
+            this.setLoading(false);
+        });
+    }
+
     setName = (name) => {
         this.name = name;
     }
