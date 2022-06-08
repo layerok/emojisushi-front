@@ -71,7 +71,7 @@ export const CartModal = inject('CartStore')(observer((
     {
         children,
         CartStore: {
-            items: products,
+            items,
             total,
             loading,
         }
@@ -114,7 +114,7 @@ export const CartModal = inject('CartStore')(observer((
 
             <S.Items>
                 <CustomScrollbars height={finalHeight}>
-                {products.map((item, i) => (
+                {items.map((item, i) => (
                     <CartItem key={i} item={item}/>
                 ))}
                 </CustomScrollbars>
@@ -126,7 +126,7 @@ export const CartModal = inject('CartStore')(observer((
                     <Price newPrice={total}/>
                 </FlexBox>
                 <S.Button>
-                    <ButtonOutline onClick={() => {
+                    <ButtonOutline disabled={items.length === 0} onClick={() => {
                         navigate('/checkout');
                     }} width={"100%"}>
                         Оформить заказ

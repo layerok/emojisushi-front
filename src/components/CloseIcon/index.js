@@ -17,6 +17,9 @@ export const CloseIcon = forwardRef((
         ref={ref}
         onClick={onClick}
         hoverColor={"#FFE600"}
+        style={{
+            cursor: 'pointer'
+        }}
         {...rest}
     >
         <CloseSvg/>
