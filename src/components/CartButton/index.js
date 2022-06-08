@@ -4,7 +4,12 @@ import {SvgIcon} from "../svg/SvgIcon";
 import {BagSvg} from "../svg/BagSvg";
 import {ButtonFilled} from "../buttons/Button";
 
-export const CartButton = () => {
+export const CartButton = (
+    {
+        count = 0,
+        total = 0
+    }
+) => {
     return (
         <ButtonFilled padding={"0 24px"} width={"170px"}>
             <FlexBox alignItems={"center"}>
@@ -14,11 +19,11 @@ export const CartButton = () => {
                     </SvgIcon>
                 </S.Icon>
                 <S.Price>
-                    308 ₴
+                    {total}
                 </S.Price>
                 <S.Delimiter/>
                 <S.Count>
-                    2
+                    {count}
                 </S.Count>
             </FlexBox>
         </ButtonFilled>

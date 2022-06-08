@@ -5,7 +5,8 @@ import {ButtonOutline} from "../Button";
 export const AddToCartButton = (
     {
         pending,
-        count
+        count,
+        handleAdd
     }
 ) => {
 
@@ -14,8 +15,16 @@ export const AddToCartButton = (
     }
 
     if(count) {
-        return <ButtonCounter count={count}/>
+        return <ButtonCounter
+            handleIncrement={() => {
+                handleAdd(1);
+            }}
+            handleDecrement={() => {
+                handleAdd(-1);
+            }}
+            count={count}
+        />
     }
 
-    return <ButtonOutline>Заказать</ButtonOutline>;
+    return <ButtonOutline onClick={() => handleAdd(1)}>Заказать</ButtonOutline>;
 }

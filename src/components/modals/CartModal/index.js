@@ -1,6 +1,5 @@
 import {BaseModal} from "../BaseModal";
 import * as S from "./styled";
-import {products} from "../../../common/mock/data/products";
 import {LightCounter} from "../../Counter";
 import {FlexBox} from "../../FlexBox";
 import {Price} from "../../Price";
@@ -48,7 +47,7 @@ const CartItem = ({item}) => {
 }
 
 
-export const CartModal = ({children}) => {
+export const CartModal = ({children, products, total}) => {
     const navigate = useNavigate();
     const windowSize = useWindowSize();
     const [height, setHeight] = useState(windowSize.height);
@@ -95,7 +94,7 @@ export const CartModal = ({children}) => {
             <S.Footer>
                 <FlexBox alignItems={"center"} justifyContent={"space-between"}>
                     <S.Sum>Сумма заказа</S.Sum>
-                    <Price newPrice={"308 ₴"}/>
+                    <Price newPrice={total + " ₴"}/>
                 </FlexBox>
                 <S.Button>
                     <ButtonOutline onClick={() => {

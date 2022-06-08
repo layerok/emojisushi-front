@@ -22,9 +22,13 @@ class Spots {
     fetchItems = (params = {}) => {
         this.setLoading(false);
         AccessService.getSpots(params).then((res) => {
-            this.items = res.data.data;
+            this.setItems(res.data.data);
             this.setLoading(false);
         })
+    }
+
+    setItems = (items) => {
+        this.items = items;
     }
 }
 

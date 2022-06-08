@@ -11,9 +11,22 @@ import {MobMenuModal} from "../../components/modals/MobMenuModal";
 import {SvgIcon} from "../../components/svg/SvgIcon";
 import {BurgerSvg} from "../../components/svg/BurgerSvg";
 import {LogoSvg} from "../../components/svg/LogoSvg";
+import {useEffect} from "react";
+import {inject, observer} from "mobx-react";
 
 
-export const Header = () => {
+const HeaderRaw = (
+    {
+        CartStore
+    }
+) => {
+
+    useEffect(() => {
+        CartStore.fetchItems();
+    },[])
+
+
+
     return (
         <S.Header>
             <Container>
@@ -39,13 +52,13 @@ export const Header = () => {
                         </S.PcHeaderItem>
                     </S.Left>
                     <S.Right>
-                        <CartModal>
+                        <CartModal total={CartStore.total} products={CartStore.items}>
                             <S.CartBtn>
-                                <CartButton/>
+                                <CartButton count={CartStore.totalQuantity} total={CartStore.total}/>
                             </S.CartBtn>
                         </CartModal>
 
-                        <CartModal>
+                        <CartModal total={CartStore.total} products={CartStore.items}>
                             <S.TinyCartBtn>
                                 <TinyCartButton/>
                             </S.TinyCartBtn>
@@ -64,4 +77,6 @@ export const Header = () => {
         </S.Header>
     )
 }
+
+export const Header = inject('CartStore')(observer(HeaderRaw));
 

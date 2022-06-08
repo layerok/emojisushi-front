@@ -5,20 +5,21 @@ import {Favorite} from "../Favorite";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import {IngredientsTooltip} from "../tooltips/IngredientsTooltip";
 import { EqualHeightElement } from 'react-equal-height';
+import {inject, observer} from "mobx-react";
 
-export const ProductCard = (
+const ProductCardRaw = (
     {
         product: {
+            id,
             name,
             weight,
             prices,
             additional_prices,
-            count,
             is_favorite,
-            pending,
             image_sets,
             description
-        }
+        },
+        CartStore
     }
 ) => {
     const breakpoint = useBreakpoint();
@@ -28,6 +29,18 @@ export const ProductCard = (
     const oldPrice = additional_prices.length > 0 ? additional_prices[0].price_formatted: undefined;
     const newPrice = prices.length > 0 ? prices[0].price_formatted: undefined;
     const img = (image_sets.length > 0 && image_sets[0] && image_sets[0].images.length > 0) ? image_sets[0].images[0].path : "default_image";
+    const cartProduct = CartStore.items.find((cartProduct) => cartProduct.product_id === id);
+    const count = cartProduct?.quantity || 0;
+
+
+    const handleAdd = (product_id) => {
+        return (quantity) => {
+            CartStore.addProduct({
+                product_id,
+                quantity
+            })
+        }
+    }
 
     return <S.Wrapper>
         <S.Favorite>
@@ -43,7 +56,14 @@ export const ProductCard = (
         </S.Description>
         <S.Footer>
             <Price oldPrice={oldPrice} newPrice={newPrice}/>
-            <AddToCartButton width={isMobile ? '177px': '130px'} count={count} pending={pending}/>
+            <AddToCartButton
+                width={isMobile ? '177px': '130px'}
+                count={count}
+                pending={CartStore.pending.includes(id)}
+                handleAdd={handleAdd(id)}
+            />
         </S.Footer>
     </S.Wrapper>;
 }
+
+export const ProductCard = inject('CartStore')(observer(ProductCardRaw))

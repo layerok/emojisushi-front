@@ -40,4 +40,4 @@ export const LayoutRaw = (
     )
 }
 
-export const Layout = inject('AppStore')(observer(LayoutRaw));
+export const Layout = inject('AppStore', 'CartStore')(observer(LayoutRaw));
