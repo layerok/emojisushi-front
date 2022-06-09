@@ -1,4 +1,4 @@
-import {cloneElement, forwardRef, useEffect, useId, useLayoutEffect, useRef, useState} from "react";
+import {cloneElement, forwardRef, useEffect, useId, useState} from "react";
 import {
     useClick,
     useDismiss,
@@ -13,27 +13,6 @@ import {
     FloatingOverlay, useFloatingParentNodeId,
 } from "@floating-ui/react-dom-interactions";
 
-function getChildren(tree, id) {
-    let allChildren =
-        tree?.nodesRef.current.filter(
-            (node) => node.parentId === id && node?.context?.open
-        ) ?? [];
-    let currentChildren = allChildren;
-
-    while (currentChildren.length) {
-        currentChildren =
-            tree?.nodesRef.current.filter((node) =>
-                currentChildren?.some(
-                    (n) => node.parentId === n.id && node?.context?.open
-                )
-            ) ?? [];
-
-        allChildren = allChildren.concat(currentChildren);
-    }
-
-    return allChildren;
-}
-
 
 export const BaseModalComponent = forwardRef((
     {
@@ -41,7 +20,8 @@ export const BaseModalComponent = forwardRef((
         overlayStyles,
         open: passedOpen = false,
         children,
-        onClick
+        onClick,
+        useClickOptions = {}
     }, ref
 ) => {
     const [open, setOpen] = useState(passedOpen);
@@ -59,7 +39,7 @@ export const BaseModalComponent = forwardRef((
     const descriptionId = `${id}-description`;
 
     const { getReferenceProps, getFloatingProps } = useInteractions([
-        useClick(context),
+        useClick(context, useClickOptions),
         useRole(context),
         useDismiss(context, {
             enabled: allowDismiss,

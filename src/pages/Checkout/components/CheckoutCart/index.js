@@ -3,32 +3,59 @@ import {FlexBox} from "../../../../components/FlexBox";
 import {Price} from "../../../../components/Price";
 import {IngredientsTooltip} from "../../../../components/tooltips/IngredientsTooltip";
 import {CustomScrollbars} from "../../../../layout/CustomScrollbar";
-import {products} from "../../../../common/mock/data/products";
 import {EditCartButton} from "../../../../components/buttons/EditCartButton";
 import {CartModal} from "../../../../components/modals/CartModal";
+import {inject, observer} from "mobx-react";
+import {
+    getProductIngredients,
+    getProductMainImage,
+    getProductNewPrice,
+    getProductOldPrice
+} from "../../../../utils/utils";
+import {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 
-export const CheckoutCart = () => {
+const CheckoutCartRaw = (
+    {
+        CartStore: {
+            items
+        }
+    }
+) => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(items.length === 0) {
+            navigate('/');
+        }
+    }, [items])
+
     return <S.Wrapper>
             <CustomScrollbars height={362}>
-                {products.map(({name, image, weight, ingredients,old_price, new_price, id}) => (
-                    <S.Item key={id}>
-                        <S.Image src={image}/>
+                {items.map((item) => {
+                    const { id, quantity, product } = item;
+                    const ingredients = getProductIngredients(product);
+                    const oldPrice = getProductOldPrice(product);
+                    const newPrice = getProductNewPrice(product);
+                    const img = getProductMainImage(product);
+                    return <S.Item key={id}>
+                        <S.Image src={img}/>
                         <S.Content>
-                            <S.Name>{name}</S.Name>
+                            <S.Name>{product.name}</S.Name>
                             <S.Description>
                                 <FlexBox>
-                                    <S.Count>1 шт</S.Count>
+                                    <S.Count>{quantity} шт</S.Count>
                                     <S.Delimiter/>
-                                    <S.Weight>{weight}</S.Weight>
+                                    <S.Weight>{product.weight}</S.Weight>
                                 </FlexBox>
                                 <IngredientsTooltip items={ingredients}/>
                             </S.Description>
                             <S.Price>
-                                <Price newPrice={new_price} oldPrice={old_price}/>
+                                <Price newPrice={newPrice} oldPrice={oldPrice}/>
                             </S.Price>
                         </S.Content>
                     </S.Item>
-                ))}
+                })}
 
             </CustomScrollbars>
             <CartModal>
@@ -40,3 +67,5 @@ export const CheckoutCart = () => {
 
 
 }
+
+export const CheckoutCart = inject('CartStore')(observer(CheckoutCartRaw));

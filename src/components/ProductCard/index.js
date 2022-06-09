@@ -6,7 +6,7 @@ import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import {IngredientsTooltip} from "../tooltips/IngredientsTooltip";
 import { EqualHeightElement } from 'react-equal-height';
 import {inject, observer} from "mobx-react";
-import {getProductMainImage} from "../../utils/utils";
+import {getProductIngredients, getProductMainImage, getProductNewPrice, getProductOldPrice} from "../../utils/utils";
 
 const ProductCardRaw = (
     {
@@ -26,9 +26,9 @@ const ProductCardRaw = (
     const breakpoint = useBreakpoint();
     const isMobile = breakpoint === 'mobile';
     const iconSize = isMobile ? '33px': '25px';
-    const ingredients = (description && description.split(',')) || [];
-    const oldPrice = additional_prices.length > 0 ? additional_prices[0].price_formatted: undefined;
-    const newPrice = prices.length > 0 ? prices[0].price_formatted: undefined;
+    const ingredients = getProductIngredients({description});
+    const oldPrice = getProductOldPrice({additional_prices});
+    const newPrice = getProductNewPrice({prices});
     const img = getProductMainImage({image_sets});
     const cartProduct = CartStore.items.find((cartProduct) => cartProduct.product_id === id);
     const count = cartProduct?.quantity || 0;

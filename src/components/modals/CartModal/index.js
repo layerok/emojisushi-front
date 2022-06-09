@@ -109,7 +109,7 @@ export const CartModal = inject('CartStore')(observer((
                 <CloseModalIcon close={close}/>
             </S.CloseIcon>
             <S.Title>
-                Корзина
+                {items.length === 0 ? 'Ваша корзина пуста': 'Корзина'}
             </S.Title>
 
             <S.Items>
@@ -120,20 +120,22 @@ export const CartModal = inject('CartStore')(observer((
                 </CustomScrollbars>
             </S.Items>
 
-            <S.Footer>
-                <FlexBox alignItems={"center"} justifyContent={"space-between"}>
-                    <S.Sum>Сумма заказа</S.Sum>
-                    <Price newPrice={total}/>
-                </FlexBox>
-                <S.Button>
-                    <ButtonOutline disabled={items.length === 0} onClick={() => {
-                        navigate('/checkout');
-                    }} width={"100%"}>
-                        Оформить заказ
-                    </ButtonOutline>
-                </S.Button>
+            { items.length !== 0 && (
+                <S.Footer>
+                    <FlexBox alignItems={"center"} justifyContent={"space-between"}>
+                        <S.Sum>Сумма заказа</S.Sum>
+                        <Price newPrice={total}/>
+                    </FlexBox>
+                    <S.Button>
+                        <ButtonOutline disabled={items.length === 0} onClick={() => {
+                            navigate('/checkout');
+                        }} width={"100%"}>
+                            Оформить заказ
+                        </ButtonOutline>
+                    </S.Button>
 
-            </S.Footer>
+                </S.Footer>
+            )}
         </S.Wrapper>
     )}>
         {children}
