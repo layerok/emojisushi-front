@@ -12,8 +12,6 @@ import {
     getProductNewPrice,
     getProductOldPrice
 } from "../../../../utils/utils";
-import {useEffect} from "react";
-import {useNavigate} from "react-router-dom";
 
 const CheckoutCartRaw = (
     {
@@ -22,13 +20,7 @@ const CheckoutCartRaw = (
         }
     }
 ) => {
-    const navigate = useNavigate();
 
-    useEffect(() => {
-        if(items.length === 0) {
-            navigate('/');
-        }
-    }, [items])
 
     return <S.Wrapper>
             <CustomScrollbars height={362}>

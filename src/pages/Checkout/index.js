@@ -4,9 +4,39 @@ import {CheckoutForm} from "./components/CheckoutForm";
 import {CheckoutCart} from "./components/CheckoutCart";
 import {Heading} from "../../components/Heading";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
+import {useNavigate} from "react-router-dom";
+import {useEffect} from "react";
+import {inject, observer} from "mobx-react";
 
-export const Checkout = () => {
+export const CheckoutRaw = (
+    {
+        CartStore: {
+            items,
+            fetchItems,
+            loading
+        },
+        AppStore
+    }
+) => {
     const breakpoint = useBreakpoint();
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        fetchItems().then(() => {
+            AppStore.setLoading(false);
+        })
+    }, [])
+
+    useEffect(() => {
+        if(!AppStore.loading) {
+            if(items.length === 0) {
+                navigate('/');
+            }
+        }
+
+    }, [items, AppStore.loading])
+
     return (
         <Layout withBanner={false} withSidebar={false}>
             <Heading>Оформление заказа</Heading>
@@ -17,3 +47,5 @@ export const Checkout = () => {
         </Layout>
     );
 }
+
+export const Checkout = inject('CartStore', 'AppStore')(observer(CheckoutRaw));
