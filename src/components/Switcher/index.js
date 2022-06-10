@@ -34,6 +34,10 @@ export const Switcher = (
         </>;
     }
 
+    if(!options.length) {
+        return "";
+    }
+
     return <S.Wrapper>
         {options.map(({id, name}, index) => (
             <Option

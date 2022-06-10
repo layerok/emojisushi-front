@@ -3,11 +3,15 @@ import {ProductsStore} from "./products.store";
 import {AppStore} from "./app.store";
 import {SpotsStore} from "./spots.store";
 import {CartStore} from "./cart.store";
+import {PaymentStore} from "./payment.store";
+import {ShippingStore} from "./shipping.store";
 
 export const stores = {
-    CategoriesStore: CategoriesStore,
-    ProductsStore: ProductsStore,
-    AppStore: AppStore,
-    SpotsStore: SpotsStore,
-    CartStore: CartStore,
+    CategoriesStore,
+    ProductsStore,
+    AppStore,
+    SpotsStore,
+    CartStore,
+    PaymentStore,
+    ShippingStore
 }

@@ -10,12 +10,10 @@ import {inject, observer} from "mobx-react";
 
 export const CheckoutRaw = (
     {
-        CartStore: {
-            items,
-            fetchItems,
-            loading
-        },
-        AppStore
+        CartStore,
+        AppStore,
+        PaymentStore,
+        ShippingStore
     }
 ) => {
     const breakpoint = useBreakpoint();
@@ -23,19 +21,24 @@ export const CheckoutRaw = (
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchItems().then(() => {
+        Promise.all([
+            CartStore.fetchItems(),
+            PaymentStore.fetchItems(),
+            ShippingStore.fetchItems()
+        ]).then(() => {
             AppStore.setLoading(false);
         })
+
     }, [])
 
     useEffect(() => {
         if(!AppStore.loading) {
-            if(items.length === 0) {
+            if(CartStore.items.length === 0) {
                 navigate('/');
             }
         }
 
-    }, [items, AppStore.loading])
+    }, [CartStore.items, AppStore.loading])
 
     return (
         <Layout withBanner={false} withSidebar={false}>
@@ -48,4 +51,4 @@ export const CheckoutRaw = (
     );
 }
 
-export const Checkout = inject('CartStore', 'AppStore')(observer(CheckoutRaw));
+export const Checkout = inject('CartStore', 'AppStore', 'PaymentStore', 'ShippingStore')(observer(CheckoutRaw));

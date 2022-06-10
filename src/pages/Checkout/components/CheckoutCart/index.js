@@ -60,4 +60,4 @@ const CheckoutCartRaw = (
 
 }
 
-export const CheckoutCart = inject('CartStore')(observer(CheckoutCartRaw));
+export const CheckoutCart = inject('CartStore', 'PaymentStore', 'ShippingStore')(observer(CheckoutCartRaw));

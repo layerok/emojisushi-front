@@ -1,14 +1,18 @@
 import * as S from "./styled";
 import {Switcher} from "../../../../components/Switcher";
-import {deliveryTypes} from "../../../../common/mock/data/deliveryTypes";
 import {Input} from "../../../../components/Input";
-import {paymentTypes} from "../../../../common/mock/data/paymentTypes";
 import {FlexBox} from "../../../../components/FlexBox";
 import {ButtonOutline} from "../../../../components/buttons/Button";
+import {inject, observer} from "mobx-react";
 
-export const CheckoutForm = () => {
+export const CheckoutFormRaw = (
+    {
+        PaymentStore,
+        ShippingStore,
+    }
+) => {
     return <S.Form>
-        <Switcher name={"deliveryType"} options={deliveryTypes}/>
+        <Switcher name={"deliveryType"} options={ShippingStore.items}/>
         <S.Control>
             <Input name={"name"} placeholder={"Имя"}/>
         </S.Control>
@@ -31,7 +35,7 @@ export const CheckoutForm = () => {
             <Input name={"change"} placeholder={"Приготовить сдачу с"}/>
         </S.Control>
         <S.Control>
-            <Switcher name={"paymentType"} options={paymentTypes}/>
+            <Switcher name={"paymentType"} options={PaymentStore.items}/>
         </S.Control>
         <S.Control>
             <S.ErrorBag>
@@ -51,3 +55,5 @@ export const CheckoutForm = () => {
 
     </S.Form>;
 }
+
+export const CheckoutForm = inject('PaymentStore', 'ShippingStore')(observer(CheckoutFormRaw))
