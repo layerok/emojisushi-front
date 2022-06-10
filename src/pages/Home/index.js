@@ -18,9 +18,23 @@ export const HomeRaw = (
             AppStore.setLoading(false);
         });
     }, [])
+
+    const handleLoadMore = () => {
+        const settings = {
+            offset: 0,
+            limit: ProductsStore.items.length + ProductsStore.offset,
+        }
+        ProductsStore.fetchItems(settings);
+    }
+
     return (
         <Layout withBanner={true}>
-            <ProductsGrid/>
+            <ProductsGrid
+                loadable={ProductsStore.meta.total > ProductsStore.items.length}
+                loading={ProductsStore.loading}
+                items={ProductsStore.items}
+                handleLoadMore={handleLoadMore}
+            />
         </Layout>
     );
 }

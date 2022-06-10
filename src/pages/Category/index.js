@@ -18,6 +18,15 @@ export const CategoryRaw = (
     })
     const title = selectedCategory?.name;
 
+    const handleLoadMore = () => {
+        const settings = {
+            offset: 0,
+            limit: ProductsStore.items.length + ProductsStore.offset,
+            category_slug: categorySlug
+        }
+        ProductsStore.fetchItems(settings);
+    }
+
     useEffect(() => {
         AppStore.setLoading(true);
         ProductsStore.fetchItems({
@@ -28,11 +37,15 @@ export const CategoryRaw = (
             AppStore.setLoading(false);
         });
     }, [categorySlug])
+
     return (
         <Layout withBanner={true}>
             <ProductsGrid
-                categorySlug={categorySlug}
+                handleLoadMore={handleLoadMore}
                 title={title}
+                loadable={ProductsStore.meta.total > ProductsStore.items.length}
+                loading={ProductsStore.loading}
+                items={ProductsStore.items}
             />
         </Layout>
     );

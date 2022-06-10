@@ -11,23 +11,15 @@ import {inject, observer} from "mobx-react";
 
 const ProductsGridRaw = (
     {
-        ProductsStore,
         title = "Меню",
-        categorySlug
+        items,
+        handleLoadMore,
+        loading,
+        loadable
     }
 ) => {
     const breakpoint = useBreakpoint();
-    const handleLoadMore = () => {
 
-        const settings = {
-            offset: 0,
-            limit: ProductsStore.items.length + ProductsStore.offset,
-        }
-        if(categorySlug) {
-            settings.category_slug = categorySlug;
-        }
-        ProductsStore.fetchItems(settings);
-    }
     return <>
         <S.Header>
             <S.Title>{title}</S.Title>
@@ -44,18 +36,17 @@ const ProductsGridRaw = (
         </S.Header>
         <EqualHeight updateOnChange={breakpoint}>
             <S.Grid>
-                {ProductsStore.items.map((product) => {
+                {items.map((product) => {
                     return <ProductCard key={product.id} product={product}/>
                 })}
             </S.Grid>
         </EqualHeight>
-        {ProductsStore.meta.total > ProductsStore.items.length && (
+        {loadable && (
             <S.Footer>
-                <LoadMoreButton loading={ProductsStore.loading} style={{cursor: 'pointer'}} text={"Показать еще..."} onClick={handleLoadMore}/>
+                <LoadMoreButton loading={loading} style={{cursor: 'pointer'}} text={"Показать еще..."} onClick={handleLoadMore}/>
             </S.Footer>
         )}
-
     </>
 }
 
-export const ProductsGrid = inject('CategoriesStore', 'ProductsStore', 'AppStore')(observer(ProductsGridRaw));
+export const ProductsGrid = inject('AppStore')(observer(ProductsGridRaw));
