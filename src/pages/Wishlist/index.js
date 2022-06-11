@@ -15,6 +15,7 @@ export const WishlistRaw = (
             offset: 0,
             limit: ProductsStore.step,
             wishlist: true,
+            sort: ProductsStore.sort
         }).then(() => {
             AppStore.setLoading(false);
         });
@@ -25,6 +26,7 @@ export const WishlistRaw = (
             offset: 0,
             limit: ProductsStore.items.length + ProductsStore.step,
             wishlist: true,
+            sort: ProductsStore.sort
         }
         ProductsStore.fetchItems(settings);
     }

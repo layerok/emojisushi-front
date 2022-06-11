@@ -22,7 +22,8 @@ export const CategoryRaw = (
         const settings = {
             offset: 0,
             limit: ProductsStore.items.length + ProductsStore.step,
-            category_slug: categorySlug
+            category_slug: categorySlug,
+            sort: ProductsStore.sort
         }
         ProductsStore.fetchItems(settings);
     }
@@ -33,6 +34,7 @@ export const CategoryRaw = (
             category_slug: categorySlug,
             offset: 0,
             limit: ProductsStore.step,
+            sort: ProductsStore.sort
         }).then(() => {
             AppStore.setLoading(false);
         });

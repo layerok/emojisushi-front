@@ -9,6 +9,9 @@ const resources = {
         translation: {
             common: {
                 filters: 'Фiльтри'
+            },
+            sort: {
+
             }
         }
 
@@ -17,6 +20,17 @@ const resources = {
         translation: {
             common: {
                 filters: 'Фильтры'
+            },
+            sort: {
+                "default": "По умолчанию",
+                bestseller: "Бестселлер",
+                ratings: "По рейтингу",
+                latest: "Сначало старые",
+                price_low: "Cначало дешевые",
+                price_high: "Сначало дорогие",
+                oldest: "Сначало старые",
+                random: "В случайном порядке",
+                name: "По алфавиту A-я"
             }
         }
     }
@@ -29,7 +43,7 @@ i18n
         lng: "ua", // language to use, more information here: https://www.i18next.com/overview/configuration-options#languages-namespaces-resources
         // you can use the i18n.changeLanguage function to change the language manually: https://www.i18next.com/overview/api#changelanguage
         // if you're using a language detector, do not define the lng option
-        fallbackLng: "ua",
+        fallbackLng: "ru",
         interpolation: {
             escapeValue: false // react already safes from xss
         }

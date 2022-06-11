@@ -10,11 +10,14 @@ class Products {
     step = 25;
     loading = false;
     lastParams = {};
+    sort = null;
 
     fetchItems = (params = {}) => {
         this.setLoading(true);
         this.setLastParams(params);
-        return MenuService.getProducts(params).then(res => {
+        return MenuService.getProducts({
+            ...params,
+        }).then(res => {
             this.setItems(res.data.data);
             this.setMeta(res.data.meta);
         }).finally(() => {
@@ -42,6 +45,10 @@ class Products {
 
     setLoading = (state) => {
         this.loading = state;
+    }
+
+    setSort = (sort) => {
+        this.sort = sort;
     }
 
 }

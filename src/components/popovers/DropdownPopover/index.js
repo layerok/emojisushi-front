@@ -6,6 +6,7 @@ export const DropdownPopover = (
     {
         onSelect,
         options = [],
+        asFlatArray = false,
         offset = 0,
         open = false,
         nameAccessor = "name",
@@ -13,6 +14,7 @@ export const DropdownPopover = (
         selectedIndex,
         children,
         backgroundColor="#171717",
+        resolveOptionName: resolveOptionNamePassed,
         width = "100%"
     }
 ) => {
@@ -35,13 +37,24 @@ export const DropdownPopover = (
         }
     }
 
+    const resolveOptionName = ({option}) => {
+        if(resolveOptionNamePassed) {
+            return resolveOptionNamePassed({option})
+        }
+        return asFlatArray ? option:  option[nameAccessor]
+    }
+
+    const resolveOptionId = ({option}) => {
+        return asFlatArray ? option:  option[idAccessor]
+    }
+
     return (
         <>
             <Popover offset={offset} open={open} render={({close}) => (
                 <S.Options width={width} backgroundColor={backgroundColor}>
                     {options.map((option, index) => (
-                        <S.Option onClick={() => handleSelect({close, option, index})} key={option[idAccessor]}>
-                            {option[nameAccessor]}
+                        <S.Option onClick={() => handleSelect({close, option, index})} key={resolveOptionId({option, index})}>
+                            {resolveOptionName({option, index})}
                         </S.Option>
                     ))}
 

@@ -1,38 +1,38 @@
 import {DropdownPopover} from "../DropdownPopover";
 import {SortOrderButton} from "../../buttons/SortOrderButton";
+import {inject} from "mobx-react";
 import {useState} from "react";
+import {useTranslation} from "react-i18next";
 
-const SORTING_OPTIONS = [
+const SortingPopoverRaw = (
     {
-        id: 0,
-        name: "По умолчанию"
-    },
-    {
-        id: 1,
-        name: "Сначало дорогие"
-    },
-    {
-        id: 2,
-        name: "Сначало дешевые"
-    },
-    {
-        id: 3,
-        name: "Сначало новые"
-    },
-    {
-        id: 4,
-        name: "Сначало старые"
-    },
-]
-
-export const SortingPopover = () => {
-    const [selectedIndex, setSelectedIndex] = useState(0);
-    return <DropdownPopover options={SORTING_OPTIONS} selectedIndex={selectedIndex} onSelect={({close, index}) => {
-        setSelectedIndex(index);
-        close();
-    }}>
+        ProductsStore
+    }
+) => {
+    const initialSelectedIndex = (ProductsStore?.meta?.sort_options || []).indexOf(ProductsStore.sort);
+    const [selectedIndex, setSelectedIndex] = useState(initialSelectedIndex === -1 ? 0 : initialSelectedIndex);
+    const {t} = useTranslation();
+    return <DropdownPopover
+        asFlatArray={true}
+        options={ProductsStore.meta.sort_options}
+        resolveOptionName={({option}) => {
+            return t(`sort.${option}`)
+        }}
+        selectedIndex={selectedIndex}
+        onSelect={({option, index, close}) => {
+            close();
+            setSelectedIndex(index);
+            ProductsStore.setSort(option);
+            ProductsStore.fetchItems({
+                ...ProductsStore.lastParams,
+                sort: option
+            })
+        }}
+    >
         {({selectedOption}) => (
-            <SortOrderButton text={selectedOption.name}/>
+            <SortOrderButton text={t(`sort.${selectedOption}`)}/>
         )}
     </DropdownPopover>
 }
+
+export const SortingPopover = inject('ProductsStore')(SortingPopoverRaw);

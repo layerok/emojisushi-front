@@ -18,6 +18,7 @@ const ProductsGridRaw = (
         loading,
         loadable,
         noItemsTitle = "Товары не найдены",
+        ProductsStore,
     }
 ) => {
     const breakpoint = useBreakpoint();
@@ -53,4 +54,4 @@ const ProductsGridRaw = (
     </>
 }
 
-export const ProductsGrid = inject('AppStore')(observer(ProductsGridRaw));
+export const ProductsGrid = inject('AppStore', 'ProductsStore')(observer(ProductsGridRaw));
