@@ -21,6 +21,7 @@ export const CheckoutRaw = (
     const navigate = useNavigate();
 
     useEffect(() => {
+        AppStore.setLoading(true);
         Promise.all([
             CartStore.fetchItems(),
             PaymentStore.fetchItems(),
