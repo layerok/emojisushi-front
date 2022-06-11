@@ -11,6 +11,8 @@ export function getProductNewPrice({prices})  {
     return prices.length > 0 ? prices[0].price_formatted: undefined;
 }
 
-export function getProductIngredients({description}) {
-    return (description && description.split(',')) || [];
+export function getProductIngredients({property_values}) {
+    return property_values.map((pv) => {
+        return pv.property.name;
+    })
 }

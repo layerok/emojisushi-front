@@ -24,7 +24,8 @@ const ProductCardRaw = (
             additional_prices,
             is_favorite_,
             image_sets,
-            description
+            description,
+            property_values
         },
         CartStore,
         ProductsStore,
@@ -34,7 +35,7 @@ const ProductCardRaw = (
     const breakpoint = useBreakpoint();
     const isMobile = breakpoint === 'mobile';
     const iconSize = isMobile ? '33px': '25px';
-    const ingredients = getProductIngredients({description});
+    const ingredients = getProductIngredients({property_values});
     const oldPrice = getProductOldPrice({additional_prices});
     const newPrice = getProductNewPrice({prices});
     const img = getProductMainImage({image_sets});
