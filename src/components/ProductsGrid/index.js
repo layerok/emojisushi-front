@@ -8,6 +8,7 @@ import { EqualHeight } from 'react-equal-height';
 import {FiltersModal} from "../modals/FiltersModal";
 import {SortingPopover} from "../popovers/SortingPopover";
 import {inject, observer} from "mobx-react";
+import {useTranslation, withTranslation} from "react-i18next";
 
 const ProductsGridRaw = (
     {
@@ -16,18 +17,22 @@ const ProductsGridRaw = (
         handleLoadMore,
         loading,
         loadable,
-        noItemsTitle = "Товары не найдены"
+        noItemsTitle = "Товары не найдены",
+        t
     }
 ) => {
     const breakpoint = useBreakpoint();
-
+    const ret = useTranslation();
+    const translation = ret.t('ua.common.filters');
+    console.log(translation);
+    console.log(ret);
     return <>
         <S.Header>
             <S.Title>{title}</S.Title>
             {breakpoint === 'pc' && (
                 <FlexBox >
                     <FiltersModal>
-                        <FiltersButton text={"Фильтры"}/>
+                        <FiltersButton text={t('common.filters')}/>
                     </FiltersModal>
                     <div style={{marginLeft: "67px"}}>
                         <SortingPopover/>
@@ -52,4 +57,4 @@ const ProductsGridRaw = (
     </>
 }
 
-export const ProductsGrid = inject('AppStore')(observer(ProductsGridRaw));
+export const ProductsGrid = withTranslation()(inject('AppStore')(observer(ProductsGridRaw)));
