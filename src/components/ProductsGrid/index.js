@@ -18,14 +18,10 @@ const ProductsGridRaw = (
         loading,
         loadable,
         noItemsTitle = "Товары не найдены",
-        t
     }
 ) => {
     const breakpoint = useBreakpoint();
-    const ret = useTranslation();
-    const translation = ret.t('ua.common.filters');
-    console.log(translation);
-    console.log(ret);
+    const {t} = useTranslation();
     return <>
         <S.Header>
             <S.Title>{title}</S.Title>
@@ -57,4 +53,4 @@ const ProductsGridRaw = (
     </>
 }
 
-export const ProductsGrid = withTranslation()(inject('AppStore')(observer(ProductsGridRaw)));
+export const ProductsGrid = inject('AppStore')(observer(ProductsGridRaw));
