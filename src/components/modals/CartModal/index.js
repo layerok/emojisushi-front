@@ -13,7 +13,7 @@ import {useDebounce} from "../../../common/hooks/useDebounce";
 import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
 import {ConfirmActionPopover} from "../../popovers/ConfirmActionPopover";
 import { useNavigate } from "react-router-dom";
-import {getProductMainImage} from "../../../utils/utils";
+import {getProductMainImage, getProductNewPrice, getProductOldPrice} from "../../../utils/utils";
 import {inject, observer} from "mobx-react";
 import {Loader} from "../../Loader";
 
@@ -26,6 +26,8 @@ const CartItem = inject('CartStore')(observer((
     const {product} = item;
     const {name} = product;
     const img = getProductMainImage(product);
+    const newPrice = getProductNewPrice(product);
+    const oldPrice = getProductOldPrice(product);
 
     const handleAdd = (product_id) => {
         return (quantity) => {
@@ -60,7 +62,7 @@ const CartItem = inject('CartStore')(observer((
                         handleAdd(item.product_id)(-1);
                     }} count={item.quantity}/>
                 </S.Item.Counter>
-                <Price newPrice={item.new_price} oldPrice={item.old_price}/>
+                <Price newPrice={newPrice} oldPrice={oldPrice}/>
             </FlexBox>
         </S.Item.Info>
     </S.Item>)

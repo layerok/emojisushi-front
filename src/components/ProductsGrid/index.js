@@ -9,6 +9,7 @@ import {FiltersModal} from "../modals/FiltersModal";
 import {SortingPopover} from "../popovers/SortingPopover";
 import {inject, observer} from "mobx-react";
 import {useTranslation, withTranslation} from "react-i18next";
+import {useDebounce} from "../../common/hooks/useDebounce";
 
 const ProductsGridRaw = (
     {
@@ -21,7 +22,12 @@ const ProductsGridRaw = (
         ProductsStore,
     }
 ) => {
+
     const breakpoint = useBreakpoint();
+
+    const debouncedBreakpoint = useDebounce(() => {
+        return breakpoint;
+    }, 300)
     const {t} = useTranslation();
     return <>
         <S.Header>
@@ -37,7 +43,7 @@ const ProductsGridRaw = (
                 </FlexBox>
             )}
         </S.Header>
-        <EqualHeight updateOnChange={breakpoint}>
+        <EqualHeight updateOnChange={debouncedBreakpoint}>
             {items.length !== 0 ? (
                 <S.Grid>
                     {items.map((product) => {
