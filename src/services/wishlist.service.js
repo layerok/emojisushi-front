@@ -1,8 +1,8 @@
 import {client} from "../clients/client";
 
 class Wishlist {
-    getItems(params = {}) {
-        return client.get('wishlist/items', {
+    addItem(params = {}) {
+        return client.get('wishlist/add', {
             params
         });
     }

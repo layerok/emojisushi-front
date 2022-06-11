@@ -5,7 +5,7 @@ import {forwardRef} from "react";
 export const SvgIcon = forwardRef((
     {
         children,
-        color="white",
+        color,
         hoverColor,
         width,
         height,

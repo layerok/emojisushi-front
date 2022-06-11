@@ -15,7 +15,8 @@ const ProductsGridRaw = (
         items,
         handleLoadMore,
         loading,
-        loadable
+        loadable,
+        noItemsTitle = "Товары не найдены"
     }
 ) => {
     const breakpoint = useBreakpoint();
@@ -35,11 +36,13 @@ const ProductsGridRaw = (
             )}
         </S.Header>
         <EqualHeight updateOnChange={breakpoint}>
-            <S.Grid>
-                {items.map((product) => {
-                    return <ProductCard key={product.id} product={product}/>
-                })}
-            </S.Grid>
+            {items.length !== 0 ? (
+                <S.Grid>
+                    {items.map((product) => {
+                        return <ProductCard key={product.id} product={product}/>
+                    })}
+                </S.Grid>
+            ): (noItemsTitle )}
         </EqualHeight>
         {loadable && (
             <S.Footer>

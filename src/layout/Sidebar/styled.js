@@ -4,6 +4,7 @@ import {SearchInput as SearchInputBase} from "../../components/SearchInput";
 
 const Sidebar = styled.div`
   width: 100%;
+  margin-bottom: 30px;
   
   ${media.greaterThan('pc')`
     width: 255px;
@@ -20,7 +21,6 @@ const SearchInput = styled(SearchInputBase)`
     margin-bottom: 0px;
  `}
 `
-
 
 export {
     Sidebar,

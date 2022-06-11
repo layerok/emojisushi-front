@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import {theme} from "styled-tools";
+import styled, {css} from "styled-components";
+import {ifProp, theme} from "styled-tools";
 
 const Favorite = styled.li`
   font-size: 16px;
@@ -20,6 +20,10 @@ const Favorite = styled.li`
   &:hover {
     color: ${theme('link.active')}
   }
+
+  ${ifProp('active', css`
+    color: ${theme('link.active')};
+  `)}
 `
 
 const Text = styled.p`

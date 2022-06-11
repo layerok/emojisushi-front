@@ -6,7 +6,13 @@ import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import {IngredientsTooltip} from "../tooltips/IngredientsTooltip";
 import { EqualHeightElement } from 'react-equal-height';
 import {inject, observer} from "mobx-react";
-import {getProductIngredients, getProductMainImage, getProductNewPrice, getProductOldPrice} from "../../utils/utils";
+import {
+    getProductIngredients,
+    getProductMainImage,
+    getProductNewPrice,
+    getProductOldPrice
+} from "../../utils/utils";
+import {Loader} from "../Loader";
 
 const ProductCardRaw = (
     {
@@ -16,11 +22,13 @@ const ProductCardRaw = (
             weight,
             prices,
             additional_prices,
-            is_favorite,
+            is_favorite_,
             image_sets,
             description
         },
-        CartStore
+        CartStore,
+        ProductsStore,
+        WishlistStore,
     }
 ) => {
     const breakpoint = useBreakpoint();
@@ -44,8 +52,23 @@ const ProductCardRaw = (
     }
 
     return <S.Wrapper>
-        <S.Favorite>
-            <Favorite width={iconSize} isFavorite={is_favorite}/>
+        <Loader loading={WishlistStore.pending.includes(id)}/>
+        <S.Favorite onClick={() => {
+            WishlistStore.addItem({
+                product_id: id,
+                quantity: count
+            }).then((res) => {
+                const items = ProductsStore.items.map((item) => {
+                    if(item.id === id) {
+                        item.is_favorite_ = res.data.added;
+                    }
+                    return item;
+                });
+
+                ProductsStore.setItems(items)
+            })
+        }}>
+            <Favorite width={iconSize} isFavorite={is_favorite_}/>
         </S.Favorite>
         <S.Image src={img}/>
         <EqualHeightElement name={"product-name"}>
@@ -67,4 +90,4 @@ const ProductCardRaw = (
     </S.Wrapper>;
 }
 
-export const ProductCard = inject('CartStore')(observer(ProductCardRaw))
+export const ProductCard = inject('CartStore', 'ProductsStore', 'WishlistStore')(observer(ProductCardRaw))

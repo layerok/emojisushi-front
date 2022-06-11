@@ -7,11 +7,12 @@ class Products {
     }
     items = [];
     meta = {};
-    offset = 25;
     loading = false;
+    lastParams = {};
 
     fetchItems = (params = {}) => {
         this.setLoading(true);
+        this.setLastParams(params);
         return MenuService.getProducts(params).then(res => {
             this.setItems(res.data.data);
             this.setMeta(res.data.meta);
@@ -20,6 +21,14 @@ class Products {
         }).catch(() => {
             this.setLoading(false);
         });
+    }
+
+    refresh = () => {
+        return this.fetchItems(this.lastParams)
+    }
+
+    setLastParams = (params) => {
+        this.lastParams = params;
     }
 
     setItems = (products) => {

@@ -5,6 +5,7 @@ import {SpotsStore} from "./spots.store";
 import {CartStore} from "./cart.store";
 import {PaymentStore} from "./payment.store";
 import {ShippingStore} from "./shipping.store";
+import {WishlistStore} from "./wishlist.store";
 
 export const stores = {
     CategoriesStore,
@@ -13,5 +14,6 @@ export const stores = {
     SpotsStore,
     CartStore,
     PaymentStore,
-    ShippingStore
+    ShippingStore,
+    WishlistStore
 }

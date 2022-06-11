@@ -9,6 +9,7 @@ import {Delivery} from "./pages/Delivery"
 import {Checkout} from "./pages/Checkout";
 import {Category} from "./pages/Category";
 import {inject, observer} from "mobx-react";
+import {Wishlist} from "./pages/Wishlist";
 
 function App(
     {
@@ -29,6 +30,7 @@ function App(
                     <Route path="/thankyou" element={<ThankYou />} />
                     <Route path="/dostavka-i-oplata" element={<Delivery />} />
                     <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/wishlist" element={<Wishlist />} />
                 </Routes>
             </div>
         </ThemeProvider>

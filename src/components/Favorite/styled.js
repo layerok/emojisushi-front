@@ -15,6 +15,7 @@ const Wrapper = styled.div`
     width: 47px;
     height: 47px;
   `}
+  
 `;
 
 export {

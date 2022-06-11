@@ -5,12 +5,18 @@ import {SvgButton} from "../../components/SvgButton";
 import {InstagramSvg} from "../../components/svg/InstagramSvg";
 import {TelegramSvg} from "../../components/svg/TelegramSvg";
 import {TelegramModal} from "../../components/modals/TelegramModal";
+import {useMatch, useNavigate, useResolvedPath} from "react-router-dom";
 
 
 export const UnderVerticalMenu = () => {
+    const navigate = useNavigate();
+    let resolved = useResolvedPath('/wishlist');
+    let match = useMatch({ path: resolved.pathname, end: true });
     return(
         <>
-            <S.Favorite>
+            <S.Favorite active={!!match} onClick={() => {
+                navigate('/wishlist')
+            }}>
                 Любимые
                 <Favorite isFavorite={true} />
             </S.Favorite>
