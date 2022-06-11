@@ -7,6 +7,7 @@ class Products {
     }
     items = [];
     meta = {};
+    step = 25;
     loading = false;
     lastParams = {};
 

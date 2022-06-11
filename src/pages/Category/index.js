@@ -21,7 +21,7 @@ export const CategoryRaw = (
     const handleLoadMore = () => {
         const settings = {
             offset: 0,
-            limit: ProductsStore.items.length + ProductsStore.offset,
+            limit: ProductsStore.items.length + ProductsStore.step,
             category_slug: categorySlug
         }
         ProductsStore.fetchItems(settings);
@@ -32,7 +32,7 @@ export const CategoryRaw = (
         ProductsStore.fetchItems({
             category_slug: categorySlug,
             offset: 0,
-            limit: ProductsStore.offset,
+            limit: ProductsStore.step,
         }).then(() => {
             AppStore.setLoading(false);
         });

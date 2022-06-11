@@ -13,7 +13,7 @@ export const HomeRaw = (
         AppStore.setLoading(true);
         ProductsStore.fetchItems({
             offset: 0,
-            limit: 25
+            limit: ProductsStore.step
         }).then(() => {
             AppStore.setLoading(false);
         });
@@ -22,7 +22,7 @@ export const HomeRaw = (
     const handleLoadMore = () => {
         const settings = {
             offset: 0,
-            limit: ProductsStore.items.length + ProductsStore.offset,
+            limit: ProductsStore.items.length + ProductsStore.step,
         }
         ProductsStore.fetchItems(settings);
     }

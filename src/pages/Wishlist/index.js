@@ -13,7 +13,7 @@ export const WishlistRaw = (
         AppStore.setLoading(true);
         ProductsStore.fetchItems({
             offset: 0,
-            limit: 25,
+            limit: ProductsStore.step,
             wishlist: true,
         }).then(() => {
             AppStore.setLoading(false);
@@ -23,7 +23,7 @@ export const WishlistRaw = (
     const handleLoadMore = () => {
         const settings = {
             offset: 0,
-            limit: ProductsStore.items.length + ProductsStore.offset,
+            limit: ProductsStore.items.length + ProductsStore.step,
             wishlist: true,
         }
         ProductsStore.fetchItems(settings);
