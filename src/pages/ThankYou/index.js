@@ -4,8 +4,17 @@ import {CheckCircleSvg} from "../../components/svg/CheckCircleSvg";
 import {SvgIcon} from "../../components/svg/SvgIcon";
 import * as S from "./styled";
 import styles from "./styles.module.css";
+import {useEffect} from "react";
+import {inject} from "mobx-react";
 
-export const ThankYou = () => {
+export const ThankYouRaw = (
+    {
+        AppStore
+    }
+) => {
+    useEffect(() => {
+        AppStore.setLoading(false);
+    })
     return (
         <Layout withSidebar={false}
                 withBanner={false}
@@ -40,3 +49,5 @@ export const ThankYou = () => {
         </Layout>
     )
 }
+
+export const ThankYou = inject('AppStore')(ThankYouRaw);

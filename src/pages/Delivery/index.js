@@ -2,9 +2,18 @@ import {Layout} from "../../layout/Layout";
 import {Heading} from "../../components/Heading";
 import {StaticMap} from "../../components/StaticMap";
 import * as S from "./styled";
-import {breakpoints} from "../../common/custom-media";
+import {useEffect} from "react";
+import {inject} from "mobx-react";
 
-export const Delivery = () => {
+export const DeliveryRaw = (
+    {
+        AppStore
+    }
+) => {
+
+    useEffect(() => {
+        AppStore.setLoading(false);
+    })
     return (
         <Layout withBanner={false}
                 withSidebar={false}
@@ -44,3 +53,5 @@ export const Delivery = () => {
         </Layout>
     )
 }
+
+export const Delivery = inject('AppStore')(DeliveryRaw);
