@@ -20,10 +20,8 @@ export const CategoryRaw = (
 
     const handleLoadMore = () => {
         const settings = {
-            offset: 0,
             limit: ProductsStore.items.length + ProductsStore.step,
-            category_slug: categorySlug,
-            sort: ProductsStore.sort
+            category_slug: categorySlug
         }
         ProductsStore.fetchItems(settings);
     }
@@ -32,9 +30,7 @@ export const CategoryRaw = (
         AppStore.setLoading(true);
         ProductsStore.fetchItems({
             category_slug: categorySlug,
-            offset: 0,
             limit: ProductsStore.step,
-            sort: ProductsStore.sort
         }).then(() => {
             AppStore.setLoading(false);
         });
@@ -45,7 +41,7 @@ export const CategoryRaw = (
             <ProductsGrid
                 handleLoadMore={handleLoadMore}
                 title={title}
-                loadable={ProductsStore.meta.total > ProductsStore.items.length}
+                loadable={ProductsStore.total > ProductsStore.items.length}
                 loading={ProductsStore.loading}
                 items={ProductsStore.items}
             />

@@ -15,8 +15,8 @@ class Cart {
         this.setLoading(true);
         return CartService.getProducts().then(res => {
             this.setItems(res.data.data);
-            this.setTotal(res.data.meta.total)
-            this.setTotalQuantity(res.data.meta.totalQuantity);
+            this.setTotal(res.data.total)
+            this.setTotalQuantity(res.data.totalQuantity);
         }).catch(() => {
             this.setLoading(false);
         }).finally(() => {
@@ -31,8 +31,8 @@ class Cart {
         this.setPending([...this.pending, product_id]);
         return CartService.addProduct(params).then((res) => {
             this.setItems(res.data.data);
-            this.setTotal(res.data.meta.total)
-            this.setTotalQuantity(res.data.meta.totalQuantity);
+            this.setTotal(res.data.total)
+            this.setTotalQuantity(res.data.totalQuantity);
         }).finally(() => {
             this.setLoading(false);
             this.setPending(this.pending.filter(id=> id !== product_id));
@@ -46,8 +46,8 @@ class Cart {
         this.setLoading(true);
         return CartService.removeCartProduct(cart_product_id).then((res) => {
             this.setItems(res.data.data);
-            this.setTotal(res.data.meta.total)
-            this.setTotalQuantity(res.data.meta.totalQuantity);
+            this.setTotal(res.data.total)
+            this.setTotalQuantity(res.data.totalQuantity);
         }).finally(() => {
             this.setLoading(false);
         }).catch(() => {

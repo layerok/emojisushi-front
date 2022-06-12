@@ -12,10 +12,8 @@ export const WishlistRaw = (
     useEffect(() => {
         AppStore.setLoading(true);
         ProductsStore.fetchItems({
-            offset: 0,
             limit: ProductsStore.step,
             wishlist: true,
-            sort: ProductsStore.sort
         }).then(() => {
             AppStore.setLoading(false);
         });
@@ -23,10 +21,8 @@ export const WishlistRaw = (
 
     const handleLoadMore = () => {
         const settings = {
-            offset: 0,
             limit: ProductsStore.items.length + ProductsStore.step,
             wishlist: true,
-            sort: ProductsStore.sort
         }
         ProductsStore.fetchItems(settings);
     }
@@ -34,7 +30,7 @@ export const WishlistRaw = (
     return (
         <Layout withBanner={false}>
             <ProductsGrid
-                loadable={ProductsStore.meta.total > ProductsStore.items.length}
+                loadable={ProductsStore.total > ProductsStore.items.length}
                 loading={ProductsStore.loading}
                 items={ProductsStore.items}
                 handleLoadMore={handleLoadMore}
