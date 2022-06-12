@@ -2,7 +2,7 @@ import {client} from "../clients/client";
 
 class Order {
     place(params = {}) {
-        return client.get('order/place', {
+        return client.post('order/place', {
             params
         });
     }
