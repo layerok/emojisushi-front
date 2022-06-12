@@ -1,5 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import {ru} from './locales/ru';
+import {ua} from './locales/ua';
 
 // the translations
 // (tip move them in a JSON file and import them,
@@ -7,31 +9,13 @@ import { initReactI18next } from "react-i18next";
 const resources = {
     ua: {
         translation: {
-            common: {
-                filters: 'Фiльтри'
-            },
-            sort: {
-
-            }
+            ...ua
         }
 
     },
     ru: {
         translation: {
-            common: {
-                filters: 'Фильтры'
-            },
-            sort: {
-                "default": "По умолчанию",
-                bestseller: "Бестселлер",
-                ratings: "По рейтингу",
-                latest: "Сначало старые",
-                price_low: "Cначало дешевые",
-                price_high: "Сначало дорогие",
-                oldest: "Сначало старые",
-                random: "В случайном порядке",
-                name: "По алфавиту A-я"
-            }
+            ...ru
         }
     }
 };
