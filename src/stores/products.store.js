@@ -6,27 +6,37 @@ class Products {
         makeAutoObservable(this);
     }
     items = [];
-    meta = {
-        filters: [],
-        total: 0,
-        offset: 0,
-        limit: 25,
-        sort_options: []
-    };
+    limit = 25;
+    sortOptions = [];
+    offset = 0;
     step = 25;
     loading = false;
     lastParams = {};
     sort = null;
     filters = [];
+    selectedFilters = [];
+    total = 0;
 
     fetchItems = (params = {}) => {
         this.setLoading(true);
         this.setLastParams(params);
+
+        const filter = this.selectedFilters.reduce((acc, slug) => {
+            return acc + `&${slug}=${slug}`;
+        }, "")
+
         return MenuService.getProducts({
+            filter: filter,
+            sort: this.sort,
+            offset: this.offset,
+            limit: this.limit,
             ...params,
         }).then(res => {
             this.setItems(res.data.data);
-            this.setMeta(res.data.meta);
+            this.setFilters(res.data.filters);
+            this.setSortOptions(res.data.sort_options)
+            this.setTotal(res.data.total);
+
         }).finally(() => {
             this.setLoading(false);
         }).catch(() => {
@@ -46,10 +56,6 @@ class Products {
         this.items = products;
     }
 
-    setMeta = (meta) => {
-        this.meta = meta;
-    }
-
     setLoading = (state) => {
         this.loading = state;
     }
@@ -60,6 +66,26 @@ class Products {
 
     setFilters = (filters) => {
         this.filters = filters;
+    }
+
+    setOffset = (offset) => {
+        this.offset = offset;
+    }
+
+    setSortOptions = (options) => {
+        this.sortOptions = options;
+    }
+
+    setLimit = (limit) => {
+        this.limit = limit;
+    }
+
+    setTotal = (total) => {
+        this.total = total
+    }
+
+    setSelectedFilters = (filters) => {
+        this.selectedFilters = filters;
     }
 
 }

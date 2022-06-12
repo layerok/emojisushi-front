@@ -9,12 +9,12 @@ const SortingPopoverRaw = (
         ProductsStore
     }
 ) => {
-    const initialSelectedIndex = (ProductsStore?.meta?.sort_options || []).indexOf(ProductsStore.sort);
+    const initialSelectedIndex = ProductsStore.sortOptions.indexOf(ProductsStore.sort);
     const [selectedIndex, setSelectedIndex] = useState(initialSelectedIndex === -1 ? 0 : initialSelectedIndex);
     const {t} = useTranslation();
     return <DropdownPopover
         asFlatArray={true}
-        options={ProductsStore.meta.sort_options}
+        options={ProductsStore.sortOptions}
         resolveOptionName={({option}) => {
             return t(`sort.${option}`)
         }}
@@ -24,8 +24,7 @@ const SortingPopoverRaw = (
             setSelectedIndex(index);
             ProductsStore.setSort(option);
             ProductsStore.fetchItems({
-                ...ProductsStore.lastParams,
-                sort: option
+                ...ProductsStore.lastParams
             })
         }}
     >

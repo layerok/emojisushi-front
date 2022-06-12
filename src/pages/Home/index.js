@@ -33,9 +33,7 @@ export const HomeRaw = (
 
     const handleLoadMore = () => {
         const settings = {
-            offset: 0,
             limit: ProductsStore.items.length + ProductsStore.step,
-            sort: ProductsStore.sort
         }
         ProductsStore.fetchItems(settings);
     }
@@ -43,7 +41,7 @@ export const HomeRaw = (
     return (
         <Layout withBanner={true}>
             <ProductsGrid
-                loadable={ProductsStore.meta.total > ProductsStore.items.length}
+                loadable={ProductsStore.total > ProductsStore.items.length}
                 loading={ProductsStore.loading}
                 items={ProductsStore.items}
                 handleLoadMore={handleLoadMore}
