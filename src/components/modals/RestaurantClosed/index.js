@@ -20,8 +20,8 @@ export const RestaurantClosed = () => {
     const {t} = useTranslation();
     return <NotifyModal
         open={closed}
-        renderTitle={() => {t('restaurantClosed.closed')}}
-        renderSubtitle={() => {t('restaurantClosed.time')}}
+        renderTitle={() => t('restaurantClosed.closed')}
+        renderSubtitle={() => t('restaurantClosed.time')}
         renderIcon={() => (
             <SvgIcon color={"#FFE600"} width={"60px"}>
                 <LowKeySvg/>

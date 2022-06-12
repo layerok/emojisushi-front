@@ -8,7 +8,9 @@ const client = axios.create({
 
 client.interceptors.request.use((config = {}) => {
     // send session_id from cookies as parameter for each api request
-    const params = config.params || {};
+    const {method} = config;
+
+    const params = method === 'post' ? config.data: config.params || {};
     params.XDEBUG_SESSION_START = true;
     const session_id = Cookies.get('session_id');
 

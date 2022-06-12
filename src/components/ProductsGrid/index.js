@@ -8,8 +8,9 @@ import { EqualHeight } from 'react-equal-height';
 import {FiltersModal} from "../modals/FiltersModal";
 import {SortingPopover} from "../popovers/SortingPopover";
 import {inject, observer} from "mobx-react";
-import {useTranslation, withTranslation} from "react-i18next";
+import {useTranslation} from "react-i18next";
 import {useDebounce} from "../../common/hooks/useDebounce";
+import {Loader} from "../Loader";
 
 const ProductsGridRaw = (
     {
@@ -28,7 +29,8 @@ const ProductsGridRaw = (
         return breakpoint;
     }, 300)
     const {t} = useTranslation();
-    return <>
+    return <div style={{position: "relative"}}>
+        <Loader loading={ProductsStore.loading}/>
         <S.Header>
             <S.Title>{title}</S.Title>
             {breakpoint === 'pc' && (
@@ -56,7 +58,7 @@ const ProductsGridRaw = (
                 <LoadMoreButton loading={loading} style={{cursor: 'pointer'}} text={t('common.show_more')} onClick={handleLoadMore}/>
             </S.Footer>
         )}
-    </>
+    </div>
 }
 
 export const ProductsGrid = inject('AppStore', 'ProductsStore')(observer(ProductsGridRaw));
