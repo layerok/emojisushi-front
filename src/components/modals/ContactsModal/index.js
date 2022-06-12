@@ -11,6 +11,7 @@ import {StaticMap} from "../../StaticMap";
 import {TelegramModal} from "../TelegramModal";
 import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
 import {useTranslation} from "react-i18next";
+import {InstagramLink} from "../../../layout/Footer/styled";
 
 export const ContactsModal = ({children, onClick = () => {}}) => {
 
@@ -35,9 +36,9 @@ export const ContactsModal = ({children, onClick = () => {}}) => {
                         <SvgIcon style={{marginRight: '10px'}} width={"25px"} color={"white"}>
                             <InstagramSvg/>
                         </SvgIcon>
-                        <span>
+                        <InstagramLink href={"https://www.instagram.com/emoji_sushi_/"} target={"_blank"}>
                             emoji_sushi
-                        </span>
+                        </InstagramLink>
                     </FlexBox>
                     <TelegramModal>
                         <FlexBox alignItems={"center"}>

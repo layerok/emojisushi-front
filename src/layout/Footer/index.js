@@ -47,7 +47,7 @@ export const Footer = () => {
                             <SvgIcon width={"25px"} color={"white"}>
                                 <InstagramSvg/>
                             </SvgIcon>
-                            <S.InstagramLink>
+                            <S.InstagramLink href={"https://www.instagram.com/emoji_sushi_/"} target={"_blank"}>
                                 emoji_sushi
                             </S.InstagramLink>
                         </FlexBox>

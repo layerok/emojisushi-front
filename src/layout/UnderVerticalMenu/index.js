@@ -26,7 +26,7 @@ export const UnderVerticalMenu = () => {
                 {t('underVerticalMenu.in_touch')}
             </S.Text>
             <S.SvgContainer>
-                <S.OneSvg>
+                <S.OneSvg href={"https://www.instagram.com/emoji_sushi_/"} target={"_blank"}>
                     <SvgButton>
                         <SvgIcon color={'black'}>
                             <InstagramSvg/>

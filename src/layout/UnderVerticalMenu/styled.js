@@ -34,8 +34,9 @@ const Text = styled.p`
   margin-bottom: 15px;
 `
 
-const OneSvg = styled.div`
+const OneSvg = styled.a`
   margin-right: 10px;
+  display: inline-block;
 `
 
 const SvgContainer = styled.div`
