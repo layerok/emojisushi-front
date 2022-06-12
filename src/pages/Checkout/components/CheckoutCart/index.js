@@ -38,7 +38,7 @@ const CheckoutCartRaw = (
                                 <FlexBox>
                                     <S.Count>{quantity} шт</S.Count>
                                     <S.Delimiter/>
-                                    <S.Weight>{product.weight}</S.Weight>
+                                    <S.Weight>{product.weight} г</S.Weight>
                                 </FlexBox>
                                 <IngredientsTooltip items={ingredients}/>
                             </S.Description>
