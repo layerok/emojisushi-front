@@ -25,7 +25,10 @@ export const HomeRaw = (
 
 
     useEffect(() => {
-        navigate('category/' + CategoriesStore.items[0].slug);
+        if(CategoriesStore.items[0]) {
+            navigate('category/' + CategoriesStore.items[0].slug);
+        }
+
     }, [CategoriesStore.items])
 
     const handleLoadMore = () => {
