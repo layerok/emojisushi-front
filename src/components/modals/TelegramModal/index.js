@@ -3,11 +3,13 @@ import {SvgIcon} from "../../svg/SvgIcon";
 import {TelegramSvg} from "../../svg/TelegramSvg";
 import {ButtonFilled} from "../../buttons/Button";
 import {NotifyModal} from "../NotifyModal";
+import {useTranslation} from "react-i18next";
 
 export const TelegramModal = ({children, ...rest}) => {
+    const {t} = useTranslation();
     return <NotifyModal
-        renderTitle={() => ("У нас появился Telegram!")}
-        renderSubtitle={() => ("Нажми на кнопку чтобы первым узнавать о новых акциях.")}
+        renderTitle={() => t('telegramModal.appeared')}
+        renderSubtitle={() => t('telegramModal.stock')}
         renderIcon={() => (
             <SvgIcon color={"#FFE600"} width={"60px"}>
                 <TelegramSvg strokeWidth={1}/>
@@ -15,7 +17,7 @@ export const TelegramModal = ({children, ...rest}) => {
         )}
         renderButton={() => (
             <ButtonFilled width={"250px"} >
-                Перейти в Telegram
+                {t('telegramModal.go_to')}
             </ButtonFilled>
         )}
         {...rest}

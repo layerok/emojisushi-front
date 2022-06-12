@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import {getProductMainImage, getProductNewPrice, getProductOldPrice} from "../../../utils/utils";
 import {inject, observer} from "mobx-react";
 import {Loader} from "../../Loader";
+import {useTranslation} from "react-i18next";
 
 const CartItem = inject('CartStore')(observer((
     {
@@ -37,7 +38,7 @@ const CartItem = inject('CartStore')(observer((
             })
         }
     }
-
+    const {t} = useTranslation();
     return (<S.Item>
         <S.Item.RemoveIcon>
             <ConfirmActionPopover onConfirm={({close}) => {
@@ -45,7 +46,7 @@ const CartItem = inject('CartStore')(observer((
                 close();
             }} onCancel={({close}) => {
                 close();
-            }} text={"Вы уверены что хотите удалить этот товар с корзины?"}>
+            }} text={t('cartModal.remove')}>
                 <CloseIcon color={"#4A4A4A"}/>
             </ConfirmActionPopover>
         </S.Item.RemoveIcon>
@@ -103,7 +104,7 @@ export const CartModal = inject('CartStore')(observer((
     useEffect(() => {
         debounceHeight();
     }, [windowSize.height])
-
+    const {t} = useTranslation();
     return <BaseModal overlayStyles={overlayStyles} render={({close}) => (
         <S.Wrapper>
             <Loader loading={loading}/>
@@ -111,7 +112,7 @@ export const CartModal = inject('CartStore')(observer((
                 <CloseModalIcon close={close}/>
             </S.CloseIcon>
             <S.Title>
-                {items.length === 0 ? 'Ваша корзина пуста': 'Корзина'}
+                {items.length === 0 ? t('cartModal.empty') : t('cartModal.cart')}
             </S.Title>
 
             <S.Items>
@@ -125,14 +126,14 @@ export const CartModal = inject('CartStore')(observer((
             { items.length !== 0 && (
                 <S.Footer>
                     <FlexBox alignItems={"center"} justifyContent={"space-between"}>
-                        <S.Sum>Сумма заказа</S.Sum>
+                        <S.Sum>{t('cartModal.sum_order')}</S.Sum>
                         <Price newPrice={total}/>
                     </FlexBox>
                     <S.Button>
                         <ButtonOutline disabled={items.length === 0} onClick={() => {
                             navigate('/checkout');
                         }} width={"100%"}>
-                            Оформить заказ
+                            {t('cartModal.checkout')}
                         </ButtonOutline>
                     </S.Button>
 

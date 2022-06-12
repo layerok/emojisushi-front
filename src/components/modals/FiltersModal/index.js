@@ -5,6 +5,7 @@ import {SvgIcon} from "../../svg/SvgIcon";
 import {MagnifierSvg} from "../../svg/MagnifierSvg";
 import {Modal} from "../Modal";
 import {inject} from "mobx-react";
+import {useTranslation} from "react-i18next";
 
 export const FiltersModalRaw = (
     {
@@ -42,12 +43,12 @@ export const FiltersModalRaw = (
 
     }
 
-
+    const {t} = useTranslation();
     return <Modal render={({close}) => (
         <S.Wrapper>
             <S.FilterMagnifier>
                 <S.Text>
-                    Фильтры поиска
+                    {t('filtersModal.search_filters')}
                 </S.Text>
                 <SvgIcon width={"25px"} style={{marginLeft: "13px"}}>
                     <MagnifierSvg/>

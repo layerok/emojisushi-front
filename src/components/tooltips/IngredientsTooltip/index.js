@@ -2,6 +2,7 @@ import {SvgIcon} from "../../svg/SvgIcon";
 import {InfoSvg} from "../../svg/InfoSvg";
 import {AnimatedTooltip} from "../AnimatedTooltip";
 import * as S from "./styled";
+import {useTranslation} from "react-i18next";
 
 export const IngredientsTooltip = (
     {
@@ -9,11 +10,11 @@ export const IngredientsTooltip = (
         items = []
     }
 ) => {
-
+    const {t} = useTranslation();
     const Content = () => {
         return <S.Wrapper>
             <S.Title>
-                Ингридиенты
+                {t('ingredients.ingredients')}
             </S.Title>
             <S.List>
                 {items.map((item, i) =><S.ListItem key={i}>{item}</S.ListItem>)}

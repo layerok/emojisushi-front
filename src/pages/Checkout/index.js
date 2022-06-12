@@ -7,6 +7,7 @@ import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import {inject, observer} from "mobx-react";
+import {useTranslation} from "react-i18next";
 
 export const CheckoutRaw = (
     {
@@ -19,6 +20,7 @@ export const CheckoutRaw = (
     const breakpoint = useBreakpoint();
 
     const navigate = useNavigate();
+
 
     useEffect(() => {
         AppStore.setLoading(true);
@@ -40,10 +42,10 @@ export const CheckoutRaw = (
         }
 
     }, [CartStore.items, AppStore.loading])
-
+    const {t} = useTranslation();
     return (
         <Layout withBanner={false} withSidebar={false}>
-            <Heading>Оформление заказа</Heading>
+            <Heading>{t('checkout.title')}</Heading>
             <FlexBox flexDirection={breakpoint === 'mobile' ? 'column': 'row'} justifyContent={"space-between"} style={{marginTop: '30px'}}>
                 <CheckoutForm/>
                 <CheckoutCart/>

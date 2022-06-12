@@ -8,8 +8,10 @@ import {TelegramSvg} from "../../components/svg/TelegramSvg";
 import {InstagramSvg} from "../../components/svg/InstagramSvg";
 import {PhoneSvg} from "../../components/svg/PhoneSvg";
 import {LogoSvg} from "../../components/svg/LogoSvg";
+import {useTranslation} from "react-i18next";
 
 export const Footer = () => {
+    const {t} = useTranslation();
     return (
         <S.Footer>
             <Container>
@@ -27,7 +29,7 @@ export const Footer = () => {
                                <PhoneSvg/>
                            </SvgIcon>
                            <S.PhoneLabel>
-                               Номера
+                               {t('footerPhones.phones')}
                            </S.PhoneLabel>
                        </FlexBox>
 

@@ -18,7 +18,6 @@ const ProductsGridRaw = (
         handleLoadMore,
         loading,
         loadable,
-        noItemsTitle = "Товары не найдены",
         ProductsStore,
     }
 ) => {
@@ -50,11 +49,11 @@ const ProductsGridRaw = (
                         return <ProductCard key={product.id} product={product}/>
                     })}
                 </S.Grid>
-            ): (noItemsTitle )}
+            ): t('common.not_found')}
         </EqualHeight>
         {loadable && (
             <S.Footer>
-                <LoadMoreButton loading={loading} style={{cursor: 'pointer'}} text={"Показать еще..."} onClick={handleLoadMore}/>
+                <LoadMoreButton loading={loading} style={{cursor: 'pointer'}} text={t('common.show_more')} onClick={handleLoadMore}/>
             </S.Footer>
         )}
     </>

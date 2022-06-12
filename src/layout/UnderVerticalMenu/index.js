@@ -6,22 +6,24 @@ import {InstagramSvg} from "../../components/svg/InstagramSvg";
 import {TelegramSvg} from "../../components/svg/TelegramSvg";
 import {TelegramModal} from "../../components/modals/TelegramModal";
 import {useMatch, useNavigate, useResolvedPath} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 
 export const UnderVerticalMenu = () => {
     const navigate = useNavigate();
     let resolved = useResolvedPath('/wishlist');
     let match = useMatch({ path: resolved.pathname, end: true });
+    const {t} = useTranslation();
     return(
         <>
             <S.Favorite active={!!match} onClick={() => {
                 navigate('/wishlist')
             }}>
-                Любимые
+                {t('underVerticalMenu.favorite')}
                 <Favorite isFavorite={true} />
             </S.Favorite>
             <S.Text>
-                Оставайтесь на связи
+                {t('underVerticalMenu.in_touch')}
             </S.Text>
             <S.SvgContainer>
                 <S.OneSvg>

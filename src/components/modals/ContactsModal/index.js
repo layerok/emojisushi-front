@@ -10,16 +10,18 @@ import {TelegramSvg} from "../../svg/TelegramSvg";
 import {StaticMap} from "../../StaticMap";
 import {TelegramModal} from "../TelegramModal";
 import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
+import {useTranslation} from "react-i18next";
 
 export const ContactsModal = ({children, onClick = () => {}}) => {
 
     const breakpoint = useBreakpoint();
     const width = breakpoint !== 'pc' ? "375px": false;
+    const {t} = useTranslation();
 
     return <Modal width={width} onClick={onClick} render={({close}) => (
         <div>
             <S.Wrapper >
-                <S.Title>Контакты</S.Title>
+                <S.Title>{t('contactsModal.contacts')}</S.Title>
                 <S.Phones>
                     <SvgIcon style={{marginRight: '11px'}} width={"25px"} color={"white"}>
                         <PhoneSvg/>

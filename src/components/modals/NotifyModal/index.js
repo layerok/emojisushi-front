@@ -1,6 +1,7 @@
 import {cloneElement} from "react";
 import {Modal} from "../Modal";
 import * as S from "./styled";
+import {useTranslation} from "react-i18next";
 
 export const NotifyModal = (
     {
@@ -13,6 +14,7 @@ export const NotifyModal = (
         ...rest
     }
 ) => {
+    const {t} = useTranslation();
     return <Modal alignCenter={true} open={open} {...rest} render={({close}) => (
         <S.Container>
             {renderIcon && renderIcon()}

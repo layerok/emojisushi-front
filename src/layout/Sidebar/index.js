@@ -8,6 +8,7 @@ import {UnderVerticalMenu} from "../UnderVerticalMenu";
 import {SortingPopover} from "../../components/popovers/SortingPopover";
 import {inject, observer} from "mobx-react";
 import {useEffect} from "react";
+import {useTranslation} from "react-i18next";
 
 export const SidebarRaw = (
     {
@@ -22,6 +23,7 @@ export const SidebarRaw = (
         CategoriesStore.fetchItems();
     }, [])
 
+    const {t} = useTranslation();
     return (
         <S.Sidebar>
             <FlexBox
@@ -34,7 +36,7 @@ export const SidebarRaw = (
                     <FlexBox justifyContent={isMobile ? 'space-between': 'flex-end'} style={{
                         width: "100%"
                     }}>
-                        <FiltersButton text={"Фильтры"} />
+                        <FiltersButton text={t('common.filters')} />
                         <div style={{
                             marginLeft: "30px"
                         }}>

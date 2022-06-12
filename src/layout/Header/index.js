@@ -13,6 +13,7 @@ import {BurgerSvg} from "../../components/svg/BurgerSvg";
 import {LogoSvg} from "../../components/svg/LogoSvg";
 import {useEffect} from "react";
 import {inject, observer} from "mobx-react";
+import {useTranslation} from "react-i18next";
 
 
 const HeaderRaw = (
@@ -26,7 +27,7 @@ const HeaderRaw = (
     },[])
 
 
-
+    const {t} = useTranslation();
     return (
         <S.Header>
             <Container>
@@ -42,12 +43,12 @@ const HeaderRaw = (
                         </S.PcHeaderItem>
                         <ContactsModal>
                             <S.PcHeaderItem>
-                                Контакты
+                                {t('header.contacts')}
                             </S.PcHeaderItem>
                         </ContactsModal>
                         <S.PcHeaderItem>
                             <NavLink to={"/dostavka-i-oplata"}>
-                                Доставка и оплата
+                                {t('header.delivery')}
                             </NavLink>
                         </S.PcHeaderItem>
                     </S.Left>

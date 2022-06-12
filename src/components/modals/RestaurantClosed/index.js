@@ -1,6 +1,7 @@
 import {SvgIcon} from "../../svg/SvgIcon";
 import {NotifyModal} from "../NotifyModal";
 import {LowKeySvg} from "../../svg/LowKeySvg";
+import {useTranslation} from "react-i18next";
 
 const isClosed = ({start,end}) => {
     const now = new Date();
@@ -16,11 +17,11 @@ export const RestaurantClosed = () => {
         start: [10, 0],
         end: [22, 45],
     });
-
+    const {t} = useTranslation();
     return <NotifyModal
         open={closed}
-        renderTitle={() => ("Ресторан закрыт!")}
-        renderSubtitle={() => ("Время работы: 10:00-22:45")}
+        renderTitle={() => {t('restaurantClosed.closed')}}
+        renderSubtitle={() => {t('restaurantClosed.time')}}
         renderIcon={() => (
             <SvgIcon color={"#FFE600"} width={"60px"}>
                 <LowKeySvg/>
