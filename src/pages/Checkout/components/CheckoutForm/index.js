@@ -5,52 +5,182 @@ import {FlexBox} from "../../../../components/FlexBox";
 import {ButtonOutline} from "../../../../components/buttons/Button";
 import {inject, observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
+import {useFormik} from "formik";
+import * as Yup from "yup";
 
 export const CheckoutFormRaw = (
     {
         PaymentStore,
         ShippingStore,
+        CartStore
     }
 ) => {
     const {t} = useTranslation();
-    return <S.Form>
-        <Switcher name={"deliveryType"} options={ShippingStore.items}/>
+
+    const CheckoutSchema = Yup.object().shape({
+        phone: Yup.string().test(
+            'is-possible-phone-number',
+            () => t('checkout.form.errors.ua_phone'),
+            (value) => {
+                const regex = /^(((\+?)(38))\s?)?(([0-9]{3})|(\([0-9]{3}\)))(\-|\s)?(([0-9]{3})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{2})|([0-9]{2})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{3})|([0-9]{2})(\-|\s)?([0-9]{3})(\-|\s)?([0-9]{2}))$/;
+                return regex.test(value ?? '');
+            }
+        ),
+        email: Yup.string().email('Invalid email'),
+    });
+
+    const formik = useFormik({
+        initialValues: {
+            name: '',
+            email: '',
+            phone: '',
+            address: '',
+            comment: '',
+            sticks: '',
+            change: '',
+            paymentTypeId: '1',
+            shippingTypeId: '1',
+        },
+        validationSchema: CheckoutSchema,
+        onSubmit: values => {
+            alert(JSON.stringify(values, null, 2));
+        }
+    })
+
+    const getShippingType = () => {
+        return ShippingStore.items.find((item) => item.id === +formik.values.shippingTypeId);
+    }
+
+
+    const getShippingTypeIndex = () => {
+        const selectedItem = getShippingType();
+
+        if(selectedItem) {
+            const index = ShippingStore.items.indexOf(selectedItem);
+            return index === -1 ? 0: index;
+        }
+
+        return 0;
+    }
+
+    const getPaymentType = () => {
+        return PaymentStore.items.find((item) => item.id === +formik.values.paymentTypeId);
+    }
+
+    const getPaymentTypeIndex = () => {
+        const selectedItem = getPaymentType();
+        if(selectedItem) {
+            const index = PaymentStore.items.indexOf(selectedItem);
+            return index === -1 ? 0: index;
+        }
+
+        return 0;
+    }
+
+    return <S.Form onSubmit={formik.handleSubmit}>
+
+
+        <Switcher
+            name={"shippingTypeId"}
+            options={ShippingStore.items}
+            selectedIndex={getShippingTypeIndex()}
+            handleChange={({e, index}) => {
+                formik.handleChange(e);
+            }}
+        />
+
+        {getShippingType()?.id === 2 && (
+            <S.Control>
+                <Input
+                    name={"address"}
+                    placeholder={t('checkout.form.address')}
+                    onChange={formik.handleChange}
+                    value={formik.values.address}
+                />
+            </S.Control>
+        )}
         <S.Control>
-            <Input name={"name"} placeholder={t('checkout.form.name')}/>
+            <Input
+                name={"name"}
+                placeholder={t('checkout.form.name')}
+                onChange={formik.handleChange}
+                value={formik.values.name}
+            />
+        </S.Control>
+
+        <S.Control>
+            <Input
+                name={"email"}
+                placeholder={t('checkout.form.email')}
+                onChange={formik.handleChange}
+                value={formik.values.email}
+            />
         </S.Control>
         <S.Control>
-            <Input name={"email"} placeholder={t('checkout.form.email')}/>
+            <Input
+                name={"phone"}
+                required={true}
+                placeholder={t('checkout.form.phone')}
+                onChange={formik.handleChange}
+                value={formik.values.phone}
+            />
         </S.Control>
         <S.Control>
-            <Input name={"phone"} required={true} placeholder={t('checkout.form.phone')}/>
+            <Input
+                name={"sticks"}
+                placeholder={t('checkout.form.sticks')}
+                onChange={formik.handleChange}
+                value={formik.values.sticks}
+            />
         </S.Control>
         <S.Control>
-            <Input name={"address"} placeholder={t('checkout.form.address')}/>
+            <Input
+                name={"comment"}
+                placeholder={t('checkout.form.comment')}
+                onChange={formik.handleChange}
+                value={formik.values.comment}
+            />
         </S.Control>
+
         <S.Control>
-            <Input name={"comment"} placeholder={t('checkout.form.comment')}/>
+            <Switcher
+                name={"paymentTypeId"}
+                options={PaymentStore.items}
+                handleChange={({e, index}) => {
+                    formik.handleChange(e);
+                }}
+                selectedIndex={getPaymentTypeIndex()}
+            />
         </S.Control>
-        <S.Control>
-            <Input name={"sticks"} placeholder={t('checkout.form.sticks')}/>
-        </S.Control>
-        <S.Control>
-            <Input name={"change"} placeholder={t('checkout.form.change')}/>
-        </S.Control>
-        <S.Control>
-            <Switcher name={"paymentType"} options={PaymentStore.items}/>
-        </S.Control>
-        <S.Control>
-            <S.ErrorBag>
-                {t('checkout.form.errors.ua_phone')}
-            </S.ErrorBag>
-        </S.Control>
+        {getPaymentType()?.id === 1 && (
+            <S.Control>
+                <Input
+                    name={"change"}
+                    placeholder={t('checkout.form.change')}
+                    onChange={formik.handleChange}
+                    value={formik.values.change}
+                />
+            </S.Control>
+        )}
+        {Object.keys(formik.errors).length > 0 && (
+            <S.Control>
+                <S.ErrorBag>
+                    {Object.keys(formik.errors).map((key, i) => (
+                        <li key={key}>
+                            {i+ 1}. {formik.errors[key]}
+                        </li>
+                    ))}
+                </S.ErrorBag>
+            </S.Control>
+        )}
+
         <S.Control>
             <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
-                <ButtonOutline width={"160px"}>
+                <ButtonOutline type={"submit"} width={"160px"}>
                     {t('checkout.order')}
                 </ButtonOutline>
                 <S.Total>
-                    {t('checkout.to_pay')} 308 ₴
+                    {t('checkout.to_pay')} {CartStore.total}
                 </S.Total>
             </FlexBox>
         </S.Control>
@@ -58,4 +188,4 @@ export const CheckoutFormRaw = (
     </S.Form>;
 }
 
-export const CheckoutForm = inject('PaymentStore', 'ShippingStore')(observer(CheckoutFormRaw))
+export const CheckoutForm = inject('PaymentStore', 'ShippingStore', 'CartStore')(observer(CheckoutFormRaw))

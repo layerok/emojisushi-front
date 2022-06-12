@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
     "date-fns": "^2.28.0",
+    "formik": "^2.2.9",
     "framer-motion": "^6.3.3",
     "i18next": "^21.8.9",
     "js-cookie": "^3.0.1",
@@ -33,7 +34,8 @@
     "styled-components": "^5.3.5",
     "styled-media-query": "^2.1.2",
     "styled-tools": "^1.7.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",

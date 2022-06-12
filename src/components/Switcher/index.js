@@ -5,32 +5,31 @@ export const Switcher = (
     {
         options = [],
         name,
+        handleChange,
+        selectedIndex,
     }
 ) => {
-
-    const [selectedIndex, setSelectedIndex] = useState(1);
-    const handleChange = (index) => {
-        setSelectedIndex(index)
-    }
     const Option = (
         {
             name: text,
             length,
-            index
+            index,
+            id
         }
     ) => {
-        const id = useId()
+        const internal_id = useId()
         return <>
             <S.Input
                 length={length}
                 index={index}
-                id={id}
+                id={internal_id}
+                value={id}
                 type={"radio"}
                 name={name}
                 checked={index === selectedIndex}
-                onChange={() => handleChange(index)}
+                onChange={(e) => handleChange({e, index})}
             />
-            <S.Label htmlFor={id}>{text}</S.Label>
+            <S.Label htmlFor={internal_id}>{text}</S.Label>
         </>;
     }
 

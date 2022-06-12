@@ -14,12 +14,18 @@ const Total = styled.div`
   line-height: 22px;
 `;
 
-const ErrorBag = styled.div`
+const ErrorBag = styled.ul`
   background: #CD3838;
   box-shadow: 0 0 15px rgba(34, 34, 34, 0.3);
   border-radius: 10px;
-  padding: 12px 66px;
-  text-align: center;
+  padding: 12px;
+  
+  li {
+    margin-top: 8px;
+    :first-child {
+      margin-top: 0px;
+    }
+  }
 `;
 
 export {

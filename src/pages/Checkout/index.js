@@ -46,7 +46,11 @@ export const CheckoutRaw = (
     return (
         <Layout withBanner={false} withSidebar={false}>
             <Heading>{t('checkout.title')}</Heading>
-            <FlexBox flexDirection={breakpoint === 'mobile' ? 'column': 'row'} justifyContent={"space-between"} style={{marginTop: '30px'}}>
+            <FlexBox
+                flexDirection={breakpoint === 'mobile' ? 'column': 'row'}
+                justifyContent={"space-between"}
+                style={{marginTop: '30px'}}
+            >
                 <CheckoutForm/>
                 <CheckoutCart/>
             </FlexBox>
