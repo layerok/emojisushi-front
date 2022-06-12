@@ -5,6 +5,7 @@ import {CaretDownSvg} from "../../svg/CaretDownSvg";
 import {FlexBox} from "../../FlexBox";
 import {DropdownPopover} from "../DropdownPopover";
 import {inject, observer} from "mobx-react";
+import LocalStorageService from "../../../services/local-storage.service";
 
 
 export const LocationPickerPopoverRaw = (
@@ -25,7 +26,8 @@ export const LocationPickerPopoverRaw = (
                 options={SpotsStore.items}
                 selectedIndex={SpotsStore.selectedIndex}
                 onSelect={({close, option, index}) => {
-                    SpotsStore.setSelectedIndex(index)
+                    SpotsStore.setSelectedIndex(index);
+                    LocalStorageService.set('spot_id', option.id)
                     close();
                 }}
             >

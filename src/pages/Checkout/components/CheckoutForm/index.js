@@ -7,6 +7,7 @@ import {inject, observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
 import {useFormik} from "formik";
 import * as Yup from "yup";
+import OrderService from "../../../../services/order.service";
 
 export const CheckoutFormRaw = (
     {
@@ -43,7 +44,9 @@ export const CheckoutFormRaw = (
         },
         validationSchema: CheckoutSchema,
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            OrderService.place(values).then((res) => {
+                console.log(res)
+            })
         }
     })
 
