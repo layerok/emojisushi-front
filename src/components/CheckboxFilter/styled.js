@@ -17,6 +17,10 @@ const Label = styled.label`
   padding: 11px 33px;
   font-size: 15px;
   line-height: 18px;
+  
+  &:hover {
+    background: #393939;
+  }
 `;
 
 const CheckBoxWrapper = styled.div`

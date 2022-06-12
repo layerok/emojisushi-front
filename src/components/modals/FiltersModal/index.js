@@ -1,13 +1,48 @@
-import {cloneElement} from "react";
+import {cloneElement, useEffect} from "react";
 import {CheckboxFilter} from "../../CheckboxFilter";
 import * as S from "./styled";
 import {SvgIcon} from "../../svg/SvgIcon";
 import {MagnifierSvg} from "../../svg/MagnifierSvg";
 import {Modal} from "../Modal";
+import {inject} from "mobx-react";
+
+export const FiltersModalRaw = (
+    {
+        children,
+        ProductsStore
+    }
+) => {
+
+    const records = ProductsStore?.meta?.filters || [];
+    const handleOnChange = ({e, item}) => {
+        const {slug} = item;
+        const checked = e.target.checked;
+        const selectedFilters = getFilter(checked);
+        ProductsStore.setFilters(selectedFilters);
+
+        function getFilter(state) {
+            if(state) {
+                return [...ProductsStore.filters, slug]
+            } else {
+                return ProductsStore.filters.filter(f => f !== slug)
+            }
+        }
+
+        if(ProductsStore.filters.length > 0) {
+            const url = ProductsStore.filters.reduce((acc, slug) => {
+                return acc + `&${slug}=${slug}`;
+            }, "")
+
+            ProductsStore.fetchItems({
+                ...ProductsStore.lastParams,
+                filter: url
+            })
+        }
 
 
+    }
 
-export const FiltersModal = ({children}) => {
+
     return <Modal render={({close}) => (
         <S.Wrapper>
             <S.FilterMagnifier>
@@ -19,20 +54,21 @@ export const FiltersModal = ({children}) => {
                 </SvgIcon>
             </S.FilterMagnifier>
             <S.CheckboxWrapper>
-                <CheckboxFilter>угорь</CheckboxFilter>
-                <CheckboxFilter>тунец</CheckboxFilter>
-                <CheckboxFilter>авокадо</CheckboxFilter>
-                <CheckboxFilter>краб</CheckboxFilter>
-                <CheckboxFilter>лосось слабосоленый</CheckboxFilter>
-                <CheckboxFilter>креветка</CheckboxFilter>
-                <CheckboxFilter>икра</CheckboxFilter>
-                <CheckboxFilter>огурец</CheckboxFilter>
-                <CheckboxFilter>фурикаке</CheckboxFilter>
-                <CheckboxFilter>икра тобико</CheckboxFilter>
+                {records.map((item) => (
+                    <CheckboxFilter
+                        checked={ProductsStore.filters.includes(item.slug)}
+                        key={item.slug}
+                        handleOnChange={(e) => handleOnChange({e, item})}
+                    >
+                        {item.name}
+                    </CheckboxFilter>
+                ))}
             </S.CheckboxWrapper>
         </S.Wrapper>
     )}>
         {cloneElement(children)}
     </Modal>;
-
 }
+
+export const FiltersModal = inject('ProductsStore')(FiltersModalRaw);
+

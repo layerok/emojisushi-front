@@ -6,11 +6,18 @@ class Products {
         makeAutoObservable(this);
     }
     items = [];
-    meta = {};
+    meta = {
+        filters: [],
+        total: 0,
+        offset: 0,
+        limit: 25,
+        sort_options: []
+    };
     step = 25;
     loading = false;
     lastParams = {};
     sort = null;
+    filters = [];
 
     fetchItems = (params = {}) => {
         this.setLoading(true);
@@ -49,6 +56,10 @@ class Products {
 
     setSort = (sort) => {
         this.sort = sort;
+    }
+
+    setFilters = (filters) => {
+        this.filters = filters;
     }
 
 }

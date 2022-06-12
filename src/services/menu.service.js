@@ -11,6 +11,12 @@ class Menu {
             params
         });
     }
+
+    getIngredients(params = {}) {
+        return client.get('ingredients', {
+            params
+        });
+    }
 }
 
 const MenuService = new Menu();
