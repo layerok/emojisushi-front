@@ -27,6 +27,7 @@ class Products {
 
         return MenuService.getProducts({
             filter: filter,
+            category_slug: "menu",
             sort: this.sort,
             offset: this.offset,
             limit: this.limit,
