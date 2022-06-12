@@ -24,7 +24,7 @@ const Image = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   width: 190px;
-  height: 122px;
+  height: 170px;
   margin: 0 auto;
 
   ${media.lessThan('tablet')`
