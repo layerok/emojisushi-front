@@ -6,6 +6,7 @@ import * as S from "./styled";
 import styles from "./styles.module.css";
 import {useEffect} from "react";
 import {inject} from "mobx-react";
+import {useTranslation} from "react-i18next";
 
 export const ThankYouRaw = (
     {
@@ -15,6 +16,7 @@ export const ThankYouRaw = (
     useEffect(() => {
         AppStore.setLoading(false);
     })
+    const {t} = useTranslation();
     return (
         <Layout withSidebar={false}
                 withBanner={false}
@@ -29,7 +31,7 @@ export const ThankYouRaw = (
                         fontWeight: "bold"
                     }
                 }>
-                    Благодарим Вас за заказ!
+                    {t('thankYou.title')}
                 </Heading>
                 <SvgIcon
                     color={"#FFE600"}
@@ -38,11 +40,10 @@ export const ThankYouRaw = (
                     <CheckCircleSvg />
                 </SvgIcon>
                 <S.MediumText>
-                    Ваш заказ успешно принят и отправлен в работу!
+                    {t('thankYou.subtitle')}
                 </S.MediumText>
                 <S.Text>
-                    В ближайшее время Вам перезвонит менеджер для подтверждения заказа.
-                    Затем заказ будет подготовлен и отправлен на указанный Вами адрес.
+                    {t('thankYou.text')}
                 </S.Text>
             </S.Center>
 

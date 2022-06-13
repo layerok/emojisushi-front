@@ -3,6 +3,7 @@ import {SvgIcon} from "../svg/SvgIcon";
 import {MapPinSvg} from "../svg/MapPinSvg";
 import {SvgButton} from "../SvgButton";
 import {useTranslation} from "react-i18next";
+import {useNavigate} from "react-router-dom";
 
 
 export const StaticMap = (
@@ -17,6 +18,7 @@ export const StaticMap = (
         style
     }) => {
     const {t} = useTranslation();
+    const navigate = useNavigate();
     return (
         <S.Background style={style}
                       width={width}
@@ -26,6 +28,9 @@ export const StaticMap = (
                       bottomLeft={bottomLeft}
                       bottomRight={bottomRight}
                       mobileFirst={mobileFirst}
+                      onClick={() => {
+                          navigate('/dostavka-i-oplata')
+                      }}
         >
 
             <SvgButton>

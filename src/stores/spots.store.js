@@ -1,4 +1,4 @@
-import {makeAutoObservable} from "mobx";
+import  {makeAutoObservable} from "mobx";
 import AccessService from "../services/access.service";
 import LocalStorageService from "../services/local-storage.service";
 
@@ -18,6 +18,10 @@ class Spots {
 
     setLoading = (state) => {
         this.loading = state;
+    }
+
+    get getAddress() {
+        return this.items?.[this.selectedIndex]?.address
     }
 
     fetchItems = (params = {}) => {

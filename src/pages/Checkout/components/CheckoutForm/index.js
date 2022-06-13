@@ -8,6 +8,8 @@ import {useTranslation} from "react-i18next";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import OrderService from "../../../../services/order.service";
+import {useNavigate} from "react-router-dom";
+import {useState} from "react";
 
 export const CheckoutFormRaw = (
     {
@@ -17,7 +19,9 @@ export const CheckoutFormRaw = (
     }
 ) => {
     const {t} = useTranslation();
+    const [backendErrors, setBackendErrors] = useState([]);
 
+    const navigate = useNavigate();
     const CheckoutSchema = Yup.object().shape({
         phone: Yup.string().test(
             'is-possible-phone-number',
@@ -39,19 +43,26 @@ export const CheckoutFormRaw = (
             comment: '',
             sticks: '',
             change: '',
-            paymentTypeId: '1',
-            shippingTypeId: '1',
+            payment_id: '1',
+            shipping_id: '1',
         },
         validationSchema: CheckoutSchema,
         onSubmit: values => {
+            setBackendErrors([]);
             OrderService.place(values).then((res) => {
-                console.log(res)
+                if(res.data?.success) {
+                    navigate('/thankyou');
+                }
+            }).catch((e) => {
+                if(e.response.data?.errors) {
+                    setBackendErrors(e.response.data.errors);
+                }
             })
         }
     })
 
     const getShippingType = () => {
-        return ShippingStore.items.find((item) => item.id === +formik.values.shippingTypeId);
+        return ShippingStore.items.find((item) => item.id === +formik.values.shipping_id);
     }
 
 
@@ -67,7 +78,7 @@ export const CheckoutFormRaw = (
     }
 
     const getPaymentType = () => {
-        return PaymentStore.items.find((item) => item.id === +formik.values.paymentTypeId);
+        return PaymentStore.items.find((item) => item.id === +formik.values.payment_id);
     }
 
     const getPaymentTypeIndex = () => {
@@ -80,11 +91,13 @@ export const CheckoutFormRaw = (
         return 0;
     }
 
+    console.log(backendErrors);
+
     return <S.Form onSubmit={formik.handleSubmit}>
 
 
         <Switcher
-            name={"shippingTypeId"}
+            name={"shipping_id"}
             options={ShippingStore.items}
             selectedIndex={getShippingTypeIndex()}
             handleChange={({e, index}) => {
@@ -104,8 +117,8 @@ export const CheckoutFormRaw = (
         )}
         <S.Control>
             <Input
-                name={"name"}
-                placeholder={t('checkout.form.name')}
+                name={"first_name"}
+                placeholder={t('checkout.form.first_name')}
                 onChange={formik.handleChange}
                 value={formik.values.name}
             />
@@ -131,6 +144,8 @@ export const CheckoutFormRaw = (
         <S.Control>
             <Input
                 name={"sticks"}
+                type={"number"}
+                min={"0"}
                 placeholder={t('checkout.form.sticks')}
                 onChange={formik.handleChange}
                 value={formik.values.sticks}
@@ -147,7 +162,7 @@ export const CheckoutFormRaw = (
 
         <S.Control>
             <Switcher
-                name={"paymentTypeId"}
+                name={"payment_id"}
                 options={PaymentStore.items}
                 handleChange={({e, index}) => {
                     formik.handleChange(e);
@@ -165,12 +180,17 @@ export const CheckoutFormRaw = (
                 />
             </S.Control>
         )}
-        {Object.keys(formik.errors).length > 0 && (
+        {(Object.keys(formik.errors).length > 0 || Object.keys(backendErrors).length > 0) && (
             <S.Control>
                 <S.ErrorBag>
                     {Object.keys(formik.errors).map((key, i) => (
-                        <li key={key}>
-                            {i+ 1}. {formik.errors[key]}
+                        <li key={`frontend-${key}`}>
+                            {formik.errors[key]}
+                        </li>
+                    ))}
+                    {Object.keys(backendErrors).map((key) => (
+                        <li key={`backend-${key}`}>
+                            {backendErrors[key]}
                         </li>
                     ))}
                 </S.ErrorBag>
