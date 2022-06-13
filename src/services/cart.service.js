@@ -20,6 +20,10 @@ class Cart {
             }
         })
     }
+
+    clearCart() {
+        return client.get('cart/clear')
+    }
 }
 
 const CartService = new Cart();

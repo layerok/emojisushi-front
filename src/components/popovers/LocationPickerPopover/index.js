@@ -6,6 +6,7 @@ import {FlexBox} from "../../FlexBox";
 import {DropdownPopover} from "../DropdownPopover";
 import {inject, observer} from "mobx-react";
 import LocalStorageService from "../../../services/local-storage.service";
+import CartService from "../../../services/cart.service";
 
 
 export const LocationPickerPopoverRaw = (
@@ -13,7 +14,9 @@ export const LocationPickerPopoverRaw = (
         offset = 0,
         backgroundColor,
         width = "211px",
-        SpotsStore
+        SpotsStore,
+        AppStore,
+        CartStore,
     }
 ) => {
 
@@ -26,8 +29,17 @@ export const LocationPickerPopoverRaw = (
                 options={SpotsStore.items}
                 selectedIndex={SpotsStore.selectedIndex}
                 onSelect={({close, option, index}) => {
+                    AppStore.setLoading(true);
                     SpotsStore.setSelectedIndex(index);
-                    LocalStorageService.set('spot_id', option.id)
+                    LocalStorageService.set('spot_id', option.id);
+                    CartService.clearCart().then((res) => {
+                        CartStore.setItems(res.data.data);
+                        CartStore.setTotal(res.data.total);
+                        CartStore.setTotalQuantity(res.data.totalQuantity)
+                        AppStore.setLoading(false);
+                    }).catch(() => {
+                        AppStore.setLoading(false);
+                    });
                     close();
                 }}
             >
@@ -56,4 +68,4 @@ export const LocationPickerPopoverRaw = (
 }
 
 
-export const LocationPickerPopover = inject('SpotsStore')(observer(LocationPickerPopoverRaw))
+export const LocationPickerPopover = inject('SpotsStore', 'CartStore', 'AppStore')(observer(LocationPickerPopoverRaw))
