@@ -9,7 +9,7 @@ export const SearchInput = forwardRef(({value = "", handleInput, ...rest}, ref) 
     const {t} = useTranslation()
     return (
         <S.Search {...rest}>
-            <Input ref={ref} value={value} handleInput={handleInput} placeholder={t('search.input_search')}/>
+            <Input ref={ref} value={value} onInput={handleInput} placeholder={t('search.input_search')}/>
             <S.IconBtn>
                 <SvgIcon color={"white"} width={"25px"} height={"25px"}>
                     <MagnifierSvg/>

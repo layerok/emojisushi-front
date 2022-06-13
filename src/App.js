@@ -1,4 +1,4 @@
-import {Routes, Route } from "react-router-dom";
+import {Routes, Route, Navigate } from "react-router-dom";
 import React, {useEffect} from "react";
 import {Home} from "./pages/Home";
 import 'normalize.css';
@@ -59,6 +59,7 @@ function App(
                     <Route path="/dostavka-i-oplata" element={<Delivery />} />
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/wishlist" element={<Wishlist />} />
+                    <Route path="*" element={<Navigate to={"/"}/>} replace/>
                 </Routes>
             </div>
         </ThemeProvider>

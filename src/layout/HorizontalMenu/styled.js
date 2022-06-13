@@ -14,6 +14,12 @@ const Categories = styled.div`
   }
 `
 
+const HorizontalContainer = styled.div`
+  display: flex;
+  overflow-x: scroll;
+  flex-wrap: nowrap;
+`;
+
 const Hint = styled.div`
   position: absolute;
   top: 15px;
@@ -28,6 +34,7 @@ const Category = styled(NavLink)`
   cursor: pointer;
   color: white;
   text-decoration: none;
+  margin-right: 16px;
   
   &:hover {
     color: ${theme('link.active')};
@@ -49,5 +56,6 @@ const Category = styled(NavLink)`
 export {
     Categories,
     Category,
-    Hint
+    Hint,
+    HorizontalContainer
 }

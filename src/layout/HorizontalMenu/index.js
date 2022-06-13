@@ -1,5 +1,4 @@
 import * as S from "./styled";
-import Slider  from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import {SvgIcon} from "../../components/svg/SvgIcon";
@@ -12,13 +11,7 @@ const HorizontalMenu = (
         categories = []
     }
 ) => {
-    const settings = {
-        slidesToShow: 1,
-        arrows: false,
-        infinite: false,
-        variableWidth: true,
-        swipeToSlide: true
-    }
+
     const {categorySlug} = useParams();
     return (
         <nav>
@@ -32,7 +25,7 @@ const HorizontalMenu = (
                     </FlexBox>
                 </S.Hint>
 
-                <Slider {...settings}>
+                <S.HorizontalContainer>
                     {
                         categories.map((category) => {
                             const active = categorySlug === category.slug;
@@ -43,7 +36,7 @@ const HorizontalMenu = (
                             )
                         })
                     }
-                </Slider>
+                </S.HorizontalContainer>
 
             </S.Categories>
         </nav>
