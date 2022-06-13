@@ -36,7 +36,7 @@ export const CheckoutFormRaw = (
 
     const formik = useFormik({
         initialValues: {
-            name: '',
+            first_name: '',
             email: '',
             phone: '',
             address: '',
