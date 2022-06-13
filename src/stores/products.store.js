@@ -16,6 +16,7 @@ class Products {
     filters = [];
     selectedFilters = [];
     total = 0;
+    search = "";
 
     fetchItems = (params = {}) => {
         this.setLoading(true);
@@ -28,6 +29,7 @@ class Products {
         return MenuService.getProducts({
             filter: filter,
             category_slug: "menu",
+            search: this.search,
             sort: this.sort,
             offset: this.offset,
             limit: this.limit,
@@ -87,6 +89,10 @@ class Products {
 
     setSelectedFilters = (filters) => {
         this.selectedFilters = filters;
+    }
+
+    setSearch = (search) => {
+        this.search = search;
     }
 
 }
