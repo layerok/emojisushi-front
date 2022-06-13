@@ -65,6 +65,7 @@ export const FooterRaw = (
                             <FlexBox style={{
                                 marginTop: "10px"
                             }} alignItems={"center"}>
+
                                 <SvgIcon width={"25px"} color={"white"}>
                                     <TelegramSvg/>
                                 </SvgIcon>

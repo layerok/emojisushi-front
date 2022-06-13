@@ -40,7 +40,10 @@ const CheckoutCartRaw = (
                                     <S.Delimiter/>
                                     <S.Weight>{product.weight} г</S.Weight>
                                 </FlexBox>
-                                <IngredientsTooltip items={ingredients}/>
+                                {ingredients.length > 0 && (
+                                    <IngredientsTooltip items={ingredients}/>
+                                    )}
+
                             </S.Description>
                             <S.Price>
                                 <Price newPrice={newPrice} oldPrice={oldPrice}/>

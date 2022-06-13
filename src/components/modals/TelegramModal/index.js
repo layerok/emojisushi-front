@@ -16,7 +16,7 @@ export const TelegramModal = ({children, ...rest}) => {
             </SvgIcon>
         )}
         renderButton={() => (
-            <ButtonFilled width={"250px"} >
+            <ButtonFilled as={"a"} href={"https://t.me/Emojisushibot"} target={"_blank"} width={"250px"} >
                 {t('telegramModal.go_to')}
             </ButtonFilled>
         )}
