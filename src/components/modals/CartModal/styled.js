@@ -13,8 +13,8 @@ const Wrapper = styled.div`
     border-radius: 15px 15px 0 0;
     width: 375px;
   `}
-  
-  padding: 40px 0 31px 20px;
+
+  padding: 40px 20px 31px 20px;
   flex-direction: column;
   justify-content: space-between;
 `;
