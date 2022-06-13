@@ -12,6 +12,7 @@ class Spots {
     items = [];
     selectedIndex = null;
     needRefresh = false;
+    userSelectedSpot = false;
 
     setSelectedIndex = (index) => {
         this.selectedIndex = index;
@@ -35,6 +36,10 @@ class Spots {
 
     get getSelected() {
         return this.items?.[this.selectedIndex]
+    }
+
+    get getSelectedIndex() {
+        return this.selectedIndex;
     }
 
     fetchItems = (params = {}) => {
@@ -65,6 +70,10 @@ class Spots {
 
     setItems = (items) => {
         this.items = items;
+    }
+
+    setUserSelectedSpot = (state) => {
+        this.userSelectedSpot = state;
     }
 }
 

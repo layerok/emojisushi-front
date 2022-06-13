@@ -16,3 +16,4 @@ export function getProductIngredients({property_values}) {
         return pv.property.name;
     })
 }
+

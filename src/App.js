@@ -13,6 +13,7 @@ import {Wishlist} from "./pages/Wishlist";
 import {reaction} from "mobx";
 import LocalStorageService from "./services/local-storage.service";
 import CartService from "./services/cart.service";
+import {SpotsModal} from "./components/modals/SpotsModal";
 
 function App(
     {
@@ -26,14 +27,13 @@ function App(
 
     useEffect(() => {
         SpotsStore.fetchItems();
-    })
+    }, [])
 
     useEffect(() => {
         return reaction(() => {
             return SpotsStore.needRefresh
         }, () => {
             const selected = SpotsStore.getSelected;
-            console.log(selected);
             LocalStorageService.set('spot_id', selected.id);
             CartService.clearCart().then((res) => {
                 CartStore.setItems(res.data.data);
@@ -47,7 +47,8 @@ function App(
             ProductsStore.fetchItems(ProductsStore.lastParams);
             CategoriesStore.fetchItems()
         })
-    })
+    }, [])
+
 
     return (
         <ThemeProvider theme={theme}>

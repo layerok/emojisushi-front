@@ -49,6 +49,9 @@ export const ua = {
     filtersModal: {
         search_filters: "Фільтри пошуку"
     },
+    spotsModal: {
+        title: "Оберіть заклад"
+    },
     mobMenuModal: {
         contacts: "Контакти",
         delivery: "Доставка і оплата",

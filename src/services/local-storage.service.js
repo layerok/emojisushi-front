@@ -10,7 +10,10 @@ class LocalStorage {
             console.error('ls error' + e.toString());
             return defaultValue;
         }
+    }
 
+    exist(key) {
+        return (key in localStorage);
     }
 }
 

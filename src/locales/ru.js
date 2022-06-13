@@ -49,6 +49,9 @@ export const ru = {
     filtersModal: {
         search_filters: "Фильтры поиска"
     },
+    spotsModal: {
+        title: "Выберите заведение"
+    },
     mobMenuModal: {
         contacts: "Контакты",
         delivery: "Доставка и оплата",

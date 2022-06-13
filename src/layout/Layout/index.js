@@ -7,6 +7,8 @@ import * as S from "./styled";
 import {RestaurantClosed} from "../../components/modals/RestaurantClosed";
 import {Preloader} from "../Preloader";
 import {inject, observer} from "mobx-react";
+import {SpotsModal} from "../../components/modals/SpotsModal";
+import {useEffect} from "react";
 
 export const LayoutRaw = (
     {
@@ -15,9 +17,24 @@ export const LayoutRaw = (
         withSidebar= true,
         mainProps = {},
         containerProps = {},
-        AppStore: {loading},
+        AppStore: {
+            loading,
+            lastActivity,
+            lastActivityExpired,
+            setOpenSpotsModal,
+            openSpotsModal
+        },
         ...rest
     }) => {
+
+/*    useEffect(() => {
+        console.log('last-activity', lastActivity);
+        if(typeof lastActivity === 'undefined' || lastActivityExpired) {
+            setOpenSpotsModal(true);
+        } else {
+            setOpenSpotsModal(false);
+        }
+    })*/
 
     return (
         <S.Layout {...rest}>
@@ -35,7 +52,8 @@ export const LayoutRaw = (
                 </Container>
             </S.Main>
             <Footer/>
-            <RestaurantClosed open={true}/>
+            <RestaurantClosed/>
+            <SpotsModal open={true}/>
         </S.Layout>
     )
 }
