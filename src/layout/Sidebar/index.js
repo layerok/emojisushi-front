@@ -39,12 +39,12 @@ export const SidebarRaw = (
                 justifyContent={"space-between"}
                 flexDirection={isMobile ? 'column': 'row'}
             >
-                <div style={{marginBottom: "30px", width: "100%"}}>
-                    <S.SearchInput  onInput={(e) => {
-                        ProductsStore.setSearch(e.target.value);
-                        debouncedFetch()
-                    }} value={ProductsStore.search}/>
-                </div>
+
+                <S.SearchInput  handleInput={(e) => {
+                    ProductsStore.setSearch(e.target.value);
+                    debouncedFetch()
+                }} value={ProductsStore.search}/>
+
 
                 {breakpoint !== 'pc' && (
                     <FlexBox justifyContent={isMobile ? 'space-between': 'flex-end'} style={{

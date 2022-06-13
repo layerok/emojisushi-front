@@ -5,11 +5,11 @@ import {MagnifierSvg} from "../svg/MagnifierSvg";
 import {useTranslation} from "react-i18next";
 import {forwardRef} from "react";
 
-export const SearchInput = forwardRef(({...rest}, ref) => {
+export const SearchInput = forwardRef(({value = "", handleInput, ...rest}, ref) => {
     const {t} = useTranslation()
     return (
-        <S.Search >
-            <Input ref={ref} {...rest} placeholder={t('search.input_search')}/>
+        <S.Search {...rest}>
+            <Input ref={ref} value={value} handleInput={handleInput} placeholder={t('search.input_search')}/>
             <S.IconBtn>
                 <SvgIcon color={"white"} width={"25px"} height={"25px"}>
                     <MagnifierSvg/>
