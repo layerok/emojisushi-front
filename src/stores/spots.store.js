@@ -21,7 +21,20 @@ class Spots {
     }
 
     get getAddress() {
-        return this.items?.[this.selectedIndex]?.address
+        return this.getSelected?.address
+    }
+
+    get getPhones() {
+        return this.getSelected?.phones;
+    }
+
+    get hasPhones() {
+        console.log(this.getPhones);
+        return this.getPhones && this.getPhones !== '';
+    }
+
+    get getSelected() {
+        return this.items?.[this.selectedIndex]
     }
 
     fetchItems = (params = {}) => {

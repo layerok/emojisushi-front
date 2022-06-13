@@ -9,8 +9,13 @@ import {InstagramSvg} from "../../components/svg/InstagramSvg";
 import {PhoneSvg} from "../../components/svg/PhoneSvg";
 import {LogoSvg} from "../../components/svg/LogoSvg";
 import {useTranslation} from "react-i18next";
+import {inject, observer} from "mobx-react";
 
-export const Footer = () => {
+export const FooterRaw = (
+    {
+        SpotsStore
+    }
+) => {
     const {t} = useTranslation();
     return (
         <S.Footer>
@@ -22,25 +27,30 @@ export const Footer = () => {
                         </SvgIcon>
                     </S.Logo>
                     <S.List>
-                       <FlexBox style={{
-                           marginBottom: "15px"
-                       }} alignItems={"center"}>
-                           <SvgIcon width={"25px"} color={"white"}>
-                               <PhoneSvg/>
-                           </SvgIcon>
-                           <S.PhoneLabel>
-                               {t('footerPhones.phones')}
-                           </S.PhoneLabel>
-                       </FlexBox>
+                        {SpotsStore.hasPhones && (
+                            <>
+                                <FlexBox style={{
+                                    marginBottom: "15px"
+                                }} alignItems={"center"}>
+                                    <SvgIcon width={"25px"} color={"white"}>
+                                        <PhoneSvg/>
+                                    </SvgIcon>
+                                    <S.PhoneLabel>
+                                        {t('footerPhones.phones')}
+                                    </S.PhoneLabel>
+                                </FlexBox>
 
-                        <FlexBox flexDirection={"column"}>
-                            <S.Phone href={"tel:+380933662869"}>
-                                +38 (093) 366 28 69
-                            </S.Phone>
-                            <S.Phone href={"tel:+380933662869"}>
-                                +38 (093) 366 28 69
-                            </S.Phone>
-                        </FlexBox>
+                                <FlexBox flexDirection={"column"}>
+                                    {SpotsStore.getPhones.split(',').map(phone => (
+                                        <S.Phone href={`tel:${phone}`}>
+                                            {phone}
+                                        </S.Phone>
+                                    ))}
+                                </FlexBox>
+                            </>
+
+                        )}
+
 
 
                         <FlexBox alignItems={"center"} >
@@ -83,3 +93,5 @@ export const Footer = () => {
         </S.Footer>
     )
 }
+
+export const Footer = inject('SpotsStore')(observer(FooterRaw));
