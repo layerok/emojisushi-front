@@ -18,7 +18,8 @@ export const ru = {
         name: "По алфавиту A-я"
     },
     search: {
-        input_search: "Поиск"
+        input_search: "Поиск",
+        title: "Ищем товары \"{{word}}\" в категории {{category}}"
     },
     underVerticalMenu: {
         favorite: "Любимые",

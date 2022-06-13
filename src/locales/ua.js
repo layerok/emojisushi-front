@@ -18,7 +18,8 @@ export const ua = {
         name: "За алфавітом A-я"
     },
     search: {
-        input_search: "Пошук"
+        input_search: "Пошук",
+        title: "Шукаемо товары \"{{word}}\" в категорії {{category}}"
     },
     underVerticalMenu: {
         favorite: "Улюблені",
