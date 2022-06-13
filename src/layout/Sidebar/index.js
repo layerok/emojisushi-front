@@ -51,9 +51,9 @@ export const SidebarRaw = (
                     <FlexBox justifyContent={isMobile ? 'space-between': 'flex-end'} style={{
                         width: "100%"
                     }}>
-                        <FiltersModal>
+           {/*             <FiltersModal>
                             <FiltersButton text={t('common.filters')} />
-                        </FiltersModal>
+                        </FiltersModal>*/}
                         <div style={{
                             marginLeft: "30px"
                         }}>

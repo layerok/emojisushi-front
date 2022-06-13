@@ -35,9 +35,9 @@ const ProductsGridRaw = (
             <S.Title>{title}</S.Title>
             {breakpoint === 'pc' && (
                 <FlexBox >
-                    <FiltersModal>
+ {/*                   <FiltersModal>
                         <FiltersButton text={t('common.filters')}/>
-                    </FiltersModal>
+                    </FiltersModal>*/}
                     <div style={{marginLeft: "67px"}}>
                         <SortingPopover/>
                     </div>
