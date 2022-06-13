@@ -1,11 +1,9 @@
 import {ProductCard} from "../ProductCard";
 import * as S from "./styled";
-import {FiltersButton} from "../buttons/FiltersButton";
 import {FlexBox} from "../FlexBox";
 import {LoadMoreButton} from "../buttons/LoadMoreButton";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import { EqualHeight } from 'react-equal-height';
-import {FiltersModal} from "../modals/FiltersModal";
 import {SortingPopover} from "../popovers/SortingPopover";
 import {inject, observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
