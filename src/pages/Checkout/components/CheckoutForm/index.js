@@ -91,7 +91,6 @@ export const CheckoutFormRaw = (
         return 0;
     }
 
-    console.log(backendErrors);
 
     return <S.Form onSubmit={formik.handleSubmit}>
 

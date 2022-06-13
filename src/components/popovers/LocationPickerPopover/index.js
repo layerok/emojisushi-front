@@ -17,6 +17,8 @@ export const LocationPickerPopoverRaw = (
         SpotsStore,
         AppStore,
         CartStore,
+        ProductsStore,
+        CategoriesStore
     }
 ) => {
 
@@ -31,15 +33,6 @@ export const LocationPickerPopoverRaw = (
                 onSelect={({close, option, index}) => {
                     AppStore.setLoading(true);
                     SpotsStore.setSelectedIndex(index);
-                    LocalStorageService.set('spot_id', option.id);
-                    CartService.clearCart().then((res) => {
-                        CartStore.setItems(res.data.data);
-                        CartStore.setTotal(res.data.total);
-                        CartStore.setTotalQuantity(res.data.totalQuantity)
-                        AppStore.setLoading(false);
-                    }).catch(() => {
-                        AppStore.setLoading(false);
-                    });
                     close();
                 }}
             >
@@ -68,4 +61,4 @@ export const LocationPickerPopoverRaw = (
 }
 
 
-export const LocationPickerPopover = inject('SpotsStore', 'CartStore', 'AppStore')(observer(LocationPickerPopoverRaw))
+export const LocationPickerPopover = inject('SpotsStore', 'CartStore', 'AppStore', 'ProductsStore', 'CategoriesStore')(observer(LocationPickerPopoverRaw))

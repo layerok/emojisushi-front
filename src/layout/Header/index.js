@@ -61,7 +61,7 @@ const HeaderRaw = (
 
                         <CartModal>
                             <S.TinyCartBtn>
-                                <TinyCartButton/>
+                                <TinyCartButton price={CartStore.total}/>
                             </S.TinyCartBtn>
                         </CartModal>
 

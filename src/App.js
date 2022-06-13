@@ -10,15 +10,43 @@ import {Checkout} from "./pages/Checkout";
 import {Category} from "./pages/Category";
 import {inject, observer} from "mobx-react";
 import {Wishlist} from "./pages/Wishlist";
+import {reaction} from "mobx";
+import LocalStorageService from "./services/local-storage.service";
+import CartService from "./services/cart.service";
 
 function App(
     {
-        SpotsStore
+        SpotsStore,
+        CartStore,
+        AppStore,
+        ProductsStore,
+        CategoriesStore
     }
 ) {
 
     useEffect(() => {
         SpotsStore.fetchItems();
+    })
+
+    useEffect(() => {
+        return reaction(() => {
+            return SpotsStore.selectedIndex
+        }, () => {
+            const selected = SpotsStore.getSelected;
+            console.log(selected);
+            LocalStorageService.set('spot_id', selected.id);
+            CartService.clearCart().then((res) => {
+                CartStore.setItems(res.data.data);
+                CartStore.setTotal(res.data.total);
+                CartStore.setTotalQuantity(res.data.totalQuantity)
+                AppStore.setLoading(false);
+            }).catch(() => {
+                AppStore.setLoading(false);
+            });
+
+            ProductsStore.fetchItems(ProductsStore.lastParams);
+            CategoriesStore.fetchItems()
+        })
     })
 
     return (
@@ -37,4 +65,4 @@ function App(
     );
 }
 
-export default inject('SpotsStore')(observer(App))
+export default inject('SpotsStore', 'CartStore', 'AppStore', 'CategoriesStore', 'ProductsStore')(observer(App))

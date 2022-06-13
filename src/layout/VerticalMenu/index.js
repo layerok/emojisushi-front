@@ -9,7 +9,7 @@ const VerticalMenu = (
     const {categorySlug} = useParams();
 
     return (
-        <nav>
+        <nav style={{width: "255px"}}>
             <S.Categories>
                 {
                     categories.map((category) => {

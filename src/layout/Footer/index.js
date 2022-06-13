@@ -41,8 +41,8 @@ export const FooterRaw = (
                                 </FlexBox>
 
                                 <FlexBox flexDirection={"column"}>
-                                    {SpotsStore.getPhones.split(',').map(phone => (
-                                        <S.Phone href={`tel:${phone}`}>
+                                    {SpotsStore.getPhones.split(',').map((phone, i) => (
+                                        <S.Phone key={i} href={`tel:${phone}`}>
                                             {phone}
                                         </S.Phone>
                                     ))}

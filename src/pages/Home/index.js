@@ -28,7 +28,7 @@ export const HomeRaw = (
     }
 
     return (
-        <Layout withBanner={true}>
+        <Layout withBanner={false}>
             <ProductsGrid
                 loadable={ProductsStore.total > ProductsStore.items.length}
                 loading={ProductsStore.loading}

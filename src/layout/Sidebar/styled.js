@@ -6,10 +6,11 @@ const Sidebar = styled.div`
   width: 100%;
   margin-bottom: 30px;
   
-  ${media.greaterThan('pc')`
-    width: 255px;
+  ${media.greaterThan('tablet')`
     margin-right: 30px;
+    width: 255px;
   `}
+
 `
 
 const SearchInput = styled(SearchInputBase)`

@@ -2,7 +2,11 @@ import * as S from "./styled";
 import {SvgIcon} from "../svg/SvgIcon";
 import {BagSvg} from "../svg/BagSvg";
 
-export const TinyCartButton = () => {
+export const TinyCartButton = (
+    {
+        price
+    }
+) => {
     return (
         <S.TinyCartButton>
         <S.Icon>
@@ -11,7 +15,7 @@ export const TinyCartButton = () => {
             </SvgIcon>
         </S.Icon>
         <S.Price>
-            308 ₴
+            {price}
         </S.Price>
         </S.TinyCartButton>
     );

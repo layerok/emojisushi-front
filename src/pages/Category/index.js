@@ -37,7 +37,7 @@ export const CategoryRaw = (
     }, [categorySlug])
 
     return (
-        <Layout withBanner={true}>
+        <Layout withBanner={false}>
             <ProductsGrid
                 handleLoadMore={handleLoadMore}
                 title={title}

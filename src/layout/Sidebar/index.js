@@ -31,7 +31,7 @@ export const SidebarRaw = (
                 justifyContent={"space-between"}
                 flexDirection={isMobile ? 'column': 'row'}
             >
-                <S.SearchInput/>
+                {/*<S.SearchInput/>*/}
                 {breakpoint !== 'pc' && (
                     <FlexBox justifyContent={isMobile ? 'space-between': 'flex-end'} style={{
                         width: "100%"
