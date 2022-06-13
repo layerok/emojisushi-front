@@ -8,7 +8,8 @@ import {RestaurantClosed} from "../../components/modals/RestaurantClosed";
 import {Preloader} from "../Preloader";
 import {inject, observer} from "mobx-react";
 import {SpotsModal} from "../../components/modals/SpotsModal";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {isClosed} from "../../utils/time.utils";
 
 export const LayoutRaw = (
     {
@@ -19,22 +20,16 @@ export const LayoutRaw = (
         containerProps = {},
         AppStore: {
             loading,
-            lastActivity,
-            lastActivityExpired,
-            setOpenSpotsModal,
-            openSpotsModal
         },
+        SpotsStore,
         ...rest
     }) => {
 
-/*    useEffect(() => {
-        console.log('last-activity', lastActivity);
-        if(typeof lastActivity === 'undefined' || lastActivityExpired) {
-            setOpenSpotsModal(true);
-        } else {
-            setOpenSpotsModal(false);
-        }
-    })*/
+
+    const closed = isClosed({
+        start: [10, 0],
+        end: [22, 45],
+    });
 
     return (
         <S.Layout {...rest}>
@@ -52,10 +47,10 @@ export const LayoutRaw = (
                 </Container>
             </S.Main>
             <Footer/>
-            <RestaurantClosed/>
-            <SpotsModal open={true}/>
+            <RestaurantClosed open={closed}/>
+            <SpotsModal open={!SpotsStore.userSelectedSpot && !closed}/>
         </S.Layout>
     )
 }
 
-export const Layout = inject('AppStore', 'CartStore')(observer(LayoutRaw));
+export const Layout = inject('AppStore', 'CartStore', 'SpotsStore')(observer(LayoutRaw));

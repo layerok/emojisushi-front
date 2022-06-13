@@ -8,6 +8,7 @@ import {useTranslation} from "react-i18next";
 export const SpotsModalRaw = (
     {
         SpotsStore,
+        open = false,
     }
 ) => {
 
@@ -15,7 +16,7 @@ export const SpotsModalRaw = (
     const selectedIndex = SpotsStore.getSelectedIndex;
     const {t} = useTranslation();
 
-    return <Modal open={!SpotsStore.userSelectedSpot} render={({close}) => (
+    return <Modal open={open} render={({close}) => (
         <S.Wrapper>
             <S.FilterMagnifier>
                 <S.Text>
