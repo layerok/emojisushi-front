@@ -102,7 +102,7 @@ export const CartModal = inject('CartStore')(observer((
         alignItems: breakpoint === 'mobile' ? 'center': 'start',
         background: "rgba(0, 0, 0, 0.4)",
         display: 'grid',
-        zIndex: 999
+        zIndex: 999999
     };
 
     // max cart items wrapper height is 500px and min is 300px

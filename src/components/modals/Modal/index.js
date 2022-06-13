@@ -18,7 +18,7 @@ export const Modal = (
         justifyItems,
         alignItems,
         background: "rgba(0, 0, 0, 0.4)",
-        zIndex: 999
+        zIndex: 999999
     }
     return <BaseModal overlayStyles={overlayStyles} render={({close}) => (
         <S.Container width={width} alignCenter={alignCenter}>

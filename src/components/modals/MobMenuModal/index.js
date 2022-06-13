@@ -15,7 +15,7 @@ export const MobMenuModal = ({children}) => {
         alignItems: 'start',
         background: "rgba(0, 0, 0, 0.4)",
         display: 'grid',
-        zIndex: 999
+        zIndex: 999999
     };
     const {t} = useTranslation();
     return <BaseModal overlayStyles={overlayStyles} render={({close}) => (
