@@ -53,13 +53,13 @@ function App(
         <ThemeProvider theme={theme}>
             <div className="App">
                 <Routes>
-                    <Route path="/" element={<Home />} />
+{/*                    <Route path="/" element={<Home />} />*/}
                     <Route path="/category/:categorySlug" element={<Category />} />
                     <Route path="/thankyou" element={<ThankYou />} />
                     <Route path="/dostavka-i-oplata" element={<Delivery />} />
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/wishlist" element={<Wishlist />} />
-                    <Route path="*" element={<Navigate to={"/"}/>} replace/>
+                    <Route path="*" element={<Navigate to={"/category/roli"}/>} replace/>
                 </Routes>
             </div>
         </ThemeProvider>

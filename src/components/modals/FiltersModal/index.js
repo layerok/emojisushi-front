@@ -1,4 +1,4 @@
-import {cloneElement, useEffect} from "react";
+import {cloneElement} from "react";
 import {CheckboxFilter} from "../../CheckboxFilter";
 import * as S from "./styled";
 import {SvgIcon} from "../../svg/SvgIcon";

@@ -10,6 +10,7 @@ import {inject, observer} from "mobx-react";
 import {useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import {useDebounce} from "../../common/hooks/useDebounce";
+import {FiltersModal} from "../../components/modals/FiltersModal";
 
 export const SidebarRaw = (
     {
@@ -50,7 +51,9 @@ export const SidebarRaw = (
                     <FlexBox justifyContent={isMobile ? 'space-between': 'flex-end'} style={{
                         width: "100%"
                     }}>
-                        <FiltersButton text={t('common.filters')} />
+                        <FiltersModal>
+                            <FiltersButton text={t('common.filters')} />
+                        </FiltersModal>
                         <div style={{
                             marginLeft: "30px"
                         }}>
