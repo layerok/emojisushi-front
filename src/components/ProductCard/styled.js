@@ -19,6 +19,9 @@ const Wrapper = styled.div`
 `;
 
 const Image = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-image: url("${prop("src")}");
   background-size: contain;
   background-position: center;

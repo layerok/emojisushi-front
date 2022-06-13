@@ -58,6 +58,9 @@ const Item = styled.div`
 `;
 
 Item.Img = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100px;
   height: 64px;
   background-image: url("${prop("src")}");

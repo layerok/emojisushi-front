@@ -39,6 +39,9 @@ const Image = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-content: center;
   ${media.lessThan('pc')`
     width: 100px;
     height: 64px;

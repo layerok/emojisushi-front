@@ -17,6 +17,8 @@ import {getProductMainImage, getProductNewPrice, getProductOldPrice} from "../..
 import {inject, observer} from "mobx-react";
 import {Loader} from "../../Loader";
 import {useTranslation} from "react-i18next";
+import {SvgIcon} from "../../svg/SvgIcon";
+import {LogoSvg} from "../../svg/LogoSvg";
 
 const CartItem = inject('CartStore')(observer((
     {
@@ -50,7 +52,13 @@ const CartItem = inject('CartStore')(observer((
                 <CloseIcon color={"#4A4A4A"}/>
             </ConfirmActionPopover>
         </S.Item.RemoveIcon>
-        <S.Item.Img src={img}/>
+        <S.Item.Img src={img}>
+            {!img && (
+                <SvgIcon color={"white"} width={"80%"} style={{opacity: 0.05}}>
+                    <LogoSvg/>
+                </SvgIcon>
+            )}
+        </S.Item.Img>
         <S.Item.Info>
             <S.Item.Name title={name}>
                 {name}

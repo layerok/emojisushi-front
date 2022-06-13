@@ -13,6 +13,8 @@ import {
     getProductOldPrice
 } from "../../utils/utils";
 import {Loader} from "../Loader";
+import {SvgIcon} from "../svg/SvgIcon";
+import {LogoSvg} from "../svg/LogoSvg";
 
 const ProductCardRaw = (
     {
@@ -71,7 +73,14 @@ const ProductCardRaw = (
         }}>
             <Favorite width={iconSize} isFavorite={is_favorite_}/>
         </S.Favorite>
-        <S.Image src={img}/>
+        <S.Image src={img}>
+            {!img && (
+                <SvgIcon color={"white"} width={"80%"} style={{opacity: 0.05}}>
+                    <LogoSvg/>
+                </SvgIcon>
+            )}
+
+        </S.Image>
         <EqualHeightElement name={"product-name"}>
             <S.Name>{name}</S.Name>
         </EqualHeightElement>

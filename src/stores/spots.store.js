@@ -11,6 +11,7 @@ class Spots {
     loading = false;
     items = [];
     selectedIndex = null;
+    needRefresh = false;
 
     setSelectedIndex = (index) => {
         this.selectedIndex = index;
@@ -47,10 +48,19 @@ class Spots {
             const exist = res.data.data.find((item) => item.id === selectedId);
             if(!selectedId || !exist) {
                 this.setSelectedIndex(0);
+                this.refresh();
             } else {
                 this.setSelectedIndex(res.data.data.indexOf(exist));
             }
         })
+    }
+
+    refresh = () => {
+        this.setNeedRefresh(!this.needRefresh)
+    }
+
+    setNeedRefresh = (state) => {
+        this.needRefresh = state;
     }
 
     setItems = (items) => {

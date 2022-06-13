@@ -12,6 +12,8 @@ import {
     getProductNewPrice,
     getProductOldPrice
 } from "../../../../utils/utils";
+import {SvgIcon} from "../../../../components/svg/SvgIcon";
+import {LogoSvg} from "../../../../components/svg/LogoSvg";
 
 const CheckoutCartRaw = (
     {
@@ -31,7 +33,14 @@ const CheckoutCartRaw = (
                     const newPrice = getProductNewPrice(product);
                     const img = getProductMainImage(product);
                     return <S.Item key={id}>
-                        <S.Image src={img}/>
+                        <S.Image src={img}>
+                            {!img && (
+                                <SvgIcon color={"white"} width={"80%"} style={{opacity: 0.05}}>
+                                    <LogoSvg/>
+                                </SvgIcon>
+                            )}
+                        </S.Image>
+
                         <S.Content>
                             <S.Name>{product.name}</S.Name>
                             <S.Description>

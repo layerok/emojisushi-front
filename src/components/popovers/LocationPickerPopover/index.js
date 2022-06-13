@@ -33,6 +33,7 @@ export const LocationPickerPopoverRaw = (
                 onSelect={({close, option, index}) => {
                     AppStore.setLoading(true);
                     SpotsStore.setSelectedIndex(index);
+                    SpotsStore.refresh();
                     close();
                 }}
             >

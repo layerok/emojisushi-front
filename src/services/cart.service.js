@@ -21,8 +21,10 @@ class Cart {
         })
     }
 
-    clearCart() {
-        return client.get('cart/clear')
+    clearCart(params = {}) {
+        return client.get('cart/clear', {
+            params
+        })
     }
 }
 

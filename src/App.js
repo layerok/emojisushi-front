@@ -30,7 +30,7 @@ function App(
 
     useEffect(() => {
         return reaction(() => {
-            return SpotsStore.selectedIndex
+            return SpotsStore.needRefresh
         }, () => {
             const selected = SpotsStore.getSelected;
             console.log(selected);
