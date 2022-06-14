@@ -1,5 +1,4 @@
 import {ButtonCounter} from "../../Counter";
-import {PendingButton} from "../Button";
 import {ButtonOutline} from "../Button";
 import {useTranslation} from "react-i18next";
 
@@ -11,9 +10,6 @@ export const AddToCartButton = (
     }
 ) => {
     const {t} = useTranslation();
-    if(pending) {
-        return <PendingButton/>;
-    }
 
     if(count) {
         return <ButtonCounter
@@ -26,5 +22,5 @@ export const AddToCartButton = (
             count={count}
         />
     }
-    return <ButtonOutline onClick={() => handleAdd(1)}>{t('order.order_btn')}</ButtonOutline>;
+    return <ButtonOutline loading={pending} onClick={() => handleAdd(1)}>{t('order.order_btn')}</ButtonOutline>;
 }
