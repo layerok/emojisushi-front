@@ -42,11 +42,3 @@ export const ButtonFilled = (
         {children}
     </Button>
 }
-
-export const PendingButton = (props) => {
-    return (<ButtonFilled {...props}>
-        <SvgIcon width={"25px"} color={"black"}>
-            <SpinnerSvg/>
-        </SvgIcon>
-    </ButtonFilled>)
-}
