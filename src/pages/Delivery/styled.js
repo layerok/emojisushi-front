@@ -23,7 +23,13 @@ const AdresText = styled.p`
   line-height: 18px;
   color: #FFFFFF;
   margin-top: 10px;
-  width: 500px;
+  width: 100%;
+
+  ${media.lessThan("tablet")`
+        width: 500px;
+    `
+  }
+  
   ${media.lessThan("pc")`
         width: 700px;
         margin-top: 15px;   
