@@ -56,10 +56,10 @@ export const CheckoutFormRaw = (
                 }
             }).catch((e) => {
                 if(e.response.data?.errors) {
-                    setBackendErrors(e.response.data.errors);
+                    formik.setErrors(e.response.data.errors);
                 }
             })
-        }
+        },
     })
 
     const getShippingType = () => {
@@ -137,7 +137,9 @@ export const CheckoutFormRaw = (
                 name={"phone"}
                 required={true}
                 placeholder={t('checkout.form.phone')}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                    formik.handleChange(e);
+                }}
                 value={formik.values.phone}
             />
         </S.Control>
@@ -180,17 +182,12 @@ export const CheckoutFormRaw = (
                 />
             </S.Control>
         )}
-        {(Object.keys(formik.errors).length > 0 || Object.keys(backendErrors).length > 0) && (
+        {(Object.keys(formik.errors).length > 0 ) && (
             <S.Control>
                 <S.ErrorBag>
                     {Object.keys(formik.errors).map((key, i) => (
-                        <li key={`frontend-${key}`}>
+                        <li key={key}>
                             {formik.errors[key]}
-                        </li>
-                    ))}
-                    {Object.keys(backendErrors).map((key) => (
-                        <li key={`backend-${key}`}>
-                            {backendErrors[key]}
                         </li>
                     ))}
                 </S.ErrorBag>
