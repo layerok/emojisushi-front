@@ -23,14 +23,15 @@ export const CheckoutFormRaw = (
 
     const navigate = useNavigate();
     const CheckoutSchema = Yup.object().shape({
-        phone: Yup.string().test(
-            'is-possible-phone-number',
-            () => t('checkout.form.errors.ua_phone'),
-            (value) => {
-                const regex = /^(((\+?)(38))\s?)?(([0-9]{3})|(\([0-9]{3}\)))(\-|\s)?(([0-9]{3})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{2})|([0-9]{2})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{3})|([0-9]{2})(\-|\s)?([0-9]{3})(\-|\s)?([0-9]{2}))$/;
-                return regex.test(value ?? '');
-            }
-        ),
+        phone: Yup.string()
+            .required(t('validation.required', {field: t('checkout.form.phone')})).test(
+                'is-possible-phone-number',
+                () => t('checkout.form.errors.ua_phone'),
+                (value) => {
+                    const regex = /^(((\+?)(38))\s?)?(([0-9]{3})|(\([0-9]{3}\)))(\-|\s)?(([0-9]{3})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{2})|([0-9]{2})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{3})|([0-9]{2})(\-|\s)?([0-9]{3})(\-|\s)?([0-9]{2}))$/;
+                    return regex.test(value ?? '');
+                }
+            ),
         email: Yup.string().email('Invalid email'),
     });
 

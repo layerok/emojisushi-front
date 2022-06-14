@@ -95,6 +95,9 @@ export const ru = {
         order: "Заказать",
         to_pay: "К оплате:"
     },
+    validation: {
+        required:  'Поле "{{field}}" обязательное'
+    },
     thankYou: {
         title: 'Благодарим Вас за заказ!',
         subtitle: 'Ваш заказ успешно принят и отправлен в работу!',
