@@ -8,8 +8,11 @@ import {RestaurantClosed} from "../../components/modals/RestaurantClosed";
 import {Preloader} from "../Preloader";
 import {inject, observer} from "mobx-react";
 import {SpotsModal} from "../../components/modals/SpotsModal";
-import {useEffect, useState} from "react";
 import {isClosed} from "../../utils/time.utils";
+import { useWindowScroll} from "react-use";
+import {CartModal} from "../../components/modals/CartModal";
+import {TinyCartButton} from "../../components/TinyCartButton";
+import {Sticky} from "../../components/Sticky";
 
 export const LayoutRaw = (
     {
@@ -21,10 +24,13 @@ export const LayoutRaw = (
         AppStore: {
             loading,
         },
+        CartStore,
         SpotsStore,
         ...rest
     }) => {
+    const {x, y} = useWindowScroll();
 
+    const showStickyCart = y > 100;
 
     const closed = isClosed({
         start: [10, 0],
@@ -49,6 +55,11 @@ export const LayoutRaw = (
             <Footer/>
             <RestaurantClosed open={closed}/>
             <SpotsModal open={!SpotsStore.userSelectedSpot && !closed}/>
+            <CartModal>
+                <Sticky show={showStickyCart}>
+                    <TinyCartButton  price={CartStore.total}/>
+                </Sticky>
+            </CartModal>
         </S.Layout>
     )
 }
