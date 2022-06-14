@@ -3,13 +3,18 @@ import {ArrowUpSvg} from "../svg/ArrowUpSvg";
 import {Sticky} from "../Sticky";
 import {useWindowScroll} from "react-use";
 
-export const StickyToTopBtn = () => {
+export const StickyToTopBtn = (
+
+) => {
     const scroll = useWindowScroll();
     return <Sticky show={scroll.y > 500}
                    bottom={"calc(7% + 130px)"}
-                   right={"calc(2% + 32px)"}>
+                   right={"calc(2% + 31px)"}>
 
-            <SvgIcon width={"34px"} onClick={() => {
+            <SvgIcon style={{
+                cursor: "pointer",
+
+            }} width={"34px"} onClick={() => {
                 window.scrollTo(0,0);
             }}>
                 <ArrowUpSvg/>
