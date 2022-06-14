@@ -11,9 +11,7 @@ const Wrapper = styled.div`
   
   ${media.lessThan('tablet')`
     border-radius: 15px 15px 0 0;
-    max-width: 375px;
-    width: 100%;
-    min-width: 360px;
+    width: 375px;
   `}
 
   padding: 40px 20px 31px 20px;
