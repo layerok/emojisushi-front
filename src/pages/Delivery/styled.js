@@ -25,12 +25,12 @@ const AdresText = styled.p`
   margin-top: 10px;
   width: 100%;
 
-  ${media.lessThan("tablet")`
+  ${media.greaterThan("tablet")`
         width: 500px;
     `
   }
   
-  ${media.lessThan("pc")`
+  ${media.greaterThan("pc")`
         width: 700px;
         margin-top: 15px;   
     `
