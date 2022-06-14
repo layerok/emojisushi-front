@@ -8,11 +8,18 @@ export const Button = (
         width,
         filled = false,
         padding,
+        loading = false,
         justifyContent,
         ...rest
     }) => {
-    return <S.Button padding={padding} filled={filled} width={width} justifyContent={justifyContent} {...rest}>
-        {children}
+    return <S.Button loading={loading} padding={padding} filled={filled} width={width} justifyContent={justifyContent} {...rest}>
+        {loading ? (
+            <SvgIcon width={"25px"} color={"black"}>
+                <SpinnerSvg/>
+            </SvgIcon>
+        ) : (
+            children
+        )}
     </S.Button>
 }
 

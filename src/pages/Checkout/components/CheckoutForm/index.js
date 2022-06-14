@@ -19,8 +19,7 @@ export const CheckoutFormRaw = (
     }
 ) => {
     const {t} = useTranslation();
-    const [backendErrors, setBackendErrors] = useState([]);
-
+    const [pending, setPending] = useState(false);
     const navigate = useNavigate();
     const CheckoutSchema = Yup.object().shape({
         phone: Yup.string()
@@ -49,15 +48,17 @@ export const CheckoutFormRaw = (
         },
         validationSchema: CheckoutSchema,
         onSubmit: values => {
-            setBackendErrors([]);
+            setPending(true);
             OrderService.place(values).then((res) => {
                 if(res.data?.success) {
                     navigate('/thankyou');
                 }
+                setPending(false);
             }).catch((e) => {
                 if(e.response.data?.errors) {
                     formik.setErrors(e.response.data.errors);
                 }
+                setPending(false);
             })
         },
     })
@@ -196,7 +197,7 @@ export const CheckoutFormRaw = (
 
         <S.Control>
             <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
-                <ButtonOutline type={"submit"} width={"160px"}>
+                <ButtonOutline loading={pending} type={"submit"} width={"160px"}>
                     {t('checkout.order')}
                 </ButtonOutline>
                 <S.Total>

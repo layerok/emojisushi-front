@@ -14,6 +14,9 @@ const Button = styled.button`
   align-items: center;
   user-select: none;
   text-decoration: none;
+  ${ifProp('loading', css`
+    background-color: #FFE600;
+  `)}
 
   ${ifProp('filled', css`
     background: #FFE600;
