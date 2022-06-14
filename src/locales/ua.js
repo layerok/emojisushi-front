@@ -26,7 +26,7 @@ export const ua = {
         in_touch: "Залишайтеся на зв'язку"
     },
     map: {
-        on_map : "Дивитися на <br> карті"
+        on_map : "Інформація <br/> про доставку <br/> та оплату"
     },
     footerPhones: {
         phones: "Номери"

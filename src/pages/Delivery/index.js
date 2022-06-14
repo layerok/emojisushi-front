@@ -52,10 +52,11 @@ export const DeliveryRaw = (
                     </S.DeliveryText>
                 </S.Left>
 
-
+                {SpotsStore.selectedIndex === 1 && (
                 <S.Right>
                     <iframe src="https://www.google.com/maps/d/embed?mid=15tq0LKbuZUtWZW5Wy8XurmS3qIE3AU4W" width="100%" height="480"></iframe>
                 </S.Right>
+                    )}
             </S.FlexContainer>
 
 
