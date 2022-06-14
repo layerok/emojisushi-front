@@ -11,7 +11,7 @@ import {MobMenuModal} from "../../components/modals/MobMenuModal";
 import {SvgIcon} from "../../components/svg/SvgIcon";
 import {BurgerSvg} from "../../components/svg/BurgerSvg";
 import {LogoSvg} from "../../components/svg/LogoSvg";
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import {inject, observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
 

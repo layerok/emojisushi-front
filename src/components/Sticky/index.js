@@ -1,20 +1,29 @@
-import {forwardRef} from "react";
+import {cloneElement, forwardRef} from "react";
 
 export const Sticky = forwardRef((
     {
         children,
-        show
+        show,
+        top,
+        right,
+        bottom,
+        left,
+        style
     }, ref) => {
 
     return (
-        <div ref={ref} style={{
+        <div style={{
             position: "fixed",
-            top: "30px",
-            right: "30px",
             display: show ? "block": "none",
+            zIndex: 999,
+            top,
+            right,
+            bottom,
+            left,
+            ...style
         }}>
 
-            {children}
+            {cloneElement(children, {ref} )}
 
         </div>
     )

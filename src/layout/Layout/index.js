@@ -13,6 +13,9 @@ import { useWindowScroll} from "react-use";
 import {CartModal} from "../../components/modals/CartModal";
 import {TinyCartButton} from "../../components/TinyCartButton";
 import {Sticky} from "../../components/Sticky";
+import {SvgIcon} from "../../components/svg/SvgIcon";
+import {ArrowUpSvg} from "../../components/svg/ArrowUpSvg";
+import {StickyToTopBtn} from "../../components/StickyToTopBtn";
 
 export const LayoutRaw = (
     {
@@ -55,11 +58,16 @@ export const LayoutRaw = (
             <Footer/>
             <RestaurantClosed open={closed}/>
             <SpotsModal open={!SpotsStore.userSelectedSpot && !closed}/>
-            <CartModal>
-                <Sticky show={showStickyCart}>
-                    <TinyCartButton  price={CartStore.total}/>
-                </Sticky>
-            </CartModal>
+
+            <Sticky top={"30px"} right={"30px"} show={showStickyCart}>
+                <CartModal>
+                    <div>
+                        <TinyCartButton  price={CartStore.total}/>
+                    </div>
+                </CartModal>
+            </Sticky>
+            <StickyToTopBtn/>
+
         </S.Layout>
     )
 }

@@ -15,7 +15,7 @@ export const ThankYouRaw = (
 ) => {
     useEffect(() => {
         AppStore.setLoading(false);
-    })
+    }, [])
     const {t} = useTranslation();
     return (
         <Layout withSidebar={false}
