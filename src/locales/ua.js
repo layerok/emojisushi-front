@@ -4,7 +4,8 @@ export const ua = {
         show_more: "Показати ще...",
         menu: "Меню",
         not_found: "Товари не знайдені",
-        address: "Адреса"
+        address: "Адреса",
+        favorite: "Улюблені",
     },
     sort: {
         "default": "Типово",
@@ -23,7 +24,6 @@ export const ua = {
         everywhere: "Шукаемо товары"
     },
     underVerticalMenu: {
-        favorite: "Улюблені",
         in_touch: "Залишайтеся на зв'язку"
     },
     map: {
@@ -57,7 +57,6 @@ export const ua = {
     mobMenuModal: {
         contacts: "Контакти",
         delivery: "Доставка і оплата",
-        favorite: "Улюблені"
     },
     restaurantClosed: {
         closed: "Ресторан закритий!",

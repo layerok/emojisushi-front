@@ -2,6 +2,7 @@ import {Layout} from "../../layout/Layout";
 import {ProductsGrid} from "../../components/ProductsGrid";
 import {inject, observer} from "mobx-react";
 import {useEffect} from "react";
+import {useTranslation} from "react-i18next";
 
 export const WishlistRaw = (
     {
@@ -19,6 +20,8 @@ export const WishlistRaw = (
         });
     }, [])
 
+    const {t} = useTranslation();
+
     const handleLoadMore = () => {
         const settings = {
             limit: ProductsStore.items.length + ProductsStore.step,
@@ -34,7 +37,7 @@ export const WishlistRaw = (
                 loading={ProductsStore.loading}
                 items={ProductsStore.items}
                 handleLoadMore={handleLoadMore}
-                title={"Любимые"}
+                title={t('common.favorite')}
             />
         </Layout>
     );

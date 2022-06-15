@@ -4,7 +4,8 @@ export const ru = {
         show_more: "Показать еще...",
         menu: "Меню",
         not_found: "Товары не найдены",
-        address: "Адресс"
+        address: "Адресс",
+        favorite: "Любимые",
     },
     sort: {
         "default": "По умолчанию",
@@ -22,7 +23,6 @@ export const ru = {
         title: "Ищем товары \"{{word}}\" в категории {{category}}"
     },
     underVerticalMenu: {
-        favorite: "Любимые",
         in_touch: "Оставайтесь на связи"
     },
     map: {
@@ -56,7 +56,6 @@ export const ru = {
     mobMenuModal: {
         contacts: "Контакты",
         delivery: "Доставка и оплата",
-        favorite: "Любимые"
     },
     restaurantClosed: {
         closed: "Ресторан закрыт!",

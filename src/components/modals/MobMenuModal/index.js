@@ -38,7 +38,7 @@ export const MobMenuModal = ({children}) => {
             <S.Item>
                 <FlexBox justifyContent={"space-between"} alignItems={"center"}>
                     <NavLink to={"/wishlist"}>
-                        <div>{t('mobMenuModal.favorite')}</div>
+                        <div>{t('common.favorite')}</div>
                     </NavLink>
                     <SvgIcon color={"#FFE600"} width={"25px"}>
                         <HeartSvg />

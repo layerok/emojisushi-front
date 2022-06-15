@@ -19,7 +19,7 @@ export const UnderVerticalMenu = () => {
             <S.Favorite active={!!match} onClick={() => {
                 navigate('/wishlist')
             }}>
-                {t('underVerticalMenu.favorite')}
+                {t('common.favorite')}
                 <Favorite isFavorite={true} />
             </S.Favorite>
             <S.Text>
