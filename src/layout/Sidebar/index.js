@@ -28,7 +28,10 @@ export const SidebarRaw = (
 
     const debouncedFetch = useDebounce((e) => {
 
-            ProductsStore.fetchItems(ProductsStore.lastParams);
+            ProductsStore.fetchItems({
+                ...ProductsStore.lastParams,
+                filter: "&category_id=" + CategoriesStore.items.map(_=>_.id).join('.')
+            });
     }, 500)
 
     const {t} = useTranslation();

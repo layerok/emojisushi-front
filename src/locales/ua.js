@@ -19,7 +19,8 @@ export const ua = {
     },
     search: {
         input_search: "Пошук",
-        title: "Шукаемо товары \"{{word}}\" в категорії {{category}}"
+        in_category: "Шукаемо товары \"{{word}}\" в категорії {{category}}",
+        everywhere: "Шукаемо товары"
     },
     underVerticalMenu: {
         favorite: "Улюблені",

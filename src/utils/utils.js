@@ -11,9 +11,13 @@ export function getProductNewPrice({prices})  {
     return prices.length > 0 ? prices[0].price_formatted: undefined;
 }
 
-export function getProductIngredients({property_values}) {
-    return property_values.map((pv) => {
+export function getProductIngredients({description_short}) {
+
+    return description_short ? description_short.split(','): [];
+
+    // Мы не используем свойства
+    /*return property_values.map((pv) => {
         return pv.property.name;
-    })
+    })*/
 }
 

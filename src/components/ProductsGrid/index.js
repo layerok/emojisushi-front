@@ -30,7 +30,7 @@ const ProductsGridRaw = (
     return <div style={{position: "relative"}}>
         <Loader loading={ProductsStore.loading}/>
         <S.Header>
-            <S.Title>{ProductsStore.search ? t('search.title', { word: ProductsStore.search, category: title }) : title}</S.Title>
+            <S.Title>{ProductsStore.search ? `${t('search.everywhere')} "${ProductsStore.search}"` : title}</S.Title>
             {breakpoint === 'pc' && (
                 <FlexBox >
  {/*                   <FiltersModal>

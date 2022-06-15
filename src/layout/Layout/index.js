@@ -9,13 +9,12 @@ import {Preloader} from "../Preloader";
 import {inject, observer} from "mobx-react";
 import {SpotsModal} from "../../components/modals/SpotsModal";
 import {isClosed} from "../../utils/time.utils";
-import { useWindowScroll} from "react-use";
+import {useLocation, useWindowScroll} from "react-use";
 import {CartModal} from "../../components/modals/CartModal";
 import {TinyCartButton} from "../../components/TinyCartButton";
 import {Sticky} from "../../components/Sticky";
-import {SvgIcon} from "../../components/svg/SvgIcon";
-import {ArrowUpSvg} from "../../components/svg/ArrowUpSvg";
 import {StickyToTopBtn} from "../../components/StickyToTopBtn";
+import {useEffect} from "react";
 
 export const LayoutRaw = (
     {
@@ -27,11 +26,14 @@ export const LayoutRaw = (
         AppStore: {
             loading,
         },
+        ProductsStore,
         CartStore,
         SpotsStore,
         ...rest
     }) => {
     const {x, y} = useWindowScroll();
+    const location = useLocation();
+    console.log(location);
 
     const showStickyCart = y > 100;
 
@@ -39,6 +41,10 @@ export const LayoutRaw = (
         start: [10, 0],
         end: [22, 45],
     });
+
+    useEffect(() => {
+        ProductsStore.clearSearch();
+    }, [location.pathname])
 
     return (
         <S.Layout {...rest}>
@@ -72,4 +78,4 @@ export const LayoutRaw = (
     )
 }
 
-export const Layout = inject('AppStore', 'CartStore', 'SpotsStore')(observer(LayoutRaw));
+export const Layout = inject('AppStore', 'CartStore', 'SpotsStore', 'ProductsStore')(observer(LayoutRaw));

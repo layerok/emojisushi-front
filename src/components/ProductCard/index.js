@@ -18,29 +18,25 @@ import {LogoSvg} from "../svg/LogoSvg";
 
 const ProductCardRaw = (
     {
-        product: {
-            id,
-            name,
-            weight,
-            prices,
-            additional_prices,
-            is_favorite_,
-            image_sets,
-            description,
-            property_values
-        },
+        product,
         CartStore,
         ProductsStore,
         WishlistStore,
     }
 ) => {
+    const {
+        id,
+        name,
+        weight,
+        is_favorite_,
+    } = product;
     const breakpoint = useBreakpoint();
     const isMobile = breakpoint === 'mobile';
     const iconSize = isMobile ? '33px': '25px';
-    const ingredients = getProductIngredients({property_values});
-    const oldPrice = getProductOldPrice({additional_prices});
-    const newPrice = getProductNewPrice({prices});
-    const img = getProductMainImage({image_sets});
+    const ingredients = getProductIngredients(product);
+    const oldPrice = getProductOldPrice(product);
+    const newPrice = getProductNewPrice(product);
+    const img = getProductMainImage(product);
     const cartProduct = CartStore.items.find((cartProduct) => cartProduct.product_id === id);
     const count = cartProduct?.quantity || 0;
 

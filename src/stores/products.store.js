@@ -95,6 +95,10 @@ class Products {
         this.search = search;
     }
 
+    clearSearch = () => {
+        this.setSearch("");
+    }
+
 }
 
 const ProductsStore = new Products();
