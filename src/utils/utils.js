@@ -21,3 +21,9 @@ export function getProductIngredients({description_short}) {
     })*/
 }
 
+export function getNameWithMods(item) {
+    return (item?.variant?.property_values || []).reduce((acc, property) => {
+        return acc + " " + property.value;
+    }, item.product.name)
+}
+

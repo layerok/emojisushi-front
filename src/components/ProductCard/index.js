@@ -39,22 +39,10 @@ const ProductCardRaw = (
     const oldPrice = getProductOldPrice(product);
     const newPrice = getProductNewPrice(product);
     const img = getProductMainImage(product);
-    const cartProduct = CartStore.items.find((cartProduct) => cartProduct.product_id === id);
-    const count = cartProduct?.quantity || 0;
 
-
-
-    const handleAdd = (product_id) => {
-        return (quantity) => {
-            CartStore.addProduct({
-                product_id,
-                quantity
-            })
-        }
-    }
 
     const mod_groups = product.property_values.filter((value) => {
-       return value.property?.options?.length > 0
+        return value.property?.options?.length > 0
     }).reduce((acc, property) => {
         if(acc.includes(property.property_id)) {
             return acc;
@@ -72,6 +60,35 @@ const ProductCardRaw = (
     }, {})
 
     const [modificators, setModificators] = useState(initialModificatorsState);
+
+    const getVariant = (product) => {
+        return product.variants.find((variant) => {
+            return !!Object.values(modificators).includes(''+ variant.poster_id)
+        })
+    }
+
+    const getCartProduct = (product) => {
+        if(product.inventory_management_method === 'variant') {
+            return CartStore.items.find((cartProduct) =>  cartProduct.product_id === product.id && cartProduct.variant_id === getVariant(product).id)
+        }
+        return CartStore.items.find((cartProduct) => cartProduct.product_id === product.id)
+    }
+
+    const cartProduct = getCartProduct(product);
+    const count = cartProduct?.quantity || 0;
+
+
+    const handleAdd = (product_id, modificators) => {
+        return (quantity) => {
+            CartStore.addProduct({
+                product_id,
+                quantity,
+                modificators: Object.values(modificators),
+            })
+        }
+    }
+
+
 
 
     return <S.Wrapper>
@@ -136,7 +153,7 @@ const ProductCardRaw = (
                 width={isMobile ? '177px': '130px'}
                 count={count}
                 pending={CartStore.pending.includes(id)}
-                handleAdd={handleAdd(id)}
+                handleAdd={handleAdd(id, modificators)}
             />
         </S.Footer>
     </S.Wrapper>;

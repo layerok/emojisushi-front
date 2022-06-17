@@ -7,6 +7,7 @@ import {EditCartButton} from "../../../../components/buttons/EditCartButton";
 import {CartModal} from "../../../../components/modals/CartModal";
 import {inject, observer} from "mobx-react";
 import {
+    getNameWithMods,
     getProductIngredients,
     getProductMainImage,
     getProductNewPrice,
@@ -32,6 +33,7 @@ const CheckoutCartRaw = (
                     const oldPrice = getProductOldPrice(product);
                     const newPrice = getProductNewPrice(product);
                     const img = getProductMainImage(product);
+                    const nameWithMods = getNameWithMods(item);
                     return <S.Item key={id}>
                         <S.Image src={img}>
                             {!img && (
@@ -42,7 +44,7 @@ const CheckoutCartRaw = (
                         </S.Image>
 
                         <S.Content>
-                            <S.Name>{product.name}</S.Name>
+                            <S.Name>{nameWithMods}</S.Name>
                             <S.Description>
                                 <FlexBox>
                                     <S.Count>{quantity} шт</S.Count>

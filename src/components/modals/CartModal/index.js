@@ -13,7 +13,7 @@ import {useDebounce} from "../../../common/hooks/useDebounce";
 import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
 import {ConfirmActionPopover} from "../../popovers/ConfirmActionPopover";
 import { useNavigate } from "react-router-dom";
-import {getProductMainImage, getProductNewPrice, getProductOldPrice} from "../../../utils/utils";
+import {getNameWithMods, getProductMainImage, getProductNewPrice, getProductOldPrice} from "../../../utils/utils";
 import {inject, observer} from "mobx-react";
 import {Loader} from "../../Loader";
 import {useTranslation} from "react-i18next";
@@ -27,16 +27,17 @@ const CartItem = inject('CartStore')(observer((
     }
 ) => {
     const {product} = item;
-    const {name} = product;
     const img = getProductMainImage(product);
     const newPrice = getProductNewPrice(product);
-    const oldPrice = getProductOldPrice(product);
+    const oldPrice = getProductOldPrice(product)
+    const nameWithMods = getNameWithMods(item);
 
-    const handleAdd = (product_id) => {
+    const handleAdd = (product_id, variant_id) => {
         return (quantity) => {
             CartStore.addProduct({
                 product_id,
-                quantity
+                quantity,
+                variant_id
             })
         }
     }
@@ -60,15 +61,15 @@ const CartItem = inject('CartStore')(observer((
             )}
         </S.Item.Img>
         <S.Item.Info>
-            <S.Item.Name title={name}>
-                {name}
+            <S.Item.Name title={nameWithMods}>
+                {nameWithMods}
             </S.Item.Name>
             <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
                 <S.Item.Counter>
                     <LightCounter handleIncrement={() => {
-                        handleAdd(item.product_id)(1);
+                        handleAdd(item.product_id, item.variant_id)(1);
                     }} handleDecrement={() => {
-                        handleAdd(item.product_id)(-1);
+                        handleAdd(item.product_id, item.variant_id)(-1);
                     }} count={item.quantity}/>
                 </S.Item.Counter>
                 <Price newPrice={newPrice} oldPrice={oldPrice}/>

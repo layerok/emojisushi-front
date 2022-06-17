@@ -2,6 +2,7 @@ import styled from "styled-components";
 import {prop} from "styled-tools";
 
 const Slide = styled.div`
+  padding: 0 4px;
   position: absolute;
   width: calc(100% / ${prop('length')});
   height: 100%;
@@ -25,6 +26,7 @@ const Wrapper = styled.div`
 `;
 
 const Label = styled.label`
+  padding: 0 4px;
   width: 100%;
   display: flex;
   justify-content: center;
