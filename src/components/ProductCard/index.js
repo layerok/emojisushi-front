@@ -15,6 +15,8 @@ import {
 import {Loader} from "../Loader";
 import {SvgIcon} from "../svg/SvgIcon";
 import {LogoSvg} from "../svg/LogoSvg";
+import {Switcher} from "../Switcher";
+import {useState} from "react";
 
 const ProductCardRaw = (
     {
@@ -41,6 +43,7 @@ const ProductCardRaw = (
     const count = cartProduct?.quantity || 0;
 
 
+
     const handleAdd = (product_id) => {
         return (quantity) => {
             CartStore.addProduct({
@@ -49,6 +52,27 @@ const ProductCardRaw = (
             })
         }
     }
+
+    const mod_groups = product.property_values.filter((value) => {
+       return value.property?.options?.length > 0
+    }).reduce((acc, property) => {
+        if(acc.includes(property.property_id)) {
+            return acc;
+        }
+        return [...acc, property.property_id]
+    }, []).map((id) => {
+        return product.property_values.find((property) => property.property_id === id)
+    });
+
+    const initialModificatorsState = mod_groups.reduce((acc, group) => {
+        return {
+            ...acc,
+            [group.property.id]: group.property.options[0].poster_id
+        }
+    }, {})
+
+    const [modificators, setModificators] = useState(initialModificatorsState);
+
 
     return <S.Wrapper>
         <Loader loading={WishlistStore.pending.includes(id)}/>
@@ -79,6 +103,28 @@ const ProductCardRaw = (
         </S.Image>
         <EqualHeightElement name={"product-name"}>
             <S.Name>{name}</S.Name>
+            {mod_groups.map((group) => (
+                <Switcher style={{marginTop: "12px"}}
+                    handleChange={({option}) => {
+                        setModificators(state => {
+                            return {
+                            ...state,
+                             [group.property.id]: option.poster_id
+                            }
+                        })
+                    }}
+                    name={"modificator_" + group.property.id}
+                    nameAccessor={"value"}
+                    idAccessor={"poster_id"}
+                    options={group.property.options}
+                    selected={(option) => {
+                        if(!option) {
+                            return 0
+                        }
+                        return modificators[group.property.id] === option.poster_id;
+                    }}/>
+            ))}
+
         </EqualHeightElement>
         <S.Description>
             <S.Weight>{weight} г</S.Weight>

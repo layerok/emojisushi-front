@@ -68,30 +68,10 @@ export const CheckoutFormRaw = (
     }
 
 
-    const getShippingTypeIndex = () => {
-        const selectedItem = getShippingType();
-
-        if(selectedItem) {
-            const index = ShippingStore.items.indexOf(selectedItem);
-            return index === -1 ? 0: index;
-        }
-
-        return 0;
-    }
-
     const getPaymentType = () => {
         return PaymentStore.items.find((item) => item.id === +formik.values.payment_id);
     }
 
-    const getPaymentTypeIndex = () => {
-        const selectedItem = getPaymentType();
-        if(selectedItem) {
-            const index = PaymentStore.items.indexOf(selectedItem);
-            return index === -1 ? 0: index;
-        }
-
-        return 0;
-    }
 
 
     return <S.Form onSubmit={formik.handleSubmit}>
@@ -100,7 +80,9 @@ export const CheckoutFormRaw = (
         <Switcher
             name={"shipping_id"}
             options={ShippingStore.items}
-            selectedIndex={getShippingTypeIndex()}
+            selected={(option) => {
+                return option.id === getShippingType().id}
+            }
             handleChange={({e, index}) => {
                 formik.handleChange(e);
             }}
@@ -170,10 +152,10 @@ export const CheckoutFormRaw = (
                 handleChange={({e, index}) => {
                     formik.handleChange(e);
                 }}
-                selectedIndex={getPaymentTypeIndex()}
+                selected={(option) => option.id === getPaymentType().id}
             />
         </S.Control>
-        {getPaymentType()?.id === 1 && (
+        {getPaymentType()?.code === "cash" && (
             <S.Control>
                 <Input
                     name={"change"}

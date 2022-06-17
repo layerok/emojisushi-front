@@ -33,7 +33,6 @@ export const LayoutRaw = (
     }) => {
     const {x, y} = useWindowScroll();
     const location = useLocation();
-    console.log(location);
 
     const showStickyCart = y > 100;
 
