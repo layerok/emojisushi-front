@@ -67,7 +67,7 @@ const ProductCardRaw = (
 
     const getCartProduct = (product) => {
         if(product.inventory_management_method === 'variant') {
-            return CartStore.items.find((cartProduct) =>  cartProduct.product_id === product.id && cartProduct.variant_id === getVariant(product).id)
+            return CartStore.items.find((cartProduct) =>  cartProduct.product_id === product.id && cartProduct.variant_id === getVariant(product)?.id)
         }
         return CartStore.items.find((cartProduct) => cartProduct.product_id === product.id)
     }
@@ -84,7 +84,7 @@ const ProductCardRaw = (
             CartStore.addProduct({
                 product_id,
                 quantity,
-                variant_id: getVariant(product).id,
+                variant_id: getVariant(product)?.id,
             })
         }
     }
