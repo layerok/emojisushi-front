@@ -36,8 +36,6 @@ const ProductCardRaw = (
     const isMobile = breakpoint === 'mobile';
     const iconSize = isMobile ? '33px': '25px';
     const ingredients = getProductIngredients(product);
-    const oldPrice = getProductOldPrice(product);
-    const newPrice = getProductNewPrice(product);
     const img = getProductMainImage(product);
 
 
@@ -74,22 +72,22 @@ const ProductCardRaw = (
         return CartStore.items.find((cartProduct) => cartProduct.product_id === product.id)
     }
 
+    const oldPrice = getProductOldPrice(product, getVariant(product));
+    const newPrice = getProductNewPrice(product, getVariant(product));
+
     const cartProduct = getCartProduct(product);
     const count = cartProduct?.quantity || 0;
 
 
-    const handleAdd = (product_id, modificators) => {
+    const handleAdd = (product_id) => {
         return (quantity) => {
             CartStore.addProduct({
                 product_id,
                 quantity,
-                modificators: Object.values(modificators),
+                variant_id: getVariant(product).id,
             })
         }
     }
-
-
-
 
     return <S.Wrapper>
         <Loader loading={WishlistStore.pending.includes(id)}/>
@@ -153,7 +151,7 @@ const ProductCardRaw = (
                 width={isMobile ? '177px': '130px'}
                 count={count}
                 pending={CartStore.pending.includes(id)}
-                handleAdd={handleAdd(id, modificators)}
+                handleAdd={handleAdd(id)}
             />
         </S.Footer>
     </S.Wrapper>;

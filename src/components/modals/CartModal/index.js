@@ -28,8 +28,8 @@ const CartItem = inject('CartStore')(observer((
 ) => {
     const {product} = item;
     const img = getProductMainImage(product);
-    const newPrice = getProductNewPrice(product);
-    const oldPrice = getProductOldPrice(product)
+    const newPrice = getProductNewPrice(product, item.variant);
+    const oldPrice = getProductOldPrice(product, item.variant)
     const nameWithMods = getNameWithMods(item);
 
     const handleAdd = (product_id, variant_id) => {

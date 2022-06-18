@@ -3,11 +3,19 @@ export function getProductMainImage(product) {
     return (image_sets.length > 0 && image_sets[0] && image_sets[0].images.length > 0) ? image_sets[0].images[0].path : undefined;
 }
 
-export function getProductOldPrice({additional_prices})  {
+export function getProductOldPrice(product, variant)  {
+    const {additional_prices} = product;
+    if(variant) {
+        return getProductOldPrice(variant);
+    }
     return additional_prices.length > 0 ? additional_prices[0].price_formatted: undefined;
 }
 
-export function getProductNewPrice({prices})  {
+export function getProductNewPrice(product, variant)  {
+    const {prices} = product;
+    if(variant) {
+        return getProductNewPrice(variant);
+    }
     return prices.length > 0 ? prices[0].price_formatted: undefined;
 }
 
