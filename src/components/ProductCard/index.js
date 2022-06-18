@@ -142,7 +142,7 @@ const ProductCardRaw = (
 
         </EqualHeightElement>
         <S.Description>
-            <S.Weight>{weight} г</S.Weight>
+            <S.Weight>{weight !== 0 ? weight + 'г' : ''}&nbsp;</S.Weight>
             {ingredients.length !== 0 && (<IngredientsTooltip items={ingredients} iconSize={iconSize}/>)}
         </S.Description>
         <S.Footer>

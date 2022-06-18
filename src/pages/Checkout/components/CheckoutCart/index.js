@@ -34,6 +34,7 @@ const CheckoutCartRaw = (
                     const newPrice = getProductNewPrice(product, item.variant);
                     const img = getProductMainImage(product);
                     const nameWithMods = getNameWithMods(item);
+                    const {weight} = product;
                     return <S.Item key={id}>
                         <S.Image src={img}>
                             {!img && (
@@ -48,8 +49,10 @@ const CheckoutCartRaw = (
                             <S.Description>
                                 <FlexBox>
                                     <S.Count>{quantity} шт</S.Count>
-                                    <S.Delimiter/>
-                                    <S.Weight>{product.weight} г</S.Weight>
+                                    {weight !== 0 && (
+                                        <S.Delimiter/>
+                                    ) }
+                                    <S.Weight>{weight === 0 ? '': weight + 'г'} &nbsp;</S.Weight>
                                 </FlexBox>
                                 {ingredients.length > 0 && (
                                     <IngredientsTooltip items={ingredients}/>
