@@ -5,4 +5,4 @@
 2. npm install
 3. npm run start
 
-Comment: In ```env.example``` is used production api url, but you can start your [own](https://github.com/adjustmentlayer/emojisushi-backend)
+Comment: ```env.example``` has production api url set, but you can start your [own](https://github.com/adjustmentlayer/emojisushi-backend)
