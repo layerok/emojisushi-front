@@ -60,7 +60,7 @@
   },
   "restaurantClosed": {
     "closed": "Ресторан закритий!",
-    "time": "Час роботи: 10: 00-22: 45"
+    "time": "Час роботи"
   },
   "telegramModal": {
     "appeared": "У нас з'явився Telegram!",

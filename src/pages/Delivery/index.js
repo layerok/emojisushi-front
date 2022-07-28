@@ -44,7 +44,7 @@ export const DeliveryRaw = (
                         {SpotsStore.selectedIndex === 0 && (
                             <ol style={{paddingLeft: 0, listStyleType: 'disc'}}>
                                 <li style={{marginTop: "16px"}}>Ми здійснюємо доставку по місту Чорноморськ та прилеглі населені пункти (Олександрівка, Молодіжне, Великодолинське)</li>
-                                <li style={{marginTop: "16px"}}>Прийом замовлень на доставку здійснюється з 10:00 до 22:30 щоденно</li>
+                                <li style={{marginTop: "16px"}}>Прийом замовлень на доставку здійснюється з {AppStore.formatWorkingHours()} щоденно</li>
                                 <li style={{marginTop: "16px"}}>При замовленні від 250 грн. доставка безкоштовна</li>
                                 <li style={{marginTop: "16px"}}>Вартість доставки на суму до 250 грн. складає 25 грн</li>
                             </ol>
