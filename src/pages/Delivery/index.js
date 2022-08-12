@@ -54,7 +54,9 @@ export const DeliveryRaw = (
 
                 {SpotsStore.selectedIndex === 1 && (
                 <S.Right>
-                    <iframe src="https://www.google.com/maps/d/embed?mid=15tq0LKbuZUtWZW5Wy8XurmS3qIE3AU4W" width="100%" height="480"></iframe>
+                    <iframe src="https://www.google.com/maps/d/embed?mid=1ObdbApbdVR-pYNbE758PLjrQsbVnhxA&ehbc=2E312F"
+                            width="100%"
+                            height="480"></iframe>
                 </S.Right>
                     )}
             </S.FlexContainer>
