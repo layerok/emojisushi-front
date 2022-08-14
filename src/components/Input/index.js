@@ -7,12 +7,13 @@ export const Input = (
         placeholder,
         required,
         name,
+        light = false,
         ...rest
     }
 ) => {
     return (
         <S.Wrapper>
-            <S.Input name={name} placeholder={placeholder} {...rest}/>
+            <S.Input name={name} placeholder={placeholder} light={light} {...rest}/>
             {required && (
                 <S.Asterisk>
                     <SvgIcon width={"10px"} color={"#FFE600"}>

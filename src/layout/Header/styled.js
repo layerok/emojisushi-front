@@ -55,6 +55,10 @@ const BurgerBtn = styled.button`
   `}
 `;
 
+const UserBtn = styled.div`
+  margin-left: 20px;
+`;
+
 export {
     Header,
     Left,
@@ -64,4 +68,5 @@ export {
     BurgerBtn,
     CartBtn,
     TinyCartBtn,
+    UserBtn,
 }

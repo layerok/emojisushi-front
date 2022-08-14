@@ -14,6 +14,7 @@ import {reaction} from "mobx";
 import LocalStorageService from "./services/local-storage.service";
 import CartService from "./services/cart.service";
 import {SpotsModal} from "./components/modals/SpotsModal";
+import {Profile} from "./pages/Profile";
 
 function App(
     {
@@ -60,6 +61,7 @@ function App(
                     <Route path="/dostavka-i-oplata" element={<Delivery />} />
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/wishlist" element={<Wishlist />} />
+                    <Route path="/profile" element={<Profile />} />
                     <Route path="*" element={<Navigate to={"/category/roli"}/>} replace/>
                 </Routes>
             </div>

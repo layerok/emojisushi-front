@@ -1,12 +1,13 @@
 import styled from "styled-components";
-import {theme} from "styled-tools";
+import {ifProp, theme} from "styled-tools";
+
 
 const Wrapper = styled.div`
   position: relative;
 `;
 
 const Input = styled.input`
-  background: #1C1C1C;
+  background: ${ifProp("light", "#272727", "#1C1C1C")};
   box-shadow: 0 0 15px rgba(34, 34, 34, 0.3);
   border-radius: 10px;
   padding: 11px 35px 11px 10px;

@@ -14,6 +14,9 @@ import {LogoSvg} from "../../components/svg/LogoSvg";
 import {useEffect, useRef} from "react";
 import {inject, observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
+import {SvgButton} from "../../components/SvgButton";
+import {UserSvg} from "../../components/svg/UserSvg";
+import {AuthModal} from "../../components/modals/AuthModal";
 
 
 const HeaderRaw = (
@@ -72,6 +75,16 @@ const HeaderRaw = (
                                 </SvgIcon>
                             </MobMenuModal>
                         </S.BurgerBtn>
+
+                       <S.UserBtn>
+                            <AuthModal>
+                                <SvgButton>
+                                    <SvgIcon width={"25px"} color={"black"}>
+                                        <UserSvg/>
+                                    </SvgIcon>
+                                </SvgButton>
+                            </AuthModal>
+                       </S.UserBtn>
                     </S.Right>
                 </FlexBox>
             </Container>
