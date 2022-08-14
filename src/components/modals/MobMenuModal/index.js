@@ -2,7 +2,7 @@ import {cloneElement} from "react";
 import {BaseModal} from "../BaseModal";
 import * as S from "./styled";
 import {ContactsModal} from "../ContactsModal";
-import {NavLink} from "../../NavLink";
+import {NavLinkUnderline} from "../../NavLinkUnderline";
 import {FlexBox} from "../../FlexBox";
 import {LocationPickerPopover} from "../../popovers/LocationPickerPopover";
 import {SvgIcon} from "../../svg/SvgIcon";
@@ -31,15 +31,15 @@ export const MobMenuModal = ({children}) => {
             </ContactsModal>
             </S.Item>
             <S.Item>
-                <NavLink to={"/dostavka-i-oplata"}>
+                <NavLinkUnderline to={"/dostavka-i-oplata"}>
                     <div>{t('mobMenuModal.delivery')}</div>
-                </NavLink>
+                </NavLinkUnderline>
             </S.Item>
             <S.Item>
                 <FlexBox justifyContent={"space-between"} alignItems={"center"}>
-                    <NavLink to={"/wishlist"}>
+                    <NavLinkUnderline to={"/wishlist"}>
                         <div>{t('common.favorite')}</div>
-                    </NavLink>
+                    </NavLinkUnderline>
                     <SvgIcon color={"#FFE600"} width={"25px"}>
                         <HeartSvg />
                     </SvgIcon>
