@@ -43,6 +43,7 @@ const CartBtn = styled.div`
 `;
 
 const TinyCartBtn = styled.div`
+  flex-shrink: 0;
   ${media.greaterThan("tablet")`
     display: none;
   `}
