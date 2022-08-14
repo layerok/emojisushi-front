@@ -34,21 +34,6 @@ const HorizontalBar = styled.div`
   margin-top: 10px
 `
 
-const NavLink = styled(NavlinkBase)`
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 18px;
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  color: ${ifProp({className: 'active'}, "#FFE600", "#FFFFFF",)};
-  :hover {
-    color: #FFE600;
-  }
-  :after {
-    border-bottom: none;
-  }
-`
 
 const Quit = styled.button`
   font-weight: 400;
@@ -76,6 +61,5 @@ export {
     Navbar,
     NavbarHeader,
     HorizontalBar,
-    NavLink,
     Quit,
 }

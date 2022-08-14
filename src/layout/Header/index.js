@@ -4,7 +4,7 @@ import {Container } from "../../components/Container";
 import {FlexBox} from "../../components/FlexBox";
 import {CartButton} from "../../components/CartButton";
 import {TinyCartButton} from "../../components/TinyCartButton";
-import {NavLink} from "../../components/NavLink";
+import {NavLinkUnderline} from "../../components/NavLinkUnderline";
 import {ContactsModal} from "../../components/modals/ContactsModal";
 import {CartModal} from "../../components/modals/CartModal";
 import {MobMenuModal} from "../../components/modals/MobMenuModal";
@@ -50,9 +50,9 @@ const HeaderRaw = (
                             </S.PcHeaderItem>
                         </ContactsModal>
                         <S.PcHeaderItem>
-                            <NavLink to={"/dostavka-i-oplata"}>
+                            <NavLinkUnderline to={"/dostavka-i-oplata"}>
                                 {t('header.delivery')}
-                            </NavLink>
+                            </NavLinkUnderline>
                         </S.PcHeaderItem>
                     </S.Left>
                     <S.Right>

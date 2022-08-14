@@ -1,27 +1,21 @@
-import {Layout} from "../../layout/Layout";
-import {Cabinet} from "../../layout/Cabinet";
+import { CabinetLayout} from "../../layout/CabinetLayout";
 import {useEffect} from "react";
 import {inject, observer} from "mobx-react";
 
-
-export const Profile = inject( 'AppStore')(observer(({
-                            AppStore
-                        }) => {
+export const Profile = inject( 'AppStore')(observer((
+    {
+        AppStore
+    }
+) => {
 
     useEffect(() => {
-            AppStore.setLoading(false);
+        AppStore.setLoading(false);
     }, [])
 
     return (
-            <Layout withSidebar={false}
-                    withBanner={false}
-            >
-                <Cabinet>
+        <CabinetLayout>
 
-                </Cabinet>
-
-            </Layout>
-
+        </CabinetLayout>
     )
 }))
 

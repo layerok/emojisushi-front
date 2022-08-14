@@ -1,31 +1,21 @@
-import styled, {css} from "styled-components";
-import {ifProp} from "styled-tools";
+import styled from "styled-components";
 import {Link as LinkBase} from "react-router-dom";
-import media from "../../common/custom-media";
+import {ifProp} from "styled-tools";
 
 const Link = styled(LinkBase)`
-  color: white;
-  position: relative;
+  font-weight: 400;
   text-decoration: none;
-  display: inline-block;
-
-
+  font-size: 15px;
+  line-height: 18px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  color: ${ifProp({className: 'active'}, "#FFE600", "#FFFFFF",)};
   :hover {
-    :after {
-      opacity: 1
-    }
+    color: #FFE600;
   }
-  
   :after {
-    content: "";
-    opacity: ${ifProp({className: 'active'}, 1, 0)};
-    position: absolute;
-    width: 100%;
-    left: 0;
-    border-bottom: 1px solid #FFE600;
-    box-shadow: 0 0 15px rgba(255, 230, 0, 0.3);
-    margin-top: 10px;
-    bottom: -10px;
+    border-bottom: none;
   }
 `
 
