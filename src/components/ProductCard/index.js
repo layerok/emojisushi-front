@@ -141,10 +141,13 @@ const ProductCardRaw = (
             ))}
 
         </EqualHeightElement>
-        <S.Description>
-            <S.Weight>{weight !== 0 ? weight + 'г' : ''}&nbsp;</S.Weight>
-            {ingredients.length !== 0 && (<IngredientsTooltip items={ingredients} iconSize={iconSize}/>)}
-        </S.Description>
+        <EqualHeightElement name={"description"}>
+            <S.Description>
+                <S.Weight>{weight !== 0 ? weight + 'г' : ''}&nbsp;</S.Weight>
+                {ingredients.length !== 0 && (<IngredientsTooltip items={ingredients} iconSize={iconSize}/>)}
+            </S.Description>
+        </EqualHeightElement>
+
         <S.Footer>
             <Price oldPrice={oldPrice} newPrice={newPrice}/>
             <AddToCartButton
