@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import {NavLink as NavlinkBase} from "../../components/NavLink";
-import {ifProp} from "styled-tools";
+
 
 
 const Container = styled.div`
@@ -35,25 +34,19 @@ const HorizontalBar = styled.div`
 `
 
 
-const Quit = styled.button`
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 18px;
-  color: #FFFFFF;
-  background: #272727;
-  box-shadow: 0px 0px 15px rgba(34, 34, 34, 0.3);
-  border-radius: 10px;
-  width: 191px;
-  height: 40px;
+const Wrapper   = styled.div`
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 11px 27px;
-  gap: 10px;
   
-  margin-top: 10px;
 `
 
+const LeftSide = styled.div`
+  
+`
+
+
+const RightSide = styled.div`
+    margin-left: 30px;
+`
 
 export {
     Container,
@@ -61,5 +54,7 @@ export {
     Navbar,
     NavbarHeader,
     HorizontalBar,
-    Quit,
+    Wrapper,
+    LeftSide,
+    RightSide,
 }
