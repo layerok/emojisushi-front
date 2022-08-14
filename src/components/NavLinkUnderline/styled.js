@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {ifProp} from "styled-tools";
-import {NavLink} from "../NavLink";
+import {NavLink} from "react-router-dom";
 
 const Link = styled(NavLink)`
   color: white;
