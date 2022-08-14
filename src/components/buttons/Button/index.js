@@ -15,7 +15,7 @@ export const Button = (
         hoverColor = "black",
         backgroundColor = "transparent",
         hoverBackgroundColor = "#FFE600",
-        hoverOutline = false,
+        hoverOutline = true,
         minWidth = "130px",
         ...rest
     }) => {

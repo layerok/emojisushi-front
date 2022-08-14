@@ -11,7 +11,7 @@ export const CartButton = (
     }
 ) => {
     return (
-        <ButtonFilled padding={"0 24px"} width={"170px"}>
+        <ButtonFilled padding={"0 24px"} minWidth={"170px"}>
             <FlexBox alignItems={"center"}>
                 <S.Icon>
                     <SvgIcon color={"black"} width={"25px"} height={"25px"}>
