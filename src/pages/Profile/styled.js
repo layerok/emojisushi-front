@@ -89,6 +89,29 @@ const BirthText = styled.p`
   color: #616161;
 `
 
+const DropDownsWrapper = styled.div`
+  display: flex;
+  
+`
+
+const BirthWrapper = styled.div`
+  margin-left: 35px;
+  margin-top: 20px;
+  :first-child{
+    margin-left: 0;
+  }
+`
+
+const SexWrapper = styled.div`
+  margin-top: 20px;
+`
+
+const HorizontalBar = styled.div`
+  border: 1px solid #2D2D2D;
+  width: 730px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+`
 
 export {
     Heading,
@@ -103,5 +126,9 @@ export {
     BirthHeading,
     BirthText,
     BtnMargin,
+    DropDownsWrapper,
+    BirthWrapper,
+    SexWrapper,
+    HorizontalBar,
 
 }

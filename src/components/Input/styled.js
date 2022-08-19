@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {ifProp, theme} from "styled-tools";
+import {ifProp, theme, prop} from "styled-tools";
 
 
 const Wrapper = styled.div`
@@ -12,7 +12,7 @@ const Input = styled.input`
   border-radius: 10px;
   padding: 11px 35px 11px 10px;
   border: none;
-  width: 100%;
+  width: ${prop("width","100%")};
   color: white;
 
   ::-webkit-input-placeholder {

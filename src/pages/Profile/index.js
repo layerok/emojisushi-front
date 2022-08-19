@@ -2,17 +2,20 @@ import { CabinetLayout} from "../../layout/CabinetLayout";
 import {useEffect} from "react";
 import {inject, observer} from "mobx-react";
 import * as S from "./styled"
-import {Button, ButtonDark} from "../../components/buttons/Button";
+import {ButtonDark, ButtonOutline} from "../../components/buttons/Button";
+import {DropDown} from "../../components/DropDown";
 
 export const Profile = inject( 'AppStore')(observer((
     {
-        AppStore
+        AppStore,
     }
 ) => {
 
     useEffect(() => {
         AppStore.setLoading(false);
     }, [])
+
+
 
     return (
         <CabinetLayout>
@@ -53,10 +56,34 @@ export const Profile = inject( 'AppStore')(observer((
 
             <S.BotMenu>
                 <S.BirthHeading>Дата Рождения</S.BirthHeading>
-
+            <S.DropDownsWrapper>
+                <S.BirthWrapper>
                     <S.BirthText>День</S.BirthText>
+                    <DropDown initialValue={"1"} options={[1,2,3,3,4]}> </DropDown>
 
+                </S.BirthWrapper>
+            <S.BirthWrapper>
+                <S.BirthText>Месяц</S.BirthText>
+                <DropDown width={"128px"} initialValue={"Январь"} options={["Январь","Февраль","Март","Апрель",]}> </DropDown>
 
+            </S.BirthWrapper>
+
+                <S.BirthWrapper>
+                    <S.BirthText>Год</S.BirthText>
+                    <DropDown width={"128px"} initialValue={"2000"} options={["2000","2001","2002","2002"]}> </DropDown>
+
+                </S.BirthWrapper>
+
+            </S.DropDownsWrapper>
+            <S.SexWrapper>
+                <S.Heading>Пол</S.Heading>
+                <DropDown marginTop={"20px"} width={"128px"} starter={"Мужской"} options={["Мужской","Женский"]}> </DropDown>
+
+            </S.SexWrapper>
+
+            <S.HorizontalBar></S.HorizontalBar>
+
+                <ButtonOutline>Сохранить</ButtonOutline>
             </S.BotMenu>
 
         </CabinetLayout>

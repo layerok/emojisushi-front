@@ -15,6 +15,9 @@ import LocalStorageService from "./services/local-storage.service";
 import CartService from "./services/cart.service";
 import {SpotsModal} from "./components/modals/SpotsModal";
 import {Profile} from "./pages/Profile";
+import {RecoverPassword} from "./pages/RecoverPassword";
+import {SavedAddresses} from "./pages/SavedAddresses";
+import {MyOrders} from "./pages/ MyOrders";
 
 function App(
     {
@@ -62,6 +65,9 @@ function App(
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/wishlist" element={<Wishlist />} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/recover-password" element={<RecoverPassword/>} />
+                    <Route path="/saved-addresses" element={<SavedAddresses/>} />
+                    <Route path="/my-orders" element={<MyOrders/>} />
                     <Route path="*" element={<Navigate to={"/category/roli"}/>} replace/>
                 </Routes>
             </div>

@@ -16,8 +16,8 @@ const Input = styled.input`
 `
 const Eye = styled.div`
   position: absolute;
-  top: 10px;
-  left: 245px;  
+  top: 23%;
+  left: 88%;  
   cursor: pointer;
 `;
 
