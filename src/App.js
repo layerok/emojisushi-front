@@ -64,10 +64,10 @@ function App(
                     <Route path="/dostavka-i-oplata" element={<Delivery />} />
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/wishlist" element={<Wishlist />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/recover-password" element={<RecoverPassword/>} />
-                    <Route path="/saved-addresses" element={<SavedAddresses/>} />
-                    <Route path="/my-orders" element={<MyOrders/>} />
+                    <Route path="/account/profile" element={<Profile/>}/>
+                    <Route path="/account/recover-password" element={<RecoverPassword/>} />
+                    <Route path="/account/saved-addresses" element={<SavedAddresses/>} />
+                    <Route path="/account/orders" element={<MyOrders/>} />
                     <Route path="*" element={<Navigate to={"/category/roli"}/>} replace/>
                 </Routes>
             </div>

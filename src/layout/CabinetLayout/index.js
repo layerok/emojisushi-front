@@ -19,11 +19,12 @@ export const CabinetLayout = ({children}) => {
                                     Мой кабинет
                                 </S.NavbarHeader>
                                 <S.HorizontalBar/>
-                                <NavLink to={"/profile"}>Личные данные</NavLink>
-                                <NavLink to={"/my-orders"}>Мои заказы</NavLink>
-                                <NavLink to={"/recover-password"}>Изменить пароль</NavLink>
-                                <NavLink to={"/saved-addresses"}>Сохраненные адреса</NavLink>
-                                <div style={{marginTop: "10px"}}>
+                                <NavLink to={"/account/profile"}>Личные данные</NavLink>
+                                <NavLink to={"/account/orders"}>Мои заказы</NavLink>
+                                <NavLink to={"/account/recover-password"}>Изменить пароль</NavLink>
+                                <NavLink to={"/account/saved-addresses"}>Сохраненные адреса</NavLink>
+                                <div style={{marginTop:
+                                        "10px"}}>
                                     <ButtonDark minWidth={"201px"}>Выйти с аккаунта</ButtonDark>
                                 </div>
                             </S.Navbar>
