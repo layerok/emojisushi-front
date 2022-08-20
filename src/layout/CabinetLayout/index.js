@@ -3,7 +3,7 @@ import {NavLink} from "../../components/NavLink";
 import {Layout} from "../Layout";
 import {ButtonDark} from "../../components/buttons/Button";
 
-export const CabinetLayout = ({children}) => {
+export const CabinetLayout = ({children, title = ""}) => {
 
 
     return (
@@ -33,7 +33,11 @@ export const CabinetLayout = ({children}) => {
                 </S.LeftSide>
 
                 <S.RightSide>
-                    {children}
+                    <S.Heading>{title}</S.Heading>
+                    <S.Content>
+                        {children}
+                    </S.Content>
+
                 </S.RightSide>
             </S.Wrapper>
 

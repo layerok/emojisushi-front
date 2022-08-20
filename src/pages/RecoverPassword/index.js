@@ -16,8 +16,8 @@ export const RecoverPassword = inject( 'AppStore')(observer((
     }, [])
 
     return (
-        <CabinetLayout>
-            <S.Heading>Изменить пароль</S.Heading>
+        <CabinetLayout title={"Изменить пароль"}>
+
 
             <S.Form>
                 <S.Text>Старый пароль</S.Text>

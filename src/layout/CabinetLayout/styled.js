@@ -1,10 +1,21 @@
 import styled from "styled-components";
 
 
+const Heading = styled.p`
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 30px;
+  color: #FFFFFF;
+
+`;
 
 const Container = styled.div`
     max-width: 1720px;
     margin: 0 auto;  
+`
+
+export const Content = styled.div`
+  margin-top: 20px;
 `
 
 const Cabinet = styled.div`
@@ -49,6 +60,7 @@ const RightSide = styled.div`
 `
 
 export {
+    Heading,
     Container,
     Cabinet,
     Navbar,

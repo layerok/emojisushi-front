@@ -19,8 +19,8 @@ export const SavedAddresses = inject( 'AppStore')(observer((
     }, [])
 
     return (
-        <CabinetLayout>
-            <S.Heading>Сохраненные адреса</S.Heading>
+        <CabinetLayout title={"Сохраненные адреса"}>
+
             <S.AddressWrapper>
                 <Input value={"Литвиненко-Вольгемут 1Г, Одесса"} width={"350px"}/>
                 <SvgIcon width={"25px"} hoverColor={"#FFE600"} style={{marginLeft:"10px"}}>
