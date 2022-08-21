@@ -78,7 +78,7 @@ export const Profile = inject( 'AppStore')(observer((
 
                     <S.Birth.Property>
                         <S.Birth.Label>Год</S.Birth.Label>
-                        <DropDown width={"128px"} initialValue={"2000"} options={["2000","2001","2002","2002"]}> </DropDown>
+                        <DropDown width={"107px"} initialValue={"2000"} options={["2000","2001","2002","2002"]}> </DropDown>
 
                     </S.Birth.Property>
 

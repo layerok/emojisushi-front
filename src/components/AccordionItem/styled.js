@@ -15,15 +15,20 @@ const MutedText = styled.p`
   font-weight: 400;
   font-size: 15px;
   line-height: 18px;
-
   color: #616161;
+`
+
+const MutedTextWrapper = styled.div`
+  width: 201px;
+  :first-child {
+    padding-bottom: 10px;
+  }
 `
 
 const OrderValue = styled.p`
   font-weight: 400;
   font-size: 15px;
   line-height: 18px;
-
   color: #FFFFFF;  
 `
 
@@ -60,6 +65,7 @@ Panel.Properties.ExceptStatus = styled.div`
   
 `
 Panel.Properties.Property = styled.div`
+  display: flex;
   
 `
 
@@ -70,6 +76,10 @@ const Wrapper = styled.div`
 Panel.Status = styled.div`
   display: flex;  
   margin-right: 149px;
+  flex-direction: column;
+  justify-content: center;
+  border-left: 1px solid #2D2D2D;
+  padding-left: 15px;
 `
 
 Panel.Status.Value = styled.p`
@@ -81,6 +91,8 @@ Panel.Status.Value = styled.p`
 
 `
 
+
+
 Panel.Status.Label = styled.p`
   font-weight: 400;
   font-size: 15px;
@@ -90,9 +102,9 @@ Panel.Status.Label = styled.p`
 `
 
 
+
 const Order = styled.div`
   display: flex;
-  margin-left: 15px;
   margin-top: 10px;
 `
 
@@ -106,7 +118,6 @@ const OrderText = styled.p`
 const OrderImg = styled.img`
   width: 80px;
   height: 52px;
-  border: none;
 `
 
 
@@ -114,6 +125,7 @@ const OrderImg = styled.img`
 const ProductDescription = styled.div`
   display: flex;
   margin-top: 10px;
+  width: 350px;
 `
 
 const ProductWrapper = styled.div`
@@ -150,7 +162,7 @@ const ProductAmount = styled.p`
 
 const ProductContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  
   width: 100%;
 `
 
@@ -171,5 +183,6 @@ export {
     ProductAmount,
     ProductPriceWrapper,
     ProductContainer,
+    MutedTextWrapper,
 
 }

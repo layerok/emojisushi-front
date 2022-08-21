@@ -35,15 +35,21 @@ export const AccordionItem = () => {
             <S.Panel.Properties>
                 <S.Panel.Properties.ExceptStatus>
                     <S.Panel.Properties.Property>
-                        <S.MutedText>Способ оплаты</S.MutedText>
+                        <S.MutedTextWrapper>
+                            <S.MutedText>Способ оплаты</S.MutedText>
+                        </S.MutedTextWrapper>
                         <S.OrderValue>Наличными</S.OrderValue>
                     </S.Panel.Properties.Property>
                     <S.Panel.Properties.Property>
-                        <S.MutedText>Способ доставки</S.MutedText>
+                        <S.MutedTextWrapper>
+                            <S.MutedText>Способ доставки</S.MutedText>
+                        </S.MutedTextWrapper>
                         <S.OrderValue>Самовывоз</S.OrderValue>
                     </S.Panel.Properties.Property>
                     <S.Panel.Properties.Property>
-                        <S.MutedText>Адрес доставки</S.MutedText>
+                        <S.MutedTextWrapper>
+                            <S.MutedText>Адрес доставки</S.MutedText>
+                        </S.MutedTextWrapper>
                         <S.OrderValue>Одесса Пархоменка не 10</S.OrderValue>
                     </S.Panel.Properties.Property>
                 </S.Panel.Properties.ExceptStatus>
@@ -75,7 +81,7 @@ export const AccordionItem = () => {
                             <S.ProductPrice>169 ₴</S.ProductPrice>
                             <S.ProductAmount>Кол-во: 1</S.ProductAmount>
                         </FlexBox>
-                        <div style={{marginLeft:"39px", marginRight:"121px"}}>
+                        <div style={{marginLeft:"39px"}}>
                             <S.ProductPrice>169 ₴</S.ProductPrice>
                         </div>
                     </S.ProductPriceWrapper>
@@ -107,7 +113,7 @@ export const AccordionItem = () => {
                             <S.ProductPrice>169 ₴</S.ProductPrice>
                             <S.ProductAmount>Кол-во: 1</S.ProductAmount>
                         </FlexBox>
-                        <div style={{marginLeft:"39px", marginRight:"121px"}}>
+                        <div style={{marginLeft:"39px"}}>
                             <S.ProductPrice>169 ₴</S.ProductPrice>
                         </div>
                     </S.ProductPriceWrapper>

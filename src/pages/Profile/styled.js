@@ -101,6 +101,9 @@ Birth.Property = styled.div`
   :first-child{
     margin-left: 0;
   }
+  ${media.lessThan("pc")`
+   margin-left: 19px;
+  `}
 `
 
 const Sex = styled.div`
@@ -116,7 +119,6 @@ Sex.Label = styled.p`
 
 const HorizontalBar = styled.div`
   border: 1px solid #2D2D2D;
-  width: 730px;
   margin-top: 30px;
   margin-bottom: 30px;
 `
