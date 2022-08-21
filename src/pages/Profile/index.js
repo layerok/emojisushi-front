@@ -4,6 +4,7 @@ import {inject, observer} from "mobx-react";
 import * as S from "./styled"
 import {ButtonDark, ButtonOutline} from "../../components/buttons/Button";
 import {DropDown} from "../../components/DropDown";
+import {Dropdown1} from "../../components/Dropdown1";
 
 export const Profile = inject( 'AppStore')(observer((
     {
@@ -15,6 +16,40 @@ export const Profile = inject( 'AppStore')(observer((
         AppStore.setLoading(false);
     }, [])
 
+    const options = [
+        {
+            label: "1975",
+            value: 1975
+        },
+        {
+            label: "1976",
+            value: 1976
+        },
+        {
+            label: "1977",
+            value: 1977
+        },
+        {
+            label: "1978",
+            value: 1978
+        },
+        {
+            label: "1979",
+            value: 1979
+        },
+        {
+            label: "1980",
+            value: 1980
+        },
+        {
+            label: "1981",
+            value: 1981
+        },
+        {
+            label: "1982",
+            value: 1982
+        },
+    ];
 
 
     return (
@@ -60,6 +95,7 @@ export const Profile = inject( 'AppStore')(observer((
                 <S.BirthWrapper>
                     <S.BirthText>День</S.BirthText>
                     <DropDown initialValue={"1"} options={[1,2,3,3,4]}> </DropDown>
+                    <Dropdown1 options={options}/>
 
                 </S.BirthWrapper>
             <S.BirthWrapper>
