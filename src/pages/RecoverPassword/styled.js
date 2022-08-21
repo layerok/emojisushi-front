@@ -24,6 +24,7 @@ const Text = styled.p`
   line-height: 18px;
   color: #616161;
   margin-top: 20px;
+  margin-bottom: 5px;
   :first-child{
     margin-top: 0;
   }

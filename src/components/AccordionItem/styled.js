@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import media from "../../common/custom-media";
 
 const Container = styled.p`
   padding: 15px;
@@ -7,51 +7,50 @@ const Container = styled.p`
   box-shadow: 0px 4px 15px rgba(28, 28, 28, 0.3);
   border-radius: 15px;
   width: 730px;
-  
+  font-size: 15px;
+  ${media.lessThan("pc")`
+    width: 350px;
+        
+  `}
 `
 
 const MutedText = styled.p`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 18px;
   color: #616161;
-`
-
-const MutedTextWrapper = styled.div`
-  width: 201px;
-  :first-child {
-    padding-bottom: 10px;
-  }
-`
-
-const OrderValue = styled.p`
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 18px;
-  color: #FFFFFF;  
 `
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   cursor: pointer;
+  ${media.lessThan("pc")`
+    display: flex;
+    align-items: center;    
+  `}
 `
 
-Header.Status = styled.p`
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 18px;
+Header.MobileTextContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 286px;
+  ${media.lessThan("pc")`
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      width: 90px;
+  `}
+`
 
+
+Header.Status = styled.p`
   color: #FFE600;
 
 `
 
-const Panel = styled.div`
+const Pan = styled.div`
   
 `
 
-Panel.Properties = styled.div`
+Pan.Props = styled.div`
   display: flex;
   justify-content: space-between;
   border-top: 1px solid #2D2D2D;
@@ -59,130 +58,165 @@ Panel.Properties = styled.div`
   padding-top: 10px;
   padding-bottom: 10px;
   margin-top: 10px;
+
+  ${media.lessThan("pc")`
+    display: flex;
+    flex-direction: column;   
+  `}
 `
 
-Panel.Properties.ExceptStatus = styled.div`
-  
+Pan.Props.ExceptStatus = styled.div`
+  ${media.lessThan("pc")`
+    border-bottom: 1px solid #2D2D2D; 
+    padding-bottom: 10px;
+  `}
 `
-Panel.Properties.Property = styled.div`
+Pan.Props.Prop = styled.div`
   display: flex;
   
 `
-
-const Wrapper = styled.div`
-  margin-right: 60px;
+Pan.Props.Prop.Label = styled.div`
+  word-break: break-all;
+  width: 201px;
+  :first-child {
+    padding-bottom: 10px;
+  }
+  ${media.lessThan("pc")`
+    width: 210px;  
+  `}
 `
 
-Panel.Status = styled.div`
+
+Pan.Status = styled.div`
   display: flex;  
   margin-right: 149px;
   flex-direction: column;
   justify-content: center;
   border-left: 1px solid #2D2D2D;
   padding-left: 15px;
+
+  ${media.lessThan("pc")`
+    border-left: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 0;
+    padding-left: 0;
+    padding-top: 10px;
+  `}
+  
 `
 
-Panel.Status.Value = styled.p`
+Pan.Status.Value = styled.p`
   font-weight: 500;
   font-size: 20px;
   line-height: 24px;
-
   color: #FFE600;
-
+  ${media.lessThan("pc")`
+   word-break: break-word;
+  `}
 `
 
 
 
-Panel.Status.Label = styled.p`
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 18px;
+Pan.Status.Label = styled.p`
+`
 
-  color: #FFFFFF;
+
+Pan.Props.Prop.Value = styled.p`
+  word-break: break-all;
+  ${media.lessThan("pc")`
+    display: flex;
+  `}
 `
 
 
 
-const Order = styled.div`
+Pan.Prod = styled.div`
   display: flex;
   margin-top: 10px;
 `
 
-const OrderText = styled.p`
-  font-weight: 400;
-  font-size: 13px;
-  line-height: 16px;
-  color: #FFFFFF;
+Pan.Prod.Name = styled.p`
 `
 
-const OrderImg = styled.img`
+
+
+Pan.Prod.Prop = styled.p`
+  font-size: 13px;
+  line-height: 16px;
+`
+
+Pan.Prod.Img = styled.img`
   width: 80px;
   height: 52px;
 `
 
 
 
-const ProductDescription = styled.div`
+Pan.Prod.Description = styled.div`
   display: flex;
   margin-top: 10px;
   width: 350px;
 `
 
-const ProductWrapper = styled.div`
+
+
+Pan.Prod.Sect1 = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 15px;
 `
 
-const VerticalStick = styled.div`
+Pan.VerticalStick = styled.div`
   border: 1px solid #FFFFFF;
   height: 13px;
   margin-left: 10px;
   margin-right: 10px;
 `
 
-const ProductPrice = styled.p`
+Pan.Prod.Price = styled.p`
   font-weight: 700;
   font-size: 20px;
   line-height: 24px;
-  color: #FFFFFF;
 `
 
-const ProductPriceWrapper = styled.div`
+Pan.Prod.Sect2 = styled.div`
   display: flex;
+  ${media.lessThan("pc")`
+    margin-top: 20px;
+  `}
 `
 
-const ProductAmount = styled.p`
-  font-weight: 400;
+Pan.Prod.TotalPrice = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 89px;
+  ${media.lessThan("pc")`
+    margin-top: 20px;
+    justify-content: flex-start;
+  `}
+`
+
+Pan.Prod.Amount = styled.p`
   font-size: 12px;
   line-height: 15px;
   color: #616161;
 
 `
 
-const ProductContainer = styled.div`
+Pan.Prod.Props = styled.div`
   display: flex;
-  
   width: 100%;
+  ${media.lessThan("pc")`
+    flex-direction: column;
+  `}
 `
 
 export {
     Container,
     MutedText,
-    OrderValue,
     Header,
-    Wrapper,
-    Panel,
-    Order,
-    OrderText,
-    OrderImg,
-    ProductDescription,
-    ProductWrapper,
-    VerticalStick,
-    ProductPrice,
-    ProductAmount,
-    ProductPriceWrapper,
-    ProductContainer,
-    MutedTextWrapper,
+    Pan,
 
 }

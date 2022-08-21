@@ -1,10 +1,9 @@
 import * as S from "./styled";
 import {SvgIcon} from "../svg/SvgIcon";
 import {FlexBox} from "../FlexBox";
-import {useState} from "react";
 import {CaretUpSvg} from "../svg/CaretUpSvg";
 import {Collapsible} from "../Collapsible";
-import {Panel} from "./styled";
+import ProductImage from "../../assets/img/products/2.png";
 
 
 export const AccordionItem = () => {
@@ -18,8 +17,10 @@ export const AccordionItem = () => {
                               opened
                           }) => {
         return  <S.Header>
-            <S.MutedText>№2131</S.MutedText>
-            <S.MutedText>2022-08-07</S.MutedText>
+            <S.Header.MobileTextContainer>
+                <S.MutedText>№2131</S.MutedText>
+                <S.Pan.Props.Prop.Value>2022-08-07</S.Pan.Props.Prop.Value>
+            </S.Header.MobileTextContainer>
             <S.Header.Status>Выполнен</S.Header.Status>
             <SvgIcon width={"20px"} style={{
                 transformOrigin: "center",
@@ -30,101 +31,97 @@ export const AccordionItem = () => {
         </S.Header>
     }
     const renderPanel = ({opened}) => {
-        return  <S.Panel>
+        return  <S.Pan>
 
-            <S.Panel.Properties>
-                <S.Panel.Properties.ExceptStatus>
-                    <S.Panel.Properties.Property>
-                        <S.MutedTextWrapper>
+            <S.Pan.Props>
+                <S.Pan.Props.ExceptStatus>
+                    <S.Pan.Props.Prop>
+                        <S.Pan.Props.Prop.Label>
                             <S.MutedText>Способ оплаты</S.MutedText>
-                        </S.MutedTextWrapper>
-                        <S.OrderValue>Наличными</S.OrderValue>
-                    </S.Panel.Properties.Property>
-                    <S.Panel.Properties.Property>
-                        <S.MutedTextWrapper>
+                        </S.Pan.Props.Prop.Label>
+                        <S.Pan.Props.Prop.Value>Наличными</S.Pan.Props.Prop.Value>
+                    </S.Pan.Props.Prop>
+                    <S.Pan.Props.Prop>
+                        <S.Pan.Props.Prop.Label>
                             <S.MutedText>Способ доставки</S.MutedText>
-                        </S.MutedTextWrapper>
-                        <S.OrderValue>Самовывоз</S.OrderValue>
-                    </S.Panel.Properties.Property>
-                    <S.Panel.Properties.Property>
-                        <S.MutedTextWrapper>
+                        </S.Pan.Props.Prop.Label>
+                        <S.Pan.Props.Prop.Value>Самовывоз</S.Pan.Props.Prop.Value>
+                    </S.Pan.Props.Prop>
+                    <S.Pan.Props.Prop>
+                        <S.Pan.Props.Prop.Label>
                             <S.MutedText>Адрес доставки</S.MutedText>
-                        </S.MutedTextWrapper>
-                        <S.OrderValue>Одесса Пархоменка не 10</S.OrderValue>
-                    </S.Panel.Properties.Property>
-                </S.Panel.Properties.ExceptStatus>
-                <S.Panel.Status>
-                        <S.Panel.Status.Label>Статус заказа</S.Panel.Status.Label>
-                        <S.Panel.Status.Value>Выполнен</S.Panel.Status.Value>
-                </S.Panel.Status>
-            </S.Panel.Properties>
+                        </S.Pan.Props.Prop.Label>
+                            <S.Pan.Props.Prop.Value>Одесса Пархоменка не 10</S.Pan.Props.Prop.Value>
+                    </S.Pan.Props.Prop>
+                </S.Pan.Props.ExceptStatus>
+                <S.Pan.Status>
+                    <S.Pan.Status.Label>Статус заказа</S.Pan.Status.Label>
+                    <S.Pan.Status.Value>Выполнен</S.Pan.Status.Value>
+                </S.Pan.Status>
+            </S.Pan.Props>
 
-            <S.Order>
-                <div>
-                    <S.OrderImg/>
-                </div>
-                <S.ProductContainer>
-                    <S.ProductWrapper>
-                        <S.OrderValue>Ролл Калифорния с угрём</S.OrderValue>
+            <S.Pan.Prod>
+                <S.Pan.Prod.Img src={ProductImage}/>
+                <S.Pan.Prod.Props>
+                    <S.Pan.Prod.Sect1>
+                        <S.Pan.Prod.Name>Ролл Калифорния с угрём</S.Pan.Prod.Name>
 
-                        <S.ProductDescription>
-                            <S.OrderText>1 шт</S.OrderText>
-                            <S.VerticalStick/>
-                            <S.OrderText>220 г</S.OrderText>
-                            <S.VerticalStick/>
-                            <S.OrderText>120 Ккал</S.OrderText>
-                        </S.ProductDescription>
-                    </S.ProductWrapper>
+                        <S.Pan.Prod.Description>
+                            <S.Pan.Prod.Prop>1 шт</S.Pan.Prod.Prop>
+                            <S.Pan.VerticalStick/>
+                            <S.Pan.Prod.Prop>220 г</S.Pan.Prod.Prop>
+                            <S.Pan.VerticalStick/>
+                            <S.Pan.Prod.Prop>120 Ккал</S.Pan.Prod.Prop>
+                        </S.Pan.Prod.Description>
+                    </S.Pan.Prod.Sect1>
 
-                    <S.ProductPriceWrapper>
+                    <S.Pan.Prod.Sect2>
                         <FlexBox flexDirection={"column"}>
-                            <S.ProductPrice>169 ₴</S.ProductPrice>
-                            <S.ProductAmount>Кол-во: 1</S.ProductAmount>
+                            <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
+                            <S.Pan.Prod.Amount>Кол-во: 1</S.Pan.Prod.Amount>
                         </FlexBox>
                         <div style={{marginLeft:"39px"}}>
-                            <S.ProductPrice>169 ₴</S.ProductPrice>
+                            <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
                         </div>
-                    </S.ProductPriceWrapper>
+                    </S.Pan.Prod.Sect2>
 
-                </S.ProductContainer>
+                </S.Pan.Prod.Props>
 
 
-            </S.Order>
+            </S.Pan.Prod>
 
-            <S.Order>
-                <div>
-                    <S.OrderImg/>
-                </div>
-                <S.ProductContainer>
-                    <S.ProductWrapper>
-                        <S.OrderValue>Ролл Калифорния с угрём</S.OrderValue>
+            <S.Pan.Prod>
+                <S.Pan.Prod.Img src={ProductImage}/>
+                <S.Pan.Prod.Props>
+                    <S.Pan.Prod.Sect1>
+                        <S.Pan.Prod.Name>Ролл Калифорния с угрём</S.Pan.Prod.Name>
 
-                        <S.ProductDescription>
-                            <S.OrderText>1 шт</S.OrderText>
-                            <S.VerticalStick/>
-                            <S.OrderText>220 г</S.OrderText>
-                            <S.VerticalStick/>
-                            <S.OrderText>120 Ккал</S.OrderText>
-                        </S.ProductDescription>
-                    </S.ProductWrapper>
+                        <S.Pan.Prod.Description>
+                            <S.Pan.Prod.Prop>1 шт</S.Pan.Prod.Prop>
+                            <S.Pan.VerticalStick/>
+                            <S.Pan.Prod.Prop>220 г</S.Pan.Prod.Prop>
+                            <S.Pan.VerticalStick/>
+                            <S.Pan.Prod.Prop>120 Ккал</S.Pan.Prod.Prop>
+                        </S.Pan.Prod.Description>
+                    </S.Pan.Prod.Sect1>
 
-                    <S.ProductPriceWrapper>
+                    <S.Pan.Prod.Sect2>
                         <FlexBox flexDirection={"column"}>
-                            <S.ProductPrice>169 ₴</S.ProductPrice>
-                            <S.ProductAmount>Кол-во: 1</S.ProductAmount>
+                            <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
+                            <S.Pan.Prod.Amount>Кол-во: 1</S.Pan.Prod.Amount>
                         </FlexBox>
                         <div style={{marginLeft:"39px"}}>
-                            <S.ProductPrice>169 ₴</S.ProductPrice>
+                            <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
                         </div>
-                    </S.ProductPriceWrapper>
+                    </S.Pan.Prod.Sect2>
 
-                </S.ProductContainer>
+                </S.Pan.Prod.Props>
 
-            </S.Order>
-            <FlexBox justifyContent={"flex-end"} style={{marginRight: "106px"}}>
-                <S.ProductPrice>К оплате 300 ₴</S.ProductPrice>
-            </FlexBox>
-        </S.Panel>
+            </S.Pan.Prod>
+            <S.Pan.Prod.TotalPrice>
+                <S.Pan.Prod.Price>К оплате: 300 ₴</S.Pan.Prod.Price>
+            </S.Pan.Prod.TotalPrice>
+        </S.Pan>
     }
 
     return (
@@ -136,6 +133,7 @@ export const AccordionItem = () => {
                      renderContainer={({Header,Panel})=>{
                          return renderContainer({Header,Panel});
                      }}
+                     headerTag={"p"}
         />
 
 
