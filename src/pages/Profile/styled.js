@@ -1,87 +1,88 @@
 import styled from "styled-components";
+import media from "../../common/custom-media";
 
-const BtnWrapper = styled.div`
+const BtnGroup = styled.div`
   display: flex;
   margin-top: 15px;
-  margin-left: 15px;
-`
+  ${media.lessThan("pc")`
+    display: flex;
+    flex-direction: column;
+    
+  `}
+`;
 
-const BtnMargin = styled.div`
+const BtnWrapper = styled.div`
   margin-left: 20px;
-`
+  ${media.lessThan("pc")`
+    margin-left: 0;
+    margin-top: 20px;   
+    
+  `}
+  
+`;
 
-const Heading = styled.p`
-  font-weight: 600;
-  font-size: 25px;
-  line-height: 30px;
-  color: #FFFFFF;
 
-`
 
-const NavWrapper = styled.div`
+const Properties = styled.div`
   width: 634px;
-  height: 230px;
 
   background: #1C1C1C;
-  box-shadow: 0px 4px 15px rgba(28, 28, 28, 0.3);
+  box-shadow: 0 4px 15px rgba(28, 28, 28, 0.3);
   border-radius: 15px;
-  margin-top: 20px
-`
-
-const Left = styled.div`
-  padding-left: 15px;
-  padding-top: 15px
-  
-`
-
-
-const NavText = styled.p`
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 18px;
-  color: #616161;
-  margin-top: 10px;
-  :first-child {
-    margin-top: 0;
-  }
-`
-
-const TextWrapper = styled.div`
-  display: flex;
-  
-`
-
-const Right = styled.div`
+  margin-top: 20px;
   padding: 15px;
-  margin-left: 114px; 
-`
-
-const PersonalData = styled.p`
   display: flex;
   flex-direction: column;
-  font-weight: 400;
-  font-size: 15px;
+  
+  ${media.lessThan("pc")`
+    width: 350px;
+   
+  `}
+`;
+
+
+
+const Property = styled.div`
+  display: flex;
   line-height: 18px;
-  color: #FFFFFF;
-  margin-top: 10px;
+  font-size: 15px;
+  padding-top: 10px;
   :first-child {
-    margin-top: 0;
+    padding-top: 0;
   }
 `
 
-const BotMenu = styled.div`
+Property.Label = styled.div`
+  color: #616161;
+  width: 270px;
+  flex-shrink: 0;
+  ${media.lessThan("pc")`
+    width: 175px;
+    
+  `}
+  
+`
+
+
+Property.Value = styled.div`
+  color: #FFFFFF;
+  word-break: break-all;
+`
+
+
+
+export const Birth = styled.div`
   margin-top: 30px;
 `
 
-const BirthHeading = styled.p`
+Birth.Heading = styled.p`
   font-weight: 600;
   font-size: 20px;
   line-height: 24px;
-
   color: #FFFFFF;
 `
 
-const BirthText = styled.p`
+Birth.Label = styled.p`
   font-weight: 400;
   font-size: 15px;
   line-height: 18px;
@@ -89,46 +90,44 @@ const BirthText = styled.p`
   color: #616161;
 `
 
-const DropDownsWrapper = styled.div`
+Birth.Properties = styled.div`
   display: flex;
   
 `
 
-const BirthWrapper = styled.div`
+Birth.Property = styled.div`
   margin-left: 35px;
   margin-top: 20px;
   :first-child{
     margin-left: 0;
   }
+  ${media.lessThan("pc")`
+   margin-left: 19px;
+  `}
 `
 
-const SexWrapper = styled.div`
+const Sex = styled.div`
   margin-top: 20px;
+`
+Sex.Label = styled.p`
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 18px;
+
+  color: #616161;
 `
 
 const HorizontalBar = styled.div`
   border: 1px solid #2D2D2D;
-  width: 730px;
   margin-top: 30px;
   margin-bottom: 30px;
 `
 
 export {
-    Heading,
-    NavWrapper,
-    NavText,
-    PersonalData,
-    Left,
-    Right,
-    TextWrapper,
+    Properties,
+    BtnGroup,
     BtnWrapper,
-    BotMenu,
-    BirthHeading,
-    BirthText,
-    BtnMargin,
-    DropDownsWrapper,
-    BirthWrapper,
-    SexWrapper,
+    Sex,
     HorizontalBar,
-
+    Property,
 }

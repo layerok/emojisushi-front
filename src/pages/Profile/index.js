@@ -1,4 +1,4 @@
-import { CabinetLayout} from "../../layout/CabinetLayout";
+import {CabinetLayout} from "../../layout/CabinetLayout";
 import {useEffect} from "react";
 import {inject, observer} from "mobx-react";
 import * as S from "./styled"
@@ -53,74 +53,81 @@ export const Profile = inject( 'AppStore')(observer((
 
 
     return (
-        <CabinetLayout>
-            <S.Heading>Личные данные</S.Heading>
-            <S.NavWrapper>
-                <S.TextWrapper>
-                    <S.Left>
+        <CabinetLayout title={"Личные данные"}>
+            <S.Properties>
 
-                        <S.NavText>Имя</S.NavText>
-                        <S.NavText>E-mail</S.NavText>
-                        <S.NavText>Телефон</S.NavText>
-                        <S.NavText>Город</S.NavText>
-                        <S.NavText>Адрес для доставок</S.NavText>
-                    </S.Left>
+                <S.Property>
+                    <S.Property.Label>Имя</S.Property.Label>
+                    <S.Property.Value>Рудоманенко Владимир Павлович</S.Property.Value>
+                </S.Property>
 
-                    <S.Right>
-                        <S.PersonalData>Рудоманенко Владимир Павлович</S.PersonalData>
-                        <S.PersonalData>kotopes231@gmail.com</S.PersonalData>
-                        <S.PersonalData>+380 66 911 10 95</S.PersonalData>
-                        <S.PersonalData>Одесса</S.PersonalData>
-                        <S.PersonalData>Литвиненко-Вольгемут 1Г</S.PersonalData>
-                    </S.Right>
-                </S.TextWrapper>
+                <S.Property>
+                    <S.Property.Label>E-mail</S.Property.Label>
+                    <S.Property.Value>kotopes231@gmail.com</S.Property.Value>
+                </S.Property>
 
-                <S.BtnWrapper>
+                <S.Property>
+                    <S.Property.Label>Телефон</S.Property.Label>
+                    <S.Property.Value>+380 66 911 10 95</S.Property.Value>
+                </S.Property>
+
+                <S.Property>
+                    <S.Property.Label>Город</S.Property.Label>
+                    <S.Property.Value >Одесса</S.Property.Value>
+                </S.Property>
+
+                <S.Property>
+                    <S.Property.Label>Адрес для доставок</S.Property.Label>
+                    <S.Property.Value >Литвиненко-Вольгемут 1Г</S.Property.Value>
+                </S.Property>
+
+
+
+                <S.BtnGroup>
                     <ButtonDark minWidth={"309px"} >
                         Редактировать личные данные
                     </ButtonDark>
-                    <S.BtnMargin>
+                    <S.BtnWrapper>
                         <ButtonDark minWidth={"202px"}>
                             Изменить пароль
                         </ButtonDark>
-                    </S.BtnMargin>
+                    </S.BtnWrapper>
+                </S.BtnGroup>
 
-                </S.BtnWrapper>
+            </S.Properties>
 
-            </S.NavWrapper>
+            <S.Birth>
+                <S.Birth.Heading>Дата Рождения</S.Birth.Heading>
+                <S.Birth.Properties>
+                    <S.Birth.Property>
+                        <S.Birth.Label>День</S.Birth.Label>
+                        <DropDown initialValue={"1"} options={[1,2,3,3,4]}> </DropDown>
 
-            <S.BotMenu>
-                <S.BirthHeading>Дата Рождения</S.BirthHeading>
-            <S.DropDownsWrapper>
-                <S.BirthWrapper>
-                    <S.BirthText>День</S.BirthText>
-                    <DropDown initialValue={"1"} options={[1,2,3,3,4]}> </DropDown>
-                    <Dropdown1 options={options}/>
+                    </S.Birth.Property>
+                    <S.Birth.Property>
+                        <S.Birth.Label>Месяц</S.Birth.Label>
+                        <DropDown width={"128px"} initialValue={"Январь"} options={["Январь","Февраль","Март","Апрель",]}> </DropDown>
 
-                </S.BirthWrapper>
-            <S.BirthWrapper>
-                <S.BirthText>Месяц</S.BirthText>
-                <DropDown width={"128px"} initialValue={"Январь"} options={["Январь","Февраль","Март","Апрель",]}> </DropDown>
+                    </S.Birth.Property>
 
-            </S.BirthWrapper>
+                    <S.Birth.Property>
+                        <S.Birth.Label>Год</S.Birth.Label>
+                        <DropDown width={"107px"} initialValue={"2000"} options={["2000","2001","2002","2002"]}> </DropDown>
 
-                <S.BirthWrapper>
-                    <S.BirthText>Год</S.BirthText>
-                    <DropDown width={"128px"} initialValue={"2000"} options={["2000","2001","2002","2002"]}> </DropDown>
+                    </S.Birth.Property>
 
-                </S.BirthWrapper>
+                </S.Birth.Properties>
 
-            </S.DropDownsWrapper>
-            <S.SexWrapper>
-                <S.Heading>Пол</S.Heading>
+            </S.Birth>
+
+            <S.Sex>
+                <S.Sex.Label>Пол</S.Sex.Label>
                 <DropDown marginTop={"20px"} width={"128px"} starter={"Мужской"} options={["Мужской","Женский"]}> </DropDown>
+            </S.Sex>
 
-            </S.SexWrapper>
+            <S.HorizontalBar/>
 
-            <S.HorizontalBar></S.HorizontalBar>
-
-                <ButtonOutline>Сохранить</ButtonOutline>
-            </S.BotMenu>
+            <ButtonOutline>Сохранить</ButtonOutline>
 
         </CabinetLayout>
     );

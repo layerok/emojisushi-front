@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import media from "../../common/custom-media";
 
 const Heading = styled.p`
   font-weight: 600;
@@ -11,6 +12,10 @@ const Heading = styled.p`
 const Form = styled.form`
     margin-top: 12px;
     width: 285px;
+  ${media.lessThan("tablet")`
+    width: 350px;
+        
+  `}
 `
 
 const Text = styled.p`
