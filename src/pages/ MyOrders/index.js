@@ -3,6 +3,7 @@ import {useEffect} from "react";
 import {CabinetLayout} from "../../layout/CabinetLayout";
 import * as S from "./styled";
 import {Collapsible} from "../../components/Collapsible";
+import {AccordionItem} from "../../components/AccordionItem";
 
 export const MyOrders = inject( 'AppStore')(observer((
     {
@@ -20,10 +21,7 @@ export const MyOrders = inject( 'AppStore')(observer((
         <CabinetLayout title={"История заказов"}>
 
 
-            <Collapsible/>
-
-            <Collapsible/>
-
+           <AccordionItem/>
         </CabinetLayout>
 
     );

@@ -1,19 +1,16 @@
 import styled from "styled-components";
 
-const Collapsible = styled.div`
-  
-`
 
-const OrderContainer = styled.p`
-  margin-top: 20px;
+const Container = styled.p`
+  padding: 15px;
   background: #1C1C1C;
   box-shadow: 0px 4px 15px rgba(28, 28, 28, 0.3);
   border-radius: 15px;
   width: 730px;
-  height: 315px;
+  
 `
 
-const SmallText = styled.p`
+const MutedText = styled.p`
   font-style: normal;
   font-weight: 400;
   font-size: 15px;
@@ -22,7 +19,7 @@ const SmallText = styled.p`
   color: #616161;
 `
 
-const OrderInfoText = styled.p`
+const OrderValue = styled.p`
   font-weight: 400;
   font-size: 15px;
   line-height: 18px;
@@ -30,7 +27,13 @@ const OrderInfoText = styled.p`
   color: #FFFFFF;  
 `
 
-const OrderStatus = styled.p`
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+`
+
+Header.Status = styled.p`
   font-weight: 400;
   font-size: 15px;
   line-height: 18px;
@@ -39,38 +42,37 @@ const OrderStatus = styled.p`
 
 `
 
-const OrderClosed = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 15px 15px 0 15px;
-  cursor: pointer;
-`
-const OrderOpen = styled.div`
-  padding: 15px 15px 0 15px;
+const Panel = styled.div`
+  
 `
 
-const HorizontalBar = styled.div`
-  border: 1px solid #2D2D2D;
-  width: 700px;
-  margin-left: 15px;
+Panel.Properties = styled.div`
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #2D2D2D;
+  border-bottom: 1px solid #2D2D2D;
+  padding-top: 10px;
+  padding-bottom: 10px;
   margin-top: 10px;
 `
 
-const OrderInfoWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
+Panel.Properties.ExceptStatus = styled.div`
+  
+`
+Panel.Properties.Property = styled.div`
+  
 `
 
 const Wrapper = styled.div`
   margin-right: 60px;
 `
 
-const OrderOpenStatus = styled.div`
+Panel.Status = styled.div`
   display: flex;  
   margin-right: 149px;
 `
 
-const Completed = styled.p`
+Panel.Status.Value = styled.p`
   font-weight: 500;
   font-size: 20px;
   line-height: 24px;
@@ -79,12 +81,14 @@ const Completed = styled.p`
 
 `
 
-const VerticalBar = styled.div`
-  border: 1px solid #2D2D2D;
-  height: 74px;
-  width: 0;
-  margin-right: 15px;
+Panel.Status.Label = styled.p`
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 18px;
+
+  color: #FFFFFF;
 `
+
 
 const Order = styled.div`
   display: flex;
@@ -151,18 +155,12 @@ const ProductContainer = styled.div`
 `
 
 export {
-    OrderContainer,
-    SmallText,
-    OrderInfoText,
-    OrderStatus,
-    OrderClosed,
-    OrderOpen,
-    HorizontalBar,
+    Container,
+    MutedText,
+    OrderValue,
+    Header,
     Wrapper,
-    OrderInfoWrapper,
-    OrderOpenStatus,
-    Completed,
-    VerticalBar,
+    Panel,
     Order,
     OrderText,
     OrderImg,
@@ -173,5 +171,5 @@ export {
     ProductAmount,
     ProductPriceWrapper,
     ProductContainer,
-    Collapsible,
+
 }
