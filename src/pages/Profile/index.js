@@ -3,8 +3,7 @@ import {useEffect} from "react";
 import {inject, observer} from "mobx-react";
 import * as S from "./styled"
 import {ButtonDark, ButtonOutline} from "../../components/buttons/Button";
-import {DropDown} from "../../components/DropDown";
-import {Dropdown1} from "../../components/Dropdown1";
+import {Dropdown} from "../../components/Dropdown";
 
 export const Profile = inject( 'AppStore')(observer((
     {
@@ -16,7 +15,93 @@ export const Profile = inject( 'AppStore')(observer((
         AppStore.setLoading(false);
     }, [])
 
-    const options = [
+    const dayOptions = [
+        {
+            label: "1",
+            value: 1
+        },
+        {
+            label: "2",
+            value: 2
+        },
+        {
+            label: "3",
+            value: 3
+        },
+        {
+            label: "4",
+            value: 4
+        },
+        {
+            label: "5",
+            value: 5
+        },
+        {
+            label: "6",
+            value: 6
+        },
+        {
+            label: "7",
+            value: 7
+        },
+        {
+            label: "8",
+            value: 8
+        },
+    ];
+
+    const monthOptions = [
+        {
+            label: "1",
+            value: 1
+        },
+        {
+            label: "2",
+            value: 2
+        },
+        {
+            label: "3",
+            value: 3
+        },
+        {
+            label: "4",
+            value: 4
+        },
+        {
+            label: "5",
+            value: 5
+        },
+        {
+            label: "6",
+            value: 6
+        },
+        {
+            label: "7",
+            value: 7
+        },
+        {
+            label: "8",
+            value: 8
+        },
+        {
+            label: "9",
+            value: 9
+        },
+        {
+            label: "10",
+            value: 10
+        },
+        {
+            label: "11",
+            value: 11
+        },
+        {
+            label: "12",
+            value: 12
+        },
+    ];
+
+    const yearOptions = [
         {
             label: "1975",
             value: 1975
@@ -50,6 +135,17 @@ export const Profile = inject( 'AppStore')(observer((
             value: 1982
         },
     ];
+
+    const sexOptions = [
+        {
+            label: "Myжской",
+            value: "male"
+        },
+        {
+            label: "Женский",
+            value: "female"
+        },
+    ]
 
 
     return (
@@ -101,18 +197,29 @@ export const Profile = inject( 'AppStore')(observer((
                 <S.Birth.Properties>
                     <S.Birth.Property>
                         <S.Birth.Label>День</S.Birth.Label>
-                        <DropDown initialValue={"1"} options={[1,2,3,3,4]}> </DropDown>
+                        <Dropdown
+                            width={"100px"}
+                            initiallySelectedValue={1}
+                            options={dayOptions}
+                        />
 
                     </S.Birth.Property>
                     <S.Birth.Property>
                         <S.Birth.Label>Месяц</S.Birth.Label>
-                        <DropDown width={"128px"} initialValue={"Январь"} options={["Январь","Февраль","Март","Апрель",]}> </DropDown>
+                        <Dropdown width={"128px"}
+                                  initiallySelectedValue={1}
+                                  options={monthOptions}
+                        />
 
                     </S.Birth.Property>
 
                     <S.Birth.Property>
                         <S.Birth.Label>Год</S.Birth.Label>
-                        <DropDown width={"107px"} initialValue={"2000"} options={["2000","2001","2002","2002"]}> </DropDown>
+                        <Dropdown
+                            width={"107px"}
+                            initiallySelectedValue={1976}
+                            options={yearOptions}
+                        />
 
                     </S.Birth.Property>
 
@@ -122,7 +229,11 @@ export const Profile = inject( 'AppStore')(observer((
 
             <S.Sex>
                 <S.Sex.Label>Пол</S.Sex.Label>
-                <DropDown marginTop={"20px"} width={"128px"} starter={"Мужской"} options={["Мужской","Женский"]}> </DropDown>
+                <Dropdown
+                    width={"128px"}
+                    initiallySelectedValue={"male"}
+                    options={sexOptions}
+                />
             </S.Sex>
 
             <S.HorizontalBar/>
