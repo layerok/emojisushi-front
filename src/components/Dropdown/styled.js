@@ -8,20 +8,21 @@ const Dropdown = styled.div`
 `
 
 const Reference = styled.div`
+  position: relative;
   display: flex;
-  width: ${prop('width')}px;
+  width: ${prop('width')};
   align-items: center;
   background-color: #1C1C1C;
   height: 40px;
   padding-left: 15px;
-  padding-right: 15px;
-  border-radius: ${ifProp('open', ifProp({placement: 'bottom'}, "15px 15px 0 0", "0 0 15px 15px"), "15px")};
+  padding-right: 30px;
+  border-radius: ${ifProp('open', ifProp({placement: 'bottom'}, "10px 10px 0 0", "0 0 10px 10px"), "10px")};
   color: white;
 `
 
 const Content = styled.div`
   background-color: #1C1C1C;
-  width: ${prop('width')}px;
+  width: ${prop('width')};
   ${ifProp({
     placement: 'bottom'
   }, css`

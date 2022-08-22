@@ -4,7 +4,7 @@ import {CaretDownSvg} from "../svg/CaretDownSvg";
 import {useState} from "react";
 
 
-export const DropDown = (
+export const DropdownBySmile = (
     {
         options = [],
         width,
