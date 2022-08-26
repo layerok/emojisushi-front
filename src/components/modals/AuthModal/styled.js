@@ -7,15 +7,14 @@ const Wrapper = styled.div`
   padding: 20px
 `
 
-const Text = styled.p`
+const Title = styled.p`
   font-weight: 500;
   font-size: 18px;
   line-height: 22px;
-  color: #FFFFFF;
   margin-bottom: 20px;
 `
 
-const InputText = styled.p`
+const InputLabel = styled.p`
   font-weight: 400;
   font-size: 15px;
   line-height: 18px;
@@ -25,23 +24,21 @@ const InputText = styled.p`
 
 const InputWrapper = styled.div`
   width: 275px;
-  height: 63px;
   margin-top: 20px;
+  position: relative;
   :first-child{
     margin-top: 0;
   }
 `
 
 
-const ForgotPass = styled.p`
-  font-weight: 400;
+const NavigateButton = styled.button`
   font-size: 12px;
-  line-height: 15px;
   color: #72BBFF;
-  padding-top: 10px;
-  padding-left: 10px;
+  display: block;
   cursor: pointer ;
 `
+
 
 const LoginForm = styled.form`
   user-select: none;
@@ -57,15 +54,14 @@ const SignUpForm = styled.form`
   user-select: none;
 `
 
-const Error = styled.p`
-  display: flex;
-  justify-content: flex-end;
-  font-weight: 400;
+const Error = styled.p` 
   font-size: 10px;
   line-height: 12px;
   margin-top: 5px;
   color: #CD3838;
   user-select: none;
+  position: absolute;
+  right: 0;
 `
 
 const CheckboxWrapper = styled.div`
@@ -86,18 +82,17 @@ const ForgotPassText = styled.p`
 const BtnGroup = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `
 
-const BtnWrapper = styled.div`
-  margin-top: 20px;
-`
+
 
 export {
-    Text,
+    Title,
     Wrapper,
-    InputText,
+    InputLabel,
     InputWrapper,
-    ForgotPass,
+    NavigateButton,
     LoginForm,
     SignUpForm,
     VerticalBar,
@@ -105,5 +100,4 @@ export {
     CheckboxWrapper,
     ForgotPassText,
     BtnGroup,
-    BtnWrapper,
 }
