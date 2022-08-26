@@ -11,6 +11,8 @@ import {
 import {forwardRef, useId, useMemo, useRef, useState} from "react";
 import {useEffect} from "react";
 import * as S from "./styled";
+import {SvgIcon} from "../svg/SvgIcon";
+import {CaretDownSvg} from "../svg/CaretDownSvg";
 
 
 
@@ -28,18 +30,14 @@ const Option = forwardRef(function Option(
             aria-selected={selected}
             style={{
                 background: active
-                    ? "rgba(0, 255, 255, 0.5)"
+                    ? "#272727"
                     : selected
-                        ? "rgba(0, 10, 20, 0.1)"
+                        ? "#272727"
                         : "none",
-                border: active
-                    ? "1px solid rgba(0, 225, 255, 1)"
-                    : "1px solid transparent",
                 borderRadius: 4,
-                textAlign: "center",
-                cursor: "default",
                 userSelect: "none",
-                padding: 0
+                padding: "10px 15px",
+                cursor: "pointer"
             }}
         >
             {children}
@@ -47,10 +45,11 @@ const Option = forwardRef(function Option(
     );
 });
 
-export const Dropdown1 = (
+export const Dropdown = (
     {
         options = [],
-        width = 100
+        width = "100px",
+        initiallySelectedValue = null
     }
 ) => {
 
@@ -58,8 +57,7 @@ export const Dropdown1 = (
 
     const [activeIndex, setActiveIndex] = useState(null);
     const [placement, setPlacement] = useState(null);
-    const [selectedValue, setSelectedValue] = useState(null);
-    const [search, setSearch] = useState("");
+    const [selectedValue, setSelectedValue] = useState(initiallySelectedValue);
 
     const selectedOption = useMemo(() => options.find(({value}) => value === selectedValue), [
         selectedValue,
@@ -67,8 +65,6 @@ export const Dropdown1 = (
     ])
 
     const listRef = useRef([]);
-
-    const noResultsId = useId();
     const buttonId = useId();
     const listboxId = useId();
 
@@ -88,7 +84,7 @@ export const Dropdown1 = (
         onOpenChange: setOpen,
         // We don't want flipping to occur while searching, as the floating element
         // will resize and cause disorientation.
-        middleware: [offset(0), ...(placement ? [] : [flip()]), shift()],
+        middleware: [offset(0), flip(), shift()],
     });
 
     useEffect(() => {
@@ -97,16 +93,22 @@ export const Dropdown1 = (
         }
     }, [open, update, refs.reference, refs.floating]);
 
+    const onNavigate = (index) => {
+        return open ? setActiveIndex(index) : () => {};
+    }
+
     const { getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
         useClick(context),
         useDismiss(context),
-        useRole(context),
+        useRole(context, {
+            role: 'listbox'
+        }),
         useListNavigation(context, {
             listRef,
-            onNavigate: open ? setActiveIndex : () => {},
+            onNavigate,
             activeIndex,
             cols: 1,
-            orientation: "horizontal",
+            orientation: "vertical",
             loop: true,
             focusItemOnOpen: false,
             virtual: true,
@@ -119,7 +121,6 @@ export const Dropdown1 = (
         if (open) {
             setPlacement(resultantPlacement);
         } else {
-            setSearch("");
             setActiveIndex(null);
             setPlacement(null);
         }
@@ -133,13 +134,6 @@ export const Dropdown1 = (
         }
     };
 
-
-    const {
-        "aria-activedescendant": ignoreAria,
-        ...floatingProps
-    } = getFloatingProps(getFloatingProps());
-
-
     return (
         <S.Dropdown >
             <S.Reference
@@ -152,12 +146,17 @@ export const Dropdown1 = (
                 aria-describedby="day-label"
                 {...getReferenceProps()}>
                 {selectedValue && (
-                    <span id="day-label" aria-label={
-                        selectedOption?.label
-                    }>
+                    <span id="day-label" aria-label={selectedOption?.label}>
                         {selectedOption?.label}
                     </span>
                 )}
+                <SvgIcon style={{
+                    position: 'absolute',
+                    right: "15px",
+                    top: "12px"
+                }} width={"15px"}>
+                    <CaretDownSvg/>
+                </SvgIcon>
             </S.Reference>
             <FloatingPortal>
                 {open && (
@@ -173,7 +172,13 @@ export const Dropdown1 = (
                                 top: y ?? 0
                             }}
                             aria-labelledby={buttonId}
-                            {...floatingProps}
+                            {...getFloatingProps({
+                                onKeyDown: (e) => {
+                                    if (e.key === "Enter") {
+                                        handleOptionClick();
+                                    }
+                                }
+                            })}
                         >
 
                             {options.length > 0 && (
@@ -195,7 +200,7 @@ export const Dropdown1 = (
                                             selected={selectedValue === value}
                                             active={activeIndex === index}
                                             {...getItemProps({
-                                                onClick: handleOptionClick
+                                                onClick: handleOptionClick,
                                             })}
                                         >
                                             {label}
