@@ -19,6 +19,7 @@ import {Loader} from "../../Loader";
 import {useTranslation} from "react-i18next";
 import {SvgIcon} from "../../svg/SvgIcon";
 import {LogoSvg} from "../../svg/LogoSvg";
+import {SushiSvg} from "../../svg/SushiSvg";
 
 const CartItem = inject('CartStore')(observer((
     {
@@ -120,9 +121,14 @@ export const CartModal = inject('CartStore')(observer((
             <S.CloseIcon>
                 <CloseModalIcon close={close}/>
             </S.CloseIcon>
-            <S.Title>
-                {items.length === 0 ? t('cartModal.empty') : t('cartModal.cart')}
-            </S.Title>
+
+
+            <S.EmptyCartImgContainer>
+                {items.length === 0 && <SushiSvg/> }
+                <S.Title>
+                    {items.length === 0 && t('cartModal.empty') }
+                </S.Title>
+            </S.EmptyCartImgContainer>
 
             <S.Items>
                 <CustomScrollbars height={finalHeight}>

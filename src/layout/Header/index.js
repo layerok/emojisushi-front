@@ -17,6 +17,7 @@ import {useTranslation} from "react-i18next";
 import {SvgButton} from "../../components/SvgButton";
 import {UserSvg} from "../../components/svg/UserSvg";
 import {AuthModal} from "../../components/modals/AuthModal";
+import {LanguageSelector} from "../../components/LanguageSelector";
 
 
 const HeaderRaw = (
@@ -56,6 +57,9 @@ const HeaderRaw = (
                         </S.PcHeaderItem>
                     </S.Left>
                     <S.Right>
+                        <S.LanguageSelectorContainer>
+                            <LanguageSelector/>
+                        </S.LanguageSelectorContainer>
                         <CartModal>
                             <S.CartBtn>
                                 <CartButton count={CartStore.totalQuantity} total={CartStore.total}/>
@@ -76,7 +80,7 @@ const HeaderRaw = (
                             </MobMenuModal>
                         </S.BurgerBtn>
 
-                       <S.UserBtn>
+                        <S.UserBtn>
                             <AuthModal>
                                 <SvgButton>
                                     <SvgIcon width={"25px"} color={"black"}>
@@ -84,7 +88,7 @@ const HeaderRaw = (
                                     </SvgIcon>
                                 </SvgButton>
                             </AuthModal>
-                       </S.UserBtn>
+                        </S.UserBtn>
                     </S.Right>
                 </FlexBox>
             </Container>

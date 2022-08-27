@@ -58,7 +58,20 @@ const BurgerBtn = styled.button`
 
 const UserBtn = styled.div`
   margin-left: 20px;
+  ${media.lessThan("pc")`
+    display: none;
+  `}
 `;
+
+const LanguageSelectorContainer = styled.div`
+  margin-right: 20px;
+  ${media.lessThan("pc")`
+    margin-right: 30px;
+  `}
+  ${media.lessThan("tablet")`
+    display: none;
+  `}
+`
 
 export {
     Header,
@@ -70,4 +83,6 @@ export {
     CartBtn,
     TinyCartBtn,
     UserBtn,
+    LanguageSelectorContainer,
+
 }

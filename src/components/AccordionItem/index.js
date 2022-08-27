@@ -4,9 +4,13 @@ import {FlexBox} from "../FlexBox";
 import {CaretUpSvg} from "../svg/CaretUpSvg";
 import {Collapsible} from "../Collapsible";
 import ProductImage from "../../assets/img/products/2.png";
+import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 
 
 export const AccordionItem = () => {
+
+    const breakpoint = useBreakpoint();
+    const isPc = breakpoint === 'pc';
     const renderContainer = ({Header, Panel}) => {
         return <S.Container>
             <Header/>
@@ -16,10 +20,13 @@ export const AccordionItem = () => {
     const renderHeader = ({
                               opened
                           }) => {
+
+
+
         return  <S.Header>
             <S.Header.MobileTextContainer>
                 <S.MutedText>№2131</S.MutedText>
-                <S.Pan.Props.Prop.Value>2022-08-07</S.Pan.Props.Prop.Value>
+                <S.Pan.Props.Prop.Value style={{marginTop: !isPc ? "5px" : "0"}}>2022-08-07</S.Pan.Props.Prop.Value>
             </S.Header.MobileTextContainer>
             <S.Header.Status>Выполнен</S.Header.Status>
             <SvgIcon width={"20px"} style={{
@@ -60,64 +67,67 @@ export const AccordionItem = () => {
                 </S.Pan.Status>
             </S.Pan.Props>
 
-            <S.Pan.Prod>
-                <S.Pan.Prod.Img src={ProductImage}/>
-                <S.Pan.Prod.Props>
-                    <S.Pan.Prod.Sect1>
-                        <S.Pan.Prod.Name>Ролл Калифорния с угрём</S.Pan.Prod.Name>
+            <div>
+                <S.Pan.Prod>
+                    <S.Pan.Prod.Img src={ProductImage}/>
+                    <S.Pan.Prod.Props>
+                        <S.Pan.Prod.Sect1>
+                            <S.Pan.Prod.Name>Ролл Калифорния с угрём</S.Pan.Prod.Name>
 
-                        <S.Pan.Prod.Description>
-                            <S.Pan.Prod.Prop>1 шт</S.Pan.Prod.Prop>
-                            <S.Pan.VerticalStick/>
-                            <S.Pan.Prod.Prop>220 г</S.Pan.Prod.Prop>
-                            <S.Pan.VerticalStick/>
-                            <S.Pan.Prod.Prop>120 Ккал</S.Pan.Prod.Prop>
-                        </S.Pan.Prod.Description>
-                    </S.Pan.Prod.Sect1>
+                            <S.Pan.Prod.Description>
+                                <S.Pan.Prod.Prop>1 шт</S.Pan.Prod.Prop>
+                                <S.Pan.VerticalStick/>
+                                <S.Pan.Prod.Prop>220 г</S.Pan.Prod.Prop>
+                                <S.Pan.VerticalStick/>
+                                <S.Pan.Prod.Prop>120 Ккал</S.Pan.Prod.Prop>
+                            </S.Pan.Prod.Description>
+                        </S.Pan.Prod.Sect1>
 
-                    <S.Pan.Prod.Sect2>
-                        <FlexBox flexDirection={"column"}>
-                            <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
-                            <S.Pan.Prod.Amount>Кол-во: 1</S.Pan.Prod.Amount>
-                        </FlexBox>
-                        <div style={{marginLeft:"39px"}}>
-                            <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
-                        </div>
-                    </S.Pan.Prod.Sect2>
+                        <S.Pan.Prod.Sect2>
+                            <FlexBox flexDirection={"column"}>
+                                <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
+                                <S.Pan.Prod.Amount>Кол-во: 1</S.Pan.Prod.Amount>
+                            </FlexBox>
+                            <div style={{marginLeft:"39px"}}>
+                                <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
+                            </div>
+                        </S.Pan.Prod.Sect2>
 
-                </S.Pan.Prod.Props>
+                    </S.Pan.Prod.Props>
 
 
-            </S.Pan.Prod>
+                </S.Pan.Prod>
 
-            <S.Pan.Prod>
-                <S.Pan.Prod.Img src={ProductImage}/>
-                <S.Pan.Prod.Props>
-                    <S.Pan.Prod.Sect1>
-                        <S.Pan.Prod.Name>Ролл Калифорния с угрём</S.Pan.Prod.Name>
+                <S.Pan.Prod>
+                    <S.Pan.Prod.Img src={ProductImage}/>
+                    <S.Pan.Prod.Props>
+                        <S.Pan.Prod.Sect1>
+                            <S.Pan.Prod.Name>Ролл Калифорния с угрём</S.Pan.Prod.Name>
 
-                        <S.Pan.Prod.Description>
-                            <S.Pan.Prod.Prop>1 шт</S.Pan.Prod.Prop>
-                            <S.Pan.VerticalStick/>
-                            <S.Pan.Prod.Prop>220 г</S.Pan.Prod.Prop>
-                            <S.Pan.VerticalStick/>
-                            <S.Pan.Prod.Prop>120 Ккал</S.Pan.Prod.Prop>
-                        </S.Pan.Prod.Description>
-                    </S.Pan.Prod.Sect1>
+                            <S.Pan.Prod.Description>
+                                <S.Pan.Prod.Prop>1 шт</S.Pan.Prod.Prop>
+                                <S.Pan.VerticalStick/>
+                                <S.Pan.Prod.Prop>220 г</S.Pan.Prod.Prop>
+                                <S.Pan.VerticalStick/>
+                                <S.Pan.Prod.Prop>120 Ккал</S.Pan.Prod.Prop>
+                            </S.Pan.Prod.Description>
+                        </S.Pan.Prod.Sect1>
 
-                    <S.Pan.Prod.Sect2>
-                        <FlexBox flexDirection={"column"}>
-                            <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
-                            <S.Pan.Prod.Amount>Кол-во: 1</S.Pan.Prod.Amount>
-                        </FlexBox>
-                        <div style={{marginLeft:"39px"}}>
-                            <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
-                        </div>
-                    </S.Pan.Prod.Sect2>
+                        <S.Pan.Prod.Sect2>
+                            <FlexBox flexDirection={"column"}>
+                                <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
+                                <S.Pan.Prod.Amount>Кол-во: 1</S.Pan.Prod.Amount>
+                            </FlexBox>
+                            <div style={{marginLeft:"39px"}}>
+                                <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
+                            </div>
+                        </S.Pan.Prod.Sect2>
 
-                </S.Pan.Prod.Props>
+                    </S.Pan.Prod.Props>
 
-            </S.Pan.Prod>
+                </S.Pan.Prod>
+            </div>
+
             <S.Pan.Prod.TotalPrice>
                 <S.Pan.Prod.Price>К оплате: 300 ₴</S.Pan.Prod.Price>
             </S.Pan.Prod.TotalPrice>

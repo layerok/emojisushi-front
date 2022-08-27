@@ -8,7 +8,7 @@ export const UserSvg = () => {
             viewBox="0 0 25 25"
         >
             <path
-                stroke="#000"
+                stroke="currentColor"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="1.5"

@@ -7,7 +7,6 @@ import {Checkbox} from "../../Checkbox";
 import {PasswordInput} from "../../PasswordInput";
 import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
 import {FlexBox} from "../../FlexBox";
-import {safePreventDefault} from "react-slick/lib/utils/innerSliderUtils";
 
 
 export const AuthModal = ( { children}) => {

@@ -127,6 +127,7 @@ Pan.Props.Prop.Value = styled.p`
   word-break: break-all;
   ${media.lessThan("pc")`
     display: flex;
+    width: 95px;  
   `}
 `
 
@@ -135,6 +136,13 @@ Pan.Props.Prop.Value = styled.p`
 Pan.Prod = styled.div`
   display: flex;
   margin-top: 10px;
+  border-bottom: 1px solid #2D2D2D;
+  padding-bottom: 10px;
+  
+  &:last-child{
+    border: none;
+    padding-bottom: 0;  
+  }
 `
 
 Pan.Prod.Name = styled.p`
@@ -185,6 +193,7 @@ Pan.Prod.Sect2 = styled.div`
   display: flex;
   ${media.lessThan("pc")`
     margin-top: 20px;
+   
   `}
 `
 

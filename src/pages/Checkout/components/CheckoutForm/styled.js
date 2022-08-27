@@ -29,9 +29,15 @@ const ErrorBag = styled.ol`
   }
 `;
 
+const SignIn = styled.p`
+  color: #FFE600;
+  margin-left: 5px;
+`
+
 export {
     Form,
     Control,
     ErrorBag,
-    Total
+    Total,
+    SignIn,
 }

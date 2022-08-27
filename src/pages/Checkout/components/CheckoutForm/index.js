@@ -10,6 +10,7 @@ import * as Yup from "yup";
 import OrderService from "../../../../services/order.service";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
+import {AuthModal} from "../../../../components/modals/AuthModal";
 
 export const CheckoutFormRaw = (
     {
@@ -75,7 +76,14 @@ export const CheckoutFormRaw = (
 
 
     return <S.Form onSubmit={formik.handleSubmit}>
-
+        <FlexBox style={{marginBottom: "20px"}}>
+            Уже есть аккаунт?
+            <AuthModal>
+                <S.SignIn>
+                    Войти
+                </S.SignIn>
+            </AuthModal>
+        </FlexBox>
 
         <Switcher
             name={"shipping_id"}
