@@ -1,6 +1,6 @@
 import {Modal} from "../Modal";
 import * as S from "./styled";
-import {cloneElement, useState} from "react";
+import {cloneElement, useEffect, useState} from "react";
 import {Input} from "../../Input";
 import {Button} from "../../buttons/Button";
 import {Checkbox} from "../../Checkbox";
@@ -16,6 +16,11 @@ export const AuthModal = ( { children}) => {
     const isMobile = breakpoint === 'mobile';
 
     const [ showSignUp,  setShowSignUp]  = useState(false);
+
+    useEffect(() => {
+        setShowSignUp(false);
+        setShowPasswordRecovery(false);
+    }, [isMobile])
 
     return <Modal width={isMobile ? "350px" : "675px"}  render={({close}) => (
 
