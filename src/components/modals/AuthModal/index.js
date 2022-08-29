@@ -17,15 +17,18 @@ export const AuthModal = ( { children}) => {
 
     const [ showSignUp,  setShowSignUp]  = useState(false);
 
-    useEffect(() => {
+/*    useEffect(() => {
         setShowSignUp(false);
         setShowPasswordRecovery(false);
-    }, [isMobile])
+    }, [isMobile])*/
+
+    const showLoginForm = isMobile ? !showPasswordRecovery && !showSignUp: !showPasswordRecovery;
+    const showSignUpForm = (!isMobile || showSignUp);
 
     return <Modal width={isMobile ? "350px" : "675px"}  render={({close}) => (
 
         <S.Wrapper>
-            {(!showPasswordRecovery && !showSignUp) && (
+            { showLoginForm && (
                 <S.LoginForm>
                     <S.Title>
                         Войти в аккаунт
@@ -93,7 +96,7 @@ export const AuthModal = ( { children}) => {
             }
 
 
-            {(!isMobile || showSignUp) &&
+            {showSignUpForm &&
 
                 <S.SignUpForm>
                     <S.Title>
