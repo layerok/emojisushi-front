@@ -51,7 +51,7 @@ const HeaderRaw = (
                             </S.PcHeaderItem>
                         </ContactsModal>
                         <S.PcHeaderItem>
-                            <NavLinkUnderline to={"/dostavka-i-oplata"}>
+                            <NavLinkUnderline style={{width:"144px"}} to={"/dostavka-i-oplata"}>
                                 {t('header.delivery')}
                             </NavLinkUnderline>
                         </S.PcHeaderItem>
