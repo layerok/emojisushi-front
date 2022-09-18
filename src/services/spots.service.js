@@ -1,6 +1,6 @@
 import {stores} from "../stores/stores";
 import AccessApi from "../api/access.api";
-import LocalStorageApi from "../api/local-storage.api";
+import LocalStorageService from "./local-storage.service";
 const { SpotsStore } = stores;
 
 class SpotsService {
@@ -10,7 +10,7 @@ class SpotsService {
             SpotsStore.setItems(res.data.data);
             SpotsStore.setLoading(false);
 
-            const selectedId = LocalStorageApi.get('spot_id');
+            const selectedId = LocalStorageService.get('spot_id');
 
             const exist = res.data.data.find((item) => item.id === selectedId);
             if(!selectedId || !exist) {

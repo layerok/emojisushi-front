@@ -46,6 +46,14 @@ class CartService {
             CartStore.setLoading(false);
         });
     }
+
+    clearCart() {
+        return CartApi.clearCart().then((res) => {
+            CartStore.setItems(res.data.data);
+            CartStore.setTotal(res.data.total);
+            CartStore.setTotalQuantity(res.data.totalQuantity)
+        })
+    }
 }
 
 

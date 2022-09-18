@@ -5,7 +5,7 @@ import {CaretDownSvg} from "../../svg/CaretDownSvg";
 import {FlexBox} from "../../FlexBox";
 import {DropdownPopover} from "../DropdownPopover";
 import {inject, observer} from "mobx-react";
-import LocalStorageApi from "../../../api/local-storage.api";
+import LocalStorageService from "../../../services/local-storage.service";
 import CartApi from "../../../api/cart.api";
 
 

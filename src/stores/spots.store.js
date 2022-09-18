@@ -1,6 +1,6 @@
 import  {makeAutoObservable} from "mobx";
 import AccessApi from "../api/access.api";
-import LocalStorageApi from "../api/local-storage.api";
+import LocalStorageService from "../services/local-storage.service";
 
 class Spots {
 

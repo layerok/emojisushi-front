@@ -10,8 +10,7 @@ import {Category} from "./pages/Category";
 import {inject, observer} from "mobx-react";
 import {Wishlist} from "./pages/Wishlist";
 import {reaction} from "mobx";
-import LocalStorageApi from "./api/local-storage.api";
-import CartApi from "./api/cart.api";
+import LocalStorageService from "./services/local-storage.service";
 import {Profile} from "./pages/Profile";
 import {RecoverPassword} from "./pages/RecoverPassword";
 import {SavedAddresses} from "./pages/SavedAddresses";
@@ -19,6 +18,7 @@ import {MyOrders} from "./pages/ MyOrders";
 import {productsService} from "./services/products.service";
 import {categoriesService} from "./services/categories.service";
 import {spotsService} from "./services/spots.service";
+import {cartService} from "./services/cart.service";
 
 function App(
     {
@@ -38,16 +38,12 @@ function App(
             return SpotsStore.needRefresh
         }, () => {
             const selected = SpotsStore.getSelected;
-            LocalStorageApi.set('spot_id', selected.id);
-            CartApi.clearCart().then((res) => {
-                CartStore.setItems(res.data.data);
-                CartStore.setTotal(res.data.total);
-                CartStore.setTotalQuantity(res.data.totalQuantity)
+            LocalStorageService.set('spot_id', selected.id);
+            cartService.clearCart().then(() => {
                 AppStore.setLoading(false);
             }).catch(() => {
                 AppStore.setLoading(false);
             });
-
             productsService.fetchItems(ProductsStore.lastParams);
             categoriesService.fetchItems()
         })
