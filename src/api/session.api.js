@@ -13,4 +13,4 @@ class Session {
     gen = n => [...Array(n)].map(_=>Math.random()*10|0).join``;
 }
 
-export const SessionService = new Session();
+export const SessionApi = new Session();

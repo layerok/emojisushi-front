@@ -8,6 +8,9 @@ import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import {inject, observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
+import {cartService} from "../../services/cart.service";
+import {shippingService} from "../../services/shipping.service";
+import {paymentService} from "../../services/payment.service";
 
 export const CheckoutRaw = (
     {
@@ -25,9 +28,9 @@ export const CheckoutRaw = (
     useEffect(() => {
         AppStore.setLoading(true);
         Promise.all([
-            CartStore.fetchItems(),
-            PaymentStore.fetchItems(),
-            ShippingStore.fetchItems()
+            cartService.fetchItems(),
+            paymentService.fetchItems(),
+            shippingService.fetchItems()
         ]).then(() => {
             AppStore.setLoading(false);
         })

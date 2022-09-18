@@ -1,4 +1,3 @@
-import MenuService from "../services/menu.service";
 import {makeAutoObservable} from "mobx";
 
 class Products {
@@ -18,38 +17,6 @@ class Products {
     total = 0;
     search = "";
 
-    fetchItems = (params = {}) => {
-        this.setLoading(true);
-        this.setLastParams(params);
-
-        const filter = this.selectedFilters.reduce((acc, slug) => {
-            return acc + `&${slug}=${slug}`;
-        }, "")
-
-        return MenuService.getProducts({
-            filter: filter,
-            category_slug: "menu",
-            search: this.search,
-            sort: this.sort,
-            offset: this.offset,
-            limit: this.limit,
-            ...params,
-        }).then(res => {
-            this.setItems(res.data.data);
-            this.setFilters(res.data.filters);
-            this.setSortOptions(res.data.sort_options)
-            this.setTotal(res.data.total);
-
-        }).finally(() => {
-            this.setLoading(false);
-        }).catch(() => {
-            this.setLoading(false);
-        });
-    }
-
-    refresh = () => {
-        return this.fetchItems(this.lastParams)
-    }
 
     setLastParams = (params) => {
         this.lastParams = params;

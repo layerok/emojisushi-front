@@ -5,8 +5,8 @@ import {CaretDownSvg} from "../../svg/CaretDownSvg";
 import {FlexBox} from "../../FlexBox";
 import {DropdownPopover} from "../DropdownPopover";
 import {inject, observer} from "mobx-react";
-import LocalStorageService from "../../../services/local-storage.service";
-import CartService from "../../../services/cart.service";
+import LocalStorageApi from "../../../api/local-storage.api";
+import CartApi from "../../../api/cart.api";
 
 
 export const LocationPickerPopoverRaw = (

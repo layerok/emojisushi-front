@@ -11,6 +11,8 @@ import {useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import {useDebounce} from "../../common/hooks/useDebounce";
 import {FiltersModal} from "../../components/modals/FiltersModal";
+import {productsService} from "../../services/products.service";
+import {categoriesService} from "../../services/categories.service";
 
 export const SidebarRaw = (
     {
@@ -23,7 +25,7 @@ export const SidebarRaw = (
     const isMobile = breakpoint === 'mobile';
 
     useEffect(() => {
-        CategoriesStore.fetchItems();
+        categoriesService.fetchItems();
     }, [])
 
     const debouncedFetch = useDebounce((e) => {
@@ -31,7 +33,7 @@ export const SidebarRaw = (
         if(ProductsStore.search.length === 0) {
             filter = "";
         }
-        ProductsStore.fetchItems({
+        productsService.fetchItems({
             ...ProductsStore.lastParams,
             filter,
         });

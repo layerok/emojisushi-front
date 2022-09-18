@@ -1,5 +1,4 @@
 import {makeAutoObservable} from "mobx";
-import ShippingService from "../services/shipping.service";
 
 class Shipping {
 
@@ -21,14 +20,6 @@ class Shipping {
 
     setLoading = (state) => {
         this.loading = state;
-    }
-
-    fetchItems = (params = {}) => {
-        this.setLoading(false);
-        ShippingService.getMethods(params).then((res) => {
-            this.setItems(res.data.data);
-            this.setLoading(false);
-        })
     }
 
     setItems = (items) => {

@@ -7,7 +7,7 @@ import {inject, observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import OrderService from "../../../../services/order.service";
+import OrderApi from "../../../../api/order.api";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {AuthModal} from "../../../../components/modals/AuthModal";
@@ -50,7 +50,7 @@ export const CheckoutFormRaw = (
         validationSchema: CheckoutSchema,
         onSubmit: values => {
             setPending(true);
-            OrderService.place(values).then((res) => {
+            OrderApi.place(values).then((res) => {
                 if(res.data?.success) {
                     navigate('/thankyou');
                 }

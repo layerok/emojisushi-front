@@ -8,6 +8,6 @@ class Access {
     }
 }
 
-const AccessService = new Access();
+const AccessApi = new Access();
 
-export default AccessService;
+export default AccessApi;

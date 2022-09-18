@@ -20,6 +20,7 @@ import {useTranslation} from "react-i18next";
 import {SvgIcon} from "../../svg/SvgIcon";
 import {LogoSvg} from "../../svg/LogoSvg";
 import {SushiSvg} from "../../svg/SushiSvg";
+import {cartService} from "../../../services/cart.service";
 
 const CartItem = inject('CartStore')(observer((
     {
@@ -35,7 +36,7 @@ const CartItem = inject('CartStore')(observer((
 
     const handleAdd = (product_id, variant_id) => {
         return (quantity) => {
-            CartStore.addProduct({
+            cartService.addProduct({
                 product_id,
                 quantity,
                 variant_id
@@ -46,7 +47,7 @@ const CartItem = inject('CartStore')(observer((
     return (<S.Item>
         <S.Item.RemoveIcon>
             <ConfirmActionPopover onConfirm={({close}) => {
-                CartStore.removeCartProduct(item.id);
+                cartService.removeCartProduct(item.id);
                 close();
             }} onCancel={({close}) => {
                 close();

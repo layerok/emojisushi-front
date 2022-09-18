@@ -1,13 +1,16 @@
-import {client} from "../clients/client";
+import {stores} from "../stores/stores";
+import PaymentApi from "../api/payment.api";
+const { PaymentStore } = stores;
 
-class Payment {
-    getMethods(params = {}) {
-        return client.get('payments', {
-            params
-        });
+class PaymentService {
+    fetchItems = (params = {}) => {
+        PaymentStore.setLoading(false);
+        return PaymentApi.getMethods(params).then((res) => {
+            PaymentStore.setItems(res.data.data);
+            PaymentStore.setLoading(false);
+        })
     }
 }
 
-const PaymentService = new Payment();
 
-export default PaymentService;
+export const paymentService = new PaymentService();

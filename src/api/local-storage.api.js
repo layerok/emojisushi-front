@@ -17,6 +17,6 @@ class LocalStorage {
     }
 }
 
-const LocalStorageService = new LocalStorage();
+const LocalStorageApi = new LocalStorage();
 
-export default LocalStorageService;
+export default LocalStorageApi;

@@ -3,6 +3,7 @@ import {ProductsGrid} from "../../components/ProductsGrid";
 import {inject, observer} from "mobx-react";
 import {useEffect} from "react";
 import {useTranslation} from "react-i18next";
+import {productsService} from "../../services/products.service";
 
 export const WishlistRaw = (
     {
@@ -12,7 +13,7 @@ export const WishlistRaw = (
 ) => {
     useEffect(() => {
         AppStore.setLoading(true);
-        ProductsStore.fetchItems({
+        productsService.fetchItems({
             limit: ProductsStore.step,
             wishlist: true,
         }).then(() => {
@@ -27,7 +28,7 @@ export const WishlistRaw = (
             limit: ProductsStore.items.length + ProductsStore.step,
             wishlist: true,
         }
-        ProductsStore.fetchItems(settings);
+        productsService.fetchItems(settings);
     }
 
     return (

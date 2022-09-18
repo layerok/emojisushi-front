@@ -3,6 +3,7 @@ import {ProductsGrid} from "../../components/ProductsGrid";
 import {inject, observer} from "mobx-react";
 import {useEffect} from "react";
 import {useParams} from "react-router-dom";
+import {productsService} from "../../services/products.service";
 
 export const CategoryRaw = (
     {
@@ -23,12 +24,12 @@ export const CategoryRaw = (
             limit: ProductsStore.items.length + ProductsStore.step,
             category_slug: categorySlug
         }
-        ProductsStore.fetchItems(settings);
+        productsService.fetchItems(settings);
     }
 
     useEffect(() => {
         AppStore.setLoading(true);
-        ProductsStore.fetchItems({
+        productsService.fetchItems({
             category_slug: categorySlug,
             limit: ProductsStore.step,
         }).then(() => {

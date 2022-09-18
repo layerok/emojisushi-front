@@ -1,6 +1,5 @@
 import {Routes, Route, Navigate } from "react-router-dom";
 import React, {useEffect} from "react";
-import {Home} from "./pages/Home";
 import 'normalize.css';
 import {theme} from "./theme";
 import {ThemeProvider} from "styled-components";
@@ -11,26 +10,27 @@ import {Category} from "./pages/Category";
 import {inject, observer} from "mobx-react";
 import {Wishlist} from "./pages/Wishlist";
 import {reaction} from "mobx";
-import LocalStorageService from "./services/local-storage.service";
-import CartService from "./services/cart.service";
-import {SpotsModal} from "./components/modals/SpotsModal";
+import LocalStorageApi from "./api/local-storage.api";
+import CartApi from "./api/cart.api";
 import {Profile} from "./pages/Profile";
 import {RecoverPassword} from "./pages/RecoverPassword";
 import {SavedAddresses} from "./pages/SavedAddresses";
 import {MyOrders} from "./pages/ MyOrders";
+import {productsService} from "./services/products.service";
+import {categoriesService} from "./services/categories.service";
+import {spotsService} from "./services/spots.service";
 
 function App(
     {
         SpotsStore,
         CartStore,
         AppStore,
-        ProductsStore,
-        CategoriesStore
+        ProductsStore
     }
 ) {
 
     useEffect(() => {
-        SpotsStore.fetchItems();
+        spotsService.fetchItems();
     }, [])
 
     useEffect(() => {
@@ -38,8 +38,8 @@ function App(
             return SpotsStore.needRefresh
         }, () => {
             const selected = SpotsStore.getSelected;
-            LocalStorageService.set('spot_id', selected.id);
-            CartService.clearCart().then((res) => {
+            LocalStorageApi.set('spot_id', selected.id);
+            CartApi.clearCart().then((res) => {
                 CartStore.setItems(res.data.data);
                 CartStore.setTotal(res.data.total);
                 CartStore.setTotalQuantity(res.data.totalQuantity)
@@ -48,8 +48,8 @@ function App(
                 AppStore.setLoading(false);
             });
 
-            ProductsStore.fetchItems(ProductsStore.lastParams);
-            CategoriesStore.fetchItems()
+            productsService.fetchItems(ProductsStore.lastParams);
+            categoriesService.fetchItems()
         })
     }, [])
 

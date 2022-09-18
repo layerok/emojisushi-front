@@ -128,7 +128,9 @@ export const AuthModal = ( { children}) => {
                     <FlexBox>
                         <FlexBox flexDirection={"column"} alignItems={"center"}>
 
-                            <Button>Регистрация</Button>
+                            <Button onClick={() => {
+
+                            }}>Регистрация</Button>
                             {isMobile &&
                                 <S.NavigateButton style={{paddingTop:"10px"}} onClick={ (e)=>{
                                     e.preventDefault();
