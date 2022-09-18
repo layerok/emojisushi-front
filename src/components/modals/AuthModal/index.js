@@ -1,19 +1,23 @@
 import {Modal} from "../Modal";
 import * as S from "./styled";
-import {cloneElement, useEffect, useState} from "react";
+import {cloneElement, useState} from "react";
 import {Input} from "../../Input";
 import {Button} from "../../buttons/Button";
 import {Checkbox} from "../../Checkbox";
 import {PasswordInput} from "../../PasswordInput";
 import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
 import {FlexBox} from "../../FlexBox";
-
+import AuthApi from "../../../api/auth.api";
 
 export const AuthModal = ( { children}) => {
-
     const [ showPasswordRecovery, setShowPasswordRecovery] = useState();
     const breakpoint = useBreakpoint();
     const isMobile = breakpoint === 'mobile';
+    const [signupEmail, setSignupEmail] = useState();
+    const [signupEmailError, setSignupEmailError] = useState("");
+    const [signupPassword, setSignupPassword] = useState();
+    const [signupPasswordError, setSignupPasswordError] = useState("");
+    const [signupAgree, setSignupAgree] = useState(false);
 
     const [ showSignUp,  setShowSignUp]  = useState(false);
 
@@ -43,7 +47,7 @@ export const AuthModal = ( { children}) => {
                         <S.InputLabel>
                             Пароль
                         </S.InputLabel>
-                        <PasswordInput/>
+                        <PasswordInput light={true}/>
 
                     </S.InputWrapper>
                     <FlexBox justifyContent={"flex-end"}>
@@ -98,7 +102,11 @@ export const AuthModal = ( { children}) => {
 
             {showSignUpForm &&
 
-                <S.SignUpForm>
+                <S.SignUpForm onSubmit={e => {
+                    setSignupPasswordError('');
+                    setSignupEmailError('');
+                    e.preventDefault();
+                }}>
                     <S.Title>
                         Регистрация
                     </S.Title>
@@ -106,20 +114,27 @@ export const AuthModal = ( { children}) => {
                         <S.InputLabel>
                             E-mail
                         </S.InputLabel>
-                        <Input light={true}/>
-                        <S.Error>
-                            Неверно введен логин
-                        </S.Error>
+                        <Input error={signupEmailError} onChange={e => {
+                            const {value} = e.currentTarget;
+                            setSignupEmail(value);
+                            setSignupEmailError("");
+                        }} light={true}/>
                     </S.InputWrapper>
 
                     <S.InputWrapper>
                         <S.InputLabel>
                             Пароль
                         </S.InputLabel>
-                        <PasswordInput/>
+                        <PasswordInput light={true} error={signupPasswordError} onChange={e => {
+                            const {value} = e.currentTarget;
+                            setSignupPassword(value);
+                            setSignupPasswordError("");
+                        }}/>
                     </S.InputWrapper>
                     <S.CheckboxWrapper>
-                        <Checkbox initialChecked={false}>
+                        <Checkbox name={"agree"} initialChecked={signupAgree} onChange={state => {
+                            setSignupAgree(state);
+                        }}>
                             Я согласен с условиями использования и обработки моих персональных данных
                         </Checkbox>
                     </S.CheckboxWrapper>
@@ -129,7 +144,31 @@ export const AuthModal = ( { children}) => {
                         <FlexBox flexDirection={"column"} alignItems={"center"}>
 
                             <Button onClick={() => {
-
+                                if(signupAgree) {
+                                    AuthApi.register({
+                                        email: signupEmail,
+                                        password: signupPassword,
+                                        password_confirmation: signupPassword,
+                                        name: 'Не указано',
+                                        surname: 'Не указано'
+                                    }).then(() => {
+                                        console.log('Пользователь успешно зарегистрировался')
+                                    }).catch((e) => {
+                                        const {errors, message} = e.response.data;
+                                        if(errors) {
+                                            Object.keys(errors).forEach((key) => {
+                                                if(key === 'email') {
+                                                    setSignupEmailError(message);
+                                                }
+                                                if(key === 'password') {
+                                                    setSignupPasswordError(message);
+                                                }
+                                            })
+                                        }
+                                        console.error('Регистрация пользователя провалилась')
+                                        console.error(e);
+                                    })
+                                }
                             }}>Регистрация</Button>
                             {isMobile &&
                                 <S.NavigateButton style={{paddingTop:"10px"}} onClick={ (e)=>{

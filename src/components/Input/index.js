@@ -9,18 +9,28 @@ export const Input = (
         name,
         light = false,
         width,
+        error = null,
         ...rest
     }
 ) => {
     return (
         <S.Wrapper>
-            <S.Input name={name} width={width} placeholder={placeholder} light={light} {...rest}/>
+            <S.Input name={name}
+                     width={width}
+                     placeholder={placeholder}
+                     light={light}
+                     {...rest}/>
             {required && (
                 <S.Asterisk>
                     <SvgIcon width={"10px"} color={"#FFE600"}>
                         <AsteriskSvg/>
                     </SvgIcon>
                 </S.Asterisk>
+            )}
+            {error && (
+                <S.Error>
+                    {error}
+                </S.Error>
             )}
         </S.Wrapper>
 

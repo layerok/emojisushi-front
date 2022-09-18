@@ -54,16 +54,6 @@ const SignUpForm = styled.form`
   user-select: none;
 `
 
-const Error = styled.p` 
-  font-size: 10px;
-  line-height: 12px;
-  margin-top: 5px;
-  color: #CD3838;
-  user-select: none;
-  position: absolute;
-  right: 0;
-`
-
 const CheckboxWrapper = styled.div`
   margin-top: 10px;
   margin-bottom: 24px;
@@ -96,7 +86,6 @@ export {
     LoginForm,
     SignUpForm,
     VerticalBar,
-    Error,
     CheckboxWrapper,
     ForgotPassText,
     BtnGroup,

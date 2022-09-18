@@ -38,8 +38,22 @@ const Asterisk = styled.div`
   left: 0;
 `;
 
+const Error = styled.p` 
+  
+  font-size: 10px;
+  line-height: 12px;
+  padding: 2px 5px;
+  background-color: #CD3838;
+  color: white;
+  user-select: none;
+  position: absolute;
+  right: 0;
+  z-index: 3
+`
+
 export {
     Input,
     Wrapper,
-    Asterisk
+    Asterisk,
+    Error
 }

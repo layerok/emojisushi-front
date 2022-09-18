@@ -4,14 +4,22 @@ import {CheckSvg} from "../svg/CheckSvg";
 import {SvgIcon} from "../svg/SvgIcon";
 
 
-export const Checkbox = ({children, initialChecked}) => {
+export const Checkbox = (
+    {
+        children,
+        initialChecked,
+        name,
+        onChange
+    }
+) => {
     const [checked, setChecked] = useState(initialChecked);
 
 
     return (
             <S.LabelCheck>
-                <S.Checkbox type="checkbox"  name="happy" onChange={(e)=>{
+                <S.Checkbox  type="checkbox" name={name} onChange={(e)=>{
                     setChecked(e.target.checked)
+                    onChange && onChange(e.target.checked);
                 }} />
 
                 <S.LabelCheckbox>
