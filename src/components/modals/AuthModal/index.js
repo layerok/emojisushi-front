@@ -158,10 +158,10 @@ export const AuthModal = ( { children}) => {
                                         if(errors) {
                                             Object.keys(errors).forEach((key) => {
                                                 if(key === 'email') {
-                                                    setSignupEmailError(message);
+                                                    setSignupEmailError(errors[key][0]);
                                                 }
                                                 if(key === 'password') {
-                                                    setSignupPasswordError(message);
+                                                    setSignupPasswordError(errors[key][0]);
                                                 }
                                             })
                                         }
