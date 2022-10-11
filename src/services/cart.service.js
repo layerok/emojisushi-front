@@ -23,7 +23,7 @@ class CartService {
         CartStore.setPending([...CartStore.pending, product_id]);
         return CartApi.addProduct(params).then((res) => {
             CartStore.setItems(res.data.data);
-            CartStore.setTotal(res.data.total)
+            CartStore.setTotal(res.data.total);
             CartStore.setTotalQuantity(res.data.totalQuantity);
         }).finally(() => {
             CartStore.setLoading(false);
@@ -38,7 +38,7 @@ class CartService {
         CartStore.setLoading(true);
         return CartApi.removeCartProduct(cart_product_id).then((res) => {
             CartStore.setItems(res.data.data);
-            CartStore.setTotal(res.data.total)
+            CartStore.setTotal(res.data.total);
             CartStore.setTotalQuantity(res.data.totalQuantity);
         }).finally(() => {
             CartStore.setLoading(false);
