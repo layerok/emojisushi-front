@@ -10,7 +10,7 @@ client.interceptors.request.use((config = {}) => {
     // send session_id from cookies as parameter for each api request
     const {method} = config;
 
-    const params = method === 'post' ? config.data: config.params || {};
+    const params = (method === 'post' ? config.data: config.params) || {};
     params.XDEBUG_SESSION_START = true;
     const session_id = Cookies.get('session_id');
 
