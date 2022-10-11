@@ -1,18 +1,17 @@
+
 import Cookies from "js-cookie";
-import {SessionApi} from "../api/session.api";
 
 class SessionService {
-    init = async () => {
+    init = () => {
         const session_id = Cookies.get('session_id');
+        // todo: create unique session for each spot
 
-        SessionApi.get(session_id).then((res) => {
-            Cookies.set('session_id', res.data.id);
-        }).catch(() => {
-            SessionApi.create().then((res) => {
-                Cookies.set('session_id', res.data.id);
-            });
-        })
+        if(!session_id) {
+            Cookies.set('session_id', this.gen(100));
+        }
     }
+
+    gen = n => [...Array(n)].map(_=>Math.random()*10|0).join``;
 }
 
 

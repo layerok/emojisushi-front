@@ -16,7 +16,8 @@ export const CheckoutFormRaw = (
     {
         PaymentStore,
         ShippingStore,
-        CartStore
+        CartStore,
+        SpotsStore
     }
 ) => {
     const {t} = useTranslation();
@@ -50,7 +51,10 @@ export const CheckoutFormRaw = (
         validationSchema: CheckoutSchema,
         onSubmit: values => {
             setPending(true);
-            OrderApi.place(values).then((res) => {
+            OrderApi.place({
+                ...values,
+                spot_id: SpotsStore.getSelected
+            }).then((res) => {
                 if(res.data?.success) {
                     navigate('/thankyou');
                 }
@@ -199,4 +203,4 @@ export const CheckoutFormRaw = (
     </S.Form>;
 }
 
-export const CheckoutForm = inject('PaymentStore', 'ShippingStore', 'CartStore')(observer(CheckoutFormRaw))
+export const CheckoutForm = inject('PaymentStore', 'ShippingStore', 'CartStore', 'SpotsStore')(observer(CheckoutFormRaw))

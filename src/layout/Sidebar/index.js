@@ -24,10 +24,6 @@ export const SidebarRaw = (
     const breakpoint = useBreakpoint();
     const isMobile = breakpoint === 'mobile';
 
-    useEffect(() => {
-        categoriesService.fetchItems();
-    }, [])
-
     const debouncedFetch = useDebounce((e) => {
         let filter = "&category_id=" + CategoriesStore.items.map(_=>_.id).join('.');
         if(ProductsStore.search.length === 0) {

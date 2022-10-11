@@ -18,7 +18,7 @@ client.interceptors.request.use((config = {}) => {
         params.session_id = session_id;
     }
     const spot_id = LocalStorageService.get('spot_id');
-    if(spot_id) {
+    if(!params?.spot_id && spot_id) {
         params.spot_id = spot_id;
     }
     return config;

@@ -1,6 +1,4 @@
 import  {makeAutoObservable} from "mobx";
-import AccessApi from "../api/access.api";
-import LocalStorageService from "../services/local-storage.service";
 
 class Spots {
 
@@ -40,14 +38,6 @@ class Spots {
 
     get getSelectedIndex() {
         return this.selectedIndex;
-    }
-
-    refresh = () => {
-        this.setNeedRefresh(!this.needRefresh)
-    }
-
-    setNeedRefresh = (state) => {
-        this.needRefresh = state;
     }
 
     setItems = (items) => {

@@ -1,5 +1,6 @@
 import MenuApi from "../api/menu.api";
 import {stores} from "../stores/stores";
+import {SpotsStore} from "../stores/spots.store";
 const { ProductsStore } = stores;
 
 class ProductsService {
@@ -18,6 +19,7 @@ class ProductsService {
             sort: ProductsStore.sort,
             offset: ProductsStore.offset,
             limit: ProductsStore.limit,
+            spot_id: SpotsStore.getSelected,
             ...params,
         }).then(res => {
             ProductsStore.setItems(res.data.data);
