@@ -147,8 +147,9 @@ const ProductCardRaw = (
 
         </EqualHeightElement>
         <EqualHeightElement name={"description"}>
-            <InfoTooltip label={t('menu.weightComment')}>
+
             <S.Description>
+                <InfoTooltip label={t('menu.weightComment')}>
                 <S.Weight>
                     {weight !== 0 ? weight + 'г' : ''}&nbsp;<span style={{
                         fontSize: '12px',
@@ -156,9 +157,10 @@ const ProductCardRaw = (
                         top: '-3px'
                 }}>?</span>
                 </S.Weight>
+                </InfoTooltip>
                 {ingredients.length !== 0 && (<IngredientsTooltip items={ingredients} iconSize={iconSize}/>)}
             </S.Description>
-            </InfoTooltip>
+
         </EqualHeightElement>
 
         <S.Footer>
