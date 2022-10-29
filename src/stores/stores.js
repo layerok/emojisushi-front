@@ -15,5 +15,5 @@ export const stores = {
     CartStore,
     PaymentStore,
     ShippingStore,
-    WishlistStore
+    WishlistStore,
 }

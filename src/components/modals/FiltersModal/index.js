@@ -6,6 +6,7 @@ import {MagnifierSvg} from "../../svg/MagnifierSvg";
 import {Modal} from "../Modal";
 import {inject} from "mobx-react";
 import {useTranslation} from "react-i18next";
+import {productsService} from "../../../services/products.service";
 
 export const FiltersModalRaw = (
     {
@@ -29,7 +30,7 @@ export const FiltersModalRaw = (
             }
         }
 
-        ProductsStore.fetchItems({
+        productsService.fetchItems({
             ...ProductsStore.lastParams
         })
 

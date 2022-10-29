@@ -1,6 +1,7 @@
+
 import Cookies from "js-cookie";
 
-class Session {
+class SessionService {
     init = () => {
         const session_id = Cookies.get('session_id');
         // todo: create unique session for each spot
@@ -13,4 +14,5 @@ class Session {
     gen = n => [...Array(n)].map(_=>Math.random()*10|0).join``;
 }
 
-export const SessionService = new Session();
+
+export const sessionService = new SessionService();

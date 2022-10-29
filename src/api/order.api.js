@@ -6,6 +6,6 @@ class Order {
     }
 }
 
-const OrderService = new Order();
+const OrderApi = new Order();
 
-export default OrderService;
+export default OrderApi;

@@ -4,16 +4,21 @@ import {Container } from "../../components/Container";
 import {FlexBox} from "../../components/FlexBox";
 import {CartButton} from "../../components/CartButton";
 import {TinyCartButton} from "../../components/TinyCartButton";
-import {NavLink} from "../../components/NavLink";
+import {NavLinkUnderline} from "../../components/NavLinkUnderline";
 import {ContactsModal} from "../../components/modals/ContactsModal";
 import {CartModal} from "../../components/modals/CartModal";
 import {MobMenuModal} from "../../components/modals/MobMenuModal";
 import {SvgIcon} from "../../components/svg/SvgIcon";
 import {BurgerSvg} from "../../components/svg/BurgerSvg";
 import {LogoSvg} from "../../components/svg/LogoSvg";
-import {useEffect, useRef} from "react";
+import {useEffect} from "react";
 import {inject, observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
+import {SvgButton} from "../../components/SvgButton";
+import {UserSvg} from "../../components/svg/UserSvg";
+import {AuthModal} from "../../components/modals/AuthModal";
+import {LanguageSelector} from "../../components/LanguageSelector";
+import {cartService} from "../../services/cart.service";
 
 
 const HeaderRaw = (
@@ -23,7 +28,7 @@ const HeaderRaw = (
 ) => {
 
     useEffect(() => {
-        CartStore.fetchItems();
+        cartService.fetchItems();
     },[])
 
 
@@ -47,12 +52,15 @@ const HeaderRaw = (
                             </S.PcHeaderItem>
                         </ContactsModal>
                         <S.PcHeaderItem>
-                            <NavLink to={"/dostavka-i-oplata"}>
+                            <NavLinkUnderline style={{width:"144px"}} to={"/dostavka-i-oplata"}>
                                 {t('header.delivery')}
-                            </NavLink>
+                            </NavLinkUnderline>
                         </S.PcHeaderItem>
                     </S.Left>
                     <S.Right>
+                        <S.LanguageSelectorContainer>
+                            <LanguageSelector/>
+                        </S.LanguageSelectorContainer>
                         <CartModal>
                             <S.CartBtn>
                                 <CartButton count={CartStore.totalQuantity} total={CartStore.total}/>
@@ -72,6 +80,16 @@ const HeaderRaw = (
                                 </SvgIcon>
                             </MobMenuModal>
                         </S.BurgerBtn>
+
+                        <S.UserBtn>
+                            <AuthModal>
+                                <SvgButton>
+                                    <SvgIcon width={"25px"} color={"black"}>
+                                        <UserSvg/>
+                                    </SvgIcon>
+                                </SvgButton>
+                            </AuthModal>
+                        </S.UserBtn>
                     </S.Right>
                 </FlexBox>
             </Container>

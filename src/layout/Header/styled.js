@@ -43,6 +43,7 @@ const CartBtn = styled.div`
 `;
 
 const TinyCartBtn = styled.div`
+  flex-shrink: 0;
   ${media.greaterThan("tablet")`
     display: none;
   `}
@@ -55,6 +56,23 @@ const BurgerBtn = styled.button`
   `}
 `;
 
+const UserBtn = styled.div`
+  margin-left: 20px;
+  ${media.lessThan("pc")`
+    display: none;
+  `}
+`;
+
+const LanguageSelectorContainer = styled.div`
+  margin-right: 20px;
+  ${media.lessThan("pc")`
+    margin-right: 30px;
+  `}
+  ${media.lessThan("tablet")`
+    display: none;
+  `}
+`
+
 export {
     Header,
     Left,
@@ -64,4 +82,7 @@ export {
     BurgerBtn,
     CartBtn,
     TinyCartBtn,
+    UserBtn,
+    LanguageSelectorContainer,
+
 }

@@ -24,7 +24,7 @@ const Title = styled.div`
   font-size: 18px;
   line-height: 22px;
   text-transform: uppercase;
-  padding-right: 20px
+  
 `
 
 const CloseIcon = styled.div`
@@ -116,6 +116,14 @@ const Button = styled.div`
   margin-top: 37px;
 `;
 
+const EmptyCartImgContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  top: 200px;
+`
+
 export {
     Wrapper,
     Title,
@@ -124,5 +132,6 @@ export {
     Item,
     Footer,
     Sum,
-    Button
+    Button,
+    EmptyCartImgContainer,
 }

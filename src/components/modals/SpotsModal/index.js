@@ -31,7 +31,6 @@ export const SpotsModalRaw = (
                     return <S.Item key={item.id}
                                    onClick={() => {
                                        SpotsStore.setSelectedIndex(i);
-                                       SpotsStore.refresh();
                                        SpotsStore.setUserSelectedSpot(true);
                                        close();
                                    }}

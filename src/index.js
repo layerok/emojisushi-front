@@ -6,11 +6,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'mobx-react';
 import { stores } from './stores/stores';
-import {SessionService} from './services/session.service';
 import {I18nextProvider} from "react-i18next";
 import i18n from './i18n';
+import {appService} from "./services/app.service";
 
-SessionService.init();
+appService.init();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
