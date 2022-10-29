@@ -17,6 +17,8 @@ import {SvgIcon} from "../svg/SvgIcon";
 import {LogoSvg} from "../svg/LogoSvg";
 import {Switcher} from "../Switcher";
 import {useState} from "react";
+import {InfoTooltip} from "../InfoTooltip";
+import {useTranslation} from "react-i18next";
 
 const ProductCardRaw = (
     {
@@ -37,6 +39,7 @@ const ProductCardRaw = (
     const iconSize = isMobile ? '33px': '25px';
     const ingredients = getProductIngredients(product);
     const img = getProductMainImage(product);
+    const {t} = useTranslation();
 
 
     const mod_groups = product.property_values.filter((value) => {
@@ -142,7 +145,11 @@ const ProductCardRaw = (
 
         </EqualHeightElement>
         <S.Description>
-            <S.Weight>{weight !== 0 ? weight + 'г' : ''}&nbsp;</S.Weight>
+            <InfoTooltip label={t('menu.weightComment')}>
+                <S.Weight>
+                    {weight !== 0 ?  weight + 'г' : ''}&nbsp; <span style={{fontSize: '10px', top: '-10px'}}>?</span>
+                </S.Weight>
+            </InfoTooltip>
             {ingredients.length !== 0 && (<IngredientsTooltip items={ingredients} iconSize={iconSize}/>)}
         </S.Description>
         <S.Footer>
