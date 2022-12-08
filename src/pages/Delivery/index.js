@@ -6,10 +6,10 @@ import {inject, observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
 
 export const DeliveryRaw = (
-    {
-        AppStore,
-        SpotsStore
-    }
+  {
+      AppStore,
+      SpotsStore
+  }
 ) => {
 
     useEffect(() => {
@@ -18,51 +18,43 @@ export const DeliveryRaw = (
 
     const {t} = useTranslation();
 
-
+    // todo: move delivery information to the database
     return (
-        <Layout withBanner={false}
-                withSidebar={false}
-        >
-            <S.FlexContainer>
-                <S.Left>
-                    <S.HeadingWrapper>
-                        <Heading style={
-                            {
-                                fontWeight: "600"
-                            }
-                        }>
-                            Доставка и оплата
-                        </Heading>
-                    </S.HeadingWrapper>
+      <Layout withBanner={false}
+              withSidebar={false}
+      >
+          <S.FlexContainer>
+              <S.Left>
+                  <S.HeadingWrapper>
+                      <Heading style={
+                          {
+                              fontWeight: "600"
+                          }
+                      }>
+                          Доставка и оплата
+                      </Heading>
+                  </S.HeadingWrapper>
 
 
-                    <S.AdresText>
-                        <b>{t('common.address')}</b>: {SpotsStore.getAddress}
-                    </S.AdresText>
+                  <S.AdresText>
+                      <b>{t('common.address')}</b>: {SpotsStore.getAddress}
+                  </S.AdresText>
 
-                    <S.DeliveryText>
-                        {SpotsStore.selectedIndex === 0 && (
-                            <ol style={{paddingLeft: 0, listStyleType: 'disc'}}>
-                                <li style={{marginTop: "16px"}}>Ми здійснюємо доставку по місту Чорноморськ та прилеглі населені пункти (Олександрівка, Молодіжне, Великодолинське)</li>
-                                <li style={{marginTop: "16px"}}>Прийом замовлень на доставку здійснюється з {AppStore.formatWorkingHours()} щоденно</li>
-                                <li style={{marginTop: "16px"}}>При замовленні від 250 грн. доставка безкоштовна</li>
-                                <li style={{marginTop: "16px"}}>Вартість доставки на суму до 250 грн. складає 25 грн</li>
-                            </ol>
-                        )}
-                    </S.DeliveryText>
-                </S.Left>
+                  <S.DeliveryText dangerouslySetInnerHTML={{__html: SpotsStore.content}}/>
+              </S.Left>
 
-                {SpotsStore.selectedIndex === 1 && (
+              {SpotsStore.selectedIndex === 1 && (
                 <S.Right>
-                    <iframe src="https://www.google.com/maps/d/embed?mid=1ObdbApbdVR-pYNbE758PLjrQsbVnhxA&ehbc=2E312F"
-                            width="100%"
-                            height="480"></iframe>
-                </S.Right>
+                    {SpotsStore.googleMapUrl && (
+                      <iframe src={SpotsStore.googleMapUrl}
+                              width="100%"
+                              height="480"/>
                     )}
-            </S.FlexContainer>
 
-
-        </Layout>
+                </S.Right>
+              )}
+          </S.FlexContainer>
+      </Layout>
     )
 }
 

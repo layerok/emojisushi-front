@@ -30,6 +30,14 @@ class Spots {
         return this.getSelected?.phones;
     }
 
+    get content() {
+        return this.getSelected?.html_content;
+    }
+
+    get googleMapUrl() {
+        return this.getSelected?.google_map_url;
+    }
+
     get hasPhones() {
         return this.getPhones && this.getPhones !== '';
     }
@@ -41,6 +49,8 @@ class Spots {
     get getSelectedIndex() {
         return this.selectedIndex;
     }
+
+
 
     fetchItems = (params = {}) => {
         this.setLoading(false);
