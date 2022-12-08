@@ -19,6 +19,8 @@ import {Loader} from "../../Loader";
 import {useTranslation} from "react-i18next";
 import {SvgIcon} from "../../svg/SvgIcon";
 import {LogoSvg} from "../../svg/LogoSvg";
+import {SushiSvg} from "../../svg/SushiSvg";
+import {cartService} from "../../../services/cart.service";
 
 const CartItem = inject('CartStore')(observer((
     {
@@ -34,7 +36,7 @@ const CartItem = inject('CartStore')(observer((
 
     const handleAdd = (product_id, variant_id) => {
         return (quantity) => {
-            CartStore.addProduct({
+            cartService.addProduct({
                 product_id,
                 quantity,
                 variant_id
@@ -45,7 +47,7 @@ const CartItem = inject('CartStore')(observer((
     return (<S.Item>
         <S.Item.RemoveIcon>
             <ConfirmActionPopover onConfirm={({close}) => {
-                CartStore.removeCartProduct(item.id);
+                cartService.removeCartProduct(item.id);
                 close();
             }} onCancel={({close}) => {
                 close();
@@ -120,9 +122,14 @@ export const CartModal = inject('CartStore')(observer((
             <S.CloseIcon>
                 <CloseModalIcon close={close}/>
             </S.CloseIcon>
-            <S.Title>
-                {items.length === 0 ? t('cartModal.empty') : t('cartModal.cart')}
-            </S.Title>
+
+
+            <S.EmptyCartImgContainer>
+                {items.length === 0 && <SushiSvg/> }
+                <S.Title>
+                    {items.length === 0 && t('cartModal.empty') }
+                </S.Title>
+            </S.EmptyCartImgContainer>
 
             <S.Items>
                 <CustomScrollbars height={finalHeight}>

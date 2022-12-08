@@ -1,4 +1,3 @@
-import MenuService from "../services/menu.service";
 import {makeAutoObservable} from "mobx";
 
 class Categories {
@@ -6,12 +5,6 @@ class Categories {
         makeAutoObservable(this);
     }
     items = [];
-
-    fetchItems = () => {
-        return MenuService.getCategories().then(res => {
-            this.setItems(res.data.data);
-        });
-    }
 
     setName = (name) => {
         this.name = name;

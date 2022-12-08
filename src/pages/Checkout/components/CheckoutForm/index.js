@@ -7,15 +7,17 @@ import {inject, observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import OrderService from "../../../../services/order.service";
+import OrderApi from "../../../../api/order.api";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
+import {AuthModal} from "../../../../components/modals/AuthModal";
 
 export const CheckoutFormRaw = (
     {
         PaymentStore,
         ShippingStore,
-        CartStore
+        CartStore,
+        SpotsStore
     }
 ) => {
     const {t} = useTranslation();
@@ -49,7 +51,10 @@ export const CheckoutFormRaw = (
         validationSchema: CheckoutSchema,
         onSubmit: values => {
             setPending(true);
-            OrderService.place(values).then((res) => {
+            OrderApi.place({
+                ...values,
+                spot_id: SpotsStore.getSelected
+            }).then((res) => {
                 if(res.data?.success) {
                     navigate('/thankyou');
                 }
@@ -75,7 +80,14 @@ export const CheckoutFormRaw = (
 
 
     return <S.Form onSubmit={formik.handleSubmit}>
-
+        <FlexBox style={{marginBottom: "20px"}}>
+            Уже есть аккаунт?
+            <AuthModal>
+                <S.SignIn>
+                    Войти
+                </S.SignIn>
+            </AuthModal>
+        </FlexBox>
 
         <Switcher
             name={"shipping_id"}
@@ -191,4 +203,4 @@ export const CheckoutFormRaw = (
     </S.Form>;
 }
 
-export const CheckoutForm = inject('PaymentStore', 'ShippingStore', 'CartStore')(observer(CheckoutFormRaw))
+export const CheckoutForm = inject('PaymentStore', 'ShippingStore', 'CartStore', 'SpotsStore')(observer(CheckoutFormRaw))

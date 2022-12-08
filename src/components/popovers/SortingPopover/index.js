@@ -3,6 +3,7 @@ import {SortOrderButton} from "../../buttons/SortOrderButton";
 import {inject} from "mobx-react";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
+import {productsService} from "../../../services/products.service";
 
 const SortingPopoverRaw = (
     {
@@ -23,7 +24,7 @@ const SortingPopoverRaw = (
             close();
             setSelectedIndex(index);
             ProductsStore.setSort(option);
-            ProductsStore.fetchItems({
+            productsService.fetchItems({
                 ...ProductsStore.lastParams
             })
         }}

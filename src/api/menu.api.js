@@ -19,6 +19,6 @@ class Menu {
     }
 }
 
-const MenuService = new Menu();
+const MenuApi = new Menu();
 
-export default MenuService;
+export default MenuApi;

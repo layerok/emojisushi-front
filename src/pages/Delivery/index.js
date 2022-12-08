@@ -18,7 +18,7 @@ export const DeliveryRaw = (
 
     const {t} = useTranslation();
 
-    // todo: move delivery information to the database
+
     return (
       <Layout withBanner={false}
               withSidebar={false}

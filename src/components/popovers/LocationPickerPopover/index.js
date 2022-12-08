@@ -6,7 +6,7 @@ import {FlexBox} from "../../FlexBox";
 import {DropdownPopover} from "../DropdownPopover";
 import {inject, observer} from "mobx-react";
 import LocalStorageService from "../../../services/local-storage.service";
-import CartService from "../../../services/cart.service";
+import CartApi from "../../../api/cart.api";
 
 
 export const LocationPickerPopoverRaw = (
@@ -33,7 +33,6 @@ export const LocationPickerPopoverRaw = (
                 onSelect={({close, option, index}) => {
                     AppStore.setLoading(true);
                     SpotsStore.setSelectedIndex(index);
-                    SpotsStore.refresh();
                     close();
                 }}
             >

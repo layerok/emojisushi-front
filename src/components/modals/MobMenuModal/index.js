@@ -8,6 +8,9 @@ import {LocationPickerPopover} from "../../popovers/LocationPickerPopover";
 import {SvgIcon} from "../../svg/SvgIcon";
 import {HeartSvg} from "../../svg/HeartSvg";
 import {useTranslation} from "react-i18next";
+import {UserSvg} from "../../svg/UserSvg";
+import {AuthModal} from "../AuthModal";
+import {LanguageSelector} from "../../LanguageSelector";
 
 export const MobMenuModal = ({children}) => {
     const overlayStyles = {
@@ -21,14 +24,27 @@ export const MobMenuModal = ({children}) => {
     return <BaseModal overlayStyles={overlayStyles} render={({close}) => (
         <S.Wrapper>
             <S.Item>
+                <LanguageSelector/>
+            </S.Item>
+            <S.Item style={{height: "25px"}}>
                 <LocationPickerPopover width={"226px"} backgroundColor={"#1C1C1C"}/>
             </S.Item>
             <S.Item>
-            <ContactsModal onClick={() => {
-                close();
-            }}>
-                <div>{t('mobMenuModal.contacts')}</div>
-            </ContactsModal>
+                <AuthModal>
+                    <FlexBox alignItems={"center"}>
+                        <SvgIcon  width={"25px"} style={{marginRight: "10px"}}>
+                            <UserSvg/>
+                        </SvgIcon>
+                        Вход в аккаунт
+                    </FlexBox>
+                </AuthModal>
+            </S.Item>
+            <S.Item>
+                <ContactsModal onClick={() => {
+                    close();
+                }}>
+                    <div>{t('mobMenuModal.contacts')}</div>
+                </ContactsModal>
             </S.Item>
             <S.Item>
                 <NavLinkUnderline to={"/dostavka-i-oplata"}>

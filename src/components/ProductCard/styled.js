@@ -57,7 +57,9 @@ const Description = styled.div`
 `;
 
 const Weight = styled.div`
+  display: flex;
   font-size: 13px;
+  cursor: pointer;
   ${media.lessThan('tablet')`
     font-size: 15px;
   `}

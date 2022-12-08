@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {ifProp, theme} from "styled-tools";
+import {ifProp, theme, prop} from "styled-tools";
 
 
 const Wrapper = styled.div`
@@ -12,7 +12,7 @@ const Input = styled.input`
   border-radius: 10px;
   padding: 11px 35px 11px 10px;
   border: none;
-  width: 100%;
+  width: ${prop("width","100%")};
   color: white;
 
   ::-webkit-input-placeholder {
@@ -38,8 +38,22 @@ const Asterisk = styled.div`
   left: 0;
 `;
 
+const Error = styled.p` 
+  
+  font-size: 10px;
+  line-height: 12px;
+  padding: 2px 5px;
+  background-color: #CD3838;
+  color: white;
+  user-select: none;
+  position: absolute;
+  right: 0;
+  z-index: 3
+`
+
 export {
     Input,
     Wrapper,
-    Asterisk
+    Asterisk,
+    Error
 }

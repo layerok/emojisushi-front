@@ -1,10 +1,21 @@
 import styled from "styled-components";
+import media from "../../common/custom-media";
 
+const Heading = styled.p`
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 30px;
+  color: #FFFFFF;
 
+`;
 
 const Container = styled.div`
     max-width: 1720px;
     margin: 0 auto;  
+`
+
+export const Content = styled.div`
+  margin-top: 20px;
 `
 
 const Cabinet = styled.div`
@@ -36,6 +47,11 @@ const HorizontalBar = styled.div`
 
 const Wrapper   = styled.div`
   display: flex;
+  ${media.lessThan("tablet")`
+    display: flex;
+    flex-direction: column;
+    
+  `}
   
 `
 
@@ -46,9 +62,14 @@ const LeftSide = styled.div`
 
 const RightSide = styled.div`
     margin-left: 30px;
+  ${media.lessThan("tablet")`
+    margin-left: 0;
+    margin-top: 30px;
+  `}
 `
 
 export {
+    Heading,
     Container,
     Cabinet,
     Navbar,

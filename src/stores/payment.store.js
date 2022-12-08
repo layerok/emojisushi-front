@@ -1,5 +1,4 @@
 import {makeAutoObservable} from "mobx";
-import PaymentService from "../services/payment.service";
 
 class Payment {
 
@@ -21,14 +20,6 @@ class Payment {
 
     setLoading = (state) => {
         this.loading = state;
-    }
-
-    fetchItems = (params = {}) => {
-        this.setLoading(false);
-        PaymentService.getMethods(params).then((res) => {
-            this.setItems(res.data.data);
-            this.setLoading(false);
-        })
     }
 
     setItems = (items) => {

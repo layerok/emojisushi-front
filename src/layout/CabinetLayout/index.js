@@ -3,7 +3,7 @@ import {NavLink} from "../../components/NavLink";
 import {Layout} from "../Layout";
 import {ButtonDark} from "../../components/buttons/Button";
 
-export const CabinetLayout = ({children}) => {
+export const CabinetLayout = ({children, title = ""}) => {
 
 
     return (
@@ -19,11 +19,12 @@ export const CabinetLayout = ({children}) => {
                                     Мой кабинет
                                 </S.NavbarHeader>
                                 <S.HorizontalBar/>
-                                <NavLink to={"/profile"}>Личные данные</NavLink>
-                                <NavLink to={"/my-orders"}>Мои заказы</NavLink>
-                                <NavLink to={"/recover-password"}>Изменить пароль</NavLink>
-                                <NavLink to={"/saved-addresses"}>Сохраненные адреса</NavLink>
-                                <div style={{marginTop: "10px"}}>
+                                <NavLink to={"/account/profile"}>Личные данные</NavLink>
+                                <NavLink to={"/account/orders"}>Мои заказы</NavLink>
+                                <NavLink to={"/account/recover-password"}>Изменить пароль</NavLink>
+                                <NavLink to={"/account/saved-addresses"}>Сохраненные адреса</NavLink>
+                                <div style={{marginTop:
+                                        "10px"}}>
                                     <ButtonDark minWidth={"201px"}>Выйти с аккаунта</ButtonDark>
                                 </div>
                             </S.Navbar>
@@ -32,7 +33,11 @@ export const CabinetLayout = ({children}) => {
                 </S.LeftSide>
 
                 <S.RightSide>
-                    {children}
+                    <S.Heading>{title}</S.Heading>
+                    <S.Content>
+                        {children}
+                    </S.Content>
+
                 </S.RightSide>
             </S.Wrapper>
 
