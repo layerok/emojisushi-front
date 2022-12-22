@@ -21,6 +21,13 @@ client.interceptors.request.use((config = {}) => {
     if(!params?.spot_id && spot_id) {
         params.spot_id = spot_id;
     }
+
+    const jwt = LocalStorageService.get('jwt');
+    const headers = config.headers || {};
+    if(jwt) {
+        config.headers.Authorization = `Bearer ${jwt}`;
+    }
+
     return config;
 })
 

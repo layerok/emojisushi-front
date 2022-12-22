@@ -1,6 +1,7 @@
 import {CategoriesStore} from "./categories.store";
 import {ProductsStore} from "./products.store";
 import {AppStore} from "./app.store";
+import {AuthStore} from "./auth.store";
 import {SpotsStore} from "./spots.store";
 import {CartStore} from "./cart.store";
 import {PaymentStore} from "./payment.store";
@@ -16,4 +17,5 @@ export const stores = {
     PaymentStore,
     ShippingStore,
     WishlistStore,
+    AuthStore
 }
