@@ -11,18 +11,19 @@ import {TelegramModal} from "../TelegramModal";
 import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
 import {useTranslation} from "react-i18next";
 import {InstagramLink} from "../../../layout/Footer/styled";
-import {inject, observer} from "mobx-react";
+import { observer} from "mobx-react";
+import {useSpotsStore} from "../../../hooks/use-spots-store";
 
 export const ContactsModalRaw = (
     {
         children,
         onClick = () => {},
-        SpotsStore,
     }) => {
 
     const breakpoint = useBreakpoint();
     const width = breakpoint !== 'pc' ? "375px": false;
     const {t} = useTranslation();
+    const SpotsStore = useSpotsStore();
 
     return <Modal width={width} onClick={onClick} render={({close}) => (
         <div>
@@ -70,4 +71,4 @@ export const ContactsModalRaw = (
     </Modal>;
 }
 
-export const ContactsModal = inject('SpotsStore')(observer(ContactsModalRaw));
+export const ContactsModal = observer(ContactsModalRaw);

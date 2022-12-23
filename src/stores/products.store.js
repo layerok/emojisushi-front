@@ -1,8 +1,13 @@
-import {makeAutoObservable} from "mobx";
+import {makeAutoObservable, transaction} from "mobx";
+import MenuApi from "../api/menu.api";
 
-class Products {
-    constructor() {
-        makeAutoObservable(this);
+export class ProductsStore {
+    rootStore;
+    constructor(rootStore) {
+        makeAutoObservable(this, {
+            rootStore: false
+        });
+        this.rootStore = rootStore;
     }
     items = [];
     limit = 25;
@@ -66,10 +71,38 @@ class Products {
         this.setSearch("");
     }
 
-}
+    fetchItems(params = {}) {
+        this.setLoading(true);
+        this.setLastParams(params);
 
-const ProductsStore = new Products();
+        const filter = this.selectedFilters.reduce((acc, slug) => {
+            return acc + `&${slug}=${slug}`;
+        }, "")
 
-export {
-    ProductsStore
+        return MenuApi.getProducts({
+            filter: filter,
+            category_slug: "menu",
+            search: this.search,
+            sort: this.sort,
+            offset: this.offset,
+            limit: this.limit,
+            ...params,
+        }).then(res => {
+            transaction(() => {
+                this.setItems(res.data.data);
+                this.setFilters(res.data.filters);
+                this.setSortOptions(res.data.sort_options)
+                this.setTotal(res.data.total);
+            })
+        }).finally(() => {
+            this.setLoading(false);
+        }).catch(() => {
+            this.setLoading(false);
+        });
+    }
+
+    refresh() {
+        return this.fetchItems(this.lastParams)
+    }
+
 }

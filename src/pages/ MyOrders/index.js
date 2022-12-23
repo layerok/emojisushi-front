@@ -1,16 +1,11 @@
-import {inject, observer} from "mobx-react";
+import { observer} from "mobx-react";
 import {useEffect} from "react";
 import {CabinetLayout} from "../../layout/CabinetLayout";
-import * as S from "./styled";
-import {Collapsible} from "../../components/Collapsible";
 import {AccordionItem} from "../../components/AccordionItem";
+import {useAppStore} from "../../hooks/use-app-store";
 
-export const MyOrders = inject( 'AppStore')(observer((
-    {
-        AppStore,
-    }
-) => {
-
+export const MyOrders = observer(() => {
+    const AppStore = useAppStore();
     useEffect(() => {
         AppStore.setLoading(false);
     }, [])
@@ -25,4 +20,4 @@ export const MyOrders = inject( 'AppStore')(observer((
         </CabinetLayout>
 
     );
-}))
+})

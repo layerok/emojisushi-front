@@ -21,6 +21,8 @@ export const LayoutRaw = (
         children,
         withBanner = false,
         withSidebar= true,
+        withRestaurantClosedModal = false,
+        withSpotsModal = false,
         mainProps = {},
         containerProps = {},
         AppStore: {
@@ -61,8 +63,14 @@ export const LayoutRaw = (
                 </Container>
             </S.Main>
             <Footer/>
-            <RestaurantClosed open={closed}/>
-            <SpotsModal open={!SpotsStore.userSelectedSpot && !closed}/>
+
+            {withRestaurantClosedModal && (
+              <RestaurantClosed open={closed}/>
+            )}
+
+            {withSpotsModal && (
+              <SpotsModal open={!SpotsStore.userSelectedSpot && !closed}/>
+            )}
 
             <Sticky top={"30px"} right={"30px"} show={showStickyCart}>
                 <CartModal>

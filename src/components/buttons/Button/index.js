@@ -22,12 +22,11 @@ export const Button = (
     return <S.Button
         minWidth={minWidth}
         outline={outline}
-        backgroundColor={backgroundColor}
+        backgroundColor={loading ? '#FFE600': backgroundColor}
         hoverBackgroundColor={hoverBackgroundColor}
         hoverOutline={hoverOutline}
         color={color}
         hoverColor={hoverColor}
-        loading={loading}
         padding={padding}
         filled={filled}
         width={width}

@@ -22,6 +22,7 @@ export const DeliveryRaw = (
     return (
       <Layout withBanner={false}
               withSidebar={false}
+              withSpotsModal={true}
       >
           <S.FlexContainer>
               <S.Left>

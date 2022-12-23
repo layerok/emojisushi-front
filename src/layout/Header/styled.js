@@ -58,6 +58,7 @@ const BurgerBtn = styled.button`
 
 const UserBtn = styled.div`
   margin-left: 20px;
+  cursor: pointer;
   ${media.lessThan("pc")`
     display: none;
   `}

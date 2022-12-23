@@ -2,25 +2,18 @@ import * as S from "./styled";
 import {VerticalMenu} from "../VerticalMenu";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import {HorizontalMenu} from "../HorizontalMenu";
-import {FiltersButton} from "../../components/buttons/FiltersButton";
 import {FlexBox} from "../../components/FlexBox";
 import {UnderVerticalMenu} from "../UnderVerticalMenu";
 import {SortingPopover} from "../../components/popovers/SortingPopover";
-import {inject, observer} from "mobx-react";
-import {useEffect} from "react";
+import { observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
 import {useDebounce} from "../../common/hooks/useDebounce";
-import {FiltersModal} from "../../components/modals/FiltersModal";
-import {productsService} from "../../services/products.service";
-import {categoriesService} from "../../services/categories.service";
+import {useProductsStore} from "../../hooks/use-categories-store";
+import {useCategoriesStore} from "../../hooks/use-products-store";
 
-export const SidebarRaw = (
-    {
-        CategoriesStore,
-        ProductsStore,
-    }
-) => {
-
+export const SidebarRaw = () => {
+    const ProductsStore = useProductsStore();
+    const CategoriesStore = useCategoriesStore();
     const breakpoint = useBreakpoint();
     const isMobile = breakpoint === 'mobile';
 
@@ -29,7 +22,7 @@ export const SidebarRaw = (
         if(ProductsStore.search.length === 0) {
             filter = "";
         }
-        productsService.fetchItems({
+        ProductsStore.fetchItems({
             ...ProductsStore.lastParams,
             filter,
         });
@@ -80,4 +73,4 @@ export const SidebarRaw = (
     );
 }
 
-export const Sidebar = inject('CategoriesStore', 'ProductsStore')(observer(SidebarRaw));
+export const Sidebar = observer(SidebarRaw);

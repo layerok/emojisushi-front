@@ -1,19 +1,17 @@
 import {Layout} from "../../layout/Layout";
 import {ProductsGrid} from "../../components/ProductsGrid";
-import {inject, observer} from "mobx-react";
+import { observer} from "mobx-react";
 import {useEffect} from "react";
 import {useTranslation} from "react-i18next";
-import {productsService} from "../../services/products.service";
+import {useProductsStore} from "../../hooks/use-categories-store";
+import {useAppStore} from "../../hooks/use-app-store";
 
-export const WishlistRaw = (
-    {
-        ProductsStore,
-        AppStore
-    }
-) => {
+export const WishlistRaw = () => {
+    const ProductsStore = useProductsStore();
+    const AppStore = useAppStore();
     useEffect(() => {
         AppStore.setLoading(true);
-        productsService.fetchItems({
+        ProductsStore.fetchItems({
             limit: ProductsStore.step,
             wishlist: true,
         }).then(() => {
@@ -28,11 +26,15 @@ export const WishlistRaw = (
             limit: ProductsStore.items.length + ProductsStore.step,
             wishlist: true,
         }
-        productsService.fetchItems(settings);
+        ProductsStore.fetchItems(settings);
     }
 
     return (
-        <Layout withBanner={false}>
+        <Layout
+          withRestaurantClosedModal={true}
+          withBanner={false}
+          withSpotsModal={true}
+        >
             <ProductsGrid
                 loadable={ProductsStore.total > ProductsStore.items.length}
                 loading={ProductsStore.loading}
@@ -44,4 +46,4 @@ export const WishlistRaw = (
     );
 }
 
-export const Wishlist = inject('ProductsStore', 'AppStore')(observer(WishlistRaw))
+export const Wishlist = observer(WishlistRaw)

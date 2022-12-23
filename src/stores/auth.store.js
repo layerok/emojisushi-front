@@ -1,13 +1,19 @@
 import {makeAutoObservable} from "mobx";
 import authApi from "../api/auth.api";
 
-class Auth {
+export class AuthStore {
 
-    constructor() {
-        makeAutoObservable(this);
+    rootStore;
+    constructor(rootStore) {
+        makeAutoObservable(this, {
+            rootStore: false
+        });
+        this.rootStore = rootStore;
     }
 
     authToken = null;
+
+    checkUser = false;
 
     user = null;
 
@@ -31,14 +37,14 @@ class Auth {
 
     fetchUser() {
         authApi.fetchUser().then((res) => {
-            console.log('user', res.data);
+            this.setUser(res.data);
         })
     }
 
-}
+    logout() {
+        this.setAuthToken(null);
+        this.setUser(null);
+        this.setExpires(null);
+    }
 
-const AuthStore = new Auth();
-
-export {
-    AuthStore
 }

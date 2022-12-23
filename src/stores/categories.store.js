@@ -1,8 +1,14 @@
 import {makeAutoObservable} from "mobx";
+import MenuApi from "../api/menu.api";
+import {stores} from "./stores";
 
-class Categories {
-    constructor() {
-        makeAutoObservable(this);
+export class CategoriesStore {
+    rootStore;
+    constructor(rootStore) {
+        makeAutoObservable(this, {
+            rootStore: false
+        });
+        this.rootStore = rootStore;
     }
     items = [];
 
@@ -13,10 +19,12 @@ class Categories {
     setItems = (categories) => {
         this.items = categories;
     }
-}
 
-const CategoriesStore = new Categories();
-
-export {
-    CategoriesStore
+    fetchItems(params = {}) {
+        return MenuApi.getCategories({
+            ...params,
+        }).then(res => {
+            stores.CategoriesStore.setItems(res.data.data);
+        });
+    }
 }

@@ -4,17 +4,16 @@ import * as S from "./styled";
 import {SvgIcon} from "../../svg/SvgIcon";
 import {MagnifierSvg} from "../../svg/MagnifierSvg";
 import {Modal} from "../Modal";
-import {inject} from "mobx-react";
 import {useTranslation} from "react-i18next";
 import {productsService} from "../../../services/products.service";
+import {useProductsStore} from "../../../hooks/use-categories-store";
 
 export const FiltersModalRaw = (
     {
         children,
-        ProductsStore
     }
 ) => {
-
+    const ProductsStore = useProductsStore();
     const records = ProductsStore.filters || [];
     const handleOnChange = ({e, item}) => {
         const {slug} = item;
@@ -65,5 +64,5 @@ export const FiltersModalRaw = (
     </Modal>;
 }
 
-export const FiltersModal = inject('ProductsStore')(FiltersModalRaw);
+export const FiltersModal =FiltersModalRaw;
 

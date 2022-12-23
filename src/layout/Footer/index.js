@@ -9,13 +9,11 @@ import {InstagramSvg} from "../../components/svg/InstagramSvg";
 import {PhoneSvg} from "../../components/svg/PhoneSvg";
 import {LogoSvg} from "../../components/svg/LogoSvg";
 import {useTranslation} from "react-i18next";
-import {inject, observer} from "mobx-react";
+import { observer} from "mobx-react";
+import {useSpotsStore} from "../../hooks/use-spots-store";
 
-export const FooterRaw = (
-    {
-        SpotsStore
-    }
-) => {
+export const FooterRaw = () => {
+    const SpotsStore = useSpotsStore();
     const {t} = useTranslation();
     return (
         <S.Footer>
@@ -95,4 +93,4 @@ export const FooterRaw = (
     )
 }
 
-export const Footer = inject('SpotsStore')(observer(FooterRaw));
+export const Footer = observer(FooterRaw);

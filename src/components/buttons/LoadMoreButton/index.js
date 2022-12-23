@@ -1,11 +1,8 @@
 import {UIButton} from "../UIButton";
 import {ArrowsClockwiseSvg} from "../../svg/ArrowsClockwiseSvg";
-import styled, {css} from "styled-components";
-import {ifProp} from "styled-tools";
+import styled from "styled-components";
 const RotateContainer = styled.div`
-  ${ifProp('loading', css`
-    animation: spin 4s linear infinite;
-  `)}
+  animation: spin 4s linear infinite;
 `
 
 export const LoadMoreButton = (
@@ -17,9 +14,17 @@ export const LoadMoreButton = (
 ) => {
     return (
         <UIButton {...rest} text={text}>
-            <RotateContainer loading={loading}>
-                <ArrowsClockwiseSvg/>
+          {loading && (
+            <RotateContainer>
+              <ArrowsClockwiseSvg/>
             </RotateContainer>
+          )}
+          {!loading && (
+            <div>
+              <ArrowsClockwiseSvg/>
+            </div>
+          )}
+
         </UIButton>
     );
 }

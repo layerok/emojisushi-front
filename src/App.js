@@ -1,5 +1,5 @@
 import {Routes, Route, Navigate, Outlet } from "react-router-dom";
-import React, {useEffect} from "react";
+import React from "react";
 import 'normalize.css';
 import {theme} from "./theme";
 import {ThemeProvider} from "styled-components";
@@ -7,26 +7,20 @@ import {ThankYou} from "./pages/ThankYou";
 import {Delivery} from "./pages/Delivery"
 import {Checkout} from "./pages/Checkout";
 import {Category} from "./pages/Category";
-import {inject, observer} from "mobx-react";
+import { observer} from "mobx-react";
 import {Wishlist} from "./pages/Wishlist";
-import LocalStorageService from "./services/local-storage.service";
 import {Profile} from "./pages/Profile";
 import {RecoverPassword} from "./pages/RecoverPassword";
 import {SavedAddresses} from "./pages/SavedAddresses";
 import {MyOrders} from "./pages/ MyOrders";
-import {productsService} from "./services/products.service";
-import {categoriesService} from "./services/categories.service";
-import {cartService} from "./services/cart.service";
 import {ResetPassword} from "./pages/ResetPassword";
-import {toJS} from "mobx";
-
+import {useAuthStore} from "./hooks/use-auth-store";
 
 const ProtectedRoute = ({
                           user,
                           redirectPath = '/home',
                           children,
                         }) => {
-  console.log('user', user);
   if (!user) {
     return <Navigate to={redirectPath} replace />;
   }
@@ -34,34 +28,9 @@ const ProtectedRoute = ({
   return children ? children : <Outlet/>;
 };
 
-function App(
-  {
-    SpotsStore,
-    AppStore,
-    ProductsStore,
-    AuthStore
-  }
-) {
+export const App = observer(() => {
 
-  useEffect(() => {
-    AuthStore.fetchUser();
-  }, [])
-
-  useEffect(() => {
-    // update menu after spot was changed
-    if(!SpotsStore.getSelected) {
-      return;
-    }
-    LocalStorageService.set('spot_id', SpotsStore.getSelected);
-
-    Promise.all([
-      cartService.clearCart(),
-      productsService.fetchItems(ProductsStore.lastParams),
-      categoriesService.fetchItems()
-    ]).finally(() => AppStore.setLoading(false))
-
-  }, [SpotsStore.needRefresh,  SpotsStore.getSelected])
-
+  const authStore = useAuthStore();
 
   return (
     <ThemeProvider theme={theme}>
@@ -74,7 +43,7 @@ function App(
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/wishlist" element={<Wishlist />} />
 
-          <Route element={<ProtectedRoute redirectPath={'/categori/roli'} user={AuthStore.user}/>}>
+          <Route element={<ProtectedRoute redirectPath={'/categori/roli'} user={authStore.user}/>}>
             <Route path="/account/profile" element={<Profile/>}/>
             <Route path="/account/recover-password" element={<RecoverPassword/>} />
             <Route path="/account/saved-addresses" element={<SavedAddresses/>} />
@@ -91,6 +60,5 @@ function App(
       </div>
     </ThemeProvider>
   );
-}
+})
 
-export default inject('SpotsStore', 'CartStore', 'AppStore', 'CategoriesStore', 'ProductsStore', 'AuthStore')(observer(App))

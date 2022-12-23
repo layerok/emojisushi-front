@@ -5,7 +5,7 @@ import {Favorite} from "../Favorite";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import {IngredientsTooltip} from "../tooltips/IngredientsTooltip";
 import { EqualHeightElement } from 'react-equal-height';
-import {inject, observer} from "mobx-react";
+import { observer} from "mobx-react";
 import {
     getProductIngredients,
     getProductMainImage,
@@ -19,17 +19,20 @@ import {Switcher} from "../Switcher";
 import {useState} from "react";
 import {InfoTooltip} from "../InfoTooltip";
 import {useTranslation} from "react-i18next";
-import {cartService} from "../../services/cart.service";
-import {wishlistService} from "../../services/wishlist.service";
+import {useCartStore} from "../../hooks/use-cart-store";
+import {useProductsStore} from "../../hooks/use-categories-store";
+import {useWishlistStore} from "../../hooks/use-wishlist-store";
 
 const ProductCardRaw = (
-    {
-        product,
-        CartStore,
-        ProductsStore,
-        WishlistStore,
-    }
+  {
+      product,
+  }
 ) => {
+
+    const CartStore = useCartStore();
+    const ProductsStore = useProductsStore();
+    const WishlistStore = useWishlistStore();
+
     const {
         id,
         name,
@@ -86,7 +89,7 @@ const ProductCardRaw = (
 
     const handleAdd = (product_id) => {
         return (quantity) => {
-            cartService.addProduct({
+            CartStore.addProduct({
                 product_id,
                 quantity,
                 variant_id: getVariant(product)?.id,
@@ -97,7 +100,7 @@ const ProductCardRaw = (
     return <S.Wrapper>
         <Loader loading={WishlistStore.pending.includes(id)}/>
         <S.Favorite onClick={() => {
-            wishlistService.addItem({
+            WishlistStore.addItem({
                 product_id: id,
                 quantity: count
             }).then((res) => {
@@ -115,34 +118,34 @@ const ProductCardRaw = (
         </S.Favorite>
         <S.Image src={img}>
             {!img && (
-                <SvgIcon color={"white"} width={"80%"} style={{opacity: 0.05}}>
-                    <LogoSvg/>
-                </SvgIcon>
+              <SvgIcon color={"white"} width={"80%"} style={{opacity: 0.05}}>
+                  <LogoSvg/>
+              </SvgIcon>
             )}
 
         </S.Image>
         <EqualHeightElement name={"product-name"}>
             <S.Name>{name}</S.Name>
             {mod_groups.map((group) => (
-                <Switcher style={{marginTop: "12px"}}
-                    handleChange={({option}) => {
-                        setModificators(state => {
-                            return {
-                            ...state,
-                             [group.property.id]: option.poster_id
+              <Switcher style={{marginTop: "12px"}}
+                        handleChange={({option}) => {
+                            setModificators(state => {
+                                return {
+                                    ...state,
+                                    [group.property.id]: option.poster_id
+                                }
+                            })
+                        }}
+                        name={"modificator_" + group.property.id}
+                        nameAccessor={"value"}
+                        idAccessor={"poster_id"}
+                        options={group.property.options}
+                        selected={(option) => {
+                            if(!option) {
+                                return 0
                             }
-                        })
-                    }}
-                    name={"modificator_" + group.property.id}
-                    nameAccessor={"value"}
-                    idAccessor={"poster_id"}
-                    options={group.property.options}
-                    selected={(option) => {
-                        if(!option) {
-                            return 0
-                        }
-                        return modificators[group.property.id] === option.poster_id;
-                    }}/>
+                            return modificators[group.property.id] === option.poster_id;
+                        }}/>
             ))}
 
         </EqualHeightElement>
@@ -150,13 +153,13 @@ const ProductCardRaw = (
 
             <S.Description>
                 <InfoTooltip label={t('menu.weightComment')}>
-                <S.Weight>
-                    {weight !== 0 ? weight + 'г' : ''}&nbsp;<span style={{
+                    <S.Weight>
+                        {weight !== 0 ? weight + 'г' : ''}&nbsp;<span style={{
                         fontSize: '12px',
                         position: 'relative',
                         top: '-3px'
-                }}>?</span>
-                </S.Weight>
+                    }}>?</span>
+                    </S.Weight>
                 </InfoTooltip>
                 {ingredients.length !== 0 && (<IngredientsTooltip items={ingredients} iconSize={iconSize}/>)}
             </S.Description>
@@ -166,13 +169,13 @@ const ProductCardRaw = (
         <S.Footer>
             <Price oldPrice={oldPrice} newPrice={newPrice}/>
             <AddToCartButton
-                width={isMobile ? '177px': '130px'}
-                count={count}
-                pending={CartStore.pending.includes(id)}
-                handleAdd={handleAdd(id)}
+              width={isMobile ? '177px': '130px'}
+              count={count}
+              pending={CartStore.pending.includes(id)}
+              handleAdd={handleAdd(id)}
             />
         </S.Footer>
     </S.Wrapper>;
 }
 
-export const ProductCard = inject('CartStore', 'ProductsStore', 'WishlistStore')(observer(ProductCardRaw))
+export const ProductCard = observer(ProductCardRaw)

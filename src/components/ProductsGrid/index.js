@@ -5,10 +5,11 @@ import {LoadMoreButton} from "../buttons/LoadMoreButton";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import { EqualHeight } from 'react-equal-height';
 import {SortingPopover} from "../popovers/SortingPopover";
-import {inject, observer} from "mobx-react";
+import {observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
 import {useDebounce} from "../../common/hooks/useDebounce";
 import {Loader} from "../Loader";
+import {useProductsStore} from "../../hooks/use-categories-store";
 
 const ProductsGridRaw = (
     {
@@ -17,10 +18,9 @@ const ProductsGridRaw = (
         handleLoadMore,
         loading,
         loadable,
-        ProductsStore,
     }
 ) => {
-
+    const ProductsStore = useProductsStore();
     const breakpoint = useBreakpoint();
 
     const debouncedBreakpoint = useDebounce(() => {
@@ -59,4 +59,4 @@ const ProductsGridRaw = (
     </div>
 }
 
-export const ProductsGrid = inject('AppStore', 'ProductsStore')(observer(ProductsGridRaw));
+export const ProductsGrid = observer(ProductsGridRaw);

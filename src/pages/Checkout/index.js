@@ -6,31 +6,28 @@ import {Heading} from "../../components/Heading";
 import {useBreakpoint} from "../../common/hooks/useBreakpoint";
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
-import {inject, observer} from "mobx-react";
+import {observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
-import {cartService} from "../../services/cart.service";
-import {shippingService} from "../../services/shipping.service";
-import {paymentService} from "../../services/payment.service";
+import {useCartStore} from "../../hooks/use-cart-store";
+import {useAppStore} from "../../hooks/use-app-store";
+import {usePaymentStore} from "../../hooks/use-payment-store";
+import {useShippingStore} from "../../hooks/use-shipping-store";
 
-export const CheckoutRaw = (
-    {
-        CartStore,
-        AppStore,
-        PaymentStore,
-        ShippingStore
-    }
-) => {
+export const CheckoutRaw = () => {
     const breakpoint = useBreakpoint();
 
     const navigate = useNavigate();
-
+    const CartStore = useCartStore();
+    const AppStore = useAppStore();
+    const PaymentStore = usePaymentStore();
+    const ShippingStore = useShippingStore();
 
     useEffect(() => {
         AppStore.setLoading(true);
         Promise.all([
-            cartService.fetchItems(),
-            paymentService.fetchItems(),
-            shippingService.fetchItems()
+            CartStore.fetchItems(),
+            PaymentStore.fetchItems(),
+            ShippingStore.fetchItems()
         ]).then(() => {
             AppStore.setLoading(false);
         })
@@ -47,7 +44,11 @@ export const CheckoutRaw = (
     }, [CartStore.items, AppStore.loading])
     const {t} = useTranslation();
     return (
-        <Layout withBanner={false} withSidebar={false}>
+        <Layout
+          withRestaurantClosedModal={true}
+          withBanner={false}
+          withSidebar={false}
+        >
             <Heading>{t('checkout.title')}</Heading>
             <FlexBox
                 flexDirection={breakpoint === 'mobile' ? 'column': 'row'}
@@ -61,4 +62,4 @@ export const CheckoutRaw = (
     );
 }
 
-export const Checkout = inject('CartStore', 'AppStore', 'PaymentStore', 'ShippingStore')(observer(CheckoutRaw));
+export const Checkout = observer(CheckoutRaw);

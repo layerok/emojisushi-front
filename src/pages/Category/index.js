@@ -1,18 +1,16 @@
 import {Layout} from "../../layout/Layout";
 import {ProductsGrid} from "../../components/ProductsGrid";
-import {inject, observer} from "mobx-react";
+import { observer} from "mobx-react";
 import {useEffect} from "react";
 import {useParams} from "react-router-dom";
-import {productsService} from "../../services/products.service";
+import {useProductsStore} from "../../hooks/use-categories-store";
+import {useCategoriesStore} from "../../hooks/use-products-store";
+import {useAppStore} from "../../hooks/use-app-store";
 
-export const CategoryRaw = (
-    {
-        ProductsStore,
-        CategoriesStore,
-        AppStore
-    }
-) => {
-
+export const CategoryRaw = () => {
+    const ProductsStore = useProductsStore();
+    const CategoriesStore = useCategoriesStore();
+    const AppStore = useAppStore();
     const {categorySlug} = useParams();
     const selectedCategory = CategoriesStore.items.find((category) => {
         return category.slug === categorySlug;
@@ -24,12 +22,12 @@ export const CategoryRaw = (
             limit: ProductsStore.items.length + ProductsStore.step,
             category_slug: categorySlug
         }
-        productsService.fetchItems(settings);
+        ProductsStore.fetchItems(settings);
     }
 
     useEffect(() => {
         AppStore.setLoading(true);
-        productsService.fetchItems({
+        ProductsStore.fetchItems({
             category_slug: categorySlug,
             limit: ProductsStore.step,
         }).then(() => {
@@ -38,7 +36,11 @@ export const CategoryRaw = (
     }, [categorySlug])
 
     return (
-        <Layout withBanner={false}>
+        <Layout
+          withRestaurantClosedModal={true}
+          withSpotsModal={true}
+          withBanner={false}
+        >
             <ProductsGrid
                 handleLoadMore={handleLoadMore}
                 title={title}
@@ -50,4 +52,4 @@ export const CategoryRaw = (
     );
 }
 
-export const Category = inject('ProductsStore', 'AppStore', 'CategoriesStore')(observer(CategoryRaw))
+export const Category = observer(CategoryRaw)

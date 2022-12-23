@@ -12,24 +12,27 @@ import {SvgIcon} from "../../components/svg/SvgIcon";
 import {BurgerSvg} from "../../components/svg/BurgerSvg";
 import {LogoSvg} from "../../components/svg/LogoSvg";
 import {useEffect} from "react";
-import {inject, observer} from "mobx-react";
+import { observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
 import {SvgButton} from "../../components/SvgButton";
 import {UserSvg} from "../../components/svg/UserSvg";
 import {AuthModal} from "../../components/modals/AuthModal";
 import {LanguageSelector} from "../../components/LanguageSelector";
-import {cartService} from "../../services/cart.service";
+import {stores} from "../../stores/stores";
+import {useNavigate} from "react-router-dom";
+import {useCartStore} from "../../hooks/use-cart-store";
 
 
 const HeaderRaw = (
-    {
-        CartStore
-    }
+
 ) => {
+    const CartStore = useCartStore();
 
     useEffect(() => {
-        cartService.fetchItems();
+        CartStore.fetchItems();
     },[])
+
+    const navigate = useNavigate();
 
 
     const {t} = useTranslation();
@@ -81,15 +84,28 @@ const HeaderRaw = (
                             </MobMenuModal>
                         </S.BurgerBtn>
 
-                        <S.UserBtn>
-                            <AuthModal>
-                                <SvgButton>
-                                    <SvgIcon width={"25px"} color={"black"}>
-                                        <UserSvg/>
-                                    </SvgIcon>
-                                </SvgButton>
-                            </AuthModal>
-                        </S.UserBtn>
+                        {stores.AuthStore.isAuthorized ? (
+                          <S.UserBtn onClick={() => {
+                              navigate('/account')
+                          }}>
+                              <SvgButton>
+                                  <SvgIcon width={"25px"} color={"black"}>
+                                      <UserSvg/>
+                                  </SvgIcon>
+                              </SvgButton>
+                          </S.UserBtn>
+                        ): (
+                          <S.UserBtn>
+                              <AuthModal>
+                                  <SvgButton>
+                                      <SvgIcon width={"25px"} color={"black"}>
+                                          <UserSvg/>
+                                      </SvgIcon>
+                                  </SvgButton>
+                              </AuthModal>
+                          </S.UserBtn>
+                        )}
+
                     </S.Right>
                 </FlexBox>
             </Container>
@@ -97,5 +113,5 @@ const HeaderRaw = (
     )
 }
 
-export const Header = inject('CartStore')(observer(HeaderRaw));
+export const Header = observer(HeaderRaw);
 

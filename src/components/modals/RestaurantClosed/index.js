@@ -3,18 +3,16 @@ import {NotifyModal} from "../NotifyModal";
 import {LowKeySvg} from "../../svg/LowKeySvg";
 import {useTranslation} from "react-i18next";
 import {inject, observer} from "mobx-react";
+import {useAppStore} from "../../../hooks/use-app-store";
 
 
-export const RestaurantClosed = inject(
-    'AppStore'
-)(observer((
+export const RestaurantClosed = observer((
     {
         open,
-        AppStore
     }
 ) => {
 
-
+    const AppStore = useAppStore();
     const {t} = useTranslation();
     return <NotifyModal
         open={open}
@@ -28,4 +26,4 @@ export const RestaurantClosed = inject(
     >
         <div></div>
     </NotifyModal>
-}))
+})

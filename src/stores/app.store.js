@@ -1,9 +1,12 @@
 import {makeAutoObservable} from "mobx";
 
-class App {
-
-    constructor() {
-        makeAutoObservable(this);
+export class AppStore {
+    rootStore;
+    constructor(rootStore) {
+        makeAutoObservable(this, {
+            rootStore: false
+        });
+        this.rootStore = rootStore;
     }
 
     loading = true;
@@ -17,10 +20,4 @@ class App {
     setLoading = (state) => {
         this.loading = state;
     }
-}
-
-const AppStore = new App();
-
-export {
-    AppStore
 }

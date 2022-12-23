@@ -29,7 +29,11 @@ export const HomeRaw = (
     }
 
     return (
-        <Layout withBanner={false}>
+        <Layout
+          withBanner={false}
+          withRestaurantClosedModal={true}
+          withSpotsModal={true}
+        >
             <ProductsGrid
                 loadable={ProductsStore.total > ProductsStore.items.length}
                 loading={ProductsStore.loading}

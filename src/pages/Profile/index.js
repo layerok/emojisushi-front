@@ -1,16 +1,13 @@
 import {CabinetLayout} from "../../layout/CabinetLayout";
 import {useEffect} from "react";
-import {inject, observer} from "mobx-react";
+import {observer} from "mobx-react";
 import * as S from "./styled"
 import {ButtonDark, ButtonOutline} from "../../components/buttons/Button";
 import {Dropdown} from "../../components/Dropdown";
+import {useAppStore} from "../../hooks/use-app-store";
 
-export const Profile = inject( 'AppStore')(observer((
-    {
-        AppStore,
-    }
-) => {
-
+export const Profile = observer(() => {
+    const AppStore = useAppStore();
     useEffect(() => {
         AppStore.setLoading(false);
     }, [])
@@ -242,5 +239,5 @@ export const Profile = inject( 'AppStore')(observer((
 
         </CabinetLayout>
     );
-}))
+})
 

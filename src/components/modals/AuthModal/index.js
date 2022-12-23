@@ -8,12 +8,12 @@ import {PasswordInput} from "../../PasswordInput";
 import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
 import {FlexBox} from "../../FlexBox";
 import AuthApi from "../../../api/auth.api";
-import LocalStorageService from "../../../services/local-storage.service";
 import authApi from "../../../api/auth.api";
 import {observer, useLocalObservable} from "mobx-react";
 import {runInAction, transaction} from "mobx";
 import {stores} from "../../../stores/stores";
 import {useNavigate} from "react-router-dom";
+import Cookies from "js-cookie";
 
 export const AuthModal = ( { children}) => {
     const breakpoint = useBreakpoint();
@@ -55,16 +55,18 @@ const SignUpForm = ({
                     }) => {
     const breakpoint = useBreakpoint();
     const isMobile = breakpoint === 'mobile';
-    const [signupEmail, setSignupEmail] = useState();
-    const [signupEmailError, setSignupEmailError] = useState("");
-    const [signupPassword, setSignupPassword] = useState();
-    const [signupPasswordError, setSignupPasswordError] = useState("");
-    const [signupAgree, setSignupAgree] = useState(false);
-    const [signupAgreeError, setSignupAgreeError] = useState("");
+    const [email, setEmail] = useState();
+    const [loading, setLoading] = useState(false);
+    const [emailError, setEmailError] = useState("");
+    const [password, setPassword] = useState();
+    const [passwordError, setPasswordError] = useState("");
+    const [agree, setAgree] = useState(false);
+    const [agreeError, setAgreeError] = useState("");
+    const navigate = useNavigate();
 
     return <S.SignUpForm onSubmit={e => {
-        setSignupPasswordError('');
-        setSignupEmailError('');
+        setPasswordError('');
+        setEmailError('');
         e.preventDefault();
     }}>
         <S.Title>
@@ -74,10 +76,10 @@ const SignUpForm = ({
             <S.InputLabel>
                 E-mail
             </S.InputLabel>
-            <Input error={signupEmailError} onChange={e => {
+            <Input error={emailError} onChange={e => {
                 const {value} = e.currentTarget;
-                setSignupEmail(value);
-                setSignupEmailError("");
+                setEmail(value);
+                setEmailError("");
             }} light={true}/>
         </S.InputWrapper>
 
@@ -85,18 +87,18 @@ const SignUpForm = ({
             <S.InputLabel>
                 Пароль
             </S.InputLabel>
-            <PasswordInput light={true} error={signupPasswordError} onChange={e => {
+            <PasswordInput light={true} error={passwordError} onChange={e => {
                 const {value} = e.currentTarget;
-                setSignupPassword(value);
-                setSignupPasswordError("");
+                setPassword(value);
+                setPasswordError("");
             }}/>
         </S.InputWrapper>
         <S.CheckboxWrapper>
-            <Checkbox error={signupAgreeError}
+            <Checkbox error={agreeError}
                       name={"agree"}
-                      initialChecked={signupAgree}
+                      initialChecked={agree}
                       onChange={state => {
-                          setSignupAgree(state);
+                          setAgree(state);
                       }}>
                 Я согласен с условиями использования и обработки моих персональных данных
             </Checkbox>
@@ -106,34 +108,48 @@ const SignUpForm = ({
         <FlexBox>
             <FlexBox flexDirection={"column"} alignItems={"center"}>
 
-                <Button onClick={() => {
-                    setSignupAgreeError("");
+                <Button loading={loading} onClick={() => {
+                    setAgreeError("");
+                    setLoading(true);
                     AuthApi.register({
-                        email: signupEmail,
-                        password: signupPassword,
-                        password_confirmation: signupPassword,
-                        agree: signupAgree,
+                        email: email,
+                        password: password,
+                        password_confirmation: password,
+                        agree: agree,
                         name: 'Не указано',
                         surname: 'Не указано'
                     }).then(() => {
-                        console.log('Пользователь успешно зарегистрировался')
+                        return AuthApi.login({
+                            email: email,
+                            password: password
+                        }).then((res) => {
+                            const {token, expires, user} = res.data.data;
+                            Cookies.set('jwt', token);
+                            transaction(() => {
+                                stores.AuthStore.setAuthToken(token);
+                                stores.AuthStore.setUser(user);
+                                stores.AuthStore.setExpires(expires);
+                            })
+                            navigate('/account')
+                        })
                     }).catch((e) => {
                         const {errors, message} = e.response.data;
                         if(errors) {
                             Object.keys(errors).forEach((key) => {
                                 if(key === 'email') {
-                                    setSignupEmailError(errors[key][0]);
+                                    setEmailError(errors[key][0]);
                                 }
                                 if(key === 'password') {
-                                    setSignupPasswordError(errors[key][0]);
+                                    setPasswordError(errors[key][0]);
                                 }
                                 if(key === 'agree') {
-                                    setSignupAgreeError(errors[key][0]);
+                                    setAgreeError(errors[key][0]);
                                 }
                             })
                         }
-                        console.error('Регистрация пользователя провалилась')
                         console.error(e);
+                    }).finally(() => {
+                        setLoading(false);
                     })
 
                 }}>Регистрация</Button>
@@ -277,7 +293,7 @@ const LoginForm = ({
                 password: password,
             }).then((res) => {
                 const {token, expires, user} = res.data.data;
-                LocalStorageService.set('jwt', token);
+                Cookies.set('jwt', token);
                 transaction(() => {
                     stores.AuthStore.setAuthToken(token);
                     stores.AuthStore.setUser(user);

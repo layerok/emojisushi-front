@@ -1,9 +1,14 @@
 import {makeAutoObservable} from "mobx";
+import PaymentApi from "../api/payment.api";
 
-class Payment {
+export class PaymentStore {
 
-    constructor() {
-        makeAutoObservable(this);
+    rootStore;
+    constructor(rootStore) {
+        makeAutoObservable(this, {
+            rootStore: false
+        });
+        this.rootStore = rootStore;
     }
 
     loading = false;
@@ -25,10 +30,13 @@ class Payment {
     setItems = (items) => {
         this.items = items;
     }
-}
 
-const PaymentStore = new Payment();
-
-export {
-    PaymentStore
+    fetchItems = (params = {}) => {
+        this.setLoading(false);
+        return PaymentApi.getMethods(params).then((res) => {
+            this.setItems(res.data.data);
+        }).finally(() => {
+            this.setLoading(false);
+        })
+    }
 }

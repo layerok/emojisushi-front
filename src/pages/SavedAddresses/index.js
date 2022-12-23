@@ -1,4 +1,4 @@
-import {inject, observer} from "mobx-react";
+import {observer} from "mobx-react";
 import {CabinetLayout} from "../../layout/CabinetLayout";
 import {useEffect} from "react";
 import * as S from "./styled";
@@ -7,13 +7,10 @@ import {SvgIcon} from "../../components/svg/SvgIcon";
 import {CloseSvg} from "../../components/svg/CloseSvg";
 import {HeartSvg} from "../../components/svg/HeartSvg";
 import {ButtonOutline} from "../../components/buttons/Button";
+import {useAppStore} from "../../hooks/use-app-store";
 
-export const SavedAddresses = inject( 'AppStore')(observer((
-    {
-        AppStore
-    }
-) => {
-
+export const SavedAddresses = observer(() => {
+    const AppStore = useAppStore()
     useEffect(() => {
         AppStore.setLoading(false);
     }, [])
@@ -53,4 +50,4 @@ export const SavedAddresses = inject( 'AppStore')(observer((
     )
 
 
-}))
+})

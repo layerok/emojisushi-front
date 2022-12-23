@@ -1,6 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import LocalStorageService from "../services/local-storage.service";
+import {stores} from "../stores/stores";
 
 const client = axios.create({
     baseURL: `${process.env.REACT_APP_API_BASE_URL}`,
@@ -22,7 +23,7 @@ client.interceptors.request.use((config = {}) => {
         params.spot_id = spot_id;
     }
 
-    const jwt = LocalStorageService.get('jwt');
+    const jwt = Cookies.get('jwt');
     const headers = config.headers || {};
     if(jwt) {
         config.headers.Authorization = `Bearer ${jwt}`;
@@ -30,6 +31,20 @@ client.interceptors.request.use((config = {}) => {
 
     return config;
 })
+
+client.interceptors.response.use(function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    return response;
+}, function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    if([406].includes(error?.response?.status)) {
+        Cookies.remove('jwt');
+        stores.AuthStore.logout();
+    }
+    return Promise.reject(error);
+});
 
 export {
     client

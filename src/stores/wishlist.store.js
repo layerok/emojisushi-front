@@ -1,9 +1,14 @@
-import {makeAutoObservable} from "mobx";
+import {makeAutoObservable, transaction} from "mobx";
+import WishlistApi from "../api/wishlist.api";
 
-class Wishlist {
+export class WishlistStore {
 
-    constructor() {
-        makeAutoObservable(this);
+    rootStore;
+    constructor(rootStore) {
+        makeAutoObservable(this, {
+            rootStore: false
+        });
+        this.rootStore = rootStore;
     }
     loading = false;
     pending = [];
@@ -16,11 +21,24 @@ class Wishlist {
         this.pending = pending;
     }
 
+    addItem = (params = {}) => {
+        const {product_id} = params;
+        this.setLoading(true);
+        this.setPending([...this.pending, product_id])
+        return WishlistApi.addItem(params).then((res) => {
+            transaction(() => {
+                this.setLoading(false);
+                this.setPending(this.pending.filter((p) => p !== product_id));
+            })
+            return Promise.resolve(res);
+        }).catch(() => {
+            transaction(() => {
+                this.setLoading(false);
+                this.setPending(this.pending.filter((p) => p !== product_id));
+            })
 
-}
+        });
+    }
 
-const WishlistStore = new Wishlist();
 
-export {
-    WishlistStore
 }

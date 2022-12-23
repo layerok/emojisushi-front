@@ -2,6 +2,7 @@ import * as S from "./styled";
 import {NavLink} from "../../components/NavLink";
 import {Layout} from "../Layout";
 import {ButtonDark} from "../../components/buttons/Button";
+import {stores} from "../../stores/stores";
 
 export const CabinetLayout = ({children, title = ""}) => {
 
@@ -9,6 +10,7 @@ export const CabinetLayout = ({children, title = ""}) => {
     return (
         <Layout withSidebar={false}
                 withBanner={false}
+                withRestaurantClosedModal={false}
         >
             <S.Wrapper>
                 <S.LeftSide>
@@ -25,7 +27,9 @@ export const CabinetLayout = ({children, title = ""}) => {
                                 <NavLink to={"/account/saved-addresses"}>Сохраненные адреса</NavLink>
                                 <div style={{marginTop:
                                         "10px"}}>
-                                    <ButtonDark minWidth={"201px"}>Выйти с аккаунта</ButtonDark>
+                                    <ButtonDark onClick={() => {
+                                        stores.AuthStore.logout();
+                                    }} minWidth={"201px"}>Выйти с аккаунта</ButtonDark>
                                 </div>
                             </S.Navbar>
                         </S.Container>

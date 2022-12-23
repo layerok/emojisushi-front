@@ -5,14 +5,11 @@ import {SvgIcon} from "../../components/svg/SvgIcon";
 import * as S from "./styled";
 import styles from "./styles.module.css";
 import {useEffect} from "react";
-import {inject} from "mobx-react";
 import {useTranslation} from "react-i18next";
+import {useAppStore} from "../../hooks/use-app-store";
 
-export const ThankYouRaw = (
-    {
-        AppStore
-    }
-) => {
+export const ThankYouRaw = () => {
+    const AppStore = useAppStore()
     useEffect(() => {
         AppStore.setLoading(false);
     }, [])
@@ -51,4 +48,4 @@ export const ThankYouRaw = (
     )
 }
 
-export const ThankYou = inject('AppStore')(ThankYouRaw);
+export const ThankYou = ThankYouRaw;

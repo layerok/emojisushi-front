@@ -1,16 +1,14 @@
-import {inject, observer} from "mobx-react";
+import {observer} from "mobx-react";
 import {useEffect} from "react";
 import * as S from "./styled";
 import {CabinetLayout} from "../../layout/CabinetLayout";
 import {PasswordInput} from "../../components/PasswordInput";
 import {ButtonOutline} from "../../components/buttons/Button";
+import {useAppStore} from "../../hooks/use-app-store";
 
 
-export const RecoverPassword = inject( 'AppStore')(observer((
-    {
-        AppStore
-    }) => {
-
+export const RecoverPassword =observer(() => {
+    const AppStore = useAppStore();
     useEffect(() => {
         AppStore.setLoading(false);
     }, [])
@@ -33,4 +31,4 @@ export const RecoverPassword = inject( 'AppStore')(observer((
         </CabinetLayout>
     )
 
-}))
+})

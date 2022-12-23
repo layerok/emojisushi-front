@@ -1,9 +1,15 @@
-import  {makeAutoObservable} from "mobx";
+import {makeAutoObservable} from "mobx";
+import LocalStorageService from "../services/local-storage.service";
+import AccessApi from "../api/access.api";
 
-class Spots {
+export class SpotsStore {
 
-    constructor() {
-        makeAutoObservable(this);
+    rootStore;
+    constructor(rootStore) {
+        makeAutoObservable(this, {
+            rootStore: false
+        });
+        this.rootStore = rootStore;
     }
 
     loading = false;
@@ -14,6 +20,13 @@ class Spots {
 
     setSelectedIndex = (index) => {
         this.selectedIndex = index;
+        LocalStorageService.set('spot_id', this.items[index].id);
+
+        Promise.all([
+            this.rootStore.CartStore.clearCart(),
+            this.rootStore.ProductsStore.fetchItems(this.rootStore.ProductsStore.lastParams),
+            this.rootStore.CategoriesStore.fetchItems()
+        ]).finally(() => this.rootStore.AppStore.setLoading(false))
     }
 
     setLoading = (state) => {
@@ -55,10 +68,14 @@ class Spots {
     setUserSelectedSpot = (state) => {
         this.userSelectedSpot = state;
     }
+
+    loadItems = async() => {
+        this.setLoading(true);
+        return AccessApi.getSpots().then((res) => {
+            this.setItems(res.data.data);
+        }).finally(() => {
+            this.setLoading(false);
+        });
+    }
 }
 
-const SpotsStore = new Spots();
-
-export {
-    SpotsStore
-}

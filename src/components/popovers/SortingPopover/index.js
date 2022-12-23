@@ -1,15 +1,11 @@
 import {DropdownPopover} from "../DropdownPopover";
 import {SortOrderButton} from "../../buttons/SortOrderButton";
-import {inject} from "mobx-react";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {productsService} from "../../../services/products.service";
+import {useProductsStore} from "../../../hooks/use-categories-store";
 
-const SortingPopoverRaw = (
-    {
-        ProductsStore
-    }
-) => {
+const SortingPopoverRaw = () => {
+    const ProductsStore = useProductsStore();
     const initialSelectedIndex = ProductsStore.sortOptions.indexOf(ProductsStore.sort);
     const [selectedIndex, setSelectedIndex] = useState(initialSelectedIndex === -1 ? 0 : initialSelectedIndex);
     const {t} = useTranslation();
@@ -24,7 +20,7 @@ const SortingPopoverRaw = (
             close();
             setSelectedIndex(index);
             ProductsStore.setSort(option);
-            productsService.fetchItems({
+            ProductsStore.fetchItems({
                 ...ProductsStore.lastParams
             })
         }}
@@ -35,4 +31,4 @@ const SortingPopoverRaw = (
     </DropdownPopover>
 }
 
-export const SortingPopover = inject('ProductsStore')(SortingPopoverRaw);
+export const SortingPopover = SortingPopoverRaw;

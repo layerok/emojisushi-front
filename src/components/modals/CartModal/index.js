@@ -14,18 +14,17 @@ import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
 import {ConfirmActionPopover} from "../../popovers/ConfirmActionPopover";
 import { useNavigate } from "react-router-dom";
 import {getNameWithMods, getProductMainImage, getProductNewPrice, getProductOldPrice} from "../../../utils/utils";
-import {inject, observer} from "mobx-react";
+import { observer} from "mobx-react";
 import {Loader} from "../../Loader";
 import {useTranslation} from "react-i18next";
 import {SvgIcon} from "../../svg/SvgIcon";
 import {LogoSvg} from "../../svg/LogoSvg";
 import {SushiSvg} from "../../svg/SushiSvg";
-import {cartService} from "../../../services/cart.service";
+import {useCartStore} from "../../../hooks/use-cart-store";
 
-const CartItem = inject('CartStore')(observer((
+const CartItem = observer((
     {
         item,
-        CartStore
     }
 ) => {
     const {product} = item;
@@ -33,10 +32,11 @@ const CartItem = inject('CartStore')(observer((
     const newPrice = getProductNewPrice(product, item.variant);
     const oldPrice = getProductOldPrice(product, item.variant)
     const nameWithMods = getNameWithMods(item);
+    const CartStore = useCartStore();
 
     const handleAdd = (product_id, variant_id) => {
         return (quantity) => {
-            cartService.addProduct({
+            CartStore.addProduct({
                 product_id,
                 quantity,
                 variant_id
@@ -47,7 +47,7 @@ const CartItem = inject('CartStore')(observer((
     return (<S.Item>
         <S.Item.RemoveIcon>
             <ConfirmActionPopover onConfirm={({close}) => {
-                cartService.removeCartProduct(item.id);
+                CartStore.removeCartProduct(item.id);
                 close();
             }} onCancel={({close}) => {
                 close();
@@ -78,18 +78,19 @@ const CartItem = inject('CartStore')(observer((
             </FlexBox>
         </S.Item.Info>
     </S.Item>)
-}))
+})
 
 
-export const CartModal = inject('CartStore')(observer((
+export const CartModal = observer((
     {
         children,
-        CartStore: {
-            items,
-            total,
-            loading,
-        }
     }) => {
+    const cartStore = useCartStore();
+    const {
+        items,
+        total,
+        loading,
+    } = cartStore;
     const navigate = useNavigate();
     const windowSize = useWindowSize();
     const [height, setHeight] = useState(windowSize.height);
@@ -159,4 +160,4 @@ export const CartModal = inject('CartStore')(observer((
     )}>
         {children}
     </BaseModal>
-}))
+})

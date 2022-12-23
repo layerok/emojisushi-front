@@ -5,7 +5,7 @@ import {IngredientsTooltip} from "../../../../components/tooltips/IngredientsToo
 import {CustomScrollbars} from "../../../../layout/CustomScrollbar";
 import {EditCartButton} from "../../../../components/buttons/EditCartButton";
 import {CartModal} from "../../../../components/modals/CartModal";
-import {inject, observer} from "mobx-react";
+import { observer} from "mobx-react";
 import {
     getNameWithMods,
     getProductIngredients,
@@ -15,16 +15,14 @@ import {
 } from "../../../../utils/utils";
 import {SvgIcon} from "../../../../components/svg/SvgIcon";
 import {LogoSvg} from "../../../../components/svg/LogoSvg";
+import {useCartStore} from "../../../../hooks/use-cart-store";
 
-const CheckoutCartRaw = (
-    {
-        CartStore: {
-            items
-        }
-    }
-) => {
+const CheckoutCartRaw = () => {
 
-
+    const CartStore = useCartStore();
+    const {
+      items
+    } = CartStore;
     return <S.Wrapper>
             <CustomScrollbars height={362}>
                 {items.map((item) => {
@@ -77,4 +75,4 @@ const CheckoutCartRaw = (
 
 }
 
-export const CheckoutCart = inject('CartStore', 'PaymentStore', 'ShippingStore')(observer(CheckoutCartRaw));
+export const CheckoutCart = observer(CheckoutCartRaw);

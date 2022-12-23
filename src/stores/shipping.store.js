@@ -1,9 +1,14 @@
-import {makeAutoObservable} from "mobx";
+import {makeAutoObservable, transaction} from "mobx";
+import ShippingApi from "../api/shipping.api";
 
-class Shipping {
+export class ShippingStore {
 
-    constructor() {
-        makeAutoObservable(this);
+    rootStore;
+    constructor(rootStore) {
+        makeAutoObservable(this, {
+            rootStore: false
+        });
+        this.rootStore = rootStore;
     }
 
     loading = false;
@@ -25,10 +30,13 @@ class Shipping {
     setItems = (items) => {
         this.items = items;
     }
-}
 
-const ShippingStore = new Shipping();
-
-export {
-    ShippingStore
+    fetchItems = (params = {}) => {
+        this.setLoading(false);
+        return ShippingApi.getMethods(params).then((res) => {
+            this.setItems(res.data.data);
+        }).finally(() => {
+            this.setLoading(false);
+        })
+    }
 }

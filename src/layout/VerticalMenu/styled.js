@@ -8,7 +8,7 @@ const Categories = styled.nav`
   flex-direction: column;
 `
 
-const Category = styled(NavLink)`
+const Category = styled(({isActive, ...rest}) => <NavLink {...rest}/>)`
   margin-top: 20px;
   text-transform: uppercase;
   line-height: 20px;

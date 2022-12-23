@@ -16,9 +16,7 @@ const Button = styled.button`
   user-select: none;
   text-decoration: none;
   background-color: ${prop("backgroundColor")};
-  ${ifProp('loading', css`
-    background-color: #FFE600;
-  `)}
+
 
   ${ifProp('filled', css`
     box-shadow: 0px 4px 15px rgba(255, 230, 0, 0.3);
