@@ -2,7 +2,6 @@ import {Layout} from "../../layout/Layout";
 import {ProductsGrid} from "../../components/ProductsGrid";
 import {inject, observer} from "mobx-react";
 import {useEffect} from "react";
-import {productsService} from "../../services/products.service";
 
 export const HomeRaw = (
     {
@@ -13,7 +12,7 @@ export const HomeRaw = (
 
     useEffect(() => {
         AppStore.setLoading(true);
-        productsService.fetchItems({
+        ProductsStore.fetchItems({
             limit: ProductsStore.step,
         }).then(() => {
             AppStore.setLoading(false);
@@ -25,7 +24,7 @@ export const HomeRaw = (
         const settings = {
             limit: ProductsStore.items.length + ProductsStore.step,
         }
-        productsService.fetchItems(settings);
+        ProductsStore.fetchItems(settings);
     }
 
     return (
