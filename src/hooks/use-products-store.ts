@@ -1,5 +1,5 @@
-import {rootStore} from "~stores/stores";
+import {useRootStore} from "~hooks/use-root-store";
 
 export const useCategoriesStore = () => {
-  return rootStore.CategoriesStore;
+  return useRootStore().CategoriesStore;
 }

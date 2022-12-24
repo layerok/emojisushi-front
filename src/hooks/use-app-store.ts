@@ -1,5 +1,5 @@
-import {rootStore} from "~stores/stores";
+import {useRootStore} from "~hooks/use-root-store";
 
 export const useAppStore = () => {
-  return rootStore.AppStore;
+  return useRootStore().AppStore;
 }
