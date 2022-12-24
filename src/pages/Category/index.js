@@ -1,11 +1,11 @@
-import {Layout} from "../../layout/Layout";
-import {ProductsGrid} from "../../components/ProductsGrid";
+import {Layout} from "~layout/Layout";
+import {ProductsGrid} from "~components/ProductsGrid";
 import { observer} from "mobx-react";
 import {useEffect} from "react";
 import {useParams} from "react-router-dom";
-import {useProductsStore} from "../../hooks/use-categories-store";
-import {useCategoriesStore} from "../../hooks/use-products-store";
-import {useAppStore} from "../../hooks/use-app-store";
+import {useProductsStore} from "~hooks/use-categories-store";
+import {useCategoriesStore} from "~hooks/use-products-store";
+import {useAppStore} from "~hooks/use-app-store";
 
 export const CategoryRaw = () => {
     const ProductsStore = useProductsStore();
