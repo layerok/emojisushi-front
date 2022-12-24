@@ -10,15 +10,15 @@ import {WishlistStore} from "./wishlist.store";
 import {makeAutoObservable} from "mobx";
 
 class RootStore {
-    CategoriesStore;
-    ProductsStore;
-    AppStore;
-    SpotsStore;
-    CartStore;
-    PaymentStore;
-    ShippingStore;
-    WishlistStore;
-    AuthStore;
+    CategoriesStore: CategoriesStore;
+    ProductsStore: ProductsStore;
+    AppStore: AppStore;
+    SpotsStore: SpotsStore;
+    CartStore: CartStore;
+    PaymentStore: PaymentStore;
+    ShippingStore: ShippingStore;
+    WishlistStore: WishlistStore;
+    AuthStore: AuthStore;
     constructor() {
         makeAutoObservable({
             CategoriesStore: false,
@@ -45,3 +45,4 @@ class RootStore {
 
 export const rootStore = new RootStore();
 export const stores = rootStore;
+//todo: delete 'stores' export when you have replaced all it's occurrences to 'rootStore'

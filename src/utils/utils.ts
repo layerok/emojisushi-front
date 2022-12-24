@@ -3,7 +3,7 @@ export function getProductMainImage(product) {
     return (image_sets.length > 0 && image_sets[0] && image_sets[0].images.length > 0) ? image_sets[0].images[0].path : undefined;
 }
 
-export function getProductOldPrice(product, variant)  {
+export function getProductOldPrice(product, variant = undefined)  {
     const {additional_prices} = product;
     if(variant) {
         return getProductOldPrice(variant);
@@ -11,7 +11,7 @@ export function getProductOldPrice(product, variant)  {
     return additional_prices.length > 0 ? additional_prices[0].price_formatted: undefined;
 }
 
-export function getProductNewPrice(product, variant)  {
+export function getProductNewPrice(product, variant = undefined)  {
     const {prices} = product;
     if(variant) {
         return getProductNewPrice(variant);

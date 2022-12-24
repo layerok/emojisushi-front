@@ -11,6 +11,7 @@ class SessionService {
         }
     }
 
+    // @ts-ignore
     gen = n => [...Array(n)].map(_=>Math.random()*10|0).join``;
 }
 

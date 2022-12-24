@@ -11,8 +11,9 @@ export class CategoriesStore {
         this.rootStore = rootStore;
     }
     items = [];
+    name: string = "";
 
-    setName = (name) => {
+    setName = (name: string) => {
         this.name = name;
     }
 

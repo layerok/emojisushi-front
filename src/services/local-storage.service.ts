@@ -1,9 +1,9 @@
 class LocalStorage {
-    set(key, value) {
+    set(key: string, value: any) {
         localStorage.setItem(key, JSON.stringify(value));
     }
 
-    get(key, defaultValue) {
+    get(key: string, defaultValue = undefined) {
         try {
             return JSON.parse(localStorage.getItem(key)) || defaultValue;
         } catch (e) {
@@ -12,7 +12,7 @@ class LocalStorage {
         }
     }
 
-    exist(key) {
+    exist(key: string) {
         return (key in localStorage);
     }
 }

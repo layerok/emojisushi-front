@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import media from "./../../common/custom-media";
+import media from "../../common/custom-media";
 
 const Wrapper = styled.div`
   background: rgba(20, 20, 20, 0.3);

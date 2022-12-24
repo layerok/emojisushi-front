@@ -21,7 +21,10 @@ export class WishlistStore {
         this.pending = pending;
     }
 
-    addItem = (params = {}) => {
+    addItem = (params: {
+        product_id: number;
+        quantity?: number | null;
+    }) => {
         const {product_id} = params;
         this.setLoading(true);
         this.setPending([...this.pending, product_id])

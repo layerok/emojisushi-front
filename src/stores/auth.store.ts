@@ -1,5 +1,6 @@
 import {makeAutoObservable} from "mobx";
 import authApi from "../api/auth.api";
+import {RainLabUser} from "~api/auth.api.types";
 
 export class AuthStore {
 
@@ -15,7 +16,7 @@ export class AuthStore {
 
     checkUser = false;
 
-    user = null;
+    user: RainLabUser | null = null;
 
     expires = null;
 
@@ -31,7 +32,7 @@ export class AuthStore {
         this.expires = timestamp;
     }
 
-    get isAuthorized() {
+    get isAuthorized(): boolean {
         return !!this.user;
     }
 

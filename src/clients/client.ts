@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import LocalStorageService from "../services/local-storage.service";
-import {stores} from "../stores/stores";
+import {stores} from "~stores/stores";
 
 const client = axios.create({
     baseURL: `${process.env.REACT_APP_API_BASE_URL}`,
@@ -24,7 +24,7 @@ client.interceptors.request.use((config = {}) => {
     }
 
     const jwt = Cookies.get('jwt');
-    const headers = config.headers || {};
+
     if(jwt) {
         config.headers.Authorization = `Bearer ${jwt}`;
     }

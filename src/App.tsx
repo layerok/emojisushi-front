@@ -1,7 +1,7 @@
-import {Routes, Route, Navigate, Outlet } from "react-router-dom";
-import React from "react";
+import {Routes, Route, Navigate } from "react-router-dom";
+import * as React from "react";
 import 'normalize.css';
-import {theme} from "./theme";
+import {theme} from "~theme";
 import {ThemeProvider} from "styled-components";
 import {ThankYou} from "./pages/ThankYou";
 import {Delivery} from "./pages/Delivery"
@@ -14,19 +14,10 @@ import {RecoverPassword} from "./pages/RecoverPassword";
 import {SavedAddresses} from "./pages/SavedAddresses";
 import {MyOrders} from "./pages/ MyOrders";
 import {ResetPassword} from "./pages/ResetPassword";
-import {useAuthStore} from "./hooks/use-auth-store";
+import {useAuthStore} from "~hooks/use-auth-store";
+import {ProtectedRoute} from "~components/ProtectedRoute";
 
-const ProtectedRoute = ({
-                          user,
-                          redirectPath = '/home',
-                          children,
-                        }) => {
-  if (!user) {
-    return <Navigate to={redirectPath} replace />;
-  }
 
-  return children ? children : <Outlet/>;
-};
 
 export const App = observer(() => {
 
@@ -55,7 +46,7 @@ export const App = observer(() => {
             <Route path=":code" element={<ResetPassword/>}/>
             <Route path="" element={<ResetPassword/>}/>
           </Route>
-          <Route path="*" element={<Navigate to={"/category/roli"}/>} replace/>
+          <Route path="*" element={<Navigate to={"/category/roli"}/>}/>
         </Routes>
       </div>
     </ThemeProvider>

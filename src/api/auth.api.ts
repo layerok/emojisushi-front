@@ -1,4 +1,6 @@
 import {client} from "../clients/client";
+import {Axios, AxiosResponse} from "axios";
+import {RainLabUser} from "~api/auth.api.types";
 
 class Auth {
 
@@ -41,7 +43,7 @@ class Auth {
         })
     }
 
-    fetchUser() {
+    fetchUser(): Promise<AxiosResponse<RainLabUser>> {
         return client.post('user');
     }
 

@@ -14,8 +14,9 @@ export class CartStore {
     total = 0;
     totalQuantity = 0;
     pending = [];
+    name: string = ""
 
-    setName = (name) => {
+    setName = (name: string) => {
         this.name = name;
     }
 
@@ -65,7 +66,11 @@ export class CartStore {
         });
     }
 
-    addProduct(params = {}) {
+    addProduct(params: {
+        product_id: number;
+        variant_id?: number;
+        quantity?: number;
+    }) {
         const {product_id} = params;
 
         this.setLoading(true);

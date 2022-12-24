@@ -1,4 +1,4 @@
-import {rootStore} from "../stores/stores";
+import {rootStore} from "~stores/stores";
 
 export const useCartStore = () => {
   return rootStore.CartStore;

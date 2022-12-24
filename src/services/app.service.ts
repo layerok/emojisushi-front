@@ -1,6 +1,6 @@
 import LocalStorageService from "./local-storage.service";
 import {sessionService} from "./session.service";
-import {stores} from "../stores/stores";
+import {stores} from "~stores/stores";
 const {SpotsStore} = stores;
 
 class AppService {
