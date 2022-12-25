@@ -1,7 +1,8 @@
 import {makeAutoObservable} from "mobx";
+import {RootStore} from "~stores/stores";
 
 export class AppStore {
-    rootStore;
+    rootStore: RootStore;
     constructor(rootStore) {
         makeAutoObservable(this, {
             rootStore: false

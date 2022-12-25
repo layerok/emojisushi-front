@@ -1,9 +1,9 @@
 import {makeAutoObservable} from "mobx";
 import MenuApi from "../api/menu.api";
-import {stores} from "./stores";
+import {RootStore, stores} from "./stores";
 
 export class CategoriesStore {
-    rootStore;
+    rootStore: RootStore;
     constructor(rootStore) {
         makeAutoObservable(this, {
             rootStore: false

@@ -1,9 +1,10 @@
 import {makeAutoObservable, transaction} from "mobx";
 import WishlistApi from "../api/wishlist.api";
+import {RootStore} from "~stores/stores";
 
 export class WishlistStore {
 
-    rootStore;
+    rootStore: RootStore;
     constructor(rootStore) {
         makeAutoObservable(this, {
             rootStore: false
@@ -11,13 +12,13 @@ export class WishlistStore {
         this.rootStore = rootStore;
     }
     loading = false;
-    pending = [];
+    pending: number[] = [];
 
-    setLoading = (state) => {
+    setLoading = (state: boolean) => {
         this.loading = state;
     }
 
-    setPending = (pending) => {
+    setPending = (pending: number[]) => {
         this.pending = pending;
     }
 

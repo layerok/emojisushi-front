@@ -1,9 +1,10 @@
 import {makeAutoObservable} from "mobx";
 import PaymentApi from "../api/payment.api";
+import {RootStore} from "~stores/stores";
 
 export class PaymentStore {
 
-    rootStore;
+    rootStore: RootStore;
     constructor(rootStore) {
         makeAutoObservable(this, {
             rootStore: false

@@ -1,11 +1,18 @@
-import {client} from "../clients/client";
-import {Axios, AxiosResponse} from "axios";
+import {client} from "~clients/client";
+import { AxiosResponse} from "axios";
 import {RainLabUser} from "~api/auth.api.types";
 
 class Auth {
 
-    register(credentials, activate = true, autoLogin = true) {
-        const {email, password, password_confirmation, name, surname, agree} = credentials;
+    register(data: {
+        email: string;
+        password: string;
+        password_confirmation: string;
+        name: string;
+        surname: string;
+        agree: boolean;
+    }, activate = true, autoLogin = true) {
+        const {email, password, password_confirmation, name, surname, agree} = data;
         return client.post('auth/register', {
             email,
             password,
@@ -18,25 +25,21 @@ class Auth {
         });
     }
 
-    login(credentials) {
-        const {
-            email,
-            password
-        } = credentials;
-        return client.post('auth/login', {
-            email,
-            password
-        })
+    login(credentials: {
+        email: string;
+        password: string;
+    }) {
+        return client.post('auth/login', credentials)
     }
 
-    restorePassword(email) {
+    restorePassword(email: string) {
         return client.post('auth/restore-password', {
             email,
             redirect_url: window.location.origin + '/reset-password'
         })
     }
 
-    resetPassword(code, password) {
+    resetPassword(code: string, password: string) {
         return client.post('auth/reset-password', {
             code,
             password,

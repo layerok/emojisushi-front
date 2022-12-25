@@ -1,8 +1,9 @@
 import {makeAutoObservable, transaction} from "mobx";
 import CartApi from "../api/cart.api";
+import {RootStore} from "~stores/stores";
 
 export class CartStore {
-    rootStore;
+    rootStore: RootStore;
     constructor(rootStore) {
         makeAutoObservable(this, {
             rootStore: false

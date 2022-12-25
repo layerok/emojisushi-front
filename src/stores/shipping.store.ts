@@ -1,9 +1,10 @@
-import {makeAutoObservable, transaction} from "mobx";
+import {makeAutoObservable} from "mobx";
 import ShippingApi from "../api/shipping.api";
+import {RootStore} from "~stores/stores";
 
 export class ShippingStore {
 
-    rootStore;
+    rootStore: RootStore;
     constructor(rootStore) {
         makeAutoObservable(this, {
             rootStore: false

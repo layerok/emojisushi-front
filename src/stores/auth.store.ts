@@ -1,10 +1,11 @@
 import {makeAutoObservable} from "mobx";
 import authApi from "../api/auth.api";
 import {RainLabUser} from "~api/auth.api.types";
+import {RootStore} from "~stores/stores";
 
 export class AuthStore {
 
-    rootStore;
+    rootStore: RootStore;
     constructor(rootStore) {
         makeAutoObservable(this, {
             rootStore: false

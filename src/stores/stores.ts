@@ -9,7 +9,7 @@ import {ShippingStore} from "./shipping.store";
 import {WishlistStore} from "./wishlist.store";
 import {makeAutoObservable} from "mobx";
 
-class RootStore {
+export class RootStore {
     CategoriesStore: CategoriesStore;
     ProductsStore: ProductsStore;
     AppStore: AppStore;

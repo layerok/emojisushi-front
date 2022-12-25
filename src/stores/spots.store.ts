@@ -1,10 +1,12 @@
 import {makeAutoObservable} from "mobx";
 import LocalStorageService from "../services/local-storage.service";
 import AccessApi from "../api/access.api";
+import {RootStore} from "~stores/stores";
+import {ISpot} from "~api/access.api.types";
 
 export class SpotsStore {
 
-    rootStore;
+    rootStore: RootStore;
     constructor(rootStore) {
         makeAutoObservable(this, {
             rootStore: false
@@ -13,12 +15,11 @@ export class SpotsStore {
     }
 
     loading = false;
-    items = [];
-    selectedIndex = null;
-    needRefresh = false;
+    items: ISpot[] = [];
+    selectedIndex: number | null = null;
     userSelectedSpot = false;
 
-    setSelectedIndex = (index) => {
+    setSelectedIndex = (index: number) => {
         this.selectedIndex = index;
         LocalStorageService.set('spot_id', this.items[index].id);
 
@@ -33,39 +34,39 @@ export class SpotsStore {
         this.loading = state;
     }
 
-    get getAddress() {
+    get getAddress(): string | undefined | null {
         return this.getSelected?.address
     }
 
-    get getPhones() {
+    get getPhones(): string | undefined | null {
         return this.getSelected?.phones;
     }
 
-    get content() {
+    get content(): string | undefined | null {
         return this.getSelected?.html_content;
     }
 
-    get googleMapUrl() {
+    get googleMapUrl(): string | undefined | null {
         return this.getSelected?.google_map_url;
     }
 
-    get hasPhones() {
+    get hasPhones(): boolean {
         return this.getPhones && this.getPhones !== '';
     }
 
-    get getSelected() {
+    get getSelected(): ISpot | undefined {
         return this.items?.[this.selectedIndex]
     }
 
-    get getSelectedIndex() {
+    get getSelectedIndex(): number | null {
         return this.selectedIndex;
     }
 
-    setItems = (items) => {
+    setItems = (items: ISpot[]) => {
         this.items = items;
     }
 
-    setUserSelectedSpot = (state) => {
+    setUserSelectedSpot = (state: boolean) => {
         this.userSelectedSpot = state;
     }
 
