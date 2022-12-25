@@ -65,7 +65,7 @@ export const ButtonOutline = (
     {
         children,
         ...rest
-    }) => {
+    }: Omit<IProps, 'filled' | 'outline'>) => {
     return <Button {...rest} filled={false} outline={true}>
         {children}
     </Button>
@@ -75,7 +75,7 @@ export const ButtonFilled = (
     {
         children,
         ...rest
-    }) => {
+    }: Omit<IProps, 'color' | 'filled' | 'backgroundColor'>) => {
     return <Button {...rest} backgroundColor={"#FFE600"} color={"black"} filled={true}>
         {children}
     </Button>
@@ -85,7 +85,7 @@ export const ButtonDark = (
     {
         children,
         ...rest
-    }
+    }: Omit<IProps, 'outline' | 'color' | 'backgroundColor' | 'hoverBackgroundColor' | 'hoverColor' | 'hoverOutline'>
 ) => {
 
     return (

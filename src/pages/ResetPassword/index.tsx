@@ -1,4 +1,4 @@
-import {Layout} from "../../layout/Layout";
+import {Layout} from "~layout/Layout";
 import {useEffect, useState} from "react";
 import {observer} from "mobx-react";
 import {Input} from "~components/Input";
@@ -8,6 +8,7 @@ import {Button} from "~components/buttons/Button";
 import { useParams} from "react-router-dom";
 import authApi from "../../api/auth.api";
 import {useAppStore} from "~hooks/use-app-store";
+import {PasswordInput} from "~components/PasswordInput";
 
 
 export const ResetPassword = observer(() => {
@@ -42,7 +43,7 @@ export const ResetPassword = observer(() => {
             marginTop: '16px'
           }} name={'code'} placeholder={'Код'}/>
 
-          <Input error={passwordError} onChange={e => {
+          <PasswordInput error={passwordError} onChange={e => {
             setPassword((e.target as HTMLInputElement).value);
             setPasswordError('');
           }} style={{
@@ -60,7 +61,10 @@ export const ResetPassword = observer(() => {
 
           <Button loading={loading}  onClick={() => {
             setLoading(true);
-            authApi.resetPassword(code, password)
+            authApi.resetPassword({
+              code,
+              password
+            })
               .then((res) => {
                 console.log(res);
                 setIsReset(true);

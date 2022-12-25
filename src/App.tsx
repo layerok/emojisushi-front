@@ -10,7 +10,7 @@ import {Category} from "./pages/Category";
 import { observer} from "mobx-react";
 import {Wishlist} from "./pages/Wishlist";
 import {Profile} from "./pages/Profile";
-import {RecoverPassword} from "./pages/RecoverPassword";
+import {UpdatePassword} from "./pages/UpdatePassword";
 import {SavedAddresses} from "./pages/SavedAddresses";
 import {MyOrders} from "./pages/ MyOrders";
 import {ResetPassword} from "./pages/ResetPassword";
@@ -36,7 +36,7 @@ export const App = observer(() => {
 
           <Route element={<ProtectedRoute redirectPath={'/categori/roli'} user={authStore.user}/>}>
             <Route path="/account/profile" element={<Profile/>}/>
-            <Route path="/account/recover-password" element={<RecoverPassword/>} />
+            <Route path="/account/recover-password" element={<UpdatePassword/>} />
             <Route path="/account/saved-addresses" element={<SavedAddresses/>} />
             <Route path="/account/orders" element={<MyOrders/>} />
             <Route path="/account" element={<Navigate to={"/account/profile"}/>}/>

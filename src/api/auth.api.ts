@@ -1,6 +1,6 @@
 import {client} from "~clients/client";
 import { AxiosResponse} from "axios";
-import {IOfflineMallUser, IRainLabUser} from "~api/auth.api.types";
+import {IOfflineMallUser} from "~api/auth.api.types";
 
 class Auth {
 
@@ -45,11 +45,18 @@ class Auth {
         })
     }
 
-    resetPassword(code: string, password: string) {
-        return client.post('auth/reset-password', {
-            code,
-            password,
-        })
+    resetPassword(data: {
+        code: string, password: string
+    }) {
+        return client.post('auth/reset-password', data)
+    }
+
+    updateUserPassword(data: {
+        password_old: string;
+        password: string;
+        password_confirmation: string;
+    }) {
+        return client.post('user/password', data);
     }
 
     fetchUser(): Promise<AxiosResponse<IOfflineMallUser>> {

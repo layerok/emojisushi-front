@@ -130,7 +130,7 @@ const EditForm = observer(({
             }}>Сохранить</ButtonOutline>
             <ButtonDark onClick={() => {
                 cancelEditing();
-            }}>Відміна</ButtonDark>
+            }}>Скасувати</ButtonDark>
         </FlexBox>
 
     </>
