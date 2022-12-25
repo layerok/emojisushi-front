@@ -1,19 +1,16 @@
 import {Layout} from "../../layout/Layout";
-import {useEffect, useMemo, useState} from "react";
-import {inject, observer} from "mobx-react";
-import {Input} from "../../components/Input";
+import {useEffect, useState} from "react";
+import {observer} from "mobx-react";
+import {Input} from "~components/Input";
 import * as S from "./styled";
-import {FlexBox} from "../../components/FlexBox";
-import {Button} from "../../components/buttons/Button";
+import {FlexBox} from "~components/FlexBox";
+import {Button} from "~components/buttons/Button";
 import { useParams} from "react-router-dom";
 import authApi from "../../api/auth.api";
+import {useAppStore} from "~hooks/use-app-store";
 
 
-export const ResetPasswordRaw = (
-  {
-    AppStore,
-  }
-) => {
+export const ResetPassword = observer(() => {
 
   const {code: codeFromQuery} = useParams();
   const [code, setCode] = useState(codeFromQuery)
@@ -22,6 +19,7 @@ export const ResetPasswordRaw = (
   const [passwordError, setPasswordError] = useState('');
   const [codeError, setCodeError] = useState('');
   const [isReset, setIsReset] = useState(false);
+  const AppStore = useAppStore();
 
   useEffect(() => {
     AppStore.setLoading(false);
@@ -38,14 +36,14 @@ export const ResetPasswordRaw = (
           <h2>Скидання пароля</h2>
 
           <Input error={codeError} value={code} onChange={e => {
-            setCode(e.target.value);
+            setCode((e.target as HTMLInputElement).value);
             setCodeError('');
           }} style={{
             marginTop: '16px'
           }} name={'code'} placeholder={'Код'}/>
 
           <Input error={passwordError} onChange={e => {
-            setPassword(e.target.value);
+            setPassword((e.target as HTMLInputElement).value);
             setPasswordError('');
           }} style={{
             marginTop: '16px'
@@ -94,6 +92,5 @@ export const ResetPasswordRaw = (
 
     </Layout>
   )
-}
+})
 
-export const ResetPassword = inject('AppStore')(observer(ResetPasswordRaw));

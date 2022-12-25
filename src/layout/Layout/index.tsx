@@ -6,15 +6,19 @@ import {Sidebar} from "../Sidebar";
 import * as S from "./styled";
 import {RestaurantClosed} from "../../components/modals/RestaurantClosed";
 import {Preloader} from "../Preloader";
-import {inject, observer} from "mobx-react";
+import { observer} from "mobx-react";
 import {SpotsModal} from "../../components/modals/SpotsModal";
-import {isClosed} from "../../utils/time.utils";
+import {isClosed} from "~utils/time.utils";
 import {useLocation, useWindowScroll} from "react-use";
 import {CartModal} from "../../components/modals/CartModal";
 import {TinyCartButton} from "../../components/TinyCartButton";
 import {Sticky} from "../../components/Sticky";
 import {StickyToTopBtn} from "../../components/StickyToTopBtn";
 import {useEffect} from "react";
+import {useAppStore} from "~hooks/use-app-store";
+import {useProductsStore} from "~hooks/use-categories-store";
+import {useCartStore} from "~hooks/use-cart-store";
+import {useSpotsStore} from "~hooks/use-spots-store";
 
 export const LayoutRaw = (
     {
@@ -25,16 +29,14 @@ export const LayoutRaw = (
         withSpotsModal = false,
         mainProps = {},
         containerProps = {},
-        AppStore: {
-            loading,
-        },
-        ProductsStore,
-        CartStore,
-        SpotsStore,
         ...rest
     }) => {
     const {x, y} = useWindowScroll();
     const location = useLocation();
+    const AppStore = useAppStore();
+    const ProductsStore = useProductsStore();
+    const CartStore = useCartStore();
+    const SpotsStore = useSpotsStore();
 
     const showStickyCart = y > 100;
 
@@ -49,7 +51,7 @@ export const LayoutRaw = (
 
     return (
         <S.Layout {...rest}>
-            {loading && (<Preloader/>)}
+            {AppStore.loading && (<Preloader/>)}
             <Header/>
             <S.Main {...mainProps}>
                 <Container {...containerProps}>
@@ -85,4 +87,4 @@ export const LayoutRaw = (
     )
 }
 
-export const Layout = inject('AppStore', 'CartStore', 'SpotsStore', 'ProductsStore')(observer(LayoutRaw));
+export const Layout = observer(LayoutRaw);

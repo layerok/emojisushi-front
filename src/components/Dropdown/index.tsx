@@ -1,22 +1,25 @@
 import {
     autoUpdate,
     flip,
-    size,
     offset,
     shift,
     useFloating,
     FloatingPortal,
     FloatingFocusManager, useInteractions, useListNavigation, useClick, useDismiss, useRole
 } from "@floating-ui/react-dom-interactions";
-import {forwardRef, useId, useMemo, useRef, useState} from "react";
+import {forwardRef, HTMLProps, PropsWithChildren, useId, useMemo, useRef, useState} from "react";
 import {useEffect} from "react";
 import * as S from "./styled";
 import {SvgIcon} from "../svg/SvgIcon";
 import {CaretDownSvg} from "../svg/CaretDownSvg";
 
+type IOptionProps = HTMLProps<HTMLDivElement> & PropsWithChildren<{
+    name: string;
+    active: boolean;
+    selected: boolean;
+}>
 
-
-const Option = forwardRef(function Option(
+const Option = forwardRef<HTMLDivElement, IOptionProps>(function Option(
     { name, active, selected, children, ...props },
     ref
 ) {
@@ -45,12 +48,21 @@ const Option = forwardRef(function Option(
     );
 });
 
+type IDropdownProps = {
+    options: {
+        label: string;
+        value: string | number;
+    }[];
+    width: string;
+    initiallySelectedValue: null | string | number;
+}
+
 export const Dropdown = (
     {
         options = [],
         width = "100px",
         initiallySelectedValue = null
-    }
+    }: IDropdownProps
 ) => {
 
     const [open, setOpen] = useState(false);
@@ -107,7 +119,6 @@ export const Dropdown = (
             listRef,
             onNavigate,
             activeIndex,
-            cols: 1,
             orientation: "vertical",
             loop: true,
             focusItemOnOpen: false,

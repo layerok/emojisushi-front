@@ -1,6 +1,23 @@
 import * as S from "./styled";
 import {SvgIcon} from "../../svg/SvgIcon";
 import {SpinnerSvg} from "../../svg/SpinnerSvg";
+import {HTMLProps, PropsWithChildren} from "react";
+import {IJustifyContent} from "~components/FlexBox";
+
+type IProps = HTMLProps<HTMLButtonElement> & PropsWithChildren<{
+  width?: string;
+  filled?: boolean;
+  padding?: string;
+  loading?: boolean;
+  justifyContent?: IJustifyContent;
+  outline?: boolean;
+  color?: string;
+  hoverColor?: string;
+  backgroundColor?: string;
+  hoverOutline?: boolean;
+  minWidth?: string;
+  hoverBackgroundColor?: string;
+}>
 
 export const Button = (
     {
@@ -18,7 +35,7 @@ export const Button = (
         hoverOutline = true,
         minWidth = "130px",
         ...rest
-    }) => {
+    }: IProps) => {
     return <S.Button
         minWidth={minWidth}
         outline={outline}

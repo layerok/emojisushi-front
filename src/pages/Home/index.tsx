@@ -1,14 +1,13 @@
 import {Layout} from "../../layout/Layout";
 import {ProductsGrid} from "../../components/ProductsGrid";
-import {inject, observer} from "mobx-react";
+import {observer} from "mobx-react";
 import {useEffect} from "react";
+import {useProductsStore} from "~hooks/use-categories-store";
+import {useAppStore} from "~hooks/use-app-store";
 
-export const HomeRaw = (
-    {
-        ProductsStore,
-        AppStore
-    }
-) => {
+export const HomeRaw = () => {
+    const ProductsStore = useProductsStore();
+    const AppStore = useAppStore();
 
     useEffect(() => {
         AppStore.setLoading(true);
@@ -43,4 +42,4 @@ export const HomeRaw = (
     );
 }
 
-export const Home = inject('ProductsStore', 'AppStore', 'CategoriesStore')(observer(HomeRaw))
+export const Home = observer(HomeRaw)

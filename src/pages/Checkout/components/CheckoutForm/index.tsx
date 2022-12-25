@@ -1,8 +1,8 @@
 import * as S from "./styled";
 import {Switcher} from "../../../../components/Switcher";
-import {Input} from "../../../../components/Input";
-import {FlexBox} from "../../../../components/FlexBox";
-import {ButtonOutline} from "../../../../components/buttons/Button";
+import {Input} from "~components/Input";
+import {FlexBox} from "~components/FlexBox";
+import {ButtonOutline} from "~components/buttons/Button";
 import { observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
 import {useFormik} from "formik";
@@ -10,11 +10,11 @@ import * as Yup from "yup";
 import OrderApi from "../../../../api/order.api";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
-import {AuthModal} from "../../../../components/modals/AuthModal";
-import {usePaymentStore} from "../../../../hooks/use-payment-store";
-import {useShippingStore} from "../../../../hooks/use-shipping-store";
-import {useCartStore} from "../../../../hooks/use-cart-store";
-import {useAuthStore} from "../../../../hooks/use-auth-store";
+import {AuthModal} from "~components/modals/AuthModal";
+import {usePaymentStore} from "~hooks/use-payment-store";
+import {useShippingStore} from "~hooks/use-shipping-store";
+import {useCartStore} from "~hooks/use-cart-store";
+import {useAuthStore} from "~hooks/use-auth-store";
 
 export const CheckoutFormRaw = () => {
     const PaymentStore = usePaymentStore();
@@ -118,7 +118,7 @@ export const CheckoutFormRaw = () => {
               name={"first_name"}
               placeholder={t('checkout.form.first_name')}
               onChange={formik.handleChange}
-              value={formik.values.name}
+              value={formik.values.first_name}
             />
         </S.Control>
 

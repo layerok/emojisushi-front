@@ -120,7 +120,6 @@ Sex.Label = styled.p`
 const HorizontalBar = styled.div`
   border: 1px solid #2D2D2D;
   margin-top: 30px;
-  margin-bottom: 30px;
 `
 
 export {

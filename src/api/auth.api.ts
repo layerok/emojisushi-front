@@ -1,6 +1,6 @@
 import {client} from "~clients/client";
 import { AxiosResponse} from "axios";
-import {RainLabUser} from "~api/auth.api.types";
+import {IOfflineMallUser, IRainLabUser} from "~api/auth.api.types";
 
 class Auth {
 
@@ -28,7 +28,13 @@ class Auth {
     login(credentials: {
         email: string;
         password: string;
-    }) {
+    }): Promise<AxiosResponse<{
+        data: {
+            user: IOfflineMallUser;
+            expires: string;
+            token: string;
+        }
+    }>> {
         return client.post('auth/login', credentials)
     }
 
@@ -46,8 +52,22 @@ class Auth {
         })
     }
 
-    fetchUser(): Promise<AxiosResponse<RainLabUser>> {
-        return client.post('user');
+    fetchUser(): Promise<AxiosResponse<IOfflineMallUser>> {
+        return client.get('user');
+    }
+
+    updateUser(data: {
+        name?: string;
+        surname?: string;
+    }) {
+        return client.post('user', data);
+    }
+
+    updateCustomer(data: {
+        firstname?: string;
+        lastname?: string;
+    }) {
+        return client.post('customer', data);
     }
 
 }

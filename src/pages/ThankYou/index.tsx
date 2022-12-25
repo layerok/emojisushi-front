@@ -1,12 +1,11 @@
-import {Layout} from "../../layout/Layout";
+import {Layout} from "~layout/Layout";
 import {Heading} from "../../components/Heading";
 import {CheckCircleSvg} from "../../components/svg/CheckCircleSvg";
 import {SvgIcon} from "../../components/svg/SvgIcon";
 import * as S from "./styled";
-import styles from "./styles.module.css";
 import {useEffect} from "react";
 import {useTranslation} from "react-i18next";
-import {useAppStore} from "../../hooks/use-app-store";
+import {useAppStore} from "~hooks/use-app-store";
 
 export const ThankYouRaw = () => {
     const AppStore = useAppStore()
@@ -18,7 +17,9 @@ export const ThankYouRaw = () => {
         <Layout withSidebar={false}
                 withBanner={false}
                 mainProps={{
-                    className: styles.thankYouLayoutMain
+                    style: {
+                        justifyContent: 'center'
+                    }
                 }}
         >
             <S.Center>

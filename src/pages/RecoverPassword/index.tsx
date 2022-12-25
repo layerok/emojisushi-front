@@ -19,11 +19,11 @@ export const RecoverPassword =observer(() => {
 
             <S.Form>
                 <S.Text>Старый пароль</S.Text>
-                <PasswordInput/>
+                <PasswordInput name={'old_password'}/>
                 <S.Text>Новый пароль</S.Text>
-                <PasswordInput/>
+                <PasswordInput name={'password'}/>
                 <S.Text>Новый пароль ещё раз</S.Text>
-                <PasswordInput/>
+                <PasswordInput name={'password_confirmation'}/>
                 <S.ButtonWrapper>
                     <ButtonOutline width={"224px"}>Изменить пароль</ButtonOutline>
                 </S.ButtonWrapper>

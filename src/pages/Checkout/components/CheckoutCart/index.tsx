@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import {FlexBox} from "../../../../components/FlexBox";
+import {FlexBox} from "~components/FlexBox";
 import {Price} from "../../../../components/Price";
 import {IngredientsTooltip} from "../../../../components/tooltips/IngredientsTooltip";
 import {CustomScrollbars} from "../../../../layout/CustomScrollbar";
@@ -12,10 +12,10 @@ import {
     getProductMainImage,
     getProductNewPrice,
     getProductOldPrice
-} from "../../../../utils/utils";
+} from "~utils/utils";
 import {SvgIcon} from "../../../../components/svg/SvgIcon";
 import {LogoSvg} from "../../../../components/svg/LogoSvg";
-import {useCartStore} from "../../../../hooks/use-cart-store";
+import {useCartStore} from "~hooks/use-cart-store";
 
 const CheckoutCartRaw = () => {
 

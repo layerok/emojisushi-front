@@ -3,13 +3,19 @@ import {SvgIcon} from "../svg/SvgIcon";
 import {EyeSvg} from "../svg/EyeSvg";
 import {useState} from "react";
 import {ClosedEyeSvg} from "../svg/ClosedEyeSvg";
-import {Input} from "../Input";
+import {IInputComponentProps, Input} from "../Input";
+
+type IProps = IInputComponentProps & {
+  name: string;
+  hidden?: boolean;
+}
 
 export const PasswordInput = (
     {
         hidden: hiddenPassed = true,
+        name,
         ...rest
-    }
+    }: IProps
 ) => {
         const [hidden, setHidden] = useState(hiddenPassed);
 
@@ -17,7 +23,7 @@ export const PasswordInput = (
     return (
 
         <S.Wrapper>
-            <Input type={hidden ? "password" : "text"}
+            <Input name={name} type={hidden ? "password" : "text"}
                    {...rest}/>
             <S.Eye onClick={() => {setHidden( !hidden )}}>
                 <SvgIcon width="20px">

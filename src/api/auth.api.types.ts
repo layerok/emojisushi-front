@@ -1,4 +1,4 @@
-export type RainLabUser = {
+export type IRainLabUser = {
   id: number;
   name: string | null;
   email: string;
@@ -16,5 +16,17 @@ export type RainLabUser = {
   is_superuser: 0 | 1;
   created_ip_address: null | string;
   last_ip_address: null | string;
+}
+
+export type IOfflineMallCustomer = {
+  firstname: string;
+  lastname: string;
+  is_guest: boolean;
+  default_shipping_address_id: number | null;
+  default_billing_address_id: number | null;
+}
+
+export type IOfflineMallUser = IRainLabUser & {
   offline_mall_customer_group_id: number | null;
+  customer: IOfflineMallCustomer | null;
 }

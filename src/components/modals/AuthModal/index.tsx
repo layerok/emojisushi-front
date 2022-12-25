@@ -5,13 +5,13 @@ import {Input} from "../../Input";
 import {Button} from "../../buttons/Button";
 import {Checkbox} from "../../Checkbox";
 import {PasswordInput} from "../../PasswordInput";
-import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
+import {useBreakpoint} from "~common/hooks/useBreakpoint";
 import {FlexBox} from "../../FlexBox";
 import AuthApi from "../../../api/auth.api";
 import authApi from "../../../api/auth.api";
 import {observer, useLocalObservable} from "mobx-react";
 import {runInAction, transaction} from "mobx";
-import {stores} from "../../../stores/stores";
+import {stores} from "~stores/stores";
 import {useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
 
@@ -42,7 +42,7 @@ export const AuthModal = ( { children}) => {
                 <S.VerticalBar/>
             }
             {showSignUpForm &&
-                <SignUpForm/>
+                <SignUpForm setShowSignUp={setShowSignUp}/>
             }
         </S.Wrapper>
     )}>
@@ -55,10 +55,10 @@ const SignUpForm = ({
                     }) => {
     const breakpoint = useBreakpoint();
     const isMobile = breakpoint === 'mobile';
-    const [email, setEmail] = useState();
+    const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [emailError, setEmailError] = useState("");
-    const [password, setPassword] = useState();
+    const [password, setPassword] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [agree, setAgree] = useState(false);
     const [agreeError, setAgreeError] = useState("");
@@ -76,8 +76,8 @@ const SignUpForm = ({
             <S.InputLabel>
                 E-mail
             </S.InputLabel>
-            <Input error={emailError} onChange={e => {
-                const {value} = e.currentTarget;
+            <Input name={'email'} error={emailError} onChange={e => {
+                const {value} = e.currentTarget as HTMLInputElement;
                 setEmail(value);
                 setEmailError("");
             }} light={true}/>
@@ -87,9 +87,8 @@ const SignUpForm = ({
             <S.InputLabel>
                 Пароль
             </S.InputLabel>
-            <PasswordInput light={true} error={passwordError} onChange={e => {
-                const {value} = e.currentTarget;
-                setPassword(value);
+            <PasswordInput name={'password'} light={true} error={passwordError} onChange={e => {
+                setPassword((e.target as HTMLInputElement).value);
                 setPasswordError("");
             }}/>
         </S.InputWrapper>
@@ -116,8 +115,8 @@ const SignUpForm = ({
                         password: password,
                         password_confirmation: password,
                         agree: agree,
-                        name: 'Не указано',
-                        surname: 'Не указано'
+                        name: '',
+                        surname: ''
                     }).then(() => {
                         return AuthApi.login({
                             email: email,
@@ -127,7 +126,7 @@ const SignUpForm = ({
                             Cookies.set('jwt', token);
                             transaction(() => {
                                 stores.AuthStore.setAuthToken(token);
-                                stores.AuthStore.setUser(user);
+                                stores.AuthStore.userFromJson(user);
                                 stores.AuthStore.setExpires(expires);
                             })
                             navigate('/account')
@@ -186,10 +185,10 @@ const PasswordRecoveryForm = observer(({
             <S.InputLabel>
                 E-mail
             </S.InputLabel>
-            <Input error={state.error} light={true} onChange={e => {
+            <Input name={'email'} error={state.error} light={true} onChange={e => {
                 runInAction(() => {
                     state.error = '';
-                    state.email = e.target.value;
+                    state.email = (e.target as HTMLInputElement).value;
                 })
             }}/>
         </S.InputWrapper>
@@ -263,8 +262,8 @@ const LoginForm = ({
             <S.InputLabel>
                 E-mail
             </S.InputLabel>
-            <Input error={loginError} onChange={(e) => {
-                setLogin(e.target.value);
+            <Input name={'email'} error={loginError} onChange={(e) => {
+                setLogin((e.target as HTMLInputElement).value);
                 setLoginError('');
             }} light={true}/>
         </S.InputWrapper>
@@ -272,8 +271,8 @@ const LoginForm = ({
             <S.InputLabel>
                 Пароль
             </S.InputLabel>
-            <PasswordInput error={passwordError} onChange={(e) => {
-                setPassword(e.target.value);
+            <PasswordInput name={'password'} error={passwordError} onChange={(e) => {
+                setPassword((e.target as HTMLInputElement).value);
                 setPasswordError('');
             }} light={true}/>
 
@@ -296,7 +295,7 @@ const LoginForm = ({
                 Cookies.set('jwt', token);
                 transaction(() => {
                     stores.AuthStore.setAuthToken(token);
-                    stores.AuthStore.setUser(user);
+                    stores.AuthStore.userFromJson(user);
                     stores.AuthStore.setExpires(expires);
                 })
                 navigate('/account');
