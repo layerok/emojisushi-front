@@ -1,4 +1,4 @@
-import {client} from "../clients/client";
+import {client} from "~clients/client";
 
 class Shipping {
     getMethods(params = {}) {

@@ -1,7 +1,7 @@
 import {makeAutoObservable} from "mobx";
 import authApi from "../api/auth.api";
 import {RootStore} from "~stores/stores";
-import {IOfflineMallCustomer, IOfflineMallUser} from "~api/auth.api.types";
+import {IAddress, IOfflineMallCustomer, IOfflineMallUser} from "~api/auth.api.types";
 
 class OfflineMallCustomer {
     json: IOfflineMallCustomer;
@@ -37,6 +37,18 @@ class OfflineMallCustomer {
 
     get isGuest() {
         return this.json.is_guest;
+    }
+
+    get addresses() {
+        return this.json.addresses;
+    }
+
+    get defaultShippingAddressId() {
+        return this.json.default_shipping_address_id
+    }
+
+    isDefaultShippingAddress(address: IAddress) {
+        return address.id === this.defaultShippingAddressId;
     }
 
     setSaving(state: boolean) {
@@ -206,7 +218,7 @@ export class AuthStore {
     }
 
     fetchUser() {
-        authApi.fetchUser().then((res) => {
+        return authApi.fetchUser().then((res) => {
             this.setUser(new OfflineMallUser(this, res.data));
         })
     }

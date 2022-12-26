@@ -74,7 +74,31 @@ class Auth {
         firstname?: string;
         lastname?: string;
     }) {
-        return client.post('customer', data);
+        return client.post('user/customer', data);
+    }
+
+    addAddress(data: {
+        name: string;
+        lines: string;
+        zip: string;
+        city: string;
+        two_letters_country_code?: string;
+    }) {
+        return client.post('user/address', data);
+    }
+
+    deleteAddress(id: number) {
+        return client.delete('user/address', {
+            data: {
+                id
+            }
+        })
+    }
+
+    makeAddressDefault(id: number) {
+        return client.post('user/address/default', {
+            id
+        })
     }
 
 }
