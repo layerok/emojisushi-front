@@ -1,15 +1,14 @@
 import * as S from "./styled";
-import MapLocationPinSrc from "../../../assets/ui/icons/map-location-pin.svg"
 import {SvgIcon} from "../../svg/SvgIcon";
 import {CaretDownSvg} from "../../svg/CaretDownSvg";
 import {FlexBox} from "../../FlexBox";
 import {DropdownPopover} from "../DropdownPopover";
 import { observer} from "mobx-react";
-import {useSpotsStore} from "../../../hooks/use-spots-store";
-import {useAppStore} from "../../../hooks/use-app-store";
+import {useSpotsStore} from "~hooks/use-spots-store";
+import {useAppStore} from "~hooks/use-app-store";
 import {transaction} from "mobx";
 
-
+const MapLocationPinSrc = require("../../../assets/ui/icons/map-location-pin.svg")
 
 export const LocationPickerPopoverRaw = (
   {

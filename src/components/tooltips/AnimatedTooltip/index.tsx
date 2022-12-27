@@ -1,15 +1,14 @@
-import { cloneElement, useState } from "react";
+import {cloneElement,  ReactElement, useState} from "react";
 import {
     offset,
     flip,
     shift,
-    autoUpdate,
     useFloating,
     useInteractions,
     useHover,
     useFocus,
     useRole,
-    useDismiss
+    useDismiss, Placement
 } from "@floating-ui/react-dom-interactions";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -17,7 +16,11 @@ export const AnimatedTooltip = ({
                                     children,
                                     label,
                                     placement = "top"
-                                }) => {
+                                }: {
+    label: ReactElement;
+    placement: Placement
+    children: ReactElement
+}) => {
     const [open, setOpen] = useState(false);
 
     const { x, y, reference, floating, strategy, context } = useFloating({
@@ -25,7 +28,6 @@ export const AnimatedTooltip = ({
         open,
         onOpenChange: setOpen,
         middleware: [offset(5), flip(), shift({ padding: 8 })],
-        whileElementsMounted: autoUpdate
     });
 
     const { getReferenceProps, getFloatingProps } = useInteractions([
@@ -35,10 +37,11 @@ export const AnimatedTooltip = ({
         useDismiss(context)
     ]);
 
+
     return (
         <>
             {cloneElement(
-                children,
+                children as ReactElement,
                 getReferenceProps({ ref: reference, ...children.props })
             )}
             <AnimatePresence>

@@ -2,7 +2,7 @@ import {DropdownPopover} from "../DropdownPopover";
 import {SortOrderButton} from "../../buttons/SortOrderButton";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {useProductsStore} from "../../../hooks/use-categories-store";
+import {useProductsStore} from "~hooks/use-categories-store";
 
 const SortingPopoverRaw = () => {
     const ProductsStore = useProductsStore();

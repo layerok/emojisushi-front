@@ -53,8 +53,8 @@ export const DropdownPopover = (
             <Popover offset={offset} open={open} render={({close}) => (
                 <S.Options width={width} backgroundColor={backgroundColor}>
                     {options.map((option, index) => (
-                        <S.Option onClick={() => handleSelect({close, option, index})} key={resolveOptionId({option, index})}>
-                            {resolveOptionName({option, index})}
+                        <S.Option onClick={() => handleSelect({close, option, index})} key={resolveOptionId({option})}>
+                            {resolveOptionName({option})}
                         </S.Option>
                     ))}
 

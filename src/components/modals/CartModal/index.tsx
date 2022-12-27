@@ -6,11 +6,10 @@ import {Price} from "../../Price";
 import {CloseModalIcon} from "../CloseModalIcon";
 import {CloseIcon} from "../../CloseIcon";
 import {ButtonOutline} from "../../buttons/Button";
-import {CustomScrollbars} from "../../../layout/CustomScrollbar";
 import {useWindowSize} from "react-use";
 import {useEffect, useState} from "react";
-import {useDebounce} from "../../../common/hooks/useDebounce";
-import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
+import {useDebounce} from "~common/hooks/useDebounce";
+import {useBreakpoint} from "~common/hooks/useBreakpoint";
 import {ConfirmActionPopover} from "../../popovers/ConfirmActionPopover";
 import { useNavigate } from "react-router-dom";
 import {getNameWithMods, getProductMainImage, getProductNewPrice, getProductOldPrice} from "../../../utils/utils";
@@ -20,7 +19,7 @@ import {useTranslation} from "react-i18next";
 import {SvgIcon} from "../../svg/SvgIcon";
 import {LogoSvg} from "../../svg/LogoSvg";
 import {SushiSvg} from "../../svg/SushiSvg";
-import {useCartStore} from "../../../hooks/use-cart-store";
+import {useCartStore} from "~hooks/use-cart-store";
 
 const CartItem = observer((
     {
@@ -133,11 +132,17 @@ export const CartModal = observer((
             </S.EmptyCartImgContainer>
 
             <S.Items>
-                <CustomScrollbars height={finalHeight}>
-                {items.map((item, i) => (
-                    <CartItem key={i} item={item}/>
-                ))}
-                </CustomScrollbars>
+                <div style={{
+                    minHeight: 362 + 'px',
+                    maxHeight: finalHeight + 'px',
+                    overflowY: 'auto'
+                }}>
+
+                    {items.map((item, i) => (
+                        <CartItem key={i} item={item}/>
+                    ))}
+
+                </div>
             </S.Items>
 
             { items.length !== 0 && (

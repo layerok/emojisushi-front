@@ -1,9 +1,8 @@
 import * as S from "./styled";
 import {FlexBox} from "~components/FlexBox";
 import {Price} from "../../../../components/Price";
-import {IngredientsTooltip} from "../../../../components/tooltips/IngredientsTooltip";
-import {CustomScrollbars} from "../../../../layout/CustomScrollbar";
-import {EditCartButton} from "../../../../components/buttons/EditCartButton";
+import {IngredientsTooltip} from "~components/tooltips/IngredientsTooltip";
+import {EditCartButton} from "~components/buttons/EditCartButton";
 import {CartModal} from "../../../../components/modals/CartModal";
 import { observer} from "mobx-react";
 import {
@@ -13,8 +12,8 @@ import {
     getProductNewPrice,
     getProductOldPrice
 } from "~utils/utils";
-import {SvgIcon} from "../../../../components/svg/SvgIcon";
-import {LogoSvg} from "../../../../components/svg/LogoSvg";
+import {SvgIcon} from "~components/svg/SvgIcon";
+import {LogoSvg} from "~components/svg/LogoSvg";
 import {useCartStore} from "~hooks/use-cart-store";
 
 const CheckoutCartRaw = () => {
@@ -24,7 +23,12 @@ const CheckoutCartRaw = () => {
       items
     } = CartStore;
     return <S.Wrapper>
-            <CustomScrollbars height={362}>
+              <div style={{
+                maxHeight: '362px',
+                overflowY: 'auto'
+              }}>
+
+
                 {items.map((item) => {
                     const { id, quantity, product } = item;
                     const ingredients = getProductIngredients(product);
@@ -63,8 +67,8 @@ const CheckoutCartRaw = () => {
                         </S.Content>
                     </S.Item>
                 })}
+              </div>
 
-            </CustomScrollbars>
             <CartModal>
                 <S.EditButton>
                     <EditCartButton/>
