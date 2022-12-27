@@ -8,7 +8,7 @@ import {useSpotsStore} from "~hooks/use-spots-store";
 import {useAppStore} from "~hooks/use-app-store";
 import {transaction} from "mobx";
 
-const MapLocationPinSrc = require("../../../assets/ui/icons/map-location-pin.svg")
+import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg"
 
 export const LocationPickerPopoverRaw = (
   {

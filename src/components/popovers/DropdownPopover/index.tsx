@@ -1,6 +1,8 @@
 import * as S from "./styled";
 import {Popover} from "../Popover";
-import {cloneElement, useEffect, useState} from "react";
+import {cloneElement, ReactElement, useEffect, useState} from "react";
+
+type Option = any;
 
 export const DropdownPopover = (
     {
@@ -16,6 +18,19 @@ export const DropdownPopover = (
         backgroundColor="#171717",
         resolveOptionName: resolveOptionNamePassed,
         width = "100%"
+    }: {
+      options?: Option[]
+      asFlatArray?: boolean;
+      offset?: number;
+      open?: boolean;
+      nameAccessor?: string;
+      idAccessor?: string;
+      selectedIndex: number;
+      children: ReactElement | {(props: {selectedOption: Option}): ReactElement};
+      backgroundColor?: string;
+      resolveOptionName?: (props: {option: Option}) => string;
+      width?: string;
+      onSelect?: (props: {close: () => void; option: Option, index: number}) => void;
     }
 ) => {
 

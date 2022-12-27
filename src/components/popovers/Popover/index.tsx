@@ -1,4 +1,4 @@
-import React, {cloneElement, useEffect, useState} from "react";
+import React, {cloneElement, ReactElement, useEffect, useState} from "react";
 import {
     offset,
     flip,
@@ -12,7 +12,7 @@ import {
     useClick,
     FloatingFocusManager,
     FloatingNode,
-    useFloatingNodeId
+    useFloatingNodeId, Placement
 } from "@floating-ui/react-dom-interactions";
 
 export const Popover = (
@@ -22,6 +22,16 @@ export const Popover = (
         placement,
         offset: passedOffset = 0,
         open: passedOpen = false
+    }: {
+        children: ReactElement;
+        render: (props: {
+            labelId: string;
+            descriptionId: string;
+            close: () => void;
+        }) => ReactElement;
+        placement?: Placement;
+        offset?: number;
+        open?: boolean;
     }) => {
     const [open, setOpen] = useState(passedOpen);
     const nodeId = useFloatingNodeId();

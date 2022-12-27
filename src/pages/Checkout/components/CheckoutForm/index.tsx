@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import {Switcher} from "../../../../components/Switcher";
+import {Switcher} from "~components/Switcher";
 import {Input} from "~components/Input";
 import {FlexBox} from "~components/FlexBox";
 import {ButtonOutline} from "~components/buttons/Button";

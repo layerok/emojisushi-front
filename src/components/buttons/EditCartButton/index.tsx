@@ -4,9 +4,9 @@ import {UIButton} from "../UIButton";
 import {forwardRef} from "react";
 import {useTranslation} from "react-i18next";
 
-export const EditCartButton = forwardRef((props, ref) => {
+export const EditCartButton = forwardRef<HTMLDivElement>((props, ref) => {
     const {t} = useTranslation();
-    return <UIButton ref={ref} text={t('editBtn.edit_order')}>
+    return <UIButton text={t('editBtn.edit_order')}  ref={ref}>
         <SvgIcon color={"white"} width={"25px"}>
             <PencilSvg/>
         </SvgIcon>

@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import {useId} from "react";
+import {ReactElement, useId} from "react";
 
 const Option = (
     {
@@ -43,14 +43,14 @@ export const Switcher = (
         idAccessor = "id",
         ...rest
     }
-) => {
+): ReactElement => {
 
     const isSelected = (option) => {
         return typeof selected === 'function' ? selected(option): selected;
     }
 
     if(!options.length) {
-        return "";
+        return null;
     }
 
     return <S.Wrapper {...rest}>
