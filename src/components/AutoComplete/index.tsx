@@ -3,7 +3,7 @@ import React, {
     useLayoutEffect,
     useEffect,
     useRef,
-    useState
+    useState, PropsWithChildren, CSSProperties, HTMLProps
 } from "react";
 import {
     autoUpdate,
@@ -19,7 +19,10 @@ import {
 import { data } from "./data";
 
 
-const Item = forwardRef(({ children, active, ...rest }, ref) => {
+const Item = forwardRef<HTMLLIElement, HTMLProps<HTMLLIElement> & PropsWithChildren<{
+    active: boolean;
+    style?: CSSProperties;
+}>>(({ children, active, ...rest }, ref) => {
     const id = useId();
     return (
         <li

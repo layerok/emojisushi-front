@@ -4,6 +4,7 @@ import {PlusSvg} from "../svg/PlusSvg";
 import * as S from "./styled";
 import {ButtonFilled} from "../buttons/Button";
 import {FlexBox} from "../FlexBox";
+import {MouseEventHandler} from "react";
 
 export const Counter = (
     {
@@ -14,6 +15,14 @@ export const Counter = (
         controlColor,
         delimiterColor,
         hoverControlColor
+    }: {
+      handleDecrement: MouseEventHandler<HTMLSpanElement>;
+      handleIncrement: MouseEventHandler<HTMLSpanElement>;
+      count: number;
+      countColor: string;
+      controlColor: string;
+      delimiterColor: string;
+      hoverControlColor?: string;
     }) => {
     return (<FlexBox justifyContent={"center"} style={{width: '118px'}}>
         <SvgIcon width={"25px"}
@@ -77,6 +86,11 @@ export const ButtonCounter = (
         handleIncrement,
         handleDecrement,
         width
+    }: {
+      count: number;
+      handleIncrement: MouseEventHandler<HTMLSpanElement>
+      handleDecrement: MouseEventHandler<HTMLSpanElement>
+      width?: string;
     }
 ) => {
     return <ButtonFilled justifyContent={'space-around'} padding={"7px 0"} width={width}>

@@ -18,7 +18,7 @@ type IProps = HTMLProps<HTMLDivElement> & PropsWithChildren<{
   mobileFirst?: boolean;
 }>
 
-export const FlexBox = forwardRef<any, IProps>((
+export const FlexBox = forwardRef<HTMLDivElement, IProps>((
     {
         alignItems = "start",
         flexDirection = "row",

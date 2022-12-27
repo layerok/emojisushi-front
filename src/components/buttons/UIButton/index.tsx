@@ -1,8 +1,10 @@
 import {SvgIcon} from "../../svg/SvgIcon";
 import {FlexBox} from "../../FlexBox";
-import {forwardRef} from "react";
+import {forwardRef, HTMLProps, PropsWithChildren} from "react";
 
-export const UIButton = forwardRef((
+export const UIButton = forwardRef<HTMLDivElement, HTMLProps<HTMLDivElement> & PropsWithChildren<{
+  text: string;
+}>>((
     {
         text,
         children,
@@ -11,7 +13,7 @@ export const UIButton = forwardRef((
 ) => {
 
     return (
-        <FlexBox ref={ref} alignItems={"center"} {...rest}>
+        <FlexBox alignItems={"center"} {...rest} ref={ref}>
             <SvgIcon color={"white"} width={"25px"}>
                 {children}
             </SvgIcon>

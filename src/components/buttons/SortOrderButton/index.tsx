@@ -2,7 +2,9 @@ import {UIButton} from "../UIButton";
 import {SortOrderSvg} from "../../svg/SortOrderSvg";
 import {forwardRef} from "react";
 
-export const SortOrderButton = forwardRef((
+export const SortOrderButton = forwardRef<HTMLDivElement, {
+  text: string;
+}>((
     {
         text,
         ...rest
@@ -11,7 +13,7 @@ export const SortOrderButton = forwardRef((
 ) => {
 
     return (
-        <UIButton ref={ref} {...rest} text={text}>
+        <UIButton {...rest} text={text} ref={ref}>
             <SortOrderSvg/>
         </UIButton>
     );
