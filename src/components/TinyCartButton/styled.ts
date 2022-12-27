@@ -21,6 +21,8 @@ const Price = styled.div`
   color: black;
   padding: 1px 8px;
   border-radius: 3px;
+  min-width: 55px;
+  text-align: center;
   z-index: 2;
 `
 
