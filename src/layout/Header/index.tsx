@@ -1,26 +1,26 @@
-import { LocationPickerPopover } from "../../components/popovers/LocationPickerPopover";
+import { LocationPickerPopover } from "~components/popovers/LocationPickerPopover";
 import * as S from "./styled";
-import {Container } from "../../components/Container";
-import {FlexBox} from "../../components/FlexBox";
-import {CartButton} from "../../components/CartButton";
-import {TinyCartButton} from "../../components/TinyCartButton";
+import {Container } from "~components/Container";
+import {FlexBox} from "~components/FlexBox";
+import {CartButton} from "~components/CartButton";
+import {TinyCartButton} from "~components/TinyCartButton";
 import {NavLinkUnderline} from "../../components/NavLinkUnderline";
 import {ContactsModal} from "../../components/modals/ContactsModal";
-import {CartModal} from "../../components/modals/CartModal";
+import {CartModal} from "~components/modals/CartModal";
 import {MobMenuModal} from "../../components/modals/MobMenuModal";
-import {SvgIcon} from "../../components/svg/SvgIcon";
-import {BurgerSvg} from "../../components/svg/BurgerSvg";
-import {LogoSvg} from "../../components/svg/LogoSvg";
+import {SvgIcon} from "~components/svg/SvgIcon";
+import {BurgerSvg} from "~components/svg/BurgerSvg";
+import {LogoSvg} from "~components/svg/LogoSvg";
 import {useEffect} from "react";
 import { observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
-import {SvgButton} from "../../components/SvgButton";
-import {UserSvg} from "../../components/svg/UserSvg";
-import {AuthModal} from "../../components/modals/AuthModal";
+import {SvgButton} from "~components/SvgButton";
+import {UserSvg} from "~components/svg/UserSvg";
+import {AuthModal} from "~components/modals/AuthModal";
 import {LanguageSelector} from "../../components/LanguageSelector";
-import {stores} from "../../stores/stores";
+import {stores} from "~stores/stores";
 import {useNavigate} from "react-router-dom";
-import {useCartStore} from "../../hooks/use-cart-store";
+import {useCartStore} from "~hooks/use-cart-store";
 
 
 const HeaderRaw = (

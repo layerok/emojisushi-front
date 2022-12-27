@@ -13,8 +13,12 @@ import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg"
 export const LocationPickerPopoverRaw = (
   {
     offset = 0,
-    backgroundColor,
+    backgroundColor = "#171717",
     width = "211px",
+  }: {
+    offset?: number;
+    backgroundColor?: string;
+    width?: string;
   }
 ) => {
   const SpotsStore = useSpotsStore();

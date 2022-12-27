@@ -1,15 +1,15 @@
 import * as S from "./styled";
 import {VerticalMenu} from "../VerticalMenu";
-import {useBreakpoint} from "../../common/hooks/useBreakpoint";
+import {useBreakpoint} from "~common/hooks/useBreakpoint";
 import {HorizontalMenu} from "../HorizontalMenu";
-import {FlexBox} from "../../components/FlexBox";
+import {FlexBox} from "~components/FlexBox";
 import {UnderVerticalMenu} from "../UnderVerticalMenu";
-import {SortingPopover} from "../../components/popovers/SortingPopover";
+import {SortingPopover} from "~components/popovers/SortingPopover";
 import { observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
-import {useDebounce} from "../../common/hooks/useDebounce";
-import {useProductsStore} from "../../hooks/use-categories-store";
-import {useCategoriesStore} from "../../hooks/use-products-store";
+import {useDebounce} from "~common/hooks/useDebounce";
+import {useProductsStore} from "~hooks/use-categories-store";
+import {useCategoriesStore} from "~hooks/use-products-store";
 
 export const SidebarRaw = () => {
     const ProductsStore = useProductsStore();

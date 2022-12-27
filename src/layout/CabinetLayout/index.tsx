@@ -1,8 +1,8 @@
 import * as S from "./styled";
 import {NavLink} from "../../components/NavLink";
 import {Layout} from "../Layout";
-import {ButtonDark} from "../../components/buttons/Button";
-import {stores} from "../../stores/stores";
+import {ButtonDark} from "~components/buttons/Button";
+import {stores} from "~stores/stores";
 
 export const CabinetLayout = ({children, title = ""}) => {
 

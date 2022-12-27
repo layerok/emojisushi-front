@@ -1,8 +1,8 @@
 import * as S from "./styled";
-import {SvgIcon} from "../../components/svg/SvgIcon";
-import {LogoSvg} from "../../components/svg/LogoSvg";
+import {SvgIcon} from "~components/svg/SvgIcon";
+import {LogoSvg} from "~components/svg/LogoSvg";
 import FadeLoader from "react-spinners/FadeLoader";
-import {useBreakpoint} from "../../common/hooks/useBreakpoint";
+import {useBreakpoint} from "~common/hooks/useBreakpoint";
 
 export const Preloader = () => {
     const breakpoint = useBreakpoint();
@@ -18,7 +18,15 @@ export const Preloader = () => {
             <SvgIcon color={"white"} width={width} style={{opacity: 0.05}}>
                 <LogoSvg/>
             </SvgIcon>
-            <FadeLoader color={"#FFE600"} width={2} height={12} margin={10} loading={true} css={override} />
+            <FadeLoader
+              color={"#FFE600"}
+              width={2}
+              height={12}
+              margin={10}
+              loading={true}
+              // @ts-ignore
+              css={override}
+            />
 
         </S.Container>
     )

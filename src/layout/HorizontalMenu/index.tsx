@@ -1,9 +1,9 @@
 import * as S from "./styled";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {SvgIcon} from "../../components/svg/SvgIcon";
-import {HorizontalArrowsSvg} from "../../components/svg/HorizontalArrowsSvg";
-import {FlexBox} from "../../components/FlexBox";
+import {SvgIcon} from "~components/svg/SvgIcon";
+import {HorizontalArrowsSvg} from "~components/svg/HorizontalArrowsSvg";
+import {FlexBox} from "~components/FlexBox";
 import {useParams} from "react-router-dom";
 
 const HorizontalMenu = (

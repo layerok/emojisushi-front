@@ -1,16 +1,16 @@
 import * as S from "./styled";
-import {Container} from "../../components/Container";
-import {FlexBox} from "../../components/FlexBox";
+import {Container} from "~components/Container";
+import {FlexBox} from "~components/FlexBox";
 import {StaticMap} from "../../components/StaticMap";
 import {TelegramModal} from "../../components/modals/TelegramModal";
-import {SvgIcon} from "../../components/svg/SvgIcon";
-import {TelegramSvg} from "../../components/svg/TelegramSvg";
-import {InstagramSvg} from "../../components/svg/InstagramSvg";
-import {PhoneSvg} from "../../components/svg/PhoneSvg";
-import {LogoSvg} from "../../components/svg/LogoSvg";
+import {SvgIcon} from "~components/svg/SvgIcon";
+import {TelegramSvg} from "~components/svg/TelegramSvg";
+import {InstagramSvg} from "~components/svg/InstagramSvg";
+import {PhoneSvg} from "~components/svg/PhoneSvg";
+import {LogoSvg} from "~components/svg/LogoSvg";
 import {useTranslation} from "react-i18next";
 import { observer} from "mobx-react";
-import {useSpotsStore} from "../../hooks/use-spots-store";
+import {useSpotsStore} from "~hooks/use-spots-store";
 
 export const FooterRaw = () => {
     const SpotsStore = useSpotsStore();

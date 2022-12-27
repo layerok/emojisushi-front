@@ -1,6 +1,6 @@
 import styled, {css} from "styled-components";
 import {ifProp, theme} from "styled-tools";
-import {NavLink} from "react-router-dom";
+import {ActiveNavLink} from "~components/ActiveNavLink";
 
 const Categories = styled.div`
   position: relative;
@@ -26,7 +26,7 @@ const Hint = styled.div`
   right: 0
 `
 
-const Category = styled(NavLink)`
+const Category = styled(ActiveNavLink)`
   display: flex;
   text-transform: uppercase;
   line-height: 20px;
