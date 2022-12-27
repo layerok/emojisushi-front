@@ -21,13 +21,31 @@ export class SpotsStore {
 
     setSelectedIndex = (index: number) => {
         this.selectedIndex = index;
-        LocalStorageService.set('spot_id', this.items[index].id);
+    }
 
-        Promise.all([
-            this.rootStore.CartStore.clearCart(),
-            this.rootStore.ProductsStore.fetchItems(this.rootStore.ProductsStore.lastParams),
-            this.rootStore.CategoriesStore.fetchItems()
-        ]).finally(() => this.rootStore.AppStore.setLoading(false))
+    changeSpot = (spot: ISpot, clearCart = false) => {
+        const index = this.items.indexOf(spot);
+        if(index === -1) {
+            throw Error("Couldn't change spot")
+        }
+        if(index !== this.selectedIndex) {
+            const selectedId = this.items[index].id;
+            this.setSelectedIndex(index);
+
+            LocalStorageService.set('spot_id', selectedId);
+
+            const promises = [];
+
+            if(clearCart) {
+                promises.push(this.rootStore.CartStore.clearCart());
+            }
+
+            promises.push(this.rootStore.ProductsStore.fetchItems(this.rootStore.ProductsStore.lastParams))
+            promises.push(this.rootStore.CategoriesStore.fetchItems())
+            promises.push(this.rootStore.CartStore.fetchItems())
+
+            Promise.all(promises).finally(() => this.rootStore.AppStore.setLoading(false))
+        }
     }
 
     setLoading = (state) => {

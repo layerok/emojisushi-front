@@ -5,6 +5,7 @@ import {observer} from "mobx-react";
 import {MapPinSvg} from "../../svg/MapPinSvg";
 import {useTranslation} from "react-i18next";
 import {useSpotsStore} from "../../../hooks/use-spots-store";
+import {transaction} from "mobx";
 
 export const SpotsModalRaw = (
   {
@@ -31,8 +32,11 @@ export const SpotsModalRaw = (
         {records.map((item, i) => {
           return <S.Item key={item.id}
                          onClick={() => {
-                           SpotsStore.setSelectedIndex(i);
-                           SpotsStore.setUserSelectedSpot(true);
+                           transaction(() => {
+                             SpotsStore.changeSpot(item);
+                             SpotsStore.setUserSelectedSpot(true);
+                           })
+
                            close();
                          }}
                          selected={i === selectedIndex}>

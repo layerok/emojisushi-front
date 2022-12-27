@@ -1,8 +1,9 @@
 import * as S from "./styled";
 import {CSSProperties, forwardRef, HTMLProps, PropsWithChildren} from "react";
 
-type IProps = HTMLProps<HTMLSpanElement> & PropsWithChildren<{
+export type ISvgIconProps = HTMLProps<HTMLSpanElement> & PropsWithChildren<{
   color?: string;
+  ref: HTMLSpanElement;
   hoverColor?: string;
   width?: string;
   height?: string;
@@ -10,17 +11,17 @@ type IProps = HTMLProps<HTMLSpanElement> & PropsWithChildren<{
   style?: CSSProperties
 }>
 
-export const SvgIcon = forwardRef((
+export const SvgIcon = forwardRef<HTMLSpanElement, ISvgIconProps>((
     {
         children,
         color,
         hoverColor,
         width,
         height,
-      clickable = false,
+        clickable = false,
         style={},
         ...rest
-    }: IProps,
+    },
         ref
 ) => {
     return (

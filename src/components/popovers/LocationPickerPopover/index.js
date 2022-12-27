@@ -7,6 +7,7 @@ import {DropdownPopover} from "../DropdownPopover";
 import { observer} from "mobx-react";
 import {useSpotsStore} from "../../../hooks/use-spots-store";
 import {useAppStore} from "../../../hooks/use-app-store";
+import {transaction} from "mobx";
 
 
 
@@ -29,8 +30,10 @@ export const LocationPickerPopoverRaw = (
         options={SpotsStore.items}
         selectedIndex={SpotsStore.selectedIndex}
         onSelect={({close, option, index}) => {
-          AppStore.setLoading(true);
-          SpotsStore.setSelectedIndex(index);
+          transaction(() => {
+            AppStore.setLoading(true);
+            SpotsStore.changeSpot(option);
+          })
           close();
         }}
       >

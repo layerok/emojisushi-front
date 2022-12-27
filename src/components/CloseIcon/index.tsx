@@ -1,26 +1,30 @@
-import {SvgIcon} from "../svg/SvgIcon";
+import {ISvgIconProps, SvgIcon} from "../svg/SvgIcon";
 import {CloseSvg} from "../svg/CloseSvg";
 import {forwardRef} from "react";
 
-export const CloseIcon = forwardRef((
+export const CloseIcon = forwardRef<HTMLSpanElement, ISvgIconProps & {
+  width?: string;
+  color?: string;
+  onClick?: () => void;
+}>((
     {
         width = "25px",
         color = "white",
         onClick = () => {},
-        rest
+        ...rest
     },
     ref
 ) => {
     return <SvgIcon
         width={width}
         color={color}
-        ref={ref}
         onClick={onClick}
         hoverColor={"#FFE600"}
         style={{
             cursor: 'pointer'
         }}
         {...rest}
+        ref={ref}
     >
         <CloseSvg/>
     </SvgIcon>

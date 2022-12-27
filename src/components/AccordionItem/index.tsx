@@ -3,8 +3,8 @@ import {SvgIcon} from "../svg/SvgIcon";
 import {FlexBox} from "../FlexBox";
 import {CaretUpSvg} from "../svg/CaretUpSvg";
 import {Collapsible} from "../Collapsible";
-import ProductImage from "../../assets/img/products/2.png";
-import {useBreakpoint} from "../../common/hooks/useBreakpoint";
+import {useBreakpoint} from "~common/hooks/useBreakpoint";
+const ProductImage = require("~assets/img/products/2.png");
 
 
 export const AccordionItem = () => {

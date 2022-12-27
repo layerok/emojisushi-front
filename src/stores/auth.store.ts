@@ -2,6 +2,7 @@ import {makeAutoObservable} from "mobx";
 import authApi from "../api/auth.api";
 import {RootStore} from "~stores/stores";
 import {IAddress, IOfflineMallCustomer, IOfflineMallUser} from "~api/auth.api.types";
+import Cookies from "js-cookie";
 
 class OfflineMallCustomer {
     json: IOfflineMallCustomer;
@@ -224,9 +225,11 @@ export class AuthStore {
     }
 
     logout() {
+        Cookies.remove('jwt');
         this.setAuthToken(null);
         this.setUser(null);
         this.setExpires(null);
+        this.rootStore.CartStore.fetchItems();
     }
 
 }
