@@ -40,9 +40,7 @@ export const MobMenuModal = ({children}) => {
                 </AuthModal>
             </S.Item>
             <S.Item>
-                <ContactsModal onClick={() => {
-                    close();
-                }}>
+                <ContactsModal>
                     <div>{t('mobMenuModal.contacts')}</div>
                 </ContactsModal>
             </S.Item>

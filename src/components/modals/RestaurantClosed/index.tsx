@@ -2,8 +2,8 @@ import {SvgIcon} from "../../svg/SvgIcon";
 import {NotifyModal} from "../NotifyModal";
 import {LowKeySvg} from "../../svg/LowKeySvg";
 import {useTranslation} from "react-i18next";
-import {inject, observer} from "mobx-react";
-import {useAppStore} from "../../../hooks/use-app-store";
+import {observer} from "mobx-react";
+import {useAppStore} from "~hooks/use-app-store";
 
 
 export const RestaurantClosed = observer((

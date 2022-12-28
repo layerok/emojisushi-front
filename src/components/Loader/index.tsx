@@ -15,7 +15,16 @@ const override = {
 };
 
 export const Loader = ({loading}) => {
+
     return loading && <Overlay>
-        <FadeLoader color={"#FFE600"} width={2} height={12} margin={10} loading={true} css={override} />
+        <FadeLoader
+          color={"#FFE600"}
+          width={2}
+          height={12}
+          margin={10}
+          loading={true}
+          // @ts-ignore
+          css={override}
+        />
     </Overlay>
 }

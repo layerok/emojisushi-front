@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   width: 255px;
   border-radius: 15px;
   background-color: #1C1C1C;
-  box-shadow: 0px 4px 15px rgba(28, 28, 28, 0.3);
+  box-shadow: 0 4px 15px rgba(28, 28, 28, 0.3);
   padding: 22px 12px 18px;
   
   ${media.lessThan('tablet')`

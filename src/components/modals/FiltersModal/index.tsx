@@ -5,8 +5,7 @@ import {SvgIcon} from "../../svg/SvgIcon";
 import {MagnifierSvg} from "../../svg/MagnifierSvg";
 import {Modal} from "../Modal";
 import {useTranslation} from "react-i18next";
-import {productsService} from "../../../services/products.service";
-import {useProductsStore} from "../../../hooks/use-categories-store";
+import {useProductsStore} from "~hooks/use-categories-store";
 
 export const FiltersModalRaw = (
     {
@@ -29,7 +28,7 @@ export const FiltersModalRaw = (
             }
         }
 
-        productsService.fetchItems({
+        ProductsStore.fetchItems({
             ...ProductsStore.lastParams
         })
 

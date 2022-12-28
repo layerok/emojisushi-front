@@ -1,21 +1,32 @@
-import { BaseModal} from "../BaseModal";
+import {BaseModal, IBaseModalProps} from "../BaseModal";
 import * as S from "./styled";
 import {CloseModalIcon} from "../CloseModalIcon";
+import {ReactNode} from "react";
+import {IAlignItems, IJustifyContent} from "~components/FlexBox";
+
+export type IModalProps = {
+  children: ReactNode;
+  alignItems?: IAlignItems;
+  justifyContent?: IJustifyContent;
+  render: (props: {close: () => void}) => ReactNode;
+  width?: string;
+  alignCenter?: boolean;
+} & Omit<IBaseModalProps, 'overlayStyles' | 'render'>;
 
 export const Modal = (
     {
         children,
         alignItems = "center",
-        justifyItems = "center",
+        justifyContent = "center",
         render,
         width,
         alignCenter,
         ...rest
-    }) => {
+    }: IModalProps) => {
 
     const overlayStyles = {
         display: "grid",
-        justifyItems,
+        justifyContent,
         alignItems,
         background: "rgba(0, 0, 0, 0.4)",
         zIndex: 999999

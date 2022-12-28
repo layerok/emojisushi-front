@@ -8,24 +8,23 @@ import {FlexBox} from "../../FlexBox";
 import {TelegramSvg} from "../../svg/TelegramSvg";
 import {StaticMap} from "../../StaticMap";
 import {TelegramModal} from "../TelegramModal";
-import {useBreakpoint} from "../../../common/hooks/useBreakpoint";
+import {useBreakpoint} from "~common/hooks/useBreakpoint";
 import {useTranslation} from "react-i18next";
-import {InstagramLink} from "../../../layout/Footer/styled";
+import {InstagramLink} from "~layout/Footer/styled";
 import { observer} from "mobx-react";
-import {useSpotsStore} from "../../../hooks/use-spots-store";
+import {useSpotsStore} from "~hooks/use-spots-store";
 
 export const ContactsModalRaw = (
     {
         children,
-        onClick = () => {},
     }) => {
 
     const breakpoint = useBreakpoint();
-    const width = breakpoint !== 'pc' ? "375px": false;
+    const width = breakpoint !== 'pc' ? "375px": undefined;
     const {t} = useTranslation();
     const SpotsStore = useSpotsStore();
 
-    return <Modal width={width} onClick={onClick} render={({close}) => (
+    return <Modal width={width} render={({close}) => (
         <div>
             <S.Wrapper >
                 {SpotsStore.hasPhones && (

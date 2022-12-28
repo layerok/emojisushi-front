@@ -29,18 +29,11 @@ export class WishlistStore {
         const {product_id} = params;
         this.setLoading(true);
         this.setPending([...this.pending, product_id])
-        return WishlistApi.addItem(params).then((res) => {
+        return WishlistApi.addItem(params).finally(() => {
             transaction(() => {
                 this.setLoading(false);
                 this.setPending(this.pending.filter((p) => p !== product_id));
             })
-            return Promise.resolve(res);
-        }).catch(() => {
-            transaction(() => {
-                this.setLoading(false);
-                this.setPending(this.pending.filter((p) => p !== product_id));
-            })
-
         });
     }
 

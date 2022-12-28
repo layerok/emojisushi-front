@@ -8,6 +8,7 @@ type AxisValue = 'baseline';
 
 export type IAlignItems = PositionValue | AxisValue | DistributionValue | GlobalValue;
 export type IJustifyContent = PositionValue | AxisValue | DistributionValue | GlobalValue;
+export type IJustifyItems = PositionValue | AxisValue | DistributionValue | GlobalValue;
 export type IFlexDirection = 'row' | 'column' | 'row-reverse' | 'column-reverse';
 
 

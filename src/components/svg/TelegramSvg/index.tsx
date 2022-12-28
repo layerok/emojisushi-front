@@ -1,6 +1,8 @@
 export const TelegramSvg = (
     {
         strokeWidth="1.5"
+    }: {
+      strokeWidth?: string | number
     }
 ) => {
     return (

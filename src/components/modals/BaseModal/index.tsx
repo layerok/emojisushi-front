@@ -1,4 +1,4 @@
-import {cloneElement, forwardRef, useEffect, useId, useState} from "react";
+import {cloneElement, CSSProperties, ReactElement, ReactNode, useEffect, useId, useState} from "react";
 import {
     useClick,
     useDismiss,
@@ -14,15 +14,27 @@ import {
 } from "@floating-ui/react-dom-interactions";
 
 
-export const BaseModalComponent = forwardRef((
+export type IBaseModalProps = {
+    open?: boolean;
+    children: ReactElement;
+    overlayStyles: CSSProperties;
+    render: (props: {close: () => void; labelId: string; descriptionId: string}) => ReactNode;
+    useClickOptions?: {
+        enabled?: boolean;
+        pointerDown?: boolean;
+        toggle?: boolean;
+        ignoreMouse?: boolean;
+    }
+}
+
+export const BaseModalComponent = (
     {
         render,
         overlayStyles,
         open: passedOpen = false,
         children,
-        onClick,
         useClickOptions = {}
-    }, ref
+    }: IBaseModalProps
 ) => {
     const [open, setOpen] = useState(passedOpen);
     const [allowDismiss, setAllowDismiss] = useState(true);
@@ -115,19 +127,19 @@ export const BaseModalComponent = forwardRef((
             </FloatingPortal>
         </FloatingNode>
     );
-});
+};
 
-export const BaseModal = forwardRef((props, ref) => {
+export const BaseModal = (props: IBaseModalProps) => {
     const parentId = useFloatingParentNodeId();
 
     if (parentId == null) {
         return (
             <FloatingTree >
-                <BaseModalComponent {...props} ref={ref}/>
+                <BaseModalComponent {...props}/>
             </FloatingTree>
         )
     }
 
-    return <BaseModalComponent {...props} ref={ref}/>
+    return <BaseModalComponent {...props}/>
 
-})
+}

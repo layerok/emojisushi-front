@@ -2,7 +2,7 @@ import * as S from "./styled";
 import {AddToCartButton} from "../buttons/AddToCartButton";
 import {Price} from "../Price";
 import {Favorite} from "../Favorite";
-import {useBreakpoint} from "../../common/hooks/useBreakpoint";
+import {useBreakpoint} from "~common/hooks/useBreakpoint";
 import {IngredientsTooltip} from "../tooltips/IngredientsTooltip";
 import { EqualHeightElement } from 'react-equal-height';
 import { observer} from "mobx-react";
@@ -11,7 +11,7 @@ import {
     getProductMainImage,
     getProductNewPrice,
     getProductOldPrice
-} from "../../utils/utils";
+} from "~utils/utils";
 import {Loader} from "../Loader";
 import {SvgIcon} from "../svg/SvgIcon";
 import {LogoSvg} from "../svg/LogoSvg";
@@ -19,9 +19,9 @@ import {Switcher} from "../Switcher";
 import {useState} from "react";
 import {InfoTooltip} from "../InfoTooltip";
 import {useTranslation} from "react-i18next";
-import {useCartStore} from "../../hooks/use-cart-store";
-import {useProductsStore} from "../../hooks/use-categories-store";
-import {useWishlistStore} from "../../hooks/use-wishlist-store";
+import {useCartStore} from "~hooks/use-cart-store";
+import {useProductsStore} from "~hooks/use-categories-store";
+import {useWishlistStore} from "~hooks/use-wishlist-store";
 
 const ProductCardRaw = (
   {
@@ -169,7 +169,6 @@ const ProductCardRaw = (
         <S.Footer>
             <Price oldPrice={oldPrice} newPrice={newPrice}/>
             <AddToCartButton
-              width={isMobile ? '177px': '130px'}
               count={count}
               pending={CartStore.pending.includes(id)}
               handleAdd={handleAdd(id)}
