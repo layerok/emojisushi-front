@@ -53,17 +53,18 @@ export class FormModel <Fields extends Record<string, InputModel> = Record<strin
       if(errors) {
         this.fieldsAsArray.forEach(field => field.handleValidationError(errors));
       }
+      this.setSubmitting(false);
     }
 
     this.onSubmit(fd, done, error);
   }
 
   clearErrors() {
-    this.fieldsAsArray.forEach(field => field.clearError());
+    this.fieldsAsArray.forEach(field => field.resetError());
   }
 
   clearValues() {
-    this.fieldsAsArray.forEach(field => field.clearValue());
+    this.fieldsAsArray.forEach(field => field.resetValue());
   }
 
   get asSubmitButtonProps() {

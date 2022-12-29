@@ -12,7 +12,7 @@ import {useDebounce} from "~common/hooks/useDebounce";
 import {useBreakpoint} from "~common/hooks/useBreakpoint";
 import {ConfirmActionPopover} from "../../popovers/ConfirmActionPopover";
 import { useNavigate } from "react-router-dom";
-import {getNameWithMods, getProductMainImage, getProductNewPrice, getProductOldPrice} from "../../../utils/utils";
+import {getNameWithMods, getProductMainImage, getProductNewPrice, getProductOldPrice} from "~utils/utils";
 import { observer} from "mobx-react";
 import {Loader} from "../../Loader";
 import {useTranslation} from "react-i18next";

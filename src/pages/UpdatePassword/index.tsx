@@ -1,29 +1,24 @@
 import {observer, useLocalObservable} from "mobx-react";
 import {useEffect} from "react";
 import * as S from "./styled";
-import {CabinetLayout} from "../../layout/CabinetLayout";
+import {CabinetLayout} from "~layout/CabinetLayout";
 import {PasswordInput} from "~components/PasswordInput";
 import {ButtonOutline} from "~components/buttons/Button";
 import {useAppStore} from "~hooks/use-app-store";
 import authApi from "~api/auth.api";
 import {transaction} from "mobx";
-import {InputModel} from "~common/InputModel";
+import {TextInputModel} from "~common/InputModel";
 import {FormModel} from "~common/FormModel";
 
 export const UpdatePassword = observer(() => {
     const AppStore = useAppStore();
+
     const state = useLocalObservable(() => ({
         form: new FormModel({
            fields: {
-               password_old: new InputModel({
-                   name: 'password_old'
-               }),
-               password: new InputModel({
-                   name: 'password'
-               }),
-               password_confirmation: new InputModel({
-                   name: 'password_confirmation'
-               }),
+               password_old: new TextInputModel('password_old'),
+               password: new TextInputModel('password'),
+               password_confirmation: new TextInputModel('password'),
            },
             onSubmit(formData, done, error) {
                 transaction(() => {
@@ -56,6 +51,7 @@ export const UpdatePassword = observer(() => {
             this.showSuccessMessage = state;
         }
     }))
+
 
     useEffect(() => {
         AppStore.setLoading(false);

@@ -15,12 +15,14 @@ import {usePaymentStore} from "~hooks/use-payment-store";
 import {useShippingStore} from "~hooks/use-shipping-store";
 import {useCartStore} from "~hooks/use-cart-store";
 import {useAuthStore} from "~hooks/use-auth-store";
+import {useSpotsStore} from "~hooks/use-spots-store";
 
 export const CheckoutFormRaw = () => {
     const PaymentStore = usePaymentStore();
     const ShippingStore = useShippingStore();
     const CartStore = useCartStore();
     const AuthStore = useAuthStore();
+    const SpotsStore = useSpotsStore();
     const {t} = useTranslation();
     const [pending, setPending] = useState(false);
     const navigate = useNavigate();
@@ -39,21 +41,43 @@ export const CheckoutFormRaw = () => {
 
     const formik = useFormik({
         initialValues: {
-            first_name: '',
+            name: '',
             email: '',
             phone: '',
             address: '',
             comment: '',
-            sticks: '',
+            sticks: 0,
             change: '',
-            payment_id: '1',
-            shipping_id: '1',
+            payment_method_id: 1,
+            shipping_method_id: 1,
         },
         validationSchema: CheckoutSchema,
         onSubmit: values => {
             setPending(true);
+            const [firstname, lastname] = values.name.split(' ');
             OrderApi.place({
-                ...values,
+                phone: values.phone,
+                firstname: firstname || 'Гість',
+                lastname: lastname || '#' + Date.now(),
+
+                email: values.email || 'guest' + Date.now() + '@guest.com', // на жаль в поточній реліазації бєкунду, емейл це обов'язкове поле, тому ми і встановлюему "тупе" значення, в разі якщо юзер не вказав його
+
+                address: values.address || SpotsStore.getSelected.address,
+                payment_method_id: values.payment_method_id,
+                shipping_method_id: values.shipping_method_id,
+
+                poster_firstname: firstname,
+                poster_lastname: lastname,
+                poster_email: values.email,
+
+                country_code: 'UA',
+                zip: '65125',
+                city: 'Одеса',
+
+                change: values.change,
+                sticks: values.sticks,
+                comment: values.comment,
+
             }).then((res) => {
                 if(res.data?.success) {
                     navigate('/thankyou');
@@ -69,12 +93,12 @@ export const CheckoutFormRaw = () => {
     })
 
     const getShippingType = () => {
-        return ShippingStore.items.find((item) => item.id === +formik.values.shipping_id);
+        return ShippingStore.items.find((item) => item.id === +formik.values.shipping_method_id);
     }
 
 
     const getPaymentType = () => {
-        return PaymentStore.items.find((item) => item.id === +formik.values.payment_id);
+        return PaymentStore.items.find((item) => item.id === +formik.values.payment_method_id);
     }
 
 
@@ -93,7 +117,7 @@ export const CheckoutFormRaw = () => {
 
 
         <Switcher
-          name={"shipping_id"}
+          name={"shipping_method_id"}
           options={ShippingStore.items}
           selected={(option) => {
               return option.id === getShippingType().id}
@@ -115,10 +139,10 @@ export const CheckoutFormRaw = () => {
         )}
         <S.Control>
             <Input
-              name={"first_name"}
+              name={"name"}
               placeholder={t('checkout.form.first_name')}
               onChange={formik.handleChange}
-              value={formik.values.first_name}
+              value={formik.values.name}
             />
         </S.Control>
 
@@ -162,7 +186,7 @@ export const CheckoutFormRaw = () => {
 
         <S.Control>
             <Switcher
-              name={"payment_id"}
+              name={"payment_method_id"}
               options={PaymentStore.items}
               handleChange={({e, index}) => {
                   formik.handleChange(e);

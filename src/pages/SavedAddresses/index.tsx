@@ -9,7 +9,7 @@ import {HeartSvg} from "../../components/svg/HeartSvg";
 import {ButtonOutline} from "~components/buttons/Button";
 import {useAppStore} from "~hooks/use-app-store";
 import {useAuthStore} from "~hooks/use-auth-store";
-import {InputModel} from "~common/InputModel";
+import {InputModel, TextInputModel} from "~common/InputModel";
 import {FormModel} from "~common/FormModel";
 import authApi from "~api/auth.api";
 import {SpinnerSvg} from "~components/svg/SpinnerSvg";
@@ -37,7 +37,7 @@ const Address = observer(({
     <Input
       disabled={true}
       name={'address'}
-      value={address.name} width={"350px"}
+      value={address.lines} width={"350px"}
     />
     <S.IconWrapper>
       {state.loading ? (
@@ -102,16 +102,14 @@ export const SavedAddresses = observer(() => {
   const state = useLocalObservable(() => ({
     form: new FormModel({
       fields: {
-        address: new InputModel({
-          name: 'name'
-        })
+        lines: new TextInputModel('lines')
       },
       onSubmit(formData: FormData, done, error) {
         authApi.addAddress({
-          name: state.form.fields.address.value,
-          lines: 'Не вказано',
-          zip: 'Не вказано',
-          city: 'Не вказано',
+          name: user.fullName,
+          lines: state.form.fields.lines.value,
+          zip: '65125',
+          city: 'Одеса',
           two_letters_country_code: 'UA'
         }).then(() => {
           return AuthStore.fetchUser().finally(() => {
@@ -144,7 +142,7 @@ export const SavedAddresses = observer(() => {
           <Input
             placeholder={"Введіть адрес"}
             width={"350px"}
-            {...state.form.fields.address.asProps}
+            {...state.form.fields.lines.asProps}
           />
         </S.AddressWrapper>
         <S.ButtonWrapper>

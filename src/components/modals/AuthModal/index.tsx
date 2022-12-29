@@ -14,6 +14,8 @@ import {runInAction, transaction} from "mobx";
 import {stores} from "~stores/stores";
 import {useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
+import {FormModel} from "~common/FormModel";
+import {CheckboxInputModel, TextInputModel} from "~common/InputModel";
 
 export const AuthModal = ( { children}) => {
     const breakpoint = useBreakpoint();
@@ -50,55 +52,85 @@ export const AuthModal = ( { children}) => {
     </Modal>;
 }
 
-const SignUpForm = ({
+const SignUpForm = observer(({
                         setShowSignUp
                     }) => {
     const breakpoint = useBreakpoint();
     const isMobile = breakpoint === 'mobile';
-    const [email, setEmail] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [emailError, setEmailError] = useState("");
-    const [password, setPassword] = useState("");
-    const [passwordError, setPasswordError] = useState("");
-    const [agree, setAgree] = useState(false);
-    const [agreeError, setAgreeError] = useState("");
+
     const navigate = useNavigate();
 
-    return <S.SignUpForm onSubmit={e => {
-        setPasswordError('');
-        setEmailError('');
-        e.preventDefault();
-    }}>
+    const state = useLocalObservable(() => ({
+        form: new FormModel({
+            fields: {
+                name: new TextInputModel('name'),
+                surname: new TextInputModel('surname'),
+                email: new TextInputModel('email'),
+                password: new TextInputModel('password'),
+                agree: new CheckboxInputModel('agree')
+            },
+            onSubmit(formData, done, error) {
+                AuthApi.register({
+                    email: state.form.fields.email.value,
+                    password: state.form.fields.password.value,
+                    password_confirmation: state.form.fields.password.value,
+                    name: state.form.fields.name.value,
+                    surname: state.form.fields.surname.value,
+                    agree: state.form.fields.agree.checked,
+                }).then(() => {
+                    return AuthApi.login({
+                        email: state.form.fields.email.value,
+                        password: state.form.fields.password.value
+                    }).then((res) => {
+                        const {token, expires, user} = res.data.data;
+                        Cookies.set('jwt', token);
+                        transaction(() => {
+                            stores.AuthStore.setAuthToken(token);
+                            stores.AuthStore.userFromJson(user);
+                            stores.AuthStore.setExpires(expires);
+                        })
+                        navigate('/account')
+                    }).finally(() => {
+                        done()
+                    })
+                }).catch((e) => {
+                    error(e);
+                })
+            }
+        })
+    }))
+
+    return <S.SignUpForm {...state.form.asFormProps}>
         <S.Title>
             Регистрация
         </S.Title>
         <S.InputWrapper>
             <S.InputLabel>
+                І'мя
+            </S.InputLabel>
+            <Input {...state.form.fields.name.asProps} light={true}/>
+        </S.InputWrapper>
+        <S.InputWrapper>
+            <S.InputLabel>
+                Фамілія
+            </S.InputLabel>
+            <Input {...state.form.fields.surname.asProps} light={true}/>
+        </S.InputWrapper>
+        <S.InputWrapper>
+            <S.InputLabel>
                 E-mail
             </S.InputLabel>
-            <Input name={'email'} error={emailError} onChange={e => {
-                const {value} = e.currentTarget as HTMLInputElement;
-                setEmail(value);
-                setEmailError("");
-            }} light={true}/>
+            <Input {...state.form.fields.email.asProps} light={true}/>
         </S.InputWrapper>
 
         <S.InputWrapper>
             <S.InputLabel>
                 Пароль
             </S.InputLabel>
-            <PasswordInput name={'password'} light={true} error={passwordError} onChange={e => {
-                setPassword((e.target as HTMLInputElement).value);
-                setPasswordError("");
-            }}/>
+            <PasswordInput {...state.form.fields.password.asProps} light={true} />
         </S.InputWrapper>
         <S.CheckboxWrapper>
-            <Checkbox error={agreeError}
-                      name={"agree"}
-                      initialChecked={agree}
-                      onChange={state => {
-                          setAgree(state);
-                      }}>
+            <Checkbox {...state.form.fields.agree.asProps}>
                 Я согласен с условиями использования и обработки моих персональных данных
             </Checkbox>
         </S.CheckboxWrapper>
@@ -106,52 +138,7 @@ const SignUpForm = ({
 
         <FlexBox>
             <FlexBox flexDirection={"column"} alignItems={"center"}>
-
-                <Button loading={loading} onClick={() => {
-                    setAgreeError("");
-                    setLoading(true);
-                    AuthApi.register({
-                        email: email,
-                        password: password,
-                        password_confirmation: password,
-                        agree: agree,
-                        name: '',
-                        surname: ''
-                    }).then(() => {
-                        return AuthApi.login({
-                            email: email,
-                            password: password
-                        }).then((res) => {
-                            const {token, expires, user} = res.data.data;
-                            Cookies.set('jwt', token);
-                            transaction(() => {
-                                stores.AuthStore.setAuthToken(token);
-                                stores.AuthStore.userFromJson(user);
-                                stores.AuthStore.setExpires(expires);
-                            })
-                            navigate('/account')
-                        })
-                    }).catch((e) => {
-                        const {errors, message} = e.response.data;
-                        if(errors) {
-                            Object.keys(errors).forEach((key) => {
-                                if(key === 'email') {
-                                    setEmailError(errors[key][0]);
-                                }
-                                if(key === 'password') {
-                                    setPasswordError(errors[key][0]);
-                                }
-                                if(key === 'agree') {
-                                    setAgreeError(errors[key][0]);
-                                }
-                            })
-                        }
-                        console.error(e);
-                    }).finally(() => {
-                        setLoading(false);
-                    })
-
-                }}>Регистрация</Button>
+                <Button {...state.form.asSubmitButtonProps}>Регистрация</Button>
                 {isMobile &&
                   <S.NavigateButton style={{paddingTop:"10px"}} onClick={ (e)=>{
                       e.preventDefault();
@@ -164,7 +151,7 @@ const SignUpForm = ({
             </FlexBox>
         </FlexBox>
     </S.SignUpForm>
-}
+})
 
 const PasswordRecoveryForm = observer(({
                                   setShowPasswordRecovery
