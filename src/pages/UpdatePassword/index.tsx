@@ -20,7 +20,7 @@ export const UpdatePassword = observer(() => {
                password: new TextInputModel('password'),
                password_confirmation: new TextInputModel('password'),
            },
-            onSubmit(formData, done, error) {
+            onSubmit(fields, done, error) {
                 transaction(() => {
                     state.setSuccessMessageIntervalId(null);
                     state.setShowSuccessMessage(false);
@@ -60,7 +60,7 @@ export const UpdatePassword = observer(() => {
 
     return (
       <CabinetLayout title={"Змінити пароль"}>
-          <S.Form {...state.form.asFormProps}>
+          <S.Form {...state.form.asProps}>
               <S.Text>Старий пароль</S.Text>
               <PasswordInput
                 {...state.form.fields.password_old.asProps}

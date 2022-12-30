@@ -1,6 +1,6 @@
-import {CabinetLayout} from "../../layout/CabinetLayout";
-import {FormEvent, useEffect, useState} from "react";
-import {observer} from "mobx-react";
+import {CabinetLayout} from "~layout/CabinetLayout";
+import {useEffect, useState} from "react";
+import {observer, useLocalObservable} from "mobx-react";
 import * as S from "./styled"
 import {ButtonDark, ButtonOutline} from "~components/buttons/Button";
 import {Dropdown} from "~components/Dropdown";
@@ -10,7 +10,9 @@ import {FlexBox} from "~components/FlexBox";
 import {useAuthStore} from "~hooks/use-auth-store";
 import {useNavigate} from "react-router-dom";
 import {DAY_OPTIONS, MONTH_OPTIONS, SEX_OPTIONS, YEAR_OPTIONS} from "~pages/Profile/constants";
-import {transaction} from "mobx";
+
+import {FormModel} from "~common/FormModel";
+import {TextInputModel} from "~common/InputModel";
 
 const EditForm = observer(({
   cancelEditing
@@ -22,37 +24,47 @@ const EditForm = observer(({
     const user = AuthStore.user;
     const customer = user.customer;
 
-    return  <>
+    const form = useLocalObservable(() => new FormModel({
+        fields: {
+            name: new TextInputModel('name', {
+                value: user.name
+            }),
+            surname: new TextInputModel('surname', {
+                value: user.surname
+            }),
+            phone: new TextInputModel('phone', {
+                value: user.phone
+            })
+        },
+        onSubmit(fields, done, error) {
+            user.name = fields.name.value;
+            customer.firstName = fields.name.value;
+            user.surname = fields.surname.value;
+            customer.lastName = fields.surname.value
+            user.phone = fields.phone.value;
+
+            user.save().then(() => {
+                cancelEditing();
+            }).catch((e) => {
+                error(e)
+            }).finally(() => {
+                done()
+            })
+
+        }
+    }))
+
+    return  <form {...form.asProps}>
         <FlexBox justifyContent={'space-between'}>
             <Input
               style={{width: 'calc(50% - 10px)'}}
-              label={"Їм'я"}  name={"name"}
-              value={user.name}
-              onInput={(e) => {
-                  const value = (e.target as HTMLInputElement).value;
-                  transaction(() => {
-                      user.name = value;
-                      if(customer) {
-                          customer.firstName = value;
-                      }
-                  })
-              }}
+              label={"Їм'я"}
+              {...form.fields.name.asProps}
 
             />
             <Input style={{width: 'calc(50% - 10px)'}}
                    label={"Прізвище"}
-                   name={"surname"}
-                   value={user.surname}
-                   onInput={(e) => {
-                       const value = (e.target as HTMLInputElement).value;
-                       transaction(() => {
-                           user.surname = value;
-                           if(customer) {
-                               customer.lastName = value
-                           }
-                       })
-
-                   }}
+                   {...form.fields.surname.asProps}
             />
         </FlexBox>
         <FlexBox justifyContent={'space-between'} style={{
@@ -64,6 +76,11 @@ const EditForm = observer(({
               name={"email"}
               value={AuthStore.user.email}
               disabled={true}
+            />
+            <Input
+              style={{width: 'calc(50% - 10px)'}}
+              label={"Телефон"}
+              {...form.fields.phone.asProps}
             />
         </FlexBox>
 
@@ -117,23 +134,15 @@ const EditForm = observer(({
         <FlexBox style={{
             marginTop: '30px'
         }}>
-            <ButtonOutline loading={user.saving && customer?.saving} style={{
+            <ButtonOutline {...form.asSubmitButtonProps} style={{
                 marginRight: '16px'
-            }} onClick={() => {
-                transaction(() => {
-                    user.save();
-                    if(customer) {
-                        customer.save();
-                    }
-                })
-
-            }}>Сохранить</ButtonOutline>
+            }} >Сохранить</ButtonOutline>
             <ButtonDark onClick={() => {
                 cancelEditing();
             }}>Скасувати</ButtonDark>
         </FlexBox>
 
-    </>
+    </form>
 })
 
 const ProfilePreview = ({
@@ -148,13 +157,17 @@ const ProfilePreview = ({
     return <S.Properties>
 
         <S.Property>
-            <S.Property.Label>Имя</S.Property.Label>
+            <S.Property.Label>Ім'я</S.Property.Label>
             <S.Property.Value>{AuthStore.user.fullName}</S.Property.Value>
         </S.Property>
 
         <S.Property>
             <S.Property.Label>E-mail</S.Property.Label>
             <S.Property.Value>{AuthStore.user.email}</S.Property.Value>
+        </S.Property>
+        <S.Property>
+            <S.Property.Label>Телефон</S.Property.Label>
+            <S.Property.Value>{AuthStore.user.phone}</S.Property.Value>
         </S.Property>
 
         <S.BtnGroup>

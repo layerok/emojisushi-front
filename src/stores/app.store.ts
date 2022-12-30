@@ -3,6 +3,8 @@ import {RootStore} from "~stores/stores";
 
 export class AppStore {
     rootStore: RootStore;
+    initialLocationSearch: string;
+    initialLocationPathname: string;
     constructor(rootStore) {
         makeAutoObservable(this, {
             rootStore: false
@@ -20,5 +22,13 @@ export class AppStore {
 
     setLoading = (state) => {
         this.loading = state;
+    }
+
+    setInitialLocationPathname = (pathname: string) => {
+        this.initialLocationPathname = pathname;
+    }
+
+    setInitialLocationSearch = (search: string) => {
+        this.initialLocationSearch = search;
     }
 }

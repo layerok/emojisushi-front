@@ -26,6 +26,7 @@ export const CheckoutFormRaw = () => {
     const {t} = useTranslation();
     const [pending, setPending] = useState(false);
     const navigate = useNavigate();
+    const user = AuthStore.user;
     const CheckoutSchema = Yup.object().shape({
         phone: Yup.string()
           .required(t('validation.required', {field: t('checkout.form.phone')})).test(
@@ -41,10 +42,10 @@ export const CheckoutFormRaw = () => {
 
     const formik = useFormik({
         initialValues: {
-            name: '',
-            email: '',
-            phone: '',
-            address: '',
+            name: user ? user.fullName: '',
+            email: user ? user.email: '',
+            phone: user ? user.phone: '',
+            address: user ? user.customer.defaultAddress.lines : '',
             comment: '',
             sticks: 0,
             change: '',

@@ -12,6 +12,7 @@ export class CategoriesStore {
     }
     items = [];
     name: string = "";
+    loading = false;
 
     setName = (name: string) => {
         this.name = name;
@@ -22,10 +23,25 @@ export class CategoriesStore {
     }
 
     fetchItems(params = {}) {
+        this.setLoading(true);
         return MenuApi.getCategories({
             ...params,
         }).then(res => {
             stores.CategoriesStore.setItems(res.data.data);
+        }).finally(() => {
+            this.setLoading(false);
         });
+    }
+
+    findCategoryBySlug(slug: string) {
+        return this.items.find(item => item.slug === slug)
+    }
+
+    setLoading(state: boolean) {
+        this.loading = state;
+    }
+
+    get count() {
+        return this.items.length;
     }
 }

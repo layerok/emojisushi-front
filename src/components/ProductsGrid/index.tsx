@@ -2,14 +2,14 @@ import {ProductCard} from "../ProductCard";
 import * as S from "./styled";
 import {FlexBox} from "../FlexBox";
 import {LoadMoreButton} from "../buttons/LoadMoreButton";
-import {useBreakpoint} from "../../common/hooks/useBreakpoint";
+import {useBreakpoint} from "~common/hooks/useBreakpoint";
 import { EqualHeight } from 'react-equal-height';
 import {SortingPopover} from "../popovers/SortingPopover";
 import {observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
-import {useDebounce} from "../../common/hooks/useDebounce";
+import {useDebounce} from "~common/hooks/useDebounce";
 import {Loader} from "../Loader";
-import {useProductsStore} from "../../hooks/use-categories-store";
+import {useProductsStore} from "~hooks/use-categories-store";
 
 const ProductsGridRaw = (
     {
@@ -49,7 +49,7 @@ const ProductsGridRaw = (
                         return <ProductCard key={product.id} product={product}/>
                     })}
                 </S.Grid>
-            ): t('common.not_found')}
+            ): loading ? t('products.loading'): t('common.not_found')}
         </EqualHeight>
         {loadable && (
             <S.Footer>

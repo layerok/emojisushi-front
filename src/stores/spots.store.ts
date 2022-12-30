@@ -23,29 +23,37 @@ export class SpotsStore {
         this.selectedIndex = index;
     }
 
-    changeSpot = (spot: ISpot, clearCart = false) => {
-        const index = this.items.indexOf(spot);
-        if(index === -1) {
+    select = (spot: ISpot, onSelect?: () => void ) => {
+
+        if(!this.exists(spot)) {
             throw Error("Couldn't change spot")
         }
-        if(index !== this.selectedIndex) {
+
+        const selected = this.selected(spot);
+
+        if(!selected) {
+            const index = this.index(spot);
             const selectedId = this.items[index].id;
             this.setSelectedIndex(index);
 
             LocalStorageService.set('spot_id', selectedId);
-
-            const promises = [];
-
-            if(clearCart) {
-                promises.push(this.rootStore.CartStore.clearCart());
-            }
-
-            promises.push(this.rootStore.ProductsStore.fetchItems(this.rootStore.ProductsStore.lastParams))
-            promises.push(this.rootStore.CategoriesStore.fetchItems())
-            promises.push(this.rootStore.CartStore.fetchItems())
-
-            Promise.all(promises).finally(() => this.rootStore.AppStore.setLoading(false))
+            onSelect && onSelect();
         }
+
+    }
+
+    exists(spot: ISpot) {
+        const index = this.index(spot);
+        return index !== -1
+    }
+
+    index(spot: ISpot) {
+        return this.items.indexOf(spot);
+    }
+
+    selected(spot: ISpot) {
+        const index = this.index(spot);
+        return index === this.selectedIndex
     }
 
     setLoading = (state) => {

@@ -104,10 +104,10 @@ export const SavedAddresses = observer(() => {
       fields: {
         lines: new TextInputModel('lines')
       },
-      onSubmit(formData: FormData, done, error) {
+      onSubmit(fields, done, error) {
         authApi.addAddress({
           name: user.fullName,
-          lines: state.form.fields.lines.value,
+          lines: fields.lines.value,
           zip: '65125',
           city: 'Одеса',
           two_letters_country_code: 'UA'
@@ -137,7 +137,7 @@ export const SavedAddresses = observer(() => {
         return <Address key={address.id} address={address}/>
       })}
 
-      <form {...state.form.asFormProps}>
+      <form {...state.form.asProps}>
         <S.AddressWrapper>
           <Input
             placeholder={"Введіть адрес"}

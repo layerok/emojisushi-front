@@ -1,17 +1,17 @@
 import {Header} from "../Header";
-import {Container} from "../../components/Container";
+import {Container} from "~components/Container";
 import {Footer} from "../Footer";
 import {Banner} from "../Banner";
 import {Sidebar} from "../Sidebar";
 import * as S from "./styled";
-import {RestaurantClosed} from "../../components/modals/RestaurantClosed";
+import {RestaurantClosed} from "~components/modals/RestaurantClosed";
 import {Preloader} from "../Preloader";
 import { observer} from "mobx-react";
-import {SpotsModal} from "../../components/modals/SpotsModal";
+import {SpotsModal} from "~components/modals/SpotsModal";
 import {isClosed} from "~utils/time.utils";
 import {useLocation, useWindowScroll} from "react-use";
-import {CartModal} from "../../components/modals/CartModal";
-import {TinyCartButton} from "../../components/TinyCartButton";
+import {CartModal} from "~components/modals/CartModal";
+import {TinyCartButton} from "~components/TinyCartButton";
 import {Sticky} from "../../components/Sticky";
 import {StickyToTopBtn} from "../../components/StickyToTopBtn";
 import {useEffect} from "react";
@@ -19,6 +19,7 @@ import {useAppStore} from "~hooks/use-app-store";
 import {useProductsStore} from "~hooks/use-categories-store";
 import {useCartStore} from "~hooks/use-cart-store";
 import {useSpotsStore} from "~hooks/use-spots-store";
+import {useCategoriesStore} from "~hooks/use-products-store";
 
 export const LayoutRaw = (
     {
@@ -37,6 +38,7 @@ export const LayoutRaw = (
     const ProductsStore = useProductsStore();
     const CartStore = useCartStore();
     const SpotsStore = useSpotsStore();
+    const CategoriesStore = useCategoriesStore();
 
     const showStickyCart = y > 100;
 
@@ -48,6 +50,12 @@ export const LayoutRaw = (
     useEffect(() => {
         ProductsStore.clearSearch();
     }, [location.pathname])
+
+    useEffect(() => {
+      if(withSidebar) {
+        CategoriesStore.fetchItems();
+      }
+    }, [])
 
     return (
         <S.Layout {...rest}>

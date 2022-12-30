@@ -7,7 +7,6 @@ import Cookies from "js-cookie";
 class OfflineMallCustomer {
     json: IOfflineMallCustomer;
     user: OfflineMallUser;
-    saving = false;
     constructor(user: OfflineMallUser, json: IOfflineMallCustomer) {
         makeAutoObservable(this, {
             user: false
@@ -48,23 +47,15 @@ class OfflineMallCustomer {
         return this.json.default_shipping_address_id
     }
 
+    get defaultAddress() {
+        return this.addresses.find((address) => this.defaultShippingAddressId === address.id)
+    }
+
     isDefaultShippingAddress(address: IAddress) {
         return address.id === this.defaultShippingAddressId;
     }
 
-    setSaving(state: boolean) {
-        this.saving = state;
-    }
 
-    save() {
-        this.setSaving(true);
-        authApi.updateCustomer({
-            firstname: this.firstName,
-            lastname: this.lastName
-        }).finally(() => {
-            this.setSaving(false);
-        })
-    }
 }
 
 class OfflineMallUser {
@@ -95,6 +86,15 @@ class OfflineMallUser {
 
     set name(name: string) {
         this.json.name = name;
+        this.customer.firstName = name;
+    }
+
+    get phone() {
+        return this.json.phone;
+    }
+
+    set phone(phone: string) {
+        this.json.phone = phone;
     }
 
     get fullName() {
@@ -139,6 +139,7 @@ class OfflineMallUser {
 
     set surname(surname: string) {
         this.json.surname = surname;
+        this.customer.lastName = surname;
     }
 
     get deletedAt() {
@@ -171,9 +172,10 @@ class OfflineMallUser {
 
     save() {
         this.setSaving(true);
-        authApi.updateUser({
+        return authApi.updateUser({
             name: this.name,
-            surname: this.surname
+            surname: this.surname,
+            phone: this.phone
         }).finally(() => {
             this.setSaving(false);
         })
@@ -221,7 +223,13 @@ export class AuthStore {
     fetchUser() {
         return authApi.fetchUser().then((res) => {
             this.setUser(new OfflineMallUser(this, res.data));
+        }).finally(() => {
+            this.setCheckUser(true);
         })
+    }
+
+    setCheckUser = (state: boolean)  => {
+        this.checkUser = state;
     }
 
     logout() {

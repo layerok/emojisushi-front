@@ -10,7 +10,9 @@ import { Provider } from 'mobx-react';
 import {I18nextProvider} from "react-i18next";
 import i18n from './i18n';
 import {appService} from "~services/app.service";
+import {sessionService} from "~services/session.service";
 
+sessionService.init();
 appService.init();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

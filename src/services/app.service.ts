@@ -1,21 +1,33 @@
 import LocalStorageService from "./local-storage.service";
-import {sessionService} from "./session.service";
-import {stores} from "~stores/stores";
-const {SpotsStore} = stores;
+import {rootStore} from "~stores/stores";
+const {SpotsStore, AppStore, AuthStore, CartStore} = rootStore;
 
 class AppService {
     init() {
-        stores.AppStore.setLoading(true);
-        sessionService.init();
-        stores.AuthStore.fetchUser();
-        SpotsStore.loadItems().then(() => {
+        AppStore.setInitialLocationPathname(window.location.pathname);
+        AppStore.setInitialLocationPathname(window.location.search);
+        AppStore.setLoading(true);
+        AuthStore.fetchUser();
+
+        const onLoadSpots = () => {
             const selectedId = LocalStorageService.get('spot_id');
             const exist = SpotsStore.items.find((item) => item.id === selectedId);
             if(!selectedId || !exist) {
-                SpotsStore.changeSpot(SpotsStore.items[0], false);
+                SpotsStore.select(SpotsStore.items[0]);
             } else {
-                SpotsStore.changeSpot(exist, false);
+                SpotsStore.select(exist);
             }
+        }
+
+
+        Promise.all([
+            AuthStore.fetchUser(),
+            SpotsStore.loadItems().then(() => onLoadSpots())
+        ]).finally(() => {
+            CartStore.fetchItems().finally(() => {
+                AppStore.setLoading(false);
+            });
+
         })
 
     }

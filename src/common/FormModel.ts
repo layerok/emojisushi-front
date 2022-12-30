@@ -1,18 +1,18 @@
 import {makeAutoObservable} from "mobx";
 import {InputModel} from "~common/InputModel";
 
-type ISubmitCallback = (data: FormData, done: (clearValues?: boolean) => void, error: (e: any) => void) => void;
+type ISubmitCallback<Fields = Record<string, InputModel>> = (data: Fields, done: (clearValues?: boolean) => void, error: (e: any) => void) => void;
 
 export class FormModel <Fields extends Record<string, InputModel> = Record<string, InputModel>> {
   submitting = false;
   fields: Fields;
-  onSubmit: ISubmitCallback
+  onSubmit: ISubmitCallback<Fields>
   constructor({
     fields,
     onSubmit
               }: {
     fields: Fields;
-    onSubmit: ISubmitCallback
+    onSubmit: ISubmitCallback<Fields>
   }) {
     makeAutoObservable(this);
     this.fields = fields;
@@ -23,7 +23,7 @@ export class FormModel <Fields extends Record<string, InputModel> = Record<strin
     this.submitting = state;
   }
 
-  get asFormProps() {
+  get asProps() {
     return {
       onSubmit: (e) => {
         e.preventDefault();
@@ -38,8 +38,6 @@ export class FormModel <Fields extends Record<string, InputModel> = Record<strin
     }
     this.setSubmitting(true);
     this.clearErrors();
-    const fd = new FormData();
-    this.fieldsAsArray.forEach((field) => fd.append(field.name, field.value))
 
     const done = (clearValues = false) => {
       if(clearValues) {
@@ -56,7 +54,7 @@ export class FormModel <Fields extends Record<string, InputModel> = Record<strin
       this.setSubmitting(false);
     }
 
-    this.onSubmit(fd, done, error);
+    this.onSubmit(this.fields, done, error);
   }
 
   clearErrors() {

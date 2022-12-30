@@ -58,5 +58,6 @@ export type IOfflineMallCustomer = {
 
 export type IOfflineMallUser = IRainLabUser & {
   offline_mall_customer_group_id: number | null;
+  phone: string | null;
   customer: IOfflineMallCustomer | null;
 }

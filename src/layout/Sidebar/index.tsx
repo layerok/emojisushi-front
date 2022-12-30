@@ -10,6 +10,7 @@ import {useTranslation} from "react-i18next";
 import {useDebounce} from "~common/hooks/useDebounce";
 import {useProductsStore} from "~hooks/use-categories-store";
 import {useCategoriesStore} from "~hooks/use-products-store";
+import {Loader} from "~components/Loader";
 
 export const SidebarRaw = () => {
     const ProductsStore = useProductsStore();

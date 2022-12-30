@@ -69,18 +69,18 @@ const SignUpForm = observer(({
                 password: new TextInputModel('password'),
                 agree: new CheckboxInputModel('agree')
             },
-            onSubmit(formData, done, error) {
+            onSubmit(fields, done, error) {
                 AuthApi.register({
-                    email: state.form.fields.email.value,
-                    password: state.form.fields.password.value,
-                    password_confirmation: state.form.fields.password.value,
-                    name: state.form.fields.name.value,
-                    surname: state.form.fields.surname.value,
-                    agree: state.form.fields.agree.checked,
+                    email: fields.email.value,
+                    password: fields.password.value,
+                    password_confirmation: fields.password.value,
+                    name: fields.name.value,
+                    surname: fields.surname.value,
+                    agree: fields.agree.checked,
                 }).then(() => {
                     return AuthApi.login({
-                        email: state.form.fields.email.value,
-                        password: state.form.fields.password.value
+                        email: fields.email.value,
+                        password: fields.password.value
                     }).then((res) => {
                         const {token, expires, user} = res.data.data;
                         Cookies.set('jwt', token);
@@ -100,7 +100,7 @@ const SignUpForm = observer(({
         })
     }))
 
-    return <S.SignUpForm {...state.form.asFormProps}>
+    return <S.SignUpForm {...state.form.asProps}>
         <S.Title>
             Регистрация
         </S.Title>

@@ -1,4 +1,6 @@
-import {client} from "../clients/client";
+import {client} from "~clients/client";
+import {AxiosResponse} from "axios";
+import {ICategory} from "~api/menu.api.types";
 
 class Menu {
     getProducts(params = {}) {
@@ -6,7 +8,14 @@ class Menu {
             params
         });
     }
-    getCategories(params = {}) {
+    getCategories(params = {}): Promise<AxiosResponse<{
+        data: ICategory[],
+        meta: {
+            total: number;
+            offset: null | number;
+            limit: null | number;
+        }
+    }>> {
         return client.get('categories', {
             params
         });

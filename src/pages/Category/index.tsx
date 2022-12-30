@@ -2,16 +2,18 @@ import {Layout} from "~layout/Layout";
 import {ProductsGrid} from "~components/ProductsGrid";
 import { observer} from "mobx-react";
 import {useEffect} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useProductsStore} from "~hooks/use-categories-store";
 import {useCategoriesStore} from "~hooks/use-products-store";
-import {useAppStore} from "~hooks/use-app-store";
+import {useSpotsStore} from "~hooks/use-spots-store";
+
 
 export const CategoryRaw = () => {
     const ProductsStore = useProductsStore();
     const CategoriesStore = useCategoriesStore();
-    const AppStore = useAppStore();
+    const SpotsStore = useSpotsStore();
     const {categorySlug} = useParams();
+    const navigate = useNavigate();
     const selectedCategory = CategoriesStore.items.find((category) => {
         return category.slug === categorySlug;
     })
@@ -26,14 +28,18 @@ export const CategoryRaw = () => {
     }
 
     useEffect(() => {
-        AppStore.setLoading(true);
         ProductsStore.fetchItems({
             category_slug: categorySlug,
             limit: ProductsStore.step,
-        }).then(() => {
-            AppStore.setLoading(false);
-        });
+        })
     }, [categorySlug])
+
+    useEffect(() => {
+        // if current category was disabled for the current spot, then redirect user to the first available category
+        if(!CategoriesStore.findCategoryBySlug(categorySlug) && CategoriesStore.count > 0) {
+            navigate('category/' + CategoriesStore.items[0].slug)
+        }
+    }, [SpotsStore.selectedIndex, CategoriesStore.count])
 
     return (
         <Layout

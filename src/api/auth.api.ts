@@ -66,6 +66,7 @@ class Auth {
     updateUser(data: {
         name?: string;
         surname?: string;
+        phone?: string;
     }) {
         return client.post('user', data);
     }

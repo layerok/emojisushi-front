@@ -6,11 +6,11 @@ type InputModelOptions = {
   error?: string;
 }
 
-export class InputModel<N extends string = string> {
+export class InputModel{
   error: string;
-  name: N;
+  name: string;
   value: any;
-  constructor(name: N, options: InputModelOptions) {
+  constructor(name: string, options: InputModelOptions) {
     makeObservable(this, {
       error: observable,
       name: observable,
@@ -61,10 +61,10 @@ export class InputModel<N extends string = string> {
 }
 
 
-export class TextInputModel<N extends string = string> extends InputModel {
+export class TextInputModel extends InputModel {
   value: string;
 
-  constructor(name: N, options: InputModelOptions & {
+  constructor(name: string, options: InputModelOptions & {
     value?: string;
   } = {}) {
     const {value = '', ...baseOptions} = options;
@@ -104,10 +104,10 @@ export class TextInputModel<N extends string = string> extends InputModel {
   }
 }
 
-export class CheckboxInputModel<N extends string = string> extends InputModel {
+export class CheckboxInputModel extends InputModel {
   value: boolean;
 
-  constructor(name: N, options: InputModelOptions & {
+  constructor(name: string, options: InputModelOptions & {
     value?: boolean;
   } = {}) {
     const {value = false, ...baseOptions} = options;

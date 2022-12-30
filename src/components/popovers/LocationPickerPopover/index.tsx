@@ -5,10 +5,12 @@ import {FlexBox} from "../../FlexBox";
 import {DropdownPopover} from "../DropdownPopover";
 import { observer} from "mobx-react";
 import {useSpotsStore} from "~hooks/use-spots-store";
-import {useAppStore} from "~hooks/use-app-store";
 import {transaction} from "mobx";
 
 import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg"
+import {useCategoriesStore} from "~hooks/use-products-store";
+import {useProductsStore} from "~hooks/use-categories-store";
+import {useCartStore} from "~hooks/use-cart-store";
 
 export const LocationPickerPopoverRaw = (
   {
@@ -22,7 +24,9 @@ export const LocationPickerPopoverRaw = (
   }
 ) => {
   const SpotsStore = useSpotsStore();
-  const AppStore = useAppStore();
+  const CategoriesStore = useCategoriesStore();
+  const ProductsStore = useProductsStore();
+  const CartStore = useCartStore();
 
   return (
     <>
@@ -34,8 +38,16 @@ export const LocationPickerPopoverRaw = (
         selectedIndex={SpotsStore.selectedIndex}
         onSelect={({close, option, index}) => {
           transaction(() => {
-            AppStore.setLoading(true);
-            SpotsStore.changeSpot(option);
+            transaction(() => {
+              SpotsStore.select(option, () => {
+                SpotsStore.setUserSelectedSpot(true);
+                Promise.all([
+                  CartStore.fetchItems(),
+                  ProductsStore.fetchItems(ProductsStore.lastParams),
+                  CategoriesStore.fetchItems()
+                ])
+              });
+            })
           })
           close();
         }}

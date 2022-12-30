@@ -6,6 +6,9 @@ import {MapPinSvg} from "../../svg/MapPinSvg";
 import {useTranslation} from "react-i18next";
 import {useSpotsStore} from "~hooks/use-spots-store";
 import {transaction} from "mobx";
+import {useCategoriesStore} from "~hooks/use-products-store";
+import {useProductsStore} from "~hooks/use-categories-store";
+import {useCartStore} from "~hooks/use-cart-store";
 
 export const SpotsModalRaw = (
   {
@@ -13,6 +16,9 @@ export const SpotsModalRaw = (
   }
 ) => {
   const SpotsStore = useSpotsStore();
+  const CategoriesStore = useCategoriesStore();
+  const ProductsStore = useProductsStore();
+  const CartStore = useCartStore();
 
   const records = SpotsStore.items || [];
   const selectedIndex = SpotsStore.getSelectedIndex;
@@ -33,8 +39,14 @@ export const SpotsModalRaw = (
           return <S.Item key={item.id}
                          onClick={() => {
                            transaction(() => {
-                             SpotsStore.changeSpot(item);
-                             SpotsStore.setUserSelectedSpot(true);
+                             SpotsStore.select(item, () => {
+                               SpotsStore.setUserSelectedSpot(true);
+                               Promise.all([
+                                 CartStore.fetchItems(),
+                                 ProductsStore.fetchItems(ProductsStore.lastParams),
+                                 CategoriesStore.fetchItems()
+                               ])
+                             });
                            })
 
                            close();
