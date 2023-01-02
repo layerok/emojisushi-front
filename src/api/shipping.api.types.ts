@@ -1,4 +1,6 @@
-type ICurrency = {
+import {Nullable} from "~common/types";
+
+export type ICurrency = {
   id: number;
   code: string;
   symbol: string;
@@ -7,12 +9,15 @@ type ICurrency = {
 }
 
 
-type IPrice = {
+export type IPrice = {
   id: number;
   price: number;
   price_formatted: string;
   currency: ICurrency;
-  category: null;
+  category: Nullable<{
+    sort_order: number;
+    code: string;
+  }>;
 }
 
 export type IShippingMethod = {

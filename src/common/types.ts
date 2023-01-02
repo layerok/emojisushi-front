@@ -3,3 +3,5 @@ export type HTMLElementEvent<T extends HTMLElement> = Event & {
   // probably you might want to add the currentTarget as well
   // currentTarget: T;
 }
+
+export type Nullable<Type> = null | Type;

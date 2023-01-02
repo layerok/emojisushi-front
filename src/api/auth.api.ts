@@ -60,7 +60,10 @@ class Auth {
     }
 
     fetchUser(): Promise<AxiosResponse<IOfflineMallUser>> {
-        return client.get('user');
+        const config = {
+            params: {}
+        }
+        return client.get('user', config);
     }
 
     updateUser(data: {

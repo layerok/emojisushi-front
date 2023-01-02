@@ -5,6 +5,7 @@
     "menu": "Меню",
     "not_found": "Товары не найдены",
     "address": "Адресс",
+    "shippingAddress": "Адресс доставки",
     "favorite": "Любимые",
     "login": "Войти",
     "logout": "Выйти",
@@ -26,7 +27,12 @@
     "confirmPassword": "Подтвердить пароль",
     "reset": "Сбросить",
     "code": "Код",
-    "swipe": "Листай"
+    "swipe": "Листай",
+    "to_pay": "К оплате",
+    "paymentMethod": "Способ оплаты",
+    "shippingMethod": "Способ доставки",
+    "amount": "Кол-во",
+    "pcs": "шт"
   },
   "sort": {
     "default": "По умолчанию",
@@ -159,7 +165,11 @@
       "changePassword": "Изменить пароль"
     },
     "orders": {
-      "title": "Мои заказы"
+      "title": "Мои заказы",
+      "order": {
+        "status": "Статус заказа"
+      },
+      "noOrders": "У Вас нет заказов"
     },
     "changePassword": {
       "title": "Изменить пароль",

@@ -22,10 +22,13 @@ import {useTranslation} from "react-i18next";
 import {useCartStore} from "~hooks/use-cart-store";
 import {useProductsStore} from "~hooks/use-categories-store";
 import {useWishlistStore} from "~hooks/use-wishlist-store";
+import {IProduct} from "~api/menu.api.types";
 
 const ProductCardRaw = (
   {
       product,
+  }: {
+      product: IProduct
   }
 ) => {
 
@@ -127,7 +130,7 @@ const ProductCardRaw = (
         <EqualHeightElement name={"product-name"}>
             <S.Name>{name}</S.Name>
             {mod_groups.map((group) => (
-              <Switcher style={{marginTop: "12px"}}
+              <Switcher key={group.id} style={{marginTop: "12px"}}
                         handleChange={({option}) => {
                             setModificators(state => {
                                 return {
@@ -138,14 +141,14 @@ const ProductCardRaw = (
                         }}
                         name={"modificator_" + group.property.id}
                         options={group.property.options.map((option) => ({
-                            id: option.poster_id,
+                            id: +option.poster_id,
                             name: option.value
                         }))}
                         selected={(option) => {
                             if(!option) {
                                 return false
                             }
-                            return modificators[group.property.id] === option.id;
+                            return +modificators[group.property.id] === option.id;
                         }}/>
             ))}
 

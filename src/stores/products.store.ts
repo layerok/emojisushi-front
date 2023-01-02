@@ -1,6 +1,7 @@
 import {makeAutoObservable, transaction} from "mobx";
 import MenuApi from "../api/menu.api";
 import {RootStore} from "~stores/stores";
+import {IProduct} from "~api/menu.api.types";
 
 export class ProductsStore {
     rootStore: RootStore;
@@ -10,7 +11,7 @@ export class ProductsStore {
         });
         this.rootStore = rootStore;
     }
-    items = [];
+    items: IProduct[] = [];
     limit = 25;
     sortOptions = [];
     offset = 0;
@@ -28,7 +29,7 @@ export class ProductsStore {
         this.lastParams = params;
     }
 
-    setItems = (products) => {
+    setItems = (products: IProduct[]) => {
         this.items = products;
     }
 

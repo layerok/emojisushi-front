@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import media from "../../common/custom-media";
 
-const Container = styled.p`
+const Container = styled.div`
   padding: 15px;
   background: #1C1C1C;
   box-shadow: 0px 4px 15px rgba(28, 28, 28, 0.3);
@@ -77,6 +77,7 @@ Pan.Props.Prop = styled.div`
 `
 Pan.Props.Prop.Label = styled.div`
   word-break: break-all;
+  flex-shrink: 0;
   width: 201px;
   :first-child {
     padding-bottom: 10px;

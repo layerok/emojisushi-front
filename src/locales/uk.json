@@ -5,6 +5,7 @@
     "menu": "Меню",
     "not_found": "Товари не знайдені",
     "address": "Адреса",
+    "shippingAddress": "Адреса доставки",
     "favorite": "Улюблені",
     "login": "Увійти",
     "logout": "Вийти",
@@ -26,7 +27,12 @@
     "confirmPassword": "Підтвердіть пароль",
     "reset": "Скинути",
     "code": "Код",
-    "swipe": "Гортай"
+    "swipe": "Гортай",
+    "to_pay": "До оплати",
+    "paymentMethod": "Спосіб оплати",
+    "shippingMethod": "Спосіб доставки",
+    "amount": "Кількість",
+    "pcs": "шт"
   },
   "sort": {
     "default": "Типово",
@@ -159,7 +165,11 @@
       "changePassword": "Змінити пароль"
     },
     "orders": {
-      "title": "Мої замовлення"
+      "title": "Мої замовлення",
+      "order": {
+        "status": "Статус замовлення"
+      },
+      "noOrders": "У Вас немає замовлень"
     },
     "changePassword": {
       "title": "Змінити пароль",

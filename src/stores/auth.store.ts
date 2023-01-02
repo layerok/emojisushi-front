@@ -43,8 +43,16 @@ class OfflineMallCustomer {
         return this.json.addresses;
     }
 
+    get orders() {
+        return this.json.orders;
+    }
+
     get hasAddresses() {
         return this.addresses.length > 0;
+    }
+
+    get hasOrders() {
+        return this.orders.length > 0;
     }
 
     get defaultShippingAddressId() {

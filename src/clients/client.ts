@@ -8,11 +8,18 @@ const client = axios.create({
     baseURL: `${process.env.REACT_APP_API_BASE_URL}`,
 });
 
+type IParams = {
+    XDEBUG_SESSION_START?: boolean;
+    lang?: string;
+    session_id?: string;
+    spot_id?: number;
+}
+
 client.interceptors.request.use((config = {}) => {
     // send session_id from cookies as parameter for each api request
     const {method} = config;
 
-    const params = (method === 'post' ? config.data: config.params) || {};
+    const params: IParams = {};
     params.XDEBUG_SESSION_START = true;
     const session_id = Cookies.get('session_id');
 
@@ -24,7 +31,20 @@ client.interceptors.request.use((config = {}) => {
         params.spot_id = spot_id;
     }
 
-    params.lang = i18n.resolvedLanguage || i18n.options.lng;
+    params.lang = i18n.resolvedLanguage || i18n.options.lng || LocalStorageService.get('i18next_lang', 'uk');
+
+
+    if(method=== 'post') {
+        config.data = {
+            ...params,
+            ...config.data || {}
+        }
+    } else {
+        config.params = {
+            ...params,
+            ...config.params || {},
+        }
+    }
 
     const jwt = Cookies.get('jwt');
 
@@ -43,7 +63,6 @@ client.interceptors.response.use(function (response) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     if([406].includes(error?.response?.status)) {
-        Cookies.remove('jwt');
         stores.AuthStore.logout();
     }
     return Promise.reject(error);

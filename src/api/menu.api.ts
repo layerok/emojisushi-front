@@ -1,9 +1,15 @@
 import {client} from "~clients/client";
 import {AxiosResponse} from "axios";
-import {ICategory} from "~api/menu.api.types";
+import {ICategory, IFilter, IProduct} from "~api/menu.api.types";
+import {Nullable} from "~common/types";
 
 class Menu {
-    getProducts(params = {}) {
+    getProducts(params = {}): Promise<AxiosResponse<{
+        data: IProduct[],
+        total: number;
+        sort_options: string[];
+        filters: IFilter[]
+    }>> {
         return client.get('products', {
             params
         });
@@ -12,8 +18,8 @@ class Menu {
         data: ICategory[],
         meta: {
             total: number;
-            offset: null | number;
-            limit: null | number;
+            offset: Nullable<number>
+            limit: Nullable<number>
         }
     }>> {
         return client.get('categories', {

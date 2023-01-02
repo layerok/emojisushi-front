@@ -4,11 +4,19 @@ import {FlexBox} from "../FlexBox";
 import {CaretUpSvg} from "../svg/CaretUpSvg";
 import {Collapsible} from "../Collapsible";
 import {useBreakpoint} from "~common/hooks/useBreakpoint";
-const ProductImage = require("~assets/img/products/2.png");
+import {IOrder} from "~api/auth.api.types";
+import {getProductMainImage} from "~utils/utils";
+import {LogoSvg} from "~components/svg/LogoSvg";
+import {useTranslation} from "react-i18next";
 
 
-export const AccordionItem = () => {
+export const AccordionItem = ({
+  order
+                              }: {
+    order: IOrder
+}) => {
 
+    const {t} = useTranslation();
     const breakpoint = useBreakpoint();
     const isPc = breakpoint === 'pc';
     const renderContainer = ({Header, Panel}) => {
@@ -25,10 +33,14 @@ export const AccordionItem = () => {
 
         return  <S.Header>
             <S.Header.MobileTextContainer>
-                <S.MutedText>№2131</S.MutedText>
-                <S.Pan.Props.Prop.Value style={{marginTop: !isPc ? "5px" : "0"}}>2022-08-07</S.Pan.Props.Prop.Value>
+                <S.MutedText>№{order.order_number}</S.MutedText>
+                <S.Pan.Props.Prop.Value style={{marginTop: !isPc ? "5px" : "0"}}>
+                    {order.updated_at}
+                </S.Pan.Props.Prop.Value>
             </S.Header.MobileTextContainer>
-            <S.Header.Status>Выполнен</S.Header.Status>
+            <S.Header.Status style={{
+                color: order.order_state.color
+            }}>{order.order_state.name}</S.Header.Status>
             <SvgIcon width={"20px"} style={{
                 transformOrigin: "center",
                 transform: opened ? "rotate(0deg)" : "rotate(180deg)"
@@ -44,92 +56,75 @@ export const AccordionItem = () => {
                 <S.Pan.Props.ExceptStatus>
                     <S.Pan.Props.Prop>
                         <S.Pan.Props.Prop.Label>
-                            <S.MutedText>Способ оплаты</S.MutedText>
+                            <S.MutedText>{t('common.paymentMethod')}</S.MutedText>
                         </S.Pan.Props.Prop.Label>
-                        <S.Pan.Props.Prop.Value>Наличными</S.Pan.Props.Prop.Value>
+                        <S.Pan.Props.Prop.Value>{order.payment.method.name}</S.Pan.Props.Prop.Value>
                     </S.Pan.Props.Prop>
                     <S.Pan.Props.Prop>
                         <S.Pan.Props.Prop.Label>
-                            <S.MutedText>Способ доставки</S.MutedText>
+                            <S.MutedText>{t('common.shippingMethod')}</S.MutedText>
                         </S.Pan.Props.Prop.Label>
-                        <S.Pan.Props.Prop.Value>Самовывоз</S.Pan.Props.Prop.Value>
+                        <S.Pan.Props.Prop.Value>{order.shipping.method.name}</S.Pan.Props.Prop.Value>
                     </S.Pan.Props.Prop>
                     <S.Pan.Props.Prop>
                         <S.Pan.Props.Prop.Label>
-                            <S.MutedText>Адрес доставки</S.MutedText>
+                            <S.MutedText>{t('common.shippingAddress')}</S.MutedText>
                         </S.Pan.Props.Prop.Label>
-                            <S.Pan.Props.Prop.Value>Одесса Пархоменка не 10</S.Pan.Props.Prop.Value>
+                            <S.Pan.Props.Prop.Value>{order.billing_address.lines}</S.Pan.Props.Prop.Value>
                     </S.Pan.Props.Prop>
                 </S.Pan.Props.ExceptStatus>
                 <S.Pan.Status>
-                    <S.Pan.Status.Label>Статус заказа</S.Pan.Status.Label>
-                    <S.Pan.Status.Value>Выполнен</S.Pan.Status.Value>
+                    <S.Pan.Status.Label>{t('account.orders.order.status')}</S.Pan.Status.Label>
+                    <S.Pan.Status.Value style={{
+                        color: order.order_state.color
+                    }}>{order.order_state.name}</S.Pan.Status.Value>
                 </S.Pan.Status>
             </S.Pan.Props>
 
             <div>
-                <S.Pan.Prod>
-                    <S.Pan.Prod.Img src={ProductImage}/>
-                    <S.Pan.Prod.Props>
-                        <S.Pan.Prod.Sect1>
-                            <S.Pan.Prod.Name>Ролл Калифорния с угрём</S.Pan.Prod.Name>
+                {order.products.map((product, index) => {
+                    const img = getProductMainImage(product.product);
+                    return <S.Pan.Prod key={product.id}>
+                        {img ? (
+                          <S.Pan.Prod.Img src={img}/>
+                        ): (
+                          <SvgIcon color={"white"} width={"80px"} style={{opacity: 0.05}}>
+                              <LogoSvg/>
+                          </SvgIcon>
+                        )}
 
-                            <S.Pan.Prod.Description>
-                                <S.Pan.Prod.Prop>1 шт</S.Pan.Prod.Prop>
-                                <S.Pan.VerticalStick/>
-                                <S.Pan.Prod.Prop>220 г</S.Pan.Prod.Prop>
-                                <S.Pan.VerticalStick/>
-                                <S.Pan.Prod.Prop>120 Ккал</S.Pan.Prod.Prop>
-                            </S.Pan.Prod.Description>
-                        </S.Pan.Prod.Sect1>
+                        <S.Pan.Prod.Props>
+                            <S.Pan.Prod.Sect1>
+                                <S.Pan.Prod.Name>{product.name}</S.Pan.Prod.Name>
 
-                        <S.Pan.Prod.Sect2>
-                            <FlexBox flexDirection={"column"}>
-                                <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
-                                <S.Pan.Prod.Amount>Кол-во: 1</S.Pan.Prod.Amount>
-                            </FlexBox>
-                            <div style={{marginLeft:"39px"}}>
-                                <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
-                            </div>
-                        </S.Pan.Prod.Sect2>
+                                <S.Pan.Prod.Description>
+                                    <S.Pan.Prod.Prop>{product.quantity} {t('common.pcs')}</S.Pan.Prod.Prop>
+                                    <S.Pan.VerticalStick/>
+                                    <S.Pan.Prod.Prop>{product.weight} г</S.Pan.Prod.Prop>
+                                </S.Pan.Prod.Description>
+                            </S.Pan.Prod.Sect1>
 
-                    </S.Pan.Prod.Props>
+                            <S.Pan.Prod.Sect2>
+                                <FlexBox flexDirection={"column"}>
+                                    <S.Pan.Prod.Price>{product.item.price[order.currency.code]}</S.Pan.Prod.Price>
+                                    <S.Pan.Prod.Amount>{t('common.amount')}: {product.quantity} {t('common.pcs')}</S.Pan.Prod.Amount>
+                                </FlexBox>
+                                <div style={{marginLeft: "39px"}}>
+                                    <S.Pan.Prod.Price>{product.item.price[order.currency.code]}</S.Pan.Prod.Price>
+                                </div>
+                            </S.Pan.Prod.Sect2>
+
+                        </S.Pan.Prod.Props>
 
 
-                </S.Pan.Prod>
+                    </S.Pan.Prod>
+                })
+                }
 
-                <S.Pan.Prod>
-                    <S.Pan.Prod.Img src={ProductImage}/>
-                    <S.Pan.Prod.Props>
-                        <S.Pan.Prod.Sect1>
-                            <S.Pan.Prod.Name>Ролл Калифорния с угрём</S.Pan.Prod.Name>
-
-                            <S.Pan.Prod.Description>
-                                <S.Pan.Prod.Prop>1 шт</S.Pan.Prod.Prop>
-                                <S.Pan.VerticalStick/>
-                                <S.Pan.Prod.Prop>220 г</S.Pan.Prod.Prop>
-                                <S.Pan.VerticalStick/>
-                                <S.Pan.Prod.Prop>120 Ккал</S.Pan.Prod.Prop>
-                            </S.Pan.Prod.Description>
-                        </S.Pan.Prod.Sect1>
-
-                        <S.Pan.Prod.Sect2>
-                            <FlexBox flexDirection={"column"}>
-                                <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
-                                <S.Pan.Prod.Amount>Кол-во: 1</S.Pan.Prod.Amount>
-                            </FlexBox>
-                            <div style={{marginLeft:"39px"}}>
-                                <S.Pan.Prod.Price>169 ₴</S.Pan.Prod.Price>
-                            </div>
-                        </S.Pan.Prod.Sect2>
-
-                    </S.Pan.Prod.Props>
-
-                </S.Pan.Prod>
             </div>
 
             <S.Pan.Prod.TotalPrice>
-                <S.Pan.Prod.Price>К оплате: 300 ₴</S.Pan.Prod.Price>
+                <S.Pan.Prod.Price>{t('common.to_pay')}: {order.total_post_taxes / 100} {order.currency.symbol}</S.Pan.Prod.Price>
             </S.Pan.Prod.TotalPrice>
         </S.Pan>
     }
@@ -143,7 +138,7 @@ export const AccordionItem = () => {
                      renderContainer={({Header,Panel})=>{
                          return renderContainer({Header,Panel});
                      }}
-                     headerTag={"p"}
+                     headerTag={"div"}
         />
 
 

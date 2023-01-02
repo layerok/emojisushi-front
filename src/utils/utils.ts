@@ -1,4 +1,6 @@
-export function getProductMainImage(product) {
+import {IProduct} from "~api/menu.api.types";
+
+export function getProductMainImage(product: IProduct) {
     const {image_sets} = product;
     return (image_sets.length > 0 && image_sets[0] && image_sets[0].images.length > 0) ? image_sets[0].images[0].path : undefined;
 }
