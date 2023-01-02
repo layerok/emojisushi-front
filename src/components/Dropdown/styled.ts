@@ -5,6 +5,8 @@ const Dropdown = styled.div`
   font-weight: 400;
   font-size: 15px;
   line-height: 18px;
+  position: relative;
+  overflow: hidden;
 `
 
 const Reference = styled.div`
@@ -27,10 +29,10 @@ const Content = styled.div`
     placement: 'bottom'
   }, css`
     border-top: ${ifProp('open', "1px solid #2D2D2D")};
-    border-radius: 0 0 15px 15px;
+    border-radius: 0 0 10px 10px;
   `, css`
     border-bottom: ${ifProp('open', "1px solid #2D2D2D")};
-    border-radius: 15px 15px 0 0;
+    border-radius: 10px 105px 0 0;
   `)};
 `
 

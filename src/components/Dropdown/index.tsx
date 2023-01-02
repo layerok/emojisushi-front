@@ -37,7 +37,7 @@ const Option = forwardRef<HTMLDivElement, IOptionProps>(function Option(
                     : selected
                         ? "#272727"
                         : "none",
-                borderRadius: 4,
+                borderRadius: 10,
                 userSelect: "none",
                 padding: "10px 15px",
                 cursor: "pointer"
@@ -54,25 +54,26 @@ type IDropdownProps = {
         value: string | number;
     }[];
     width: string;
-    initiallySelectedValue: null | string | number;
+    value: null | string | number;
+    onChange: (value: string | number | null) => void;
 }
 
 export const Dropdown = (
     {
         options = [],
         width = "100px",
-        initiallySelectedValue = null
+        value,
+      onChange
     }: IDropdownProps
 ) => {
 
     const [open, setOpen] = useState(false);
 
-    const [activeIndex, setActiveIndex] = useState(null);
+    const [activeIndex, setActiveIndex] = useState(options.length > 0 ? 0: null);
     const [placement, setPlacement] = useState(null);
-    const [selectedValue, setSelectedValue] = useState(initiallySelectedValue);
 
-    const selectedOption = useMemo(() => options.find(({value}) => value === selectedValue), [
-        selectedValue,
+    const selectedOption = useMemo(() => options.find((option) => option.value === value), [
+        value,
         options
     ])
 
@@ -140,7 +141,6 @@ export const Dropdown = (
 
     const handleOptionClick = () => {
         if (activeIndex !== null) {
-            setSelectedValue(options[activeIndex].value);
             setOpen(false);
         }
     };
@@ -156,7 +156,7 @@ export const Dropdown = (
                 aria-label="Choose day when you were born"
                 aria-describedby="day-label"
                 {...getReferenceProps()}>
-                {selectedValue && (
+                {value && (
                     <span id="day-label" aria-label={selectedOption?.label}>
                         {selectedOption?.label}
                     </span>
@@ -187,6 +187,7 @@ export const Dropdown = (
                                 onKeyDown: (e) => {
                                     if (e.key === "Enter") {
                                         handleOptionClick();
+                                        onChange(options[activeIndex].value);
                                     }
                                 }
                             })}
@@ -201,20 +202,23 @@ export const Dropdown = (
                                     role="listbox"
                                     id={listboxId}
                                 >
-                                    {options.map(({ value, label }, index) => (
+                                    {options.map((option, index) => (
                                         <Option
-                                            key={value}
-                                            name={label}
+                                            key={option.value}
+                                            name={option.label}
                                             ref={(node) => {
                                                 listRef.current[index] = node;
                                             }}
-                                            selected={selectedValue === value}
+                                            selected={option.value === value}
                                             active={activeIndex === index}
                                             {...getItemProps({
-                                                onClick: handleOptionClick,
+                                                onClick: () => {
+                                                    handleOptionClick()
+                                                    onChange(option.value);
+                                                },
                                             })}
                                         >
-                                            {label}
+                                            {option.label}
                                         </Option>
                                     ))}
                                 </div>

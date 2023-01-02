@@ -9,22 +9,27 @@ class AppService {
         AppStore.setLoading(true);
         AuthStore.fetchUser();
 
+        const onSelectSpot = () => {
+            CartStore.fetchItems();
+        }
+
         const onLoadSpots = () => {
             const selectedId = LocalStorageService.get('spot_id');
             const exist = SpotsStore.items.find((item) => item.id === selectedId);
             if(!selectedId || !exist) {
-                SpotsStore.select(SpotsStore.items[0]);
+                SpotsStore.select(SpotsStore.items[0], onSelectSpot);
             } else {
-                SpotsStore.select(exist);
+                SpotsStore.select(exist, onSelectSpot);
             }
         }
-
 
         Promise.all([
             AuthStore.fetchUser(),
             SpotsStore.loadItems().then(() => onLoadSpots())
         ]).finally(() => {
-            CartStore.fetchItems().finally(() => {
+            Promise.all([
+                CartStore.fetchItems()
+            ]).finally(() => {
                 AppStore.setLoading(false);
             });
 

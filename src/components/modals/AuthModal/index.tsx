@@ -89,7 +89,7 @@ const SignUpForm = observer(({
                             stores.AuthStore.userFromJson(user);
                             stores.AuthStore.setExpires(expires);
                         })
-                        navigate('/account')
+                        navigate('/account/profile')
                     }).finally(() => {
                         done()
                     })
@@ -285,7 +285,7 @@ const LoginForm = ({
                     stores.AuthStore.userFromJson(user);
                     stores.AuthStore.setExpires(expires);
                 })
-                navigate('/account');
+                navigate('/account/profile');
 
             }).catch((e) => {
                 const {errors, message} = e.response.data;

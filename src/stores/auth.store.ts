@@ -43,6 +43,10 @@ class OfflineMallCustomer {
         return this.json.addresses;
     }
 
+    get hasAddresses() {
+        return this.addresses.length > 0;
+    }
+
     get defaultShippingAddressId() {
         return this.json.default_shipping_address_id
     }
@@ -213,6 +217,10 @@ export class AuthStore {
     }
 
     get isAuthorized(): boolean {
+        return !!this.user;
+    }
+
+    get hasUser(): boolean {
         return !!this.user;
     }
 

@@ -9,15 +9,19 @@ import {useFormik} from "formik";
 import * as Yup from "yup";
 import OrderApi from "../../../../api/order.api";
 import {useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {AuthModal} from "~components/modals/AuthModal";
 import {usePaymentStore} from "~hooks/use-payment-store";
 import {useShippingStore} from "~hooks/use-shipping-store";
 import {useCartStore} from "~hooks/use-cart-store";
 import {useAuthStore} from "~hooks/use-auth-store";
 import {useSpotsStore} from "~hooks/use-spots-store";
+import {Dropdown} from "~components/Dropdown";
 
-export const CheckoutFormRaw = () => {
+// todo: logout user if his token is expired
+// timer may be solution
+
+export const CheckoutForm = observer(() => {
     const PaymentStore = usePaymentStore();
     const ShippingStore = useShippingStore();
     const CartStore = useCartStore();
@@ -45,49 +49,44 @@ export const CheckoutFormRaw = () => {
             name: user ? user.fullName: '',
             email: user ? user.email: '',
             phone: user ? user.phone: '',
-            address: user ? user.customer.defaultAddress.lines : '',
+            address: '',
+            address_id: null,
             comment: '',
-            sticks: 0,
+            sticks: '',
             change: '',
             payment_method_id: 1,
             shipping_method_id: 1,
         },
         validationSchema: CheckoutSchema,
         onSubmit: values => {
+            console.log('values', values);
             setPending(true);
             const [firstname, lastname] = values.name.split(' ');
             OrderApi.place({
                 phone: values.phone,
-                firstname: firstname || 'Гість',
-                lastname: lastname || '#' + Date.now(),
+                firstname: firstname,
+                lastname: lastname,
+                email: values.email,
 
-                email: values.email || 'guest' + Date.now() + '@guest.com', // на жаль в поточній реліазації бєкунду, емейл це обов'язкове поле, тому ми і встановлюему "тупе" значення, в разі якщо юзер не вказав його
-
-                address: values.address || SpotsStore.getSelected.address,
+                address: values.address,
+                address_id: values.address_id,
                 payment_method_id: values.payment_method_id,
                 shipping_method_id: values.shipping_method_id,
 
-                poster_firstname: firstname,
-                poster_lastname: lastname,
-                poster_email: values.email,
-
-                country_code: 'UA',
-                zip: '65125',
-                city: 'Одеса',
-
                 change: values.change,
-                sticks: values.sticks,
+                sticks: +values.sticks,
                 comment: values.comment,
 
             }).then((res) => {
                 if(res.data?.success) {
+                    CartStore.fetchItems();
                     navigate('/thankyou');
                 }
-                setPending(false);
             }).catch((e) => {
                 if(e.response.data?.errors) {
                     formik.setErrors(e.response.data.errors);
                 }
+            }).finally(() => {
                 setPending(false);
             })
         },
@@ -129,14 +128,7 @@ export const CheckoutFormRaw = () => {
         />
 
         {getShippingType()?.id === 2 && (
-          <S.Control>
-              <Input
-                name={"address"}
-                placeholder={t('checkout.form.address')}
-                onChange={formik.handleChange}
-                value={formik.values.address}
-              />
-          </S.Control>
+          <AddressDropdownOrInput formik={formik}/>
         )}
         <S.Control>
             <Input
@@ -147,14 +139,16 @@ export const CheckoutFormRaw = () => {
             />
         </S.Control>
 
-        <S.Control>
-            <Input
-              name={"email"}
-              placeholder={t('checkout.form.email')}
-              onChange={formik.handleChange}
-              value={formik.values.email}
-            />
-        </S.Control>
+        {!user && (
+          <S.Control>
+              <Input
+                name={"email"}
+                placeholder={t('checkout.form.email')}
+                onChange={formik.handleChange}
+                value={formik.values.email}
+              />
+          </S.Control>
+          )}
         <S.Control>
             <Input
               name={"phone"}
@@ -229,6 +223,89 @@ export const CheckoutFormRaw = () => {
         </S.Control>
 
     </S.Form>;
+})
+
+const AddressDropdownOrInput = ({
+  formik
+                         }) => {
+    const {t} = useTranslation();
+    const AuthStore = useAuthStore();
+    const user = AuthStore.user;
+
+    const [showTextAddress, setShowTextAddress] = useState((user && !user.customer.hasAddresses) || !user);
+
+    return <div style={{
+        position: 'relative'
+    }}>
+        {showTextAddress || !user?.customer.hasAddresses ? (
+          <S.Control>
+              <Input
+                name={"address"}
+                placeholder={t('checkout.form.address')}
+                onChange={formik.handleChange}
+                value={formik.values.address}
+              />
+          </S.Control>
+        ): (
+          <AddressDropdown formik={formik}/>
+        )}
+        {user?.customer.hasAddresses && (
+          <button type={"button"} style={{
+              color: 'rgb(255, 230, 0)',
+              fontSize: '10px',
+              right: 0,
+              top: "calc(100% + 2px)",
+              position: 'absolute',
+              cursor: 'pointer'
+          }} onClick={() => {
+              setShowTextAddress(state => !state);
+              if(!showTextAddress) {
+                  formik.setFieldValue('address_id', null);
+              } else {
+                  formik.setFieldValue('address', '');
+              }
+          }}>
+              {showTextAddress ? 'Оберіть збережу адресу': 'Вписати іншу адресу'}
+          </button>
+        )}
+
+    </div>
 }
 
-export const CheckoutForm = observer(CheckoutFormRaw)
+const AddressDropdown = observer(({
+  formik
+                                  }) => {
+
+    const AuthStore = useAuthStore();
+    const user = AuthStore.user;
+
+    const options = useMemo(() => user?.customer.addresses.map((address) => ({
+            label: address.lines,
+            value: address.id
+        }),
+    ), [
+        user,
+    ]);
+
+    const initialValue = user.customer.defaultAddress?.id || options[0].value;
+
+    const [value, setValue] = useState<number | string>(user.customer.defaultAddress?.id || options[0].value)
+
+    useEffect(() => {
+        formik.setFieldValue('address_id', initialValue);
+    }, [])
+
+
+    return <S.Control>
+        <Dropdown
+          options={options}
+          width={"350px"}
+          value={value}
+          onChange={(value) => {
+              setValue(value);
+              formik.setFieldValue('address_id', value);
+          }}
+        />
+    </S.Control>
+})
+
