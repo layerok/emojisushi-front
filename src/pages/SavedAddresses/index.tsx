@@ -1,19 +1,20 @@
 import {observer, useLocalObservable} from "mobx-react";
-import {CabinetLayout} from "../../layout/CabinetLayout";
+import {CabinetLayout} from "~layout/CabinetLayout";
 import {useEffect} from "react";
 import * as S from "./styled";
 import {Input} from "~components/Input";
 import {SvgIcon} from "~components/svg/SvgIcon";
-import {CloseSvg} from "../../components/svg/CloseSvg";
-import {HeartSvg} from "../../components/svg/HeartSvg";
+import {CloseSvg} from "~components/svg/CloseSvg";
+import {HeartSvg} from "~components/svg/HeartSvg";
 import {ButtonOutline} from "~components/buttons/Button";
 import {useAppStore} from "~hooks/use-app-store";
 import {useAuthStore} from "~hooks/use-auth-store";
-import {InputModel, TextInputModel} from "~common/InputModel";
+import {TextInputModel} from "~common/InputModel";
 import {FormModel} from "~common/FormModel";
 import authApi from "~api/auth.api";
 import {SpinnerSvg} from "~components/svg/SpinnerSvg";
 import {IAddress} from "~api/auth.api.types";
+import {useTranslation} from "react-i18next";
 
 
 const Address = observer(({
@@ -25,6 +26,7 @@ const Address = observer(({
   const AuthStore = useAuthStore();
   const user = AuthStore.user;
   const customer = user.customer;
+  const {t} = useTranslation();
 
   const state = useLocalObservable(() => ({
     loading: false,
@@ -99,6 +101,7 @@ export const SavedAddresses = observer(() => {
   const AuthStore = useAuthStore();
   const user = AuthStore.user;
   const customer = user.customer;
+  const {t} = useTranslation();
   const state = useLocalObservable(() => ({
     form: new FormModel({
       fields: {
@@ -132,7 +135,7 @@ export const SavedAddresses = observer(() => {
 
 
   return (
-    <CabinetLayout title={"Сохраненные адреса"}>
+    <CabinetLayout title={t('account.addresses.title')}>
       {customer.addresses.map((address) => {
         return <Address key={address.id} address={address}/>
       })}
@@ -140,14 +143,14 @@ export const SavedAddresses = observer(() => {
       <form {...state.form.asProps}>
         <S.AddressWrapper>
           <Input
-            placeholder={"Введіть адрес"}
+            placeholder={t('account.addresses.typeAddress')}
             width={"350px"}
             {...state.form.fields.lines.asProps}
           />
         </S.AddressWrapper>
         <S.ButtonWrapper>
           <ButtonOutline {...state.form.asSubmitButtonProps} width={""}>
-            Добавить адрес
+            {t('account.addresses.addAddress')}
           </ButtonOutline>
         </S.ButtonWrapper>
       </form>

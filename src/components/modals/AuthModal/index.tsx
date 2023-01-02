@@ -16,6 +16,7 @@ import {useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
 import {FormModel} from "~common/FormModel";
 import {CheckboxInputModel, TextInputModel} from "~common/InputModel";
+import {useTranslation} from "react-i18next";
 
 export const AuthModal = ( { children}) => {
     const breakpoint = useBreakpoint();
@@ -56,6 +57,7 @@ const SignUpForm = observer(({
                         setShowSignUp
                     }) => {
     const breakpoint = useBreakpoint();
+    const {t} = useTranslation();
     const isMobile = breakpoint === 'mobile';
 
     const navigate = useNavigate();
@@ -102,50 +104,53 @@ const SignUpForm = observer(({
 
     return <S.SignUpForm {...state.form.asProps}>
         <S.Title>
-            Регистрация
+            {t('authModal.registration.title')}
         </S.Title>
         <S.InputWrapper>
             <S.InputLabel>
-                І'мя
+                {t('common.first_name')}
             </S.InputLabel>
             <Input {...state.form.fields.name.asProps} light={true}/>
         </S.InputWrapper>
         <S.InputWrapper>
             <S.InputLabel>
-                Фамілія
+                {t('common.last_name')}
             </S.InputLabel>
             <Input {...state.form.fields.surname.asProps} light={true}/>
         </S.InputWrapper>
         <S.InputWrapper>
             <S.InputLabel>
-                E-mail
+                {t('common.email')}
             </S.InputLabel>
             <Input {...state.form.fields.email.asProps} light={true}/>
         </S.InputWrapper>
 
         <S.InputWrapper>
             <S.InputLabel>
-                Пароль
+                {t('common.password')}
             </S.InputLabel>
             <PasswordInput {...state.form.fields.password.asProps} light={true} />
         </S.InputWrapper>
         <S.CheckboxWrapper>
             <Checkbox {...state.form.fields.agree.asProps}>
-                Я согласен с условиями использования и обработки моих персональных данных
+                {t('common.privacyPolicyAgreed')}
             </Checkbox>
         </S.CheckboxWrapper>
 
 
         <FlexBox>
-            <FlexBox flexDirection={"column"} alignItems={"center"}>
-                <Button {...state.form.asSubmitButtonProps}>Регистрация</Button>
+            <FlexBox
+              flexDirection={"column"}
+              alignItems={"center"}
+            >
+                <Button {...state.form.asSubmitButtonProps}>{t('common.registration')}</Button>
                 {isMobile &&
                   <S.NavigateButton style={{paddingTop:"10px"}} onClick={ (e)=>{
                       e.preventDefault();
                       setShowSignUp(false)
                   }
                   }>
-                      Вход
+                      {t('common.enter')}
                   </S.NavigateButton>
                 }
             </FlexBox>
@@ -156,6 +161,7 @@ const SignUpForm = observer(({
 const PasswordRecoveryForm = observer(({
                                   setShowPasswordRecovery
                               }) => {
+    const {t} = useTranslation();
     const state = useLocalObservable(() => ({
         email: '',
         loading: false,
@@ -166,11 +172,11 @@ const PasswordRecoveryForm = observer(({
            e.preventDefault();
     }}>
         <S.Title>
-            Восстановление пароля
+            {t('authModal.forgetPassword.title')}
         </S.Title>
         <S.InputWrapper>
             <S.InputLabel>
-                E-mail
+                {t('common.email')}
             </S.InputLabel>
             <Input name={'email'} error={state.error} light={true} onChange={e => {
                 runInAction(() => {
@@ -183,17 +189,17 @@ const PasswordRecoveryForm = observer(({
           <S.ForgotPassText style={{
               color: 'green'
           }}>
-              Пожалуйста проверьте Вашу почту. Мы отправили Вам письмо содержащее ссылку для восстановления пароля
+              {t('authModal.forgetPassword.mailSent')}
           </S.ForgotPassText>
         ): (
           <S.ForgotPassText>
-              Введите Ваш E-mail адрес для которого необходимо скинуть пароль
+              {t('authModal.forgetPassword.typeEmail')}
           </S.ForgotPassText>
         )}
         <S.BtnGroup>
             <S.NavigateButton onClick={ (e) => {
                 setShowPasswordRecovery(false)
-            }} >Назад</S.NavigateButton>
+            }} >{t('common.back')}</S.NavigateButton>
             <Button loading={state.loading} onClick={() => {
                 runInAction(() => {
                     state.loading = true;
@@ -220,7 +226,7 @@ const PasswordRecoveryForm = observer(({
                         state.loading = false;
                     })
                 });
-            }}>Восстановить</Button>
+            }}>{t('common.recover')}</Button>
         </S.BtnGroup>
 
     </S.LoginForm>
@@ -230,6 +236,7 @@ const LoginForm = ({
   setShowSignUp,
   setShowPasswordRecovery
                    }) => {
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const [login, setLogin] = useState("");
     const [loginError, setLoginError] = useState("");
@@ -243,11 +250,11 @@ const LoginForm = ({
         e.preventDefault();
     }}>
         <S.Title>
-            Войти в аккаунт
+            {t('authModal.login.title')}
         </S.Title>
         <S.InputWrapper>
             <S.InputLabel>
-                E-mail
+                {t('common.email')}
             </S.InputLabel>
             <Input name={'email'} error={loginError} onChange={(e) => {
                 setLogin((e.target as HTMLInputElement).value);
@@ -256,7 +263,7 @@ const LoginForm = ({
         </S.InputWrapper>
         <S.InputWrapper>
             <S.InputLabel>
-                Пароль
+                {t('common.password')}
             </S.InputLabel>
             <PasswordInput name={'password'} error={passwordError} onChange={(e) => {
                 setPassword((e.target as HTMLInputElement).value);
@@ -267,7 +274,7 @@ const LoginForm = ({
         <FlexBox justifyContent={"flex-end"}>
             <S.NavigateButton style={{paddingTop: "10px"}} onClick={ (e) => {
                 setShowPasswordRecovery(true)
-            }}>Забыли пароль?</S.NavigateButton>
+            }}>{t('common.forgotPassword')}</S.NavigateButton>
         </FlexBox>
 
         <Button loading={loading} onClick={() => {
@@ -304,14 +311,14 @@ const LoginForm = ({
             }).finally(() => {
                 setLoading(false);
             })
-        }} style={{marginTop: "20px", display: "flex"}}>Войти</Button>
+        }} style={{marginTop: "20px", display: "flex"}}>{t('common.login')}</Button>
 
         {isMobile &&
 
           <S.NavigateButton style={{paddingTop: "10px"}} onClick={ (e) => {
               e.preventDefault();
               setShowSignUp(true)
-          }}>Регистрация</S.NavigateButton>
+          }}>{t('common.registration')}</S.NavigateButton>
 
         }
 

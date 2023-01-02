@@ -1,37 +1,57 @@
 import * as S from "./styled";
-import {ReactElement, useId} from "react";
+import {ChangeEvent, HTMLProps, ReactElement, useId} from "react";
+
+type IOption = {
+  id: number;
+  name: string;
+}
 
 const Option = (
     {
         option,
         index,
         length,
-        idAccessor,
-        nameAccessor,
         handleChange,
         selected,
         name
+    }: {
+      option: IOption,
+      index: number;
+      length: number;
+      handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+      selected: boolean;
+      name: string;
     }
 ) => {
 
     const internal_id = useId()
-
-
 
     return <>
         <S.Input
             length={length}
             index={index}
             id={internal_id}
-            value={option[idAccessor]}
+            value={option.id}
             type={"radio"}
             name={name}
             checked={selected}
             onChange={handleChange}
         />
-        <S.Label htmlFor={internal_id}>{option[nameAccessor]}</S.Label>
+        <S.Label htmlFor={internal_id}>{option.name}</S.Label>
     </>;
 }
+
+type ISwitcherProps = Omit<HTMLProps<HTMLDivElement>, 'selected' | 'name'> & {
+  options: IOption[],
+  name: string;
+  handleChange: ({e, index, option}: {
+    e: ChangeEvent<HTMLInputElement>
+    index: number;
+    option: IOption
+  }) => void;
+  selected: {(option: IOption): boolean} | boolean;
+}
+
 
 export const Switcher = (
     {
@@ -39,10 +59,8 @@ export const Switcher = (
         name,
         handleChange,
         selected,
-        nameAccessor = "name",
-        idAccessor = "id",
         ...rest
-    }
+    }: ISwitcherProps
 ): ReactElement => {
 
     const isSelected = (option) => {
@@ -58,8 +76,6 @@ export const Switcher = (
             <Option  option={option}
                      length={options.length}
                      index={index}
-                     idAccessor={idAccessor}
-                     nameAccessor={nameAccessor}
                      name={name}
                      handleChange={(e) => handleChange({e, index, option})}
                      selected={isSelected(option)}
@@ -70,7 +86,7 @@ export const Switcher = (
             {options.reduce((acc, option) => {
                 if(isSelected(option)) {
 
-                    return option[nameAccessor]
+                    return option.name
                 }
                 return acc;
             }, "")}

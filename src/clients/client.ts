@@ -2,6 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import LocalStorageService from "../services/local-storage.service";
 import {stores} from "~stores/stores";
+import i18n from "~i18n";
 
 const client = axios.create({
     baseURL: `${process.env.REACT_APP_API_BASE_URL}`,
@@ -22,6 +23,8 @@ client.interceptors.request.use((config = {}) => {
     if(!params?.spot_id && spot_id) {
         params.spot_id = spot_id;
     }
+
+    params.lang = i18n.resolvedLanguage || i18n.options.lng;
 
     const jwt = Cookies.get('jwt');
 

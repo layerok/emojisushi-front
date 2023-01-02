@@ -9,16 +9,18 @@ import authApi from "~api/auth.api";
 import {transaction} from "mobx";
 import {TextInputModel} from "~common/InputModel";
 import {FormModel} from "~common/FormModel";
+import {useTranslation} from "react-i18next";
 
 export const UpdatePassword = observer(() => {
     const AppStore = useAppStore();
+    const {t} = useTranslation();
 
     const state = useLocalObservable(() => ({
         form: new FormModel({
            fields: {
                password_old: new TextInputModel('password_old'),
                password: new TextInputModel('password'),
-               password_confirmation: new TextInputModel('password'),
+               password_confirmation: new TextInputModel('password_confirmation'),
            },
             onSubmit(fields, done, error) {
                 transaction(() => {
@@ -59,17 +61,17 @@ export const UpdatePassword = observer(() => {
 
 
     return (
-      <CabinetLayout title={"Змінити пароль"}>
+      <CabinetLayout title={t('account.changePassword.title')}>
           <S.Form {...state.form.asProps}>
-              <S.Text>Старий пароль</S.Text>
+              <S.Text>{t('common.oldPassword')}</S.Text>
               <PasswordInput
                 {...state.form.fields.password_old.asProps}
               />
-              <S.Text>Новий пароль</S.Text>
+              <S.Text>{t('common.newPassword')}</S.Text>
               <PasswordInput
                 {...state.form.fields.password.asProps}
               />
-              <S.Text>Підтвердіть пароль</S.Text>
+              <S.Text>{t('common.confirmPassword')}</S.Text>
               <PasswordInput
                 {...state.form.fields.password_confirmation.asProps}
               />
@@ -78,7 +80,7 @@ export const UpdatePassword = observer(() => {
                     {...state.form.asSubmitButtonProps}
                     width={"224px"}
                   >
-                      Змінити пароль
+                      {t('account.changePassword.btnText')}
                   </ButtonOutline>
               </S.ButtonWrapper>
 
@@ -86,7 +88,7 @@ export const UpdatePassword = observer(() => {
                 <p style={{
                     marginTop: '10px',
                     color: 'green'
-                }}>Пароль успішно змінено</p>
+                }}>{t('account.changePassword.successMessage')}</p>
               )}
           </S.Form>
       </CabinetLayout>

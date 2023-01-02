@@ -13,6 +13,7 @@ import {DAY_OPTIONS, MONTH_OPTIONS, SEX_OPTIONS, YEAR_OPTIONS} from "~pages/Prof
 
 import {FormModel} from "~common/FormModel";
 import {TextInputModel} from "~common/InputModel";
+import {useTranslation} from "react-i18next";
 
 const EditForm = observer(({
   cancelEditing
@@ -23,6 +24,7 @@ const EditForm = observer(({
     const AuthStore = useAuthStore();
     const user = AuthStore.user;
     const customer = user.customer;
+    const {t} = useTranslation();
 
     const form = useLocalObservable(() => new FormModel({
         fields: {
@@ -58,12 +60,12 @@ const EditForm = observer(({
         <FlexBox justifyContent={'space-between'}>
             <Input
               style={{width: 'calc(50% - 10px)'}}
-              label={"Їм'я"}
+              label={t('common.first_name')}
               {...form.fields.name.asProps}
 
             />
             <Input style={{width: 'calc(50% - 10px)'}}
-                   label={"Прізвище"}
+                   label={t('common.last_name')}
                    {...form.fields.surname.asProps}
             />
         </FlexBox>
@@ -72,14 +74,14 @@ const EditForm = observer(({
         }}>
             <Input
               style={{width: 'calc(50% - 10px)'}}
-              label={"Email"}
+              label= {t('common.email')}
               name={"email"}
               value={AuthStore.user.email}
               disabled={true}
             />
             <Input
               style={{width: 'calc(50% - 10px)'}}
-              label={"Телефон"}
+              label= {t('common.phone')}
               {...form.fields.phone.asProps}
             />
         </FlexBox>
@@ -136,10 +138,12 @@ const EditForm = observer(({
         }}>
             <ButtonOutline {...form.asSubmitButtonProps} style={{
                 marginRight: '16px'
-            }} >Сохранить</ButtonOutline>
+            }} > {t('common.save')}</ButtonOutline>
             <ButtonDark onClick={() => {
                 cancelEditing();
-            }}>Скасувати</ButtonDark>
+            }}>
+                {t('common.cancel')}
+            </ButtonDark>
         </FlexBox>
 
     </form>
@@ -153,20 +157,21 @@ const ProfilePreview = ({
 
     const AuthStore = useAuthStore();
     const navigate = useNavigate();
+    const {t} = useTranslation();
 
     return <S.Properties>
 
         <S.Property>
-            <S.Property.Label>Ім'я</S.Property.Label>
+            <S.Property.Label>{t('common.first_name')}</S.Property.Label>
             <S.Property.Value>{AuthStore.user.fullName}</S.Property.Value>
         </S.Property>
 
         <S.Property>
-            <S.Property.Label>E-mail</S.Property.Label>
+            <S.Property.Label>{t('common.email')}</S.Property.Label>
             <S.Property.Value>{AuthStore.user.email}</S.Property.Value>
         </S.Property>
         <S.Property>
-            <S.Property.Label>Телефон</S.Property.Label>
+            <S.Property.Label>{t('common.phone')}</S.Property.Label>
             <S.Property.Value>{AuthStore.user.phone}</S.Property.Value>
         </S.Property>
 
@@ -174,13 +179,13 @@ const ProfilePreview = ({
             <ButtonDark onClick={() => {
                 startEditing();
             }} minWidth={"309px"} >
-                Редактировать личные данные
+                {t('account.profile.editProfile')}
             </ButtonDark>
             <S.BtnWrapper>
                 <ButtonDark onClick={() => {
                     navigate('/account/recover-password')
                 }} minWidth={"202px"}>
-                    Изменить пароль
+                    {t('account.profile.changePassword')}
                 </ButtonDark>
             </S.BtnWrapper>
         </S.BtnGroup>
@@ -191,12 +196,13 @@ const ProfilePreview = ({
 export const Profile = observer(() => {
     const AppStore = useAppStore();
     const [editModeEnabled, setEditModeEnabled] = useState(false);
+    const {t} = useTranslation();
     useEffect(() => {
         AppStore.setLoading(false);
     }, [])
 
     return (
-      <CabinetLayout title={"Личные данные"}>
+      <CabinetLayout title={t('account.profile.title')}>
           {editModeEnabled ? (
             <EditForm cancelEditing={() => setEditModeEnabled(false)}/>
           ): (

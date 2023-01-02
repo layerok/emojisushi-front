@@ -5,7 +5,28 @@
     "menu": "Меню",
     "not_found": "Товари не знайдені",
     "address": "Адреса",
-    "favorite": "Улюблені"
+    "favorite": "Улюблені",
+    "login": "Увійти",
+    "logout": "Вийти",
+    "first_name": "Ім'я",
+    "last_name": "Фамілія",
+    "email": "E-mail",
+    "phone": "Телефон",
+    "password": "Пароль",
+    "forgotPassword": "Забули пароль?",
+    "registration": "Реєстрація",
+    "enter": "Вхід",
+    "privacyPolicyAgreed": "Я згоден з умовами використання та обробки моїх персональних даних",
+    "recover": "Відновити",
+    "back": "Назад",
+    "save": "Зберегти",
+    "cancel": "Скасувати",
+    "newPassword": "Новий пароль",
+    "oldPassword": "Старий пароль",
+    "confirmPassword": "Підтвердіть пароль",
+    "reset": "Скинути",
+    "code": "Код",
+    "swipe": "Гортай"
   },
   "sort": {
     "default": "Типово",
@@ -81,9 +102,6 @@
   "checkout": {
     "title": "Оформлення замовлення",
     "form": {
-      "first_name": "Ім'я",
-      "email": "E-mail",
-      "phone": "Телефон",
       "address": "Адреса доставки",
       "comment": "Коментар до замовлення",
       "sticks": "Палички на скільки людин?",
@@ -92,8 +110,19 @@
         "ua_phone": "Некоректний формат українського номера"
       }
     },
+    "inputAnotherAddress": "Вписати іншу адресу",
+    "selectSavedAddress": "Оберіть збережу адресу",
+    "alreadyHaveAccount": "Вже маєте акаунт?",
     "order": "Замовити",
     "to_pay": "До сплати:"
+  },
+  "shippingMethods": {
+    "courier": "Кур'єр",
+    "pickup": "Самовивіз"
+  },
+  "paymentMethods": {
+    "card": "Карткою",
+    "cash": "Готівкою"
   },
   "validation": {
     "required": "Поле '{{field}}' обов'язкове"
@@ -108,5 +137,43 @@
   },
   "products": {
     "loading": "Загрузка товарів..."
+  },
+  "authModal": {
+    "login": {
+      "title": "Увійти до облікового запису"
+    },
+    "registration": {
+      "title": "Реєстрація"
+    },
+    "forgetPassword": {
+      "title": "Відновлення пароля",
+      "mailSent": "Будь ласка перевірте Вашу пошту. Ми надіслали Вам лист, що містить посилання для відновлення пароля",
+      "typeEmail": "Введіть Вашу E-mail адресу для якої необхідно скинути пароль"
+    }
+  },
+  "account": {
+    "cabinet": "Мій кабінет",
+    "profile": {
+      "title": "Особисті дані",
+      "editProfile": "Редагувати особисті дані",
+      "changePassword": "Змінити пароль"
+    },
+    "orders": {
+      "title": "Мої замовлення"
+    },
+    "changePassword": {
+      "title": "Змінити пароль",
+      "btnText": "Змінити пароль",
+      "successMessage": "Пароль успішно змінен"
+    },
+    "addresses": {
+      "title": "Збережені адреси",
+      "typeAddress": "Введіть адресу",
+      "addAddress": "Додати адресу"
+    }
+  },
+  "passwordReset": {
+    "title": "Скидання пароля",
+    "successMessage": "Пароль успішно скинутий!"
   }
 }

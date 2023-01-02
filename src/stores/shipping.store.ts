@@ -1,6 +1,7 @@
 import {makeAutoObservable} from "mobx";
 import ShippingApi from "../api/shipping.api";
 import {RootStore} from "~stores/stores";
+import {IShippingMethod} from "~api/shipping.api.types";
 
 export class ShippingStore {
 
@@ -13,7 +14,7 @@ export class ShippingStore {
     }
 
     loading = false;
-    items = [];
+    items: IShippingMethod[] = [];
     selectedId = null;
 
     setSelectedId = (id) => {

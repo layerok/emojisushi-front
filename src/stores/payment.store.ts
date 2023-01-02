@@ -1,6 +1,7 @@
 import {makeAutoObservable} from "mobx";
 import PaymentApi from "../api/payment.api";
 import {RootStore} from "~stores/stores";
+import {IPaymentMethod} from "~api/payment.api.types";
 
 export class PaymentStore {
 
@@ -13,7 +14,7 @@ export class PaymentStore {
     }
 
     loading = false;
-    items = [];
+    items: IPaymentMethod[] = [];
     selectedId = null;
 
     setSelectedId = (id) => {

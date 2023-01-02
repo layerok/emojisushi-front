@@ -1,17 +1,21 @@
 import * as S from "./styled"
+import {useState} from "react";
+import i18n from "~i18n";
 
 export const LanguageSelector = () => {
 
+    const [langs] = useState(['uk', 'ru']);
+    const [selectedLang, setSelectedLang] = useState(i18n.resolvedLanguage);
     return (
-
-        <S.Selector>
-
-
-            <S.Item id={"radio12"} type={"radio"}  value={"rad1"} name={"aaa"} checked onChange={() => {}}/>
-            <S.ItemLabel htmlFor={"radio12"}>EN</S.ItemLabel>
-
-            <S.Item id={"radio22"} type={"radio"} value={"rad2"} name={"aaa"} onChange={() => {}} />
-            <S.ItemLabel htmlFor={"radio22"}>UA</S.ItemLabel>
-        </S.Selector>
+        <S.Container>
+          {langs.map((lang) => (
+            <S.Item style={{
+              color: lang === selectedLang ? 'white': '#B6B6B6'
+            }} onClick={() => {
+              setSelectedLang(lang);
+              i18n.changeLanguage(lang);
+            }}>{lang.toUpperCase()}</S.Item>
+          ))}
+        </S.Container>
     )
 }

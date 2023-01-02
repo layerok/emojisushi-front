@@ -1,7 +1,7 @@
 import {Layout} from "~layout/Layout";
-import {Heading} from "../../components/Heading";
-import {CheckCircleSvg} from "../../components/svg/CheckCircleSvg";
-import {SvgIcon} from "../../components/svg/SvgIcon";
+import {Heading} from "~components/Heading";
+import {CheckCircleSvg} from "~components/svg/CheckCircleSvg";
+import {SvgIcon} from "~components/svg/SvgIcon";
 import * as S from "./styled";
 import {useEffect} from "react";
 import {useTranslation} from "react-i18next";

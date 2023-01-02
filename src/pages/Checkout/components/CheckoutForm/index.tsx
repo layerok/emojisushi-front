@@ -15,8 +15,8 @@ import {usePaymentStore} from "~hooks/use-payment-store";
 import {useShippingStore} from "~hooks/use-shipping-store";
 import {useCartStore} from "~hooks/use-cart-store";
 import {useAuthStore} from "~hooks/use-auth-store";
-import {useSpotsStore} from "~hooks/use-spots-store";
 import {Dropdown} from "~components/Dropdown";
+import i18n from "~i18n";
 
 // todo: logout user if his token is expired
 // timer may be solution
@@ -26,7 +26,7 @@ export const CheckoutForm = observer(() => {
     const ShippingStore = useShippingStore();
     const CartStore = useCartStore();
     const AuthStore = useAuthStore();
-    const SpotsStore = useSpotsStore();
+
     const {t} = useTranslation();
     const [pending, setPending] = useState(false);
     const navigate = useNavigate();
@@ -106,10 +106,10 @@ export const CheckoutForm = observer(() => {
     return <S.Form onSubmit={formik.handleSubmit}>
         {!AuthStore.isAuthorized && (
           <FlexBox style={{marginBottom: "20px"}}>
-              Уже есть аккаунт?
+            {t('checkout.alreadyHaveAccount')}
               <AuthModal>
                   <S.SignIn>
-                      Войти
+                    {t('common.login')}
                   </S.SignIn>
               </AuthModal>
           </FlexBox>
@@ -118,7 +118,10 @@ export const CheckoutForm = observer(() => {
 
         <Switcher
           name={"shipping_method_id"}
-          options={ShippingStore.items}
+          options={ShippingStore.items.map((item) => ({
+              id: item.id,
+              name: t('shippingMethods.' + item.code, item.name)
+          }))}
           selected={(option) => {
               return option.id === getShippingType().id}
           }
@@ -133,7 +136,7 @@ export const CheckoutForm = observer(() => {
         <S.Control>
             <Input
               name={"name"}
-              placeholder={t('checkout.form.first_name')}
+              placeholder={t('common.first_name')}
               onChange={formik.handleChange}
               value={formik.values.name}
             />
@@ -143,7 +146,7 @@ export const CheckoutForm = observer(() => {
           <S.Control>
               <Input
                 name={"email"}
-                placeholder={t('checkout.form.email')}
+                placeholder={t('common.email')}
                 onChange={formik.handleChange}
                 value={formik.values.email}
               />
@@ -153,7 +156,7 @@ export const CheckoutForm = observer(() => {
             <Input
               name={"phone"}
               required={true}
-              placeholder={t('checkout.form.phone')}
+              placeholder={t('common.phone')}
               onChange={(e) => {
                   formik.handleChange(e);
               }}
@@ -182,7 +185,10 @@ export const CheckoutForm = observer(() => {
         <S.Control>
             <Switcher
               name={"payment_method_id"}
-              options={PaymentStore.items}
+              options={PaymentStore.items.map((item) => ({
+                id: item.id,
+                name: t('paymentMethods.' + item.code,  item.name)
+              }))}
               handleChange={({e, index}) => {
                   formik.handleChange(e);
               }}
@@ -265,7 +271,7 @@ const AddressDropdownOrInput = ({
                   formik.setFieldValue('address', '');
               }
           }}>
-              {showTextAddress ? 'Оберіть збережу адресу': 'Вписати іншу адресу'}
+              {showTextAddress ? t('checkout.selectSavedAddress'): t('checkout.inputAnotherAddress')}
           </button>
         )}
 

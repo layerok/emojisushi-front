@@ -1,5 +1,5 @@
 import {Layout} from "~layout/Layout";
-import {useEffect, useState} from "react";
+import { useState} from "react";
 import {observer} from "mobx-react";
 import {Input} from "~components/Input";
 import * as S from "./styled";
@@ -7,12 +7,11 @@ import {FlexBox} from "~components/FlexBox";
 import {Button} from "~components/buttons/Button";
 import { useParams} from "react-router-dom";
 import authApi from "../../api/auth.api";
-import {useAppStore} from "~hooks/use-app-store";
 import {PasswordInput} from "~components/PasswordInput";
-
+import {useTranslation} from "react-i18next";
 
 export const ResetPassword = observer(() => {
-
+  const {t} = useTranslation();
   const {code: codeFromQuery} = useParams();
   const [code, setCode] = useState(codeFromQuery)
   const [password, setPassword] = useState('');
@@ -20,11 +19,6 @@ export const ResetPassword = observer(() => {
   const [passwordError, setPasswordError] = useState('');
   const [codeError, setCodeError] = useState('');
   const [isReset, setIsReset] = useState(false);
-  const AppStore = useAppStore();
-
-  useEffect(() => {
-    AppStore.setLoading(false);
-  }, [])
 
   return (
     <Layout withBanner={false}
@@ -34,21 +28,21 @@ export const ResetPassword = observer(() => {
         <S.Form onSubmit={e => {
           e.preventDefault();
         }}>
-          <h2>Скидання пароля</h2>
+          <h2>{t('passwordReset.title')}</h2>
 
           <Input error={codeError} value={code} onChange={e => {
             setCode((e.target as HTMLInputElement).value);
             setCodeError('');
           }} style={{
             marginTop: '16px'
-          }} name={'code'} placeholder={'Код'}/>
+          }} name={'code'} placeholder={t('common.code')}/>
 
           <PasswordInput error={passwordError} onChange={e => {
             setPassword((e.target as HTMLInputElement).value);
             setPasswordError('');
           }} style={{
             marginTop: '16px'
-          }} name={'password'} placeholder={'Новий пароль'}/>
+          }} name={'password'} placeholder={t('common.newPassword')}/>
 
           {isReset && (
             <p style={{
@@ -88,7 +82,7 @@ export const ResetPassword = observer(() => {
           }} style={{
             marginTop: '16px'
           }}>
-            Скинути
+            {t('common.reset')}
           </Button>
 
         </S.Form>

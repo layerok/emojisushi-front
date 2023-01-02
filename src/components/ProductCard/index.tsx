@@ -132,19 +132,20 @@ const ProductCardRaw = (
                             setModificators(state => {
                                 return {
                                     ...state,
-                                    [group.property.id]: option.poster_id
+                                    [group.property.id]: option.id
                                 }
                             })
                         }}
                         name={"modificator_" + group.property.id}
-                        nameAccessor={"value"}
-                        idAccessor={"poster_id"}
-                        options={group.property.options}
+                        options={group.property.options.map((option) => ({
+                            id: option.poster_id,
+                            name: option.value
+                        }))}
                         selected={(option) => {
                             if(!option) {
-                                return 0
+                                return false
                             }
-                            return modificators[group.property.id] === option.poster_id;
+                            return modificators[group.property.id] === option.id;
                         }}/>
             ))}
 
