@@ -1,18 +1,19 @@
-import {Product} from "~stores/products.store";
+import {Product, Variant} from "~stores/products.store";
+import {CartProduct} from "~stores/cart.store";
 
 export function getProductMainImage(product: Product) {
     const {imageSets} = product;
     return (imageSets.length > 0 && imageSets[0] && imageSets[0].images.length > 0) ? imageSets[0].images[0].path : undefined;
 }
 
-export function getProductOldPrice(product: Product, variant = undefined)  {
+export function getProductOldPrice(product: Product | Variant, variant: Variant | undefined = undefined)  {
     if(variant) {
         return getProductOldPrice(variant);
     }
     return product.additionalPrices.length > 0 ? product.additionalPrices[0].price_formatted: undefined;
 }
 
-export function getProductNewPrice(product, variant = undefined)  {
+export function getProductNewPrice(product: Product, variant = undefined)  {
     if(variant) {
         return getProductNewPrice(variant);
     }
@@ -29,9 +30,9 @@ export function getProductIngredients(product: Product) {
     })*/
 }
 
-export function getNameWithMods(item) {
-    return (item?.variant?.property_values || []).reduce((acc, property) => {
+export function getNameWithMods(item: CartProduct) {
+    return (item?.variant?.propertyValues || []).reduce((acc, property) => {
         return acc + " " + property.value;
-    }, item.product.name)
+    }, item.product.name as string);
 }
 

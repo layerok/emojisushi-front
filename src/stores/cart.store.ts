@@ -2,8 +2,9 @@ import {makeAutoObservable, transaction} from "mobx";
 import CartApi from "../api/cart.api";
 import {RootStore} from "~stores/stores";
 import {ICartProduct} from "~api/cart.api.types";
+import {Product, Variant} from "~stores/products.store";
 
-class CartProduct {
+export class CartProduct {
     json: ICartProduct;
     constructor(json) {
         makeAutoObservable(this);
@@ -15,11 +16,23 @@ class CartProduct {
     }
 
     get product() {
-        return this.json.product;
+        return new Product(this.json.product);
     }
 
     get id() {
         return this.json.id;
+    }
+
+    get variant() {
+        return this.json.variant ? new Variant(this.json.variant): undefined;
+    }
+
+    get productId() {
+        return this.json.product_id;
+    }
+
+    get variantId() {
+        return this.json.variant_id
     }
 
 }
@@ -32,7 +45,7 @@ export class CartStore {
         });
         this.rootStore = rootStore;
     }
-    items = [];
+    items: CartProduct[] = [];
     loading = false;
     total = 0;
     totalQuantity = 0;
@@ -43,8 +56,8 @@ export class CartStore {
         this.name = name;
     }
 
-    setItems = (categories) => {
-        this.items = categories;
+    setItems = (cartProducts: CartProduct[]) => {
+        this.items = cartProducts;
     }
 
     setLoading = (state) => {
@@ -66,7 +79,8 @@ export class CartStore {
     clearCart = () => {
         return CartApi.clearCart().then((res) => {
             transaction(() => {
-                this.setItems(res.data.data);
+                const instances = res.data.data.map((cartProduct) => new CartProduct(cartProduct))
+                this.setItems(instances);
                 this.setTotal(res.data.total);
                 this.setTotalQuantity(res.data.totalQuantity)
             })
@@ -78,7 +92,8 @@ export class CartStore {
         this.setLoading(true);
         return CartApi.getProducts().then(res => {
             transaction(() => {
-                this.setItems(res.data.data);
+                const instances = res.data.data.map((cartProduct) => new CartProduct(cartProduct))
+                this.setItems(instances);
                 this.setTotal(res.data.total)
                 this.setTotalQuantity(res.data.totalQuantity);
             })
@@ -100,7 +115,8 @@ export class CartStore {
         this.setPending([...this.pending, product_id]);
         return CartApi.addProduct(params).then((res) => {
             transaction(() => {
-                this.setItems(res.data.data);
+                const instances = res.data.data.map((cartProduct) => new CartProduct(cartProduct))
+                this.setItems(instances);
                 this.setTotal(res.data.total);
                 this.setTotalQuantity(res.data.totalQuantity);
             })

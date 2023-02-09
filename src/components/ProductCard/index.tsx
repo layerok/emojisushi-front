@@ -71,15 +71,15 @@ const ProductCardRaw = (
 
     const getVariant = (product: Product) => {
         return product.variants.find((variant) => {
-            return !!Object.values(modificators).includes(''+ variant.poster_id)
+            return !!Object.values(modificators).includes(''+ variant.posterId)
         })
     }
 
     const getCartProduct = (product: Product) => {
         if(product.inventoryManagementMethod === 'variant') {
-            return CartStore.items.find((cartProduct) =>  cartProduct.product_id === product.id && cartProduct.variant_id === getVariant(product)?.id)
+            return CartStore.items.find((cartProduct) =>  cartProduct.productId === product.id && cartProduct.variantId === getVariant(product)?.id)
         }
-        return CartStore.items.find((cartProduct) => cartProduct.product_id === product.id)
+        return CartStore.items.find((cartProduct) => cartProduct.productId === product.id)
     }
 
     const oldPrice = getProductOldPrice(product, getVariant(product));

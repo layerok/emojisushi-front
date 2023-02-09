@@ -81,8 +81,8 @@ export type IVariant = {
   hashid: string;
   product: IProduct;
   prices: IPrice[];
-  property_values: IPropertyValue;
-  additional_prices: IPrice;
+  property_values: IPropertyValue[];
+  additional_prices: IPrice[];
 }
 
 export type IImage = {

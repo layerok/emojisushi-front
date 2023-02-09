@@ -16,6 +16,7 @@ import {SvgIcon} from "~components/svg/SvgIcon";
 import {LogoSvg} from "~components/svg/LogoSvg";
 import {useCartStore} from "~hooks/use-cart-store";
 import {Product} from "~stores/products.store";
+import {CartProduct} from "~stores/cart.store";
 
 const CheckoutCartRaw = () => {
 
@@ -30,13 +31,13 @@ const CheckoutCartRaw = () => {
               }}>
 
 
-                {items.map((item) => {
-                    const { id, quantity, product } = item;
-                    const productInst = new Product(product);
-                    const ingredients = getProductIngredients(productInst);
-                    const oldPrice = getProductOldPrice(productInst, item.variant);
-                    const newPrice = getProductNewPrice(productInst, item.variant);
-                    const img = getProductMainImage(productInst);
+                {items.map((item: CartProduct) => {
+                    const { id, quantity, product, variant } = item;
+
+                    const ingredients = getProductIngredients(product);
+                    const oldPrice = getProductOldPrice(product, variant);
+                    const newPrice = getProductNewPrice(product, variant);
+                    const img = getProductMainImage(product);
                     const nameWithMods = getNameWithMods(item);
                     const {weight} = product;
                     return <S.Item key={id}>

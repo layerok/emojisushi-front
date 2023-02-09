@@ -20,22 +20,23 @@ import {SvgIcon} from "../../svg/SvgIcon";
 import {LogoSvg} from "../../svg/LogoSvg";
 import {SushiSvg} from "../../svg/SushiSvg";
 import {useCartStore} from "~hooks/use-cart-store";
-import {Product} from "~stores/products.store";
+import {CartProduct} from "~stores/cart.store";
 
 const CartItem = observer((
     {
         item,
+    }: {
+        item: CartProduct
     }
 ) => {
-    const {product} = item;
-    const productInst = new Product(product);
-    const img = getProductMainImage(productInst);
-    const newPrice = getProductNewPrice(productInst, item.variant);
-    const oldPrice = getProductOldPrice(productInst, item.variant)
+
+    const img = getProductMainImage(item.product);
+    const newPrice = getProductNewPrice(item.product, item.variant);
+    const oldPrice = getProductOldPrice(item.product, item.variant)
     const nameWithMods = getNameWithMods(item);
     const CartStore = useCartStore();
 
-    const handleAdd = (product_id, variant_id) => {
+    const handleAdd = (product_id: number, variant_id: number | undefined) => {
         return (quantity) => {
             CartStore.addProduct({
                 product_id,
@@ -70,9 +71,9 @@ const CartItem = observer((
             <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
                 <S.Item.Counter>
                     <LightCounter handleIncrement={() => {
-                        handleAdd(item.product_id, item.variant_id)(1);
+                        handleAdd(item.productId, item.variantId)(1);
                     }} handleDecrement={() => {
-                        handleAdd(item.product_id, item.variant_id)(-1);
+                        handleAdd(item.productId, item.variantId)(-1);
                     }} count={item.quantity}/>
                 </S.Item.Counter>
                 <Price newPrice={newPrice} oldPrice={oldPrice}/>

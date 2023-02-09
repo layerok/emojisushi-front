@@ -1,7 +1,7 @@
 import {makeAutoObservable, transaction} from "mobx";
 import MenuApi from "../api/menu.api";
 import {RootStore} from "~stores/stores";
-import {IProduct} from "~api/menu.api.types";
+import {IProduct, IVariant} from "~api/menu.api.types";
 
 export class Product {
     json: IProduct;
@@ -15,7 +15,7 @@ export class Product {
     }
 
     get name() {
-        return this.json.id;
+        return this.json.name;
     }
 
     get weight() {
@@ -35,7 +35,7 @@ export class Product {
     }
 
     get variants() {
-        return this.json.variants;
+        return this.json.variants.map(variant => new Variant(variant));
     }
 
     get inventoryManagementMethod() {
@@ -60,6 +60,34 @@ export class Product {
 
     get imageSets() {
         return this.json.image_sets || [];
+    }
+}
+
+export class Variant {
+    json: IVariant;
+    constructor(json: IVariant) {
+        this.json = json;
+        makeAutoObservable(this);
+    }
+
+    get id() {
+        return this.json.id;
+    }
+
+    get additionalPrices() {
+        return this.json.additional_prices || [];
+    }
+
+    get propertyValues() {
+        return this.json.property_values || []
+    }
+
+    get posterId() {
+        return this.json.poster_id;
+    }
+
+    get prices() {
+        return this.json.prices || []
     }
 }
 
