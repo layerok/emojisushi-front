@@ -1,29 +1,27 @@
-import {IProduct} from "~api/menu.api.types";
+import {Product} from "~stores/products.store";
 
-export function getProductMainImage(product: IProduct) {
-    const {image_sets} = product;
-    return (image_sets.length > 0 && image_sets[0] && image_sets[0].images.length > 0) ? image_sets[0].images[0].path : undefined;
+export function getProductMainImage(product: Product) {
+    const {imageSets} = product;
+    return (imageSets.length > 0 && imageSets[0] && imageSets[0].images.length > 0) ? imageSets[0].images[0].path : undefined;
 }
 
-export function getProductOldPrice(product, variant = undefined)  {
-    const {additional_prices} = product;
+export function getProductOldPrice(product: Product, variant = undefined)  {
     if(variant) {
         return getProductOldPrice(variant);
     }
-    return additional_prices.length > 0 ? additional_prices[0].price_formatted: undefined;
+    return product.additionalPrices.length > 0 ? product.additionalPrices[0].price_formatted: undefined;
 }
 
 export function getProductNewPrice(product, variant = undefined)  {
-    const {prices} = product;
     if(variant) {
         return getProductNewPrice(variant);
     }
-    return prices.length > 0 ? prices[0].price_formatted: undefined;
+    return product.prices.length > 0 ? product.prices[0].price_formatted: undefined;
 }
 
-export function getProductIngredients({description_short}) {
+export function getProductIngredients(product: Product) {
 
-    return description_short ? description_short.split(','): [];
+    return product.descriptionShort ? product.descriptionShort.split(','): [];
 
     // Мы не используем свойства
     /*return property_values.map((pv) => {

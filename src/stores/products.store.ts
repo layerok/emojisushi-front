@@ -3,6 +3,66 @@ import MenuApi from "../api/menu.api";
 import {RootStore} from "~stores/stores";
 import {IProduct} from "~api/menu.api.types";
 
+export class Product {
+    json: IProduct;
+    constructor(json) {
+        this.json = json;
+        makeAutoObservable(this);
+    }
+
+    get id() {
+        return this.json.id;
+    }
+
+    get name() {
+        return this.json.id;
+    }
+
+    get weight() {
+        return this.json.weight;
+    }
+
+    get isFavorite() {
+        return this.json.is_favorite_;
+    }
+
+    set isFavorite(state) {
+        this.json.is_favorite_ = state;
+    }
+
+    get propertyValues() {
+        return this.json.property_values;
+    }
+
+    get variants() {
+        return this.json.variants;
+    }
+
+    get inventoryManagementMethod() {
+        return this.json.inventory_management_method
+    }
+
+    get additionalPrices() {
+        return this.json.additional_prices || [];
+    }
+
+    get prices() {
+        return this.json.prices || [];
+    }
+
+    get descriptionShort() {
+        return this.json.description_short
+    }
+
+    get description() {
+        return this.json.description;
+    }
+
+    get imageSets() {
+        return this.json.image_sets || [];
+    }
+}
+
 export class ProductsStore {
     rootStore: RootStore;
     constructor(rootStore) {
@@ -11,7 +71,7 @@ export class ProductsStore {
         });
         this.rootStore = rootStore;
     }
-    items: IProduct[] = [];
+    items: Product[] = [];
     limit = 25;
     sortOptions = [];
     offset = 0;
@@ -29,7 +89,7 @@ export class ProductsStore {
         this.lastParams = params;
     }
 
-    setItems = (products: IProduct[]) => {
+    setItems = (products: Product[]) => {
         this.items = products;
     }
 
@@ -91,7 +151,10 @@ export class ProductsStore {
             ...params,
         }).then(res => {
             transaction(() => {
-                this.setItems(res.data.data);
+                const instances = res.data.data.map(json => {
+                    return new Product(json);
+                })
+                this.setItems(instances);
                 this.setFilters(res.data.filters);
                 this.setSortOptions(res.data.sort_options)
                 this.setTotal(res.data.total);

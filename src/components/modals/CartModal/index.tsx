@@ -20,6 +20,7 @@ import {SvgIcon} from "../../svg/SvgIcon";
 import {LogoSvg} from "../../svg/LogoSvg";
 import {SushiSvg} from "../../svg/SushiSvg";
 import {useCartStore} from "~hooks/use-cart-store";
+import {Product} from "~stores/products.store";
 
 const CartItem = observer((
     {
@@ -27,9 +28,10 @@ const CartItem = observer((
     }
 ) => {
     const {product} = item;
-    const img = getProductMainImage(product);
-    const newPrice = getProductNewPrice(product, item.variant);
-    const oldPrice = getProductOldPrice(product, item.variant)
+    const productInst = new Product(product);
+    const img = getProductMainImage(productInst);
+    const newPrice = getProductNewPrice(productInst, item.variant);
+    const oldPrice = getProductOldPrice(productInst, item.variant)
     const nameWithMods = getNameWithMods(item);
     const CartStore = useCartStore();
 

@@ -8,6 +8,7 @@ import {IOrder} from "~api/auth.api.types";
 import {getProductMainImage} from "~utils/utils";
 import {LogoSvg} from "~components/svg/LogoSvg";
 import {useTranslation} from "react-i18next";
+import {Product} from "~stores/products.store";
 
 
 export const AccordionItem = ({
@@ -83,7 +84,7 @@ export const AccordionItem = ({
 
             <div>
                 {order.products.map((product, index) => {
-                    const img = getProductMainImage(product.product);
+                    const img = getProductMainImage(new Product(product.product));
                     return <S.Pan.Prod key={product.id}>
                         {img ? (
                           <S.Pan.Prod.Img src={img}/>

@@ -22,13 +22,13 @@ import {useTranslation} from "react-i18next";
 import {useCartStore} from "~hooks/use-cart-store";
 import {useProductsStore} from "~hooks/use-categories-store";
 import {useWishlistStore} from "~hooks/use-wishlist-store";
-import {IProduct} from "~api/menu.api.types";
+import {Product} from "~stores/products.store";
 
 const ProductCardRaw = (
   {
       product,
   }: {
-      product: IProduct
+      product: Product
   }
 ) => {
 
@@ -40,7 +40,6 @@ const ProductCardRaw = (
         id,
         name,
         weight,
-        is_favorite_,
     } = product;
     const breakpoint = useBreakpoint();
     const isMobile = breakpoint === 'mobile';
@@ -50,7 +49,7 @@ const ProductCardRaw = (
     const {t} = useTranslation();
 
 
-    const mod_groups = product.property_values.filter((value) => {
+    const mod_groups = product.propertyValues.filter((value) => {
         return value.property?.options?.length > 0
     }).reduce((acc, property) => {
         if(acc.includes(property.property_id)) {
@@ -58,7 +57,7 @@ const ProductCardRaw = (
         }
         return [...acc, property.property_id]
     }, []).map((id) => {
-        return product.property_values.find((property) => property.property_id === id)
+        return product.propertyValues.find((property) => property.property_id === id)
     });
 
     const initialModificatorsState = mod_groups.reduce((acc, group) => {
@@ -70,14 +69,14 @@ const ProductCardRaw = (
 
     const [modificators, setModificators] = useState(initialModificatorsState);
 
-    const getVariant = (product) => {
+    const getVariant = (product: Product) => {
         return product.variants.find((variant) => {
             return !!Object.values(modificators).includes(''+ variant.poster_id)
         })
     }
 
-    const getCartProduct = (product) => {
-        if(product.inventory_management_method === 'variant') {
+    const getCartProduct = (product: Product) => {
+        if(product.inventoryManagementMethod === 'variant') {
             return CartStore.items.find((cartProduct) =>  cartProduct.product_id === product.id && cartProduct.variant_id === getVariant(product)?.id)
         }
         return CartStore.items.find((cartProduct) => cartProduct.product_id === product.id)
@@ -109,7 +108,7 @@ const ProductCardRaw = (
             }).then((res) => {
                 const items = ProductsStore.items.map((item) => {
                     if(item.id === id) {
-                        item.is_favorite_ = res.data.added;
+                        item.isFavorite = res.data.added;
                     }
                     return item;
                 });
@@ -117,7 +116,7 @@ const ProductCardRaw = (
                 ProductsStore.setItems(items)
             })
         }}>
-            <Favorite width={iconSize} isFavorite={is_favorite_}/>
+            <Favorite width={iconSize} isFavorite={product.isFavorite}/>
         </S.Favorite>
         <S.Image src={img}>
             {!img && (

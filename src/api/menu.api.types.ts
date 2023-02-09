@@ -55,7 +55,6 @@ export type IPropertyValue = {
   property: IProperty
 }
 
-
 export type IVariant = {
   id: number;
   product_id: number;
@@ -161,6 +160,7 @@ export type IProduct = {
   property_values: IPropertyValue[]
   image_sets: IImageSet[];
   additional_prices: IPrice[];
+  prices: IPrice[];
 }
 
 export type IFilter = {

@@ -1,6 +1,28 @@
 import {makeAutoObservable, transaction} from "mobx";
 import CartApi from "../api/cart.api";
 import {RootStore} from "~stores/stores";
+import {ICartProduct} from "~api/cart.api.types";
+
+class CartProduct {
+    json: ICartProduct;
+    constructor(json) {
+        makeAutoObservable(this);
+        this.json = json;
+    }
+
+    get quantity() {
+        return this.json.quantity;
+    }
+
+    get product() {
+        return this.json.product;
+    }
+
+    get id() {
+        return this.json.id;
+    }
+
+}
 
 export class CartStore {
     rootStore: RootStore;
