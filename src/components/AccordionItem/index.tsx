@@ -5,7 +5,6 @@ import {CaretUpSvg} from "../svg/CaretUpSvg";
 import {Collapsible} from "../Collapsible";
 import {useBreakpoint} from "~common/hooks/useBreakpoint";
 import {IOrder} from "~api/auth.api.types";
-import {getProductMainImage} from "~utils/utils";
 import {LogoSvg} from "~components/svg/LogoSvg";
 import {useTranslation} from "react-i18next";
 import {Product} from "~stores/products.store";
@@ -84,10 +83,10 @@ export const AccordionItem = ({
 
             <div>
                 {order.products.map((product, index) => {
-                    const img = getProductMainImage(new Product(product.product));
+                    const productInst = new Product(product.product);
                     return <S.Pan.Prod key={product.id}>
-                        {img ? (
-                          <S.Pan.Prod.Img src={img}/>
+                        {productInst.mainImage ? (
+                          <S.Pan.Prod.Img src={productInst.mainImage}/>
                         ): (
                           <SvgIcon color={"white"} width={"80px"} style={{opacity: 0.05}}>
                               <LogoSvg/>

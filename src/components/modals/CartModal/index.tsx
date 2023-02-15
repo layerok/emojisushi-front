@@ -12,7 +12,6 @@ import {useDebounce} from "~common/hooks/useDebounce";
 import {useBreakpoint} from "~common/hooks/useBreakpoint";
 import {ConfirmActionPopover} from "../../popovers/ConfirmActionPopover";
 import { useNavigate } from "react-router-dom";
-import {getNameWithMods, getProductMainImage, getProductNewPrice, getProductOldPrice} from "~utils/utils";
 import { observer} from "mobx-react";
 import {Loader} from "../../Loader";
 import {useTranslation} from "react-i18next";
@@ -29,11 +28,9 @@ const CartItem = observer((
         item: CartProduct
     }
 ) => {
-
-    const img = getProductMainImage(item.product);
-    const newPrice = getProductNewPrice(item.product, item.variant);
-    const oldPrice = getProductOldPrice(item.product, item.variant)
-    const nameWithMods = getNameWithMods(item);
+    const newPrice = item.product.getNewPrice(item.variant);
+    const oldPrice = item.product.getOldPrice(item.variant);
+    const nameWithMods = item.nameWithMods;
     const CartStore = useCartStore();
 
     const handleAdd = (product_id: number, variant_id: number | undefined) => {
@@ -57,8 +54,8 @@ const CartItem = observer((
                 <CloseIcon color={"#4A4A4A"}/>
             </ConfirmActionPopover>
         </S.Item.RemoveIcon>
-        <S.Item.Img src={img}>
-            {!img && (
+        <S.Item.Img src={item.product.mainImage}>
+            {!item.product.mainImage && (
                 <SvgIcon color={"white"} width={"80%"} style={{opacity: 0.05}}>
                     <LogoSvg/>
                 </SvgIcon>

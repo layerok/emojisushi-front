@@ -1,21 +1,14 @@
 import * as S from "./styled";
 import {FlexBox} from "~components/FlexBox";
-import {Price} from "../../../../components/Price";
+import {Price} from "~components/Price";
 import {IngredientsTooltip} from "~components/tooltips/IngredientsTooltip";
 import {EditCartButton} from "~components/buttons/EditCartButton";
-import {CartModal} from "../../../../components/modals/CartModal";
+import {CartModal} from "~components/modals/CartModal";
 import { observer} from "mobx-react";
-import {
-    getNameWithMods,
-    getProductIngredients,
-    getProductMainImage,
-    getProductNewPrice,
-    getProductOldPrice
-} from "~utils/utils";
+
 import {SvgIcon} from "~components/svg/SvgIcon";
 import {LogoSvg} from "~components/svg/LogoSvg";
 import {useCartStore} from "~hooks/use-cart-store";
-import {Product} from "~stores/products.store";
 import {CartProduct} from "~stores/cart.store";
 
 const CheckoutCartRaw = () => {
@@ -34,11 +27,11 @@ const CheckoutCartRaw = () => {
                 {items.map((item: CartProduct) => {
                     const { id, quantity, product, variant } = item;
 
-                    const ingredients = getProductIngredients(product);
-                    const oldPrice = getProductOldPrice(product, variant);
-                    const newPrice = getProductNewPrice(product, variant);
-                    const img = getProductMainImage(product);
-                    const nameWithMods = getNameWithMods(item);
+                    const ingredients = product.ingredients;
+                    const oldPrice = product.getOldPrice(variant);
+                    const newPrice = product.getNewPrice(variant);
+                    const img = product.mainImage;
+                    const nameWithMods = item.nameWithMods;
                     const {weight} = product;
                     return <S.Item key={id}>
                         <S.Image src={img}>

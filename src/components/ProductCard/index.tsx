@@ -6,12 +6,6 @@ import {useBreakpoint} from "~common/hooks/useBreakpoint";
 import {IngredientsTooltip} from "../tooltips/IngredientsTooltip";
 import { EqualHeightElement } from 'react-equal-height';
 import { observer} from "mobx-react";
-import {
-    getProductIngredients,
-    getProductMainImage,
-    getProductNewPrice,
-    getProductOldPrice
-} from "~utils/utils";
 import {Loader} from "../Loader";
 import {SvgIcon} from "../svg/SvgIcon";
 import {LogoSvg} from "../svg/LogoSvg";
@@ -44,8 +38,8 @@ const ProductCardRaw = (
     const breakpoint = useBreakpoint();
     const isMobile = breakpoint === 'mobile';
     const iconSize = isMobile ? '33px': '25px';
-    const ingredients = getProductIngredients(product);
-    const img = getProductMainImage(product);
+    const ingredients = product.ingredients;
+    const img = product.mainImage;
     const {t} = useTranslation();
 
 
@@ -82,8 +76,8 @@ const ProductCardRaw = (
         return CartStore.items.find((cartProduct) => cartProduct.productId === product.id)
     }
 
-    const oldPrice = getProductOldPrice(product, getVariant(product));
-    const newPrice = getProductNewPrice(product, getVariant(product));
+    const oldPrice = product.getOldPrice(getVariant(product));
+    const newPrice = product.getNewPrice(getVariant(product));
 
     const cartProduct = getCartProduct(product);
     const count = cartProduct?.quantity || 0;

@@ -61,6 +61,34 @@ export class Product {
     get imageSets() {
         return this.json.image_sets || [];
     }
+
+    get mainImage() {
+        const imageSets = this.imageSets;
+        return (imageSets.length > 0 && imageSets[0] && imageSets[0].images.length > 0) ? imageSets[0].images[0].path : undefined;
+    }
+
+    get ingredients() {
+        return this.descriptionShort ? this.descriptionShort.split(','): [];
+
+        // Мы не используем свойства
+        /*return property_values.map((pv) => {
+            return pv.property.name;
+        })*/
+    }
+
+    getOldPrice(variant: Variant) {
+        if(variant) {
+            return this.getOldPrice(variant);
+        }
+        return this.additionalPrices.length > 0 ? this.additionalPrices[0].price_formatted: undefined;
+    }
+
+    getNewPrice(variant: Variant) {
+        if(variant) {
+            return this.getNewPrice(variant);
+        }
+        return this.prices.length > 0 ? this.prices[0].price_formatted: undefined;
+    }
 }
 
 export class Variant {

@@ -33,7 +33,7 @@ export const CheckoutForm = observer(() => {
     const user = AuthStore.user;
     const CheckoutSchema = Yup.object().shape({
         phone: Yup.string()
-          .required(t('validation.required', {field: t('checkout.form.phone')})).test(
+          .required(t('validation.required', {field: t('common.phone')})).test(
             'is-possible-phone-number',
             () => t('checkout.form.errors.ua_phone'),
             (value) => {

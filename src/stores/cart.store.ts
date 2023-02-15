@@ -35,6 +35,12 @@ export class CartProduct {
         return this.json.variant_id
     }
 
+    get nameWithMods() {
+        return (this.variant?.propertyValues || []).reduce((acc, property) => {
+            return acc + " " + property.value;
+        }, this.product.name as string);
+    }
+
 }
 
 export class CartStore {
