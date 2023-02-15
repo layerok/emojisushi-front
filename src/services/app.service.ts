@@ -5,7 +5,7 @@ const {SpotsStore, AppStore, AuthStore, CartStore} = rootStore;
 class AppService {
     init() {
         AppStore.setInitialLocationPathname(window.location.pathname);
-        AppStore.setInitialLocationPathname(window.location.search);
+        AppStore.setInitialLocationSearch(window.location.search);
         AppStore.setLoading(true);
         AuthStore.fetchUser();
 
