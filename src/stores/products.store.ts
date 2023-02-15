@@ -78,14 +78,14 @@ export class Product {
 
     getOldPrice(variant: Variant) {
         if(variant) {
-            return this.getOldPrice(variant);
+            return variant.oldPrice;
         }
         return this.additionalPrices.length > 0 ? this.additionalPrices[0].price_formatted: undefined;
     }
 
     getNewPrice(variant: Variant) {
         if(variant) {
-            return this.getNewPrice(variant);
+            return variant.newPrice
         }
         return this.prices.length > 0 ? this.prices[0].price_formatted: undefined;
     }
@@ -116,6 +116,14 @@ export class Variant {
 
     get prices() {
         return this.json.prices || []
+    }
+
+    get oldPrice() {
+        return this.additionalPrices.length > 0 ? this.additionalPrices[0].price_formatted: undefined;
+    }
+
+    get newPrice() {
+        return this.prices.length > 0 ? this.prices[0].price_formatted: undefined;
     }
 }
 
