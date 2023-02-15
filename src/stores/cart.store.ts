@@ -105,7 +105,8 @@ export class CartStore {
         this.setLoading(true);
         return CartApi.removeCartProduct(cart_product_id).then((res) => {
             transaction(() => {
-                this.setItems(res.data.data);
+                const instances = res.data.data.map((cartProduct) => new CartProduct(cartProduct))
+                this.setItems(instances);
                 this.setTotal(res.data.total);
                 this.setTotalQuantity(res.data.totalQuantity);
             })
