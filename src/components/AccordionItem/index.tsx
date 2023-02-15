@@ -7,7 +7,7 @@ import {useBreakpoint} from "~common/hooks/useBreakpoint";
 import {IOrder} from "~api/auth.api.types";
 import {LogoSvg} from "~components/svg/LogoSvg";
 import {useTranslation} from "react-i18next";
-import {Product} from "~stores/products.store";
+import {Product} from "~models/Product";
 
 
 export const AccordionItem = ({
@@ -83,6 +83,7 @@ export const AccordionItem = ({
 
             <div>
                 {order.products.map((product, index) => {
+                    // todo: dont create Product instance when mapping, map Product instances instead of 'raw' products
                     const productInst = new Product(product.product);
                     return <S.Pan.Prod key={product.id}>
                         {productInst.mainImage ? (

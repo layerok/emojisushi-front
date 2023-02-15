@@ -16,7 +16,7 @@ import {useTranslation} from "react-i18next";
 import {useCartStore} from "~hooks/use-cart-store";
 import {useProductsStore} from "~hooks/use-categories-store";
 import {useWishlistStore} from "~hooks/use-wishlist-store";
-import {Product} from "~stores/products.store";
+import {Product} from "~models/Product";
 
 const ProductCardRaw = (
   {

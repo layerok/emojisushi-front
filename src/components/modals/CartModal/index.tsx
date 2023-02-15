@@ -19,7 +19,7 @@ import {SvgIcon} from "../../svg/SvgIcon";
 import {LogoSvg} from "../../svg/LogoSvg";
 import {SushiSvg} from "../../svg/SushiSvg";
 import {useCartStore} from "~hooks/use-cart-store";
-import {CartProduct} from "~stores/cart.store";
+import {CartProduct} from "~models/CartProduct";
 
 const CartItem = observer((
     {
