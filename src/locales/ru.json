@@ -116,7 +116,7 @@
         "ua_phone": "Некорректный формат украинского номера"
       }
     },
-    "inputAnotherAddress": "Ввести другой адрес",
+    "inputAnotherAddress": "Добавить другой адрес",
     "selectSavedAddress": "Выбрать сохранненый адрес",
     "alreadyHaveAccount": "Уже есть аккаунт?",
     "order": "Заказать",
