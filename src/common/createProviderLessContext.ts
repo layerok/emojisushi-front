@@ -38,11 +38,13 @@ const subscribe = (store: ReturnType<typeof createStore>, callback: () => void) 
 
 // only function below is coded by me in this file,
 export const createProviderLessContextHook = (initialValue) => {
-  // the state is an object, because underneath useMutableSource will destructure the state to clone it
-  // if we provide a primitive value as the state, like the string 'foo',
-  // then useMutableStore will destructure the state to {0: 'f', 1: 'o', 2: 'o'},
-  // and we don't want that, that is why we wrap 'initialValue' in the object { value: initialValue }
   const state = { value: initialValue };
+  // the store's state is the object, because underneath useMutableSource destructures store's state
+  // if we provide a primitive value as the store's state, like the string 'foo',
+  // then useMutableStore will destructure the store's state to {0: 'f', 1: 'o', 2: 'o'},
+  // and we don't want that, that is why we wrap 'initialValue' in the object { value: initialValue }
+  // to understand what I just wrote, you need to understand what useMutableSource is doing underneath
+  // have fun!!!
 
   const store = createStore(state);
 
