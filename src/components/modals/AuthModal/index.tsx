@@ -17,6 +17,7 @@ import Cookies from "js-cookie";
 import {FormModel} from "~common/FormModel";
 import {CheckboxInputModel, TextInputModel} from "~common/InputModel";
 import {useTranslation} from "react-i18next";
+import {If} from "~components/If";
 
 export const AuthModal = ( { children}) => {
     const breakpoint = useBreakpoint();
@@ -30,23 +31,23 @@ export const AuthModal = ( { children}) => {
     return <Modal width={isMobile ? "350px" : "675px"}  render={({close}) => (
 
         <S.Wrapper>
-            {showLoginForm && (
-               <LoginForm
-                 setShowSignUp={setShowSignUp}
-                 setShowPasswordRecovery={setShowPasswordRecovery}
-               />
-            )}
-            {showPasswordRecovery && (
+            <If condition={showLoginForm}>
+                <LoginForm
+                  setShowSignUp={setShowSignUp}
+                  setShowPasswordRecovery={setShowPasswordRecovery}
+                />
+            </If>
+            <If condition={showPasswordRecovery}>
                 <PasswordRecoveryForm
                   setShowPasswordRecovery={setShowPasswordRecovery}
                 />
-            )}
-            {!isMobile &&
+            </If>
+            <If condition={!isMobile}>
                 <S.VerticalBar/>
-            }
-            {showSignUpForm &&
+            </If>
+            <If condition={showSignUpForm}>
                 <SignUpForm setShowSignUp={setShowSignUp}/>
-            }
+            </If>
         </S.Wrapper>
     )}>
         {cloneElement(children)}
@@ -144,15 +145,15 @@ const SignUpForm = observer(({
               alignItems={"center"}
             >
                 <Button {...state.form.asSubmitButtonProps}>{t('common.registration')}</Button>
-                {isMobile &&
-                  <S.NavigateButton style={{paddingTop:"10px"}} onClick={ (e)=>{
-                      e.preventDefault();
-                      setShowSignUp(false)
-                  }
-                  }>
-                      {t('common.enter')}
-                  </S.NavigateButton>
-                }
+                <If condition={isMobile}>
+                    <S.NavigateButton style={{paddingTop:"10px"}} onClick={ (e)=>{
+                        e.preventDefault();
+                        setShowSignUp(false)
+                    }
+                    }>
+                        {t('common.enter')}
+                    </S.NavigateButton>
+                </If>
             </FlexBox>
         </FlexBox>
     </S.SignUpForm>
@@ -168,7 +169,7 @@ const PasswordRecoveryForm = observer(({
         isSent: false,
         error: ''
     }))
-    return                 <S.LoginForm onSubmit={(e) => {
+    return <S.LoginForm onSubmit={(e) => {
            e.preventDefault();
     }}>
         <S.Title>
@@ -185,17 +186,18 @@ const PasswordRecoveryForm = observer(({
                 })
             }}/>
         </S.InputWrapper>
-        {state.isSent ? (
-          <S.ForgotPassText style={{
-              color: 'green'
-          }}>
-              {t('authModal.forgetPassword.mailSent')}
-          </S.ForgotPassText>
-        ): (
-          <S.ForgotPassText>
-              {t('authModal.forgetPassword.typeEmail')}
-          </S.ForgotPassText>
-        )}
+        <If condition={state.isSent}>
+            <S.ForgotPassText style={{
+                color: 'green'
+            }}>
+                {t('authModal.forgetPassword.mailSent')}
+            </S.ForgotPassText>
+        </If>
+        <If condition={!state.isSent}>
+            <S.ForgotPassText>
+                {t('authModal.forgetPassword.typeEmail')}
+            </S.ForgotPassText>
+        </If>
         <S.BtnGroup>
             <S.NavigateButton onClick={ (e) => {
                 setShowPasswordRecovery(false)
@@ -313,15 +315,12 @@ const LoginForm = ({
             })
         }} style={{marginTop: "20px", display: "flex"}}>{t('common.login')}</Button>
 
-        {isMobile &&
-
-          <S.NavigateButton style={{paddingTop: "10px"}} onClick={ (e) => {
-              e.preventDefault();
-              setShowSignUp(true)
-          }}>{t('common.registration')}</S.NavigateButton>
-
-        }
-
+        <If condition={isMobile}>
+            <S.NavigateButton style={{paddingTop: "10px"}} onClick={ (e) => {
+                e.preventDefault();
+                setShowSignUp(true)
+            }}>{t('common.registration')}</S.NavigateButton>
+        </If>
 
     </S.LoginForm>
 }

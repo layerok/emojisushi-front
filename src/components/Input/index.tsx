@@ -2,6 +2,7 @@ import * as S from "./styled";
 import {SvgIcon} from "../svg/SvgIcon";
 import {AsteriskSvg} from "../svg/AsteriskSvg";
 import React, {CSSProperties} from "react";
+import {If} from "~components/If";
 
 export type IInputComponentProps = React.HTMLProps<HTMLInputElement> & {
   name: string;
@@ -33,32 +34,32 @@ export const Input = (
 ) => {
     return (
         <S.Wrapper style={style}>
-            {label && (
-              <p style={{
-                fontSize: '15px',
-                color: 'rgb(97, 97, 97)',
-                marginBottom: '5px',
-                ...labelStyle
-              }}>{label}</p>
-            )}
+          <If condition={!!label}>
+            <p style={{
+              fontSize: '15px',
+              color: 'rgb(97, 97, 97)',
+              marginBottom: '5px',
+              ...labelStyle
+            }}>{label}</p>
+          </If>
             <S.Input name={name}
                      width={width}
                      placeholder={placeholder}
                      light={light}
                      style={inputStyle}
                      {...rest}/>
-            {required && (
-                <S.Asterisk>
-                    <SvgIcon width={"10px"} color={"#FFE600"}>
-                        <AsteriskSvg/>
-                    </SvgIcon>
-                </S.Asterisk>
-            )}
-            {error && (
-                <S.Error>
-                    {error}
-                </S.Error>
-            )}
+          <If condition={required}>
+            <S.Asterisk>
+              <SvgIcon width={"10px"} color={"#FFE600"}>
+                <AsteriskSvg/>
+              </SvgIcon>
+            </S.Asterisk>
+          </If>
+          <If condition={!!error}>
+            <S.Error>
+              {error}
+            </S.Error>
+          </If>
         </S.Wrapper>
 
     )

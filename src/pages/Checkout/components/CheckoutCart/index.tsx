@@ -10,6 +10,8 @@ import {SvgIcon} from "~components/svg/SvgIcon";
 import {LogoSvg} from "~components/svg/LogoSvg";
 import {useCartStore} from "~hooks/use-cart-store";
 import {CartProduct} from "~models/CartProduct";
+import React from "react";
+import {If} from "~components/If";
 
 const CheckoutCartRaw = () => {
 
@@ -35,11 +37,11 @@ const CheckoutCartRaw = () => {
                     const {weight} = product;
                     return <S.Item key={id}>
                         <S.Image src={img}>
-                            {!img && (
-                                <SvgIcon color={"white"} width={"80%"} style={{opacity: 0.05}}>
-                                    <LogoSvg/>
-                                </SvgIcon>
-                            )}
+                          <If condition={!img}>
+                            <SvgIcon color={"white"} width={"80%"} style={{opacity: 0.05}}>
+                              <LogoSvg/>
+                            </SvgIcon>
+                          </If>
                         </S.Image>
 
                         <S.Content>
@@ -47,15 +49,14 @@ const CheckoutCartRaw = () => {
                             <S.Description>
                                 <FlexBox>
                                     <S.Count>{quantity} шт</S.Count>
-                                    {weight !== 0 && (
-                                        <S.Delimiter/>
-                                    ) }
+                                    <If condition={weight!==0}>
+                                      <S.Delimiter/>
+                                    </If>
                                     <S.Weight>{weight === 0 ? '': weight + 'г'} &nbsp;</S.Weight>
                                 </FlexBox>
-                                {ingredients.length > 0 && (
-                                    <IngredientsTooltip items={ingredients}/>
-                                    )}
-
+                              <If condition={ingredients.length > 0}>
+                                <IngredientsTooltip items={ingredients}/>
+                              </If>
                             </S.Description>
                             <S.Price>
                                 <Price newPrice={newPrice} oldPrice={oldPrice}/>
