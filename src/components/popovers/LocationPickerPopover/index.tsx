@@ -5,12 +5,9 @@ import {FlexBox} from "../../FlexBox";
 import {DropdownPopover} from "../DropdownPopover";
 import { observer} from "mobx-react";
 import {useSpotsStore} from "~hooks/use-spots-store";
-import {transaction} from "mobx";
-
 import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg"
-import {useCategoriesStore} from "~hooks/use-products-store";
-import {useProductsStore} from "~hooks/use-categories-store";
-import {useCartStore} from "~hooks/use-cart-store";
+import {useSpot} from "~hooks/use-spot";
+import {useNavigate} from "react-router-dom";
 
 export const LocationPickerPopoverRaw = (
   {
@@ -24,9 +21,9 @@ export const LocationPickerPopoverRaw = (
   }
 ) => {
   const SpotsStore = useSpotsStore();
-  const CategoriesStore = useCategoriesStore();
-  const ProductsStore = useProductsStore();
-  const CartStore = useCartStore();
+  const spot = useSpot();
+  const navigate = useNavigate();
+  const selectedIndex = SpotsStore.items.indexOf(spot)
 
   return (
     <>
@@ -35,20 +32,9 @@ export const LocationPickerPopoverRaw = (
         width={width}
         offset={offset}
         options={SpotsStore.items}
-        selectedIndex={SpotsStore.selectedIndex}
+        selectedIndex={selectedIndex}
         onSelect={({close, option, index}) => {
-          transaction(() => {
-            transaction(() => {
-              SpotsStore.select(option, () => {
-                SpotsStore.setUserSelectedSpot(true);
-                Promise.all([
-                  CartStore.fetchItems(),
-                  ProductsStore.fetchItems(ProductsStore.lastParams),
-                  CategoriesStore.fetchItems()
-                ])
-              });
-            })
-          })
+          navigate('/' + option.slug + '/category/roli')
           close();
         }}
       >

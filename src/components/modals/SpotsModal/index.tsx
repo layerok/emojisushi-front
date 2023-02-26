@@ -5,10 +5,8 @@ import {observer} from "mobx-react";
 import {MapPinSvg} from "../../svg/MapPinSvg";
 import {useTranslation} from "react-i18next";
 import {useSpotsStore} from "~hooks/use-spots-store";
-import {transaction} from "mobx";
-import {useCategoriesStore} from "~hooks/use-products-store";
-import {useProductsStore} from "~hooks/use-categories-store";
-import {useCartStore} from "~hooks/use-cart-store";
+import {useSpot} from "~hooks/use-spot";
+import {useNavigate} from "react-router-dom";
 
 export const SpotsModalRaw = (
   {
@@ -16,13 +14,12 @@ export const SpotsModalRaw = (
   }
 ) => {
   const SpotsStore = useSpotsStore();
-  const CategoriesStore = useCategoriesStore();
-  const ProductsStore = useProductsStore();
-  const CartStore = useCartStore();
+  const navigate = useNavigate();
+  const spot = useSpot();
 
   const records = SpotsStore.items || [];
-  const selectedIndex = SpotsStore.getSelectedIndex;
   const {t} = useTranslation();
+
 
   return <Modal open={open} render={({close}) => (
     <S.Wrapper>
@@ -38,20 +35,11 @@ export const SpotsModalRaw = (
         {records.map((item, i) => {
           return <S.Item key={item.id}
                          onClick={() => {
-                           transaction(() => {
-                             SpotsStore.select(item, () => {
-                               SpotsStore.setUserSelectedSpot(true);
-                               Promise.all([
-                                 CartStore.fetchItems(),
-                                 ProductsStore.fetchItems(ProductsStore.lastParams),
-                                 CategoriesStore.fetchItems()
-                               ])
-                             });
-                           })
+                           navigate('/' + item.slug + '/category/roli')
 
                            close();
                          }}
-                         selected={i === selectedIndex}>
+                         selected={item.slug === spot.slug}>
             {item.name}
           </S.Item>
         } )}

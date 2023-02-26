@@ -12,4 +12,5 @@ export type ISpot = {
   poster_id: number;
   html_content: string;
   google_map_url: string;
+  slug: string;
 }

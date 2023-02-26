@@ -1,44 +1,23 @@
-import {Layout} from "../../layout/Layout";
-import {ProductsGrid} from "../../components/ProductsGrid";
 import {observer} from "mobx-react";
-import {useEffect} from "react";
-import {useProductsStore} from "~hooks/use-categories-store";
-import {useAppStore} from "~hooks/use-app-store";
+import {useSpotsStore} from "~hooks/use-spots-store";
+import {useNavigate} from "react-router-dom";
 
 export const HomeRaw = () => {
-    const ProductsStore = useProductsStore();
-    const AppStore = useAppStore();
-
-    useEffect(() => {
-        AppStore.setLoading(true);
-        ProductsStore.fetchItems({
-            limit: ProductsStore.step,
-        }).then(() => {
-            AppStore.setLoading(false);
-        });
-    }, [])
-
-
-    const handleLoadMore = () => {
-        const settings = {
-            limit: ProductsStore.items.length + ProductsStore.step,
-        }
-        ProductsStore.fetchItems(settings);
-    }
-
+    const spotsStore = useSpotsStore();
+    const navigate = useNavigate();
     return (
-        <Layout
-          withBanner={false}
-          withRestaurantClosedModal={true}
-          withSpotsModal={true}
-        >
-            <ProductsGrid
-                loadable={ProductsStore.total > ProductsStore.items.length}
-                loading={ProductsStore.loading}
-                items={ProductsStore.items}
-                handleLoadMore={handleLoadMore}
-            />
-        </Layout>
+        <div>
+            <h1>Оберіть заклад</h1>
+            <ul>
+                {spotsStore.items.map(item => (
+                  <li>
+                      <a onClick={() => navigate('/' + item.slug + '/category/roli')}>
+                          {item.name}
+                      </a>
+                  </li>
+                ))}
+            </ul>
+        </div>
     );
 }
 

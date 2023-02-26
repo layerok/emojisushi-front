@@ -2,9 +2,8 @@ import * as S from "./styled";
 import {Popover} from "../Popover";
 import {cloneElement, ReactElement, useEffect, useState} from "react";
 
-type Option = any;
 
-export const DropdownPopover = (
+export function DropdownPopover<Option> (
     {
         onSelect,
         options = [],
@@ -32,7 +31,7 @@ export const DropdownPopover = (
       width?: string;
       onSelect?: (props: {close: () => void; option: Option, index: number}) => void;
     }
-) => {
+) {
 
     const [selectedOption, setSelectedOption] = useState(options[selectedIndex]);
 
