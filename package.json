@@ -162,34 +162,6 @@
     ],
     "resetMocks": true
   },
-  "babel": {
-    "presets": [
-      "react-app"
-    ],
-    "plugins": [
-      [
-        "module-resolver",
-        {
-          "root": [
-            "./"
-          ],
-          "alias": {
-            "^~(.+)": "./src/\\1"
-          },
-          "extensions": [
-            ".ios.js",
-            ".android.js",
-            ".js",
-            ".jsx",
-            ".json",
-            ".tsx",
-            ".ts",
-            ".native.js"
-          ]
-        }
-      ]
-    ]
-  },
   "devDependencies": {
     "babel-plugin-module-resolver": "^4.1.0"
   }
