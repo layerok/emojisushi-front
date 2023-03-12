@@ -1,18 +1,31 @@
 import gensync from "gensync";
-export const select = gensync({
+export const querySelector = gensync({
 	sync: function selectSync(selectors) {
 		return document.querySelector(selectors)
 	},
-	async: function selectAsync(selectors, timeout = 1000) {
+	async: function selectAsync(selectors) {
 		return new Promise((resolve, reject) => {
-			setTimeout(() => {
+			requestAnimationFrame(() => {
 				try {
 					resolve(document.querySelector(selectors));
 				} catch (error) {
 					reject(error)
 				}
-
-			}, timeout)
+			})
 		})
 	}
 })
+
+/**
+ *     Example
+ *
+ *     useEffect(() => {
+ *         let sync = true;
+ *         console.log(querySelector.sync('body'), '. is sync:', sync);
+ *
+ *         querySelector.async('body').then((el) => {
+ *             console.log(el, '. is async:', !sync);
+ *         })
+ *         sync = false;
+ *     }, [])
+ */
