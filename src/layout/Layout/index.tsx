@@ -41,16 +41,6 @@ export const LayoutRaw = (
     const SpotsStore = useSpotsStore();
     const CategoriesStore = useCategoriesStore();
 
-    useEffect(() => {
-        let sync = true;
-        console.log(select.sync('body'), '. is sync:', sync);
-
-        select.async('body').then((el) => {
-            console.log(el, '. is sync:', sync);
-        })
-        sync = false;
-    })
-
     const showStickyCart = y > 100;
 
     const closed = isClosed({
