@@ -20,6 +20,7 @@ import {useProductsStore} from "~hooks/use-categories-store";
 import {useCartStore} from "~hooks/use-cart-store";
 import {useSpotsStore} from "~hooks/use-spots-store";
 import {useCategoriesStore} from "~hooks/use-products-store";
+import {select} from "~lab/utils";
 
 export const LayoutRaw = (
     {
@@ -39,6 +40,16 @@ export const LayoutRaw = (
     const CartStore = useCartStore();
     const SpotsStore = useSpotsStore();
     const CategoriesStore = useCategoriesStore();
+
+    useEffect(() => {
+        let sync = true;
+        console.log(select.sync('body'), '. is sync:', sync);
+
+        select.async('body').then((el) => {
+            console.log(el, '. is sync:', sync);
+        })
+        sync = false;
+    })
 
     const showStickyCart = y > 100;
 
