@@ -20,7 +20,6 @@ import {useProductsStore} from "~hooks/use-categories-store";
 import {useCartStore} from "~hooks/use-cart-store";
 import {useSpotsStore} from "~hooks/use-spots-store";
 import {useCategoriesStore} from "~hooks/use-products-store";
-import {select} from "~lab/utils";
 
 export const LayoutRaw = (
     {
