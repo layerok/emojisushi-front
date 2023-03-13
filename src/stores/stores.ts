@@ -8,6 +8,7 @@ import {PaymentStore} from "./payment.store";
 import {ShippingStore} from "./shipping.store";
 import {WishlistStore} from "./wishlist.store";
 import {makeAutoObservable} from "mobx";
+import {CitiesStore} from "~stores/cities.store";
 
 export class RootStore {
     CategoriesStore: CategoriesStore;
@@ -19,6 +20,7 @@ export class RootStore {
     ShippingStore: ShippingStore;
     WishlistStore: WishlistStore;
     AuthStore: AuthStore;
+    CitiesStore: CitiesStore;
     constructor() {
         makeAutoObservable({
             CategoriesStore: false,
@@ -29,7 +31,8 @@ export class RootStore {
             PaymentStore: false,
             ShippingStore: false,
             WishlistStore: false,
-            AuthStore: false
+            AuthStore: false,
+            CitiesStore: false,
         })
         this.CategoriesStore = new CategoriesStore(this);
         this.ProductsStore = new ProductsStore(this);
@@ -40,6 +43,7 @@ export class RootStore {
         this.ShippingStore = new ShippingStore(this);
         this.WishlistStore = new WishlistStore(this);
         this.AuthStore = new AuthStore(this);
+        this.CitiesStore = new CitiesStore(this);
     }
 }
 

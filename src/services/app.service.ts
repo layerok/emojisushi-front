@@ -1,6 +1,6 @@
 import LocalStorageService from "./local-storage.service";
 import {rootStore} from "~stores/stores";
-const {SpotsStore, AppStore, AuthStore, CartStore} = rootStore;
+const {SpotsStore, AppStore, AuthStore, CartStore, CitiesStore} = rootStore;
 
 class AppService {
     init() {
@@ -25,7 +25,8 @@ class AppService {
 
         Promise.all([
             AuthStore.fetchUser(),
-            SpotsStore.loadItems().then(() => onLoadSpots())
+            SpotsStore.loadItems().then(() => onLoadSpots()),
+
         ]).finally(() => {
             Promise.all([
                 CartStore.fetchItems()

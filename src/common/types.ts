@@ -5,3 +5,9 @@ export type HTMLElementEvent<T extends HTMLElement> = Event & {
 }
 
 export type Nullable<Type> = null | Type;
+
+export type IMeta = {
+  total: number;
+  offset?: number;
+  limit?: number;
+}

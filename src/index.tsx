@@ -1,6 +1,5 @@
 import { stores } from '~stores/stores';
 import * as ReactDOM from 'react-dom/client';
-import {BrowserRouter} from "react-router-dom";
 import './index.css';
 import {
   App
@@ -19,11 +18,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <I18nextProvider i18n={i18n}>
-    <BrowserRouter>
       <Provider  {...stores}>
         <App />
       </Provider>
-    </BrowserRouter>
   </I18nextProvider>
 );
 

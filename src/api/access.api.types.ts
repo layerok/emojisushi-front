@@ -14,3 +14,9 @@ export type ISpot = {
   google_map_url: string;
   slug: string;
 }
+
+export type ICity = {
+  name: string;
+  id: number;
+  slug: string;
+}
