@@ -10,8 +10,10 @@ class Menu {
         sort_options: string[];
         filters: IFilter[]
     }>> {
-        return client.get('products', {
-            params
+        return client.get("products", {
+          params,
+          // @ts-ignore
+          skipAuthRefresh: true,
         });
     }
     getCategories(params = {}): Promise<AxiosResponse<{
@@ -23,13 +25,17 @@ class Menu {
         }
     }>> {
         return client.get('categories', {
-            params
+            params,
+            // @ts-ignore
+            skipAuthRefresh: true
         });
     }
 
     getIngredients(params = {}) {
-        return client.get('ingredients', {
-            params
+        return client.get("ingredients", {
+          params,
+          // @ts-ignore
+          skipAuthRefresh: true,
         });
     }
 }

@@ -1,16 +1,17 @@
 import {observer} from "mobx-react";
-import {useLoaderData, useNavigate} from "react-router-dom";
-import {CitiesStore} from "~stores/cities.store";
+import { useNavigate } from "react-router-dom";
+import { useCitiesStore } from "~hooks/use-cities-store";
+// todo: add index file for all hooks
 
 export const SelectCity = observer(() => {
-    const citiesStore = useLoaderData() as CitiesStore;
+    const items = useCitiesStore().items;
     const navigate = useNavigate();
 
     return (
         <div>
             <h1>Оберіть місто</h1>
             <ul>
-                {citiesStore.items.map(item => (
+                {items.map(item => (
                   <li>
                       <a onClick={() => navigate('/' + item.slug)}>
                           {item.name}

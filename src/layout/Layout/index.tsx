@@ -14,7 +14,7 @@ import {CartModal} from "~components/modals/CartModal";
 import {TinyCartButton} from "~components/TinyCartButton";
 import {Sticky} from "../../components/Sticky";
 import {StickyToTopBtn} from "../../components/StickyToTopBtn";
-import {useEffect} from "react";
+import {ReactNode, useEffect} from "react";
 import {useAppStore} from "~hooks/use-app-store";
 import {useProductsStore} from "~hooks/use-categories-store";
 import {useCartStore} from "~hooks/use-cart-store";
@@ -31,6 +31,14 @@ export const LayoutRaw = (
         mainProps = {},
         containerProps = {},
         ...rest
+    }: {
+            children?: ReactNode,
+            withBanner?: boolean,
+            withSidebar?: boolean,
+            withRestaurantClosedModal?: boolean;
+            withSpotsModal?: boolean;
+            mainProps?: Record<string, any>
+            containerProps?: Record<string, any>
     }) => {
     const {x, y} = useWindowScroll();
     const location = useLocation();
@@ -52,7 +60,7 @@ export const LayoutRaw = (
     }, [location.pathname])
 
     useEffect(() => {
-      if(withSidebar) {
+        if (withSidebar) {
         CategoriesStore.fetchItems();
       }
     }, [])

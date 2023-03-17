@@ -18,8 +18,10 @@ class Access {
         data: ISpot[]
         meta: IMeta
     }>> {
-        return client.get('spots', {
-            params
+        return client.get("spots", {
+          params,
+          // @ts-ignore
+          skipAuthRefresh: true,
         });
     }
 
@@ -27,9 +29,11 @@ class Access {
         data: ICity[]
         meta: IMeta
     }>> {
-        return client.get('cities', {
-            params
-        })
+        return client.get("cities", {
+          params,
+          // @ts-ignore
+          skipAuthRefresh: true,
+        });
     }
 }
 

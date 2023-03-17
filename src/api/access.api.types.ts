@@ -19,4 +19,5 @@ export type ICity = {
   name: string;
   id: number;
   slug: string;
+  spots: ISpot[],
 }

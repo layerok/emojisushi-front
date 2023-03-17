@@ -71,9 +71,11 @@ export class CitiesStore {
         this.items = items;
     }
 
-    loadItems = async() => {
+    loadItems = async (includeSpots = false) => {
         this.setLoading(true);
-        return AccessApi.getCities().then((res) => {
+        return AccessApi.getCities({
+            includeSpots
+        }).then((res) => {
             this.setItems(res.data.data);
         }).finally(() => {
             this.setLoading(false);
