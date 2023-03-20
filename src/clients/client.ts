@@ -21,7 +21,7 @@ client.interceptors.request.use((config = {}) => {
   const { method } = config;
 
   const params: IParams = {};
-  params.XDEBUG_SESSION_START = true;
+  
   const session_id = Cookies.get("session_id");
 
   if (session_id) {
@@ -31,6 +31,10 @@ client.interceptors.request.use((config = {}) => {
   const spot_id = LocalStorageService.get("spot_id");
   if (!params?.spot_id && spot_id) {
     params.spot_id = spot_id;
+  }
+
+  if (process.env.REACT_APP_XDEBUG_SESSION_START === 'true') {
+    params.XDEBUG_SESSION_START = true;
   }
 
   params.lang =

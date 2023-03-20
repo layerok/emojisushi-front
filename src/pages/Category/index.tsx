@@ -1,22 +1,16 @@
 import {Layout} from "~layout/Layout";
 import {ProductsGrid} from "~components/ProductsGrid";
 import { observer} from "mobx-react";
-import {useEffect} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {Navigate, useLoaderData, useParams} from "react-router-dom";
 import {useProductsStore} from "~hooks/use-categories-store";
-import {useCategoriesStore} from "~hooks/use-products-store";
-import {useSpotsStore} from "~hooks/use-spots-store";
-
 
 export const CategoryRaw = () => {
     const ProductsStore = useProductsStore();
-    const CategoriesStore = useCategoriesStore();
-    const SpotsStore = useSpotsStore();
-    const {categorySlug} = useParams();
-    const navigate = useNavigate();
-    const selectedCategory = CategoriesStore.items.find((category) => {
-        return category.slug === categorySlug;
-    })
+    const { categorySlug } = useParams();
+    const {categories, products} = useLoaderData();
+    const selectedCategory = categories.find((category) => {
+      return category.slug === categorySlug;
+    });
     const title = selectedCategory?.name;
 
     const handleLoadMore = () => {
@@ -27,19 +21,13 @@ export const CategoryRaw = () => {
         ProductsStore.fetchItems(settings);
     }
 
-    useEffect(() => {
-        ProductsStore.fetchItems({
-            category_slug: categorySlug,
-            limit: ProductsStore.step,
-        })
-    }, [categorySlug])
+    if (!categories.length) {
+        return <>...loading categories</>
+    }
 
-    useEffect(() => {
-        // if current category was disabled for the current spot, then redirect user to the first available category
-        if(!CategoriesStore.findCategoryBySlug(categorySlug) && CategoriesStore.count > 0) {
-            navigate('category/' + CategoriesStore.items[0].slug)
-        }
-    }, [SpotsStore.selectedIndex, CategoriesStore.count])
+    if (!selectedCategory && categories.length > 0) {
+      return <Navigate to={categories[0].slug} />;
+    }
 
     return (
         <Layout

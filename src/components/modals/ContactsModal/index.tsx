@@ -12,7 +12,7 @@ import {useBreakpoint} from "~common/hooks/useBreakpoint";
 import {useTranslation} from "react-i18next";
 import {InstagramLink} from "~layout/Footer/styled";
 import { observer} from "mobx-react";
-import {useSpotsStore} from "~hooks/use-spots-store";
+import { useSpot } from "~hooks/use-spot";
 
 export const ContactsModalRaw = (
     {
@@ -21,20 +21,20 @@ export const ContactsModalRaw = (
 
     const breakpoint = useBreakpoint();
     const width = breakpoint !== 'pc' ? "375px": undefined;
-    const {t} = useTranslation();
-    const SpotsStore = useSpotsStore();
+    const { t } = useTranslation();
+    const spot = useSpot();
 
     return <Modal width={width} render={({close}) => (
         <div>
             <S.Wrapper >
-                {SpotsStore.hasPhones && (
+                {spot.hasPhones && (
                     <>
                         <S.Title>{t('contactsModal.contacts')}</S.Title>
                         <S.Phones>
                             <SvgIcon style={{marginRight: '11px'}} width={"25px"} color={"white"}>
                                 <PhoneSvg/>
                             </SvgIcon>
-                            {SpotsStore.getPhones.split(',').map((phone, i) => (
+                            {spot.phones.split(',').map((phone, i) => (
                                 <S.Phone key={i}>{phone}</S.Phone>
                             ))}
                         </S.Phones>

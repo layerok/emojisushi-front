@@ -3,12 +3,12 @@ import {Heading} from "~components/Heading";
 import * as S from "./styled";
 import {observer} from "mobx-react";
 import {useTranslation} from "react-i18next";
-import {useSpotsStore} from "~hooks/use-spots-store";
 import {If} from "~components/If";
+import { useSpot } from "~hooks/use-spot";
 
 export const Delivery = observer(() => {
     const {t} = useTranslation();
-    const SpotsStore = useSpotsStore();
+    const spot = useSpot();
 
 
     return (
@@ -30,15 +30,15 @@ export const Delivery = observer(() => {
 
 
                   <S.AdresText>
-                      <b>{t('common.address')}</b>: {SpotsStore.getAddress}
+                      <b>{t('common.address')}</b>: {spot.address}
                   </S.AdresText>
 
-                  <S.DeliveryText dangerouslySetInnerHTML={{__html: SpotsStore.content}}/>
+                  <S.DeliveryText dangerouslySetInnerHTML={{__html: spot.content}}/>
               </S.Left>
 
-              <If condition={!!SpotsStore.googleMapUrl}>
+              <If condition={!!spot.googleMapUrl}>
                   <S.Right>
-                    <iframe src={SpotsStore.googleMapUrl} width="100%" height="480"/>
+                    <iframe src={spot.googleMapUrl} width="100%" height="480"/>
                   </S.Right>
               </If>
           </S.FlexContainer>

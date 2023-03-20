@@ -18,8 +18,6 @@ import {ReactNode, useEffect} from "react";
 import {useAppStore} from "~hooks/use-app-store";
 import {useProductsStore} from "~hooks/use-categories-store";
 import {useCartStore} from "~hooks/use-cart-store";
-import {useSpotsStore} from "~hooks/use-spots-store";
-import {useCategoriesStore} from "~hooks/use-products-store";
 
 export const LayoutRaw = (
     {
@@ -45,8 +43,6 @@ export const LayoutRaw = (
     const AppStore = useAppStore();
     const ProductsStore = useProductsStore();
     const CartStore = useCartStore();
-    const SpotsStore = useSpotsStore();
-    const CategoriesStore = useCategoriesStore();
 
     const showStickyCart = y > 100;
 
@@ -59,11 +55,6 @@ export const LayoutRaw = (
         ProductsStore.clearSearch();
     }, [location.pathname])
 
-    useEffect(() => {
-        if (withSidebar) {
-        CategoriesStore.fetchItems();
-      }
-    }, [])
 
     return (
         <S.Layout {...rest}>
@@ -87,7 +78,7 @@ export const LayoutRaw = (
             )}
 
             {withSpotsModal && (
-              <SpotsModal open={!SpotsStore.userSelectedSpot && !closed}/>
+              <SpotsModal open={!false && !closed}/>
             )}
 
             <Sticky top={"30px"} right={"30px"} show={showStickyCart}>

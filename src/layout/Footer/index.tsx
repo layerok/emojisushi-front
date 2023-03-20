@@ -10,10 +10,10 @@ import {PhoneSvg} from "~components/svg/PhoneSvg";
 import {LogoSvg} from "~components/svg/LogoSvg";
 import {useTranslation} from "react-i18next";
 import { observer} from "mobx-react";
-import {useSpotsStore} from "~hooks/use-spots-store";
+import { useSpot } from "~hooks/use-spot";
 
 export const FooterRaw = () => {
-    const SpotsStore = useSpotsStore();
+    const spot = useSpot();
     const {t} = useTranslation();
     return (
         <S.Footer>
@@ -25,7 +25,7 @@ export const FooterRaw = () => {
                         </SvgIcon>
                     </S.Logo>
                     <S.List>
-                        {SpotsStore.hasPhones && (
+                        {spot.hasPhones && (
                             <>
                                 <FlexBox style={{
                                     marginBottom: "15px"
@@ -39,7 +39,7 @@ export const FooterRaw = () => {
                                 </FlexBox>
 
                                 <FlexBox flexDirection={"column"}>
-                                    {SpotsStore.getPhones.split(',').map((phone, i) => (
+                                    {spot.phones.split(',').map((phone, i) => (
                                         <S.Phone key={i} href={`tel:${phone}`}>
                                             {phone}
                                         </S.Phone>

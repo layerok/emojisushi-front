@@ -4,7 +4,6 @@ import { CaretDownSvg } from "../../svg/CaretDownSvg";
 import { FlexBox } from "../../FlexBox";
 import { DropdownPopover } from "../DropdownPopover";
 import { observer } from "mobx-react";
-import { useSpotsStore } from "~hooks/use-spots-store";
 import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg";
 import { useSpot } from "~hooks/use-spot";
 import { useNavigate } from "react-router-dom";
@@ -20,8 +19,6 @@ export const LocationPickerPopoverRaw = ({
   backgroundColor?: string;
   width?: string;
 }) => {
-  const SpotsStore = useSpotsStore();
-  const spot = useSpot();
   const navigate = useNavigate();
 
   const cities = useCitiesStore().items;

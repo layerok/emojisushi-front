@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "jsx": "react-jsx",
     "esModuleInterop": true,
+    "sourceMap": true,
     "resolveJsonModule": true,
     "target": "es5",
     "paths": {
