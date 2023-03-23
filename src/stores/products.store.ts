@@ -2,6 +2,7 @@ import {makeAutoObservable, transaction} from "mobx";
 import MenuApi from "../api/menu.api";
 import {RootStore} from "~stores/stores";
 import {Product} from "~models/Product";
+import { IGetProductsParams } from "~api/menu.api.types";
 
 export class ProductsStore {
     rootStore: RootStore;
@@ -73,7 +74,7 @@ export class ProductsStore {
         this.setSearch("");
     }
 
-    fetchItems(params = {}) {
+    fetchItems(params: IGetProductsParams = {}) {
         this.setLoading(true);
         this.setLastParams(params);
 

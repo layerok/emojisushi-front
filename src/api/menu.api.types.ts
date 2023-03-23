@@ -182,3 +182,30 @@ export type IFilter = {
     sort_order: Nullable<number>;
   }
 }
+
+
+export type IGetCategoriesParams = {
+  offset?: number;
+  limit?: number;
+  spot_id_or_slug?: number;
+};
+
+export type SortKey =
+  | "bestseller"
+  | "ratings"
+  | "latest"
+  | "price_low"
+  | "price_high"
+  | "oldest";
+
+export type IGetProductsParams = {
+  filter?: string;
+  category_slug?: string;
+  search?: string;
+  sort?: SortKey | null;
+  offset?: number;
+  limit?: number;
+  spot_id_or_slug?: number;
+  wishlist_id?: number;
+  wishlist?: boolean;
+};

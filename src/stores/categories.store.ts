@@ -1,6 +1,7 @@
 import {makeAutoObservable} from "mobx";
 import MenuApi from "../api/menu.api";
 import {RootStore, stores} from "./stores";
+import { IGetCategoriesParams } from "~api/menu.api.types";
 
 export class CategoriesStore {
     rootStore: RootStore;
@@ -22,7 +23,7 @@ export class CategoriesStore {
         this.items = categories;
     }
 
-    fetchItems(params = {}) {
+    fetchItems(params: IGetCategoriesParams = {}) {
         this.setLoading(true);
         return MenuApi.getCategories({
             ...params,

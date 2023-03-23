@@ -18,3 +18,9 @@ export const ProtectedRoute = ({
 
   return children ? children : <Outlet/>;
 };
+
+export const Component = ProtectedRoute;
+
+Object.assign(Component, {
+  display: 'LazyProtectedRoute'
+})

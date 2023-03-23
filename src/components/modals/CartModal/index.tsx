@@ -20,6 +20,7 @@ import {LogoSvg} from "../../svg/LogoSvg";
 import {SushiSvg} from "../../svg/SushiSvg";
 import {useCartStore} from "~hooks/use-cart-store";
 import {CartProduct} from "~models/CartProduct";
+import { useCity, useSpot } from "~hooks";
 
 const CartItem = observer((
     {
@@ -93,6 +94,8 @@ export const CartModal = observer((
     const navigate = useNavigate();
     const windowSize = useWindowSize();
     const [height, setHeight] = useState(windowSize.height);
+    const city = useCity();
+    const spot = useSpot();
 
     const debounceHeight = useDebounce(() => {
         setHeight(windowSize.height)
@@ -153,7 +156,9 @@ export const CartModal = observer((
                     </FlexBox>
                     <S.Button>
                         <ButtonOutline disabled={items.length === 0} onClick={() => {
-                            navigate('/checkout');
+                            navigate(
+                              "/" + city.slug + "/" + spot.slug + "/checkout"
+                            );
                         }} width={"100%"}>
                             {t('cartModal.checkout')}
                         </ButtonOutline>

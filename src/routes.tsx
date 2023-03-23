@@ -1,6 +1,4 @@
-import {
-  Navigate,
-} from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import "normalize.css";
 import { ProtectedRoute } from "~components/ProtectedRoute";
 

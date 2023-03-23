@@ -3,6 +3,7 @@ import { useParams} from "react-router-dom";
 import {Loader} from "~components/Loader";
 import {useCategoriesStore} from "~hooks/use-products-store";
 import {observer} from "mobx-react";
+import { useCity, useSpot } from "~hooks";
 
 const VerticalMenu = observer((
   {
@@ -11,6 +12,8 @@ const VerticalMenu = observer((
 ) => {
   const {categorySlug} = useParams();
   const CategoriesStore = useCategoriesStore();
+  const city = useCity();
+  const spot = useSpot();
 
   return (
     <nav style={{width: "255px", position: "relative"}}>
@@ -21,7 +24,7 @@ const VerticalMenu = observer((
             const active = categorySlug === category.slug;
             return (
               <S.Category
-                to={'/category/' + category.slug}
+                to={'/' + city.slug + '/' + spot.slug + '/category/' + category.slug}
                 isActive={active}
                 key={category.id} >
                 {category.name}
