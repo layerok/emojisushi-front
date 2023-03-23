@@ -2,36 +2,16 @@ import {
   Navigate,
 } from "react-router-dom";
 import "normalize.css";
-import { ThankYou } from "~pages/ThankYou";
-import { Delivery } from "~pages/Delivery";
-import { Checkout } from "~pages/Checkout";
-import { Category } from "~pages/Category";
-import { Wishlist } from "~pages/Wishlist";
-import { Profile } from "~pages/Profile";
-import { UpdatePassword } from "~pages/UpdatePassword";
-import { SavedAddresses } from "~pages/SavedAddresses";
-import { MyOrders } from "~pages/MyOrders";
-import { ResetPassword } from "~pages/ResetPassword";
 import { ProtectedRoute } from "~components/ProtectedRoute";
-import { SelectLocation } from "~pages/SelectLocation";
-import { rootStore } from "~stores/stores";
-import { toJS } from "mobx";
-import { EnsureLocation } from "~components/EnsureLocation";
-const { CitiesStore, ProductsStore, CategoriesStore } = rootStore;
 
 export const routes = [
   {
     path: "/",
-    element: <EnsureLocation />,
-    loader: async () => {
-      await CitiesStore.loadItems(true);
-
-      return toJS(CitiesStore.items);
-    },
+    lazy: () => import("~components/EnsureLocation"),
     children: [
       {
         index: true,
-        element: <SelectLocation />,
+        lazy: () => import("~pages/SelectLocation"),
       },
       {
         path: ":citySlug/:spotSlug",
@@ -42,36 +22,23 @@ export const routes = [
           },
           {
             path: "category/:categorySlug?",
-            element: <Category />,
-            loader: async ({ params }) => {
-              await ProductsStore.fetchItems({
-                category_slug: params.categorySlug,
-                limit: ProductsStore.step,
-              });
-
-              await CategoriesStore.fetchItems();
-
-              return {
-                products: toJS(ProductsStore.items),
-                categories: toJS(CategoriesStore.items),
-              };
-            },
+            lazy: () => import("~pages/Category"),
           },
           {
             path: "thankyou",
-            element: <ThankYou />,
+            lazy: () => import("~pages/ThankYou"),
           },
           {
             path: "dostavka-i-oplata",
-            element: <Delivery />,
+            lazy: () => import("~pages/Delivery"),
           },
           {
             path: "checkout",
-            element: <Checkout />,
+            lazy: () => import("~pages/Checkout"),
           },
           {
             path: "wishlist",
-            element: <Wishlist />,
+            lazy: () => import("~pages/Wishlist"),
           },
           {
             element: <ProtectedRoute redirectPath={"/"} />,
@@ -82,19 +49,19 @@ export const routes = [
               },
               {
                 path: "account/profile",
-                element: <Profile />,
+                lazy: () => import("~pages/Profile"),
               },
               {
                 path: "account/recover-password",
-                element: <UpdatePassword />,
+                lazy: () => import("~pages/UpdatePassword"),
               },
               {
                 path: "account/saved-addresses",
-                element: <SavedAddresses />,
+                lazy: () => import("~pages/SavedAddresses"),
               },
               {
                 path: "account/orders",
-                element: <MyOrders />,
+                lazy: () => import("~pages/MyOrders"),
               },
             ],
           },
@@ -103,11 +70,11 @@ export const routes = [
             children: [
               {
                 index: true,
-                element: <ResetPassword />,
+                lazy: () => import("~pages/ResetPassword"),
               },
               {
                 path: ":code",
-                element: <ResetPassword />,
+                lazy: () => import("~pages/ResetPassword"),
               },
             ],
           },
