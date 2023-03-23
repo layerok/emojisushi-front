@@ -25,3 +25,11 @@ export const SelectLocation = observer(() => {
     );
 })
 
+export const Component = SelectLocation;
+
+Object.assign(Component, {
+  displayName: 'LazySelectLocation'
+})
+
+
+

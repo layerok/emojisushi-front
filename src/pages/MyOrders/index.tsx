@@ -34,3 +34,8 @@ export const MyOrders = observer(() => {
         </CabinetLayout>
     );
 })
+
+export const Component = MyOrders;
+Object.assign(Component, {
+  displayName: "LazyMyOrders",
+});

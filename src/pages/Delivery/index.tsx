@@ -45,3 +45,9 @@ export const Delivery = observer(() => {
       </Layout>
     )
 })
+
+export const Component = Delivery;
+
+Object.assign({
+    displayName: 'LazyDelivery'
+})

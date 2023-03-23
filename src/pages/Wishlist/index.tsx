@@ -5,7 +5,7 @@ import {useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import {useProductsStore} from "~hooks/use-categories-store";
 
-export const WishlistRaw = () => {
+export const Wishlist = observer(() => {
     const ProductsStore = useProductsStore();
     useEffect(() => {
 
@@ -40,6 +40,10 @@ export const WishlistRaw = () => {
             />
         </Layout>
     );
-}
+})
 
-export const Wishlist = observer(WishlistRaw)
+export const Component = Wishlist;
+
+Object.assign(Component, {
+    displayName: 'LazyWishlist'
+})

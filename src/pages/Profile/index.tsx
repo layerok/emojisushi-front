@@ -212,3 +212,7 @@ export const Profile = observer(() => {
     );
 })
 
+export const Component = Profile;
+Object.assign(Component, {
+    displayName: 'LazyProfile'
+})

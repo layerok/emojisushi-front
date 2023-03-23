@@ -13,7 +13,7 @@ import {useAppStore} from "~hooks/use-app-store";
 import {usePaymentStore} from "~hooks/use-payment-store";
 import {useShippingStore} from "~hooks/use-shipping-store";
 
-export const CheckoutRaw = () => {
+export const Checkout = observer(() => {
     const breakpoint = useBreakpoint();
 
     const navigate = useNavigate();
@@ -60,6 +60,9 @@ export const CheckoutRaw = () => {
             </FlexBox>
         </Layout>
     );
-}
+})
 
-export const Checkout = observer(CheckoutRaw);
+export const Component = Checkout;
+Object.assign(Component, {
+    displayName: 'LazyCheckout'
+});

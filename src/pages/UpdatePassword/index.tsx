@@ -95,3 +95,8 @@ export const UpdatePassword = observer(() => {
     )
 
 })
+
+export const Component = UpdatePassword;
+Object.assign(Component, {
+  displayName: "LazyUpdatePassword",
+});

@@ -161,3 +161,8 @@ export const SavedAddresses = observer(() => {
 
 
 })
+
+export const Component = SavedAddresses;
+Object.assign(Component, {
+  displayName: "LazySavedAddresses",
+});

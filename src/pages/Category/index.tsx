@@ -2,12 +2,15 @@ import {Layout} from "~layout/Layout";
 import {ProductsGrid} from "~components/ProductsGrid";
 import { observer} from "mobx-react";
 import {Navigate, useLoaderData, useParams} from "react-router-dom";
-import {useProductsStore} from "~hooks/use-categories-store";
+import { useProductsStore } from "~hooks/use-categories-store";
 
-export const CategoryRaw = () => {
+import { ProductsStore, CategoriesStore, } from "~stores";
+import { toJS } from "mobx";
+
+export const Category = observer(() => {
     const ProductsStore = useProductsStore();
     const { categorySlug } = useParams();
-    const {categories, products} = useLoaderData();
+    const { categories } = useLoaderData() as any;
     const selectedCategory = categories.find((category) => {
       return category.slug === categorySlug;
     });
@@ -44,6 +47,27 @@ export const CategoryRaw = () => {
             />
         </Layout>
     );
-}
+})
 
-export const Category = observer(CategoryRaw)
+export const Component = Category;
+
+Object.assign(Component, {
+    displayName: 'LazyCategoryPage'
+})
+
+export const loader = async ({params}) => {
+    await ProductsStore.fetchItems({
+      category_slug: params.categorySlug,
+      limit: ProductsStore.step,
+      spot_id_or_slug: params.spotSlug,
+    });
+
+    await CategoriesStore.fetchItems({
+      spot_id_or_slug: params.spotSlug,
+    });
+
+    return {
+      products: toJS(ProductsStore.items),
+      categories: toJS(CategoriesStore.items),
+    };
+}

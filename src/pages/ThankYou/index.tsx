@@ -6,8 +6,9 @@ import * as S from "./styled";
 import {useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import {useAppStore} from "~hooks/use-app-store";
+import { observer } from "mobx-react";
 
-export const ThankYouRaw = () => {
+export const ThankYou = observer(() => {
     const AppStore = useAppStore()
     useEffect(() => {
         AppStore.setLoading(false);
@@ -47,6 +48,10 @@ export const ThankYouRaw = () => {
 
         </Layout>
     )
-}
+})
 
-export const ThankYou = ThankYouRaw;
+export const Component = ThankYou;
+
+Object.assign(Component, {
+    displayName: 'LazyThankYou'
+})

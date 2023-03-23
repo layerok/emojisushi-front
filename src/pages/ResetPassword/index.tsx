@@ -92,3 +92,8 @@ export const ResetPassword = observer(() => {
   )
 })
 
+export const Component = ResetPassword;
+Object.assign(Component, {
+  displayName: 'LazyResetPassword',
+})
+
