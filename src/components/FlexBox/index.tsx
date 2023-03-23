@@ -24,7 +24,6 @@ export const FlexBox = forwardRef<HTMLDivElement, IProps>((
         alignItems = "start",
         flexDirection = "row",
         justifyContent = "start",
-        mobileFirst = true,
         children,
         ...rest
     }, ref
@@ -35,7 +34,6 @@ export const FlexBox = forwardRef<HTMLDivElement, IProps>((
             alignItems={alignItems}
             flexDirection={flexDirection}
             justifyContent={justifyContent}
-            mobileFirst={mobileFirst}
             {...rest}
         >{children}</S.Flex>
     )

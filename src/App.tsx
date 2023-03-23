@@ -7,11 +7,12 @@ import { theme } from "~theme";
 import { ThemeProvider } from "styled-components";
 import { observer } from "mobx-react";
 import { routes } from "~routes";
+import { Preloader } from "~layout/Preloader";
 
 const router = createBrowserRouter(routes);
 
 const FallbackElement = () => {
-  return <div>State is not initialized</div>
+  return <Preloader />;
 }
 
 export const App = observer(() => {

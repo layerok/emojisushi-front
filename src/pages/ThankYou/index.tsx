@@ -15,8 +15,8 @@ export const ThankYou = observer(() => {
     }, [])
     const {t} = useTranslation();
     return (
-        <Layout withSidebar={false}
-                withBanner={false}
+        <Layout 
+       
                 mainProps={{
                     style: {
                         justifyContent: 'center'

@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import "normalize.css";
 import { ProtectedRoute } from "~components/ProtectedRoute";
+import { Layout } from "~layout/Layout";
 
 export const routes = [
   {
@@ -13,6 +14,7 @@ export const routes = [
       },
       {
         path: ":citySlug/:spotSlug",
+        element: <Layout withRestaurantClosedModal={true} />,
         children: [
           {
             index: true,

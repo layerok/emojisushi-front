@@ -6,13 +6,11 @@ import {FlexBox} from "~components/FlexBox";
 import {UnderVerticalMenu} from "../UnderVerticalMenu";
 import {SortingPopover} from "~components/popovers/SortingPopover";
 import { observer} from "mobx-react";
-import {useTranslation} from "react-i18next";
 import {useDebounce} from "~common/hooks/useDebounce";
 import {useProductsStore} from "~hooks/use-categories-store";
 import {useCategoriesStore} from "~hooks/use-products-store";
-import {Loader} from "~components/Loader";
 
-export const SidebarRaw = () => {
+export const Sidebar = observer(() => {
     const ProductsStore = useProductsStore();
     const CategoriesStore = useCategoriesStore();
     const breakpoint = useBreakpoint();
@@ -30,7 +28,6 @@ export const SidebarRaw = () => {
 
     }, 500)
 
-    const {t} = useTranslation();
     return (
         <S.Sidebar>
             <FlexBox
@@ -72,6 +69,5 @@ export const SidebarRaw = () => {
 
         </S.Sidebar>
     );
-}
+})
 
-export const Sidebar = observer(SidebarRaw);

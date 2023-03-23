@@ -2,7 +2,7 @@ import { toJS } from "mobx";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useCity } from "~hooks/use-city";
 import { useSpot } from "~hooks/use-spot";
-import { CitiesStore } from "~stores";
+import { CitiesStore, AuthStore } from "~stores";
 
 export const EnsureLocation = ({
   redirectPath = "/",
@@ -30,6 +30,7 @@ Object.assign(Component, {
 
 export const loader = async () => {
   await CitiesStore.loadItems(true);
+  await AuthStore.fetchUser();
 
   return toJS(CitiesStore.items);
 };

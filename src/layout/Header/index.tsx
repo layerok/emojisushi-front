@@ -84,7 +84,9 @@ export const Header = observer(() => {
             {stores.AuthStore.isAuthorized ? (
               <S.UserBtn
                 onClick={() => {
-                  navigate("/account/profile");
+                  navigate(
+                    "/" + city.slug + "/" + spot.slug + "/account/profile"
+                  );
                 }}
               >
                 <SvgButton>

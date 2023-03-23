@@ -1,10 +1,10 @@
 import * as S from "./styled";
-import { Favorite } from "../../components/Favorite";
+import { Favorite } from "~components/Favorite";
 import { SvgIcon } from "~components/svg/SvgIcon";
 import { SvgButton } from "~components/SvgButton";
 import { InstagramSvg } from "~components/svg/InstagramSvg";
 import { TelegramSvg } from "~components/svg/TelegramSvg";
-import { TelegramModal } from "../../components/modals/TelegramModal";
+import { TelegramModal } from "~components/modals/TelegramModal";
 import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCity, useSpot } from "~hooks";

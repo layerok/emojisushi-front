@@ -1,8 +1,10 @@
-import {useParams} from "react-router-dom";
+import { useParams} from "react-router-dom";
+import { Spot } from "~stores/cities.store";
 import { useCity } from "./use-city";
 
-export const useSpot = () => {
+export const useSpot = (): Spot => {
   const {spotSlug} = useParams();
   const city = useCity();
-  return (city?.spots || []).find(spot => spot.slug === spotSlug);
+  const spot = (city?.spots || []).find((spot) => spot.slug === spotSlug);
+  return spot;
 }

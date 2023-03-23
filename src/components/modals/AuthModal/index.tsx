@@ -5,7 +5,7 @@ import {Input} from "../../Input";
 import {Button} from "../../buttons/Button";
 import {Checkbox} from "../../Checkbox";
 import {PasswordInput} from "../../PasswordInput";
-import {useBreakpoint} from "~common/hooks/useBreakpoint";
+import {useBreakpoint, useIsMobile} from "~common/hooks/useBreakpoint";
 import {FlexBox} from "../../FlexBox";
 import AuthApi from "../../../api/auth.api";
 import authApi from "../../../api/auth.api";
@@ -18,6 +18,7 @@ import {FormModel} from "~common/FormModel";
 import {CheckboxInputModel, TextInputModel} from "~common/InputModel";
 import {useTranslation} from "react-i18next";
 import {If} from "~components/If";
+import { useCity, useSpot } from "~hooks";
 
 export const AuthModal = ( { children}) => {
     const breakpoint = useBreakpoint();
@@ -245,8 +246,9 @@ const LoginForm = ({
     const [password, setPassword] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [loading, setLoading] = useState(false);
-    const breakpoint = useBreakpoint();
-    const isMobile = breakpoint === 'mobile';
+    const isMobile = useIsMobile();
+    const city = useCity();
+    const spot = useSpot();
 
     return  <S.LoginForm onSubmit={(e) => {
         e.preventDefault();
@@ -294,7 +296,7 @@ const LoginForm = ({
                     stores.AuthStore.userFromJson(user);
                     stores.AuthStore.setExpires(expires);
                 })
-                navigate('/account/profile');
+                navigate('/' + city.slug + '/' + spot.slug + '/account/profile');
 
             }).catch((e) => {
                 const {errors, message} = e.response.data;
