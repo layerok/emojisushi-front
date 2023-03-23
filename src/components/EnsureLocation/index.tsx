@@ -30,7 +30,15 @@ Object.assign(Component, {
 
 export const loader = async () => {
   await CitiesStore.loadItems(true);
-  await AuthStore.fetchUser();
+  try {
+    await AuthStore.fetchUser();
+  } catch (e: any) {
+    // 406 simply means that user is not authorzied, no need to throw error in this case
+    if (![406].includes(e?.response.status)) {
+      throw e;
+    }
+  }
+  
 
   return toJS(CitiesStore.items);
 };
