@@ -1,10 +1,8 @@
 import { Header } from "../Header";
 import { Container } from "~components/Container";
 import { Footer } from "../Footer";
-import { Banner } from "../Banner";
 import * as S from "./styled";
 import { RestaurantClosed } from "~components/modals/RestaurantClosed";
-import { Preloader } from "../Preloader";
 import { observer } from "mobx-react";
 import { isClosed } from "~utils/time.utils";
 import { useLocation, useWindowScroll } from "react-use";
@@ -13,7 +11,6 @@ import { TinyCartButton } from "~components/TinyCartButton";
 import { Sticky } from "../../components/Sticky";
 import { StickyToTopBtn } from "../../components/StickyToTopBtn";
 import { ReactNode, useEffect } from "react";
-import { useAppStore } from "~hooks/use-app-store";
 import { useProductsStore } from "~hooks/use-categories-store";
 import { useCartStore } from "~hooks/use-cart-store";
 import { Outlet } from "react-router-dom";
@@ -33,7 +30,6 @@ export const Layout = observer(
   }) => {
     const { x, y } = useWindowScroll();
     const location = useLocation();
-    const AppStore = useAppStore();
     const ProductsStore = useProductsStore();
     const CartStore = useCartStore();
 
@@ -50,7 +46,6 @@ export const Layout = observer(
 
     return (
       <S.Layout {...rest}>
-        {AppStore.loading && <Preloader />}
         <Header />
         <S.Main {...mainProps}>
           <Container {...containerProps}>

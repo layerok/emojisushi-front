@@ -1,4 +1,4 @@
-import BannerSrc from "../../assets/img/banner.png";
+import BannerSrc from "~assets/img/banner.png";
 import * as S from "./styled";
 
 export const Banner = () => {

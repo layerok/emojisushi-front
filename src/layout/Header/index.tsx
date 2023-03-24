@@ -34,7 +34,7 @@ export const Header = observer(() => {
       <Container>
         <FlexBox justifyContent={"space-between"} alignItems={"center"}>
           <S.Left>
-            <S.Link to={"/" + city.slug + "/" + spot.slug}>
+            <S.Link to={"/"}>
               <SvgIcon color={"#FFE600"}>
                 <LogoSvg />
               </SvgIcon>

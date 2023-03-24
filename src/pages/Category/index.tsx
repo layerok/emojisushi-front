@@ -1,18 +1,19 @@
 import { ProductsGrid } from "~components/ProductsGrid";
 import { observer } from "mobx-react";
-import { Navigate, useLoaderData, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { useProductsStore } from "~hooks/use-categories-store";
-import { ProductsStore, CategoriesStore } from "~stores";
+import { ProductsStore } from "~stores";
 import { toJS } from "mobx";
-import { Sidebar } from "~pages/Category/Sidebar";
-import { Banner } from "~layout/Banner";
+import { useCategoriesStore } from "~hooks";
 import { FlexBox } from "~components/FlexBox";
+import { Banner } from "./Banner";
 import { useIsDesktop } from "~common/hooks/useBreakpoint";
+import { Sidebar } from "~pages/Category/Sidebar";
 
 export const Category = observer(() => {
   const ProductsStore = useProductsStore();
   const { categorySlug } = useParams();
-  const { categories } = useLoaderData() as any;
+  const categories = useCategoriesStore().items;
   const selectedCategory = categories.find((category) => {
     return category.slug === categorySlug;
   });
@@ -28,7 +29,7 @@ export const Category = observer(() => {
   };
 
   if (!categories.length) {
-    return <>...loading categories</>;
+    return <>...no categories</>;
   }
 
   if (!selectedCategory && categories.length > 0) {
@@ -65,12 +66,7 @@ export const loader = async ({ params }) => {
     spot_id_or_slug: params.spotSlug,
   });
 
-  await CategoriesStore.fetchItems({
-    spot_id_or_slug: params.spotSlug,
-  });
-
   return {
     products: toJS(ProductsStore.items),
-    categories: toJS(CategoriesStore.items),
   };
 };

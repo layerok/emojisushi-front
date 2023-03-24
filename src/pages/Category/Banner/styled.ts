@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { prop } from "styled-tools";
-import media from "../../common/custom-media";
+import media from "../../../common/custom-media";
 
 const Banner = styled.div`
   margin-top: 40px;

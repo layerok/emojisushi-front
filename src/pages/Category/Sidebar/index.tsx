@@ -1,9 +1,9 @@
 import * as S from "./styled";
-import { VerticalMenu } from "../VerticalMenu";
-import { useBreakpoint } from "~common/hooks/useBreakpoint";
-import { HorizontalMenu } from "../HorizontalMenu";
+import { VerticalMenu } from "./VerticalMenu";
+import { useIsDesktop, useIsMobile } from "~common/hooks/useBreakpoint";
+import { HorizontalMenu } from "./HorizontalMenu";
 import { FlexBox } from "~components/FlexBox";
-import { UnderVerticalMenu } from "../UnderVerticalMenu";
+import { UnderVerticalMenu } from "./UnderVerticalMenu";
 import { SortingPopover } from "~components/popovers/SortingPopover";
 import { observer } from "mobx-react";
 import { useDebounce } from "~common/hooks/useDebounce";
@@ -13,8 +13,8 @@ import { useCategoriesStore } from "~hooks/use-products-store";
 export const Sidebar = observer(() => {
   const ProductsStore = useProductsStore();
   const CategoriesStore = useCategoriesStore();
-  const breakpoint = useBreakpoint();
-  const isMobile = breakpoint === "mobile";
+  const isMobile = useIsMobile();
+  const isDesktop = useIsDesktop();
 
   const debouncedFetch = useDebounce((e) => {
     let filter =
@@ -44,7 +44,7 @@ export const Sidebar = observer(() => {
           value={ProductsStore.search}
         />
 
-        {breakpoint !== "pc" && (
+        {!isDesktop && (
           <FlexBox
             justifyContent={isMobile ? "space-between" : "flex-end"}
             style={{
@@ -64,7 +64,7 @@ export const Sidebar = observer(() => {
           </FlexBox>
         )}
       </FlexBox>
-      {breakpoint === "pc" ? (
+      {isDesktop ? (
         <>
           <VerticalMenu categories={CategoriesStore.items} />
           <UnderVerticalMenu />

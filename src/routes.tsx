@@ -2,6 +2,8 @@ import { Navigate } from "react-router-dom";
 import "normalize.css";
 import { ProtectedRoute } from "~components/ProtectedRoute";
 import { Layout } from "~layout/Layout";
+import { CategoriesStore } from "~stores";
+import { toJS } from "mobx";
 
 export const routes = [
   {
@@ -21,8 +23,23 @@ export const routes = [
             element: <Navigate to={"category"} />,
           },
           {
-            path: "category/:categorySlug?",
-            lazy: () => import("~pages/Category"),
+            path: "category",
+            loader: async ({ params }) => {
+              await CategoriesStore.fetchItems({
+                spot_id_or_slug: params.spotSlug,
+              });
+              return toJS(CategoriesStore.items);
+            },
+            children: [
+              {
+                index: true,
+                lazy: () => import("~pages/CategoryIndex"),
+              },
+              {
+                path: ":categorySlug",
+                lazy: () => import("~pages/Category"),
+              },
+            ],
           },
           {
             path: "thankyou",

@@ -1,9 +1,10 @@
-import { Layout } from "~layout/Layout";
 import { ProductsGrid } from "~components/ProductsGrid";
 import { observer } from "mobx-react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useProductsStore } from "~hooks/use-categories-store";
+
+// todo: fix layout for wishlist
 
 export const Wishlist = observer(() => {
   const ProductsStore = useProductsStore();
@@ -25,15 +26,13 @@ export const Wishlist = observer(() => {
   };
 
   return (
-    <Layout withRestaurantClosedModal={true}>
-      <ProductsGrid
-        loadable={ProductsStore.total > ProductsStore.items.length}
-        loading={ProductsStore.loading}
-        items={ProductsStore.items}
-        handleLoadMore={handleLoadMore}
-        title={t("common.favorite")}
-      />
-    </Layout>
+    <ProductsGrid
+      loadable={ProductsStore.total > ProductsStore.items.length}
+      loading={ProductsStore.loading}
+      items={ProductsStore.items}
+      handleLoadMore={handleLoadMore}
+      title={t("common.favorite")}
+    />
   );
 });
 
