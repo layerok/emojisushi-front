@@ -1,8 +1,8 @@
 export const theme = {
-    input: {
-        placeholder: "#616161"
-    },
-    link: {
-        active: '#FFE600'
-    }
-}
+  input: {
+    placeholder: "#616161",
+  },
+  link: {
+    active: "#FFE600",
+  },
+};

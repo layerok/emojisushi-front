@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import {prop} from "styled-tools";
+import { prop } from "styled-tools";
 
 const Options = styled.div`
   padding: 11px 25px 19px;
-  width: ${prop('width')};
-  background-color: ${prop('backgroundColor')};
+  width: ${prop("width")};
+  background-color: ${prop("backgroundColor")};
   border-radius: 0 0 15px 15px;
 `;
 
@@ -13,8 +13,4 @@ const Option = styled.div`
   cursor: pointer;
 `;
 
-
-export {
-    Options,
-    Option
-}
+export { Options, Option };

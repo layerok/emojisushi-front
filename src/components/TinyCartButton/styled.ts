@@ -16,18 +16,14 @@ const Icon = styled.div`
 `;
 
 const Price = styled.div`
-  position:relative;
-  background-color: #FFE600;
+  position: relative;
+  background-color: #ffe600;
   color: black;
   padding: 1px 8px;
   border-radius: 3px;
   min-width: 55px;
   text-align: center;
   z-index: 2;
-`
+`;
 
-export {
-    TinyCartButton,
-    Price,
-    Icon
-}
+export { TinyCartButton, Price, Icon };

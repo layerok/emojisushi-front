@@ -19,16 +19,10 @@ const Label = styled.span`
   height: 40px;
   display: flex;
   align-items: center;
-`
-
+`;
 
 const CaretDown = styled.div`
   flex-shrink: 0;
 `;
 
-export {
-    Container,
-    Icon,
-    Label,
-    CaretDown,
-}
+export { Container, Icon, Label, CaretDown };

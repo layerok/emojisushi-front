@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-
 const Wrapper = styled.div`
   margin-top: 10px;
 `;
@@ -17,14 +16,14 @@ const Label = styled.label`
   padding: 11px 33px;
   font-size: 15px;
   line-height: 18px;
-  
+
   &:hover {
     background: #393939;
   }
 `;
 
 const CheckBoxWrapper = styled.div`
-  background: #1C1C1C;
+  background: #1c1c1c;
   overflow: hidden;
   margin-top: 10px;
   margin-right: 10px;
@@ -39,10 +38,4 @@ const CheckBox = styled.input`
   }
 `;
 
-
-export {
-    CheckBox,
-    Label,
-    Wrapper,
-    CheckBoxWrapper,
-}
+export { CheckBox, Label, Wrapper, CheckBoxWrapper };

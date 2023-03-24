@@ -1,11 +1,13 @@
 import PhoneSrc from "../../../assets/ui/icons/phone.svg";
 
 export const PhoneIcon = () => {
-    return (
-
-        <img src={PhoneSrc} style={{
-            width: "25px"
-        }} alt="phone"/>
-
-    )
-}
+  return (
+    <img
+      src={PhoneSrc}
+      style={{
+        width: "25px",
+      }}
+      alt="phone"
+    />
+  );
+};

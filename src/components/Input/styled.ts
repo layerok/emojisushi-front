@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import {ifProp, theme, prop} from "styled-tools";
-
+import { ifProp, theme, prop } from "styled-tools";
 
 const Wrapper = styled.div`
   position: relative;
@@ -12,23 +11,23 @@ const Input = styled.input`
   border-radius: 10px;
   padding: 11px 35px 11px 10px;
   border: none;
-  width: ${prop("width","100%")};
+  width: ${prop("width", "100%")};
   color: white;
 
   ::-webkit-input-placeholder {
-    color: ${theme('input.placeholder', '#616161')};
+    color: ${theme("input.placeholder", "#616161")};
   }
 
   ::-moz-placeholder {
-    color: ${theme('input.placeholder', '#616161')};
+    color: ${theme("input.placeholder", "#616161")};
   }
 
   :-ms-input-placeholder {
-    color: ${theme('input.placeholder', '#616161')};
+    color: ${theme("input.placeholder", "#616161")};
   }
 
   :-moz-placeholder {
-    color: ${theme('input.placeholder', '#616161')};
+    color: ${theme("input.placeholder", "#616161")};
   }
 `;
 
@@ -38,22 +37,16 @@ const Asterisk = styled.div`
   left: 0;
 `;
 
-const Error = styled.p` 
-  
+const Error = styled.p`
   font-size: 10px;
   line-height: 12px;
   padding: 2px 5px;
-  background-color: #CD3838;
+  background-color: #cd3838;
   color: white;
   user-select: none;
   position: absolute;
   right: 0;
-  z-index: 3
-`
+  z-index: 3;
+`;
 
-export {
-    Input,
-    Wrapper,
-    Asterisk,
-    Error
-}
+export { Input, Wrapper, Asterisk, Error };

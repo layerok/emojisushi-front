@@ -1,7 +1,7 @@
-import {ICartProduct} from "~api/cart.api.types";
-import {makeAutoObservable} from "mobx";
-import {Product} from "~models/Product";
-import {Variant} from "~models/Variant";
+import { ICartProduct } from "~api/cart.api.types";
+import { makeAutoObservable } from "mobx";
+import { Product } from "~models/Product";
+import { Variant } from "~models/Variant";
 
 export class CartProduct {
   json: ICartProduct;
@@ -23,7 +23,7 @@ export class CartProduct {
   }
 
   get variant() {
-    return this.json.variant ? new Variant(this.json.variant): undefined;
+    return this.json.variant ? new Variant(this.json.variant) : undefined;
   }
 
   get productId() {
@@ -31,7 +31,7 @@ export class CartProduct {
   }
 
   get variantId() {
-    return this.json.variant_id
+    return this.json.variant_id;
   }
 
   get nameWithMods() {
@@ -39,5 +39,4 @@ export class CartProduct {
       return acc + " " + property.value;
     }, this.product.name as string);
   }
-
 }

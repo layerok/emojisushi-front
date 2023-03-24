@@ -6,23 +6,22 @@ const Heading = styled.p`
   font-size: 25px;
   line-height: 30px;
 
-  color: #FFFFFF;
-
-`
+  color: #ffffff;
+`;
 
 export const IconWrapper = styled.div`
   display: flex;
   ${media.lessThan("pc")`
     margin-bottom: 10px;
   `}
-`
+`;
 
 const AddressWrapper = styled.div`
-    margin-top: 20px;
+  margin-top: 20px;
   display: flex;
   :first-child {
-      margin-top: 30px;
-    }
+    margin-top: 30px;
+  }
   ${media.lessThan("pc")`
     display: flex;
     flex-direction: column-reverse;
@@ -30,13 +29,9 @@ const AddressWrapper = styled.div`
     :first-child {
     margin-top: 20px;
   `}
-`
+`;
 const ButtonWrapper = styled.div`
   margin-top: 30px;
-`
+`;
 
-export {
-    Heading,
-    AddressWrapper,
-    ButtonWrapper,
-}
+export { Heading, AddressWrapper, ButtonWrapper };

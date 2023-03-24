@@ -14,7 +14,4 @@ const IconBtn = styled.button`
   padding: 0;
 `;
 
-export {
-    Search,
-    IconBtn,
-}
+export { Search, IconBtn };

@@ -5,11 +5,7 @@ const Heading = styled.p`
   font-size: 25px;
   line-height: 30px;
 
-  color: #FFFFFF;
+  color: #ffffff;
+`;
 
-`
-
-
-export {
-    Heading,
-}
+export { Heading };

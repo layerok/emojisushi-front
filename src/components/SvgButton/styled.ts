@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Box = styled.div`
-  background-color: #FFE600;
+  background-color: #ffe600;
   box-shadow: 0 0 15px rgba(255, 230, 0, 0.5);
   border-radius: 5px;
   width: 40px;
@@ -11,6 +11,4 @@ const Box = styled.div`
   justify-content: center;
 `;
 
-export {
-    Box
-}
+export { Box };

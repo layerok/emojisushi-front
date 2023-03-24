@@ -17,7 +17,7 @@ const Delimiter = styled.div`
   background-color: #000;
   margin-right: 15px;
   flex-shrink: 0;
-`
+`;
 
 const Count = styled.div`
   font-size: 20px;
@@ -25,9 +25,4 @@ const Count = styled.div`
   align-items: center;
 `;
 
-export {
-    Price,
-    Delimiter,
-    Count,
-    Icon
-}
+export { Price, Delimiter, Count, Icon };

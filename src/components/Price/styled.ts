@@ -6,19 +6,14 @@ const OldPrice = styled.div`
   line-height: 18px;
   text-decoration-line: line-through;
   color: #838383;
-`
+`;
 
 const NewPrice = styled.div`
   font-weight: 700;
   font-size: 20px;
   line-height: 24px;
 
-  color: #FFFFFF;
+  color: #ffffff;
 `;
 
-
-export {
-    OldPrice,
-    NewPrice
-}
-
+export { OldPrice, NewPrice };

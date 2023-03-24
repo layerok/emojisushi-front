@@ -1,5 +1,5 @@
-import {Nullable} from "~common/types";
-import {IPrice} from "~api/shipping.api.types";
+import { Nullable } from "~common/types";
+import { IPrice } from "~api/shipping.api.types";
 
 export type ICategory = {
   id: number;
@@ -23,12 +23,12 @@ export type ICategory = {
   description_short: string;
   poster_id: number;
   published: boolean;
-}
+};
 
 export type IOption = {
   value: string;
   poster_id: string;
-}
+};
 
 export type IProperty = {
   id: number;
@@ -41,7 +41,7 @@ export type IProperty = {
   updated_at: Nullable<string>;
   deleted_at: Nullable<string>;
   poster_id: number;
-}
+};
 
 export type IPropertyValue = {
   id: number;
@@ -52,8 +52,8 @@ export type IPropertyValue = {
   index_value: string;
   created_at: Nullable<string>;
   updated_at: Nullable<string>;
-  property: IProperty
-}
+  property: IProperty;
+};
 
 export type IVariant = {
   id: number;
@@ -83,7 +83,7 @@ export type IVariant = {
   prices: IPrice[];
   property_values: IPropertyValue[];
   additional_prices: IPrice[];
-}
+};
 
 export type IImage = {
   id: number;
@@ -99,7 +99,7 @@ export type IImage = {
   updated_at: Nullable<string>;
   path: string;
   extension: string;
-}
+};
 
 export type IImageSet = {
   id: number;
@@ -109,7 +109,7 @@ export type IImageSet = {
   created_at: Nullable<string>;
   updated_at: Nullable<string>;
   images: IImage[];
-}
+};
 
 export type IProduct = {
   id: number;
@@ -135,7 +135,7 @@ export type IProduct = {
   stock: Nullable<number>;
   reviews_rating: Nullable<string>;
   links: Nullable<any[]>; // jsonable
-  inventory_management_method: 'single' | 'variant';
+  inventory_management_method: "single" | "variant";
   allow_out_of_stock_purchases: boolean;
   stackable: boolean;
   shippable: boolean;
@@ -157,11 +157,11 @@ export type IProduct = {
   poster_type: Nullable<string>;
   hash_id: string;
   variants: IVariant[];
-  property_values: IPropertyValue[]
+  property_values: IPropertyValue[];
   image_sets: IImageSet[];
   additional_prices: IPrice[];
   prices: IPrice[];
-}
+};
 
 export type IFilter = {
   id: number;
@@ -180,9 +180,8 @@ export type IFilter = {
     use_for_variants: 0 | 1;
     filter_type: string;
     sort_order: Nullable<number>;
-  }
-}
-
+  };
+};
 
 export type IGetCategoriesParams = {
   offset?: number;

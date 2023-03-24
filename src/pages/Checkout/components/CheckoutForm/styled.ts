@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Form = styled.form`
-width: 350px;
+  width: 350px;
 `;
 
 const Control = styled.div`
@@ -15,7 +15,7 @@ const Total = styled.div`
 `;
 
 const ErrorBag = styled.ol`
-  background: #CD3838;
+  background: #cd3838;
   box-shadow: 0 0 15px rgba(34, 34, 34, 0.3);
   border-radius: 10px;
   padding: 12px 12px 12px 28px;
@@ -30,14 +30,8 @@ const ErrorBag = styled.ol`
 `;
 
 const SignIn = styled.p`
-  color: #FFE600;
+  color: #ffe600;
   margin-left: 5px;
-`
+`;
 
-export {
-    Form,
-    Control,
-    ErrorBag,
-    Total,
-    SignIn,
-}
+export { Form, Control, ErrorBag, Total, SignIn };

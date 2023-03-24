@@ -21,7 +21,7 @@ client.interceptors.request.use((config = {}) => {
   const { method } = config;
 
   const params: IParams = {};
-  
+
   const session_id = Cookies.get("session_id");
 
   if (session_id) {
@@ -33,7 +33,7 @@ client.interceptors.request.use((config = {}) => {
     params.spot_id = spot_id;
   }
 
-  if (process.env.REACT_APP_XDEBUG_SESSION_START === 'true') {
+  if (process.env.REACT_APP_XDEBUG_SESSION_START === "true") {
     params.XDEBUG_SESSION_START = true;
   }
 

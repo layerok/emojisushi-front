@@ -9,4 +9,4 @@ export type IPaymentMethod = {
   fee_label: null | string;
   fee_percentage: null | number;
   pdf_partial: null | string;
-}
+};

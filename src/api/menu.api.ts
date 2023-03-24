@@ -1,8 +1,13 @@
 import { client } from "~clients/client";
 import { AxiosResponse } from "axios";
-import { ICategory, IFilter, IGetCategoriesParams, IGetProductsParams, IProduct } from "~api/menu.api.types";
+import {
+  ICategory,
+  IFilter,
+  IGetCategoriesParams,
+  IGetProductsParams,
+  IProduct,
+} from "~api/menu.api.types";
 import { Nullable } from "~common/types";
-
 
 class Menu {
   getProducts(params: IGetProductsParams = {}): Promise<

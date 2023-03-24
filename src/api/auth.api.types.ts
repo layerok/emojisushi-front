@@ -1,7 +1,7 @@
-import {IPrice, IShippingMethod} from "~api/shipping.api.types";
-import {IPaymentMethod} from "~api/payment.api.types";
-import {Nullable} from "~common/types";
-import {IProduct} from "~api/menu.api.types";
+import { IPrice, IShippingMethod } from "~api/shipping.api.types";
+import { IPaymentMethod } from "~api/payment.api.types";
+import { Nullable } from "~common/types";
+import { IProduct } from "~api/menu.api.types";
 
 export type IRainLabUser = {
   id: number;
@@ -21,14 +21,14 @@ export type IRainLabUser = {
   is_superuser: 0 | 1;
   created_ip_address: Nullable<string>;
   last_ip_address: Nullable<string>;
-}
+};
 
 type IState = {
   id: number;
   name: string;
   code: string;
   country: ICountry;
-}
+};
 
 type ICountry = {
   id: number;
@@ -37,7 +37,7 @@ type ICountry = {
   code: string;
   is_pinned: 0 | 1;
   calling_code: string;
-}
+};
 
 export type IAddress = {
   id: number;
@@ -50,7 +50,7 @@ export type IAddress = {
   state_id: Nullable<IState>;
   country_id: number;
   details: Nullable<string>;
-}
+};
 
 export type IOrderCurrency = {
   id: number;
@@ -63,8 +63,8 @@ export type IOrderCurrency = {
   is_default: boolean;
   created_at: string;
   updated_at: string;
-  rounding: unknown;// todo: check type
-}
+  rounding: unknown; // todo: check type
+};
 
 export type IOrderProduct = {
   id: number;
@@ -93,16 +93,16 @@ export type IOrderProduct = {
   property_description: Nullable<any[]>; //  jsonable
   service_options: Nullable<any[]>; // jsonable
   custom_field_values: any[]; // jsonable
-  brand: Nullable<any[]>
+  brand: Nullable<any[]>;
   taxes: any[]; // jsonable
   item: IProduct & {
-    price: IPrice
+    price: IPrice;
   };
-  created_at: Nullable<string>
+  created_at: Nullable<string>;
   updated_at: Nullable<string>;
   deleted_at: Nullable<string>;
   product: IProduct;
-}
+};
 
 enum ORDER_STATES {
   NEW = 1,
@@ -115,17 +115,17 @@ enum ORDER_STATES {
 export type IOrder = {
   id: number;
   session_id: Nullable<string>;
-  order_number: Nullable<number>
+  order_number: Nullable<number>;
   invoice_number: Nullable<string>;
   currency: IOrderCurrency;
   payment_state: string;
   order_state_id: ORDER_STATES;
   shipping_address_same_as_billing: Nullable<boolean>;
-  billing_address:  Nullable<IAddress>;
+  billing_address: Nullable<IAddress>;
   shipping_address: Nullable<IAddress>;
   custom_fields: any[]; //jsonable
   shipping: null | {
-    method: IShippingMethod, // todo: extend this type
+    method: IShippingMethod; // todo: extend this type
     preTaxes: number;
     taxes: number;
     total: number;
@@ -133,15 +133,15 @@ export type IOrder = {
   };
   taxes: any[]; // jsonable
   payment: {
-    method: IPaymentMethod,
+    method: IPaymentMethod;
     preTaxes: number;
     taxes: number;
     total: number;
-  }
-  discounts: any[];// jsonable
-  payment_method_id: Nullable<number>
+  };
+  discounts: any[]; // jsonable
+  payment_method_id: Nullable<number>;
   payment_id: Nullable<string>;
-  payment_hash: Nullable<string>
+  payment_hash: Nullable<string>;
   total_shipping_pre_taxes: Nullable<number>;
   total_shipping_taxes: Nullable<number>;
   total_shipping_post_taxes: Nullable<number>;
@@ -165,9 +165,9 @@ export type IOrder = {
   total_weight: Nullable<number>;
   customer_notes: Nullable<string>;
   admin_notes: Nullable<string>;
-  payment_transaction_id: Nullable<string>
+  payment_transaction_id: Nullable<string>;
   ip_address: Nullable<string>;
-  customer_id: Nullable<number>
+  customer_id: Nullable<number>;
   paid_at: Nullable<string>;
   delete_at: Nullable<string>;
   updated_at: Nullable<string>;
@@ -176,7 +176,7 @@ export type IOrder = {
   customer_payment_method_id: Nullable<number>;
   products: IOrderProduct[];
   order_state: IOrderState;
-}
+};
 
 export type IOrderState = {
   id: number;
@@ -188,7 +188,7 @@ export type IOrderState = {
   created_at: Nullable<string>;
   updated_at: Nullable<string>;
   deleted_at: Nullable<string>;
-}
+};
 
 export type IOfflineMallCustomer = {
   firstname: string;
@@ -196,12 +196,12 @@ export type IOfflineMallCustomer = {
   is_guest: boolean;
   default_shipping_address_id: number | null;
   default_billing_address_id: number | null;
-  addresses: IAddress[]
-  orders: IOrder[]
-}
+  addresses: IAddress[];
+  orders: IOrder[];
+};
 
 export type IOfflineMallUser = IRainLabUser & {
   offline_mall_customer_group_id: number | null;
   phone: string | null;
   customer: IOfflineMallCustomer | null;
-}
+};

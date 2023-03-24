@@ -1,44 +1,45 @@
-import {makeAutoObservable} from "mobx";
+import { makeAutoObservable } from "mobx";
 import ShippingApi from "../api/shipping.api";
-import {RootStore} from "~stores/stores";
-import {IShippingMethod} from "~api/shipping.api.types";
+import { RootStore } from "~stores/stores";
+import { IShippingMethod } from "~api/shipping.api.types";
 
 export class ShippingStore {
+  rootStore: RootStore;
+  constructor(rootStore) {
+    makeAutoObservable(this, {
+      rootStore: false,
+    });
+    this.rootStore = rootStore;
+  }
 
-    rootStore: RootStore;
-    constructor(rootStore) {
-        makeAutoObservable(this, {
-            rootStore: false
-        });
-        this.rootStore = rootStore;
-    }
+  loading = false;
+  items: IShippingMethod[] = [];
+  selectedId = null;
 
-    loading = false;
-    items: IShippingMethod[] = [];
-    selectedId = null;
+  setSelectedId = (id) => {
+    this.selectedId = id;
+  };
 
-    setSelectedId = (id) => {
-        this.selectedId = id;
-    }
+  getSelectedMethod() {
+    return this.items.find((item) => item.id === this.selectedId);
+  }
 
-    getSelectedMethod() {
-        return this.items.find((item) => item.id === this.selectedId);
-    }
+  setLoading = (state) => {
+    this.loading = state;
+  };
 
-    setLoading = (state) => {
-        this.loading = state;
-    }
+  setItems = (items) => {
+    this.items = items;
+  };
 
-    setItems = (items) => {
-        this.items = items;
-    }
-
-    fetchItems = (params = {}) => {
+  fetchItems = (params = {}) => {
+    this.setLoading(false);
+    return ShippingApi.getMethods(params)
+      .then((res) => {
+        this.setItems(res.data.data);
+      })
+      .finally(() => {
         this.setLoading(false);
-        return ShippingApi.getMethods(params).then((res) => {
-            this.setItems(res.data.data);
-        }).finally(() => {
-            this.setLoading(false);
-        })
-    }
+      });
+  };
 }

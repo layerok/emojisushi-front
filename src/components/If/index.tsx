@@ -3,12 +3,10 @@ import { ReactNode } from "react";
 
 export const If = ({
   children,
-  condition
-                   }: {
-  children?: ReactNode,
-  condition: boolean
+  condition,
+}: {
+  children?: ReactNode;
+  condition: boolean;
 }) => {
-  return <>
-    {condition ? children: null}
-  </>
-}
+  return <>{condition ? children : null}</>;
+};

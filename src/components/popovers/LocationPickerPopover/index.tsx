@@ -25,14 +25,21 @@ export const LocationPickerPopoverRaw = ({
   const selectedSpot = useSpot();
   const selectedCity = useCity();
 
-  const options = cities.map((city) => city.spots.map((spot) => ({
-    name: city.name + ', ' + spot.name,
-    id: city.id + '-' + spot.id,
-    city: city,
-    spot: spot
-  }))).flat()
+  const options = cities
+    .map((city) =>
+      city.spots.map((spot) => ({
+        name: city.name + ", " + spot.name,
+        id: city.id + "-" + spot.id,
+        city: city,
+        spot: spot,
+      }))
+    )
+    .flat();
 
-  const selectedOption = options.find(option => option.city.id === selectedCity.id && option.spot.id === selectedSpot.id);
+  const selectedOption = options.find(
+    (option) =>
+      option.city.id === selectedCity.id && option.spot.id === selectedSpot.id
+  );
   const selectedIndex = options.indexOf(selectedOption);
   return (
     <>
@@ -43,7 +50,9 @@ export const LocationPickerPopoverRaw = ({
         options={options}
         selectedIndex={selectedIndex}
         onSelect={({ close, option, index }) => {
-          navigate("/" + option.city.slug + '/' + option.spot.slug + "/category/roli");
+          navigate(
+            "/" + option.city.slug + "/" + option.spot.slug + "/category/roli"
+          );
           close();
         }}
       >

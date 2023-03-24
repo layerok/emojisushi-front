@@ -1,4 +1,4 @@
-import {IProduct, IVariant} from "~api/menu.api.types";
+import { IProduct, IVariant } from "~api/menu.api.types";
 
 export type ICartProduct = {
   quantity: number;
@@ -9,4 +9,4 @@ export type ICartProduct = {
   product_id: number;
 
   variant_id?: number;
-}
+};

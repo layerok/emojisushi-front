@@ -1,4 +1,4 @@
-import {createMutableSource, useMutableSource} from "~common/mutableSource";
+import { createMutableSource, useMutableSource } from "~common/mutableSource";
 
 // read this for an explanation https://dev.to/aslemammad/react-context-without-provider-usemutablesource-4aph
 
@@ -6,9 +6,9 @@ const createStore = (state) => {
   return {
     state: state,
     version: 0,
-    listeners: new Set<() => any>()
+    listeners: new Set<() => any>(),
   };
-}
+};
 
 const cache = new Map();
 
@@ -31,7 +31,10 @@ const getSnapshot = (store: ReturnType<typeof createStore>) => {
 
   return cache.get(store.state) as [typeof store.state, typeof setState];
 };
-const subscribe = (store: ReturnType<typeof createStore>, callback: () => void) => {
+const subscribe = (
+  store: ReturnType<typeof createStore>,
+  callback: () => void
+) => {
   store.listeners.add(callback);
   return () => store.listeners.delete(callback);
 };
@@ -48,27 +51,26 @@ export const createProviderLessContextHook = (initialValue) => {
 
   const store = createStore(state);
 
-  const source = createMutableSource(
-    store,
-    (store) => store.version
-  );
+  const source = createMutableSource(store, (store) => store.version);
 
   return () => {
-    const [_state, _setState] = useMutableSource(source, getSnapshot, subscribe);
+    const [_state, _setState] = useMutableSource(
+      source,
+      getSnapshot,
+      subscribe
+    );
 
     const setState = (valueOrCb) => {
-      if(typeof valueOrCb === 'function') {
+      if (typeof valueOrCb === "function") {
         _setState(() => ({
-          value: valueOrCb(_state.value)
+          value: valueOrCb(_state.value),
         }));
       } else {
         _setState(() => ({
-          value: valueOrCb
+          value: valueOrCb,
         }));
       }
-
-    }
+    };
     return [_state.value, setState];
-  }
-}
-
+  };
+};

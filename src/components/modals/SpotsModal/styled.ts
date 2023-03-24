@@ -1,5 +1,5 @@
-import styled, {css} from "styled-components";
-import {ifProp} from "styled-tools";
+import styled, { css } from "styled-components";
+import { ifProp } from "styled-tools";
 
 const Wrapper = styled.div`
   display: flex;
@@ -30,14 +30,16 @@ const Item = styled.div`
   margin-top: 15px;
   font-size: 15px;
   line-height: 18px;
-  
-  ${ifProp('selected', css`
-    font-weight: 500;
-    color: #FFE600;
-  `)}
-  cursor: pointer
 
-`
+  ${ifProp(
+    "selected",
+    css`
+      font-weight: 500;
+      color: #ffe600;
+    `
+  )}
+  cursor: pointer
+`;
 
 const CheckboxWrapper = styled.div`
   display: flex;
@@ -46,11 +48,4 @@ const CheckboxWrapper = styled.div`
   padding-top: 30px;
 `;
 
-export {
-    Wrapper,
-    Text,
-    FilterMagnifier,
-    CheckboxWrapper,
-    Content,
-    Item
-}
+export { Wrapper, Text, FilterMagnifier, CheckboxWrapper, Content, Item };

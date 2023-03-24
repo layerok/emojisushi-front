@@ -7,6 +7,7 @@ import { toJS } from "mobx";
 import { Sidebar } from "~pages/Category/Sidebar";
 import { Banner } from "~layout/Banner";
 import { FlexBox } from "~components/FlexBox";
+import { useIsDesktop } from "~common/hooks/useBreakpoint";
 
 export const Category = observer(() => {
   const ProductsStore = useProductsStore();
@@ -16,6 +17,7 @@ export const Category = observer(() => {
     return category.slug === categorySlug;
   });
   const title = selectedCategory?.name;
+  const isDesktop = useIsDesktop();
 
   const handleLoadMore = () => {
     const settings = {
@@ -36,7 +38,7 @@ export const Category = observer(() => {
   return (
     <>
       {false && <Banner />}
-      <FlexBox>
+      <FlexBox flexDirection={isDesktop ? "row" : "column"}>
         <Sidebar />
         <ProductsGrid
           handleLoadMore={handleLoadMore}

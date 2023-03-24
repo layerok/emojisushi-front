@@ -13,6 +13,4 @@ const Container = styled.div`
   `}
 `;
 
-export {
-    Container
-}
+export { Container };

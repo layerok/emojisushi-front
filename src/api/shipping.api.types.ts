@@ -1,4 +1,4 @@
-import {Nullable} from "~common/types";
+import { Nullable } from "~common/types";
 
 export type ICurrency = {
   id: number;
@@ -6,8 +6,7 @@ export type ICurrency = {
   symbol: string;
   rate: number;
   decimals: number;
-}
-
+};
 
 export type IPrice = {
   id: number;
@@ -18,7 +17,7 @@ export type IPrice = {
     sort_order: number;
     code: string;
   }>;
-}
+};
 
 export type IShippingMethod = {
   id: number;
@@ -29,5 +28,5 @@ export type IShippingMethod = {
   price_includes_tax: boolean;
   code: string;
   price_formatted: string | null;
-  prices: IPrice[]
-}
+  prices: IPrice[];
+};

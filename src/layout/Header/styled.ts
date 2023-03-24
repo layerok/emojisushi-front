@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import {Link as LinkBase} from "react-router-dom";
+import { Link as LinkBase } from "react-router-dom";
 import media from "../../common/custom-media";
 
 const Header = styled.header`
@@ -10,7 +10,7 @@ const Header = styled.header`
   display: flex;
   align-items: center;
   flex-shrink: 0;
-`
+`;
 
 const Link = styled(LinkBase)`
   margin-right: 95px;
@@ -21,20 +21,19 @@ const Left = styled.div`
 `;
 
 const Right = styled.div`
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 `;
 
 const PcHeaderItem = styled.div`
   margin-right: 60px;
-  display:flex;
+  display: flex;
   align-items: center;
-  
+
   ${media.lessThan("pc")`
         display: none;
-    `
-  }
-`
+    `}
+`;
 
 const CartBtn = styled.div`
   ${media.lessThan("tablet")`
@@ -72,18 +71,17 @@ const LanguageSelectorContainer = styled.div`
   ${media.lessThan("tablet")`
     display: none;
   `}
-`
+`;
 
 export {
-    Header,
-    Left,
-    Right,
-    Link,
-    PcHeaderItem,
-    BurgerBtn,
-    CartBtn,
-    TinyCartBtn,
-    UserBtn,
-    LanguageSelectorContainer,
-
-}
+  Header,
+  Left,
+  Right,
+  Link,
+  PcHeaderItem,
+  BurgerBtn,
+  CartBtn,
+  TinyCartBtn,
+  UserBtn,
+  LanguageSelectorContainer,
+};

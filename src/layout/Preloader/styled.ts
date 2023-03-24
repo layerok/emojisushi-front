@@ -13,6 +13,4 @@ const Container = styled.div`
   align-items: center;
 `;
 
-export {
-    Container,
-}
+export { Container };

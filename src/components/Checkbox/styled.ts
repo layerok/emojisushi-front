@@ -17,7 +17,7 @@ const LabelCheckbox = styled.div`
   flex-shrink: 0;
   position: relative;
   user-select: none;
-  border-radius: 5px
+  border-radius: 5px;
 `;
 
 const Checkbox = styled.input`
@@ -29,7 +29,7 @@ const Text = styled.p`
   font-weight: 400;
   font-size: 11px;
   line-height: 13px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-left: 10px;
 `;
 
@@ -37,19 +37,13 @@ const Error = styled.div`
   font-size: 10px;
   line-height: 12px;
   padding: 2px 5px;
-  background-color: #CD3838;
+  background-color: #cd3838;
   color: white;
   user-select: none;
   position: absolute;
   right: 0;
   top: 100%;
   z-index: 3;
-`
+`;
 
-export {
-    Checkbox,
-    LabelCheck,
-    Text,
-    LabelCheckbox,
-    Error
-}
+export { Checkbox, LabelCheck, Text, LabelCheckbox, Error };

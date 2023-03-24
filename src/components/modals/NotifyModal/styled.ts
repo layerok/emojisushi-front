@@ -7,7 +7,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   width: 338px;
-  ${media.lessThan('pc')`
+  ${media.lessThan("pc")`
     width: 310px;
   `}
 `;
@@ -25,12 +25,7 @@ const Subtitle = styled.div`
 `;
 
 const Button = styled.div`
-    margin-top: 20px;
+  margin-top: 20px;
 `;
 
-export {
-    Container,
-    Title,
-    Subtitle,
-    Button,
-}
+export { Container, Title, Subtitle, Button };

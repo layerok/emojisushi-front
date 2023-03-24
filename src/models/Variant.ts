@@ -1,5 +1,5 @@
-import {IVariant} from "~api/menu.api.types";
-import {makeAutoObservable} from "mobx";
+import { IVariant } from "~api/menu.api.types";
+import { makeAutoObservable } from "mobx";
 
 export class Variant {
   json: IVariant;
@@ -17,7 +17,7 @@ export class Variant {
   }
 
   get propertyValues() {
-    return this.json.property_values || []
+    return this.json.property_values || [];
   }
 
   get posterId() {
@@ -25,14 +25,16 @@ export class Variant {
   }
 
   get prices() {
-    return this.json.prices || []
+    return this.json.prices || [];
   }
 
   get oldPrice() {
-    return this.additionalPrices.length > 0 ? this.additionalPrices[0].price_formatted: undefined;
+    return this.additionalPrices.length > 0
+      ? this.additionalPrices[0].price_formatted
+      : undefined;
   }
 
   get newPrice() {
-    return this.prices.length > 0 ? this.prices[0].price_formatted: undefined;
+    return this.prices.length > 0 ? this.prices[0].price_formatted : undefined;
   }
 }

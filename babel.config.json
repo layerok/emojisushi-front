@@ -1,14 +1,10 @@
 {
-  "presets": [
-    "react-app"
-  ],
+  "presets": ["react-app"],
   "plugins": [
     [
       "module-resolver",
       {
-        "root": [
-          "./"
-        ],
+        "root": ["./"],
         "alias": {
           "^~(.+)": "./src/\\1"
         },

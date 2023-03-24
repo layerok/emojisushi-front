@@ -1,15 +1,15 @@
 import styled from "styled-components";
-import {prop} from "styled-tools";
+import { prop } from "styled-tools";
 import media from "../../../common/custom-media";
 
 const Wrapper = styled.div`
   position: relative;
   width: 420px;
-  background: #1C1C1C;
+  background: #1c1c1c;
   box-shadow: 0 4px 15px rgba(28, 28, 28, 0.3);
   border-radius: 15px 0 0 15px;
-  
-  ${media.lessThan('tablet')`
+
+  ${media.lessThan("tablet")`
     border-radius: 15px 15px 0 0;
     width: 375px;
   `}
@@ -24,8 +24,7 @@ const Title = styled.div`
   font-size: 18px;
   line-height: 22px;
   text-transform: uppercase;
-  
-`
+`;
 
 const CloseIcon = styled.div`
   position: absolute;
@@ -33,7 +32,7 @@ const CloseIcon = styled.div`
   top: 33px;
   cursor: pointer;
 
-  ${media.lessThan('tablet')`
+  ${media.lessThan("tablet")`
     right: 20px;
     left: auto;
   `}
@@ -50,8 +49,8 @@ const Item = styled.div`
   display: flex;
   padding-bottom: 20px;
   margin-top: 20px;
-  border-bottom: 1px solid #4A4A4A;
-  
+  border-bottom: 1px solid #4a4a4a;
+
   &:first-child {
     margin-top: 0;
   }
@@ -74,7 +73,6 @@ Item.Info = styled.div`
   margin-left: 10px;
   width: 100%;
   padding-right: 20px;
-  
 `;
 
 Item.Name = styled.div`
@@ -84,8 +82,8 @@ Item.Name = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   width: 220px;
-  
-  ${media.lessThan('tablet')`
+
+  ${media.lessThan("tablet")`
     width: 186px;
   `}
 `;
@@ -99,11 +97,11 @@ Item.RemoveIcon = styled.div`
   position: absolute;
   right: 20px;
   top: 0;
-`
+`;
 
 const Footer = styled.div`
-    margin-top: 30px;
-  padding-right: 20px
+  margin-top: 30px;
+  padding-right: 20px;
 `;
 
 const Sum = styled.div`
@@ -122,16 +120,16 @@ const EmptyCartImgContainer = styled.div`
   flex-direction: column;
   position: relative;
   top: 200px;
-`
+`;
 
 export {
-    Wrapper,
-    Title,
-    CloseIcon,
-    Items,
-    Item,
-    Footer,
-    Sum,
-    Button,
-    EmptyCartImgContainer,
-}
+  Wrapper,
+  Title,
+  CloseIcon,
+  Items,
+  Item,
+  Footer,
+  Sum,
+  Button,
+  EmptyCartImgContainer,
+};

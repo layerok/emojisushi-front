@@ -10,17 +10,14 @@ const Layout = styled.div`
 `;
 
 const Main = styled.main`
-  display: flex;
-  flex-direction: column;
   flex-grow: 1;
-`
+`;
 
 const Content = styled.div`
   width: 100%;
   margin-bottom: 50px;
   margin-top: 50px;
   ${media.lessThan("pc")`
-        flex-direction: column;
         margin-top: 60px;
     `}
 
@@ -29,8 +26,4 @@ const Content = styled.div`
     `}
 `;
 
-export {
-    Layout,
-    Main,
-    Content
-}
+export { Layout, Main, Content };

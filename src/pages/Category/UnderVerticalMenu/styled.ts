@@ -1,5 +1,5 @@
-import styled, {css} from "styled-components";
-import {ifProp, theme} from "styled-tools";
+import styled, { css } from "styled-components";
+import { ifProp, theme } from "styled-tools";
 
 const Favorite = styled.li`
   font-size: 16px;
@@ -16,37 +16,35 @@ const Favorite = styled.li`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  
+
   &:hover {
-    color: ${theme('link.active')}
+    color: ${theme("link.active")};
   }
 
-  ${ifProp('active', css`
-    color: ${theme('link.active')};
-  `)}
-`
+  ${ifProp(
+    "active",
+    css`
+      color: ${theme("link.active")};
+    `
+  )}
+`;
 
 const Text = styled.p`
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 400;
   font-size: 16px;
   margin-top: 20px;
   margin-bottom: 15px;
-`
+`;
 
 const OneSvg = styled.a`
   margin-right: 10px;
   display: inline-block;
-`
+`;
 
 const SvgContainer = styled.div`
   display: flex;
   margin-right: 10px;
-`
+`;
 
-export {
-    Favorite,
-    Text,
-    SvgContainer,
-    OneSvg
-}
+export { Favorite, Text, SvgContainer, OneSvg };

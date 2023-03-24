@@ -5,36 +5,32 @@ const DeliveryText = styled.p`
   font-size: 15px;
   font-weight: 400;
   line-height: 18px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-top: 10px;
   width: 100%;
   ${media.lessThan("pc")`
         width: 100%;
         margin-top: 30px;
         margin-bottom: 30px;
-    `
-  }
-  
+    `}
 `;
 
 const AdresText = styled.p`
   font-size: 15px;
   font-weight: 400;
   line-height: 18px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-top: 10px;
   width: 100%;
 
   ${media.greaterThan("tablet")`
         width: 500px;
-    `
-  }
-  
+    `}
+
   ${media.greaterThan("pc")`
         width: 700px;
         margin-top: 15px;   
-    `
-}
+    `}
 `;
 
 const Left = styled.div`
@@ -43,15 +39,13 @@ const Left = styled.div`
   width: 100%;
   ${media.greaterThan("pc")`
         width: 500px;
-    `
-  }
+    `}
 `;
 
 const Right = styled.div`
   ${media.greaterThan("pc")`
         width: 540px;
-    `
-  }
+    `}
 `;
 
 const FlexContainer = styled.div`
@@ -60,22 +54,13 @@ const FlexContainer = styled.div`
   margin-top: 30px;
   ${media.lessThan("pc")`
         flex-direction: column;
-    `
-  }
+    `}
 `;
 const HeadingWrapper = styled.div`
   margin-bottom: 20px;
   ${media.lessThan("pc")`
         margin-bottom: 0;
-    `
-  }
+    `}
 `;
 
-export {
-    DeliveryText,
-    Left,
-    Right,
-    FlexContainer,
-    HeadingWrapper,
-    AdresText
-}
+export { DeliveryText, Left, Right, FlexContainer, HeadingWrapper, AdresText };

@@ -8,9 +8,7 @@ const Wrapper = styled.div`
   padding: 10px;
 `;
 
-const Title = styled.div`
-
-`;
+const Title = styled.div``;
 
 const List = styled.ul`
   margin-top: 15px;
@@ -21,7 +19,7 @@ const ListItem = styled.li`
   font-size: 13px;
   line-height: 16px;
   position: relative;
-  
+
   :before {
     content: "";
     position: absolute;
@@ -34,10 +32,4 @@ const ListItem = styled.li`
   }
 `;
 
-
-export {
-    Wrapper,
-    Title,
-    List,
-    ListItem
-}
+export { Wrapper, Title, List, ListItem };

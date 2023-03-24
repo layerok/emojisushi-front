@@ -7,6 +7,7 @@ const Center = styled.div`
   justify-content: center;
   align-items: center;
   height: 100%;
+  flex-grow: 1;
 `;
 const Text = styled.p`
   width: 469px;
@@ -16,8 +17,7 @@ const Text = styled.p`
   line-height: 22px;
   ${media.lessThan("pc")`
       width: 350px;
-    `
-  }
+    `}
 `;
 const MediumText = styled.p`
   font-size: 18px;
@@ -27,12 +27,7 @@ const MediumText = styled.p`
   line-height: 18px;
   ${media.lessThan("pc")`
       width: 350px;
-    `
-  }
+    `}
 `;
 
-export {
-    Center,
-    Text,
-    MediumText
-}
+export { Center, Text, MediumText };

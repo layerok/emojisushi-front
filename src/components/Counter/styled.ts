@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {prop} from "styled-tools";
+import { prop } from "styled-tools";
 
 const Count = styled.div`
   font-size: 20px;
@@ -9,11 +9,9 @@ const Count = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-left: 1px solid ${prop('delimiterColor')};
-  border-right: 1px solid ${prop('delimiterColor')};
-  color: ${prop('color', 'black')}
-`
+  border-left: 1px solid ${prop("delimiterColor")};
+  border-right: 1px solid ${prop("delimiterColor")};
+  color: ${prop("color", "black")};
+`;
 
-export {
-    Count
-}
+export { Count };

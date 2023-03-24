@@ -10,17 +10,16 @@ import { MyOrders } from "~pages/MyOrders";
 import { ResetPassword } from "~pages/ResetPassword";
 import { SelectLocation } from "~pages/SelectLocation";
 
-
 export {
-    ThankYou,
-    Delivery,
-    Checkout,
-    Category,
-    Wishlist,
-    Profile,
-    UpdatePassword,
-    SavedAddresses,
-    MyOrders,
-    ResetPassword,
-    SelectLocation
-}
+  ThankYou,
+  Delivery,
+  Checkout,
+  Category,
+  Wishlist,
+  Profile,
+  UpdatePassword,
+  SavedAddresses,
+  MyOrders,
+  ResetPassword,
+  SelectLocation,
+};

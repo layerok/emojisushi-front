@@ -25,9 +25,4 @@ const CheckboxWrapper = styled.div`
   padding-top: 30px;
 `;
 
-export {
-    Wrapper,
-    Text,
-    FilterMagnifier,
-    CheckboxWrapper
-}
+export { Wrapper, Text, FilterMagnifier, CheckboxWrapper };

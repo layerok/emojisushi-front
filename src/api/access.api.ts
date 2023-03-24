@@ -1,40 +1,44 @@
-import {client} from "~clients/client";
-import {AxiosResponse} from "axios";
-import {ISpot, ICity} from "~api/access.api.types";
-import {IMeta} from "~common/types";
+import { client } from "~clients/client";
+import { AxiosResponse } from "axios";
+import { ISpot, ICity } from "~api/access.api.types";
+import { IMeta } from "~common/types";
 
 const getCitiesDefaults: IGetCitiesParams = {
-    includeSpots: false
-}
+  includeSpots: false,
+};
 
 type IGetCitiesParams = {
-    includeSpots?: boolean;
-    offset?: number;
-    limit?: number;
-}
+  includeSpots?: boolean;
+  offset?: number;
+  limit?: number;
+};
 
 class Access {
-    getSpots(params = {}): Promise<AxiosResponse<{
-        data: ISpot[]
-        meta: IMeta
-    }>> {
-        return client.get("spots", {
-          params,
-          // @ts-ignore
-          skipAuthRefresh: true,
-        });
-    }
+  getSpots(params = {}): Promise<
+    AxiosResponse<{
+      data: ISpot[];
+      meta: IMeta;
+    }>
+  > {
+    return client.get("spots", {
+      params,
+      // @ts-ignore
+      skipAuthRefresh: true,
+    });
+  }
 
-    getCities(params: IGetCitiesParams = getCitiesDefaults): Promise<AxiosResponse<{
-        data: ICity[]
-        meta: IMeta
-    }>> {
-        return client.get("cities", {
-          params,
-          // @ts-ignore
-          skipAuthRefresh: true,
-        });
-    }
+  getCities(params: IGetCitiesParams = getCitiesDefaults): Promise<
+    AxiosResponse<{
+      data: ICity[];
+      meta: IMeta;
+    }>
+  > {
+    return client.get("cities", {
+      params,
+      // @ts-ignore
+      skipAuthRefresh: true,
+    });
+  }
 }
 
 const AccessApi = new Access();

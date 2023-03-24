@@ -1,20 +1,20 @@
 import React from "react";
 import {
-    FloatingTree,
-    useFloatingParentNodeId
+  FloatingTree,
+  useFloatingParentNodeId,
 } from "@floating-ui/react-dom-interactions";
-import {Popover} from "../Popover";
+import { Popover } from "../Popover";
 
 export const NestedPopover = (props) => {
-    const parentId = useFloatingParentNodeId();
+  const parentId = useFloatingParentNodeId();
 
-    if (parentId == null) {
-        return (
-            <FloatingTree>
-                <Popover {...props} />
-            </FloatingTree>
-        );
-    }
+  if (parentId == null) {
+    return (
+      <FloatingTree>
+        <Popover {...props} />
+      </FloatingTree>
+    );
+  }
 
-    return <Popover {...props} />;
+  return <Popover {...props} />;
 };

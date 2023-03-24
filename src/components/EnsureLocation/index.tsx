@@ -38,7 +38,6 @@ export const loader = async () => {
       throw e;
     }
   }
-  
 
   return toJS(CitiesStore.items);
 };

@@ -13,11 +13,11 @@ export type ISpot = {
   html_content: string;
   google_map_url: string;
   slug: string;
-}
+};
 
 export type ICity = {
   name: string;
   id: number;
   slug: string;
-  spots: ISpot[],
-}
+  spots: ISpot[];
+};

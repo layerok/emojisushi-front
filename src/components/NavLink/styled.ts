@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import {Link as LinkBase} from "react-router-dom";
-import {ifProp} from "styled-tools";
+import { Link as LinkBase } from "react-router-dom";
+import { ifProp } from "styled-tools";
 
 const Link = styled(LinkBase)`
   font-weight: 400;
@@ -10,17 +10,13 @@ const Link = styled(LinkBase)`
   margin-top: 10px;
   display: flex;
   flex-direction: column;
-  color: ${ifProp({className: 'active'}, "#FFE600", "#FFFFFF",)};
+  color: ${ifProp({ className: "active" }, "#FFE600", "#FFFFFF")};
   :hover {
-    color: #FFE600;
+    color: #ffe600;
   }
   :after {
     border-bottom: none;
   }
-`
+`;
 
-
-
-export {
-    Link
-}
+export { Link };

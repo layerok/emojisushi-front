@@ -1,5 +1,5 @@
-import {cloneElement, ReactElement, ReactNode} from "react";
-import {IModalProps, Modal} from "../Modal";
+import { cloneElement, ReactElement, ReactNode } from "react";
+import { IModalProps, Modal } from "../Modal";
 import * as S from "./styled";
 
 export type INotifyModalProps = {
@@ -8,41 +8,31 @@ export type INotifyModalProps = {
   renderSubtitle?: () => ReactNode;
   renderButton?: () => ReactNode;
   renderIcon?: () => ReactNode;
-} & Omit<IModalProps, 'render'>
+} & Omit<IModalProps, "render">;
 
-export const NotifyModal = (
-    {
-        children,
-        renderTitle,
-        renderSubtitle,
-        renderButton,
-        renderIcon,
-        open,
-        ...rest
-    }: INotifyModalProps
-) => {
-    return <Modal alignCenter={true} {...rest} render={({close}) => (
+export const NotifyModal = ({
+  children,
+  renderTitle,
+  renderSubtitle,
+  renderButton,
+  renderIcon,
+  open,
+  ...rest
+}: INotifyModalProps) => {
+  return (
+    <Modal
+      alignCenter={true}
+      {...rest}
+      render={({ close }) => (
         <S.Container>
-            {renderIcon && renderIcon()}
-            {renderTitle && (
-                <S.Title>
-                    {renderTitle()}
-                </S.Title>
-            )}
-            {renderSubtitle && (
-                <S.Subtitle>
-                    {renderSubtitle()}
-                </S.Subtitle>
-            )}
-            {renderButton && (
-                <S.Button>
-                    {renderButton()}
-                </S.Button>
-            )}
-
+          {renderIcon && renderIcon()}
+          {renderTitle && <S.Title>{renderTitle()}</S.Title>}
+          {renderSubtitle && <S.Subtitle>{renderSubtitle()}</S.Subtitle>}
+          {renderButton && <S.Button>{renderButton()}</S.Button>}
         </S.Container>
-
-    )}>
-        {cloneElement(children)}
+      )}
+    >
+      {cloneElement(children)}
     </Modal>
-}
+  );
+};

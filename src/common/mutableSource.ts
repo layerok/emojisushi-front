@@ -14,7 +14,7 @@ function createMutableSource<TargetType, VersionType>(
 ): Source<TargetType, VersionType> {
   return {
     [TARGET]: target,
-    [GET_VERSION]: getVersion
+    [GET_VERSION]: getVersion,
   };
 }
 
@@ -25,19 +25,21 @@ function useMutableSource<ValueType, TargetType, VersionType>(
 ): ValueType {
   const lastVersoin = useRef<VersionType>();
   const currentVersion = source[GET_VERSION](source[TARGET]);
-  const [state, setState] = useState((): [
-    typeof source,
-    typeof getSnapshot,
-    typeof subscribe,
-    typeof currentVersion,
-    ValueType
-  ] => [
-    source,
-    getSnapshot,
-    subscribe,
-    currentVersion,
-    getSnapshot(source[TARGET])
-  ]);
+  const [state, setState] = useState(
+    (): [
+      typeof source,
+      typeof getSnapshot,
+      typeof subscribe,
+      typeof currentVersion,
+      ValueType
+    ] => [
+      source,
+      getSnapshot,
+      subscribe,
+      currentVersion,
+      getSnapshot(source[TARGET]),
+    ]
+  );
   let currentSnapshot = state[4];
 
   if (
@@ -73,7 +75,7 @@ function useMutableSource<ValueType, TargetType, VersionType>(
           prevState[1],
           prevState[2],
           lastVersoin.current as VersionType,
-          nextSnapshot
+          nextSnapshot,
         ];
       });
     };

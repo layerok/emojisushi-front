@@ -6,9 +6,9 @@ import { useTranslation } from "react-i18next";
 import { useCity, useSpot } from "~hooks";
 
 export const CabinetLayout = ({ children, title = "" }) => {
-    const { t } = useTranslation();
-    const city = useCity()
-    const spot = useSpot();
+  const { t } = useTranslation();
+  const city = useCity();
+  const spot = useSpot();
 
   return (
     <S.Wrapper>

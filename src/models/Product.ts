@@ -1,6 +1,6 @@
-import {IProduct} from "~api/menu.api.types";
-import {makeAutoObservable} from "mobx";
-import {Variant} from "~models/Variant";
+import { IProduct } from "~api/menu.api.types";
+import { makeAutoObservable } from "mobx";
+import { Variant } from "~models/Variant";
 
 export class Product {
   json: IProduct;
@@ -34,11 +34,11 @@ export class Product {
   }
 
   get variants() {
-    return this.json.variants.map(variant => new Variant(variant));
+    return this.json.variants.map((variant) => new Variant(variant));
   }
 
   get inventoryManagementMethod() {
-    return this.json.inventory_management_method
+    return this.json.inventory_management_method;
   }
 
   get additionalPrices() {
@@ -50,7 +50,7 @@ export class Product {
   }
 
   get descriptionShort() {
-    return this.json.description_short
+    return this.json.description_short;
   }
 
   get description() {
@@ -63,11 +63,15 @@ export class Product {
 
   get mainImage() {
     const imageSets = this.imageSets;
-    return (imageSets.length > 0 && imageSets[0] && imageSets[0].images.length > 0) ? imageSets[0].images[0].path : undefined;
+    return imageSets.length > 0 &&
+      imageSets[0] &&
+      imageSets[0].images.length > 0
+      ? imageSets[0].images[0].path
+      : undefined;
   }
 
   get ingredients() {
-    return this.descriptionShort ? this.descriptionShort.split(','): [];
+    return this.descriptionShort ? this.descriptionShort.split(",") : [];
 
     // Мы не используем свойства
     /*return property_values.map((pv) => {
@@ -76,16 +80,18 @@ export class Product {
   }
 
   getOldPrice(variant: Variant) {
-    if(variant) {
+    if (variant) {
       return variant.oldPrice;
     }
-    return this.additionalPrices.length > 0 ? this.additionalPrices[0].price_formatted: undefined;
+    return this.additionalPrices.length > 0
+      ? this.additionalPrices[0].price_formatted
+      : undefined;
   }
 
   getNewPrice(variant: Variant) {
-    if(variant) {
-      return variant.newPrice
+    if (variant) {
+      return variant.newPrice;
     }
-    return this.prices.length > 0 ? this.prices[0].price_formatted: undefined;
+    return this.prices.length > 0 ? this.prices[0].price_formatted : undefined;
   }
 }

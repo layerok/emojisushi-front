@@ -26,12 +26,6 @@ const Phone = styled.span`
 const Socials = styled.div`
   display: flex;
   margin-top: 20px;
-`
+`;
 
-export {
-    Title,
-    Wrapper,
-    Phones,
-    Phone,
-    Socials,
-}
+export { Title, Wrapper, Phones, Phone, Socials };

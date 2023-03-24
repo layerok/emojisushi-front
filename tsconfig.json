@@ -10,15 +10,6 @@
       "~*": ["src/*"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "build",
-    "config",
-    "public",
-    "scripts"
-  ],
-  "include": [
-    "src",
-    "src/custom.d.ts"
-  ]
+  "exclude": ["node_modules", "build", "config", "public", "scripts"],
+  "include": ["src", "src/custom.d.ts"]
 }

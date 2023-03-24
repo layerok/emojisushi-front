@@ -8,6 +8,4 @@ const Wrapper = styled.div`
   color: white;
 `;
 
-export {
-    Wrapper
-}
+export { Wrapper };

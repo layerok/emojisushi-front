@@ -6,6 +6,4 @@ const Text = styled.p`
   font-weight: 600;
 `;
 
-export {
-    Text
-}
+export { Text };

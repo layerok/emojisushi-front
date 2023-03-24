@@ -1,12 +1,12 @@
-import {ChangeEvent, FormEvent} from "react";
-import {action, computed, makeObservable, observable, override} from "mobx";
+import { ChangeEvent, FormEvent } from "react";
+import { action, computed, makeObservable, observable, override } from "mobx";
 
 type InputModelOptions = {
   value?: string;
   error?: string;
-}
+};
 
-export class InputModel{
+export class InputModel {
   error: string;
   name: string;
   value: any;
@@ -21,9 +21,7 @@ export class InputModel{
       asProps: computed,
       resetValue: action,
     });
-    const {
-      error = ""
-    } = options;
+    const { error = "" } = options;
 
     this.error = error;
     this.name = name;
@@ -33,41 +31,44 @@ export class InputModel{
     this.error = error;
   }
 
-  handleValidationError(errors: {
-    [key: string]: [string]
-  }[]) {
+  handleValidationError(
+    errors: {
+      [key: string]: [string];
+    }[]
+  ) {
     Object.keys(errors).forEach((key) => {
-      if(key === this.name) {
+      if (key === this.name) {
         this.setError(errors[key][0]);
       }
-    })
+    });
   }
 
   resetError() {
-    this.setError('');
+    this.setError("");
   }
 
   get asProps() {
     return {
       name: this.name,
-      error: this.error
-    }
+      error: this.error,
+    };
   }
 
   resetValue() {
     this.value = null;
   }
-
 }
-
 
 export class TextInputModel extends InputModel {
   value: string;
 
-  constructor(name: string, options: InputModelOptions & {
-    value?: string;
-  } = {}) {
-    const {value = '', ...baseOptions} = options;
+  constructor(
+    name: string,
+    options: InputModelOptions & {
+      value?: string;
+    } = {}
+  ) {
+    const { value = "", ...baseOptions } = options;
     super(name, baseOptions);
     this.value = value;
     makeObservable(this, {
@@ -76,12 +77,12 @@ export class TextInputModel extends InputModel {
       onChangeHandler: action,
       setValue: action,
       resetValue: override,
-    })
+    });
   }
 
   onChangeHandler(e: FormEvent<HTMLInputElement>) {
     this.resetError();
-    this.setValue((e.target as HTMLInputElement).value)
+    this.setValue((e.target as HTMLInputElement).value);
   }
 
   setValue(value: string) {
@@ -92,25 +93,28 @@ export class TextInputModel extends InputModel {
     return {
       name: this.name,
       onChange: (e: FormEvent<HTMLInputElement>) => {
-        this.onChangeHandler(e)
+        this.onChangeHandler(e);
       },
       value: this.value,
-      error: this.error
-    }
+      error: this.error,
+    };
   }
 
   resetValue() {
-    this.setValue('')
+    this.setValue("");
   }
 }
 
 export class CheckboxInputModel extends InputModel {
   value: boolean;
 
-  constructor(name: string, options: InputModelOptions & {
-    value?: boolean;
-  } = {}) {
-    const {value = false, ...baseOptions} = options;
+  constructor(
+    name: string,
+    options: InputModelOptions & {
+      value?: boolean;
+    } = {}
+  ) {
+    const { value = false, ...baseOptions } = options;
     super(name, baseOptions);
     this.value = value;
     makeObservable(this, {
@@ -120,27 +124,27 @@ export class CheckboxInputModel extends InputModel {
       setChecked: action,
       resetValue: override,
       checked: computed,
-    })
+    });
   }
 
   setChecked = (checked: boolean) => {
     this.value = checked;
-  }
+  };
 
   onChangeHandler(e: ChangeEvent<HTMLInputElement>) {
     this.resetError();
-    this.setChecked((e.target as HTMLInputElement).checked)
+    this.setChecked((e.target as HTMLInputElement).checked);
   }
 
   get asProps() {
     return {
       name: this.name,
       onChange: (e: ChangeEvent<HTMLInputElement>) => {
-        this.onChangeHandler(e)
+        this.onChangeHandler(e);
       },
       checked: this.checked,
-      error: this.error
-    }
+      error: this.error,
+    };
   }
 
   resetValue() {

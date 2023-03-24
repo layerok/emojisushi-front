@@ -10,14 +10,11 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  
-  ${media.lessThan('tablet')`
+
+  ${media.lessThan("tablet")`
     width: 47px;
     height: 47px;
   `}
-  
 `;
 
-export {
-    Wrapper
-}
+export { Wrapper };

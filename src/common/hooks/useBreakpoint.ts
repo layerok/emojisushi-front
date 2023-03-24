@@ -1,16 +1,16 @@
-import {createBreakpoint} from "react-use";
-import {breakpointsInPixels} from "../custom-media";
+import { createBreakpoint } from "react-use";
+import { breakpointsInPixels } from "../custom-media";
 
 export const useBreakpoint = createBreakpoint(breakpointsInPixels);
 
 export const useIsMobile = () => {
-    return useBreakpoint() === 'mobile'
-}
+  return useBreakpoint() === "mobile";
+};
 
 export const useIsDesktop = () => {
-    return useBreakpoint() === 'pc';
-}
+  return useBreakpoint() === "pc";
+};
 
 export const useIsTablet = () => {
-    return useBreakpoint() === 'tablet';
-}
+  return useBreakpoint() === "tablet";
+};
