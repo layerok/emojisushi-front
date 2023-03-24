@@ -93,7 +93,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -165,6 +166,9 @@
     "resetMocks": true
   },
   "devDependencies": {
-    "babel-plugin-module-resolver": "^4.1.0"
+    "babel-plugin-module-resolver": "^4.1.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.0",
+    "prettier": "^2.8.6"
   }
 }
