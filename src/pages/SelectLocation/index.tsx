@@ -14,8 +14,6 @@ export const SelectLocation = observer(() => {
   const { t } = useTranslation();
   const items = useCitiesStore().items;
   const isMobile = useIsMobile();
-
-  const getUrl = process.env.REACT_APP_API_BASE_URL.slice(0, -3);
   return (
     <S.Locations>
       <S.Locations.Container>
@@ -44,15 +42,13 @@ export const SelectLocation = observer(() => {
                       <S.Location>
                         <S.Location.Content>
                           <S.Location.Head>
-                            Адреса
+                            {t('common.address')}
                             <SvgIcon width={'15px'} color={'#FFE600'}>
                               <MapPinSvg />
                             </SvgIcon>
                           </S.Location.Head>
                            {spot.address}
                         </S.Location.Content>
-
-               
                       </S.Location>
                     </Link>
                   ))}

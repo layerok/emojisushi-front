@@ -151,13 +151,7 @@ Locations.Body = styled.div`
           ${Location.Content} {
             border-color: ${theme('link.active')};
           }
-          ${Location.Image} {
-            height: 178px;
-
-            ${media.lessThan('tablet')`
-            height: 0;
-            `}
-          }
+          
         }
       }
 
