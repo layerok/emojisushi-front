@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { prop, theme } from 'styled-tools';
+import { theme } from 'styled-tools';
 import media from '../../common/custom-media';
 
 const Location = styled.li`
@@ -47,45 +47,6 @@ Location.Head = styled.div`
   color: ${theme('link.active')};
 `;
 
-Location.Image = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: url('${prop('src')}'), linear-gradient(0deg, #232323, #232323);
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 0;
-  margin: 0 auto;
-  position: relative;
-
-  border-radius: 10px 10px 0px 0px;
-  overflow: hidden;
-
-  transition: 0.3s ease-out;
-
-  position: absolute;
-  bottom: calc(100% - 14px);
-  left: 0;
-  z-index: 1;
-
-  &:before {
-    position: absolute;
-    content: '';
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(0deg, rgba(20, 20, 20, 0.15), rgba(20, 20, 20, 0.15));
-    pointer-events: none;
-  }
-
-  ${media.lessThan('tablet')`
-    display: none;
-  `}
-`;
 
 const Locations = styled.div`
   display: flex;

@@ -49,16 +49,10 @@ export const SelectLocation = observer(() => {
                               <MapPinSvg />
                             </SvgIcon>
                           </S.Location.Head>
-                          {city.name}, {spot.name}
+                           {spot.address}
                         </S.Location.Content>
 
-                        <S.Location.Image src={getUrl + 'storage/app/media' + spot.cover}>
-                          {!spot.cover && (
-                            <SvgIcon color={'white'} width={'100px'}>
-                              <LogoSvg />
-                            </SvgIcon>
-                          )}
-                        </S.Location.Image>
+               
                       </S.Location>
                     </Link>
                   ))}
