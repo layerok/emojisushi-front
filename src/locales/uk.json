@@ -185,5 +185,8 @@
   "passwordReset": {
     "title": "Скидання пароля",
     "successMessage": "Пароль успішно скинутий!"
+  },
+  "categoryIndex": {
+    "title": "Оберіть категорію"
   }
 }
