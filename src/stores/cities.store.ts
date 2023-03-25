@@ -1,8 +1,8 @@
-import { makeAutoObservable } from 'mobx';
-import LocalStorageService from '../services/local-storage.service';
-import AccessApi from '../api/access.api';
-import { RootStore } from '~stores/stores';
-import { ICity, ISpot } from '~api/access.api.types';
+import { makeAutoObservable } from "mobx";
+import LocalStorageService from "../services/local-storage.service";
+import AccessApi from "../api/access.api";
+import { RootStore } from "~stores/stores";
+import { ICity, ISpot } from "~api/access.api.types";
 
 export class City {
   json: ICity;
@@ -35,13 +35,16 @@ export class City {
 export class Spot {
   json: ISpot;
   city;
-  cover: string | null;
   constructor(spot: ISpot, city: City) {
     this.city = city;
     this.json = spot;
     makeAutoObservable(this, {
       city: false,
     });
+  }
+
+  get cover() {
+    return this.json.cover;
   }
 
   get id() {
@@ -107,7 +110,7 @@ export class CitiesStore {
       const selectedId = this.items[index].id;
       this.setSelectedIndex(index);
 
-      LocalStorageService.set('city_id', selectedId);
+      LocalStorageService.set("city_id", selectedId);
       onSelect && onSelect();
     }
   };

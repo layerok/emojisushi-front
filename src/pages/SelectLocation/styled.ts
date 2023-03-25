@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { prop, theme } from 'styled-tools';
-import media from '../../common/custom-media';
+import styled from "styled-components";
+import { prop, theme } from "styled-tools";
+import media from "../../common/custom-media";
 
 const Location = styled.li`
   display: flex;
@@ -44,14 +44,14 @@ Location.Head = styled.div`
   font-size: 13px;
   line-height: 16px;
 
-  color: ${theme('link.active')};
+  color: ${theme("link.active")};
 `;
 
 Location.Image = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url('${prop('src')}'), linear-gradient(0deg, #232323, #232323);
+  background: url("${prop("src")}"), linear-gradient(0deg, #232323, #232323);
 
   background-size: cover;
   background-position: center;
@@ -61,28 +61,32 @@ Location.Image = styled.div`
   margin: 0 auto;
   position: relative;
 
-  border-radius: 0px 0px 10px 10px;
+  border-radius: 10px 10px 0px 0px;
   overflow: hidden;
 
   transition: 0.3s ease-out;
 
   position: absolute;
-  top: calc(100% - 14px);
+  bottom: calc(100% - 14px);
   left: 0;
   z-index: 1;
 
   &:before {
     position: absolute;
-    content: '';
+    content: "";
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(0deg, rgba(20, 20, 20, 0.15), rgba(20, 20, 20, 0.15));
+    background: linear-gradient(
+      0deg,
+      rgba(20, 20, 20, 0.15),
+      rgba(20, 20, 20, 0.15)
+    );
     pointer-events: none;
   }
 
-  ${media.lessThan('tablet')`
+  ${media.lessThan("tablet")`
     display: none;
   `}
 `;
@@ -98,7 +102,7 @@ const Locations = styled.div`
 
   min-height: 100vh;
 
-  ${media.lessThan('tablet')`
+  ${media.lessThan("tablet")`
       padding: 50px 0;
     `}
 `;
@@ -121,7 +125,7 @@ Locations.Head = styled.div`
 
   gap: 30px;
 
-  ${media.lessThan('mobile')`
+  ${media.lessThan("mobile")`
     margin-bottom: 60px;
   `}
 `;
@@ -139,7 +143,7 @@ Locations.Label = styled.div`
   text-transform: uppercase;
   color: #fff;
 
-  ${media.lessThan('mobile')`
+  ${media.lessThan("mobile")`
     font-size: 1rem;
     line-height: 1.25rem;
   `}
@@ -165,7 +169,7 @@ Locations.Body = styled.div`
         flex-wrap: wrap;
         gap: 30px;
 
-        ${media.lessThan('mobile')`
+        ${media.lessThan("mobile")`
          flex-direction:column; 
          gap: 15px;
          `}
@@ -173,7 +177,7 @@ Locations.Body = styled.div`
         & > * {
           width: calc(100% / 2 - 15px);
 
-          ${media.lessThan('mobile')`
+          ${media.lessThan("mobile")`
              width: 100%;
          `}
         }
@@ -188,12 +192,12 @@ Locations.Body = styled.div`
           z-index: 4;
 
           ${Location.Content} {
-            border-color: ${theme('link.active')};
+            border-color: ${theme("link.active")};
           }
           ${Location.Image} {
             height: 178px;
 
-            ${media.lessThan('tablet')`
+            ${media.lessThan("tablet")`
             height: 0;
             `}
           }
