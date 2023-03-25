@@ -1,3 +1,5 @@
+import { IFile } from "~common/types";
+
 export type ISpot = {
   id: number;
   name: string;
@@ -13,6 +15,8 @@ export type ISpot = {
   html_content: string;
   google_map_url: string;
   slug: string;
+  cover: null | string;
+  photos: IFile[];
 };
 
 export type ICity = {
