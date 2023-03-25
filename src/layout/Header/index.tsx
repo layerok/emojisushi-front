@@ -39,7 +39,9 @@ export const Header = observer(() => {
                 <LogoSvg />
               </SvgIcon>
             </S.Link>
-            <S.PcHeaderItem>
+            <S.PcHeaderItem onClick={() => {
+              navigate('/')
+            }}>
               <LocationPickerPopover offset={22} />
             </S.PcHeaderItem>
             <ContactsModal>
