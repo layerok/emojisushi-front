@@ -66,6 +66,7 @@
     "react-equal-height": "^1.2.2",
     "react-i18next": "^11.17.1",
     "react-refresh": "^0.11.0",
+    "react-responsive": "^9.0.2",
     "react-router-dom": "6.9.0",
     "react-slick": "^0.29.0",
     "react-spinners": "^0.12.0",
