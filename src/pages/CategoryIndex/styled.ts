@@ -86,7 +86,7 @@ Category.Items = styled.div`
     flex-wrap: wrap;
     gap: 30px;
 
-    ${media.lessThan('mobile')`
+    ${media.lessThan('tablet')`
       flex-direction: column;
       gap: 15px;
     `}
@@ -94,7 +94,7 @@ Category.Items = styled.div`
     li {
       width: calc(100% / 2 - 15px);
 
-      ${media.lessThan('mobile')`
+      ${media.lessThan('tablet')`
      width: 100%;
     `}
 
