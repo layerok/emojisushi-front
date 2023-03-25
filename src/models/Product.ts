@@ -1,6 +1,7 @@
 import { IProduct } from "~api/menu.api.types";
 import { makeAutoObservable } from "mobx";
 import { Variant } from "~models/Variant";
+import { Spot } from "~stores/cities.store";
 
 export class Product {
   json: IProduct;
@@ -68,6 +69,18 @@ export class Product {
       imageSets[0].images.length > 0
       ? imageSets[0].images[0].path
       : undefined;
+  }
+
+  get categories() {
+    return this.json.categories;
+  }
+
+  get hideProductsInSpot() {
+    return this.json.hide_products_in_spot;
+  }
+
+  isHiddenInSpot(spot: Spot) {
+    return !!this.hideProductsInSpot.find((s) => s.id === spot.id);
   }
 
   get ingredients() {

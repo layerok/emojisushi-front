@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useProductsStore } from "~hooks/use-categories-store";
+import { useSpot } from "~hooks";
 
 // todo: fix layout for wishlist
 
@@ -16,6 +17,7 @@ export const Wishlist = observer(() => {
   }, []);
 
   const { t } = useTranslation();
+  const selectedSpot = useSpot();
 
   const handleLoadMore = () => {
     const settings = {
@@ -29,7 +31,9 @@ export const Wishlist = observer(() => {
     <ProductsGrid
       loadable={ProductsStore.total > ProductsStore.items.length}
       loading={ProductsStore.loading}
-      items={ProductsStore.items}
+      items={ProductsStore.items.filter(
+        (product) => !product.isHiddenInSpot(selectedSpot)
+      )}
       handleLoadMore={handleLoadMore}
       title={t("common.favorite")}
     />

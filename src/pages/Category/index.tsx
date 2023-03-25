@@ -4,7 +4,7 @@ import { Navigate, useParams } from "react-router-dom";
 import { useProductsStore } from "~hooks/use-categories-store";
 import { ProductsStore } from "~stores";
 import { toJS } from "mobx";
-import { useCategoriesStore } from "~hooks";
+import { useCategoriesStore, useSpot } from "~hooks";
 import { FlexBox } from "~components/FlexBox";
 import { Banner } from "./Banner";
 import { useIsDesktop } from "~common/hooks/useBreakpoint";
@@ -19,6 +19,7 @@ export const Category = observer(() => {
   });
   const title = selectedCategory?.name;
   const isDesktop = useIsDesktop();
+  const selectedSpot = useSpot();
 
   const handleLoadMore = () => {
     const settings = {
@@ -46,7 +47,9 @@ export const Category = observer(() => {
           title={title}
           loadable={ProductsStore.total > ProductsStore.items.length}
           loading={ProductsStore.loading}
-          items={ProductsStore.items}
+          items={ProductsStore.items.filter(
+            (product) => !product.isHiddenInSpot(selectedSpot)
+          )}
         />
       </FlexBox>
     </>

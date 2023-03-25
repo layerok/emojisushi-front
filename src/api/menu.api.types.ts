@@ -163,6 +163,8 @@ export type IProduct = {
   image_sets: IImageSet[];
   additional_prices: IPrice[];
   prices: IPrice[];
+  categories: ICategory[];
+  hide_products_in_spot: ISpot[];
 };
 
 export type IFilter = {
