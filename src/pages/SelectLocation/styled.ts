@@ -12,6 +12,8 @@ const Location = styled.li`
 
   color: #ffffff;
   text-decoration: none;
+
+  position: relative;
 `;
 
 Location.Content = styled.div`
@@ -27,7 +29,7 @@ Location.Content = styled.div`
   flex-direction: column;
 
   position: relative;
-  z-index: 1;
+  z-index: 2;
 `;
 
 Location.Head = styled.div`
@@ -64,7 +66,10 @@ Location.Image = styled.div`
 
   transition: 0.3s ease-out;
 
-  margin-top: -14px;
+  position: absolute;
+  top: calc(100% - 14px);
+  left: 0;
+  z-index: 1;
 
   &:before {
     position: absolute;
@@ -89,6 +94,9 @@ const Locations = styled.div`
   width: 100%;
 
   padding: 60px 0;
+  padding-bottom: 200px;
+
+  min-height: 100vh;
 
   ${media.lessThan('tablet')`
       padding: 50px 0;
@@ -145,11 +153,7 @@ Locations.Body = styled.div`
   > ul {
     display: flex;
     flex-direction: column;
-    gap: 44px 30px;
-
-    ${media.lessThan('tablet')`
-      gap: 30px;
-    `}
+    gap: 30px;
 
     > li {
       display: flex;
@@ -178,8 +182,11 @@ Locations.Body = styled.div`
       a {
         color: #ffffff;
         text-decoration: none;
+        position: relative;
 
         &:hover {
+          z-index: 4;
+
           ${Location.Content} {
             border-color: ${theme('link.active')};
           }
