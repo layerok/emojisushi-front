@@ -185,5 +185,8 @@
   "passwordReset": {
     "title": "Сброс пароля",
     "successMessage": "Пароль успешно сброшен!"
+  },
+  "categoryIndex": {
+    "title": "Выберите категорию"
   }
 }
