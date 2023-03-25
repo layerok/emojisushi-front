@@ -18,7 +18,8 @@ export const Sidebar = observer(() => {
 
   const debouncedFetch = useDebounce((e) => {
     let filter =
-      "&category_id=" + CategoriesStore.items.map((_) => _.id).join(".");
+      "&category_id=" +
+      CategoriesStore.publishedCategories.map((_) => _.id).join(".");
     if (ProductsStore.search.length === 0) {
       filter = "";
     }
@@ -66,11 +67,11 @@ export const Sidebar = observer(() => {
       </FlexBox>
       {isDesktop ? (
         <>
-          <VerticalMenu categories={CategoriesStore.items} />
+          <VerticalMenu />
           <UnderVerticalMenu />
         </>
       ) : (
-        <HorizontalMenu categories={CategoriesStore.items} />
+        <HorizontalMenu />
       )}
     </S.Sidebar>
   );

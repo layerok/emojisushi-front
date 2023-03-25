@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import MenuApi from "../api/menu.api";
 import { RootStore, stores } from "./stores";
-import { IGetCategoriesParams } from "~api/menu.api.types";
+import { ICategory, IGetCategoriesParams } from "~api/menu.api.types";
 
 export class CategoriesStore {
   rootStore: RootStore;
@@ -11,7 +11,7 @@ export class CategoriesStore {
     });
     this.rootStore = rootStore;
   }
-  items = [];
+  items: ICategory[] = [];
   name: string = "";
   loading = false;
 
@@ -19,7 +19,7 @@ export class CategoriesStore {
     this.name = name;
   };
 
-  setItems = (categories) => {
+  setItems = (categories: ICategory[]) => {
     this.items = categories;
   };
 
@@ -46,5 +46,9 @@ export class CategoriesStore {
 
   get count() {
     return this.items.length;
+  }
+
+  get publishedCategories() {
+    return this.items.filter((category) => category.published);
   }
 }

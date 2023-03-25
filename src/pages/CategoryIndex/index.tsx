@@ -2,30 +2,37 @@ import { Link } from "react-router-dom";
 import { useCategoriesStore, useCity, useSpot } from "~hooks";
 
 export const CategoryIndex = () => {
-  const categories = useCategoriesStore().items;
+  const categoriesStore = useCategoriesStore();
   const city = useCity();
-  const spot = useSpot();
+  const selectedSpot = useSpot();
 
   return (
     <ul>
-      {categories.map((category) => (
-        <li>
-          <Link
-            to={
-              "/" +
-              city.slug +
-              "/" +
-              spot.slug +
-              "/" +
-              "category" +
-              "/" +
-              category.slug
-            }
-          >
-            {category.name}
-          </Link>
-        </li>
-      ))}
+      {categoriesStore.publishedCategories
+        .filter((category) => {
+          const hidden = category.hide_categories_in_spot.find(
+            (spot) => spot.id === selectedSpot.id
+          );
+          return !hidden;
+        })
+        .map((category) => (
+          <li>
+            <Link
+              to={
+                "/" +
+                city.slug +
+                "/" +
+                selectedSpot.slug +
+                "/" +
+                "category" +
+                "/" +
+                category.slug
+              }
+            >
+              {category.name}
+            </Link>
+          </li>
+        ))}
     </ul>
   );
 };

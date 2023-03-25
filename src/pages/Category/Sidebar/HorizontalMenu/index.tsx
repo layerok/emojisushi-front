@@ -6,13 +6,15 @@ import { HorizontalArrowsSvg } from "~components/svg/HorizontalArrowsSvg";
 import { FlexBox } from "~components/FlexBox";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useCity, useSpot } from "~hooks";
+import { useCategoriesStore, useCity, useSpot } from "~hooks";
+import { observer } from "mobx-react";
 
-const HorizontalMenu = ({ categories = [] }) => {
+const HorizontalMenu = observer(() => {
   const { t } = useTranslation();
   const { categorySlug } = useParams();
   const city = useCity();
   const spot = useSpot();
+  const categories = useCategoriesStore().publishedCategories;
   return (
     <nav>
       <S.Categories>
@@ -49,6 +51,6 @@ const HorizontalMenu = ({ categories = [] }) => {
       </S.Categories>
     </nav>
   );
-};
+});
 
 export { HorizontalMenu };

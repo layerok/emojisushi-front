@@ -5,9 +5,10 @@ import { useCategoriesStore } from "~hooks/use-products-store";
 import { observer } from "mobx-react";
 import { useCity, useSpot } from "~hooks";
 
-const VerticalMenu = observer(({ categories = [] }) => {
+const VerticalMenu = observer(() => {
   const { categorySlug } = useParams();
   const CategoriesStore = useCategoriesStore();
+  const categories = CategoriesStore.publishedCategories;
   const city = useCity();
   const spot = useSpot();
 

@@ -1,5 +1,6 @@
 import { Nullable } from "~common/types";
 import { IPrice } from "~api/shipping.api.types";
+import { ISpot } from "./access.api.types";
 
 export type ICategory = {
   id: number;
@@ -23,6 +24,7 @@ export type ICategory = {
   description_short: string;
   poster_id: number;
   published: boolean;
+  hide_categories_in_spot: ISpot[];
 };
 
 export type IOption = {

@@ -13,7 +13,7 @@ import { Sidebar } from "~pages/Category/Sidebar";
 export const Category = observer(() => {
   const ProductsStore = useProductsStore();
   const { categorySlug } = useParams();
-  const categories = useCategoriesStore().items;
+  const categories = useCategoriesStore().publishedCategories;
   const selectedCategory = categories.find((category) => {
     return category.slug === categorySlug;
   });
