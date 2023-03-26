@@ -3,12 +3,13 @@ import { NavLink } from "~components/NavLink";
 import { ButtonDark } from "~components/buttons/Button";
 import { stores } from "~stores/stores";
 import { useTranslation } from "react-i18next";
-import { useCity, useSpot } from "~hooks";
+import { useCity, useLang, useSpot } from "~hooks";
 
 export const CabinetLayout = ({ children, title = "" }) => {
   const { t } = useTranslation();
   const city = useCity();
   const spot = useSpot();
+  const lang = useLang();
 
   return (
     <S.Wrapper>
@@ -19,17 +20,35 @@ export const CabinetLayout = ({ children, title = "" }) => {
               <S.NavbarHeader>{t("account.cabinet")}</S.NavbarHeader>
               <S.HorizontalBar />
               <NavLink
-                to={"/" + city.slug + "/" + spot.slug + "/account/profile"}
+                to={
+                  "/" +
+                  lang +
+                  "/" +
+                  city.slug +
+                  "/" +
+                  spot.slug +
+                  "/account/profile"
+                }
               >
                 {t("account.profile.title")}
               </NavLink>
               <NavLink
-                to={"/" + city.slug + "/" + spot.slug + "/account/orders"}
+                to={
+                  "/" +
+                  lang +
+                  "/" +
+                  city.slug +
+                  "/" +
+                  spot.slug +
+                  "/account/orders"
+                }
               >
                 {t("account.orders.title")}
               </NavLink>
               <NavLink
                 to={
+                  "/" +
+                  lang +
                   "/" +
                   city.slug +
                   "/" +
@@ -41,7 +60,13 @@ export const CabinetLayout = ({ children, title = "" }) => {
               </NavLink>
               <NavLink
                 to={
-                  "/" + city.slug + "/" + spot.slug + "/account/saved-addresses"
+                  "/" +
+                  lang +
+                  "/" +
+                  city.slug +
+                  "/" +
+                  spot.slug +
+                  "/account/saved-addresses"
                 }
               >
                 {t("account.addresses.title")}

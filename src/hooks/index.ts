@@ -4,6 +4,7 @@ import { useCartStore } from "./use-cart-store";
 import { useProductsStore } from "./use-categories-store";
 import { useCitiesStore } from "./use-cities-store";
 import { useCity } from "./use-city";
+import { useLang } from "./use-lang";
 import { usePaymentStore } from "./use-payment-store";
 import { useCategoriesStore } from "./use-products-store";
 import { useRootStore } from "./use-root-store";
@@ -24,4 +25,5 @@ export {
   useShippingStore,
   useSpot,
   useWishlistStore,
+  useLang
 };

@@ -9,6 +9,7 @@ import { useSpot } from "~hooks/use-spot";
 import { useNavigate } from "react-router-dom";
 import { useCity } from "~hooks/use-city";
 import { useCitiesStore } from "~hooks/use-cities-store";
+import { useLang } from "~hooks";
 
 export const LocationPickerPopoverRaw = ({
   offset = 0,
@@ -24,6 +25,7 @@ export const LocationPickerPopoverRaw = ({
   const cities = useCitiesStore().items;
   const selectedSpot = useSpot();
   const selectedCity = useCity();
+  const lang = useLang();
 
   const options = cities
     .map((city) =>
@@ -46,12 +48,19 @@ export const LocationPickerPopoverRaw = ({
       <DropdownPopover
         backgroundColor={backgroundColor}
         width={width}
+        disable={true}
         offset={offset}
         options={options}
         selectedIndex={selectedIndex}
         onSelect={({ close, option, index }) => {
           navigate(
-            "/" + option.city.slug + "/" + option.spot.slug + "/category/roli"
+            "/" +
+              lang +
+              "/" +
+              option.city.slug +
+              "/" +
+              option.spot.slug +
+              "/category/roli"
           );
           close();
         }}

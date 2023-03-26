@@ -20,13 +20,14 @@ import { LanguageSelector } from "~components/LanguageSelector";
 import { stores } from "~stores/stores";
 import { useNavigate } from "react-router-dom";
 import { useCartStore } from "~hooks/use-cart-store";
-import { useCity, useSpot } from "~hooks";
+import { useCity, useLang, useSpot } from "~hooks";
 
 export const Header = observer(() => {
   const CartStore = useCartStore();
   const navigate = useNavigate();
   const city = useCity();
   const spot = useSpot();
+  const lang = useLang();
   const { t } = useTranslation();
 
   return (
@@ -39,9 +40,11 @@ export const Header = observer(() => {
                 <LogoSvg />
               </SvgIcon>
             </S.Link>
-            <S.PcHeaderItem onClick={() => {
-              navigate('/')
-            }}>
+            <S.PcHeaderItem
+              onClick={() => {
+                navigate("/");
+              }}
+            >
               <LocationPickerPopover offset={22} />
             </S.PcHeaderItem>
             <ContactsModal>
@@ -50,7 +53,15 @@ export const Header = observer(() => {
             <S.PcHeaderItem>
               <NavLinkUnderline
                 style={{ width: "144px" }}
-                to={"/" + city.slug + "/" + spot.slug + "/dostavka-i-oplata"}
+                to={
+                  "/" +
+                  lang +
+                  "/" +
+                  city.slug +
+                  "/" +
+                  spot.slug +
+                  "/dostavka-i-oplata"
+                }
               >
                 {t("header.delivery")}
               </NavLinkUnderline>
@@ -87,7 +98,13 @@ export const Header = observer(() => {
               <S.UserBtn
                 onClick={() => {
                   navigate(
-                    "/" + city.slug + "/" + spot.slug + "/account/profile"
+                    "/" +
+                      lang +
+                      "/" +
+                      city.slug +
+                      "/" +
+                      spot.slug +
+                      "/account/profile"
                   );
                 }}
               >

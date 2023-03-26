@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import * as S from './styled';
 
-import { useCategoriesStore, useCity, useSpot } from '~hooks';
+import { useCategoriesStore, useCity, useLang, useSpot } from '~hooks';
 import { useTranslation } from 'react-i18next';
 import { SvgIcon } from '~components/svg/SvgIcon';
 import { useIsMobile } from '~common/hooks/useBreakpoint';
@@ -13,14 +13,15 @@ export const CategoryIndex = () => {
   const categoriesStore = useCategoriesStore();
   const city = useCity();
   const selectedSpot = useSpot();
+  const lang = useLang();
   const isMobile = useIsMobile();
 
   return (
     <S.Category>
       <S.Category.Container>
         <S.Category.Label>
-          {t('categoryIndex.title')}
-          <SvgIcon width={isMobile ? '20px' : '25px'} color={'white'}>
+          {t("categoryIndex.title")}
+          <SvgIcon width={isMobile ? "20px" : "25px"} color={"white"}>
             <ToteSvg />
           </SvgIcon>
         </S.Category.Label>
@@ -29,7 +30,7 @@ export const CategoryIndex = () => {
             {categoriesStore.publishedCategories
               .filter((category) => {
                 const hidden = category.hide_categories_in_spot.find(
-                  (spot) => spot.id === selectedSpot.id,
+                  (spot) => spot.id === selectedSpot.id
                 );
                 return !hidden;
               })
@@ -37,13 +38,15 @@ export const CategoryIndex = () => {
                 <li>
                   <Link
                     to={
-                      '/' +
+                      "/" +
+                      lang +
+                      "/" +
                       city.slug +
-                      '/' +
+                      "/" +
                       selectedSpot.slug +
-                      '/' +
-                      'category' +
-                      '/' +
+                      "/" +
+                      "category" +
+                      "/" +
                       category.slug
                     }
                   >
@@ -51,7 +54,7 @@ export const CategoryIndex = () => {
                       {category.image.path ? (
                         <img src={category.image.path} alt="" />
                       ) : (
-                        <SvgIcon color={'white'} width={'80%'}>
+                        <SvgIcon color={"white"} width={"80%"}>
                           <LogoSvg />
                         </SvgIcon>
                       )}
@@ -72,3 +75,7 @@ export const Component = CategoryIndex;
 Object.assign(CategoryIndex, {
   displayName: 'LazyCategoryIndex',
 });
+
+export const shouldRevalidate = ({currentParams, nextParams}) => {
+  return currentParams.lang !== nextParams.lang;
+}

@@ -20,10 +20,12 @@ export const Popover = ({
   children,
   render,
   placement,
+  disable = false,
   offset: passedOffset = 0,
   open: passedOpen = false,
 }: {
   children: ReactElement;
+  disable?: boolean;
   render: (props: {
     labelId: string;
     descriptionId: string;
@@ -38,7 +40,7 @@ export const Popover = ({
 
   const { x, y, reference, floating, strategy, refs, update, context } =
     useFloating({
-      open,
+      open: open,
       onOpenChange: setOpen,
       middleware: [offset(passedOffset), flip(), shift()],
       placement,
@@ -66,7 +68,7 @@ export const Popover = ({
         children,
         getReferenceProps({ ref: reference, ...children.props })
       )}
-      {open && (
+      {open && !disable && (
         <FloatingFocusManager
           context={context}
           modal={false}

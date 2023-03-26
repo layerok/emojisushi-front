@@ -4,11 +4,17 @@ import { ProtectedRoute } from "~components/ProtectedRoute";
 import { Layout } from "~layout/Layout";
 import { CategoriesStore } from "~stores";
 import { toJS } from "mobx";
+import { EnsureLocation, loader as ensureLocationLoader } from "~components/EnsureLocation";
 
 export const routes = [
   {
     path: "/",
-    lazy: () => import("~components/EnsureLocation"),
+    element: <Navigate to={"uk"} />,
+  },
+  {
+    path: ":lang?",
+    element: <EnsureLocation redirectPath="/uk" />,
+    loader: ensureLocationLoader,
     children: [
       {
         index: true,

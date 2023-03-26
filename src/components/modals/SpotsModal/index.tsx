@@ -8,6 +8,7 @@ import { useSpot } from "~hooks/use-spot";
 import { useNavigate } from "react-router-dom";
 import { useCity } from "~hooks/use-city";
 import { useCitiesStore } from "~hooks/use-cities-store";
+import { useLang } from "~hooks";
 
 export const SpotsModalRaw = ({ open = false }) => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ export const SpotsModalRaw = ({ open = false }) => {
   const { t } = useTranslation();
   const selectedSpot = useSpot();
   const selectedCity = useCity();
+  const lang = useLang();
 
   return (
     <Modal
@@ -36,7 +38,13 @@ export const SpotsModalRaw = ({ open = false }) => {
                     key={city.id + "-" + spot.id}
                     onClick={() => {
                       navigate(
-                        "/" + city.slug + "/" + spot.slug + "/category/roli"
+                        "/" +
+                          lang +
+                          "/" +
+                          city.slug +
+                          "/" +
+                          spot.slug +
+                          "/category/roli"
                       );
 
                       close();

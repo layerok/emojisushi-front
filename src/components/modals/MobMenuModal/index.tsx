@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { UserSvg } from "../../svg/UserSvg";
 import { AuthModal } from "../AuthModal";
 import { LanguageSelector } from "../../LanguageSelector";
-import { useCity, useSpot } from "~hooks";
+import { useCity, useLang, useSpot } from "~hooks";
 
 export const MobMenuModal = ({ children }) => {
   const overlayStyles = {
@@ -24,6 +24,7 @@ export const MobMenuModal = ({ children }) => {
   const { t } = useTranslation();
   const city = useCity();
   const spot = useSpot();
+  const lang = useLang();
   return (
     <BaseModal
       overlayStyles={overlayStyles}
@@ -55,7 +56,15 @@ export const MobMenuModal = ({ children }) => {
           </S.Item>
           <S.Item>
             <NavLinkUnderline
-              to={"/" + city.slug + "/" + spot.slug + "/dostavka-i-oplata"}
+              to={
+                "/" +
+                lang +
+                "/" +
+                city.slug +
+                "/" +
+                spot.slug +
+                "/dostavka-i-oplata"
+              }
             >
               <div>{t("mobMenuModal.delivery")}</div>
             </NavLinkUnderline>
@@ -63,7 +72,9 @@ export const MobMenuModal = ({ children }) => {
           <S.Item>
             <FlexBox justifyContent={"space-between"} alignItems={"center"}>
               <NavLinkUnderline
-                to={"/" + city.slug + "/" + spot.slug + "/wishlist"}
+                to={
+                  "/" + lang + "/" + city.slug + "/" + spot.slug + "/wishlist"
+                }
               >
                 <div>{t("common.favorite")}</div>
               </NavLinkUnderline>

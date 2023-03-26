@@ -41,3 +41,7 @@ export const loader = async () => {
 
   return toJS(CitiesStore.items);
 };
+
+export const shouldRevalidate = ({currentParams, nextParams}) => {
+  return currentParams.lang !== nextParams.lang;
+}

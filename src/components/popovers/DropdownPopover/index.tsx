@@ -7,7 +7,8 @@ export function DropdownPopover<Option>({
   options = [],
   asFlatArray = false,
   offset = 0,
-  open = false,
+  open: initialOpen = false,
+  disable = false,
   nameAccessor = "name",
   idAccessor = "id",
   selectedIndex,
@@ -20,6 +21,7 @@ export function DropdownPopover<Option>({
   asFlatArray?: boolean;
   offset?: number;
   open?: boolean;
+  disable?: boolean;
   nameAccessor?: string;
   idAccessor?: string;
   selectedIndex: number;
@@ -68,7 +70,8 @@ export function DropdownPopover<Option>({
     <>
       <Popover
         offset={offset}
-        open={open}
+        open={initialOpen}
+        disable={disable}
         render={({ close }) => (
           <S.Options width={width} backgroundColor={backgroundColor}>
             {options.map((option, index) => (

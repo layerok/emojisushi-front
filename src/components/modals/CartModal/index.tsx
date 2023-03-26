@@ -20,7 +20,7 @@ import { LogoSvg } from "../../svg/LogoSvg";
 import { SushiSvg } from "../../svg/SushiSvg";
 import { useCartStore } from "~hooks/use-cart-store";
 import { CartProduct } from "~models/CartProduct";
-import { useCity, useSpot } from "~hooks";
+import { useCity, useLang, useSpot } from "~hooks";
 
 const CartItem = observer(({ item }: { item: CartProduct }) => {
   const newPrice = item.product.getNewPrice(item.variant);
@@ -90,6 +90,7 @@ export const CartModal = observer(({ children }) => {
   const [height, setHeight] = useState(windowSize.height);
   const city = useCity();
   const spot = useSpot();
+  const lang = useLang();
 
   const debounceHeight = useDebounce(() => {
     setHeight(windowSize.height);
@@ -152,7 +153,15 @@ export const CartModal = observer(({ children }) => {
                 <ButtonOutline
                   disabled={items.length === 0}
                   onClick={() => {
-                    navigate("/" + city.slug + "/" + spot.slug + "/checkout");
+                    navigate(
+                      "/" +
+                        lang +
+                        "/" +
+                        city.slug +
+                        "/" +
+                        spot.slug +
+                        "/checkout"
+                    );
                   }}
                   width={"100%"}
                 >

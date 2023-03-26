@@ -18,7 +18,7 @@ import { FormModel } from "~common/FormModel";
 import { CheckboxInputModel, TextInputModel } from "~common/InputModel";
 import { useTranslation } from "react-i18next";
 import { If } from "~components/If";
-import { useCity, useSpot } from "~hooks";
+import { useCity, useLang, useSpot } from "~hooks";
 
 export const AuthModal = ({ children }) => {
   const isMobile = useIsMobile();
@@ -67,6 +67,7 @@ const SignUpForm = observer(({ setShowSignUp }) => {
   const navigate = useNavigate();
   const city = useCity();
   const spot = useSpot();
+  const lang = useLang();
 
   const state = useLocalObservable(() => ({
     form: new FormModel({
@@ -100,7 +101,7 @@ const SignUpForm = observer(({ setShowSignUp }) => {
                   stores.AuthStore.setExpires(expires);
                 });
                 navigate(
-                  "/" + city.slug + "/" + spot.slug + "/account/profile"
+                  "/" + lang + "/" + city.slug + "/" + spot.slug + "/account/profile"
                 );
               })
               .finally(() => {
@@ -265,6 +266,7 @@ const LoginForm = ({ setShowSignUp, setShowPasswordRecovery }) => {
   const isMobile = useIsMobile();
   const city = useCity();
   const spot = useSpot();
+  const lang = useLang();
 
   return (
     <S.LoginForm
@@ -326,7 +328,15 @@ const LoginForm = ({ setShowSignUp, setShowPasswordRecovery }) => {
                 stores.AuthStore.userFromJson(user);
                 stores.AuthStore.setExpires(expires);
               });
-              navigate("/" + city.slug + "/" + spot.slug + "/account/profile");
+              navigate(
+                "/" +
+                  lang +
+                  "/" +
+                  city.slug +
+                  "/" +
+                  spot.slug +
+                  "/account/profile"
+              );
             })
             .catch((e) => {
               const { errors, message } = e.response.data;

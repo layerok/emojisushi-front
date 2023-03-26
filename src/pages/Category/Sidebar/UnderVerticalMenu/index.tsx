@@ -7,7 +7,7 @@ import { TelegramSvg } from "~components/svg/TelegramSvg";
 import { TelegramModal } from "~components/modals/TelegramModal";
 import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useCity, useSpot } from "~hooks";
+import { useCity, useLang, useSpot } from "~hooks";
 
 export const UnderVerticalMenu = () => {
   const navigate = useNavigate();
@@ -15,13 +15,16 @@ export const UnderVerticalMenu = () => {
   let match = useMatch({ path: resolved.pathname, end: true });
   const city = useCity();
   const spot = useSpot();
+  const lang = useLang();
   const { t } = useTranslation();
   return (
     <>
       <S.Favorite
         active={!!match}
         onClick={() => {
-          navigate("/" + city.slug + "/" + spot.slug + "/wishlist");
+          navigate(
+            "/" + lang + "/" + city.slug + "/" + spot.slug + "/wishlist"
+          );
         }}
       >
         {t("common.favorite")}
