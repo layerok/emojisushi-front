@@ -12,6 +12,10 @@ class LocalStorage {
     }
   }
 
+  remove(key: string) {
+    localStorage.removeItem(key);
+  }
+
   exist(key: string) {
     return key in localStorage;
   }

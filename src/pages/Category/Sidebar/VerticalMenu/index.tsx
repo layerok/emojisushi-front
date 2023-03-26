@@ -23,13 +23,9 @@ const VerticalMenu = observer(() => {
             <S.Category
               to={
                 "/" +
-                lang +
-                "/" +
-                city.slug +
-                "/" +
-                spot.slug +
-                "/category/" +
-                category.slug
+                [lang, city.slug, spot.slug, "category", category.slug].join(
+                  "/"
+                )
               }
               isActive={active}
               key={category.id}

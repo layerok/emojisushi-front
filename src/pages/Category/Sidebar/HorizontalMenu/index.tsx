@@ -1,6 +1,6 @@
 import * as S from "./styled";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
 import { SvgIcon } from "~components/svg/SvgIcon";
 import { HorizontalArrowsSvg } from "~components/svg/HorizontalArrowsSvg";
 import { FlexBox } from "~components/FlexBox";
@@ -31,18 +31,16 @@ const HorizontalMenu = observer(() => {
         <S.HorizontalContainer>
           {categories.map((category) => {
             const active = categorySlug === category.slug;
+            const nextSegments = [
+              lang,
+              city.slug,
+              spot.slug,
+              "category",
+              category.slug,
+            ];
             return (
               <S.Category
-                to={
-                  "/" +
-                  lang +
-                  "/" +
-                  city.slug +
-                  "/" +
-                  spot.slug +
-                  "/category/" +
-                  category.slug
-                }
+                to={"/" + nextSegments.join("/")}
                 isActive={active}
                 key={category.id}
               >

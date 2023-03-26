@@ -22,9 +22,7 @@ export const UnderVerticalMenu = () => {
       <S.Favorite
         active={!!match}
         onClick={() => {
-          navigate(
-            "/" + lang + "/" + city.slug + "/" + spot.slug + "/wishlist"
-          );
+          navigate("/" + [lang, city.slug, spot.slug, "/wishlist"]);
         }}
       >
         {t("common.favorite")}

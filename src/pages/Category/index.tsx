@@ -66,7 +66,6 @@ export const loader = async ({ params }) => {
   await ProductsStore.fetchItems({
     category_slug: params.categorySlug,
     limit: ProductsStore.step,
-    spot_id_or_slug: params.spotSlug,
   });
 
   return {

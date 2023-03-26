@@ -1,45 +1,25 @@
-import { Layout } from "~layout/Layout";
 import { FlexBox } from "~components/FlexBox";
 import { CheckoutForm } from "./components/CheckoutForm";
 import { CheckoutCart } from "./components/CheckoutCart";
 import { Heading } from "~components/Heading";
-import { useBreakpoint, useIsMobile } from "~common/hooks/useBreakpoint";
+import { useIsMobile } from "~common/hooks/useBreakpoint";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useCartStore } from "~hooks/use-cart-store";
-import { useAppStore } from "~hooks/use-app-store";
-import { usePaymentStore } from "~hooks/use-payment-store";
-import { useShippingStore } from "~hooks/use-shipping-store";
+import { CartStore, PaymentStore, ShippingStore } from "~stores";
 
 export const Checkout = observer(() => {
   const isMobile = useIsMobile();
-
   const navigate = useNavigate();
   const CartStore = useCartStore();
-  const AppStore = useAppStore();
-  const PaymentStore = usePaymentStore();
-  const ShippingStore = useShippingStore();
 
   useEffect(() => {
-    AppStore.setLoading(true);
-    Promise.all([
-      CartStore.fetchItems(),
-      PaymentStore.fetchItems(),
-      ShippingStore.fetchItems(),
-    ]).then(() => {
-      AppStore.setLoading(false);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!AppStore.loading) {
-      if (CartStore.items.length === 0) {
-        navigate("/");
-      }
+    if (CartStore.items.length === 0) {
+      navigate("/");
     }
-  }, [CartStore.items, AppStore.loading]);
+  }, [CartStore.items]);
   const { t } = useTranslation();
   return (
     <>
@@ -60,3 +40,17 @@ export const Component = Checkout;
 Object.assign(Component, {
   displayName: "LazyCheckout",
 });
+
+export const loader = async () => {
+  await PaymentStore.fetchItems();
+  await ShippingStore.fetchItems();
+  await CartStore.fetchItems();
+  return true;
+};
+
+export const shouldRevalidate = ({ currentParams, nextParams }) => {
+  return (
+    currentParams.spotSlug !== nextParams.spotSlug ||
+    currentParams.citySlug !== nextParams.citySlug
+  );
+};

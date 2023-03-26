@@ -58,12 +58,7 @@ export const MobMenuModal = ({ children }) => {
             <NavLinkUnderline
               to={
                 "/" +
-                lang +
-                "/" +
-                city.slug +
-                "/" +
-                spot.slug +
-                "/dostavka-i-oplata"
+                [lang, city.slug, spot.slug, "dostavka-i-oplata"].join("/")
               }
             >
               <div>{t("mobMenuModal.delivery")}</div>
@@ -72,9 +67,7 @@ export const MobMenuModal = ({ children }) => {
           <S.Item>
             <FlexBox justifyContent={"space-between"} alignItems={"center"}>
               <NavLinkUnderline
-                to={
-                  "/" + lang + "/" + city.slug + "/" + spot.slug + "/wishlist"
-                }
+                to={"/" + [lang, city.slug, spot.slug, "wishlist"].join("/")}
               >
                 <div>{t("common.favorite")}</div>
               </NavLinkUnderline>

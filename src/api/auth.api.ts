@@ -9,6 +9,7 @@ class Auth {
       password: string;
       password_confirmation: string;
       name: string;
+      spot_slug_or_id: string | number;
       surname: string;
       agree: boolean;
     },

@@ -38,13 +38,7 @@ export const SpotsModalRaw = ({ open = false }) => {
                     key={city.id + "-" + spot.id}
                     onClick={() => {
                       navigate(
-                        "/" +
-                          lang +
-                          "/" +
-                          city.slug +
-                          "/" +
-                          spot.slug +
-                          "/category/roli"
+                        "/" + [lang, city.slug, spot.slug, "category"].join("/")
                       );
 
                       close();

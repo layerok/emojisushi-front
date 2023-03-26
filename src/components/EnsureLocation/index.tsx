@@ -1,7 +1,9 @@
 import { toJS } from "mobx";
+import { useEffect, useLayoutEffect } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useCity } from "~hooks/use-city";
 import { useSpot } from "~hooks/use-spot";
+import LocalStorageService from "~services/local-storage.service";
 import { CitiesStore, AuthStore } from "~stores";
 
 export const EnsureLocation = ({
@@ -28,20 +30,11 @@ Object.assign(Component, {
   displayName: "LazyEnsureLocation",
 });
 
-export const loader = async () => {
+export const loader = async ({ params }) => {
   await CitiesStore.loadItems(true);
-  try {
-    await AuthStore.fetchUser();
-  } catch (e: any) {
-    // 406 simply means that user is not authorzied, no need to throw error in this case
-    if (![406].includes(e?.response.status)) {
-      throw e;
-    }
-  }
-
   return toJS(CitiesStore.items);
 };
 
-export const shouldRevalidate = ({currentParams, nextParams}) => {
+export const shouldRevalidate = ({ currentParams, nextParams }) => {
   return currentParams.lang !== nextParams.lang;
-}
+};

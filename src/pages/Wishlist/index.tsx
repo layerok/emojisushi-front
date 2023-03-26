@@ -41,7 +41,6 @@ export const Wishlist = observer(() => {
 });
 
 export const Component = Wishlist;
-
 Object.assign(Component, {
   displayName: "LazyWishlist",
 });

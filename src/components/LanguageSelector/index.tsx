@@ -17,7 +17,6 @@ export const LanguageSelector = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-
   return (
     <S.Container>
       {langs.map((lang) => (
@@ -29,15 +28,12 @@ export const LanguageSelector = () => {
           onClick={() => {
             setSelectedLang(lang);
             i18n.changeLanguage(lang);
-        
+
             LocalStorageService.set("i18next_lang", lang);
-            const url =
-              "/" +
-              lang +
-              "/" +
-              location.pathname.slice(4, location.pathname.length);;
-            console.log(url);
-                navigate(url);
+            const currentSegments = location.pathname.split("/");
+            const nextSegments = [lang, ...currentSegments.splice(2)];
+            const nextUrl = "/" + nextSegments.join("/");
+            navigate(nextUrl);
           }}
         >
           {lang.toUpperCase()}

@@ -16,7 +16,7 @@ import { useShippingStore } from "~hooks/use-shipping-store";
 import { useCartStore } from "~hooks/use-cart-store";
 import { useAuthStore } from "~hooks/use-auth-store";
 import { Dropdown } from "~components/Dropdown";
-import i18n from "~i18n";
+import { useSpot } from "~hooks";
 
 // todo: logout user if his token is expired
 // timer may be solution
@@ -31,6 +31,7 @@ export const CheckoutForm = observer(() => {
   const [pending, setPending] = useState(false);
   const navigate = useNavigate();
   const user = AuthStore.user;
+  const spot = useSpot();
   const CheckoutSchema = Yup.object().shape({
     phone: Yup.string()
       .required(t("validation.required", { field: t("common.phone") }))
@@ -69,6 +70,7 @@ export const CheckoutForm = observer(() => {
         firstname: firstname,
         lastname: lastname,
         email: values.email,
+        spot_id_or_slug: spot.slug,
 
         address: values.address,
         address_id: values.address_id,

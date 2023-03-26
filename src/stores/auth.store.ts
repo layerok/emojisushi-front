@@ -260,6 +260,5 @@ export class AuthStore {
     this.setAuthToken(null);
     this.setUser(null);
     this.setExpires(null);
-    this.rootStore.CartStore.fetchItems();
   }
 }

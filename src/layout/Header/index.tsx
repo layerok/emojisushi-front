@@ -35,16 +35,14 @@ export const Header = observer(() => {
       <Container>
         <FlexBox justifyContent={"space-between"} alignItems={"center"}>
           <S.Left>
-            <S.Link to={"/"}>
-              <SvgIcon color={"#FFE600"}>
+            <S.Link
+              to={"/" + [lang, city.slug, spot.slug, "category"].join("/")}
+            >
+              <SvgIcon clickable={true} color={"#FFE600"}>
                 <LogoSvg />
               </SvgIcon>
             </S.Link>
-            <S.PcHeaderItem
-              onClick={() => {
-                navigate("/");
-              }}
-            >
+            <S.PcHeaderItem>
               <LocationPickerPopover offset={22} />
             </S.PcHeaderItem>
             <ContactsModal>
@@ -55,12 +53,7 @@ export const Header = observer(() => {
                 style={{ width: "144px" }}
                 to={
                   "/" +
-                  lang +
-                  "/" +
-                  city.slug +
-                  "/" +
-                  spot.slug +
-                  "/dostavka-i-oplata"
+                  [lang, city.slug, spot.slug, "dostavka-i-oplata"].join("/")
                 }
               >
                 {t("header.delivery")}
@@ -99,17 +92,14 @@ export const Header = observer(() => {
                 onClick={() => {
                   navigate(
                     "/" +
-                      lang +
-                      "/" +
-                      city.slug +
-                      "/" +
-                      spot.slug +
-                      "/account/profile"
+                      [lang, city.slug, spot.slug, "account", "profile"].join(
+                        "/"
+                      )
                   );
                 }}
               >
                 <SvgButton>
-                  <SvgIcon width={"25px"} color={"black"}>
+                  <SvgIcon clickable={true} width={"25px"} color={"black"}>
                     <UserSvg />
                   </SvgIcon>
                 </SvgButton>
@@ -118,7 +108,7 @@ export const Header = observer(() => {
               <S.UserBtn>
                 <AuthModal>
                   <SvgButton>
-                    <SvgIcon width={"25px"} color={"black"}>
+                    <SvgIcon clickable={true} width={"25px"} color={"black"}>
                       <UserSvg />
                     </SvgIcon>
                   </SvgButton>

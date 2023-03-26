@@ -17,6 +17,7 @@ import { useCartStore } from "~hooks/use-cart-store";
 import { useProductsStore } from "~hooks/use-categories-store";
 import { useWishlistStore } from "~hooks/use-wishlist-store";
 import { Product } from "~models/Product";
+import { useSpot } from "~hooks";
 
 const ProductCardRaw = ({ product }: { product: Product }) => {
   const CartStore = useCartStore();
@@ -30,6 +31,7 @@ const ProductCardRaw = ({ product }: { product: Product }) => {
   const ingredients = product.ingredients;
   const img = product.mainImage;
   const { t } = useTranslation();
+  const spot = useSpot();
 
   const mod_groups = product.propertyValues
     .filter((value) => {

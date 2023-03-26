@@ -1,6 +1,6 @@
-import { IFile, Nullable } from '~common/types';
-import { IPrice } from '~api/shipping.api.types';
-import { ISpot } from './access.api.types';
+import { IFile, Nullable } from "~common/types";
+import { IPrice } from "~api/shipping.api.types";
+import { ISpot } from "./access.api.types";
 
 export type ICategory = {
   id: number;
@@ -25,7 +25,7 @@ export type ICategory = {
   poster_id: number;
   published: boolean;
   hide_categories_in_spot: ISpot[];
-  image?: IFile;
+  image: IFile | null;
 };
 
 export type IOption = {
@@ -138,7 +138,7 @@ export type IProduct = {
   stock: Nullable<number>;
   reviews_rating: Nullable<string>;
   links: Nullable<any[]>; // jsonable
-  inventory_management_method: 'single' | 'variant';
+  inventory_management_method: "single" | "variant";
   allow_out_of_stock_purchases: boolean;
   stackable: boolean;
   shippable: boolean;
@@ -191,10 +191,15 @@ export type IFilter = {
 export type IGetCategoriesParams = {
   offset?: number;
   limit?: number;
-  spot_id_or_slug?: number;
 };
 
-export type SortKey = 'bestseller' | 'ratings' | 'latest' | 'price_low' | 'price_high' | 'oldest';
+export type SortKey =
+  | "bestseller"
+  | "ratings"
+  | "latest"
+  | "price_low"
+  | "price_high"
+  | "oldest";
 
 export type IGetProductsParams = {
   filter?: string;
@@ -203,7 +208,6 @@ export type IGetProductsParams = {
   sort?: SortKey | null;
   offset?: number;
   limit?: number;
-  spot_id_or_slug?: number;
   wishlist_id?: number;
   wishlist?: boolean;
 };

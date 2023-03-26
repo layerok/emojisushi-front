@@ -2,6 +2,7 @@ import { useAppStore } from "./use-app-store";
 import { useAuthStore } from "./use-auth-store";
 import { useCartStore } from "./use-cart-store";
 import { useProductsStore } from "./use-categories-store";
+import { useCategory } from "./use-category";
 import { useCitiesStore } from "./use-cities-store";
 import { useCity } from "./use-city";
 import { useLang } from "./use-lang";
@@ -25,5 +26,6 @@ export {
   useShippingStore,
   useSpot,
   useWishlistStore,
-  useLang
+  useLang,
+  useCategory,
 };

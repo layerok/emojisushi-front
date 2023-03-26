@@ -154,14 +154,9 @@ export const CartModal = observer(({ children }) => {
                   disabled={items.length === 0}
                   onClick={() => {
                     navigate(
-                      "/" +
-                        lang +
-                        "/" +
-                        city.slug +
-                        "/" +
-                        spot.slug +
-                        "/checkout"
+                      "/" + [lang, city.slug, spot.slug, "checkout"].join("/")
                     );
+                    close();
                   }}
                   width={"100%"}
                 >

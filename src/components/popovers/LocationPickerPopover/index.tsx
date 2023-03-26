@@ -6,7 +6,7 @@ import { DropdownPopover } from "../DropdownPopover";
 import { observer } from "mobx-react";
 import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg";
 import { useSpot } from "~hooks/use-spot";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useCity } from "~hooks/use-city";
 import { useCitiesStore } from "~hooks/use-cities-store";
 import { useLang } from "~hooks";
@@ -43,25 +43,29 @@ export const LocationPickerPopoverRaw = ({
       option.city.id === selectedCity.id && option.spot.id === selectedSpot.id
   );
   const selectedIndex = options.indexOf(selectedOption);
+  const location = useLocation();
   return (
     <>
       <DropdownPopover
         backgroundColor={backgroundColor}
         width={width}
-        disable={true}
+        disable={false}
         offset={offset}
         options={options}
         selectedIndex={selectedIndex}
         onSelect={({ close, option, index }) => {
-          navigate(
-            "/" +
-              lang +
-              "/" +
-              option.city.slug +
-              "/" +
-              option.spot.slug +
-              "/category/roli"
-          );
+          const segments = location.pathname.split("/");
+          // segments[0] is lang
+          // segments[1] index is city
+          // segments[2] index is spot
+          const nextSegments = [
+            lang,
+            option.city.slug,
+            option.spot.slug,
+            ...segments.splice(4),
+          ];
+          const nextUrl = nextSegments.join("/");
+          navigate("/" + nextUrl);
           close();
         }}
       >

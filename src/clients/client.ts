@@ -21,16 +21,21 @@ client.interceptors.request.use((config = {}) => {
   const { method } = config;
 
   const params: IParams = {};
+  const citySlug = LocalStorageService.get("city");
+  const spotSlug = LocalStorageService.get("spot");
 
-  const session_id = Cookies.get("session_id");
+  let session_id = Cookies.get("session_id");
+
+  if (citySlug) {
+    session_id += citySlug;
+  }
+
+  if (spotSlug) {
+    session_id += spotSlug;
+  }
 
   if (session_id) {
     params.session_id = session_id;
-  }
-  // todo: dont add spot_id param to every request
-  const spot_id = LocalStorageService.get("spot_id");
-  if (!params?.spot_id && spot_id) {
-    params.spot_id = spot_id;
   }
 
   if (process.env.REACT_APP_XDEBUG_SESSION_START === "true") {

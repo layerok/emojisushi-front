@@ -86,6 +86,7 @@ const SignUpForm = observer(({ setShowSignUp }) => {
           name: fields.name.value,
           surname: fields.surname.value,
           agree: fields.agree.checked,
+          spot_slug_or_id: spot.slug,
         })
           .then(() => {
             return AuthApi.login({
@@ -101,7 +102,8 @@ const SignUpForm = observer(({ setShowSignUp }) => {
                   stores.AuthStore.setExpires(expires);
                 });
                 navigate(
-                  "/" + lang + "/" + city.slug + "/" + spot.slug + "/account/profile"
+                  "/" +
+                    [lang, city.slug, spot.slug, "account", "profile"].join("/")
                 );
               })
               .finally(() => {
@@ -330,12 +332,7 @@ const LoginForm = ({ setShowSignUp, setShowPasswordRecovery }) => {
               });
               navigate(
                 "/" +
-                  lang +
-                  "/" +
-                  city.slug +
-                  "/" +
-                  spot.slug +
-                  "/account/profile"
+                  [lang, city.slug, spot.slug, "account", "profile"].join("/")
               );
             })
             .catch((e) => {
