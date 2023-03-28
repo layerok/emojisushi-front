@@ -18,9 +18,12 @@ import { UserSvg } from "~components/svg/UserSvg";
 import { AuthModal } from "~components/modals/AuthModal";
 import { LanguageSelector } from "~components/LanguageSelector";
 import { stores } from "~stores/stores";
-import { useNavigate } from "react-router-dom";
+import { Await, useNavigate, useRouteLoaderData } from "react-router-dom";
 import { useCartStore } from "~hooks/use-cart-store";
 import { useCity, useLang, useSpot } from "~hooks";
+import { loader as checkUserLoader } from "~components/CheckUser";
+import { Suspense } from "react";
+import Skeleton from "react-loading-skeleton";
 
 export const Header = observer(() => {
   const CartStore = useCartStore();
@@ -29,15 +32,16 @@ export const Header = observer(() => {
   const spot = useSpot();
   const lang = useLang();
   const { t } = useTranslation();
+  const { user } = useRouteLoaderData("checkUser") as ReturnType<
+    typeof checkUserLoader
+  >["data"];
 
   return (
     <S.Header>
       <Container>
         <FlexBox justifyContent={"space-between"} alignItems={"center"}>
           <S.Left>
-            <S.Link
-              to={"/" + [lang, city.slug, spot.slug, "category"].join("/")}
-            >
+            <S.Link to={"/"}>
               <SvgIcon clickable={true} color={"#FFE600"}>
                 <LogoSvg />
               </SvgIcon>

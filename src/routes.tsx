@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { defer, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "~components/ProtectedRoute";
 import { Layout } from "~layout/Layout";
 import { CartStore, CategoriesStore } from "~stores";
@@ -7,6 +7,20 @@ import {
   EnsureLocation,
   loader as ensureLocationLoader,
 } from "~components/EnsureLocation";
+
+export const spotLoader = () => {
+  return defer({
+    cart: {
+      products: CartStore.fetchItems(),
+    },
+  });
+};
+
+export const categoryLoader = () => {
+  return defer({
+    categories: CategoriesStore.fetchItems(),
+  });
+};
 
 export const routes = [
   {
@@ -28,14 +42,13 @@ export const routes = [
           },
           {
             lazy: () => import("~components/CheckUser"),
+            id: "checkUser",
             children: [
               {
                 path: ":citySlug/:spotSlug",
                 element: <Layout withRestaurantClosedModal={true} />,
-                loader: async () => {
-                  await CartStore.fetchItems();
-                  return true;
-                },
+                id: "spot",
+                loader: spotLoader,
                 children: [
                   {
                     index: true,
@@ -43,10 +56,8 @@ export const routes = [
                   },
                   {
                     path: "category",
-                    loader: async ({ params }) => {
-                      await CategoriesStore.fetchItems();
-                      return toJS(CategoriesStore.items);
-                    },
+                    loader: categoryLoader,
+                    id: "category",
                     children: [
                       {
                         index: true,

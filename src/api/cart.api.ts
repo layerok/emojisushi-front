@@ -1,7 +1,15 @@
+import { AxiosResponse } from "axios";
 import { client } from "~clients/client";
+import { ICartProduct } from "./cart.api.types";
 
 class Cart {
-  getProducts(params = {}) {
+  getProducts(params = {}): Promise<
+    AxiosResponse<{
+      data: ICartProduct[];
+      total: string;
+      totalQuantity: number;
+    }>
+  > {
     return client.get("cart/products", {
       params,
       // @ts-ignore
@@ -9,7 +17,13 @@ class Cart {
     });
   }
 
-  addProduct(params = {}) {
+  addProduct(params = {}): Promise<
+    AxiosResponse<{
+      data: ICartProduct[];
+      total: string;
+      totalQuantity: number;
+    }>
+  > {
     return client.get("cart/add", {
       params,
       // @ts-ignore
@@ -17,7 +31,13 @@ class Cart {
     });
   }
 
-  removeCartProduct(cart_product_id) {
+  removeCartProduct(cart_product_id): Promise<
+    AxiosResponse<{
+      data: ICartProduct[];
+      total: string;
+      totalQuantity: number;
+    }>
+  > {
     return client.get("cart/remove", {
       params: {
         cart_product_id,
@@ -27,7 +47,13 @@ class Cart {
     });
   }
 
-  clearCart(params = {}) {
+  clearCart(params = {}): Promise<
+    AxiosResponse<{
+      data: ICartProduct[];
+      total: string;
+      totalQuantity: number;
+    }>
+  > {
     return client.get("cart/clear", {
       params,
       // @ts-ignore

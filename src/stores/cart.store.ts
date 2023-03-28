@@ -42,41 +42,37 @@ export class CartStore {
     this.totalQuantity = value;
   };
 
-  clearCart = () => {
-    return CartApi.clearCart().then((res) => {
-      transaction(() => {
-        const instances = res.data.data.map(
-          (cartProduct) => new CartProduct(cartProduct)
-        );
-        this.setItems(instances);
-        this.setTotal(res.data.total);
-        this.setTotalQuantity(res.data.totalQuantity);
-      });
+  clearCart = async () => {
+    const res = await CartApi.clearCart();
+    const instances = res.data.data.map(
+      (cartProduct) => new CartProduct(cartProduct)
+    );
+    transaction(() => {
+      this.setItems(instances);
+      this.setTotal(res.data.total);
+      this.setTotalQuantity(res.data.totalQuantity);
     });
+    return instances;
   };
 
-  fetchItems() {
+  async fetchItems(): Promise<CartProduct[]> {
     this.setLoading(true);
-    return CartApi.getProducts()
-      .then((res) => {
-        transaction(() => {
-          const instances = res.data.data.map(
-            (cartProduct) => new CartProduct(cartProduct)
-          );
-          this.setItems(instances);
-          this.setTotal(res.data.total);
-          this.setTotalQuantity(res.data.totalQuantity);
-        });
-      })
-      .catch(() => {
-        this.setLoading(false);
-      })
-      .finally(() => {
-        this.setLoading(false);
-      });
+
+    const res = await CartApi.getProducts();
+    const instances = res.data.data.map(
+      (cartProduct) => new CartProduct(cartProduct)
+    );
+    transaction(() => {
+      this.setItems(instances);
+      this.setTotal(res.data.total);
+      this.setTotalQuantity(res.data.totalQuantity);
+    });
+
+    this.setLoading(false);
+    return instances;
   }
 
-  addProduct(params: {
+  async addProduct(params: {
     product_id: number;
     variant_id?: number;
     quantity?: number;
@@ -85,49 +81,38 @@ export class CartStore {
 
     this.setLoading(true);
     this.setPending([...this.pending, product_id]);
-    return CartApi.addProduct(params)
-      .then((res) => {
-        transaction(() => {
-          const instances = res.data.data.map(
-            (cartProduct) => new CartProduct(cartProduct)
-          );
-          this.setItems(instances);
-          this.setTotal(res.data.total);
-          this.setTotalQuantity(res.data.totalQuantity);
-        });
-      })
-      .finally(() => {
-        transaction(() => {
-          this.setLoading(false);
-          this.setPending(this.pending.filter((id) => id !== product_id));
-        });
-      })
-      .catch(() => {
-        transaction(() => {
-          this.setLoading(false);
-          this.setPending(this.pending.filter((id) => id !== product_id));
-        });
-      });
+
+    const res = await CartApi.addProduct(params);
+
+    const instances = res.data.data.map(
+      (cartProduct) => new CartProduct(cartProduct)
+    );
+
+    transaction(() => {
+      this.setItems(instances);
+      this.setTotal(res.data.total);
+      this.setTotalQuantity(res.data.totalQuantity);
+    });
+
+    this.setLoading(false);
+    this.setPending(this.pending.filter((id) => id !== product_id));
+    return instances;
   }
 
-  removeCartProduct(cart_product_id) {
+  async removeCartProduct(cart_product_id) {
     this.setLoading(true);
-    return CartApi.removeCartProduct(cart_product_id)
-      .then((res) => {
-        transaction(() => {
-          const instances = res.data.data.map(
-            (cartProduct) => new CartProduct(cartProduct)
-          );
-          this.setItems(instances);
-          this.setTotal(res.data.total);
-          this.setTotalQuantity(res.data.totalQuantity);
-        });
-      })
-      .finally(() => {
-        this.setLoading(false);
-      })
-      .catch(() => {
-        this.setLoading(false);
-      });
+
+    const res = await CartApi.removeCartProduct(cart_product_id);
+    const instances = res.data.data.map(
+      (cartProduct) => new CartProduct(cartProduct)
+    );
+    transaction(() => {
+      this.setItems(instances);
+      this.setTotal(res.data.total);
+      this.setTotalQuantity(res.data.totalQuantity);
+    });
+
+    this.setLoading(false);
+    return instances;
   }
 }

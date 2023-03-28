@@ -1,19 +1,59 @@
-import { Link } from "react-router-dom";
+import { Await, useRouteLoaderData } from "react-router-dom";
 import * as S from "./styled";
 
-import { useCategoriesStore, useCity, useLang, useSpot } from "~hooks";
+import { useCategoriesStore, useSpot } from "~hooks";
 import { useTranslation } from "react-i18next";
 import { SvgIcon } from "~components/svg/SvgIcon";
 import { useIsMobile } from "~common/hooks/useBreakpoint";
-import { LogoSvg } from "~components/svg/LogoSvg";
 import { ToteSvg } from "~components/svg/ToteSvg";
+import { categoryLoader } from "~routes";
+import { Suspense } from "react";
+import { Category } from "./components/Category";
+
+const Categories = () => {
+  const selectedSpot = useSpot();
+  const categoriesStore = useCategoriesStore();
+  return (
+    <ul>
+      {categoriesStore.publishedCategories
+        .filter((category) => {
+          const hidden = category.hide_categories_in_spot.find(
+            (spot) => spot.id === selectedSpot.id
+          );
+          return !hidden;
+        })
+        .map((category) => (
+          <Category key={category.id} category={category} />
+        ))}
+    </ul>
+  );
+};
+
+const CategoriesSkeleton = () => {
+  return (
+    <ul>
+      <Category />
+      <Category />
+      <Category />
+      <Category />
+      <Category />
+      <Category />
+      <Category />
+      <Category />
+      <Category />
+      <Category />
+      <Category />
+    </ul>
+  );
+};
 
 export const CategoryIndex = () => {
   const { t } = useTranslation();
-  const categoriesStore = useCategoriesStore();
-  const city = useCity();
-  const selectedSpot = useSpot();
-  const lang = useLang();
+
+  const { categories } = useRouteLoaderData("category") as ReturnType<
+    typeof categoryLoader
+  >["data"];
+
   const isMobile = useIsMobile();
 
   return (
@@ -26,42 +66,14 @@ export const CategoryIndex = () => {
           </SvgIcon>
         </S.Category.Label>
         <S.Category.Items>
-          <ul>
-            {categoriesStore.publishedCategories
-              .filter((category) => {
-                const hidden = category.hide_categories_in_spot.find(
-                  (spot) => spot.id === selectedSpot.id
-                );
-                return !hidden;
-              })
-              .map((category) => (
-                <li key={category.id}>
-                  <Link
-                    to={
-                      "/" +
-                      [
-                        lang,
-                        city.slug,
-                        selectedSpot.slug,
-                        "category",
-                        category.slug,
-                      ].join("/")
-                    }
-                  >
-                    <S.Category.Image>
-                      {category.image?.path ? (
-                        <img src={category.image.path} alt="" />
-                      ) : (
-                        <SvgIcon color={"white"} width={"80%"}>
-                          <LogoSvg />
-                        </SvgIcon>
-                      )}
-                    </S.Category.Image>
-                    <span>{category.name}</span>
-                  </Link>
-                </li>
-              ))}
-          </ul>
+          <Suspense fallback={<CategoriesSkeleton />}>
+            <Await
+              resolve={categories}
+              errorElement={<p>Error downloading categories!</p>}
+            >
+              {(categories) => <Categories />}
+            </Await>
+          </Suspense>
         </S.Category.Items>
       </S.Category.Container>
     </S.Category>

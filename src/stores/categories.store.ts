@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import MenuApi from "../api/menu.api";
-import { RootStore, stores } from "./stores";
+import { RootStore } from "./stores";
 import { ICategory, IGetCategoriesParams } from "~api/menu.api.types";
 
 export class CategoriesStore {
@@ -23,17 +23,15 @@ export class CategoriesStore {
     this.items = categories;
   };
 
-  fetchItems(params: IGetCategoriesParams = {}) {
+  async fetchItems(params: IGetCategoriesParams = {}) {
     this.setLoading(true);
-    return MenuApi.getCategories({
+    const res = await MenuApi.getCategories({
       ...params,
-    })
-      .then((res) => {
-        stores.CategoriesStore.setItems(res.data.data);
-      })
-      .finally(() => {
-        this.setLoading(false);
-      });
+    });
+    const items = res.data.data;
+    this.setItems(items);
+    this.setLoading(false);
+    return items;
   }
 
   findCategoryBySlug(slug: string) {
