@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { prop, theme } from 'styled-tools';
-import media from '../../common/custom-media';
+import styled from "styled-components";
+import { prop, theme } from "styled-tools";
+import media from "../../common/custom-media";
 
 const Category = styled.div`
   display: flex;
@@ -10,7 +10,7 @@ const Category = styled.div`
 
   padding-bottom: 50px;
 
-  ${media.lessThan('mobile')`
+  ${media.lessThan("mobile")`
    padding-top: 10px;
    padding-bottom: 60px;
   `}
@@ -40,7 +40,7 @@ Category.Label = styled.div`
   text-transform: uppercase;
   color: #fff;
 
-  ${media.lessThan('mobile')`
+  ${media.lessThan("mobile")`
     font-size: 16px;
     line-height: 20px;
   `}
@@ -66,7 +66,7 @@ Category.Image = styled.div`
 
   &:before {
     position: absolute;
-    content: '';
+    content: "";
     top: 0;
     left: 0;
     width: 100%;
@@ -80,69 +80,17 @@ Category.Items = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+`;
 
-  ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
+Category.List = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
 
-    ${media.lessThan('tablet')`
+  ${media.lessThan("tablet")`
       flex-direction: column;
       gap: 15px;
     `}
-
-    li {
-      width: calc(100% / 2 - 15px);
-
-      ${media.lessThan('tablet')`
-     width: 100%;
-    `}
-
-      a {
-        padding-left: 20px;
-        padding-right: 15px;
-        background: #1c1c1c;
-        border-radius: 10px;
-
-        transition: 0.3s;
-
-        display: flex;
-        align-items: center;
-
-        border: 1px solid #1c1c1c;
-
-        gap: 34px;
-
-        color: #ffffff;
-        text-decoration: none;
-        position: relative;
-
-        font-weight: 500;
-        font-size: 15px;
-        line-height: 18px;
-        text-transform: uppercase;
-
-        span {
-          display: inline-block;
-          max-width: 101px;
-          width: 100%;
-        }
-
-        &:hover {
-          color: ${theme('link.active')};
-        }
-        &:active {
-          border-color: ${theme('link.active')};
-          color: ${theme('link.active')};
-        }
-
-        ${media.lessThan('mobile')`
-        padding-right: 9px;
-        justify-content: space-between;
-        `}
-      }
-    }
-  }
 `;
 
 export { Category };

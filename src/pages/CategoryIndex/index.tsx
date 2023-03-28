@@ -14,7 +14,7 @@ const Categories = () => {
   const selectedSpot = useSpot();
   const categoriesStore = useCategoriesStore();
   return (
-    <ul>
+    <S.Category.List>
       {categoriesStore.publishedCategories
         .filter((category) => {
           const hidden = category.hide_categories_in_spot.find(
@@ -25,13 +25,13 @@ const Categories = () => {
         .map((category) => (
           <Category key={category.id} category={category} />
         ))}
-    </ul>
+    </S.Category.List>
   );
 };
 
 const CategoriesSkeleton = () => {
   return (
-    <ul>
+    <S.Category.List>
       <Category />
       <Category />
       <Category />
@@ -43,7 +43,7 @@ const CategoriesSkeleton = () => {
       <Category />
       <Category />
       <Category />
-    </ul>
+    </S.Category.List>
   );
 };
 

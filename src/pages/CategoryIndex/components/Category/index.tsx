@@ -1,5 +1,4 @@
 import Skeleton from "react-loading-skeleton";
-import { Link } from "react-router-dom";
 import { ICategory } from "~api/menu.api.types";
 import { LogoSvg } from "~components/svg/LogoSvg";
 import { SvgIcon } from "~components/svg/SvgIcon";
@@ -25,13 +24,13 @@ export const Category = ({ category }: { category?: ICategory }) => {
     "/" + [lang, city.slug, spot.slug, "category", category?.slug].join("/");
 
   return (
-    <li>
-      <Link to={category ? to : undefined}>
+    <S.Item>
+      <S.Link to={category ? to : undefined}>
         <S.Image>
           {category ? <Image category={category} /> : <Skeleton />}
         </S.Image>
         <span>{category?.name ?? <Skeleton />}</span>
-      </Link>
-    </li>
+      </S.Link>
+    </S.Item>
   );
 };
