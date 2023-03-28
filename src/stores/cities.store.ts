@@ -147,14 +147,14 @@ export class CitiesStore {
 
   loadItems = async (includeSpots = false) => {
     this.setLoading(true);
-    return AccessApi.getCities({
+    const res = await AccessApi.getCities({
       includeSpots,
-    })
-      .then((res) => {
-        this.setItems(res.data.data.map((city) => new City(city, this)));
-      })
-      .finally(() => {
-        this.setLoading(false);
-      });
+    });
+
+    const instanses = res.data.data.map((city) => new City(city, this));
+
+    this.setItems(instanses);
+    this.setLoading(false);
+    return instanses;
   };
 }

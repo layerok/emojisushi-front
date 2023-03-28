@@ -1,10 +1,7 @@
-import { toJS } from "mobx";
-import { useEffect, useLayoutEffect } from "react";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { defer, Navigate, Outlet, useLocation } from "react-router-dom";
 import { useCity } from "~hooks/use-city";
 import { useSpot } from "~hooks/use-spot";
-import LocalStorageService from "~services/local-storage.service";
-import { CitiesStore, AuthStore } from "~stores";
+import { CitiesStore } from "~stores";
 
 export const EnsureLocation = ({
   redirectPath = "/",
@@ -30,9 +27,10 @@ Object.assign(Component, {
   displayName: "LazyEnsureLocation",
 });
 
-export const loader = async ({ params }) => {
-  await CitiesStore.loadItems(true);
-  return toJS(CitiesStore.items);
+export const loader = ({ params }) => {
+  return defer({
+    cities: CitiesStore.loadItems(true),
+  });
 };
 
 export const shouldRevalidate = ({ currentParams, nextParams }) => {

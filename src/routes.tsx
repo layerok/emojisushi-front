@@ -20,6 +20,7 @@ export const routes = [
         path: ":lang?",
         element: <EnsureLocation redirectPath="/uk" />,
         loader: ensureLocationLoader,
+        id: "ensureLocation",
         children: [
           {
             index: true,
