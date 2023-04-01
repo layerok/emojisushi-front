@@ -1,24 +1,25 @@
 import { Await, useRouteLoaderData } from "react-router-dom";
 import * as S from "./styled";
 
-import { useCategoriesStore, useSpot } from "~hooks";
+import { useCategoriesStore, useSpotSlug } from "~hooks";
 import { useTranslation } from "react-i18next";
 import { SvgIcon } from "~components/svg/SvgIcon";
 import { useIsMobile } from "~common/hooks/useBreakpoint";
 import { ToteSvg } from "~components/svg/ToteSvg";
-import { categoryLoader } from "~routes";
+import { categoryLoaderIndex } from "~routes";
 import { Suspense } from "react";
 import { Category } from "./components/Category";
+import Skeleton from "react-loading-skeleton";
 
 const Categories = () => {
-  const selectedSpot = useSpot();
+  const spotSlug = useSpotSlug();
   const categoriesStore = useCategoriesStore();
   return (
     <S.Category.List>
       {categoriesStore.publishedCategories
         .filter((category) => {
           const hidden = category.hide_categories_in_spot.find(
-            (spot) => spot.id === selectedSpot.id
+            (spot) => spot.slug === spotSlug
           );
           return !hidden;
         })
@@ -50,8 +51,8 @@ const CategoriesSkeleton = () => {
 export const CategoryIndex = () => {
   const { t } = useTranslation();
 
-  const { categories } = useRouteLoaderData("category") as ReturnType<
-    typeof categoryLoader
+  const { categories } = useRouteLoaderData("categoryIndex") as ReturnType<
+    typeof categoryLoaderIndex
   >["data"];
 
   const isMobile = useIsMobile();
@@ -60,10 +61,16 @@ export const CategoryIndex = () => {
     <S.Category>
       <S.Category.Container>
         <S.Category.Label>
-          {t("categoryIndex.title")}
-          <SvgIcon width={isMobile ? "20px" : "25px"} color={"white"}>
-            <ToteSvg />
-          </SvgIcon>
+          <Suspense fallback={<Skeleton width={220} height={20} />}>
+            <Await resolve={categories}>
+              <>
+                {t("categoryIndex.title")}
+                <SvgIcon width={isMobile ? "20px" : "25px"} color={"white"}>
+                  <ToteSvg />
+                </SvgIcon>
+              </>
+            </Await>
+          </Suspense>
         </S.Category.Label>
         <S.Category.Items>
           <Suspense fallback={<CategoriesSkeleton />}>
@@ -71,7 +78,7 @@ export const CategoryIndex = () => {
               resolve={categories}
               errorElement={<p>Error downloading categories!</p>}
             >
-              {(categories) => <Categories />}
+              <Categories />
             </Await>
           </Suspense>
         </S.Category.Items>

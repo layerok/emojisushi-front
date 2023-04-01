@@ -6,6 +6,7 @@ const Footer = styled.footer`
   flex-shrink: 0;
   background-color: #171717;
   height: 239px;
+  overflow: hidden;
 
   & > div {
     height: 100%;
@@ -53,12 +54,16 @@ const Phone = styled.a`
   text-decoration: none;
   color: #ffff;
   margin-bottom: 10px;
+  width: 100%;
+`;
+
+const LinkContainer = styled.div`
+  margin-left: 10px;
 `;
 
 const InstagramLink = styled.a`
   text-decoration: none;
   color: #ffff;
-  margin-left: 10px;
 `;
 
 const PhoneLabel = styled.div`
@@ -67,6 +72,8 @@ const PhoneLabel = styled.div`
 
 const TelegramText = styled.p`
   margin-left: 10px;
+  width: 100%;
+  flex-grow: 1;
 `;
 
 const StaticMap = styled.div`
@@ -99,4 +106,5 @@ export {
   InstagramLink,
   TelegramText,
   StaticMap,
+  LinkContainer,
 };

@@ -1,6 +1,7 @@
 import { makeAutoObservable, transaction } from "mobx";
 import WishlistApi from "../api/wishlist.api";
 import { RootStore } from "~stores/stores";
+import { Product } from "~models/Product";
 
 export class WishlistStore {
   rootStore: RootStore;
@@ -32,4 +33,8 @@ export class WishlistStore {
       });
     });
   };
+
+  isPending(product: Product) {
+    return this.pending.includes(product.id);
+  }
 }

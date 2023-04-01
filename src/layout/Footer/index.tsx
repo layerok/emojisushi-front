@@ -11,85 +11,174 @@ import { LogoSvg } from "~components/svg/LogoSvg";
 import { useTranslation } from "react-i18next";
 import { observer } from "mobx-react";
 import { useSpot } from "~hooks/use-spot";
+import Skeleton from "react-loading-skeleton";
 
-export const FooterRaw = () => {
-  const spot = useSpot();
-  const { t } = useTranslation();
+type FooterProps = {
+  showSkeleton?: boolean;
+};
+
+export const Footer = ({ showSkeleton = false }: FooterProps) => {
   return (
     <S.Footer>
       <Container>
         <S.Left>
-          <S.Logo>
-            <SvgIcon color={"#FFE600"}>
-              <LogoSvg />
-            </SvgIcon>
-          </S.Logo>
-          <S.List>
-            {spot.hasPhones && (
-              <>
-                <FlexBox
-                  style={{
-                    marginBottom: "15px",
-                  }}
-                  alignItems={"center"}
-                >
-                  <SvgIcon width={"25px"} color={"white"}>
-                    <PhoneSvg />
-                  </SvgIcon>
-                  <S.PhoneLabel>{t("footerPhones.phones")}</S.PhoneLabel>
-                </FlexBox>
-
-                <FlexBox flexDirection={"column"}>
-                  {spot.phones.split(",").map((phone, i) => (
-                    <S.Phone key={i} href={`tel:${phone}`}>
-                      {phone}
-                    </S.Phone>
-                  ))}
-                </FlexBox>
-              </>
-            )}
-
-            <FlexBox alignItems={"center"}>
-              <SvgIcon width={"25px"} color={"white"}>
-                <InstagramSvg />
-              </SvgIcon>
-              <S.InstagramLink
-                href={"https://www.instagram.com/emoji_sushi_/"}
-                target={"_blank"}
-              >
-                emoji_sushi
-              </S.InstagramLink>
-            </FlexBox>
-            <TelegramModal>
-              <FlexBox
-                style={{
-                  marginTop: "10px",
-                }}
-                alignItems={"center"}
-              >
-                <SvgIcon width={"25px"} color={"white"}>
-                  <TelegramSvg />
-                </SvgIcon>
-                <S.TelegramText>Telegram</S.TelegramText>
-              </FlexBox>
-            </TelegramModal>
-          </S.List>
+          <Logo showSkeleton={showSkeleton} />
+          <Socials showSkeleton={showSkeleton} />
         </S.Left>
         <S.Right>
-          <S.StaticMap>
-            <StaticMap
-              width={"100%"}
-              height={"100%"}
-              topLeft={"10px"}
-              topRight={"10px"}
-              bottomLeft={"0px"}
-              bottomRight={"0px"}
-            />
-          </S.StaticMap>
+          <Map showSkeleton={showSkeleton} />
         </S.Right>
       </Container>
     </S.Footer>
   );
 };
 
-export const Footer = observer(FooterRaw);
+const Map = ({ showSkeleton = false }: { showSkeleton?: boolean }) => {
+  return (
+    <S.StaticMap>
+      {showSkeleton ? (
+        <Skeleton width={"100%"} height={"100%"} />
+      ) : (
+        <StaticMap
+          width={"100%"}
+          height={"100%"}
+          topLeft={"10px"}
+          topRight={"10px"}
+          bottomLeft={"0px"}
+          bottomRight={"0px"}
+        />
+      )}
+    </S.StaticMap>
+  );
+};
+
+const Socials = ({ showSkeleton = false }: { showSkeleton?: boolean }) => {
+  return (
+    <S.List>
+      <Phones showSkeleton={showSkeleton} />
+      <Instagram showSkeleton={showSkeleton} />
+      <Telegram showSkeleton={showSkeleton} />
+    </S.List>
+  );
+};
+
+const Phones = observer(
+  ({ showSkeleton = false }: { showSkeleton?: boolean }) => {
+    const spot = useSpot();
+    const { t } = useTranslation();
+    return (
+      spot?.hasPhones && (
+        <>
+          <FlexBox
+            style={{
+              marginBottom: "15px",
+            }}
+            alignItems={"center"}
+          >
+            <SvgIcon showSkeleton={showSkeleton} width={"25px"} color={"white"}>
+              <PhoneSvg />
+            </SvgIcon>
+
+            <S.PhoneLabel>
+              {showSkeleton ? (
+                <Skeleton width={100} />
+              ) : (
+                t("footerPhones.phones")
+              )}
+            </S.PhoneLabel>
+          </FlexBox>
+
+          <FlexBox flexDirection={"column"}>
+            {showSkeleton ? (
+              <>
+                <Phone showSkeleton />
+                <Phone showSkeleton />
+              </>
+            ) : (
+              spot.phones.split(",").map((phone, i) => <Phone phone={phone} />)
+            )}
+          </FlexBox>
+        </>
+      )
+    );
+  }
+);
+
+const Phone = ({
+  showSkeleton = false,
+  phone,
+}: {
+  showSkeleton?: boolean;
+  phone?: string;
+}) => {
+  if (showSkeleton) {
+    return (
+      <S.Phone>
+        <Skeleton />
+      </S.Phone>
+    );
+  }
+  return <S.Phone href={`tel:${phone}`}>{phone}</S.Phone>;
+};
+
+const Instagram = ({ showSkeleton = false }) => {
+  return (
+    <FlexBox alignItems={"center"}>
+      <SvgIcon showSkeleton={showSkeleton} width={"25px"} color={"white"}>
+        <InstagramSvg />
+      </SvgIcon>
+      <S.LinkContainer
+        style={{
+          flexGrow: 1,
+        }}
+      >
+        {showSkeleton ? (
+          <Skeleton />
+        ) : (
+          <S.InstagramLink
+            href={"https://www.instagram.com/emoji_sushi_/"}
+            target={"_blank"}
+          >
+            emoji_sushi
+          </S.InstagramLink>
+        )}
+      </S.LinkContainer>
+    </FlexBox>
+  );
+};
+
+const Telegram = ({ showSkeleton = false }: { showSkeleton?: boolean }) => {
+  return (
+    <TelegramModal>
+      <FlexBox
+        style={{
+          marginTop: "10px",
+          width: "100%",
+        }}
+        alignItems={"center"}
+      >
+        <SvgIcon showSkeleton={showSkeleton} width={"25px"} color={"white"}>
+          <TelegramSvg />
+        </SvgIcon>
+
+        <S.TelegramText>
+          {showSkeleton ? <Skeleton /> : "Telegram"}
+        </S.TelegramText>
+      </FlexBox>
+    </TelegramModal>
+  );
+};
+
+const Logo = ({ showSkeleton }: { showSkeleton?: boolean }) => {
+  return (
+    <S.Logo>
+      {showSkeleton ? (
+        <Skeleton width={160} height={73} />
+      ) : (
+        <SvgIcon color={"#FFE600"}>
+          <LogoSvg />
+        </SvgIcon>
+      )}
+    </S.Logo>
+  );
+};

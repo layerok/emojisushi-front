@@ -3,11 +3,16 @@ import { useEffect, useState } from "react";
 import i18n from "~i18n";
 import LocalStorageService from "~services/local-storage.service";
 import { createProviderLessContextHook } from "~common/createProviderLessContext";
-import { useHref, useLocation, useMatch, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 
 const useLanguageContext = createProviderLessContextHook("uk");
 
-export const LanguageSelector = () => {
+export const LanguageSelector = ({
+  showSkeleton = false,
+}: {
+  showSkeleton?: boolean;
+}) => {
   const [selectedLang, setSelectedLang] = useLanguageContext();
   useEffect(() => {
     setSelectedLang(i18n.resolvedLanguage);
@@ -16,6 +21,10 @@ export const LanguageSelector = () => {
   const [langs] = useState(["uk", "ru"]);
   const location = useLocation();
   const navigate = useNavigate();
+
+  if (showSkeleton) {
+    return <Skeleton borderRadius={10} height={40} width={75} />;
+  }
 
   return (
     <S.Container>

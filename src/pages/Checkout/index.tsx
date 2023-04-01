@@ -3,7 +3,7 @@ import { CheckoutForm } from "./components/CheckoutForm";
 import { CheckoutCart } from "./components/CheckoutCart";
 import { Heading } from "~components/Heading";
 import { useIsMobile } from "~common/hooks/useBreakpoint";
-import { useNavigate } from "react-router-dom";
+import { defer, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";

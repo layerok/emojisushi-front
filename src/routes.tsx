@@ -2,7 +2,6 @@ import { defer, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "~components/ProtectedRoute";
 import { Layout } from "~layout/Layout";
 import { CartStore, CategoriesStore } from "~stores";
-import { toJS } from "mobx";
 import {
   EnsureLocation,
   loader as ensureLocationLoader,
@@ -16,7 +15,7 @@ export const spotLoader = () => {
   });
 };
 
-export const categoryLoader = () => {
+export const categoryLoaderIndex = () => {
   return defer({
     categories: CategoriesStore.fetchItems(),
   });
@@ -25,10 +24,11 @@ export const categoryLoader = () => {
 export const routes = [
   {
     lazy: () => import("~pages/LocationSaver"),
+    path: "/",
     children: [
       {
-        path: "/",
-        element: <Navigate to={"uk"} />,
+        index: true,
+        element: <Navigate to={"/uk"} />,
       },
       {
         path: ":lang?",
@@ -56,8 +56,8 @@ export const routes = [
                   },
                   {
                     path: "category",
-                    loader: categoryLoader,
-                    id: "category",
+                    loader: categoryLoaderIndex,
+                    id: "categoryIndex",
                     children: [
                       {
                         index: true,
@@ -66,6 +66,7 @@ export const routes = [
                       {
                         path: ":categorySlug",
                         lazy: () => import("~pages/Category"),
+                        id: "category",
                       },
                     ],
                   },

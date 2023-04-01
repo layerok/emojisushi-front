@@ -3,8 +3,12 @@ import { FlexBox } from "../FlexBox";
 import { SvgIcon } from "../svg/SvgIcon";
 import { BagSvg } from "../svg/BagSvg";
 import { ButtonFilled } from "../buttons/Button";
+import Skeleton from "react-loading-skeleton";
 
-export const CartButton = ({ count = 0, total = 0 }) => {
+export const CartButton = ({ count = 0, total = 0, showSkeleton = false }) => {
+  if (showSkeleton) {
+    return <Skeleton width={170} height={40} borderRadius={10} />;
+  }
   return (
     <ButtonFilled padding={"0 24px"} minWidth={"170px"}>
       <FlexBox alignItems={"center"}>

@@ -13,11 +13,11 @@ export const EnsureLocation = ({
   const city = useCity();
   const spot = useSpot();
   const location = useLocation();
-  console.log("dbg ensureLocation", city?.slug, spot?.slug);
+  // console.log("dbg ensureLocation", city?.slug, spot?.slug);
 
-  if ((!city || !spot) && location.pathname !== redirectPath) {
-    return <Navigate to={redirectPath} replace />;
-  }
+  // if ((!city || !spot) && location.pathname !== redirectPath) {
+  //   return <Navigate to={redirectPath} replace />;
+  // }
 
   return children ? children : <Outlet />;
 };

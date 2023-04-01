@@ -1,57 +1,102 @@
 import * as S from "./styled";
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
 import { SvgIcon } from "~components/svg/SvgIcon";
 import { HorizontalArrowsSvg } from "~components/svg/HorizontalArrowsSvg";
 import { FlexBox } from "~components/FlexBox";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useCategoriesStore, useCity, useLang, useSpot } from "~hooks";
+import { useCitySlug, useLang, useSpotSlug } from "~hooks";
 import { observer } from "mobx-react";
+import { ICategory } from "~api/menu.api.types";
+import Skeleton from "react-loading-skeleton";
+import { clamp } from "~utils/utils";
 
-const HorizontalMenu = observer(() => {
-  const { t } = useTranslation();
+const HorizontalMenu = observer(
+  ({
+    categories = [],
+    showSkeleton = false,
+  }: {
+    categories?: ICategory[];
+    showSkeleton?: boolean;
+  }) => {
+    const { t } = useTranslation();
+
+    return (
+      <nav>
+        <S.Categories>
+          <S.Hint>
+            {showSkeleton ? (
+              <Skeleton width={87} height={25} />
+            ) : (
+              <FlexBox alignItems={"center"}>
+                <SvgIcon width={"25px"}>
+                  <HorizontalArrowsSvg />
+                </SvgIcon>
+                <div style={{ marginLeft: "10px" }}>{t("common.swipe")}</div>
+              </FlexBox>
+            )}
+          </S.Hint>
+
+          <S.HorizontalContainer>
+            {showSkeleton ? (
+              <>
+                <Category showSkeleton />
+                <Category showSkeleton />
+                <Category showSkeleton />
+                <Category showSkeleton />
+                <Category showSkeleton />
+                <Category showSkeleton />
+                <Category showSkeleton />
+              </>
+            ) : (
+              categories.map((category) => {
+                return <Category category={category} />;
+              })
+            )}
+          </S.HorizontalContainer>
+        </S.Categories>
+      </nav>
+    );
+  }
+);
+
+const Category = ({
+  showSkeleton = false,
+  category,
+}: {
+  showSkeleton?: boolean;
+  category?: ICategory;
+}) => {
   const { categorySlug } = useParams();
-  const city = useCity();
-  const spot = useSpot();
+  const citySlug = useCitySlug();
+  const spotSlug = useSpotSlug();
   const lang = useLang();
-  const categories = useCategoriesStore().publishedCategories;
-  return (
-    <nav>
-      <S.Categories>
-        <S.Hint>
-          <FlexBox alignItems={"center"}>
-            <SvgIcon width={"25px"}>
-              <HorizontalArrowsSvg />
-            </SvgIcon>
-            <div style={{ marginLeft: "10px" }}>{t("common.swipe")}</div>
-          </FlexBox>
-        </S.Hint>
+  const active = categorySlug === category?.slug;
+  const nextSegments = [lang, citySlug, spotSlug, "category", category?.slug];
 
-        <S.HorizontalContainer>
-          {categories.map((category) => {
-            const active = categorySlug === category.slug;
-            const nextSegments = [
-              lang,
-              city.slug,
-              spot.slug,
-              "category",
-              category.slug,
-            ];
-            return (
-              <S.Category
-                to={"/" + nextSegments.join("/")}
-                isActive={active}
-                key={category.id}
-              >
-                {category.name}
-              </S.Category>
-            );
-          })}
-        </S.HorizontalContainer>
-      </S.Categories>
-    </nav>
+  if (showSkeleton) {
+    const randomWidth = Math.floor(Math.random() * 250);
+    return (
+      <S.Category>
+        <Skeleton
+          borderRadius={5}
+          height={40}
+          width={clamp(randomWidth, 80, 250)}
+        />
+      </S.Category>
+    );
+  }
+
+  return (
+    <S.Category>
+      <S.CategoryLink
+        to={"/" + nextSegments.join("/")}
+        isActive={active}
+        key={category.id}
+      >
+        {category.name}
+      </S.CategoryLink>
+    </S.Category>
   );
-});
+};
 
 export { HorizontalMenu };

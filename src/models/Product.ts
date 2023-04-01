@@ -107,4 +107,22 @@ export class Product {
     }
     return this.prices.length > 0 ? this.prices[0].price_formatted : undefined;
   }
+
+  get modGroups() {
+    return this.propertyValues
+      .filter((value) => {
+        return value.property?.options?.length > 0;
+      })
+      .reduce((acc, property) => {
+        if (acc.includes(property.property_id)) {
+          return acc;
+        }
+        return [...acc, property.property_id];
+      }, [])
+      .map((id) => {
+        return this.propertyValues.find(
+          (property) => property.property_id === id
+        );
+      });
+  }
 }

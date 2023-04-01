@@ -1,9 +1,26 @@
+import Skeleton from "react-loading-skeleton";
 import { ButtonCounter } from "../../Counter";
 import { ButtonOutline } from "../Button";
 import { useTranslation } from "react-i18next";
 
-export const AddToCartButton = ({ pending, count, handleAdd }) => {
+type AddToCartButtonProps = {
+  showSkeleton: boolean;
+  count: number;
+  pending: boolean;
+  handleAdd: (count: number) => void;
+};
+
+export const AddToCartButton = ({
+  pending,
+  count,
+  handleAdd,
+  showSkeleton = false,
+}) => {
   const { t } = useTranslation();
+
+  if (showSkeleton) {
+    return <Skeleton width={130} height={40} borderRadius={10} />;
+  }
 
   if (count && !pending) {
     return (

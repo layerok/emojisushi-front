@@ -10,15 +10,18 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useCity } from "~hooks/use-city";
 import { useCitiesStore } from "~hooks/use-cities-store";
 import { useLang } from "~hooks";
+import Skeleton from "react-loading-skeleton";
 
 export const LocationPickerPopoverRaw = ({
   offset = 0,
   backgroundColor = "#171717",
   width = "211px",
+  showSkeleton = false,
 }: {
   offset?: number;
   backgroundColor?: string;
   width?: string;
+  showSkeleton?: boolean;
 }) => {
   const navigate = useNavigate();
 
@@ -44,6 +47,10 @@ export const LocationPickerPopoverRaw = ({
   );
   const selectedIndex = options.indexOf(selectedOption);
   const location = useLocation();
+
+  if (showSkeleton) {
+    return <Skeleton width={width} height={40} />;
+  }
   return (
     <>
       <DropdownPopover

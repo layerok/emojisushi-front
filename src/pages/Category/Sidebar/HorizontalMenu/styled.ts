@@ -26,7 +26,11 @@ const Hint = styled.div`
   right: 0;
 `;
 
-const Category = styled(ActiveNavLink)`
+const Category = styled.div`
+  margin-right: 16px;
+  flex-shrink: 0;
+`;
+const CategoryLink = styled(ActiveNavLink)`
   display: flex;
   text-transform: uppercase;
   line-height: 20px;
@@ -34,14 +38,12 @@ const Category = styled(ActiveNavLink)`
   cursor: pointer;
   color: white;
   text-decoration: none;
-  margin-right: 16px;
 
   &:hover {
     color: ${theme("link.active")};
     border: 1px solid ${theme("link.active")};
   }
 
-  flex-shrink: 0;
   border: 1px solid white;
   border-radius: 5px;
   padding: 9px 23px;
@@ -55,4 +57,4 @@ const Category = styled(ActiveNavLink)`
   )}
 `;
 
-export { Categories, Category, Hint, HorizontalContainer };
+export { Categories, Category, CategoryLink, Hint, HorizontalContainer };

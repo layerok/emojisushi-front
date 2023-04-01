@@ -73,7 +73,7 @@ export class ProductsStore {
     this.setSearch("");
   };
 
-  fetchItems(params: IGetProductsParams = {}) {
+  async fetchItems(params: IGetProductsParams = {}) {
     this.setLoading(true);
     this.setLastParams(params);
 
@@ -81,7 +81,7 @@ export class ProductsStore {
       return acc + `&${slug}=${slug}`;
     }, "");
 
-    return MenuApi.getProducts({
+    const res = await MenuApi.getProducts({
       filter: filter,
       category_slug: "menu",
       search: this.search,
@@ -89,24 +89,21 @@ export class ProductsStore {
       offset: this.offset,
       limit: this.limit,
       ...params,
-    })
-      .then((res) => {
-        transaction(() => {
-          const instances = res.data.data.map((json) => {
-            return new Product(json);
-          });
-          this.setItems(instances);
-          this.setFilters(res.data.filters);
-          this.setSortOptions(res.data.sort_options);
-          this.setTotal(res.data.total);
-        });
-      })
-      .finally(() => {
-        this.setLoading(false);
-      })
-      .catch(() => {
-        this.setLoading(false);
-      });
+    });
+
+    const instances = res.data.data.map((json) => {
+      return new Product(json);
+    });
+
+    transaction(() => {
+      this.setItems(instances);
+      this.setFilters(res.data.filters);
+      this.setSortOptions(res.data.sort_options);
+      this.setTotal(res.data.total);
+      this.setLoading(false);
+    });
+
+    return instances;
   }
 
   refresh() {

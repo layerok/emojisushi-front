@@ -1,8 +1,9 @@
-import { useParams } from "react-router-dom";
 import { useCitiesStore } from "./use-cities-store";
+import { City } from "~stores/cities.store";
+import { useCitySlug } from "./use-city-slug";
 
-export const useCity = () => {
-  const { citySlug } = useParams();
+export const useCity = (): City | undefined => {
+  const citySlug = useCitySlug();
   const citiesStore = useCitiesStore();
   return citiesStore.items.find((city) => city.slug === citySlug);
 };

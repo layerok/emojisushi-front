@@ -2,6 +2,8 @@ import { makeAutoObservable, transaction } from "mobx";
 import CartApi from "../api/cart.api";
 import { RootStore } from "~stores/stores";
 import { CartProduct } from "~models/CartProduct";
+import { Product } from "~models/Product";
+import { Variant } from "~models/Variant";
 
 export class CartStore {
   rootStore: RootStore;
@@ -114,5 +116,18 @@ export class CartStore {
 
     this.setLoading(false);
     return instances;
+  }
+
+  findInCart(product: Product, variant?: Variant) {
+    if (product.inventoryManagementMethod === "variant") {
+      return this.items.find(
+        (cartProduct) =>
+          cartProduct.productId === product.id &&
+          cartProduct.variantId === variant?.id
+      );
+    }
+    return this.items.find(
+      (cartProduct) => cartProduct.productId === product.id
+    );
   }
 }

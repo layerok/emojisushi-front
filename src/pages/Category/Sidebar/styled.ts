@@ -5,6 +5,7 @@ import { SearchInput as SearchInputBase } from "../../../components/SearchInput"
 const Sidebar = styled.div`
   width: 100%;
   margin-bottom: 30px;
+  flex-shrink: 0;
 
   ${media.greaterThan("pc")`
     margin-right: 30px;
@@ -12,14 +13,19 @@ const Sidebar = styled.div`
   `}
 `;
 
-const SearchInput = styled(SearchInputBase)`
-  flex-shrink: 0;
-  width: 100%;
+const SearchContainer = styled.div`
   margin-bottom: 30px;
   ${media.greaterThan("tablet")`
-    width: 255px;
     margin-bottom: 0px;
  `}
 `;
 
-export { Sidebar, SearchInput };
+const SearchInput = styled(SearchInputBase)`
+  flex-shrink: 0;
+  width: 100%;
+  ${media.greaterThan("tablet")`
+    width: 255px;
+ `}
+`;
+
+export { Sidebar, SearchInput, SearchContainer };

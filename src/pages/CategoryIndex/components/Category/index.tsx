@@ -2,7 +2,7 @@ import Skeleton from "react-loading-skeleton";
 import { ICategory } from "~api/menu.api.types";
 import { LogoSvg } from "~components/svg/LogoSvg";
 import { SvgIcon } from "~components/svg/SvgIcon";
-import { useCity, useLang, useSpot } from "~hooks";
+import { useCity, useCitySlug, useLang, useSpot, useSpotSlug } from "~hooks";
 import * as S from "./styled";
 
 const Image = ({ category }: { category?: ICategory }) => {
@@ -18,10 +18,10 @@ const Image = ({ category }: { category?: ICategory }) => {
 
 export const Category = ({ category }: { category?: ICategory }) => {
   const lang = useLang();
-  const city = useCity();
-  const spot = useSpot();
+  const citySlug = useCitySlug();
+  const spotSlug = useSpotSlug();
   const to =
-    "/" + [lang, city.slug, spot.slug, "category", category?.slug].join("/");
+    "/" + [lang, citySlug, spotSlug, "category", category?.slug].join("/");
 
   return (
     <S.Item>

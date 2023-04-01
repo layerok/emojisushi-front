@@ -10,10 +10,11 @@ import { CartModal } from "~components/modals/CartModal";
 import { TinyCartButton } from "~components/TinyCartButton";
 import { Sticky } from "../../components/Sticky";
 import { StickyToTopBtn } from "../../components/StickyToTopBtn";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, Suspense, useEffect } from "react";
 import { useProductsStore } from "~hooks/use-categories-store";
 import { useCartStore } from "~hooks/use-cart-store";
-import { Outlet } from "react-router-dom";
+import { Await, Outlet, useRouteLoaderData } from "react-router-dom";
+import { loader } from "~components/EnsureLocation";
 
 export const Layout = observer(
   ({
@@ -32,6 +33,9 @@ export const Layout = observer(
     const location = useLocation();
     const ProductsStore = useProductsStore();
     const CartStore = useCartStore();
+    const { cities } = useRouteLoaderData("ensureLocation") as ReturnType<
+      typeof loader
+    >["data"];
 
     const showStickyCart = y > 100;
 
@@ -46,7 +50,12 @@ export const Layout = observer(
 
     return (
       <S.Layout {...rest}>
-        <Header />
+        <Suspense fallback={<Header showSkeleton />}>
+          <Await resolve={cities}>
+            <Header />
+          </Await>
+        </Suspense>
+
         <S.Main {...mainProps}>
           <Container {...containerProps}>
             <S.Content>
@@ -54,17 +63,27 @@ export const Layout = observer(
             </S.Content>
           </Container>
         </S.Main>
-        <Footer />
+
+        <Suspense fallback={<Footer showSkeleton={true} />}>
+          <Await resolve={cities}>
+            <Footer />
+          </Await>
+        </Suspense>
 
         {withRestaurantClosedModal && <RestaurantClosed open={closed} />}
 
-        <Sticky top={"30px"} right={"30px"} show={showStickyCart}>
-          <CartModal>
-            <div>
-              <TinyCartButton price={CartStore.total} />
-            </div>
-          </CartModal>
-        </Sticky>
+        <Suspense>
+          <Await resolve={cities}>
+            <Sticky top={"30px"} right={"30px"} show={showStickyCart}>
+              <CartModal>
+                <div>
+                  <TinyCartButton price={CartStore.total} />
+                </div>
+              </CartModal>
+            </Sticky>
+          </Await>
+        </Suspense>
+
         <StickyToTopBtn />
       </S.Layout>
     );

@@ -1,3 +1,4 @@
+import Skeleton from "react-loading-skeleton";
 import * as S from "./styled";
 import { CSSProperties, forwardRef, HTMLProps, PropsWithChildren } from "react";
 
@@ -10,6 +11,7 @@ export type ISvgIconProps = HTMLProps<HTMLSpanElement> &
     height?: string;
     clickable?: boolean;
     style?: CSSProperties;
+    showSkeleton?: boolean;
   }>;
 
 export const SvgIcon = forwardRef<HTMLSpanElement, ISvgIconProps>(
@@ -21,11 +23,16 @@ export const SvgIcon = forwardRef<HTMLSpanElement, ISvgIconProps>(
       width,
       height,
       clickable = false,
+      showSkeleton = false,
       style = {},
       ...rest
     },
     ref
   ) => {
+    if (showSkeleton) {
+      return <Skeleton width={width || 25} height={height || 25} />;
+    }
+
     return (
       <S.Parent
         style={{

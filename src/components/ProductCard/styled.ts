@@ -26,8 +26,8 @@ const Image = styled.div`
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  width: 190px;
-  height: 170px;
+  width: ${prop("width", 190)}px;
+  height: ${prop("width", 170)}px;
   margin: 0 auto;
 
   ${media.lessThan("tablet")`
@@ -78,6 +78,7 @@ const Favorite = styled.div`
   position: absolute;
   top: 22px;
   right: 12px;
+  z-index: 2;
 
   ${media.lessThan("tablet")`
     top: 30px;

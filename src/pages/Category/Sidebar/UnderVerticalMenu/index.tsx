@@ -7,14 +7,23 @@ import { TelegramSvg } from "~components/svg/TelegramSvg";
 import { TelegramModal } from "~components/modals/TelegramModal";
 import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useCity, useLang, useSpot } from "~hooks";
+import { useLang } from "~hooks";
+import { useCitySlug } from "~hooks";
+import { useSpotSlug } from "~hooks";
+import Skeleton from "react-loading-skeleton";
 
-export const UnderVerticalMenu = () => {
+type UnderVerticalMenuProps = {
+  showSkeleton?: boolean;
+};
+
+export const UnderVerticalMenu = ({
+  showSkeleton = false,
+}: UnderVerticalMenuProps) => {
   const navigate = useNavigate();
   let resolved = useResolvedPath("/wishlist");
   let match = useMatch({ path: resolved.pathname, end: true });
-  const city = useCity();
-  const spot = useSpot();
+  const citySlug = useCitySlug();
+  const spotSlug = useSpotSlug();
   const lang = useLang();
   const { t } = useTranslation();
   return (
@@ -22,31 +31,50 @@ export const UnderVerticalMenu = () => {
       <S.Favorite
         active={!!match}
         onClick={() => {
-          navigate("/" + [lang, city.slug, spot.slug, "/wishlist"]);
+          navigate("/" + [lang, citySlug, spotSlug, "/wishlist"]);
         }}
       >
-        {t("common.favorite")}
-        <Favorite isFavorite={true} />
+        {showSkeleton ? (
+          <Skeleton height={26} width={120} />
+        ) : (
+          t("common.favorite")
+        )}
+        {showSkeleton ? (
+          <Skeleton circle width={25} height={25} />
+        ) : (
+          <Favorite isFavorite={true} />
+        )}
       </S.Favorite>
-      <S.Text>{t("underVerticalMenu.in_touch")}</S.Text>
+
+      <S.Text>
+        {showSkeleton ? <Skeleton /> : t("underVerticalMenu.in_touch")}
+      </S.Text>
       <S.SvgContainer>
         <S.OneSvg
           href={"https://www.instagram.com/emoji_sushi_/"}
           target={"_blank"}
         >
-          <SvgButton>
-            <SvgIcon color={"black"}>
-              <InstagramSvg />
-            </SvgIcon>
-          </SvgButton>
+          {showSkeleton ? (
+            <Skeleton width={40} height={40} />
+          ) : (
+            <SvgButton>
+              <SvgIcon color={"black"}>
+                <InstagramSvg />
+              </SvgIcon>
+            </SvgButton>
+          )}
         </S.OneSvg>
-        <TelegramModal>
-          <SvgButton>
-            <SvgIcon color={"black"}>
-              <TelegramSvg />
-            </SvgIcon>
-          </SvgButton>
-        </TelegramModal>
+        {showSkeleton ? (
+          <Skeleton width={40} height={40} />
+        ) : (
+          <TelegramModal>
+            <SvgButton>
+              <SvgIcon color={"black"}>
+                <TelegramSvg />
+              </SvgIcon>
+            </SvgButton>
+          </TelegramModal>
+        )}
       </S.SvgContainer>
     </>
   );
