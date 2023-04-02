@@ -4,12 +4,13 @@ import {
   Await,
   Navigate,
   defer,
+  useNavigate,
   useParams,
   useRouteLoaderData,
 } from "react-router-dom";
 import { useProductsStore } from "~hooks/use-categories-store";
 import { ProductsStore } from "~stores";
-import { useCategoriesStore, useSpot } from "~hooks";
+import { useCategoriesStore, useLang, useSpot } from "~hooks";
 import { FlexBox } from "~components/FlexBox";
 import { Banner } from "./Banner";
 import { useIsDesktop } from "~common/hooks/useBreakpoint";
@@ -20,13 +21,17 @@ import { loader as categoryLoader } from "~pages/Category";
 
 export const Category = observer(() => {
   const ProductsStore = useProductsStore();
-  const { categorySlug } = useParams();
+  const { categorySlug, spotSlug, citySlug } = useParams();
+  const lang = useLang();
   const CategoriesStore = useCategoriesStore();
   const selectedCategory = CategoriesStore.publishedCategories.find(
     (category) => {
       return category.slug === categorySlug;
     }
   );
+
+  const navigate = useNavigate();
+
   const title = selectedCategory?.name;
   const isDesktop = useIsDesktop();
   const selectedSpot = useSpot();
@@ -40,11 +45,13 @@ export const Category = observer(() => {
   >["data"];
 
   const handleLoadMore = () => {
-    const settings = {
-      limit: ProductsStore.items.length + ProductsStore.step,
-      category_slug: categorySlug,
-    };
-    ProductsStore.fetchItems(settings);
+    const nextLimit = ProductsStore.items.length + ProductsStore.step;
+    navigate(
+      "/" +
+        [lang, citySlug, spotSlug, "category", categorySlug, nextLimit].join(
+          "/"
+        )
+    );
   };
 
   // if (!selectedCategory && categories.length > 0) {
@@ -97,11 +104,13 @@ Object.assign(Component, {
   displayName: "LazyCategoryPage",
 });
 
-export const loader = ({ params }) => {
+export const loader = ({ params, request }) => {
+  const { limit = ProductsStore.step } = params;
+  console.log("limit", limit);
   return defer({
     products: ProductsStore.fetchItems({
       category_slug: params.categorySlug,
-      limit: ProductsStore.step,
+      limit: +limit,
     }),
   });
 };

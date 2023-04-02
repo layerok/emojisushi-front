@@ -35,5 +35,8 @@ export const loader = ({ params }) => {
 };
 
 export const shouldRevalidate = ({ currentParams, nextParams }) => {
-  return currentParams.lang !== nextParams.lang;
+  if (currentParams.lang !== nextParams.lang) {
+    return true;
+  }
+  // if return undefined, then react-router runs default revalidation logic
 };

@@ -31,7 +31,7 @@ export const routes = [
         element: <Navigate to={"/uk"} />,
       },
       {
-        path: ":lang?",
+        path: ":lang",
         element: <EnsureLocation redirectPath="/uk" />,
         loader: ensureLocationLoader,
         id: "ensureLocation",
@@ -64,7 +64,7 @@ export const routes = [
                         lazy: () => import("~pages/CategoryIndex"),
                       },
                       {
-                        path: ":categorySlug",
+                        path: ":categorySlug/:limit?",
                         lazy: () => import("~pages/Category"),
                         id: "category",
                       },
