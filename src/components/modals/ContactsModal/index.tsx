@@ -1,5 +1,5 @@
 import { Modal } from "../Modal";
-import { cloneElement } from "react";
+import { ReactElement, cloneElement } from "react";
 import * as S from "./styled";
 import { SvgIcon } from "../../svg/SvgIcon";
 import { PhoneSvg } from "../../svg/PhoneSvg";
@@ -11,10 +11,11 @@ import { TelegramModal } from "../TelegramModal";
 import { useBreakpoint } from "~common/hooks/useBreakpoint";
 import { useTranslation } from "react-i18next";
 import { InstagramLink } from "~layout/Footer/styled";
-import { observer } from "mobx-react";
 import { useSpot } from "~hooks/use-spot";
 
-export const ContactsModalRaw = ({ children }) => {
+// todo: fix that if we provide Fragment as children, then popup doesn't get opened
+
+export const ContactsModal = ({ children }: { children: ReactElement }) => {
   const breakpoint = useBreakpoint();
   const width = breakpoint !== "pc" ? "375px" : undefined;
   const { t } = useTranslation();
@@ -82,5 +83,3 @@ export const ContactsModalRaw = ({ children }) => {
     </Modal>
   );
 };
-
-export const ContactsModal = observer(ContactsModalRaw);

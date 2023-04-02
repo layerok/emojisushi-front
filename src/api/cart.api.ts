@@ -2,14 +2,14 @@ import { AxiosResponse } from "axios";
 import { client } from "~clients/client";
 import { ICartProduct } from "./cart.api.types";
 
+export type IGetCartProductsResponse = {
+  data: ICartProduct[];
+  total: string;
+  totalQuantity: number;
+};
+
 class Cart {
-  getProducts(params = {}): Promise<
-    AxiosResponse<{
-      data: ICartProduct[];
-      total: string;
-      totalQuantity: number;
-    }>
-  > {
+  getProducts(params = {}): Promise<AxiosResponse<IGetCartProductsResponse>> {
     return client.get("cart/products", {
       params,
       // @ts-ignore

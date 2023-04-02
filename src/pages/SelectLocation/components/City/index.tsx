@@ -1,4 +1,4 @@
-import { City as CityClass } from "~stores/cities.store";
+import { City as CityModel } from "~models";
 import { Spot } from "../Spot";
 import * as S from "./styled";
 import Skeleton from "react-loading-skeleton";
@@ -9,7 +9,7 @@ export const City = ({
   city,
 }: {
   children: ReactNode;
-  city?: CityClass;
+  city?: CityModel;
 }) => {
   return (
     <S.City>
@@ -23,7 +23,7 @@ export const Spots = ({ children }: { children: ReactNode }) => {
   return <S.Spots>{children}</S.Spots>;
 };
 
-export const Cities = ({ items }: { items: CityClass[] }) => {
+export const Cities = ({ items }: { items: CityModel[] }) => {
   return (
     <S.Cities>
       {items.map((city, index) => (

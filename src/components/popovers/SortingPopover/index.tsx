@@ -1,31 +1,51 @@
 import { DropdownPopover } from "../DropdownPopover";
 import { SortOrderButton } from "../../buttons/SortOrderButton";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useProductsStore } from "~hooks/use-categories-store";
 import Skeleton from "react-loading-skeleton";
+import { Await, useAsyncValue, useRouteLoaderData } from "react-router-dom";
+import { loader } from "~pages/Category";
+import MenuApi from "~api/menu.api";
 
-const SortingPopoverRaw = ({
+export const SortingPopover = ({
   showSkeleton = false,
 }: {
   showSkeleton?: boolean;
 }) => {
-  const ProductsStore = useProductsStore();
-  const initialSelectedIndex = ProductsStore.sortOptions.indexOf(
-    ProductsStore.sort
-  );
-  const [selectedIndex, setSelectedIndex] = useState(
-    initialSelectedIndex === -1 ? 0 : initialSelectedIndex
-  );
-  const { t } = useTranslation();
+  const { productsQuery } = useRouteLoaderData("category") as ReturnType<
+    typeof loader
+  >["data"];
 
   if (showSkeleton) {
     return <Skeleton width={120} height={25} />;
   }
   return (
+    <Suspense fallback={<Skeleton width={120} height={25} />}>
+      <Await resolve={productsQuery}>
+        <InternalSortingDropdown />
+      </Await>
+    </Suspense>
+  );
+};
+
+const InternalSortingDropdown = () => {
+  const productsQuery = useAsyncValue() as Awaited<
+    ReturnType<typeof MenuApi.getProducts>
+  >;
+
+  const options = productsQuery.data.sort_options;
+
+  const initialSelectedIndex = options.indexOf("bestsellar");
+
+  const [selectedIndex, setSelectedIndex] = useState(
+    initialSelectedIndex === -1 ? 0 : initialSelectedIndex
+  );
+  const { t } = useTranslation();
+
+  return (
     <DropdownPopover
       asFlatArray={true}
-      options={ProductsStore.sortOptions}
+      options={options}
       resolveOptionName={({ option }) => {
         return t(`sort.${option}`);
       }}
@@ -33,10 +53,7 @@ const SortingPopoverRaw = ({
       onSelect={({ option, index, close }) => {
         close();
         setSelectedIndex(index);
-        ProductsStore.setSort(option);
-        ProductsStore.fetchItems({
-          ...ProductsStore.lastParams,
-        });
+        // todo: sort products
       }}
     >
       {({ selectedOption }) => (
@@ -45,5 +62,3 @@ const SortingPopoverRaw = ({
     </DropdownPopover>
   );
 };
-
-export const SortingPopover = SortingPopoverRaw;

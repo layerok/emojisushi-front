@@ -7,34 +7,39 @@ import { CloseModalIcon } from "../CloseModalIcon";
 import { CloseIcon } from "../../CloseIcon";
 import { ButtonOutline } from "../../buttons/Button";
 import { useWindowSize } from "react-use";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { useDebounce } from "~common/hooks/useDebounce";
 import { useBreakpoint } from "~common/hooks/useBreakpoint";
 import { ConfirmActionPopover } from "../../popovers/ConfirmActionPopover";
-import { useNavigate } from "react-router-dom";
+import { useFetcher, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react";
 import { Loader } from "../../Loader";
 import { useTranslation } from "react-i18next";
 import { SvgIcon } from "../../svg/SvgIcon";
 import { LogoSvg } from "../../svg/LogoSvg";
 import { SushiSvg } from "../../svg/SushiSvg";
-import { useCartStore } from "~hooks/use-cart-store";
 import { CartProduct } from "~models/CartProduct";
 import { useCity, useLang, useSpot } from "~hooks";
+import CartApi from "~api/cart.api";
+import { queryClient } from "~query-client";
+import { cartQuery } from "~routes";
+import { useQueries, useQuery } from "react-query";
 
 const CartItem = observer(({ item }: { item: CartProduct }) => {
   const newPrice = item.product.getNewPrice(item.variant);
   const oldPrice = item.product.getOldPrice(item.variant);
   const nameWithMods = item.nameWithMods;
-  const CartStore = useCartStore();
+
+  const fetcher = useFetcher();
 
   const handleAdd = (product_id: number, variant_id: number | undefined) => {
-    return (quantity) => {
-      CartStore.addProduct({
+    return async (quantity) => {
+      await CartApi.addProduct({
         product_id,
         quantity,
         variant_id,
       });
+      queryClient.invalidateQueries(cartQuery.queryKey);
     };
   };
   const { t } = useTranslation();
@@ -42,8 +47,9 @@ const CartItem = observer(({ item }: { item: CartProduct }) => {
     <S.Item>
       <S.Item.RemoveIcon>
         <ConfirmActionPopover
-          onConfirm={({ close }) => {
-            CartStore.removeCartProduct(item.id);
+          onConfirm={async ({ close }) => {
+            await CartApi.removeCartProduct(item.id);
+            queryClient.invalidateQueries(cartQuery.queryKey);
             close();
           }}
           onCancel={({ close }) => {
@@ -83,20 +89,46 @@ const CartItem = observer(({ item }: { item: CartProduct }) => {
 });
 
 export const CartModal = observer(({ children }) => {
-  const cartStore = useCartStore();
-  const { items, total, loading } = cartStore;
+  const { data, isLoading } = useQuery(cartQuery);
+
+  // todo: console.log('check why this component rerenders on window scroll');
+
+  if (!data || isLoading) {
+    return children;
+  }
+
+  return <AwaitedCartModal>{children}</AwaitedCartModal>;
+});
+
+const AwaitedCartModal = ({ children }: { children: ReactElement }) => {
   const navigate = useNavigate();
   const windowSize = useWindowSize();
   const [height, setHeight] = useState(windowSize.height);
   const city = useCity();
   const spot = useSpot();
   const lang = useLang();
+  const query = useQuery(cartQuery) as any;
 
   const debounceHeight = useDebounce(() => {
     setHeight(windowSize.height);
   }, 300);
 
   const breakpoint = useBreakpoint();
+
+  useEffect(() => {
+    debounceHeight();
+  }, [windowSize.height]);
+  const { t } = useTranslation();
+
+  if (!query.data?.data) {
+    return <>...loaidng</>;
+  }
+
+  const { data, total } = query.data.data;
+
+  const items = data.map((json) => new CartProduct(json));
+  //todo: implement loading logic
+  const loading = false;
 
   const overlayStyles = {
     justifyItems: breakpoint === "mobile" ? "center" : "end",
@@ -110,10 +142,6 @@ export const CartModal = observer(({ children }) => {
   // 252px is sum of heights another element in cart modal
   const finalHeight = Math.max(Math.min(height - 252, 500), 300);
 
-  useEffect(() => {
-    debounceHeight();
-  }, [windowSize.height]);
-  const { t } = useTranslation();
   return (
     <BaseModal
       overlayStyles={overlayStyles}
@@ -171,4 +199,4 @@ export const CartModal = observer(({ children }) => {
       {children}
     </BaseModal>
   );
-});
+};

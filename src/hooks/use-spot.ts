@@ -1,4 +1,4 @@
-import { Spot } from "~stores/cities.store";
+import { Spot } from "~models/Spot";
 import { useCity } from "./use-city";
 import { useSpotSlug } from "./use-spot-slug";
 

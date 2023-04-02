@@ -117,17 +117,4 @@ export class CartStore {
     this.setLoading(false);
     return instances;
   }
-
-  findInCart(product: Product, variant?: Variant) {
-    if (product.inventoryManagementMethod === "variant") {
-      return this.items.find(
-        (cartProduct) =>
-          cartProduct.productId === product.id &&
-          cartProduct.variantId === variant?.id
-      );
-    }
-    return this.items.find(
-      (cartProduct) => cartProduct.productId === product.id
-    );
-  }
 }

@@ -11,8 +11,6 @@ import { UnderVerticalMenu } from "./UnderVerticalMenu";
 import { SortingPopover } from "~components/popovers/SortingPopover";
 import { observer } from "mobx-react";
 import { useDebounce } from "~common/hooks/useDebounce";
-import { useProductsStore } from "~hooks/use-categories-store";
-import { useCategoriesStore } from "~hooks/use-products-store";
 import { ICategory } from "~api/menu.api.types";
 import Skeleton from "react-loading-skeleton";
 
@@ -49,21 +47,12 @@ export const Sidebar = observer(
 );
 
 const Search = ({ showSkeleton = false }: { showSkeleton?: boolean }) => {
-  const ProductsStore = useProductsStore();
-  const CategoriesStore = useCategoriesStore();
   const isTablet = useIsTablet();
 
   const debouncedFetch = useDebounce((e) => {
-    let filter =
-      "&category_id=" +
-      CategoriesStore.publishedCategories.map((_) => _.id).join(".");
-    if (ProductsStore.search.length === 0) {
-      filter = "";
-    }
-    ProductsStore.fetchItems({
-      ...ProductsStore.lastParams,
-      filter,
-    });
+    // let filter =
+    //   "&category_id=" +
+    //   CategoriesStore.publishedCategories.map((_) => _.id).join(".");
   }, 500);
 
   if (showSkeleton) {
@@ -87,10 +76,9 @@ const Search = ({ showSkeleton = false }: { showSkeleton?: boolean }) => {
     <S.SearchContainer>
       <S.SearchInput
         handleInput={(e) => {
-          ProductsStore.setSearch(e.target.value);
           debouncedFetch();
         }}
-        value={ProductsStore.search}
+        value={""}
       />
     </S.SearchContainer>
   );

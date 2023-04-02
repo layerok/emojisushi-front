@@ -2,57 +2,34 @@ import { ProductsGrid } from "~components/ProductsGrid";
 import { observer } from "mobx-react";
 import {
   Await,
-  Navigate,
   defer,
+  useAsyncValue,
+  useLoaderData,
   useNavigate,
   useParams,
   useRouteLoaderData,
+  useSearchParams,
 } from "react-router-dom";
-import { useProductsStore } from "~hooks/use-categories-store";
-import { ProductsStore } from "~stores";
-import { useCategoriesStore, useLang, useSpot } from "~hooks";
+import { useLang, useSpot, useSpotSlug } from "~hooks";
 import { FlexBox } from "~components/FlexBox";
 import { Banner } from "./Banner";
 import { useIsDesktop } from "~common/hooks/useBreakpoint";
 import { Sidebar } from "~pages/Category/Sidebar";
 import { categoryLoaderIndex } from "~routes";
 import { Suspense } from "react";
-import { loader as categoryLoader } from "~pages/Category";
+import { FetchQueryOptions, QueryClient } from "react-query";
+import MenuApi from "~api/menu.api";
+import { ICategory, IGetProductsParams } from "~api/menu.api.types";
+import { queryClient } from "~query-client";
+import { Product } from "~models/Product";
+import WishlistApi from "~api/wishlist.api";
 
 export const Category = observer(() => {
-  const ProductsStore = useProductsStore();
-  const { categorySlug, spotSlug, citySlug } = useParams();
-  const lang = useLang();
-  const CategoriesStore = useCategoriesStore();
-  const selectedCategory = CategoriesStore.publishedCategories.find(
-    (category) => {
-      return category.slug === categorySlug;
-    }
-  );
-
-  const navigate = useNavigate();
-
-  const title = selectedCategory?.name;
   const isDesktop = useIsDesktop();
-  const selectedSpot = useSpot();
 
-  const { categories } = useRouteLoaderData("categoryIndex") as ReturnType<
+  const { categoriesQuery } = useRouteLoaderData("categoryIndex") as ReturnType<
     typeof categoryLoaderIndex
   >["data"];
-
-  const { products } = useRouteLoaderData("category") as ReturnType<
-    typeof categoryLoader
-  >["data"];
-
-  const handleLoadMore = () => {
-    const nextLimit = ProductsStore.items.length + ProductsStore.step;
-    navigate(
-      "/" +
-        [lang, citySlug, spotSlug, "category", categorySlug, nextLimit].join(
-          "/"
-        )
-    );
-  };
 
   // if (!selectedCategory && categories.length > 0) {
   //   return <Navigate to={categories[0].slug} />;
@@ -70,27 +47,8 @@ export const Category = observer(() => {
             </>
           }
         >
-          <Await resolve={categories}>
-            {(categories) => (
-              <>
-                <Sidebar categories={categories} />
-                <Await resolve={products}>
-                  {(products) => (
-                    <ProductsGrid
-                      handleLoadMore={handleLoadMore}
-                      title={title}
-                      loadable={
-                        ProductsStore.total > ProductsStore.items.length
-                      }
-                      loading={ProductsStore.loading}
-                      items={products.filter(
-                        (product) => !product.isHiddenInSpot(selectedSpot)
-                      )}
-                    />
-                  )}
-                </Await>
-              </>
-            )}
+          <Await resolve={categoriesQuery}>
+            <AwaitedCategory />
           </Await>
         </Suspense>
       </FlexBox>
@@ -98,19 +56,123 @@ export const Category = observer(() => {
   );
 });
 
+export const AwaitedCategory = () => {
+  const spotSlug = useSpotSlug();
+  const categoriesQuery = useAsyncValue() as Awaited<
+    ReturnType<typeof MenuApi.getCategories>
+  >;
+
+  const publishedCategories = categoriesQuery.data.data
+    .filter((category) => category.published)
+    .filter((category) => {
+      return !category.hide_categories_in_spot
+        .map((spot) => spot.slug)
+        .includes(spotSlug);
+    });
+
+  const { productsQuery } = useLoaderData() as ReturnType<
+    typeof loader
+  >["data"];
+
+  return (
+    <>
+      <Sidebar categories={publishedCategories} />
+      <Await resolve={productsQuery}>
+        <AwaitedProducts categories={publishedCategories} />
+      </Await>
+    </>
+  );
+};
+
+export const AwaitedProducts = ({
+  categories,
+}: {
+  categories: ICategory[];
+}) => {
+  const { categorySlug, spotSlug, citySlug } = useParams();
+  const [searchParams] = useSearchParams();
+  const limit = searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
+
+  const lang = useLang();
+
+  const navigate = useNavigate();
+
+  const selectedCategory = categories.find((category) => {
+    return category.slug === categorySlug;
+  });
+  const title = selectedCategory?.name;
+  const selectedSpot = useSpot();
+  const handleLoadMore = () => {
+    const nextLimit = +limit + PRODUCTS_LIMIT_STEP;
+    navigate(
+      "/" +
+        [lang, citySlug, spotSlug, "category", categorySlug].join("/") +
+        "?limit=" +
+        nextLimit
+    );
+  };
+  const productsQuery = useAsyncValue() as Awaited<
+    ReturnType<typeof MenuApi.getProducts>
+  >;
+  const items = productsQuery.data.data
+    .map((product) => new Product(product))
+    .filter((product: Product) => {
+      return !product.isHiddenInSpot(selectedSpot);
+    });
+  const total = productsQuery.data.total;
+  return (
+    <ProductsGrid
+      handleLoadMore={handleLoadMore}
+      title={title}
+      loadable={total > items.length}
+      loading={false}
+      items={items}
+    />
+  );
+};
+
 export const Component = Category;
 
 Object.assign(Component, {
   displayName: "LazyCategoryPage",
 });
 
-export const loader = ({ params, request }) => {
-  const { limit = ProductsStore.step } = params;
-  console.log("limit", limit);
-  return defer({
-    products: ProductsStore.fetchItems({
-      category_slug: params.categorySlug,
+export const PRODUCTS_LIMIT_STEP = 25;
+
+const productsQuery = (params: IGetProductsParams): FetchQueryOptions => ({
+  queryKey: ["products", "list", params ?? "all"],
+  queryFn: () => MenuApi.getProducts(params),
+});
+
+const wishlistsQuery = (): FetchQueryOptions => ({
+  queryKey: ["wishlists", "list", "all"],
+  queryFn: () => {
+    return WishlistApi.getList();
+  },
+});
+
+export const querifiedLoader = (queryClient: QueryClient) => {
+  return ({ params, request }) => {
+    const url = new URL(request.url);
+    const limit = url.searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
+    const productQuery = productsQuery({
+      category_slug: params.categorySlug || "menu",
+      search: null,
+      sort: null,
+      offset: 0,
       limit: +limit,
-    }),
-  });
+    });
+    console.log(params.categorySlug);
+    const wishlistQuery = wishlistsQuery();
+    return defer({
+      productsQuery:
+        queryClient.getQueryData(productQuery.queryKey) ??
+        queryClient.fetchQuery(productQuery),
+      wishlistQuery:
+        queryClient.getQueryData(wishlistQuery.queryKey) ??
+        queryClient.fetchQuery(wishlistQuery),
+    });
+  };
 };
+
+export const loader = querifiedLoader(queryClient);

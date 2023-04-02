@@ -3,10 +3,10 @@ import Skeleton from "react-loading-skeleton";
 import { MapPinSvg } from "~components/svg/MapPinSvg";
 import { SvgIcon } from "~components/svg/SvgIcon";
 import { useLang } from "~hooks";
-import { Spot as SpotInstance } from "~stores/cities.store";
+import { Spot as SpotModel } from "~models";
 import * as S from "./styled";
 
-export const Spot = ({ spot }: { spot?: SpotInstance }) => {
+export const Spot = ({ spot }: { spot?: SpotModel }) => {
   const lang = useLang();
   const { t } = useTranslation();
   return (

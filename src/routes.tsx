@@ -1,23 +1,43 @@
 import { defer, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "~components/ProtectedRoute";
 import { Layout } from "~layout/Layout";
-import { CartStore, CategoriesStore } from "~stores";
 import {
   EnsureLocation,
   loader as ensureLocationLoader,
 } from "~components/EnsureLocation";
+import { QueryOptions } from "react-query";
+import MenuApi from "~api/menu.api";
+import { IGetCategoriesParams } from "~api/menu.api.types";
+import { queryClient } from "~query-client";
+import CartApi from "~api/cart.api";
+import { cartPageLoader } from "~pages/Cart/CartPage/CartPage";
+import { cartUpdateAction } from "~pages/Cart/UpdateCartPage/UpdateCartPage";
+import { cartDeleteAction } from "~pages/Cart/DeleteCartPage/DeleteCartPage";
 
-export const spotLoader = () => {
-  return defer({
-    cart: {
-      products: CartStore.fetchItems(),
-    },
-  });
+export const cartQuery: QueryOptions = {
+  queryKey: ["cart"],
+  queryFn: () => CartApi.getProducts(),
 };
 
-export const categoryLoaderIndex = () => {
+export const spotLoader = () => {
+  return null;
+  // return defer({
+  //   cartQuery:
+  //     queryClient.getQueryData(cartQuery.queryKey) ??
+  //     queryClient.fetchQuery(cartQuery),
+  // });
+};
+
+const categoriesQuery = (params?: IGetCategoriesParams): QueryOptions => ({
+  queryKey: ["categories", "list", params ?? "all"],
+  queryFn: () => MenuApi.getCategories(params),
+});
+
+export const categoryLoaderIndex = ({ params }) => {
+  const query = categoriesQuery();
   return defer({
-    categories: CategoriesStore.fetchItems(),
+    categoriesQuery:
+      queryClient.getQueryData(query.queryKey) ?? queryClient.fetchQuery(query),
   });
 };
 
@@ -64,7 +84,7 @@ export const routes = [
                         lazy: () => import("~pages/CategoryIndex"),
                       },
                       {
-                        path: ":categorySlug/:limit?",
+                        path: ":categorySlug",
                         lazy: () => import("~pages/Category"),
                         id: "category",
                       },
@@ -84,6 +104,7 @@ export const routes = [
                   },
                   {
                     path: "wishlist",
+                    id: "wishlist",
                     lazy: () => import("~pages/Wishlist"),
                   },
                   {
@@ -121,6 +142,23 @@ export const routes = [
                       {
                         path: ":code",
                         lazy: () => import("~pages/ResetPassword"),
+                      },
+                    ],
+                  },
+                  {
+                    path: "cart",
+                    children: [
+                      {
+                        path: "view",
+                        loader: cartPageLoader,
+                      },
+                      {
+                        path: "update",
+                        action: cartUpdateAction,
+                      },
+                      {
+                        path: "delete",
+                        action: cartDeleteAction,
                       },
                     ],
                   },

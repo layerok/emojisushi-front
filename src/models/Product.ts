@@ -1,7 +1,7 @@
 import { IProduct } from "~api/menu.api.types";
 import { makeAutoObservable } from "mobx";
 import { Variant } from "~models/Variant";
-import { Spot } from "~stores/cities.store";
+import { Spot } from "./Spot";
 
 export class Product {
   json: IProduct;

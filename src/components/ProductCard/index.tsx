@@ -5,30 +5,56 @@ import { Favorite } from "../Favorite";
 import { useIsMobile } from "~common/hooks/useBreakpoint";
 import { IngredientsTooltip } from "../tooltips/IngredientsTooltip";
 import { EqualHeightElement } from "react-equal-height";
-import { observer } from "mobx-react";
 import { Loader } from "../Loader";
 import { SvgIcon } from "../svg/SvgIcon";
 import { LogoSvg } from "../svg/LogoSvg";
 import { Switcher } from "../Switcher";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { InfoTooltip } from "../InfoTooltip";
 import { useTranslation } from "react-i18next";
-import { useCartStore } from "~hooks/use-cart-store";
-import { useProductsStore } from "~hooks/use-categories-store";
 import { useWishlistStore } from "~hooks/use-wishlist-store";
 import { Product } from "~models/Product";
 import Skeleton from "react-loading-skeleton";
 import { Variant } from "~models/Variant";
 import { CartProduct } from "~models/CartProduct";
+import { queryClient } from "~query-client";
+import { cartQuery } from "~routes";
+import { useCartProducts } from "~hooks/use-cart";
+import CartApi from "~api/cart.api";
+import {
+  Form,
+  useFetcher,
+  useLocation,
+  useNavigation,
+  useSubmit,
+} from "react-router-dom";
+import { useCitySlug, useLang, useSpotSlug } from "~hooks";
+import { useCategorySlug } from "~hooks/use-category-slug";
 
-const ProductCardRaw = ({
+export const findInCart = (
+  items: CartProduct[],
+  product: Product,
+  variant?: Variant
+) => {
+  if (product.inventoryManagementMethod === "variant") {
+    return items.find(
+      (cartProduct) =>
+        cartProduct.productId === product.id &&
+        cartProduct.variantId === variant?.id
+    );
+  }
+  return items.find((cartProduct) => cartProduct.productId === product.id);
+};
+
+export const ProductCard = ({
   product,
   showSkeleton = false,
 }: {
   product?: Product;
   showSkeleton?: boolean;
 }) => {
-  const CartStore = useCartStore();
+  const cartProducts = useCartProducts();
+
   const WishlistStore = useWishlistStore();
   const initialModificatorsState = product?.modGroups.reduce((acc, group) => {
     return {
@@ -48,14 +74,18 @@ const ProductCardRaw = ({
   const variant = useMemo(() => getVariant(product), [product, modificators]);
 
   const cartProduct = useMemo(
-    () => (product ? CartStore.findInCart(product, variant) : undefined),
+    () => (product ? findInCart(cartProducts, product, variant) : undefined),
     [product, variant]
   );
 
   return (
     <S.Wrapper>
       <Loader loading={product ? WishlistStore.isPending(product) : false} />
-      <FavoriteButton showSkeleton={showSkeleton} cartProduct={cartProduct} />
+      <FavoriteButton
+        showSkeleton={showSkeleton}
+        cartProduct={cartProduct}
+        product={product}
+      />
       <Image product={product} showSkeleton={showSkeleton} />
 
       <EqualHeightElement name={"product-name"}>
@@ -95,24 +125,16 @@ const FavoriteButton = ({
 }) => {
   const isMobile = useIsMobile();
   const iconSize = isMobile ? 33 : 25;
-  const ProductsStore = useProductsStore();
   const WishlistStore = useWishlistStore();
   const count = cartProduct?.quantity || 0;
 
-  const handleToggleFavorite = () => {
-    WishlistStore.addItem({
+  const handleToggleFavorite = async () => {
+    await WishlistStore.addItem({
       product_id: product.id,
       quantity: count,
-    }).then((res) => {
-      const items = ProductsStore.items.map((item) => {
-        if (item.id === product.id) {
-          item.isFavorite = res.data.added;
-        }
-        return item;
-      });
-
-      ProductsStore.setItems(items);
     });
+    // todo: check that it is working
+    queryClient.invalidateQueries({ queryKey: ["wishlist", "list", "all"] });
   };
 
   if (showSkeleton) {
@@ -137,21 +159,31 @@ const Footer = ({
   variant?: Variant;
   cartProduct?: CartProduct;
 }) => {
-  const CartStore = useCartStore();
   const oldPrice = product?.getOldPrice(variant);
   const newPrice = product?.getNewPrice(variant);
-
+  const [pending, setPending] = useState(false);
+  const fetcher = useFetcher();
   const count = cartProduct?.quantity || 0;
+  const isPending = ["submitting", "loading"].includes(fetcher.state);
 
-  const handleAdd = (product: Product, variant?: Variant) => {
-    return (quantity) => {
-      CartStore.addProduct({
-        product_id: product.id,
-        quantity,
-        variant_id: variant?.id,
-      });
+  const handleAdd = () => {
+    return (quantity: number) => {
+      setPending(true);
+      fetcher.submit(
+        {
+          product_id: product.id + "",
+          variant_id: variant?.id + "",
+          quantity: quantity + "",
+        },
+        {
+          // todo: there is something wrong with this
+          action: "/lang/city/spot/cart/update",
+          method: "post",
+        }
+      );
     };
   };
+
   return (
     <S.Footer>
       <Price
@@ -159,11 +191,12 @@ const Footer = ({
         oldPrice={oldPrice}
         newPrice={newPrice}
       />
+
       <AddToCartButton
         showSkeleton={showSkeleton}
         count={count}
-        pending={product ? CartStore.pending.includes(product.id) : false}
-        handleAdd={handleAdd(product, variant)}
+        pending={isPending}
+        handleAdd={handleAdd()}
       />
     </S.Footer>
   );
@@ -297,5 +330,3 @@ const Ingredients = ({
     )
   );
 };
-
-export const ProductCard = observer(ProductCardRaw);

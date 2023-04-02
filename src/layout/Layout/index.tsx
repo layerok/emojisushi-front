@@ -5,13 +5,12 @@ import * as S from "./styled";
 import { RestaurantClosed } from "~components/modals/RestaurantClosed";
 import { observer } from "mobx-react";
 import { isClosed } from "~utils/time.utils";
-import { useLocation, useWindowScroll } from "react-use";
+import { useWindowScroll } from "react-use";
 import { CartModal } from "~components/modals/CartModal";
 import { TinyCartButton } from "~components/TinyCartButton";
 import { Sticky } from "../../components/Sticky";
 import { StickyToTopBtn } from "../../components/StickyToTopBtn";
-import { ReactNode, Suspense, useEffect } from "react";
-import { useProductsStore } from "~hooks/use-categories-store";
+import { ReactNode, Suspense } from "react";
 import { useCartStore } from "~hooks/use-cart-store";
 import { Await, Outlet, useRouteLoaderData } from "react-router-dom";
 import { loader } from "~components/EnsureLocation";
@@ -30,10 +29,9 @@ export const Layout = observer(
     containerProps?: Record<string, any>;
   }) => {
     const { x, y } = useWindowScroll();
-    const location = useLocation();
-    const ProductsStore = useProductsStore();
+
     const CartStore = useCartStore();
-    const { cities } = useRouteLoaderData("ensureLocation") as ReturnType<
+    const { citiesQuery } = useRouteLoaderData("ensureLocation") as ReturnType<
       typeof loader
     >["data"];
 
@@ -44,14 +42,10 @@ export const Layout = observer(
       end: [21, 15],
     });
 
-    useEffect(() => {
-      ProductsStore.clearSearch();
-    }, [location.pathname]);
-
     return (
       <S.Layout {...rest}>
         <Suspense fallback={<Header showSkeleton />}>
-          <Await resolve={cities}>
+          <Await resolve={citiesQuery}>
             <Header />
           </Await>
         </Suspense>
@@ -65,7 +59,7 @@ export const Layout = observer(
         </S.Main>
 
         <Suspense fallback={<Footer showSkeleton={true} />}>
-          <Await resolve={cities}>
+          <Await resolve={citiesQuery}>
             <Footer />
           </Await>
         </Suspense>
@@ -73,7 +67,7 @@ export const Layout = observer(
         {withRestaurantClosedModal && <RestaurantClosed open={closed} />}
 
         <Suspense>
-          <Await resolve={cities}>
+          <Await resolve={citiesQuery}>
             <Sticky top={"30px"} right={"30px"} show={showStickyCart}>
               <CartModal>
                 <div>

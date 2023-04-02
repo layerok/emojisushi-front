@@ -9,9 +9,10 @@ import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useDebounce } from "~common/hooks/useDebounce";
 import { Loader } from "../Loader";
-import { useProductsStore } from "~hooks/use-categories-store";
 import { Product } from "~models/Product";
 import Skeleton from "react-loading-skeleton";
+import { useSearchParams } from "react-router-dom";
+import { PRODUCTS_LIMIT_STEP } from "~pages/Category";
 
 // todo: fix design at 1280px breakpoing
 
@@ -41,7 +42,8 @@ export const ProductsGrid = observer(
 
     return (
       <div style={{ position: "relative", width: "100%" }}>
-        {/* <Loader loading={ProductsStore.loading} /> */}
+        {/* show loader or skeleton when adding to favorites */}
+        <Loader loading={false} />
         <Header showSkeleton={showSkeleton} title={title} />
         <EqualHeight updateOnChange={debouncedBreakpoint}>
           <Items showSkeleton={showSkeleton} items={items} />
@@ -69,20 +71,16 @@ const Items = ({
 }) => {
   const { t } = useTranslation();
 
+  const [searchParams] = useSearchParams();
+
   if (showSkeleton) {
     return (
       <S.Grid>
-        <ProductCard showSkeleton={showSkeleton} />
-        <ProductCard showSkeleton={showSkeleton} />
-        <ProductCard showSkeleton={showSkeleton} />
-        <ProductCard showSkeleton={showSkeleton} />
-        <ProductCard showSkeleton={showSkeleton} />
-
-        <ProductCard showSkeleton={showSkeleton} />
-        <ProductCard showSkeleton={showSkeleton} />
-        <ProductCard showSkeleton={showSkeleton} />
-        <ProductCard showSkeleton={showSkeleton} />
-        <ProductCard showSkeleton={showSkeleton} />
+        {new Array(+searchParams.get("limit") || PRODUCTS_LIMIT_STEP)
+          .fill(null)
+          .map((_, index) => (
+            <ProductCard key={index} showSkeleton />
+          ))}
       </S.Grid>
     );
   }
@@ -137,11 +135,11 @@ const Header = ({
   title: string;
   showSkeleton?: boolean;
 }) => {
-  const ProductsStore = useProductsStore();
+  const search = ""; // todo: here must be react value
   const { t } = useTranslation();
   const isDesktop = useIsDesktop();
-  const titleOrSearch = ProductsStore.search
-    ? `${t("search.everywhere")} "${ProductsStore.search}"`
+  const titleOrSearch = search
+    ? `${t("search.everywhere")} "${search}"`
     : title;
   return (
     <S.Header>

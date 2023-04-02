@@ -9,10 +9,11 @@ import { Cities, CitiesSkeleton } from "./components/City";
 import { Await, useRouteLoaderData } from "react-router-dom";
 import { loader } from "~components/EnsureLocation";
 import { Suspense } from "react";
+import { City } from "~models";
 
 export const SelectLocation = observer(() => {
   const { t } = useTranslation();
-  const data = useRouteLoaderData("ensureLocation") as ReturnType<
+  const { citiesQuery } = useRouteLoaderData("ensureLocation") as ReturnType<
     typeof loader
   >["data"];
 
@@ -34,10 +35,14 @@ export const SelectLocation = observer(() => {
         <S.Locations.Body>
           <Suspense fallback={<CitiesSkeleton />}>
             <Await
-              resolve={data.cities}
+              resolve={citiesQuery}
               errorElement={<p>Error loading cities</p>}
             >
-              {(cities) => <Cities items={cities} />}
+              {(citiesQuery) => (
+                <Cities
+                  items={citiesQuery.data.data.map((json) => new City(json))}
+                />
+              )}
             </Await>
           </Suspense>
         </S.Locations.Body>

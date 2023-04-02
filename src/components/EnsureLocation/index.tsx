@@ -1,7 +1,9 @@
+import { QueryClient, QueryOptions } from "react-query";
 import { defer, Navigate, Outlet, useLocation } from "react-router-dom";
+import AccessApi from "~api/access.api";
 import { useCity } from "~hooks/use-city";
 import { useSpot } from "~hooks/use-spot";
-import { CitiesStore } from "~stores";
+import { queryClient } from "~query-client";
 
 export const EnsureLocation = ({
   redirectPath = "/",
@@ -28,15 +30,28 @@ Object.assign(Component, {
   displayName: "LazyEnsureLocation",
 });
 
-export const loader = ({ params }) => {
-  return defer({
-    cities: CitiesStore.loadItems(true),
-  });
+export const citiesQuery: QueryOptions = {
+  queryFn: () =>
+    AccessApi.getCities({
+      includeSpots: true,
+    }),
+  queryKey: ["cities", "list", "all"],
 };
 
+const qurifiedLoader = (queryClient: QueryClient) => {
+  return ({ params }) => {
+    return defer({
+      citiesQuery:
+        queryClient.getQueryData(citiesQuery.queryKey) ??
+        queryClient.fetchQuery(citiesQuery),
+    });
+  };
+};
+
+export const citiesLoader = qurifiedLoader(queryClient);
+
+export const loader = citiesLoader;
+
 export const shouldRevalidate = ({ currentParams, nextParams }) => {
-  if (currentParams.lang !== nextParams.lang) {
-    return true;
-  }
-  // if return undefined, then react-router runs default revalidation logic
+  return currentParams.lang !== nextParams.lang;
 };

@@ -7,13 +7,12 @@ import { useTranslation } from "react-i18next";
 import { useSpot } from "~hooks/use-spot";
 import { useNavigate } from "react-router-dom";
 import { useCity } from "~hooks/use-city";
-import { useCitiesStore } from "~hooks/use-cities-store";
-import { useLang } from "~hooks";
+import { useCities, useLang } from "~hooks";
 
 export const SpotsModalRaw = ({ open = false }) => {
   const navigate = useNavigate();
 
-  const cities = useCitiesStore().items;
+  const cities = useCities();
   const { t } = useTranslation();
   const selectedSpot = useSpot();
   const selectedCity = useCity();

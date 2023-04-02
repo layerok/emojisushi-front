@@ -3,32 +3,55 @@ import { SvgIcon } from "../../svg/SvgIcon";
 import { CaretDownSvg } from "../../svg/CaretDownSvg";
 import { FlexBox } from "../../FlexBox";
 import { DropdownPopover } from "../DropdownPopover";
-import { observer } from "mobx-react";
 import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg";
 import { useSpot } from "~hooks/use-spot";
-import { useLocation, useNavigate } from "react-router-dom";
+import {
+  Await,
+  useAsyncValue,
+  useLocation,
+  useNavigate,
+  useRouteLoaderData,
+} from "react-router-dom";
 import { useCity } from "~hooks/use-city";
-import { useCitiesStore } from "~hooks/use-cities-store";
 import { useLang } from "~hooks";
 import Skeleton from "react-loading-skeleton";
-
-export const LocationPickerPopoverRaw = ({
-  offset = 0,
-  backgroundColor = "#171717",
-  width = "211px",
-  showSkeleton = false,
-}: {
+import { Suspense } from "react";
+import { citiesLoader } from "~components/EnsureLocation";
+import AccessApi from "~api/access.api";
+type LocationPickerPopoverProps = {
   offset?: number;
   backgroundColor?: string;
   width?: string;
-  showSkeleton?: boolean;
-}) => {
-  const navigate = useNavigate();
+};
 
-  const cities = useCitiesStore().items;
+export const LocationPickerPopover = (props: LocationPickerPopoverProps) => {
+  const { width = "211px" } = props;
+
+  const { citiesQuery } = useRouteLoaderData("ensureLocation") as ReturnType<
+    typeof citiesLoader
+  >["data"];
+
+  return (
+    <Suspense fallback={<Skeleton width={width} height={40} />}>
+      <Await resolve={citiesQuery}>
+        <AwaitedLocationPickerPopover {...props} />
+      </Await>
+    </Suspense>
+  );
+};
+
+const AwaitedLocationPickerPopover = (props: LocationPickerPopoverProps) => {
+  const citiesQuery = useAsyncValue() as Awaited<
+    ReturnType<typeof AccessApi.getCities>
+  >;
+
+  const cities = citiesQuery.data.data;
+
+  const { offset = 0, backgroundColor = "#171717", width = "211px" } = props;
+  const navigate = useNavigate();
+  const lang = useLang();
   const selectedSpot = useSpot();
   const selectedCity = useCity();
-  const lang = useLang();
 
   const options = cities
     .map((city) =>
@@ -48,9 +71,6 @@ export const LocationPickerPopoverRaw = ({
   const selectedIndex = options.indexOf(selectedOption);
   const location = useLocation();
 
-  if (showSkeleton) {
-    return <Skeleton width={width} height={40} />;
-  }
   return (
     <>
       <DropdownPopover
@@ -96,5 +116,3 @@ export const LocationPickerPopoverRaw = ({
     </>
   );
 };
-
-export const LocationPickerPopover = observer(LocationPickerPopoverRaw);

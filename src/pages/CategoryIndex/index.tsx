@@ -1,7 +1,7 @@
-import { Await, useRouteLoaderData } from "react-router-dom";
+import { Await, useAsyncValue, useRouteLoaderData } from "react-router-dom";
 import * as S from "./styled";
 
-import { useCategoriesStore, useSpotSlug } from "~hooks";
+import { useSpotSlug } from "~hooks";
 import { useTranslation } from "react-i18next";
 import { SvgIcon } from "~components/svg/SvgIcon";
 import { useIsMobile } from "~common/hooks/useBreakpoint";
@@ -10,13 +10,25 @@ import { categoryLoaderIndex } from "~routes";
 import { Suspense } from "react";
 import { Category } from "./components/Category";
 import Skeleton from "react-loading-skeleton";
+import MenuApi from "~api/menu.api";
 
 const Categories = () => {
   const spotSlug = useSpotSlug();
-  const categoriesStore = useCategoriesStore();
+  const categoriesQuery = useAsyncValue() as Awaited<
+    ReturnType<typeof MenuApi.getCategories>
+  >;
+
+  const publishedCategories = categoriesQuery.data.data
+    .filter((category) => category.published)
+    .filter((category) => {
+      return !category.hide_categories_in_spot
+        .map((spot) => spot.slug)
+        .includes(spotSlug);
+    });
+
   return (
     <S.Category.List>
-      {categoriesStore.publishedCategories
+      {publishedCategories
         .filter((category) => {
           const hidden = category.hide_categories_in_spot.find(
             (spot) => spot.slug === spotSlug
@@ -51,7 +63,7 @@ const CategoriesSkeleton = () => {
 export const CategoryIndex = () => {
   const { t } = useTranslation();
 
-  const { categories } = useRouteLoaderData("categoryIndex") as ReturnType<
+  const { categoriesQuery } = useRouteLoaderData("categoryIndex") as ReturnType<
     typeof categoryLoaderIndex
   >["data"];
 
@@ -62,7 +74,7 @@ export const CategoryIndex = () => {
       <S.Category.Container>
         <S.Category.Label>
           <Suspense fallback={<Skeleton width={220} height={20} />}>
-            <Await resolve={categories}>
+            <Await resolve={categoriesQuery}>
               <>
                 {t("categoryIndex.title")}
                 <SvgIcon width={isMobile ? "20px" : "25px"} color={"white"}>
@@ -75,8 +87,8 @@ export const CategoryIndex = () => {
         <S.Category.Items>
           <Suspense fallback={<CategoriesSkeleton />}>
             <Await
-              resolve={categories}
-              errorElement={<p>Error downloading categories!</p>}
+              resolve={categoriesQuery}
+              errorElement={<p>Error fetching categories!</p>}
             >
               <Categories />
             </Await>

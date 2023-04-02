@@ -31,7 +31,7 @@ export const UnderVerticalMenu = ({
       <S.Favorite
         active={!!match}
         onClick={() => {
-          navigate("/" + [lang, citySlug, spotSlug, "/wishlist"]);
+          navigate("/" + [lang, citySlug, spotSlug, "wishlist"].join("/"));
         }}
       >
         {showSkeleton ? (
