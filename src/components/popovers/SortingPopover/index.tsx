@@ -1,9 +1,14 @@
 import { DropdownPopover } from "../DropdownPopover";
 import { SortOrderButton } from "../../buttons/SortOrderButton";
-import { Suspense, useState } from "react";
+import { Suspense, useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
-import { Await, useAsyncValue, useRouteLoaderData } from "react-router-dom";
+import {
+  Await,
+  UNSAFE_RouteContext,
+  useAsyncValue,
+  useRouteLoaderData,
+} from "react-router-dom";
 import { loader } from "~pages/Category";
 import MenuApi, { IGetProductsResponse } from "~api/menu.api";
 
@@ -12,7 +17,11 @@ export const SortingPopover = ({
 }: {
   showSkeleton?: boolean;
 }) => {
-  const { productsQuery } = useRouteLoaderData("category") as ReturnType<
+  const route = useContext(UNSAFE_RouteContext);
+  const routeId = route.matches[route.matches.length - 1]?.route?.id;
+
+  // todo: pass sort_options as props
+  const { productsQuery } = useRouteLoaderData(routeId) as ReturnType<
     typeof loader
   >["data"];
 

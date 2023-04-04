@@ -139,7 +139,9 @@ Object.assign(Component, {
 
 export const PRODUCTS_LIMIT_STEP = 25;
 
-const productsQuery = (params: IGetProductsParams): FetchQueryOptions => ({
+export const productsQuery = (
+  params: IGetProductsParams
+): FetchQueryOptions => ({
   queryKey: ["products", "list", params ?? "all"],
   queryFn: () => MenuApi.getProducts(params).then((res) => res.data),
 });
