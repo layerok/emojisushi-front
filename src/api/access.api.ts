@@ -3,6 +3,11 @@ import { AxiosResponse } from "axios";
 import { ISpot, ICity } from "~api/access.api.types";
 import { IMeta } from "~common/types";
 
+export type IGetCitiesResponse = {
+  data: ICity[];
+  meta: IMeta;
+};
+
 const getCitiesDefaults: IGetCitiesParams = {
   includeSpots: false,
 };
@@ -27,12 +32,9 @@ class Access {
     });
   }
 
-  getCities(params: IGetCitiesParams = getCitiesDefaults): Promise<
-    AxiosResponse<{
-      data: ICity[];
-      meta: IMeta;
-    }>
-  > {
+  getCities(
+    params: IGetCitiesParams = getCitiesDefaults
+  ): Promise<AxiosResponse<IGetCitiesResponse>> {
     return client.get("cities", {
       params,
       // @ts-ignore

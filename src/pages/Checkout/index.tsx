@@ -44,7 +44,7 @@ Object.assign(Component, {
 export const loader = async () => {
   await PaymentStore.fetchItems();
   await ShippingStore.fetchItems();
-  await CartStore.fetchItems();
+  //await CartStore.fetchItems();
   return true;
 };
 

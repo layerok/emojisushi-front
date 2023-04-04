@@ -4,7 +4,6 @@ import { CaretDownSvg } from "../../svg/CaretDownSvg";
 import { FlexBox } from "../../FlexBox";
 import { DropdownPopover } from "../DropdownPopover";
 import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg";
-import { useSpot } from "~hooks/use-spot";
 import {
   Await,
   useAsyncValue,
@@ -12,12 +11,10 @@ import {
   useNavigate,
   useRouteLoaderData,
 } from "react-router-dom";
-import { useCity } from "~hooks/use-city";
-import { useLang } from "~hooks";
+import { useCitySlug, useLang, useSpotSlug } from "~hooks";
 import Skeleton from "react-loading-skeleton";
 import { Suspense } from "react";
-import { citiesLoader } from "~components/EnsureLocation";
-import AccessApi from "~api/access.api";
+import { ICity } from "~api/access.api.types";
 type LocationPickerPopoverProps = {
   offset?: number;
   backgroundColor?: string;
@@ -27,9 +24,7 @@ type LocationPickerPopoverProps = {
 export const LocationPickerPopover = (props: LocationPickerPopoverProps) => {
   const { width = "211px" } = props;
 
-  const { citiesQuery } = useRouteLoaderData("ensureLocation") as ReturnType<
-    typeof citiesLoader
-  >["data"];
+  const { citiesQuery } = useRouteLoaderData("ensureLocation") as any;
 
   return (
     <Suspense fallback={<Skeleton width={width} height={40} />}>
@@ -41,17 +36,15 @@ export const LocationPickerPopover = (props: LocationPickerPopoverProps) => {
 };
 
 const AwaitedLocationPickerPopover = (props: LocationPickerPopoverProps) => {
-  const citiesQuery = useAsyncValue() as Awaited<
-    ReturnType<typeof AccessApi.getCities>
-  >;
+  const citiesQuery = useAsyncValue() as any;
 
-  const cities = citiesQuery.data.data;
+  const cities: ICity[] = citiesQuery.data;
 
   const { offset = 0, backgroundColor = "#171717", width = "211px" } = props;
   const navigate = useNavigate();
   const lang = useLang();
-  const selectedSpot = useSpot();
-  const selectedCity = useCity();
+  const spotSlug = useSpotSlug();
+  const citySlug = useCitySlug();
 
   const options = cities
     .map((city) =>
@@ -65,8 +58,7 @@ const AwaitedLocationPickerPopover = (props: LocationPickerPopoverProps) => {
     .flat();
 
   const selectedOption = options.find(
-    (option) =>
-      option.city.id === selectedCity.id && option.spot.id === selectedSpot.id
+    (option) => option.city.slug === citySlug && option.spot.slug === spotSlug
   );
   const selectedIndex = options.indexOf(selectedOption);
   const location = useLocation();

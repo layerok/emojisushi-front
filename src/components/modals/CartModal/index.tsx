@@ -7,11 +7,17 @@ import { CloseModalIcon } from "../CloseModalIcon";
 import { CloseIcon } from "../../CloseIcon";
 import { ButtonOutline } from "../../buttons/Button";
 import { useWindowSize } from "react-use";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, Suspense, useEffect, useState } from "react";
 import { useDebounce } from "~common/hooks/useDebounce";
 import { useBreakpoint } from "~common/hooks/useBreakpoint";
 import { ConfirmActionPopover } from "../../popovers/ConfirmActionPopover";
-import { useFetcher, useNavigate } from "react-router-dom";
+import {
+  Await,
+  FetcherWithComponents,
+  useAsyncValue,
+  useFetcher,
+  useNavigate,
+} from "react-router-dom";
 import { observer } from "mobx-react";
 import { Loader } from "../../Loader";
 import { useTranslation } from "react-i18next";
@@ -19,95 +25,131 @@ import { SvgIcon } from "../../svg/SvgIcon";
 import { LogoSvg } from "../../svg/LogoSvg";
 import { SushiSvg } from "../../svg/SushiSvg";
 import { CartProduct } from "~models/CartProduct";
-import { useCity, useLang, useSpot } from "~hooks";
-import CartApi from "~api/cart.api";
-import { queryClient } from "~query-client";
-import { cartQuery } from "~routes";
-import { useQueries, useQuery } from "react-query";
+import { useCity, useCitySlug, useLang, useSpot, useSpotSlug } from "~hooks";
+import { useCart } from "~hooks/use-cart";
 
-const CartItem = observer(({ item }: { item: CartProduct }) => {
-  const newPrice = item.product.getNewPrice(item.variant);
-  const oldPrice = item.product.getOldPrice(item.variant);
-  const nameWithMods = item.nameWithMods;
+const CartItem = observer(
+  ({
+    item,
+    updateFetcher,
+  }: {
+    item: CartProduct;
+    updateFetcher: FetcherWithComponents<any>;
+  }) => {
+    const newPrice = item.product.getNewPrice(item.variant);
+    const oldPrice = item.product.getOldPrice(item.variant);
+    const nameWithMods = item.nameWithMods;
+    const lang = useLang();
+    const spotSlug = useSpotSlug();
+    const citySlug = useCitySlug();
 
-  const fetcher = useFetcher();
-
-  const handleAdd = (product_id: number, variant_id: number | undefined) => {
-    return async (quantity) => {
-      await CartApi.addProduct({
-        product_id,
-        quantity,
-        variant_id,
-      });
-      queryClient.invalidateQueries(cartQuery.queryKey);
+    const handleAdd = (product_id: number, variant_id?: number) => {
+      return async (quantity) => {
+        updateFetcher.submit(
+          {
+            product_id: product_id + "",
+            variant_id: variant_id + "",
+            quantity: quantity + "",
+          },
+          {
+            action: `/${lang}/${citySlug}/${spotSlug}/cart/update`,
+            method: "post",
+          }
+        );
+      };
     };
-  };
-  const { t } = useTranslation();
-  return (
-    <S.Item>
-      <S.Item.RemoveIcon>
-        <ConfirmActionPopover
-          onConfirm={async ({ close }) => {
-            await CartApi.removeCartProduct(item.id);
-            queryClient.invalidateQueries(cartQuery.queryKey);
-            close();
-          }}
-          onCancel={({ close }) => {
-            close();
-          }}
-          text={t("cartModal.remove")}
-        >
-          <CloseIcon color={"#4A4A4A"} />
-        </ConfirmActionPopover>
-      </S.Item.RemoveIcon>
-      <S.Item.Img src={item.product.mainImage}>
-        {!item.product.mainImage && (
-          <SvgIcon color={"white"} width={"80%"} style={{ opacity: 0.05 }}>
-            <LogoSvg />
-          </SvgIcon>
-        )}
-      </S.Item.Img>
-      <S.Item.Info>
-        <S.Item.Name title={nameWithMods}>{nameWithMods}</S.Item.Name>
-        <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
-          <S.Item.Counter>
-            <LightCounter
-              handleIncrement={() => {
-                handleAdd(item.productId, item.variantId)(1);
-              }}
-              handleDecrement={() => {
-                handleAdd(item.productId, item.variantId)(-1);
-              }}
-              count={item.quantity}
-            />
-          </S.Item.Counter>
-          <Price newPrice={newPrice} oldPrice={oldPrice} />
-        </FlexBox>
-      </S.Item.Info>
-    </S.Item>
-  );
-});
+    const { t } = useTranslation();
+
+    return (
+      <S.Item>
+        <S.Item.RemoveIcon>
+          <ConfirmActionPopover
+            onConfirm={({ close }) => {
+              updateFetcher.submit(
+                {
+                  cart_product_id: item.id + "",
+                },
+                {
+                  action: `/${lang}/${citySlug}/${spotSlug}/cart/delete`,
+                  method: "post",
+                }
+              );
+              close();
+            }}
+            onCancel={({ close }) => {
+              close();
+            }}
+            text={t("cartModal.remove")}
+          >
+            <CloseIcon color={"#4A4A4A"} />
+          </ConfirmActionPopover>
+        </S.Item.RemoveIcon>
+        <S.Item.Img src={item.product.mainImage}>
+          {!item.product.mainImage && (
+            <SvgIcon color={"white"} width={"80%"} style={{ opacity: 0.05 }}>
+              <LogoSvg />
+            </SvgIcon>
+          )}
+        </S.Item.Img>
+        <S.Item.Info>
+          <S.Item.Name title={nameWithMods}>{nameWithMods}</S.Item.Name>
+          <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
+            <S.Item.Counter>
+              <LightCounter
+                handleIncrement={() => {
+                  handleAdd(item.productId, item.variantId)(1);
+                }}
+                handleDecrement={() => {
+                  handleAdd(item.productId, item.variantId)(-1);
+                }}
+                count={item.quantity}
+              />
+            </S.Item.Counter>
+            <Price newPrice={newPrice} oldPrice={oldPrice} />
+          </FlexBox>
+        </S.Item.Info>
+      </S.Item>
+    );
+  }
+);
 
 export const CartModal = observer(({ children }) => {
-  const { data, isLoading } = useQuery(cartQuery);
+  const cartFetcher = useFetcher();
 
-  // todo: console.log('check why this component rerenders on window scroll');
+  const lang = useLang();
+  const spotSlug = useSpotSlug();
+  const citySlug = useCitySlug();
 
-  if (!data || isLoading) {
+  useEffect(() => {
+    cartFetcher.load(`/${lang}/${citySlug}/${spotSlug}/cart/view`);
+  }, []);
+
+  if (!cartFetcher.data) {
     return children;
   }
 
-  return <AwaitedCartModal>{children}</AwaitedCartModal>;
+  // todo: console.log('check why this component rerenders on window scroll');
+
+  return (
+    <AwaitedCartModal cartFetcher={cartFetcher}>{children}</AwaitedCartModal>
+  );
 });
 
-const AwaitedCartModal = ({ children }: { children: ReactElement }) => {
+const AwaitedCartModal = ({
+  children,
+}: {
+  children: ReactElement;
+  cartFetcher: FetcherWithComponents<any>;
+}) => {
   const navigate = useNavigate();
   const windowSize = useWindowSize();
   const [height, setHeight] = useState(windowSize.height);
   const city = useCity();
   const spot = useSpot();
   const lang = useLang();
-  const query = useQuery(cartQuery) as any;
+  const cart = useCart();
+
+  const { data, total } = cart;
 
   const debounceHeight = useDebounce(() => {
     setHeight(windowSize.height);
@@ -120,15 +162,10 @@ const AwaitedCartModal = ({ children }: { children: ReactElement }) => {
   }, [windowSize.height]);
   const { t } = useTranslation();
 
-  if (!query.data?.data) {
-    return <>...loaidng</>;
-  }
-
-  const { data, total } = query.data.data;
-
   const items = data.map((json) => new CartProduct(json));
-  //todo: implement loading logic
-  const loading = false;
+
+  const updateFetcher = useFetcher();
+  const loading = ["submitting"].includes(updateFetcher.state);
 
   const overlayStyles = {
     justifyItems: breakpoint === "mobile" ? "center" : "end",
@@ -166,7 +203,11 @@ const AwaitedCartModal = ({ children }: { children: ReactElement }) => {
               }}
             >
               {items.map((item, i) => (
-                <CartItem key={i} item={item} />
+                <CartItem
+                  updateFetcher={updateFetcher}
+                  key={item.id}
+                  item={item}
+                />
               ))}
             </div>
           </S.Items>

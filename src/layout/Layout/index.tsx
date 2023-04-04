@@ -11,9 +11,9 @@ import { TinyCartButton } from "~components/TinyCartButton";
 import { Sticky } from "../../components/Sticky";
 import { StickyToTopBtn } from "../../components/StickyToTopBtn";
 import { ReactNode, Suspense } from "react";
-import { useCartStore } from "~hooks/use-cart-store";
 import { Await, Outlet, useRouteLoaderData } from "react-router-dom";
 import { loader } from "~components/EnsureLocation";
+import { useCart } from "~hooks/use-cart";
 
 export const Layout = observer(
   ({
@@ -30,7 +30,7 @@ export const Layout = observer(
   }) => {
     const { x, y } = useWindowScroll();
 
-    const CartStore = useCartStore();
+    const cart = useCart();
     const { citiesQuery } = useRouteLoaderData("ensureLocation") as ReturnType<
       typeof loader
     >["data"];
@@ -71,7 +71,7 @@ export const Layout = observer(
             <Sticky top={"30px"} right={"30px"} show={showStickyCart}>
               <CartModal>
                 <div>
-                  <TinyCartButton price={CartStore.total} />
+                  <TinyCartButton price={cart?.total} />
                 </div>
               </CartModal>
             </Sticky>

@@ -8,12 +8,12 @@ export const cartUpdateAction = async ({ params, request }) => {
   const variant_id = formData.get("variant_id");
   const quantity = formData.get("quantity");
 
-  await CartApi.addProduct({
+  const res = await CartApi.addProduct({
     product_id,
     quantity,
     variant_id,
   });
 
-  queryClient.invalidateQueries(cartQuery.queryKey);
-  return null;
+  queryClient.setQueryData(cartQuery.queryKey, res.data);
+  return res.data;
 };

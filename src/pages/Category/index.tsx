@@ -6,6 +6,7 @@ import {
   useAsyncValue,
   useLoaderData,
   useNavigate,
+  useNavigation,
   useParams,
   useRouteLoaderData,
   useSearchParams,
@@ -18,11 +19,13 @@ import { Sidebar } from "~pages/Category/Sidebar";
 import { categoryLoaderIndex } from "~routes";
 import { Suspense } from "react";
 import { FetchQueryOptions, QueryClient } from "react-query";
-import MenuApi from "~api/menu.api";
+import MenuApi, { IGetProductsResponse } from "~api/menu.api";
 import { ICategory, IGetProductsParams } from "~api/menu.api.types";
 import { queryClient } from "~query-client";
 import { Product } from "~models/Product";
 import WishlistApi from "~api/wishlist.api";
+
+import { IGetCategoriesResponse } from "~api/menu.api";
 
 export const Category = observer(() => {
   const isDesktop = useIsDesktop();
@@ -58,11 +61,9 @@ export const Category = observer(() => {
 
 export const AwaitedCategory = () => {
   const spotSlug = useSpotSlug();
-  const categoriesQuery = useAsyncValue() as Awaited<
-    ReturnType<typeof MenuApi.getCategories>
-  >;
+  const categoriesQuery = useAsyncValue() as IGetCategoriesResponse;
 
-  const publishedCategories = categoriesQuery.data.data
+  const publishedCategories = categoriesQuery.data
     .filter((category) => category.published)
     .filter((category) => {
       return !category.hide_categories_in_spot
@@ -92,6 +93,7 @@ export const AwaitedProducts = ({
   const { categorySlug, spotSlug, citySlug } = useParams();
   const [searchParams] = useSearchParams();
   const limit = searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
+  const navigation = useNavigation();
 
   const lang = useLang();
 
@@ -101,7 +103,7 @@ export const AwaitedProducts = ({
     return category.slug === categorySlug;
   });
   const title = selectedCategory?.name;
-  const selectedSpot = useSpot();
+
   const handleLoadMore = () => {
     const nextLimit = +limit + PRODUCTS_LIMIT_STEP;
     navigate(
@@ -111,21 +113,19 @@ export const AwaitedProducts = ({
         nextLimit
     );
   };
-  const productsQuery = useAsyncValue() as Awaited<
-    ReturnType<typeof MenuApi.getProducts>
-  >;
-  const items = productsQuery.data.data
+  const productsQuery = useAsyncValue() as IGetProductsResponse;
+  const items = productsQuery.data
     .map((product) => new Product(product))
     .filter((product: Product) => {
-      return !product.isHiddenInSpot(selectedSpot);
+      return !product.isHiddenInSpot(spotSlug);
     });
-  const total = productsQuery.data.total;
+  const total = productsQuery.total;
   return (
     <ProductsGrid
       handleLoadMore={handleLoadMore}
       title={title}
       loadable={total > items.length}
-      loading={false}
+      loading={navigation.state === "loading"}
       items={items}
     />
   );
@@ -141,13 +141,13 @@ export const PRODUCTS_LIMIT_STEP = 25;
 
 const productsQuery = (params: IGetProductsParams): FetchQueryOptions => ({
   queryKey: ["products", "list", params ?? "all"],
-  queryFn: () => MenuApi.getProducts(params),
+  queryFn: () => MenuApi.getProducts(params).then((res) => res.data),
 });
 
 const wishlistsQuery = (): FetchQueryOptions => ({
   queryKey: ["wishlists", "list", "all"],
   queryFn: () => {
-    return WishlistApi.getList();
+    return WishlistApi.getList().then((res) => res.data);
   },
 });
 
@@ -162,7 +162,7 @@ export const querifiedLoader = (queryClient: QueryClient) => {
       offset: 0,
       limit: +limit,
     });
-    console.log(params.categorySlug);
+
     const wishlistQuery = wishlistsQuery();
     return defer({
       productsQuery:

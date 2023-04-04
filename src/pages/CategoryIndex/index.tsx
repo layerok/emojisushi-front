@@ -10,15 +10,13 @@ import { categoryLoaderIndex } from "~routes";
 import { Suspense } from "react";
 import { Category } from "./components/Category";
 import Skeleton from "react-loading-skeleton";
-import MenuApi from "~api/menu.api";
+import { IGetCategoriesResponse } from "~api/menu.api";
 
 const Categories = () => {
   const spotSlug = useSpotSlug();
-  const categoriesQuery = useAsyncValue() as Awaited<
-    ReturnType<typeof MenuApi.getCategories>
-  >;
+  const categoriesQuery = useAsyncValue() as IGetCategoriesResponse;
 
-  const publishedCategories = categoriesQuery.data.data
+  const publishedCategories = categoriesQuery.data
     .filter((category) => category.published)
     .filter((category) => {
       return !category.hide_categories_in_spot

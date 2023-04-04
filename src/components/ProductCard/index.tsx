@@ -9,7 +9,7 @@ import { Loader } from "../Loader";
 import { SvgIcon } from "../svg/SvgIcon";
 import { LogoSvg } from "../svg/LogoSvg";
 import { Switcher } from "../Switcher";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { InfoTooltip } from "../InfoTooltip";
 import { useTranslation } from "react-i18next";
 import { useWishlistStore } from "~hooks/use-wishlist-store";
@@ -18,18 +18,9 @@ import Skeleton from "react-loading-skeleton";
 import { Variant } from "~models/Variant";
 import { CartProduct } from "~models/CartProduct";
 import { queryClient } from "~query-client";
-import { cartQuery } from "~routes";
 import { useCartProducts } from "~hooks/use-cart";
-import CartApi from "~api/cart.api";
-import {
-  Form,
-  useFetcher,
-  useLocation,
-  useNavigation,
-  useSubmit,
-} from "react-router-dom";
-import { useCitySlug, useLang, useSpotSlug } from "~hooks";
-import { useCategorySlug } from "~hooks/use-category-slug";
+import { useFetcher } from "react-router-dom";
+import { useCity, useCitySlug, useLang, useSpot, useSpotSlug } from "~hooks";
 
 export const findInCart = (
   items: CartProduct[],
@@ -161,14 +152,18 @@ const Footer = ({
 }) => {
   const oldPrice = product?.getOldPrice(variant);
   const newPrice = product?.getNewPrice(variant);
-  const [pending, setPending] = useState(false);
   const fetcher = useFetcher();
+
+  const lang = useLang();
+  const spot = useSpotSlug();
+  const city = useCitySlug();
+
+  const isPending = ["submitting"].includes(fetcher.state);
+
   const count = cartProduct?.quantity || 0;
-  const isPending = ["submitting", "loading"].includes(fetcher.state);
 
   const handleAdd = () => {
-    return (quantity: number) => {
-      setPending(true);
+    return async (quantity: number) => {
       fetcher.submit(
         {
           product_id: product.id + "",
@@ -176,8 +171,7 @@ const Footer = ({
           quantity: quantity + "",
         },
         {
-          // todo: there is something wrong with this
-          action: "/lang/city/spot/cart/update",
+          action: `/${lang}/${city}/${spot}/cart/update`,
           method: "post",
         }
       );

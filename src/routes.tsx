@@ -9,28 +9,13 @@ import { QueryOptions } from "react-query";
 import MenuApi from "~api/menu.api";
 import { IGetCategoriesParams } from "~api/menu.api.types";
 import { queryClient } from "~query-client";
-import CartApi from "~api/cart.api";
 import { cartPageLoader } from "~pages/Cart/CartPage/CartPage";
 import { cartUpdateAction } from "~pages/Cart/UpdateCartPage/UpdateCartPage";
 import { cartDeleteAction } from "~pages/Cart/DeleteCartPage/DeleteCartPage";
 
-export const cartQuery: QueryOptions = {
-  queryKey: ["cart"],
-  queryFn: () => CartApi.getProducts(),
-};
-
-export const spotLoader = () => {
-  return null;
-  // return defer({
-  //   cartQuery:
-  //     queryClient.getQueryData(cartQuery.queryKey) ??
-  //     queryClient.fetchQuery(cartQuery),
-  // });
-};
-
 const categoriesQuery = (params?: IGetCategoriesParams): QueryOptions => ({
   queryKey: ["categories", "list", params ?? "all"],
-  queryFn: () => MenuApi.getCategories(params),
+  queryFn: () => MenuApi.getCategories(params).then((res) => res.data),
 });
 
 export const categoryLoaderIndex = ({ params }) => {
@@ -67,8 +52,6 @@ export const routes = [
               {
                 path: ":citySlug/:spotSlug",
                 element: <Layout withRestaurantClosedModal={true} />,
-                id: "spot",
-                loader: spotLoader,
                 children: [
                   {
                     index: true,

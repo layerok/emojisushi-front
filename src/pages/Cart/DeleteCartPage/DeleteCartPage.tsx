@@ -6,8 +6,8 @@ export const cartDeleteAction = async ({ params, request }) => {
   let formData = await request.formData();
   const cart_product_id = formData.get("cart_product_id");
 
-  await CartApi.removeCartProduct(cart_product_id);
+  const res = await CartApi.removeCartProduct(cart_product_id);
 
-  queryClient.invalidateQueries(cartQuery.queryKey);
-  return null;
+  queryClient.setQueryData(cartQuery.queryKey, res.data);
+  return res.data;
 };

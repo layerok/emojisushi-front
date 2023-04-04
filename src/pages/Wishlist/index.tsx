@@ -1,7 +1,7 @@
 import { ProductsGrid } from "~components/ProductsGrid";
 import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
-import { useSpot } from "~hooks";
+import { useSpot, useSpotSlug } from "~hooks";
 import WishlistApi from "~api/wishlist.api";
 import { defer, useLoaderData } from "react-router-dom";
 import MenuApi from "~api/menu.api";
@@ -11,7 +11,7 @@ import { Product } from "~models/Product";
 
 export const Wishlist = observer(() => {
   const { t } = useTranslation();
-  const selectedSpot = useSpot();
+  const spotSlug = useSpotSlug();
 
   const handleLoadMore = () => {
     // todo: implement load more
@@ -23,7 +23,7 @@ export const Wishlist = observer(() => {
 
   const items = products.data.data
     .map((json) => new Product(json))
-    .filter((product) => !product.isHiddenInSpot(selectedSpot));
+    .filter((product) => !product.isHiddenInSpot(spotSlug));
 
   return (
     <ProductsGrid

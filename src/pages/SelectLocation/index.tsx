@@ -13,9 +13,7 @@ import { City } from "~models";
 
 export const SelectLocation = observer(() => {
   const { t } = useTranslation();
-  const { citiesQuery } = useRouteLoaderData("ensureLocation") as ReturnType<
-    typeof loader
-  >["data"];
+  const { citiesQuery } = useRouteLoaderData("ensureLocation") as any;
 
   const isMobile = useIsMobile();
   return (
@@ -36,11 +34,11 @@ export const SelectLocation = observer(() => {
           <Suspense fallback={<CitiesSkeleton />}>
             <Await
               resolve={citiesQuery}
-              errorElement={<p>Error loading cities</p>}
+              errorElement={<p>Error loading locations</p>}
             >
               {(citiesQuery) => (
                 <Cities
-                  items={citiesQuery.data.data.map((json) => new City(json))}
+                  items={citiesQuery.data.map((json) => new City(json))}
                 />
               )}
             </Await>

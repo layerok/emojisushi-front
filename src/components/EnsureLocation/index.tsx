@@ -34,7 +34,7 @@ export const citiesQuery: QueryOptions = {
   queryFn: () =>
     AccessApi.getCities({
       includeSpots: true,
-    }),
+    }).then((res) => res.data),
   queryKey: ["cities", "list", "all"],
 };
 

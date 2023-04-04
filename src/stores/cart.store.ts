@@ -2,8 +2,6 @@ import { makeAutoObservable, transaction } from "mobx";
 import CartApi from "../api/cart.api";
 import { RootStore } from "~stores/stores";
 import { CartProduct } from "~models/CartProduct";
-import { Product } from "~models/Product";
-import { Variant } from "~models/Variant";
 
 export class CartStore {
   rootStore: RootStore;

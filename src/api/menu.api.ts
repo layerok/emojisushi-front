@@ -9,31 +9,35 @@ import {
 } from "~api/menu.api.types";
 import { Nullable } from "~common/types";
 
+export type IGetCategoriesResponse = {
+  data: ICategory[];
+  meta: {
+    total: number;
+    offset: Nullable<number>;
+    limit: Nullable<number>;
+  };
+};
+
+export type IGetProductsResponse = {
+  data: IProduct[];
+  total: number;
+  sort_options: string[];
+  filters: IFilter[];
+};
+
 class Menu {
-  getProducts(params: IGetProductsParams = {}): Promise<
-    AxiosResponse<{
-      data: IProduct[];
-      total: number;
-      sort_options: string[];
-      filters: IFilter[];
-    }>
-  > {
+  getProducts(
+    params: IGetProductsParams = {}
+  ): Promise<AxiosResponse<IGetProductsResponse>> {
     return client.get("products", {
       params,
       // @ts-ignore
       skipAuthRefresh: true,
     });
   }
-  getCategories(params: IGetCategoriesParams = {}): Promise<
-    AxiosResponse<{
-      data: ICategory[];
-      meta: {
-        total: number;
-        offset: Nullable<number>;
-        limit: Nullable<number>;
-      };
-    }>
-  > {
+  getCategories(
+    params: IGetCategoriesParams = {}
+  ): Promise<AxiosResponse<IGetCategoriesResponse>> {
     return client.get("categories", {
       params,
       // @ts-ignore

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { Await, useAsyncValue, useRouteLoaderData } from "react-router-dom";
 import { loader } from "~pages/Category";
-import MenuApi from "~api/menu.api";
+import MenuApi, { IGetProductsResponse } from "~api/menu.api";
 
 export const SortingPopover = ({
   showSkeleton = false,
@@ -29,11 +29,9 @@ export const SortingPopover = ({
 };
 
 const InternalSortingDropdown = () => {
-  const productsQuery = useAsyncValue() as Awaited<
-    ReturnType<typeof MenuApi.getProducts>
-  >;
+  const productsQuery = useAsyncValue() as IGetProductsResponse;
 
-  const options = productsQuery.data.sort_options;
+  const options = productsQuery.sort_options;
 
   const initialSelectedIndex = options.indexOf("bestsellar");
 

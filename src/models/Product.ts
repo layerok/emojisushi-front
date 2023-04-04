@@ -79,8 +79,8 @@ export class Product {
     return this.json.hide_products_in_spot;
   }
 
-  isHiddenInSpot(spot: Spot) {
-    return !!this.hideProductsInSpot.find((s) => s.id === spot.id);
+  isHiddenInSpot(spotSlug: string) {
+    return !!this.hideProductsInSpot.find((s) => s.slug === spotSlug);
   }
 
   get ingredients() {

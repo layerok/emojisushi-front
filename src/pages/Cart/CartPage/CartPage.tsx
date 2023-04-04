@@ -5,7 +5,7 @@ import { queryClient } from "~query-client";
 
 export const cartQuery: QueryOptions = {
   queryKey: ["cart"],
-  queryFn: () => CartApi.getProducts(),
+  queryFn: () => CartApi.getProducts().then((res) => res.data),
 };
 export const loader = () => {
   return defer({
