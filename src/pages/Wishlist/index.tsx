@@ -99,11 +99,11 @@ export const wishlistLoader = async ({ params, request }) => {
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
   const sort = url.searchParams.get("sort") as SortKey;
-  // todo: make option to fetch all products. Because some products from nested categories are missing
+  // todo: checkou default limit, maybe make it unlimited by default
   const productQuery = productsQuery({
     category_slug: "menu",
     search: q,
-    limit: null,
+    limit: 2000,
     sort: sort,
   });
 
