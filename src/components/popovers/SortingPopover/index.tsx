@@ -10,15 +10,34 @@ import {
   useRouteLoaderData,
 } from "react-router-dom";
 import { loader } from "~pages/Category";
-import MenuApi, { IGetProductsResponse } from "~api/menu.api";
+import { IGetProductsResponse } from "~api/menu.api";
+
+const invariant = (condition, message) => {
+  if (!condition) {
+    throw message;
+  }
+};
+
+const useRouteContext = () => {
+  return useContext(UNSAFE_RouteContext);
+};
+
+const useCurrentRouteId = () => {
+  const route = useRouteContext();
+  const thisRoute = route.matches[route.matches.length - 1];
+  invariant(
+    thisRoute.route.id,
+    `useCurrentRouteId can only be used on routes that contain a unique "id"`
+  );
+  return thisRoute.route.id;
+};
 
 export const SortingPopover = ({
   showSkeleton = false,
 }: {
   showSkeleton?: boolean;
 }) => {
-  const route = useContext(UNSAFE_RouteContext);
-  const routeId = route.matches[route.matches.length - 1]?.route?.id;
+  const routeId = useCurrentRouteId();
 
   // todo: pass sort_options as props
   const { productsQuery } = useRouteLoaderData(routeId) as ReturnType<

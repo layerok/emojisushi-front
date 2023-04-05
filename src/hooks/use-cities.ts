@@ -5,5 +5,5 @@ import { citiesQuery } from "~components/EnsureLocation";
 export const useCities = (): ICity[] | undefined => {
   // todo: add types
   const query = useQuery(citiesQuery) as any;
-  return query?.data?.data?.data;
+  return query?.data?.data;
 };

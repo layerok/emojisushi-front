@@ -1,4 +1,9 @@
-import { Await, useAsyncValue, useRouteLoaderData } from "react-router-dom";
+import {
+  Await,
+  defer,
+  useAsyncValue,
+  useRouteLoaderData,
+} from "react-router-dom";
 import * as S from "./styled";
 
 import { useSpotSlug } from "~hooks";
@@ -6,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { SvgIcon } from "~components/svg/SvgIcon";
 import { useIsMobile } from "~common/hooks/useBreakpoint";
 import { ToteSvg } from "~components/svg/ToteSvg";
-import { categoryLoaderIndex } from "~routes";
+import { CategoryIndexLoaderResolvedData } from "~routes";
 import { Suspense } from "react";
 import { Category } from "./components/Category";
 import Skeleton from "react-loading-skeleton";
@@ -14,9 +19,9 @@ import { IGetCategoriesResponse } from "~api/menu.api";
 
 const Categories = () => {
   const spotSlug = useSpotSlug();
-  const categoriesQuery = useAsyncValue() as IGetCategoriesResponse;
+  const categories = useAsyncValue() as IGetCategoriesResponse;
 
-  const publishedCategories = categoriesQuery.data
+  const publishedCategories = categories.data
     .filter((category) => category.published)
     .filter((category) => {
       return !category.hide_categories_in_spot
@@ -61,9 +66,9 @@ const CategoriesSkeleton = () => {
 export const CategoryIndex = () => {
   const { t } = useTranslation();
 
-  const { categoriesQuery } = useRouteLoaderData("categoryIndex") as ReturnType<
-    typeof categoryLoaderIndex
-  >["data"];
+  const { categories }: CategoryIndexLoaderResolvedData = useRouteLoaderData(
+    "categoryIndex"
+  ) as any;
 
   const isMobile = useIsMobile();
 
@@ -72,7 +77,7 @@ export const CategoryIndex = () => {
       <S.Category.Container>
         <S.Category.Label>
           <Suspense fallback={<Skeleton width={220} height={20} />}>
-            <Await resolve={categoriesQuery}>
+            <Await resolve={categories}>
               <>
                 {t("categoryIndex.title")}
                 <SvgIcon width={isMobile ? "20px" : "25px"} color={"white"}>
@@ -85,7 +90,7 @@ export const CategoryIndex = () => {
         <S.Category.Items>
           <Suspense fallback={<CategoriesSkeleton />}>
             <Await
-              resolve={categoriesQuery}
+              resolve={categories}
               errorElement={<p>Error fetching categories!</p>}
             >
               <Categories />

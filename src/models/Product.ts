@@ -2,6 +2,7 @@ import { IProduct } from "~api/menu.api.types";
 import { makeAutoObservable } from "mobx";
 import { Variant } from "~models/Variant";
 import { Spot } from "./Spot";
+import { IWishlist } from "~api/wishlist.api.types";
 
 export class Product {
   json: IProduct;
@@ -36,6 +37,10 @@ export class Product {
 
   get variants() {
     return this.json.variants.map((variant) => new Variant(variant));
+  }
+
+  get variantIds() {
+    return this.variants.map((v) => v.id);
   }
 
   get inventoryManagementMethod() {
@@ -81,6 +86,30 @@ export class Product {
 
   isHiddenInSpot(spotSlug: string) {
     return !!this.hideProductsInSpot.find((s) => s.slug === spotSlug);
+  }
+
+  isInWishlists(wishlists: IWishlist[]): boolean {
+    for (let i = 0; i < wishlists.length; i++) {
+      const wishlist = wishlists[i];
+      if (this.isInWishlist(wishlist)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  isInWishlist(wishlist: IWishlist): boolean {
+    for (let j = 0; j < wishlist.items.length; j++) {
+      const item = wishlist.items[j];
+      if (
+        item.product_id === this.id &&
+        (!item.variant_id || this.variantIds.includes(item.variant_id))
+      ) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   get ingredients() {

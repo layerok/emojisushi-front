@@ -6,24 +6,45 @@ import {
   loader as ensureLocationLoader,
 } from "~components/EnsureLocation";
 import { QueryOptions } from "react-query";
-import MenuApi from "~api/menu.api";
+import MenuApi, { IGetCategoriesResponse } from "~api/menu.api";
 import { IGetCategoriesParams } from "~api/menu.api.types";
 import { queryClient } from "~query-client";
 import { cartPageLoader } from "~pages/Cart/CartPage/CartPage";
 import { cartUpdateAction } from "~pages/Cart/UpdateCartPage/UpdateCartPage";
 import { cartDeleteAction } from "~pages/Cart/DeleteCartPage/DeleteCartPage";
+import WishlistApi from "~api/wishlist.api";
+import { wishlistQuery } from "~pages/Wishlist";
 
-const categoriesQuery = (params?: IGetCategoriesParams): QueryOptions => ({
+export const categoriesQuery = (
+  params?: IGetCategoriesParams
+): QueryOptions => ({
   queryKey: ["categories", "list", params ?? "all"],
   queryFn: () => MenuApi.getCategories(params).then((res) => res.data),
 });
 
+export type CategoryIndexLoaderResolvedData = {
+  categories: IGetCategoriesResponse;
+};
+
 export const categoryLoaderIndex = ({ params }) => {
   const query = categoriesQuery();
   return defer({
-    categoriesQuery:
+    categories:
       queryClient.getQueryData(query.queryKey) ?? queryClient.fetchQuery(query),
+  } as CategoryIndexLoaderResolvedData);
+};
+
+const wishilstAddAction = async ({ request }) => {
+  let formData = await request.formData();
+  const product_id = formData.get("product_id");
+  const quantity = formData.get("quantity");
+
+  const res = await WishlistApi.addItem({
+    product_id,
+    quantity,
   });
+  queryClient.setQueryData(wishlistQuery.queryKey, res.data);
+  return res.data;
 };
 
 export const routes = [
@@ -86,9 +107,17 @@ export const routes = [
                     lazy: () => import("~pages/Checkout"),
                   },
                   {
-                    path: "wishlist",
                     id: "wishlist",
+                    path: "wishlist",
                     lazy: () => import("~pages/Wishlist"),
+                    children: [
+                      {
+                        path: "add",
+                        id: "wishlist-add",
+                        // element: <Navigate to={"../"} />,
+                        action: wishilstAddAction,
+                      },
+                    ],
                   },
                   {
                     element: <ProtectedRoute redirectPath={"/"} />,

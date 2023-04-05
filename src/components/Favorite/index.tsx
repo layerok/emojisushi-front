@@ -6,7 +6,12 @@ export const Favorite = ({ isFavorite = false, width = "25px" }) => {
   const color = isFavorite ? "#FFE600" : "white";
   return (
     <S.Wrapper>
-      <SvgIcon width={width} color={color} hoverColor={"#FFE600"}>
+      <SvgIcon
+        clickable={true}
+        width={width}
+        color={color}
+        hoverColor={"#FFE600"}
+      >
         <HeartSvg />
       </SvgIcon>
     </S.Wrapper>

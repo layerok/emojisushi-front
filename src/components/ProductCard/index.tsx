@@ -9,18 +9,19 @@ import { Loader } from "../Loader";
 import { SvgIcon } from "../svg/SvgIcon";
 import { LogoSvg } from "../svg/LogoSvg";
 import { Switcher } from "../Switcher";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { InfoTooltip } from "../InfoTooltip";
 import { useTranslation } from "react-i18next";
-import { useWishlistStore } from "~hooks/use-wishlist-store";
 import { Product } from "~models/Product";
 import Skeleton from "react-loading-skeleton";
 import { Variant } from "~models/Variant";
 import { CartProduct } from "~models/CartProduct";
-import { queryClient } from "~query-client";
 import { useCartProducts } from "~hooks/use-cart";
-import { useFetcher } from "react-router-dom";
-import { useCity, useCitySlug, useLang, useSpot, useSpotSlug } from "~hooks";
+import { useFetcher, useParams } from "react-router-dom";
+import { useCitySlug, useLang, useSpotSlug } from "~hooks";
+import { FetcherWithComponents } from "react-router-dom";
+import { IGetWishlistResponse } from "~api/wishlist.api";
+import { WishlistLoaderResolvedDefferedData } from "~pages/Wishlist";
 
 export const findInCart = (
   items: CartProduct[],
@@ -45,8 +46,8 @@ export const ProductCard = ({
   showSkeleton?: boolean;
 }) => {
   const cartProducts = useCartProducts();
+  const wishlistFetcher = useFetcher<IGetWishlistResponse>();
 
-  const WishlistStore = useWishlistStore();
   const initialModificatorsState = product?.modGroups.reduce((acc, group) => {
     return {
       ...acc,
@@ -71,8 +72,9 @@ export const ProductCard = ({
 
   return (
     <S.Wrapper>
-      <Loader loading={product ? WishlistStore.isPending(product) : false} />
+      <Loader loading={wishlistFetcher.state === "submitting"} />
       <FavoriteButton
+        fetcher={wishlistFetcher}
         showSkeleton={showSkeleton}
         cartProduct={cartProduct}
         product={product}
@@ -108,25 +110,41 @@ export const ProductCard = ({
 const FavoriteButton = ({
   cartProduct,
   product,
+  fetcher,
   showSkeleton = false,
 }: {
   cartProduct?: CartProduct;
   product?: Product;
+  fetcher: FetcherWithComponents<IGetWishlistResponse>;
   showSkeleton?: boolean;
 }) => {
   const isMobile = useIsMobile();
   const iconSize = isMobile ? 33 : 25;
-  const WishlistStore = useWishlistStore();
   const count = cartProduct?.quantity || 0;
+  const loadFetcher =
+    useFetcher() as FetcherWithComponents<WishlistLoaderResolvedDefferedData>;
+
+  const { spotSlug, citySlug, lang } = useParams();
 
   const handleToggleFavorite = async () => {
-    await WishlistStore.addItem({
-      product_id: product.id,
-      quantity: count,
-    });
-    // todo: check that it is working
-    queryClient.invalidateQueries({ queryKey: ["wishlist", "list", "all"] });
+    fetcher.submit(
+      {
+        quantity: count + "",
+        product_id: product.id + "",
+      },
+      {
+        action: `${lang}/${citySlug}/${spotSlug}/wishlist/add`,
+        method: "post",
+      }
+    );
   };
+
+  useEffect(() => {
+    // I don't sure about that fetcher, it will fetch products, categories, wishlists if they are stale.
+    // don't sure if such overhead is needed
+    // todo: need to rethink this
+    loadFetcher.load(`/${lang}/${citySlug}/${spotSlug}/wishlist`);
+  }, []);
 
   if (showSkeleton) {
     return null;
@@ -134,7 +152,12 @@ const FavoriteButton = ({
 
   return (
     <S.Favorite onClick={handleToggleFavorite}>
-      <Favorite width={iconSize + "px"} isFavorite={product?.isFavorite} />
+      <Favorite
+        width={iconSize + "px"}
+        isFavorite={product.isInWishlists(
+          fetcher.data || loadFetcher.data?.wishlistQuery || []
+        )}
+      />
     </S.Favorite>
   );
 };

@@ -16,23 +16,23 @@ import { FlexBox } from "~components/FlexBox";
 import { Banner } from "./Banner";
 import { useIsDesktop } from "~common/hooks/useBreakpoint";
 import { Sidebar } from "~pages/Category/Sidebar";
-import { categoryLoaderIndex } from "~routes";
+import { CategoryIndexLoaderResolvedData, categoryLoaderIndex } from "~routes";
 import { Suspense } from "react";
 import { FetchQueryOptions, QueryClient } from "react-query";
 import MenuApi, { IGetProductsResponse } from "~api/menu.api";
 import { ICategory, IGetProductsParams } from "~api/menu.api.types";
 import { queryClient } from "~query-client";
 import { Product } from "~models/Product";
-import WishlistApi from "~api/wishlist.api";
+import WishlistApi, { IGetWishlistResponse } from "~api/wishlist.api";
 
 import { IGetCategoriesResponse } from "~api/menu.api";
 
 export const Category = observer(() => {
   const isDesktop = useIsDesktop();
 
-  const { categoriesQuery } = useRouteLoaderData("categoryIndex") as ReturnType<
-    typeof categoryLoaderIndex
-  >["data"];
+  const { categories }: CategoryIndexLoaderResolvedData = useRouteLoaderData(
+    "categoryIndex"
+  ) as any;
 
   // if (!selectedCategory && categories.length > 0) {
   //   return <Navigate to={categories[0].slug} />;
@@ -50,7 +50,7 @@ export const Category = observer(() => {
             </>
           }
         >
-          <Await resolve={categoriesQuery}>
+          <Await resolve={categories}>
             <AwaitedCategory />
           </Await>
         </Suspense>
@@ -61,9 +61,9 @@ export const Category = observer(() => {
 
 export const AwaitedCategory = () => {
   const spotSlug = useSpotSlug();
-  const categoriesQuery = useAsyncValue() as IGetCategoriesResponse;
+  const categories = useAsyncValue() as IGetCategoriesResponse;
 
-  const publishedCategories = categoriesQuery.data
+  const publishedCategories = categories.data
     .filter((category) => category.published)
     .filter((category) => {
       return !category.hide_categories_in_spot
@@ -119,6 +119,7 @@ export const AwaitedProducts = ({
     .filter((product: Product) => {
       return !product.isHiddenInSpot(spotSlug);
     });
+  // todo: Total is not right because hidden products are also counted
   const total = productsQuery.total;
   return (
     <ProductsGrid
@@ -138,6 +139,11 @@ Object.assign(Component, {
 });
 
 export const PRODUCTS_LIMIT_STEP = 25;
+
+export type CategoryLoaderResolvedDeferredData = {
+  productsQuery: IGetProductsResponse;
+  wishlistQuery: IGetWishlistResponse;
+};
 
 export const productsQuery = (
   params: IGetProductsParams
@@ -173,7 +179,7 @@ export const querifiedLoader = (queryClient: QueryClient) => {
       wishlistQuery:
         queryClient.getQueryData(wishlistQuery.queryKey) ??
         queryClient.fetchQuery(wishlistQuery),
-    });
+    } as CategoryLoaderResolvedDeferredData);
   };
 };
 
