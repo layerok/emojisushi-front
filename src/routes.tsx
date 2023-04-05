@@ -1,27 +1,13 @@
-import { defer, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { ProtectedRoute } from "~components/ProtectedRoute";
 import { Layout, layoutLoader } from "~layout/Layout";
 import {
   EnsureLocation,
   loader as ensureLocationLoader,
 } from "~components/EnsureLocation";
-import { IGetCategoriesResponse } from "~api/menu.api";
-import { queryClient } from "~query-client";
 import { cartUpdateAction } from "~pages/Cart/UpdateCartPage/UpdateCartPage";
 import { cartDeleteAction } from "~pages/Cart/DeleteCartPage/DeleteCartPage";
-import { categoriesQuery } from "~queries/categories.query";
-
-export type CategoryIndexLoaderResolvedData = {
-  categories: IGetCategoriesResponse;
-};
-
-export const categoriesLoader = ({ params }) => {
-  const query = categoriesQuery();
-  return defer({
-    categories:
-      queryClient.getQueryData(query.queryKey) ?? queryClient.fetchQuery(query),
-  } as CategoryIndexLoaderResolvedData);
-};
+import { categoriesLoader } from "~pages/Categories";
 
 export const routes = [
   {

@@ -16,7 +16,6 @@ import { FlexBox } from "~components/FlexBox";
 import { Banner } from "./Banner";
 import { useIsDesktop } from "~common/hooks/useBreakpoint";
 import { Sidebar } from "~pages/Category/Sidebar";
-import { CategoryIndexLoaderResolvedData } from "~routes";
 import { Suspense } from "react";
 import { QueryClient } from "react-query";
 import { IGetProductsResponse } from "~api/menu.api";
@@ -27,11 +26,12 @@ import WishlistApi, { IGetWishlistResponse } from "~api/wishlist.api";
 import { wishlistsQuery } from "~queries";
 import { IGetCategoriesResponse } from "~api/menu.api";
 import { productsQuery } from "~queries";
+import { CategoriesLoaderResolvedData } from "~pages/Categories";
 
 export const Category = observer(() => {
   const isDesktop = useIsDesktop();
 
-  const { categories }: CategoryIndexLoaderResolvedData = useRouteLoaderData(
+  const { categories }: CategoriesLoaderResolvedData = useRouteLoaderData(
     "categories"
   ) as any;
 

@@ -1,15 +1,21 @@
-import { Await, useAsyncValue, useRouteLoaderData } from "react-router-dom";
+import {
+  Await,
+  defer,
+  useAsyncValue,
+  useRouteLoaderData,
+} from "react-router-dom";
 import * as S from "./styled";
 import { useSpotSlug } from "~hooks";
 import { useTranslation } from "react-i18next";
 import { SvgIcon } from "~components/svg/SvgIcon";
 import { useIsMobile } from "~common/hooks/useBreakpoint";
 import { ToteSvg } from "~components/svg/ToteSvg";
-import { CategoryIndexLoaderResolvedData } from "~routes";
 import { Suspense } from "react";
 import { Category } from "./components/Category";
 import Skeleton from "react-loading-skeleton";
 import { IGetCategoriesResponse } from "~api/menu.api";
+import { categoriesQuery } from "~queries";
+import { queryClient } from "~query-client";
 
 const Categories = () => {
   const spotSlug = useSpotSlug();
@@ -60,7 +66,7 @@ const CategoriesSkeleton = () => {
 export const CategoriesPage = () => {
   const { t } = useTranslation();
 
-  const { categories }: CategoryIndexLoaderResolvedData = useRouteLoaderData(
+  const { categories }: CategoriesLoaderResolvedData = useRouteLoaderData(
     "categories"
   ) as any;
 
@@ -101,6 +107,20 @@ export const Component = CategoriesPage;
 Object.assign(CategoriesPage, {
   displayName: "LazyCategoriesPage",
 });
+
+export type CategoriesLoaderResolvedData = {
+  categories: IGetCategoriesResponse;
+};
+
+export const categoriesLoader = ({ params }) => {
+  const query = categoriesQuery();
+  return defer({
+    categories:
+      queryClient.getQueryData(query.queryKey) ?? queryClient.fetchQuery(query),
+  } as CategoriesLoaderResolvedData);
+};
+
+export const loader = categoriesLoader;
 
 export const shouldRevalidate = ({ currentParams, nextParams }) => {
   return currentParams.lang !== nextParams.lang;
