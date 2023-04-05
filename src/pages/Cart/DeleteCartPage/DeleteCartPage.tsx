@@ -1,5 +1,5 @@
 import CartApi from "~api/cart.api";
-import { cartQuery } from "../CartPage/CartPage";
+import { cartQuery } from "~queries";
 import { queryClient } from "~query-client";
 
 export const cartDeleteAction = async ({ params, request }) => {

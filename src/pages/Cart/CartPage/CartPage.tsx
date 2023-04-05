@@ -1,12 +1,7 @@
-import { QueryOptions } from "react-query";
 import { defer } from "react-router-dom";
-import CartApi from "~api/cart.api";
+import { cartQuery } from "~queries/cart.query";
 import { queryClient } from "~query-client";
 
-export const cartQuery: QueryOptions = {
-  queryKey: ["cart"],
-  queryFn: () => CartApi.getProducts().then((res) => res.data),
-};
 export const loader = () => {
   return defer({
     cartQuery:

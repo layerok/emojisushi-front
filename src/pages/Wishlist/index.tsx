@@ -2,31 +2,29 @@ import { ProductsGrid } from "~components/ProductsGrid";
 import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useSpotSlug } from "~hooks";
-import WishlistApi, { IGetWishlistResponse } from "~api/wishlist.api";
+import { IGetWishlistResponse } from "~api/wishlist.api";
 import { Await, defer, useAsyncValue, useLoaderData } from "react-router-dom";
 import { IGetProductsResponse } from "~api/menu.api";
 import { Product } from "~models/Product";
 import { queryClient } from "~query-client";
-import { productsQuery } from "~pages/Category";
 import { Suspense } from "react";
 import { FlexBox } from "~components/FlexBox";
 import { Sidebar } from "~pages/Category/Sidebar";
-import { QueryOptions } from "react-query";
 import { useLoadCategories } from "~hooks/use-load-categories";
 import { CategoriesStore } from "~stores/categories.store";
+import { productsQuery, wishlistsQuery } from "~queries";
 
 // todo: fix layout for wishlist
 
 export const Wishlist = observer(() => {
-  const { productsQuery, wishlistQuery } = useLoaderData() as any;
-
-  console.log("dbg reredner");
+  const { items }: WishlistLoaderResolvedDeferredData = useLoaderData() as any;
+  const [products, wishlists] = items;
 
   return (
     <FlexBox>
       <InternalSidebar />
       <Suspense>
-        <Await resolve={Promise.all([productsQuery, wishlistQuery])}>
+        <Await resolve={Promise.all([products, wishlists])}>
           <AwaitedWishlist />
         </Await>
       </Suspense>
@@ -85,14 +83,8 @@ Object.assign(Component, {
   displayName: "LazyWishlist",
 });
 
-export const wishlistQuery: QueryOptions = {
-  queryKey: ["wishlist", "list", "all"],
-  queryFn: () => WishlistApi.getList().then((res) => res.data),
-};
-
-export type WishlistLoaderResolvedDefferedData = {
-  productsQuery: IGetProductsResponse;
-  wishlistQuery: IGetWishlistResponse;
+export type WishlistLoaderResolvedDeferredData = {
+  items: [IGetProductsResponse, IGetWishlistResponse];
 };
 
 export const wishlistLoader = async ({ params }) => {
@@ -101,14 +93,16 @@ export const wishlistLoader = async ({ params }) => {
     search: null,
   });
 
+  const productsPromise =
+    queryClient.getQueryData(productQuery.queryKey) ??
+    queryClient.fetchQuery(productQuery);
+  const wishlistsPromise =
+    queryClient.getQueryData(wishlistsQuery.queryKey) ??
+    queryClient.fetchQuery(wishlistsQuery);
+
   return defer({
-    productsQuery:
-      queryClient.getQueryData(productQuery.queryKey) ??
-      queryClient.fetchQuery(productQuery),
-    wishlistQuery:
-      queryClient.getQueryData(wishlistQuery.queryKey) ??
-      queryClient.fetchQuery(wishlistQuery),
-  });
+    items: [productsPromise, wishlistsPromise],
+  } as WishlistLoaderResolvedDeferredData);
 };
 
 export const loader = wishlistLoader;

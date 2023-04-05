@@ -24,8 +24,10 @@ import { ICategory, IGetProductsParams } from "~api/menu.api.types";
 import { queryClient } from "~query-client";
 import { Product } from "~models/Product";
 import WishlistApi, { IGetWishlistResponse } from "~api/wishlist.api";
+import { wishlistsQuery } from "~queries";
 
 import { IGetCategoriesResponse } from "~api/menu.api";
+import { productsQuery } from "~queries";
 
 export const Category = observer(() => {
   const isDesktop = useIsDesktop();
@@ -145,20 +147,6 @@ export type CategoryLoaderResolvedDeferredData = {
   wishlistQuery: IGetWishlistResponse;
 };
 
-export const productsQuery = (
-  params: IGetProductsParams
-): FetchQueryOptions => ({
-  queryKey: ["products", "list", params ?? "all"],
-  queryFn: () => MenuApi.getProducts(params).then((res) => res.data),
-});
-
-const wishlistsQuery = (): FetchQueryOptions => ({
-  queryKey: ["wishlists", "list", "all"],
-  queryFn: () => {
-    return WishlistApi.getList().then((res) => res.data);
-  },
-});
-
 export const querifiedLoader = (queryClient: QueryClient) => {
   return ({ params, request }) => {
     const url = new URL(request.url);
@@ -171,14 +159,13 @@ export const querifiedLoader = (queryClient: QueryClient) => {
       limit: +limit,
     });
 
-    const wishlistQuery = wishlistsQuery();
     return defer({
       productsQuery:
         queryClient.getQueryData(productQuery.queryKey) ??
         queryClient.fetchQuery(productQuery),
       wishlistQuery:
-        queryClient.getQueryData(wishlistQuery.queryKey) ??
-        queryClient.fetchQuery(wishlistQuery),
+        queryClient.getQueryData(wishlistsQuery.queryKey) ??
+        queryClient.fetchQuery(wishlistsQuery),
     } as CategoryLoaderResolvedDeferredData);
   };
 };

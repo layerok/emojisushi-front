@@ -1,7 +1,5 @@
 import { City } from "~models/City";
 import { useCitySlug } from "./use-city-slug";
-import { useQuery } from "react-query";
-import { citiesQuery } from "~components/EnsureLocation";
 import { useCities } from "./use-cities";
 export const useCity = (): City | undefined => {
   const citySlug = useCitySlug();

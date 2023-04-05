@@ -1,6 +1,6 @@
 import CartApi from "~api/cart.api";
+import { cartQuery } from "~queries";
 import { queryClient } from "~query-client";
-import { cartQuery } from "../CartPage/CartPage";
 
 export const cartUpdateAction = async ({ params, request }) => {
   let formData = await request.formData();

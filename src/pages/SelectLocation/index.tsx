@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
 import { useIsMobile } from "~common/hooks/useBreakpoint";
 import { Cities, CitiesSkeleton } from "./components/City";
 import { Await, useRouteLoaderData } from "react-router-dom";
-import { loader } from "~components/EnsureLocation";
 import { Suspense } from "react";
 import { City } from "~models";
 

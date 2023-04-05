@@ -5,22 +5,14 @@ import {
   EnsureLocation,
   loader as ensureLocationLoader,
 } from "~components/EnsureLocation";
-import { QueryOptions } from "react-query";
-import MenuApi, { IGetCategoriesResponse } from "~api/menu.api";
-import { IGetCategoriesParams } from "~api/menu.api.types";
+import { IGetCategoriesResponse } from "~api/menu.api";
 import { queryClient } from "~query-client";
 import { cartPageLoader } from "~pages/Cart/CartPage/CartPage";
 import { cartUpdateAction } from "~pages/Cart/UpdateCartPage/UpdateCartPage";
 import { cartDeleteAction } from "~pages/Cart/DeleteCartPage/DeleteCartPage";
 import WishlistApi from "~api/wishlist.api";
-import { wishlistQuery } from "~pages/Wishlist";
-
-export const categoriesQuery = (
-  params?: IGetCategoriesParams
-): QueryOptions => ({
-  queryKey: ["categories", "list", params ?? "all"],
-  queryFn: () => MenuApi.getCategories(params).then((res) => res.data),
-});
+import { categoriesQuery } from "~queries/categories.query";
+import { wishlistsQuery } from "~queries";
 
 export type CategoryIndexLoaderResolvedData = {
   categories: IGetCategoriesResponse;
@@ -43,7 +35,7 @@ const wishilstAddAction = async ({ request }) => {
     product_id,
     quantity,
   });
-  queryClient.setQueryData(wishlistQuery.queryKey, res.data);
+  const query = queryClient.setQueryData(wishlistsQuery.queryKey, res.data);
   return res.data;
 };
 

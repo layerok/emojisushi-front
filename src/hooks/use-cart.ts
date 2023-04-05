@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { CartProduct } from "~models";
-import { cartQuery } from "~pages/Cart/CartPage/CartPage";
+import { cartQuery } from "~queries/cart.query";
 
 export const useCart = () => {
   // todo add return types

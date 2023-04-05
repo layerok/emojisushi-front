@@ -3,6 +3,7 @@ import { defer, Navigate, Outlet, useLocation } from "react-router-dom";
 import AccessApi from "~api/access.api";
 import { useCity } from "~hooks/use-city";
 import { useSpot } from "~hooks/use-spot";
+import { citiesQuery } from "~queries/cities.query";
 import { queryClient } from "~query-client";
 
 export const EnsureLocation = ({
@@ -29,14 +30,6 @@ export const Component = EnsureLocation;
 Object.assign(Component, {
   displayName: "LazyEnsureLocation",
 });
-
-export const citiesQuery: QueryOptions = {
-  queryFn: () =>
-    AccessApi.getCities({
-      includeSpots: true,
-    }).then((res) => res.data),
-  queryKey: ["cities", "list", "all"],
-};
 
 const qurifiedLoader = (queryClient: QueryClient) => {
   return ({ params }) => {

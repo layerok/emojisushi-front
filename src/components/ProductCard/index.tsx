@@ -21,7 +21,7 @@ import { useFetcher, useParams } from "react-router-dom";
 import { useCitySlug, useLang, useSpotSlug } from "~hooks";
 import { FetcherWithComponents } from "react-router-dom";
 import { IGetWishlistResponse } from "~api/wishlist.api";
-import { WishlistLoaderResolvedDefferedData } from "~pages/Wishlist";
+import { WishlistLoaderResolvedDeferredData } from "~pages/Wishlist";
 
 export const findInCart = (
   items: CartProduct[],
@@ -122,7 +122,7 @@ const FavoriteButton = ({
   const iconSize = isMobile ? 33 : 25;
   const count = cartProduct?.quantity || 0;
   const loadFetcher =
-    useFetcher() as FetcherWithComponents<WishlistLoaderResolvedDefferedData>;
+    useFetcher() as FetcherWithComponents<WishlistLoaderResolvedDeferredData>;
 
   const { spotSlug, citySlug, lang } = useParams();
 
@@ -155,7 +155,7 @@ const FavoriteButton = ({
       <Favorite
         width={iconSize + "px"}
         isFavorite={product.isInWishlists(
-          fetcher.data || loadFetcher.data?.wishlistQuery || []
+          fetcher.data || loadFetcher.data?.items?.[1] || []
         )}
       />
     </S.Favorite>
