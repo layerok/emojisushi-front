@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { SortKey } from "~api/menu.api.types";
+import { useSubmit } from "react-router-dom";
 
 export const SortingPopover = ({
   showSkeleton = false,
@@ -28,6 +29,7 @@ export const SortingPopover = ({
 
 const InternalSortingDropdown = ({ options = [] }: { options?: SortKey[] }) => {
   const initialSelectedIndex = options.indexOf("bestseller");
+  const submit = useSubmit();
 
   const [selectedIndex, setSelectedIndex] = useState(
     initialSelectedIndex === -1 ? 0 : initialSelectedIndex
@@ -45,7 +47,9 @@ const InternalSortingDropdown = ({ options = [] }: { options?: SortKey[] }) => {
       onSelect={({ option, index, close }) => {
         close();
         setSelectedIndex(index);
-        // todo: sort products
+        const fd = new FormData();
+        fd.append("sort", option);
+        submit(fd);
       }}
     >
       {({ selectedOption }) => (

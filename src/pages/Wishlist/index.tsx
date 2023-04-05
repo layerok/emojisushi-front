@@ -12,6 +12,7 @@ import { FlexBox } from "~components/FlexBox";
 import { Sidebar } from "~pages/Category/Sidebar";
 import { CategoriesStore } from "~stores/categories.store";
 import { categoriesQuery, productsQuery, wishlistsQuery } from "~queries";
+import { SortKey } from "~api/menu.api.types";
 
 // todo: fix layout for wishlist
 
@@ -91,16 +92,19 @@ export type WishlistLoaderResolvedDeferredData = {
   products: IGetProductsResponse;
   wishlists: IGetWishlistResponse;
   categories: IGetCategoriesResponse;
+  q: string | undefined;
 };
 
 export const wishlistLoader = async ({ params, request }) => {
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
+  const sort = url.searchParams.get("sort") as SortKey;
   // todo: make option to fetch all products. Because some products from nested categories are missing
   const productQuery = productsQuery({
     category_slug: "menu",
     search: q,
     limit: null,
+    sort: sort,
   });
 
   // todo: rename categoriesQuery function
@@ -120,6 +124,8 @@ export const wishlistLoader = async ({ params, request }) => {
     products: productsPromise,
     wishlists: wishlistsPromise,
     categories: categoriesPromise,
+    q,
+    sort,
   } as WishlistLoaderResolvedDeferredData);
 };
 

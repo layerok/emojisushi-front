@@ -19,7 +19,7 @@ import { Sidebar } from "~pages/Category/Sidebar";
 import { Suspense } from "react";
 import { QueryClient } from "react-query";
 import { IGetProductsResponse } from "~api/menu.api";
-import { ICategory } from "~api/menu.api.types";
+import { ICategory, SortKey } from "~api/menu.api.types";
 import { queryClient } from "~query-client";
 import { Product } from "~models/Product";
 import WishlistApi, { IGetWishlistResponse } from "~api/wishlist.api";
@@ -145,6 +145,7 @@ export type CategoryLoaderResolvedDeferredData = {
   productsQuery: IGetProductsResponse;
   wishlistQuery: IGetWishlistResponse;
   q: string | undefined;
+  sort: string | undefined;
 };
 
 export const querifiedLoader = (queryClient: QueryClient) => {
@@ -152,10 +153,11 @@ export const querifiedLoader = (queryClient: QueryClient) => {
     const url = new URL(request.url);
     const limit = url.searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
     const q = url.searchParams.get("q");
+    const sort = url.searchParams.get("sort") as SortKey;
     const productQuery = productsQuery({
       category_slug: q || !params.categorySlug ? "menu" : params.categorySlug,
       search: q,
-      sort: null,
+      sort: sort,
       offset: 0,
       limit: +limit,
     });
@@ -168,6 +170,7 @@ export const querifiedLoader = (queryClient: QueryClient) => {
         queryClient.getQueryData(wishlistsQuery.queryKey) ??
         queryClient.fetchQuery(wishlistsQuery),
       q,
+      sort,
     } as CategoryLoaderResolvedDeferredData);
   };
 };
