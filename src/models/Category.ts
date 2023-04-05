@@ -9,7 +9,7 @@ export class Category {
   }
 
   isHidden(spotSlug: string) {
-    return !this.json.published && this.isHiddenInSpot(spotSlug);
+    return !this.json.published || this.isHiddenInSpot(spotSlug);
   }
 
   isHiddenInSpot(spotSlug: string) {

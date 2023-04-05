@@ -31,8 +31,14 @@ export const Wishlist = observer(() => {
       </Suspense>
 
       <Suspense fallback={<ProductsGrid showSkeleton />}>
-        <Await resolve={Promise.all([products, wishlists])}>
-          <AwaitedWishlist />
+        <Await resolve={products}>
+          {(products) => (
+            <Await resolve={wishlists}>
+              {(wishlists) => (
+                <AwaitedWishlist products={products} wishlists={wishlists} />
+              )}
+            </Await>
+          )}
         </Await>
       </Suspense>
     </FlexBox>
@@ -50,7 +56,13 @@ export const InternalSidebar = () => {
   return <Sidebar categories={publishedCategories} />;
 };
 
-const AwaitedWishlist = () => {
+const AwaitedWishlist = ({
+  products,
+  wishlists,
+}: {
+  products: IGetProductsResponse;
+  wishlists: IGetWishlistResponse;
+}) => {
   const { t } = useTranslation();
 
   const handleLoadMore = () => {
@@ -58,20 +70,15 @@ const AwaitedWishlist = () => {
   };
   const spotSlug = useSpotSlug();
 
-  const [productsQuery, wishlistQuery] = useAsyncValue() as [
-    IGetProductsResponse,
-    IGetWishlistResponse
-  ];
-
-  const items = productsQuery.data
+  const items = products.data
     .map((json) => new Product(json))
     .filter((product) => !product.isHiddenInSpot(spotSlug))
     .filter((product) => {
-      return product.isInWishlists(wishlistQuery);
+      return product.isInWishlists(wishlists);
     });
   return (
     <ProductsGrid
-      loadable={productsQuery.total > productsQuery.data.length}
+      loadable={products.total > products.data.length}
       loading={false}
       items={items}
       handleLoadMore={handleLoadMore}
