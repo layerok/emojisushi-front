@@ -144,15 +144,17 @@ export const PRODUCTS_LIMIT_STEP = 25;
 export type CategoryLoaderResolvedDeferredData = {
   productsQuery: IGetProductsResponse;
   wishlistQuery: IGetWishlistResponse;
+  q: string | undefined;
 };
 
 export const querifiedLoader = (queryClient: QueryClient) => {
   return ({ params, request }) => {
     const url = new URL(request.url);
     const limit = url.searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
+    const q = url.searchParams.get("q");
     const productQuery = productsQuery({
-      category_slug: params.categorySlug || "menu",
-      search: null,
+      category_slug: q || !params.categorySlug ? "menu" : params.categorySlug,
+      search: q,
       sort: null,
       offset: 0,
       limit: +limit,
@@ -165,6 +167,7 @@ export const querifiedLoader = (queryClient: QueryClient) => {
       wishlistQuery:
         queryClient.getQueryData(wishlistsQuery.queryKey) ??
         queryClient.fetchQuery(wishlistsQuery),
+      q,
     } as CategoryLoaderResolvedDeferredData);
   };
 };

@@ -13,6 +13,13 @@ import { observer } from "mobx-react";
 import { useDebounce } from "~common/hooks/useDebounce";
 import { ICategory } from "~api/menu.api.types";
 import Skeleton from "react-loading-skeleton";
+import {
+  Form,
+  useLoaderData,
+  useNavigation,
+  useRouteLoaderData,
+  useSubmit,
+} from "react-router-dom";
 
 type SidebarProps = { showSkeleton?: boolean; categories?: ICategory[] };
 
@@ -48,6 +55,15 @@ export const Sidebar = observer(
 
 const Search = ({ showSkeleton = false }: { showSkeleton?: boolean }) => {
   const isTablet = useIsTablet();
+  const navigation = useNavigation();
+  const submit = useSubmit();
+  const { q } = useLoaderData() as {
+    q: string | undefined;
+  };
+
+  const searching =
+    navigation.location &&
+    new URLSearchParams(navigation.location.search).has("q");
 
   const debouncedFetch = useDebounce((e) => {
     // let filter =
@@ -74,12 +90,20 @@ const Search = ({ showSkeleton = false }: { showSkeleton?: boolean }) => {
 
   return (
     <S.SearchContainer>
-      <S.SearchInput
-        handleInput={(e) => {
-          debouncedFetch();
-        }}
-        value={""}
-      />
+      <Form role="search">
+        <S.SearchInput
+          onChange={(event) => {
+            // debouncedFetch();
+            const isFirstSearch = q == null;
+            submit(event.currentTarget.form, {
+              replace: !isFirstSearch,
+            });
+          }}
+          type="search"
+          name="q"
+          defaultValue={q}
+        />
+      </Form>
     </S.SearchContainer>
   );
 };

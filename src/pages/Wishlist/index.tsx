@@ -26,7 +26,7 @@ export const Wishlist = observer(() => {
     <FlexBox>
       <Suspense fallback={<Sidebar showSkeleton />}>
         <Await resolve={categories}>
-          <InternalSidebar />
+          <AwaitedSidebar />
         </Await>
       </Suspense>
 
@@ -45,7 +45,7 @@ export const Wishlist = observer(() => {
   );
 });
 
-export const InternalSidebar = () => {
+export const AwaitedSidebar = () => {
   const spotSlug = useSpotSlug();
 
   const categories = useAsyncValue() as IGetCategoriesResponse;
@@ -78,7 +78,7 @@ const AwaitedWishlist = ({
     });
   return (
     <ProductsGrid
-      loadable={products.total > products.data.length}
+      loadable={false}
       loading={false}
       items={items}
       handleLoadMore={handleLoadMore}
@@ -93,10 +93,13 @@ export type WishlistLoaderResolvedDeferredData = {
   categories: IGetCategoriesResponse;
 };
 
-export const wishlistLoader = async ({ params }) => {
+export const wishlistLoader = async ({ params, request }) => {
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q");
+  // todo: make option to fetch all products. Because some products from nested categories are missing
   const productQuery = productsQuery({
     category_slug: "menu",
-    search: null,
+    search: q,
     limit: null,
   });
 
