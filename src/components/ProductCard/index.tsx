@@ -133,7 +133,6 @@ const FavoriteButton = ({
         product_id: product.id + "",
       },
       {
-        action: `${lang}/${citySlug}/${spotSlug}/wishlist/add`,
         method: "post",
       }
     );
@@ -155,7 +154,7 @@ const FavoriteButton = ({
       <Favorite
         width={iconSize + "px"}
         isFavorite={product.isInWishlists(
-          fetcher.data || loadFetcher.data?.items?.[1] || []
+          fetcher.data || loadFetcher.data?.wishlists || []
         )}
       />
     </S.Favorite>

@@ -4,7 +4,7 @@ import { queryClient } from "~query-client";
 
 export const loader = () => {
   return defer({
-    cartQuery:
+    cart:
       queryClient.getQueryData(cartQuery.queryKey) ??
       queryClient.fetchQuery(cartQuery),
   });

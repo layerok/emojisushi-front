@@ -1,11 +1,5 @@
-import {
-  Await,
-  defer,
-  useAsyncValue,
-  useRouteLoaderData,
-} from "react-router-dom";
+import { Await, useAsyncValue, useRouteLoaderData } from "react-router-dom";
 import * as S from "./styled";
-
 import { useSpotSlug } from "~hooks";
 import { useTranslation } from "react-i18next";
 import { SvgIcon } from "~components/svg/SvgIcon";
@@ -63,11 +57,11 @@ const CategoriesSkeleton = () => {
   );
 };
 
-export const CategoryIndex = () => {
+export const CategoriesPage = () => {
   const { t } = useTranslation();
 
   const { categories }: CategoryIndexLoaderResolvedData = useRouteLoaderData(
-    "categoryIndex"
+    "categories"
   ) as any;
 
   const isMobile = useIsMobile();
@@ -102,10 +96,10 @@ export const CategoryIndex = () => {
   );
 };
 
-export const Component = CategoryIndex;
+export const Component = CategoriesPage;
 
-Object.assign(CategoryIndex, {
-  displayName: "LazyCategoryIndex",
+Object.assign(CategoriesPage, {
+  displayName: "LazyCategoriesPage",
 });
 
 export const shouldRevalidate = ({ currentParams, nextParams }) => {

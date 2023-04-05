@@ -11,21 +11,20 @@ import {
   useRouteLoaderData,
   useSearchParams,
 } from "react-router-dom";
-import { useLang, useSpot, useSpotSlug } from "~hooks";
+import { useLang, useSpotSlug } from "~hooks";
 import { FlexBox } from "~components/FlexBox";
 import { Banner } from "./Banner";
 import { useIsDesktop } from "~common/hooks/useBreakpoint";
 import { Sidebar } from "~pages/Category/Sidebar";
-import { CategoryIndexLoaderResolvedData, categoryLoaderIndex } from "~routes";
+import { CategoryIndexLoaderResolvedData } from "~routes";
 import { Suspense } from "react";
-import { FetchQueryOptions, QueryClient } from "react-query";
-import MenuApi, { IGetProductsResponse } from "~api/menu.api";
-import { ICategory, IGetProductsParams } from "~api/menu.api.types";
+import { QueryClient } from "react-query";
+import { IGetProductsResponse } from "~api/menu.api";
+import { ICategory } from "~api/menu.api.types";
 import { queryClient } from "~query-client";
 import { Product } from "~models/Product";
 import WishlistApi, { IGetWishlistResponse } from "~api/wishlist.api";
 import { wishlistsQuery } from "~queries";
-
 import { IGetCategoriesResponse } from "~api/menu.api";
 import { productsQuery } from "~queries";
 
@@ -33,7 +32,7 @@ export const Category = observer(() => {
   const isDesktop = useIsDesktop();
 
   const { categories }: CategoryIndexLoaderResolvedData = useRouteLoaderData(
-    "categoryIndex"
+    "categories"
   ) as any;
 
   // if (!selectedCategory && categories.length > 0) {
@@ -171,3 +170,19 @@ export const querifiedLoader = (queryClient: QueryClient) => {
 };
 
 export const loader = querifiedLoader(queryClient);
+
+// todo: duplicated code, the same action is defined on the Wishlist page
+export const categoryAction = async ({ request }) => {
+  let formData = await request.formData();
+  const product_id = formData.get("product_id");
+  const quantity = formData.get("quantity");
+
+  const res = await WishlistApi.addItem({
+    product_id,
+    quantity,
+  });
+  queryClient.setQueryData(wishlistsQuery.queryKey, res.data);
+  return res.data;
+};
+
+export const action = categoryAction;

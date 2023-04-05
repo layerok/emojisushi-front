@@ -2,28 +2,35 @@ import { ProductsGrid } from "~components/ProductsGrid";
 import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useSpotSlug } from "~hooks";
-import { IGetWishlistResponse } from "~api/wishlist.api";
+import WishlistApi, { IGetWishlistResponse } from "~api/wishlist.api";
 import { Await, defer, useAsyncValue, useLoaderData } from "react-router-dom";
-import { IGetProductsResponse } from "~api/menu.api";
+import { IGetCategoriesResponse, IGetProductsResponse } from "~api/menu.api";
 import { Product } from "~models/Product";
 import { queryClient } from "~query-client";
 import { Suspense } from "react";
 import { FlexBox } from "~components/FlexBox";
 import { Sidebar } from "~pages/Category/Sidebar";
-import { useLoadCategories } from "~hooks/use-load-categories";
 import { CategoriesStore } from "~stores/categories.store";
-import { productsQuery, wishlistsQuery } from "~queries";
+import { categoriesQuery, productsQuery, wishlistsQuery } from "~queries";
 
 // todo: fix layout for wishlist
 
 export const Wishlist = observer(() => {
-  const { items }: WishlistLoaderResolvedDeferredData = useLoaderData() as any;
-  const [products, wishlists] = items;
+  const {
+    products,
+    wishlists,
+    categories,
+  }: WishlistLoaderResolvedDeferredData = useLoaderData() as any;
 
   return (
     <FlexBox>
-      <InternalSidebar />
-      <Suspense>
+      <Suspense fallback={<Sidebar showSkeleton />}>
+        <Await resolve={categories}>
+          <InternalSidebar />
+        </Await>
+      </Suspense>
+
+      <Suspense fallback={<ProductsGrid showSkeleton />}>
         <Await resolve={Promise.all([products, wishlists])}>
           <AwaitedWishlist />
         </Await>
@@ -34,16 +41,11 @@ export const Wishlist = observer(() => {
 
 export const InternalSidebar = () => {
   const spotSlug = useSpotSlug();
-  const categoriesFetcher = useLoadCategories();
 
-  const categoriesStore = new CategoriesStore(
-    categoriesFetcher.data?.categories?.data || []
-  );
+  const categories = useAsyncValue() as IGetCategoriesResponse;
+
+  const categoriesStore = new CategoriesStore(categories.data);
   const publishedCategories = categoriesStore.getPublishedItems(spotSlug);
-
-  if (categoriesFetcher.state === "loading" && !categoriesFetcher.data) {
-    return <Sidebar showSkeleton />;
-  }
 
   return <Sidebar categories={publishedCategories} />;
 };
@@ -78,20 +80,21 @@ const AwaitedWishlist = () => {
   );
 };
 
-export const Component = Wishlist;
-Object.assign(Component, {
-  displayName: "LazyWishlist",
-});
-
 export type WishlistLoaderResolvedDeferredData = {
-  items: [IGetProductsResponse, IGetWishlistResponse];
+  products: IGetProductsResponse;
+  wishlists: IGetWishlistResponse;
+  categories: IGetCategoriesResponse;
 };
 
 export const wishlistLoader = async ({ params }) => {
   const productQuery = productsQuery({
     category_slug: "menu",
     search: null,
+    limit: null,
   });
+
+  // todo: rename categoriesQuery function
+  const catQuery = categoriesQuery();
 
   const productsPromise =
     queryClient.getQueryData(productQuery.queryKey) ??
@@ -99,10 +102,35 @@ export const wishlistLoader = async ({ params }) => {
   const wishlistsPromise =
     queryClient.getQueryData(wishlistsQuery.queryKey) ??
     queryClient.fetchQuery(wishlistsQuery);
+  const categoriesPromise =
+    queryClient.getQueryData(catQuery.queryKey) ??
+    queryClient.fetchQuery(catQuery);
 
   return defer({
-    items: [productsPromise, wishlistsPromise],
+    products: productsPromise,
+    wishlists: wishlistsPromise,
+    categories: categoriesPromise,
   } as WishlistLoaderResolvedDeferredData);
 };
+
+export const wishlistAction = async ({ request }) => {
+  let formData = await request.formData();
+  const product_id = formData.get("product_id");
+  const quantity = formData.get("quantity");
+
+  const res = await WishlistApi.addItem({
+    product_id,
+    quantity,
+  });
+  queryClient.setQueryData(wishlistsQuery.queryKey, res.data);
+  return res.data;
+};
+
+export const Component = Wishlist;
+Object.assign(Component, {
+  displayName: "LazyWishlist",
+});
+
+export const action = wishlistAction;
 
 export const loader = wishlistLoader;

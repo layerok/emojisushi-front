@@ -11,9 +11,18 @@ import { TinyCartButton } from "~components/TinyCartButton";
 import { Sticky } from "../../components/Sticky";
 import { StickyToTopBtn } from "../../components/StickyToTopBtn";
 import { ReactNode, Suspense } from "react";
-import { Await, Outlet, useRouteLoaderData } from "react-router-dom";
-import { loader } from "~components/EnsureLocation";
+import {
+  Await,
+  defer,
+  Outlet,
+  useLoaderData,
+  useRouteLoaderData,
+} from "react-router-dom";
+import { loader as ensureLocationLoader } from "~components/EnsureLocation";
 import { useCart } from "~hooks/use-cart";
+import { queryClient } from "~query-client";
+import { cartQuery } from "~queries";
+import { IGetCartProductsResponse } from "~api/cart.api";
 
 export const Layout = observer(
   ({
@@ -30,9 +39,11 @@ export const Layout = observer(
   }) => {
     const { x, y } = useWindowScroll();
 
-    const cart = useCart();
+    const { cart } = useLoaderData() as LayoutLoaderReturnType;
+
+    // todo: rename citiesQuery, it is not query, it is response
     const { citiesQuery } = useRouteLoaderData("ensureLocation") as ReturnType<
-      typeof loader
+      typeof ensureLocationLoader
     >["data"];
 
     const showStickyCart = y > 100;
@@ -67,7 +78,7 @@ export const Layout = observer(
         {withRestaurantClosedModal && <RestaurantClosed open={closed} />}
 
         <Suspense>
-          <Await resolve={citiesQuery}>
+          <Await resolve={cart}>
             <Sticky top={"30px"} right={"30px"} show={showStickyCart}>
               <CartModal>
                 <div>
@@ -85,6 +96,20 @@ export const Layout = observer(
 );
 
 export const Component = Layout;
+
+export type LayoutLoaderReturnType = {
+  cart: IGetCartProductsResponse;
+};
+
+export const layoutLoader = () => {
+  return defer({
+    cart:
+      queryClient.getQueryData(cartQuery.queryKey) ??
+      queryClient.fetchQuery(cartQuery),
+  } as LayoutLoaderReturnType);
+};
+
+export const loader = layoutLoader;
 
 Object.assign(Component, {
   displayName: "LazyLayout",

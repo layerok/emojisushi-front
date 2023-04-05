@@ -1,42 +1,26 @@
 import { defer, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "~components/ProtectedRoute";
-import { Layout } from "~layout/Layout";
+import { Layout, layoutLoader } from "~layout/Layout";
 import {
   EnsureLocation,
   loader as ensureLocationLoader,
 } from "~components/EnsureLocation";
 import { IGetCategoriesResponse } from "~api/menu.api";
 import { queryClient } from "~query-client";
-import { cartPageLoader } from "~pages/Cart/CartPage/CartPage";
 import { cartUpdateAction } from "~pages/Cart/UpdateCartPage/UpdateCartPage";
 import { cartDeleteAction } from "~pages/Cart/DeleteCartPage/DeleteCartPage";
-import WishlistApi from "~api/wishlist.api";
 import { categoriesQuery } from "~queries/categories.query";
-import { wishlistsQuery } from "~queries";
 
 export type CategoryIndexLoaderResolvedData = {
   categories: IGetCategoriesResponse;
 };
 
-export const categoryLoaderIndex = ({ params }) => {
+export const categoriesLoader = ({ params }) => {
   const query = categoriesQuery();
   return defer({
     categories:
       queryClient.getQueryData(query.queryKey) ?? queryClient.fetchQuery(query),
   } as CategoryIndexLoaderResolvedData);
-};
-
-const wishilstAddAction = async ({ request }) => {
-  let formData = await request.formData();
-  const product_id = formData.get("product_id");
-  const quantity = formData.get("quantity");
-
-  const res = await WishlistApi.addItem({
-    product_id,
-    quantity,
-  });
-  const query = queryClient.setQueryData(wishlistsQuery.queryKey, res.data);
-  return res.data;
 };
 
 export const routes = [
@@ -65,6 +49,8 @@ export const routes = [
               {
                 path: ":citySlug/:spotSlug",
                 element: <Layout withRestaurantClosedModal={true} />,
+                id: "layout",
+                loader: layoutLoader,
                 children: [
                   {
                     index: true,
@@ -72,12 +58,12 @@ export const routes = [
                   },
                   {
                     path: "category",
-                    loader: categoryLoaderIndex,
-                    id: "categoryIndex",
+                    loader: categoriesLoader,
+                    id: "categories",
                     children: [
                       {
                         index: true,
-                        lazy: () => import("~pages/CategoryIndex"),
+                        lazy: () => import("~pages/Categories"),
                       },
                       {
                         path: ":categorySlug",
@@ -102,14 +88,6 @@ export const routes = [
                     id: "wishlist",
                     path: "wishlist",
                     lazy: () => import("~pages/Wishlist"),
-                    children: [
-                      {
-                        path: "add",
-                        id: "wishlist-add",
-                        // element: <Navigate to={"../"} />,
-                        action: wishilstAddAction,
-                      },
-                    ],
                   },
                   {
                     element: <ProtectedRoute redirectPath={"/"} />,
@@ -152,10 +130,6 @@ export const routes = [
                   {
                     path: "cart",
                     children: [
-                      {
-                        path: "view",
-                        loader: cartPageLoader,
-                      },
                       {
                         path: "update",
                         action: cartUpdateAction,

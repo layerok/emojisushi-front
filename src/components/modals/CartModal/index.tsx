@@ -14,9 +14,9 @@ import { ConfirmActionPopover } from "../../popovers/ConfirmActionPopover";
 import {
   Await,
   FetcherWithComponents,
-  useAsyncValue,
   useFetcher,
   useNavigate,
+  useRouteLoaderData,
 } from "react-router-dom";
 import { observer } from "mobx-react";
 import { Loader } from "../../Loader";
@@ -27,6 +27,7 @@ import { SushiSvg } from "../../svg/SushiSvg";
 import { CartProduct } from "~models/CartProduct";
 import { useCity, useCitySlug, useLang, useSpot, useSpotSlug } from "~hooks";
 import { useCart } from "~hooks/use-cart";
+import { LayoutLoaderReturnType } from "~layout/Layout";
 
 const CartItem = observer(
   ({
@@ -116,22 +117,16 @@ const CartItem = observer(
 export const CartModal = observer(({ children }) => {
   const cartFetcher = useFetcher();
 
-  const lang = useLang();
-  const spotSlug = useSpotSlug();
-  const citySlug = useCitySlug();
-
-  useEffect(() => {
-    cartFetcher.load(`/${lang}/${citySlug}/${spotSlug}/cart/view`);
-  }, []);
-
-  if (!cartFetcher.data) {
-    return children;
-  }
-
+  const { cart } = useRouteLoaderData("layout") as LayoutLoaderReturnType;
   // todo: console.log('check why this component rerenders on window scroll');
-
   return (
-    <AwaitedCartModal cartFetcher={cartFetcher}>{children}</AwaitedCartModal>
+    <Suspense fallback={children}>
+      <Await resolve={cart}>
+        <AwaitedCartModal cartFetcher={cartFetcher}>
+          {children}
+        </AwaitedCartModal>
+      </Await>
+    </Suspense>
   );
 });
 
