@@ -55,20 +55,16 @@ export const Sidebar = observer(
 
 const Search = ({ showSkeleton = false }: { showSkeleton?: boolean }) => {
   const isTablet = useIsTablet();
-  const navigation = useNavigation();
   const submit = useSubmit();
   const { q } = useLoaderData() as {
     q: string | undefined;
   };
 
-  const searching =
-    navigation.location &&
-    new URLSearchParams(navigation.location.search).has("q");
-
-  const debouncedFetch = useDebounce((e) => {
+  const debouncedFetch = useDebounce((form) => {
     // let filter =
     //   "&category_id=" +
     //   CategoriesStore.publishedCategories.map((_) => _.id).join(".");
+    console.log("dbg ", form);
   }, 500);
 
   if (showSkeleton) {
@@ -93,7 +89,8 @@ const Search = ({ showSkeleton = false }: { showSkeleton?: boolean }) => {
       <Form role="search">
         <S.SearchInput
           onChange={(event) => {
-            // debouncedFetch();
+            // todo: debounce search
+            // todo: and fix loading indicator
             const isFirstSearch = q == null;
             submit(event.currentTarget.form, {
               replace: !isFirstSearch,

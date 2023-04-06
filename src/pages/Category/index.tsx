@@ -96,6 +96,10 @@ export const AwaitedProducts = ({
   const limit = searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
   const navigation = useNavigation();
 
+  const searching =
+    navigation.location &&
+    new URLSearchParams(navigation.location.search).has("q");
+
   const lang = useLang();
 
   const navigate = useNavigate();
@@ -126,6 +130,7 @@ export const AwaitedProducts = ({
     <ProductsGrid
       handleLoadMore={handleLoadMore}
       title={title}
+      showSkeleton={searching}
       loadable={total > items.length}
       loading={navigation.state === "loading"}
       items={items}
