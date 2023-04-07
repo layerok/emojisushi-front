@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { SortKey } from "~api/menu.api.types";
-import { useSubmit } from "react-router-dom";
+import { useLocation, useSubmit } from "react-router-dom";
 
 export const SortingPopover = ({
   showSkeleton = false,
@@ -28,7 +28,14 @@ export const SortingPopover = ({
 };
 
 const InternalSortingDropdown = ({ options = [] }: { options?: SortKey[] }) => {
-  const initialSelectedIndex = options.indexOf("bestseller");
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
+  const sortFromUrl = searchParams.get("sort") as SortKey;
+  // todo: validate provided search params from url
+  const initialSelectedIndex = options.indexOf(
+    sortFromUrl ? sortFromUrl : "bestseller"
+  );
   const submit = useSubmit();
 
   const [selectedIndex, setSelectedIndex] = useState(

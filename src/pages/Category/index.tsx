@@ -95,13 +95,7 @@ export const AwaitedProducts = ({
   const [searchParams] = useSearchParams();
   const limit = searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
   const navigation = useNavigation();
-
-  const searching =
-    navigation.location &&
-    new URLSearchParams(navigation.location.search).has("q");
-
   const lang = useLang();
-
   const navigate = useNavigate();
 
   const selectedCategory = categories.find((category) => {
@@ -126,11 +120,13 @@ export const AwaitedProducts = ({
     });
   // todo: Total is not right because hidden products are also counted
   const total = productsQuery.total;
+
+  // todo: show skeleton while searching products
   return (
     <ProductsGrid
       handleLoadMore={handleLoadMore}
       title={title}
-      showSkeleton={searching}
+      showSkeleton={false}
       loadable={total > items.length}
       loading={navigation.state === "loading"}
       items={items}
