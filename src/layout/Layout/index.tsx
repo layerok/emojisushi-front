@@ -19,10 +19,9 @@ import {
   useRouteLoaderData,
 } from "react-router-dom";
 import { loader as ensureLocationLoader } from "~components/EnsureLocation";
-import { useCart } from "~hooks/use-cart";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
-import { IGetCartProductsResponse } from "~api/cart.api";
+import CartApi, { IGetCartProductsResponse } from "~api/cart.api";
 
 export const Layout = observer(
   ({
@@ -108,6 +107,40 @@ export const layoutLoader = () => {
       queryClient.fetchQuery(cartQuery),
   } as LayoutLoaderReturnType);
 };
+
+const updateCartProduct = async ({ formData }: { formData: FormData }) => {
+  const product_id = formData.get("product_id");
+  const variant_id = formData.get("variant_id");
+  const quantity = formData.get("quantity");
+
+  const res = await CartApi.addProduct({
+    product_id,
+    quantity,
+    variant_id,
+  });
+
+  queryClient.setQueryData(cartQuery.queryKey, res.data);
+  return res.data;
+};
+
+const deleteCartProduct = async ({ formData }: { formData: FormData }) => {
+  const cart_product_id = formData.get("cart_product_id");
+  const res = await CartApi.removeCartProduct(cart_product_id);
+  queryClient.setQueryData(cartQuery.queryKey, res.data);
+  return res.data;
+};
+
+export const layoutAction = async ({ request }) => {
+  let formData = await request.formData();
+  let type = formData.get("type");
+  if (type === "update") {
+    return updateCartProduct({ formData });
+  } else {
+    return deleteCartProduct({ formData });
+  }
+};
+
+export const action = layoutAction;
 
 export const loader = layoutLoader;
 

@@ -76,6 +76,8 @@ const AwaitedFavoriteButton = ({
     );
   };
 
+  // todo: show delete button instead of 'heart' button when we are on wishlist page
+
   return (
     <S.Favorite onClick={handleToggleFavorite}>
       <Favorite width={iconSize + "px"} isFavorite={favorite} />

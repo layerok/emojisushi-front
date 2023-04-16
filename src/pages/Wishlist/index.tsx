@@ -15,6 +15,8 @@ import { SortKey } from "~api/menu.api.types";
 
 // todo: fix layout for wishlist
 
+// todo: optimisticly filter out wishlisted products
+
 export const Wishlist = observer(() => {
   const {
     products,

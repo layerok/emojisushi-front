@@ -25,9 +25,11 @@ export const Footer = ({
   const spot = useSpotSlug();
   const city = useCitySlug();
 
-  const isPending = ["submitting"].includes(fetcher.state);
+  let count = cartProduct?.quantity || 0;
 
-  const count = cartProduct?.quantity || 0;
+  if (fetcher.formData) {
+    count = +fetcher.formData.get("count");
+  }
 
   const handleAdd = () => {
     return async (quantity: number) => {
@@ -36,9 +38,11 @@ export const Footer = ({
           product_id: product.id + "",
           variant_id: variant?.id + "",
           quantity: quantity + "",
+          count: `${count + quantity}`,
+          type: "update",
         },
         {
-          action: `/${lang}/${city}/${spot}/cart/update`,
+          action: "/" + [lang, city, spot].join("/"),
           method: "post",
         }
       );
@@ -52,7 +56,7 @@ export const Footer = ({
       <AddToCartButton
         loading={loading}
         count={count}
-        pending={isPending}
+        pending={false}
         handleAdd={handleAdd()}
       />
     </S.Footer>

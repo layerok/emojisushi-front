@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { ProtectedRoute } from "~components/ProtectedRoute";
-import { Layout, layoutLoader } from "~layout/Layout";
+import { Layout, layoutAction, layoutLoader } from "~layout/Layout";
 import {
   EnsureLocation,
   loader as ensureLocationLoader,
@@ -35,6 +35,7 @@ export const routes = [
                 path: ":citySlug/:spotSlug",
                 element: <Layout withRestaurantClosedModal={true} />,
                 id: "layout",
+                action: layoutAction,
                 loader: layoutLoader,
                 children: [
                   {
