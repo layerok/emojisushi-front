@@ -1,4 +1,4 @@
-import { SvgIcon } from "../../svg/SvgIcon";
+import { SvgIcon } from "../../SvgIcon";
 import { InfoSvg } from "../../svg/InfoSvg";
 import { AnimatedTooltip } from "../AnimatedTooltip";
 import * as S from "./styled";

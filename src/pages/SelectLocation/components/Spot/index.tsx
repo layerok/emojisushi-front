@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { MapPinSvg } from "~components/svg/MapPinSvg";
-import { SvgIcon } from "~components/svg/SvgIcon";
+import { SvgIcon } from "~components/SvgIcon";
 import { useLang } from "~hooks";
 import { Spot as SpotModel } from "~models";
 import * as S from "./styled";

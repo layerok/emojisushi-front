@@ -1,26 +1,26 @@
 import * as S from "./styled";
 import { observer } from "mobx-react";
-import { useLang } from "~hooks";
-import { useSpotSlug } from "~hooks";
-import { useCitySlug } from "~hooks";
+import { useLang, useSpotSlug, useCitySlug } from "~hooks";
 import { useCategorySlug } from "~hooks/use-category-slug";
 import { ICategory } from "~api/menu.api.types";
 import Skeleton from "react-loading-skeleton";
 
+type TCategoryProps = {
+  active?: boolean;
+  category?: ICategory;
+  loading?: boolean;
+};
+
 const Category = ({
   active = false,
   category,
-  showSkeleton = false,
-}: {
-  active?: boolean;
-  category?: ICategory;
-  showSkeleton?: boolean;
-}) => {
+  loading = false,
+}: TCategoryProps) => {
   const citySlug = useCitySlug();
   const spotSlug = useSpotSlug();
   const lang = useLang();
 
-  if (showSkeleton) {
+  if (loading) {
     return (
       <Skeleton
         width={"100%"}
@@ -42,29 +42,28 @@ const Category = ({
   );
 };
 
+type TVerticalMenuProps = {
+  categories: ICategory[];
+  loading?: boolean;
+};
+
 const VerticalMenu = observer(
-  ({
-    categories = [],
-    showSkeleton = true,
-  }: {
-    categories: ICategory[];
-    showSkeleton?: boolean;
-  }) => {
+  ({ categories = [], loading = true }: TVerticalMenuProps) => {
     const categorySlug = useCategorySlug();
 
-    if (showSkeleton) {
+    if (loading) {
       return (
         <S.Categories>
-          <Category showSkeleton />
-          <Category showSkeleton />
-          <Category showSkeleton />
-          <Category showSkeleton />
-          <Category showSkeleton />
-          <Category showSkeleton />
-          <Category showSkeleton />
-          <Category showSkeleton />
-          <Category showSkeleton />
-          <Category showSkeleton />
+          <Category loading />
+          <Category loading />
+          <Category loading />
+          <Category loading />
+          <Category loading />
+          <Category loading />
+          <Category loading />
+          <Category loading />
+          <Category loading />
+          <Category loading />
         </S.Categories>
       );
     }

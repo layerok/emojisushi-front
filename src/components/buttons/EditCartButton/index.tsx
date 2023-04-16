@@ -1,4 +1,4 @@
-import { SvgIcon } from "../../svg/SvgIcon";
+import { SvgIcon } from "../../SvgIcon";
 import { PencilSvg } from "../../svg/PencilSvg";
 import { UIButton } from "../UIButton";
 import { forwardRef } from "react";

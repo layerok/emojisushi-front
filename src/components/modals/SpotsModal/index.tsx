@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { SvgIcon } from "../../svg/SvgIcon";
+import { SvgIcon } from "../../SvgIcon";
 import { Modal } from "../Modal";
 import { observer } from "mobx-react";
 import { MapPinSvg } from "../../svg/MapPinSvg";

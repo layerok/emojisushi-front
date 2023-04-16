@@ -5,7 +5,7 @@ import { ContactsModal } from "../ContactsModal";
 import { NavLinkUnderline } from "../../NavLinkUnderline";
 import { FlexBox } from "../../FlexBox";
 import { LocationPickerPopover } from "../../popovers/LocationPickerPopover";
-import { SvgIcon } from "../../svg/SvgIcon";
+import { SvgIcon } from "../../SvgIcon";
 import { HeartSvg } from "../../svg/HeartSvg";
 import { useTranslation } from "react-i18next";
 import { UserSvg } from "../../svg/UserSvg";

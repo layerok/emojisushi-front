@@ -1,4 +1,4 @@
-import { SvgIcon } from "../svg/SvgIcon";
+import { SvgIcon } from "../SvgIcon";
 import { MinusSvg } from "../svg/MinusSvg";
 import { PlusSvg } from "../svg/PlusSvg";
 import * as S from "./styled";

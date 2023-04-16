@@ -1,4 +1,4 @@
-import { SvgIcon } from "../../svg/SvgIcon";
+import { SvgIcon } from "../../SvgIcon";
 import { FlexBox } from "../../FlexBox";
 import { forwardRef, HTMLProps, PropsWithChildren } from "react";
 

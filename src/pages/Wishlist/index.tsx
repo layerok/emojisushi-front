@@ -1,14 +1,13 @@
-import { ProductsGrid } from "~components/ProductsGrid";
+import { ProductsGrid, FlexBox } from "~components";
 import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useSpotSlug } from "~hooks";
 import WishlistApi, { IGetWishlistResponse } from "~api/wishlist.api";
 import { Await, defer, useAsyncValue, useLoaderData } from "react-router-dom";
 import { IGetCategoriesResponse, IGetProductsResponse } from "~api/menu.api";
-import { Product } from "~models/Product";
+import { Product } from "~models";
 import { queryClient } from "~query-client";
 import { Suspense } from "react";
-import { FlexBox } from "~components/FlexBox";
 import { Sidebar } from "~pages/Category/Sidebar";
 import { CategoriesStore } from "~stores/categories.store";
 import { categoriesQuery, productsQuery, wishlistsQuery } from "~queries";
@@ -25,13 +24,13 @@ export const Wishlist = observer(() => {
 
   return (
     <FlexBox>
-      <Suspense fallback={<Sidebar showSkeleton />}>
+      <Suspense fallback={<Sidebar loading />}>
         <Await resolve={categories}>
           <AwaitedSidebar />
         </Await>
       </Suspense>
 
-      <Suspense fallback={<ProductsGrid showSkeleton />}>
+      <Suspense fallback={<ProductsGrid loading />}>
         <Await resolve={products}>
           {(products) => (
             <Await resolve={wishlists}>
@@ -80,7 +79,6 @@ const AwaitedWishlist = ({
   return (
     <ProductsGrid
       loadable={false}
-      loading={false}
       items={items}
       handleLoadMore={handleLoadMore}
       title={t("common.favorite")}

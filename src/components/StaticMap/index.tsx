@@ -1,7 +1,5 @@
 import * as S from "./styled";
-import { SvgIcon } from "../svg/SvgIcon";
-import { MapPinSvg } from "../svg/MapPinSvg";
-import { SvgButton } from "../SvgButton";
+import { SvgIcon, MapPinSvg, SvgButton } from "~components";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -14,7 +12,7 @@ export const StaticMap = ({
   bottomLeft,
   mobileFirst,
   style,
-}) => {
+}: any) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   return (

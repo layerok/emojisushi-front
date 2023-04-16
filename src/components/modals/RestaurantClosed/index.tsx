@@ -1,4 +1,4 @@
-import { SvgIcon } from "../../svg/SvgIcon";
+import { SvgIcon } from "../../SvgIcon";
 import { NotifyModal } from "../NotifyModal";
 import { LowKeySvg } from "../../svg/LowKeySvg";
 import { useTranslation } from "react-i18next";

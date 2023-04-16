@@ -1,23 +1,17 @@
 import * as S from "./styled";
-import { Favorite } from "~components/Favorite";
-import { SvgIcon } from "~components/svg/SvgIcon";
-import { SvgButton } from "~components/SvgButton";
-import { InstagramSvg } from "~components/svg/InstagramSvg";
-import { TelegramSvg } from "~components/svg/TelegramSvg";
-import { TelegramModal } from "~components/modals/TelegramModal";
+import { SvgIcon, SvgButton, Favorite, TelegramModal } from "~components";
+import { TelegramSvg, InstagramSvg } from "~components/svg";
 import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useLang } from "~hooks";
-import { useCitySlug } from "~hooks";
-import { useSpotSlug } from "~hooks";
+import { useLang, useCitySlug, useSpotSlug } from "~hooks";
 import Skeleton from "react-loading-skeleton";
 
 type UnderVerticalMenuProps = {
-  showSkeleton?: boolean;
+  loading?: boolean;
 };
 
 export const UnderVerticalMenu = ({
-  showSkeleton = false,
+  loading = false,
 }: UnderVerticalMenuProps) => {
   const navigate = useNavigate();
   let resolved = useResolvedPath("/wishlist");
@@ -34,12 +28,8 @@ export const UnderVerticalMenu = ({
           navigate("/" + [lang, citySlug, spotSlug, "wishlist"].join("/"));
         }}
       >
-        {showSkeleton ? (
-          <Skeleton height={26} width={120} />
-        ) : (
-          t("common.favorite")
-        )}
-        {showSkeleton ? (
+        {loading ? <Skeleton height={26} width={120} /> : t("common.favorite")}
+        {loading ? (
           <Skeleton circle width={25} height={25} />
         ) : (
           <Favorite isFavorite={true} />
@@ -47,14 +37,14 @@ export const UnderVerticalMenu = ({
       </S.Favorite>
 
       <S.Text>
-        {showSkeleton ? <Skeleton /> : t("underVerticalMenu.in_touch")}
+        {loading ? <Skeleton /> : t("underVerticalMenu.in_touch")}
       </S.Text>
       <S.SvgContainer>
         <S.OneSvg
           href={"https://www.instagram.com/emoji_sushi_/"}
           target={"_blank"}
         >
-          {showSkeleton ? (
+          {loading ? (
             <Skeleton width={40} height={40} />
           ) : (
             <SvgButton>
@@ -64,7 +54,7 @@ export const UnderVerticalMenu = ({
             </SvgButton>
           )}
         </S.OneSvg>
-        {showSkeleton ? (
+        {loading ? (
           <Skeleton width={40} height={40} />
         ) : (
           <TelegramModal>

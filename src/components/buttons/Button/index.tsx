@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { SvgIcon } from "../../svg/SvgIcon";
+import { SvgIcon } from "../../SvgIcon";
 import { SpinnerSvg } from "../../svg/SpinnerSvg";
 import { HTMLProps, PropsWithChildren } from "react";
 import { IJustifyContent } from "~components/FlexBox";

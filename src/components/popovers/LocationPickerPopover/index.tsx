@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { SvgIcon } from "../../svg/SvgIcon";
+import { SvgIcon } from "../../SvgIcon";
 import { CaretDownSvg } from "../../svg/CaretDownSvg";
 import { FlexBox } from "../../FlexBox";
 import { DropdownPopover } from "../DropdownPopover";

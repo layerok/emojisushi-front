@@ -1,11 +1,15 @@
 import Skeleton from "react-loading-skeleton";
 import { LogoSvg } from "~components/svg/LogoSvg";
-import { SvgIcon } from "~components/svg/SvgIcon";
+import { SvgIcon } from "~components/SvgIcon";
 import * as S from "./styled";
 import { Link } from "react-router-dom";
 
-export const Logo = ({ showSkeleton = false }: { showSkeleton?: boolean }) => {
-  if (showSkeleton) {
+type TLogoProps = {
+  loading?: boolean;
+};
+
+export const Logo = ({ loading = false }: TLogoProps) => {
+  if (loading) {
     return (
       <S.Container>
         <Skeleton width={95} height={43} />

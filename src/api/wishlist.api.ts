@@ -1,8 +1,8 @@
 import { AxiosResponse } from "axios";
-import { client } from "../clients/client";
-import { IWishlist } from "./wishlist.api.types";
+import { client } from "~clients/client";
+import { IGetWishlistResponse } from "./wishlist.api.types";
 
-export type IGetWishlistResponse = IWishlist[];
+export * from "./wishlist.api.types";
 
 class Wishlist {
   addItem(params: { product_id: number; quantity?: number | null }) {

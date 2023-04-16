@@ -1,7 +1,6 @@
 import * as S from "./styled";
-import { SvgIcon } from "~components/svg/SvgIcon";
-import { HorizontalArrowsSvg } from "~components/svg/HorizontalArrowsSvg";
-import { FlexBox } from "~components/FlexBox";
+import { HorizontalArrowsSvg } from "~components/svg";
+import { FlexBox, SvgIcon } from "~components";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCitySlug, useLang, useSpotSlug } from "~hooks";
@@ -10,21 +9,20 @@ import { ICategory } from "~api/menu.api.types";
 import Skeleton from "react-loading-skeleton";
 import { clamp } from "~utils/utils";
 
+type THorizontalMenuProps = {
+  categories?: ICategory[];
+  loading?: boolean;
+};
+
 const HorizontalMenu = observer(
-  ({
-    categories = [],
-    showSkeleton = false,
-  }: {
-    categories?: ICategory[];
-    showSkeleton?: boolean;
-  }) => {
+  ({ categories = [], loading = false }: THorizontalMenuProps) => {
     const { t } = useTranslation();
 
     return (
       <nav>
         <S.Categories>
           <S.Hint>
-            {showSkeleton ? (
+            {loading ? (
               <Skeleton width={87} height={25} />
             ) : (
               <FlexBox alignItems={"center"}>
@@ -37,15 +35,15 @@ const HorizontalMenu = observer(
           </S.Hint>
 
           <S.HorizontalContainer>
-            {showSkeleton ? (
+            {loading ? (
               <>
-                <Category showSkeleton />
-                <Category showSkeleton />
-                <Category showSkeleton />
-                <Category showSkeleton />
-                <Category showSkeleton />
-                <Category showSkeleton />
-                <Category showSkeleton />
+                <Category loading />
+                <Category loading />
+                <Category loading />
+                <Category loading />
+                <Category loading />
+                <Category loading />
+                <Category loading />
               </>
             ) : (
               categories.map((category) => {
@@ -59,13 +57,12 @@ const HorizontalMenu = observer(
   }
 );
 
-const Category = ({
-  showSkeleton = false,
-  category,
-}: {
-  showSkeleton?: boolean;
+type TCategoryProps = {
+  loading?: boolean;
   category?: ICategory;
-}) => {
+};
+
+const Category = ({ loading = false, category }: TCategoryProps) => {
   const { categorySlug } = useParams();
   const citySlug = useCitySlug();
   const spotSlug = useSpotSlug();
@@ -73,7 +70,7 @@ const Category = ({
   const active = categorySlug === category?.slug;
   const nextSegments = [lang, citySlug, spotSlug, "category", category?.slug];
 
-  if (showSkeleton) {
+  if (loading) {
     const randomWidth = Math.floor(Math.random() * 250);
     return (
       <S.Category>

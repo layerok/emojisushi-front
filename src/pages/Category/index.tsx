@@ -1,4 +1,3 @@
-import { ProductsGrid } from "~components/ProductsGrid";
 import { observer } from "mobx-react";
 import {
   Await,
@@ -12,21 +11,22 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { useLang, useSpotSlug } from "~hooks";
-import { FlexBox } from "~components/FlexBox";
+import { FlexBox, ProductsGrid } from "~components";
 import { Banner } from "./Banner";
-import { useIsDesktop } from "~common/hooks/useBreakpoint";
+import { useIsDesktop } from "~common/hooks";
 import { Sidebar } from "~pages/Category/Sidebar";
 import { Suspense } from "react";
 import { QueryClient } from "react-query";
 import { IGetProductsResponse } from "~api/menu.api";
 import { ICategory, SortKey } from "~api/menu.api.types";
 import { queryClient } from "~query-client";
-import { Product } from "~models/Product";
-import WishlistApi, { IGetWishlistResponse } from "~api/wishlist.api";
+import { Product } from "~models";
+import WishlistApi from "~api/wishlist.api";
 import { wishlistsQuery } from "~queries";
 import { IGetCategoriesResponse } from "~api/menu.api";
 import { productsQuery } from "~queries";
 import { CategoriesLoaderResolvedData } from "~pages/Categories";
+import { IGetWishlistResponse } from "~api/wishlist.api.types";
 
 export const Category = observer(() => {
   const isDesktop = useIsDesktop();
@@ -46,8 +46,8 @@ export const Category = observer(() => {
         <Suspense
           fallback={
             <>
-              <Sidebar showSkeleton />
-              <ProductsGrid showSkeleton />
+              <Sidebar loading />
+              <ProductsGrid loading />
             </>
           }
         >
@@ -126,9 +126,9 @@ export const AwaitedProducts = ({
     <ProductsGrid
       handleLoadMore={handleLoadMore}
       title={title}
-      showSkeleton={false}
+      loading={false}
       loadable={total > items.length}
-      loading={navigation.state === "loading"}
+      loadingMore={navigation.state === "loading"}
       items={items}
     />
   );

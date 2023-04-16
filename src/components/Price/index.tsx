@@ -1,20 +1,18 @@
 import Skeleton from "react-loading-skeleton";
-import { FlexBox } from "../FlexBox";
+import { FlexBox } from "~components";
 import * as S from "./styled";
 import { ReactNode } from "react";
 
-export const Price = ({
-  oldPrice,
-  newPrice,
-  showSkeleton = false,
-}: {
+type TPriceProps = {
   oldPrice?: ReactNode;
   newPrice: ReactNode;
-  showSkeleton?: boolean;
-}) => {
+  loading?: boolean;
+};
+
+export const Price = ({ oldPrice, newPrice, loading = false }: TPriceProps) => {
   return (
     <FlexBox flexDirection={"column"}>
-      {showSkeleton ? (
+      {loading ? (
         <Skeleton height={40} width={64} />
       ) : (
         <>

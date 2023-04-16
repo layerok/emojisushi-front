@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { SvgIcon } from "~components/svg/SvgIcon";
+import { SvgIcon } from "~components/SvgIcon";
 import { LogoSvg } from "~components/svg/LogoSvg";
 import FadeLoader from "react-spinners/FadeLoader";
 import { useBreakpoint } from "~common/hooks/useBreakpoint";

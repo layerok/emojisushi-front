@@ -1,7 +1,7 @@
 import * as S from "./styled";
 import { ChangeEvent, ReactNode } from "react";
 import { CheckSvg } from "../svg/CheckSvg";
-import { SvgIcon } from "../svg/SvgIcon";
+import { SvgIcon } from "../SvgIcon";
 import { If } from "~components/If";
 
 export const Checkbox = ({

@@ -11,7 +11,7 @@ export type ISvgIconProps = HTMLProps<HTMLSpanElement> &
     height?: string;
     clickable?: boolean;
     style?: CSSProperties;
-    showSkeleton?: boolean;
+    loading?: boolean;
   }>;
 
 export const SvgIcon = forwardRef<HTMLSpanElement, ISvgIconProps>(
@@ -23,13 +23,13 @@ export const SvgIcon = forwardRef<HTMLSpanElement, ISvgIconProps>(
       width,
       height,
       clickable = false,
-      showSkeleton = false,
+      loading = false,
       style = {},
       ...rest
     },
     ref
   ) => {
-    if (showSkeleton) {
+    if (loading) {
       return <Skeleton width={width || 25} height={height || 25} />;
     }
 

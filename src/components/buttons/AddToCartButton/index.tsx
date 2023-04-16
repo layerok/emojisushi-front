@@ -1,10 +1,9 @@
 import Skeleton from "react-loading-skeleton";
-import { ButtonCounter } from "../../Counter";
-import { ButtonOutline } from "../Button";
+import { ButtonCounter, ButtonOutline } from "~components";
 import { useTranslation } from "react-i18next";
 
 type AddToCartButtonProps = {
-  showSkeleton: boolean;
+  loading: boolean;
   count: number;
   pending: boolean;
   handleAdd: (count: number) => void;
@@ -14,11 +13,11 @@ export const AddToCartButton = ({
   pending,
   count,
   handleAdd,
-  showSkeleton = false,
-}) => {
+  loading = false,
+}: AddToCartButtonProps) => {
   const { t } = useTranslation();
 
-  if (showSkeleton) {
+  if (loading) {
     return <Skeleton width={130} height={40} borderRadius={10} />;
   }
 

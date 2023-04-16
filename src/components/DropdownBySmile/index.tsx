@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { SvgIcon } from "../svg/SvgIcon";
+import { SvgIcon } from "../SvgIcon";
 import { CaretDownSvg } from "../svg/CaretDownSvg";
 import { useState } from "react";
 

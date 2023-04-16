@@ -1,6 +1,5 @@
-import { SvgIcon } from "../svg/SvgIcon";
-import { ArrowUpSvg } from "../svg/ArrowUpSvg";
-import { Sticky } from "../Sticky";
+import { SvgIcon, Sticky } from "~components";
+import { ArrowUpSvg } from "~components/svg";
 import { useWindowScroll } from "react-use";
 import styled from "styled-components";
 

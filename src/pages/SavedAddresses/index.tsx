@@ -3,7 +3,7 @@ import { CabinetLayout } from "~layout/CabinetLayout";
 import { useEffect } from "react";
 import * as S from "./styled";
 import { Input } from "~components/Input";
-import { SvgIcon } from "~components/svg/SvgIcon";
+import { SvgIcon } from "~components/SvgIcon";
 import { CloseSvg } from "~components/svg/CloseSvg";
 import { HeartSvg } from "~components/svg/HeartSvg";
 import { ButtonOutline } from "~components/buttons/Button";

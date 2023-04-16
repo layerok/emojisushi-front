@@ -8,11 +8,13 @@ import Skeleton from "react-loading-skeleton";
 
 const useLanguageContext = createProviderLessContextHook("uk");
 
+type TLanguateSelectorProps = {
+  loading?: boolean;
+};
+
 export const LanguageSelector = ({
-  showSkeleton = false,
-}: {
-  showSkeleton?: boolean;
-}) => {
+  loading = false,
+}: TLanguateSelectorProps) => {
   const [selectedLang, setSelectedLang] = useLanguageContext();
   useEffect(() => {
     setSelectedLang(i18n.resolvedLanguage);
@@ -22,7 +24,7 @@ export const LanguageSelector = ({
   const location = useLocation();
   const navigate = useNavigate();
 
-  if (showSkeleton) {
+  if (loading) {
     return <Skeleton borderRadius={10} height={40} width={75} />;
   }
 

@@ -1,7 +1,7 @@
 import { cloneElement, forwardRef } from "react";
 
 export const Sticky = forwardRef(
-  ({ children, show, top, right, bottom, left, style }, ref) => {
+  ({ children, show, top, right, bottom, left, style }: any, ref) => {
     return (
       <div
         style={{

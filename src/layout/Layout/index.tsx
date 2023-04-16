@@ -55,7 +55,7 @@ export const Layout = observer(
 
     return (
       <S.Layout {...rest}>
-        <Suspense fallback={<Header showSkeleton />}>
+        <Suspense fallback={<Header loading />}>
           <Await resolve={citiesQuery}>
             <Header />
           </Await>
@@ -69,7 +69,7 @@ export const Layout = observer(
           </Container>
         </S.Main>
 
-        <Suspense fallback={<Footer showSkeleton={true} />}>
+        <Suspense fallback={<Footer loading={true} />}>
           <Await resolve={citiesQuery}>
             <Footer />
           </Await>

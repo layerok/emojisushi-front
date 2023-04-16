@@ -6,7 +6,7 @@ import { EditCartButton } from "~components/buttons/EditCartButton";
 import { CartModal } from "~components/modals/CartModal";
 import { observer } from "mobx-react";
 
-import { SvgIcon } from "~components/svg/SvgIcon";
+import { SvgIcon } from "~components/SvgIcon";
 import { LogoSvg } from "~components/svg/LogoSvg";
 import { useCartStore } from "~hooks/use-cart-store";
 import { CartProduct } from "~models/CartProduct";

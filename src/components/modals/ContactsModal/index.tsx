@@ -1,14 +1,8 @@
-import { Modal } from "../Modal";
 import { ReactElement, cloneElement } from "react";
 import * as S from "./styled";
-import { SvgIcon } from "../../svg/SvgIcon";
-import { PhoneSvg } from "../../svg/PhoneSvg";
-import { InstagramSvg } from "../../svg/InstagramSvg";
-import { FlexBox } from "../../FlexBox";
-import { TelegramSvg } from "../../svg/TelegramSvg";
-import { StaticMap } from "../../StaticMap";
-import { TelegramModal } from "../TelegramModal";
-import { useBreakpoint } from "~common/hooks/useBreakpoint";
+import { SvgIcon, FlexBox, StaticMap, TelegramModal, Modal } from "~components";
+import { PhoneSvg, InstagramSvg, TelegramSvg } from "~components/svg";
+import { useBreakpoint } from "~common/hooks";
 import { useTranslation } from "react-i18next";
 import { InstagramLink } from "~layout/Footer/styled";
 import { useSpot } from "~hooks/use-spot";

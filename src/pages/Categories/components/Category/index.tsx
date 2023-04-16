@@ -1,7 +1,7 @@
 import Skeleton from "react-loading-skeleton";
 import { ICategory } from "~api/menu.api.types";
 import { LogoSvg } from "~components/svg/LogoSvg";
-import { SvgIcon } from "~components/svg/SvgIcon";
+import { SvgIcon } from "~components/SvgIcon";
 import { useCity, useCitySlug, useLang, useSpot, useSpotSlug } from "~hooks";
 import * as S from "./styled";
 

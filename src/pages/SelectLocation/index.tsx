@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import * as S from "./styled";
 import { LogoSvg } from "~components/svg/LogoSvg";
 import { MapPinSvg } from "~components/svg/MapPinSvg";
-import { SvgIcon } from "~components/svg/SvgIcon";
+import { SvgIcon } from "~components/SvgIcon";
 import { useTranslation } from "react-i18next";
 import { useIsMobile } from "~common/hooks/useBreakpoint";
 import { Cities, CitiesSkeleton } from "./components/City";

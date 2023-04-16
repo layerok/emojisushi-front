@@ -1,17 +1,19 @@
 import * as S from "./styled";
-import { SvgIcon } from "../svg/SvgIcon";
-import { BagSvg } from "../svg/BagSvg";
+import { SvgIcon } from "~components";
+import { BagSvg } from "~components/svg";
 import { ReactNode } from "react";
 import Skeleton from "react-loading-skeleton";
 
+type ITinyCartButtonProps = {
+  loading?: boolean;
+  price: ReactNode;
+};
+
 export const TinyCartButton = ({
   price,
-  showSkeleton = false,
-}: {
-  showSkeleton?: boolean;
-  price: ReactNode;
-}) => {
-  if (showSkeleton) {
+  loading = false,
+}: ITinyCartButtonProps) => {
+  if (loading) {
     return <Skeleton width={55} height={40} />;
   }
 

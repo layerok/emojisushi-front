@@ -22,3 +22,5 @@ export type IWishlist = {
   items: IWishlistItem[];
   shipping_method: null | IShippingMethod;
 };
+
+export type IGetWishlistResponse = IWishlist[];

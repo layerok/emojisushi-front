@@ -1,15 +1,12 @@
-import { Input } from "../Input";
 import * as S from "./styled";
-import { SvgIcon } from "../svg/SvgIcon";
-import { MagnifierSvg } from "../svg/MagnifierSvg";
+import { SvgIcon, MagnifierSvg, Input } from "~components";
 import { useTranslation } from "react-i18next";
-import { forwardRef } from "react";
 
-export const SearchInput = forwardRef(({ ...rest }, ref) => {
+export const SearchInput = ({ ...rest }: any) => {
   const { t } = useTranslation();
   return (
     <S.Search>
-      <Input ref={ref} placeholder={t("search.input_search")} {...rest} />
+      <Input placeholder={t("search.input_search")} {...rest} />
       <S.IconBtn>
         <SvgIcon color={"white"} width={"25px"} height={"25px"}>
           <MagnifierSvg />
@@ -17,4 +14,4 @@ export const SearchInput = forwardRef(({ ...rest }, ref) => {
       </S.IconBtn>
     </S.Search>
   );
-});
+};

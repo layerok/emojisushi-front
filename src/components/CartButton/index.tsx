@@ -1,12 +1,22 @@
 import * as S from "./styled";
 import { FlexBox } from "../FlexBox";
-import { SvgIcon } from "../svg/SvgIcon";
+import { SvgIcon } from "../SvgIcon";
 import { BagSvg } from "../svg/BagSvg";
 import { ButtonFilled } from "../buttons/Button";
 import Skeleton from "react-loading-skeleton";
 
-export const CartButton = ({ count = 0, total = 0, showSkeleton = false }) => {
-  if (showSkeleton) {
+type TCartButton = {
+  count?: number;
+  total?: number;
+  loading?: boolean;
+};
+
+export const CartButton = ({
+  count = 0,
+  total = 0,
+  loading = false,
+}: TCartButton) => {
+  if (loading) {
     return <Skeleton width={170} height={40} borderRadius={10} />;
   }
   return (

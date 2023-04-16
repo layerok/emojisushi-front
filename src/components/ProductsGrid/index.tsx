@@ -1,28 +1,19 @@
-import { ProductCard } from "../ProductCard";
-import * as S from "./styled";
-import { FlexBox } from "../FlexBox";
-import { LoadMoreButton } from "../buttons/LoadMoreButton";
-import { useBreakpoint, useIsDesktop } from "~common/hooks/useBreakpoint";
+import { useBreakpoint, useDebounce } from "~common/hooks";
 import { EqualHeight } from "react-equal-height";
-import { SortingPopover } from "../popovers/SortingPopover";
 import { observer } from "mobx-react";
-import { useTranslation } from "react-i18next";
-import { useDebounce } from "~common/hooks/useDebounce";
-import { Loader } from "../Loader";
-import { Product } from "~models/Product";
-import Skeleton from "react-loading-skeleton";
-import { useSearchParams } from "react-router-dom";
-import { PRODUCTS_LIMIT_STEP } from "~pages/Category";
+import { Loader } from "~components";
+import { Product } from "~models";
+import { Footer, Items, Header } from "./components";
 
 // todo: fix design at 1280px breakpoing
 
-type ProductsGridProps = {
+type TProductsGridProps = {
   title?: string;
   items?: Product[];
   handleLoadMore?: () => void;
-  loading?: boolean;
+  loadingMore?: boolean;
   loadable?: boolean;
-  showSkeleton?: boolean;
+  loading?: boolean;
 };
 
 export const ProductsGrid = observer(
@@ -31,9 +22,9 @@ export const ProductsGrid = observer(
     items = [],
     handleLoadMore,
     loading = false,
+    loadingMore = false,
     loadable = false,
-    showSkeleton = false,
-  }: ProductsGridProps) => {
+  }: TProductsGridProps) => {
     const breakpoint = useBreakpoint();
 
     const debouncedBreakpoint = useDebounce(() => {
@@ -44,14 +35,14 @@ export const ProductsGrid = observer(
       <div style={{ position: "relative", width: "100%" }}>
         {/* show loader or skeleton when adding to favorites */}
         <Loader loading={false} />
-        <Header showSkeleton={showSkeleton} title={title} />
+        <Header loading={loading} title={title} />
         <EqualHeight updateOnChange={debouncedBreakpoint}>
-          <Items showSkeleton={showSkeleton} items={items} />
+          <Items loading={loading} items={items} />
         </EqualHeight>
         {loadable && (
           <Footer
-            showSkeleton={showSkeleton}
             loading={loading}
+            loadingMore={loadingMore}
             handleLoadMore={handleLoadMore}
           />
         )}
@@ -59,103 +50,3 @@ export const ProductsGrid = observer(
     );
   }
 );
-
-const Items = ({
-  loading = false,
-  items = [],
-  showSkeleton = false,
-}: {
-  loading?: boolean;
-  items: Product[];
-  showSkeleton?: boolean;
-}) => {
-  const { t } = useTranslation();
-
-  const [searchParams] = useSearchParams();
-
-  if (showSkeleton) {
-    return (
-      <S.Grid>
-        {new Array(+searchParams.get("limit") || PRODUCTS_LIMIT_STEP)
-          .fill(null)
-          .map((_, index) => (
-            <ProductCard key={index} showSkeleton />
-          ))}
-      </S.Grid>
-    );
-  }
-
-  return (
-    <>
-      {items.length !== 0 ? (
-        <S.Grid>
-          {items.map((product) => {
-            return <ProductCard key={product.id} product={product} />;
-          })}
-        </S.Grid>
-      ) : loading ? (
-        t("products.loading")
-      ) : (
-        t("common.not_found")
-      )}
-    </>
-  );
-};
-
-const Footer = ({
-  loading = false,
-  handleLoadMore,
-  showSkeleton = false,
-}: {
-  loading?: boolean;
-  handleLoadMore: () => void;
-
-  showSkeleton?: boolean;
-}) => {
-  const { t } = useTranslation();
-  if (showSkeleton) {
-    return null;
-  }
-  return (
-    <S.Footer>
-      <LoadMoreButton
-        loading={loading}
-        style={{ cursor: "pointer" }}
-        text={t("common.show_more")}
-        onClick={handleLoadMore}
-      />
-    </S.Footer>
-  );
-};
-
-const Header = ({
-  title,
-  showSkeleton = false,
-}: {
-  title: string;
-  showSkeleton?: boolean;
-}) => {
-  const search = ""; // todo: here must be react value
-  const { t } = useTranslation();
-  const isDesktop = useIsDesktop();
-  const titleOrSearch = search
-    ? `${t("search.everywhere")} "${search}"`
-    : title;
-  return (
-    <S.Header>
-      <S.Title>
-        {showSkeleton ? <Skeleton width={260} height={22} /> : titleOrSearch}
-      </S.Title>
-      {isDesktop && (
-        <FlexBox>
-          {/*                   <FiltersModal>
-                        <FiltersButton text={t('common.filters')}/>
-                    </FiltersModal>*/}
-          <div style={{ marginLeft: "67px" }}>
-            <SortingPopover showSkeleton={showSkeleton} />
-          </div>
-        </FlexBox>
-      )}
-    </S.Header>
-  );
-};

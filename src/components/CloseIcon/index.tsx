@@ -1,4 +1,4 @@
-import { ISvgIconProps, SvgIcon } from "../svg/SvgIcon";
+import { ISvgIconProps, SvgIcon } from "../SvgIcon";
 import { CloseSvg } from "../svg/CloseSvg";
 import { forwardRef } from "react";
 

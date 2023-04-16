@@ -23,7 +23,7 @@ import {
 } from "react";
 import { useEffect } from "react";
 import * as S from "./styled";
-import { SvgIcon } from "../svg/SvgIcon";
+import { SvgIcon } from "../SvgIcon";
 import { CaretDownSvg } from "../svg/CaretDownSvg";
 
 type IOptionProps = HTMLProps<HTMLDivElement> &

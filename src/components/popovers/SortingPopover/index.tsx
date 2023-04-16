@@ -1,17 +1,17 @@
-import { DropdownPopover } from "../DropdownPopover";
-import { SortOrderButton } from "../../buttons/SortOrderButton";
+import { DropdownPopover } from "~components/popovers/DropdownPopover";
+import { SortOrderButton } from "~components/buttons/SortOrderButton";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { SortKey } from "~api/menu.api.types";
 import { useLocation, useSubmit } from "react-router-dom";
 
-export const SortingPopover = ({
-  showSkeleton = false,
-}: {
-  showSkeleton?: boolean;
-}) => {
-  if (showSkeleton) {
+type TSortingPopoverProps = {
+  loading?: boolean;
+};
+
+export const SortingPopover = ({ loading = false }: TSortingPopoverProps) => {
+  if (loading) {
     return <Skeleton width={120} height={25} />;
   }
   // todo: fetch this options from backend, becase backend is a source of truth

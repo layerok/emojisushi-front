@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { SvgIcon } from "../svg/SvgIcon";
+import { SvgIcon } from "../SvgIcon";
 import { AsteriskSvg } from "../svg/AsteriskSvg";
 import React, { CSSProperties } from "react";
 import { If } from "~components/If";

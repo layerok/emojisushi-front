@@ -1,5 +1,5 @@
 import { cloneElement } from "react";
-import { SvgIcon } from "../../svg/SvgIcon";
+import { SvgIcon } from "../../SvgIcon";
 import { TelegramSvg } from "../../svg/TelegramSvg";
 import { ButtonFilled } from "../../buttons/Button";
 import { NotifyModal } from "../NotifyModal";
