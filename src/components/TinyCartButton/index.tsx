@@ -24,7 +24,7 @@ export const TinyCartButton = ({
           <BagSvg />
         </SvgIcon>
       </S.Icon>
-      <S.Price>{price}</S.Price>
+      <S.Price>{price} ₴</S.Price>
     </S.TinyCartButton>
   );
 };

@@ -39,4 +39,8 @@ export class CartProduct {
       return acc + " " + property.value;
     }, this.product.name as string);
   }
+
+  get total() {
+    return this.product.getNewPrice(this.variant).price * this.quantity;
+  }
 }

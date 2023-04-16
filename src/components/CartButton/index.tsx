@@ -27,7 +27,7 @@ export const CartButton = ({
             <BagSvg />
           </SvgIcon>
         </S.Icon>
-        <S.Price>{total}</S.Price>
+        <S.Price>{total} ₴</S.Price>
         <S.Delimiter />
         <S.Count>{count}</S.Count>
       </FlexBox>

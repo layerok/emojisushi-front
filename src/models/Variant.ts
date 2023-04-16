@@ -30,11 +30,11 @@ export class Variant {
 
   get oldPrice() {
     return this.additionalPrices.length > 0
-      ? this.additionalPrices[0].price_formatted
+      ? this.additionalPrices[0]
       : undefined;
   }
 
   get newPrice() {
-    return this.prices.length > 0 ? this.prices[0].price_formatted : undefined;
+    return this.prices.length > 0 ? this.prices[0] : undefined;
   }
 }

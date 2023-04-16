@@ -126,7 +126,7 @@ export class Product {
       return variant.oldPrice;
     }
     return this.additionalPrices.length > 0
-      ? this.additionalPrices[0].price_formatted
+      ? this.additionalPrices[0]
       : undefined;
   }
 
@@ -134,7 +134,7 @@ export class Product {
     if (variant) {
       return variant.newPrice;
     }
-    return this.prices.length > 0 ? this.prices[0].price_formatted : undefined;
+    return this.prices.length > 0 ? this.prices[0] : undefined;
   }
 
   get modGroups() {

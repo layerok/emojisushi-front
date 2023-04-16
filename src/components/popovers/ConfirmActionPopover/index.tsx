@@ -7,12 +7,14 @@ import { useTranslation } from "react-i18next";
 export const ConfirmActionPopover = ({
   text,
   onConfirm,
+  initiallyOpen = false,
   onCancel,
   children,
 }) => {
   const { t } = useTranslation();
   return (
     <NestedPopover
+      open={initiallyOpen}
       render={({ close }) => (
         <S.Wrapper>
           {text}

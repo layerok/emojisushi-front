@@ -28,8 +28,8 @@ const CheckoutCartRaw = () => {
           const { id, quantity, product, variant } = item;
 
           const ingredients = product.ingredients;
-          const oldPrice = product.getOldPrice(variant);
-          const newPrice = product.getNewPrice(variant);
+          const oldPrice = product.getOldPrice(variant)?.price_formatted;
+          const newPrice = product.getNewPrice(variant)?.price_formatted;
           const img = product.mainImage;
           const nameWithMods = item.nameWithMods;
           const { weight } = product;

@@ -62,7 +62,6 @@ export const CheckoutForm = observer(() => {
     },
     validationSchema: CheckoutSchema,
     onSubmit: (values) => {
-      console.log("values", values);
       setPending(true);
       const [firstname, lastname] = values.name.split(" ");
       OrderApi.place({

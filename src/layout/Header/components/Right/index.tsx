@@ -1,27 +1,31 @@
 import * as S from "./styled";
-import { CartButton } from "~components/CartButton";
-import { TinyCartButton } from "~components/TinyCartButton";
-import { CartModal } from "~components/modals/CartModal";
-import { MobMenuModal } from "~components/modals/MobMenuModal";
-import { SvgIcon } from "~components/SvgIcon";
-import { BurgerSvg } from "~components/svg/BurgerSvg";
-import { SvgButton } from "~components/SvgButton";
-import { UserSvg } from "~components/svg/UserSvg";
-import { AuthModal } from "~components/modals/AuthModal";
-import { LanguageSelector } from "~components/LanguageSelector";
+import { BurgerSvg, UserSvg } from "~components/svg";
+import {
+  SvgButton,
+  AuthModal,
+  LanguageSelector,
+  MobMenuModal,
+  CartModal,
+  SvgIcon,
+  CartButton,
+  TinyCartButton,
+} from "~components";
 import { stores } from "~stores/stores";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useRouteLoaderData } from "react-router-dom";
 import { useCitySlug, useLang, useSpotSlug } from "~hooks";
 import Skeleton from "react-loading-skeleton";
-import { useCart } from "~hooks/use-cart";
+import { CartProduct } from "~models";
+import { useOptimisticCartTotals } from "~hooks/use-layout-fetchers";
 
 export const Right = ({ loading = false }: { loading?: boolean }) => {
   const citySlug = useCitySlug();
   const spotSlug = useSpotSlug();
   const lang = useLang();
 
-  const cart = useCart();
+  const { cart } = useRouteLoaderData("layout") as any;
   const navigate = useNavigate();
+  const items = (cart?.data || []).map((json) => new CartProduct(json));
+  const cartTotals = useOptimisticCartTotals({ items });
   return (
     <S.Right>
       <S.LanguageSelectorContainer>
@@ -32,15 +36,15 @@ export const Right = ({ loading = false }: { loading?: boolean }) => {
         <S.CartBtn>
           <CartButton
             loading={loading}
-            count={cart?.totalQuantity || 0}
-            total={cart?.total || 0}
+            count={cartTotals.quantity || 0}
+            total={cartTotals.price || 0}
           />
         </S.CartBtn>
       </CartModal>
 
       <CartModal>
         <S.TinyCartBtn>
-          <TinyCartButton loading={loading} price={cart?.total || 0} />
+          <TinyCartButton loading={loading} price={cartTotals.price || 0} />
         </S.TinyCartBtn>
       </CartModal>
 

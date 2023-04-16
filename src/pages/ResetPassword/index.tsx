@@ -78,7 +78,6 @@ export const ResetPassword = observer(() => {
                   password,
                 })
                 .then((res) => {
-                  console.log(res);
                   setIsReset(true);
                 })
                 .catch((e) => {

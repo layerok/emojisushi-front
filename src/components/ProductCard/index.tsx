@@ -1,11 +1,8 @@
 import * as S from "./styled";
 import { EqualHeightElement } from "react-equal-height";
-import { Loader } from "~components";
 import { useMemo, useState } from "react";
 import { Product } from "~models";
 import { useCartProducts } from "~hooks/use-cart";
-import { useFetcher } from "react-router-dom";
-import { IGetWishlistResponse } from "~api/wishlist.api.types";
 import {
   Image,
   Weight,

@@ -20,3 +20,7 @@ export * from "./SvgButton";
 export * from "./Sticky";
 export * from "./StaticMap";
 export * from "./modals";
+export * from "./CloseIcon";
+export * from "./LanguageSelector";
+export * from "./StickyToTopBtn";
+export * from "./OptimisticCartTotalPrice";
