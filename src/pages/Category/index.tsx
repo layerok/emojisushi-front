@@ -72,14 +72,12 @@ export const AwaitedCategory = () => {
         .includes(spotSlug);
     });
 
-  const { productsQuery } = useLoaderData() as ReturnType<
-    typeof loader
-  >["data"];
+  const { products } = useLoaderData() as ReturnType<typeof loader>["data"];
 
   return (
     <>
       <Sidebar categories={publishedCategories} />
-      <Await resolve={productsQuery}>
+      <Await resolve={products}>
         <AwaitedProducts categories={publishedCategories} />
       </Await>
     </>
@@ -143,8 +141,8 @@ Object.assign(Component, {
 export const PRODUCTS_LIMIT_STEP = 25;
 
 export type CategoryLoaderResolvedDeferredData = {
-  productsQuery: IGetProductsResponse;
-  wishlistQuery: IGetWishlistResponse;
+  products: IGetProductsResponse;
+  wishlists: IGetWishlistResponse;
   q: string | undefined;
   sort: string | undefined;
 };
@@ -164,10 +162,10 @@ export const querifiedLoader = (queryClient: QueryClient) => {
     });
 
     return defer({
-      productsQuery:
+      products:
         queryClient.getQueryData(productQuery.queryKey) ??
         queryClient.fetchQuery(productQuery),
-      wishlistQuery:
+      wishlists:
         queryClient.getQueryData(wishlistsQuery.queryKey) ??
         queryClient.fetchQuery(wishlistsQuery),
       q,

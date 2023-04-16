@@ -1,38 +1,74 @@
-import { useEffect } from "react";
-import { FetcherWithComponents, useFetcher, useParams } from "react-router-dom";
-import { IGetWishlistResponse } from "~api/wishlist.api.types";
+import { Suspense } from "react";
+import {
+  Await,
+  useAsyncValue,
+  useFetcher,
+  useLoaderData,
+} from "react-router-dom";
 import { useIsMobile } from "~common/hooks";
 import { CartProduct, Product } from "~models";
 import * as S from "./styled";
-import { WishlistLoaderResolvedDeferredData } from "~pages/Wishlist";
 import { Favorite } from "~components";
+import Skeleton from "react-loading-skeleton";
+import { IWishlist } from "~api/wishlist.api.types";
 
 type FavoriteButtonProps = {
   cartProduct?: CartProduct;
   product?: Product;
-  fetcher: FetcherWithComponents<IGetWishlistResponse>;
   loading?: boolean;
 };
 
 export const FavoriteButton = ({
   cartProduct,
   product,
-  fetcher,
   loading = false,
 }: FavoriteButtonProps) => {
+  const { wishlists } = useLoaderData() as any;
+
+  if (loading) {
+    return (
+      <S.Favorite>
+        <Skeleton width={20} height={20} borderRadius={20} />
+      </S.Favorite>
+    );
+  }
+
+  return (
+    <Suspense fallback={<Skeleton width={20} height={20} borderRadius={20} />}>
+      <Await resolve={wishlists}>
+        <AwaitedFavoriteButton product={product} cartProduct={cartProduct} />
+      </Await>
+    </Suspense>
+  );
+};
+
+const AwaitedFavoriteButton = ({
+  product,
+  cartProduct,
+}: {
+  product: Product;
+  cartProduct?: CartProduct;
+}) => {
   const isMobile = useIsMobile();
   const iconSize = isMobile ? 33 : 25;
+
+  // todo: saving count is useless for now, we don't use it anyhow
   const count = cartProduct?.quantity || 0;
-  const loadFetcher =
-    useFetcher() as FetcherWithComponents<WishlistLoaderResolvedDeferredData>;
 
-  const { spotSlug, citySlug, lang } = useParams();
+  const fetcher = useFetcher();
+  const wishlists = useAsyncValue() as IWishlist[];
 
-  const handleToggleFavorite = async () => {
+  let favorite = product.isInWishlists(wishlists || []);
+
+  if (fetcher.formData) {
+    favorite = fetcher.formData.get("favorite") === "true";
+  }
+  const handleToggleFavorite = () => {
     fetcher.submit(
       {
         quantity: count + "",
         product_id: product.id + "",
+        favorite: favorite ? "false" : "true",
       },
       {
         method: "post",
@@ -40,25 +76,9 @@ export const FavoriteButton = ({
     );
   };
 
-  useEffect(() => {
-    // I don't sure about that fetcher, it will fetch products, categories, wishlists if they are stale.
-    // don't sure if such overhead is needed
-    // todo: need to rethink this
-    loadFetcher.load(`/${lang}/${citySlug}/${spotSlug}/wishlist`);
-  }, []);
-
-  if (loading) {
-    return null;
-  }
-
   return (
     <S.Favorite onClick={handleToggleFavorite}>
-      <Favorite
-        width={iconSize + "px"}
-        isFavorite={product.isInWishlists(
-          fetcher.data || loadFetcher.data?.wishlists || []
-        )}
-      />
+      <Favorite width={iconSize + "px"} isFavorite={favorite} />
     </S.Favorite>
   );
 };

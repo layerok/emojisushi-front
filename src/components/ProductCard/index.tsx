@@ -23,7 +23,6 @@ export const ProductCard = ({
   loading = false,
 }: TProductCardProps) => {
   const cartProducts = useCartProducts();
-  const wishlistFetcher = useFetcher<IGetWishlistResponse>();
 
   const initialModificatorsState = product?.modGroups.reduce((acc, group) => {
     return {
@@ -49,9 +48,7 @@ export const ProductCard = ({
 
   return (
     <S.Wrapper>
-      <Loader loading={wishlistFetcher.state === "submitting"} />
       <FavoriteButton
-        fetcher={wishlistFetcher}
         loading={loading}
         cartProduct={cartProduct}
         product={product}

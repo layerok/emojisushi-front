@@ -11,7 +11,6 @@ import { categoriesLoader } from "~pages/Categories";
 
 export const routes = [
   {
-    lazy: () => import("~pages/LocationSaver"),
     path: "/",
     children: [
       {

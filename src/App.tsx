@@ -22,12 +22,10 @@ export const App = observer(() => {
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <SkeletonTheme baseColor="#1F1F1F" highlightColor="#2F2F2F">
-          <div className="App">
-            <RouterProvider
-              fallbackElement={<FallbackElement />}
-              router={router}
-            />
-          </div>
+          <RouterProvider
+            fallbackElement={<FallbackElement />}
+            router={router}
+          />
         </SkeletonTheme>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
