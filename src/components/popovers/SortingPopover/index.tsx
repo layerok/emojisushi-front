@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { SortKey } from "~api/menu.api.types";
-import { useLocation, useSubmit } from "react-router-dom";
+import { useLocation, useSearchParams, useSubmit } from "react-router-dom";
 
 type TSortingPopoverProps = {
   loading?: boolean;
@@ -29,7 +29,7 @@ export const SortingPopover = ({ loading = false }: TSortingPopoverProps) => {
 
 const InternalSortingDropdown = ({ options = [] }: { options?: SortKey[] }) => {
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
+  const [searchParams] = useSearchParams();
 
   const sortFromUrl = searchParams.get("sort") as SortKey;
   // todo: validate provided search params from url
@@ -42,6 +42,8 @@ const InternalSortingDropdown = ({ options = [] }: { options?: SortKey[] }) => {
     initialSelectedIndex === -1 ? 0 : initialSelectedIndex
   );
   const { t } = useTranslation();
+
+  // todo: don't build dynamic translations keys
 
   return (
     <DropdownPopover
@@ -56,6 +58,11 @@ const InternalSortingDropdown = ({ options = [] }: { options?: SortKey[] }) => {
         setSelectedIndex(index);
         const fd = new FormData();
         fd.append("sort", option);
+        if (searchParams.has("q")) {
+          fd.append("q", searchParams.get("q"));
+        }
+        // todo: preserve all query parameters when doing sorting
+
         submit(fd);
       }}
     >
