@@ -16,6 +16,7 @@ export const Sidebar = ({ loading = false, categories = [] }: SidebarProps) => {
   const isMobile = useIsMobile();
   const isDesktop = useIsDesktop();
 
+  // todo: make sidebar sticky
   return (
     <S.Sidebar>
       <FlexBox

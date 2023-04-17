@@ -1,6 +1,6 @@
-import { cartQuery } from "./cart.query";
-import { categoriesQuery } from "./categories.query";
-import { productsQuery } from "./products.query";
-import { wishlistsQuery } from "./wishlist.query";
-
-export { cartQuery, productsQuery, categoriesQuery, wishlistsQuery };
+export * from "./cart.query";
+export * from "./categories.query";
+export * from "./products.query";
+export * from "./wishlist.query";
+export * from "./payment.query";
+export * from "./shipping.query";

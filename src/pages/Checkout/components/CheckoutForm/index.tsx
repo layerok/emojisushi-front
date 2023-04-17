@@ -1,31 +1,37 @@
 import * as S from "./styled";
-import { Switcher } from "~components/Switcher";
-import { Input } from "~components/Input";
-import { FlexBox } from "~components/FlexBox";
-import { ButtonOutline } from "~components/buttons/Button";
+import {
+  FlexBox,
+  Input,
+  Switcher,
+  ButtonOutline,
+  AuthModal,
+  Dropdown,
+} from "~components";
 import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import OrderApi from "../../../../api/order.api";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
-import { AuthModal } from "~components/modals/AuthModal";
-import { usePaymentStore } from "~hooks/use-payment-store";
-import { useShippingStore } from "~hooks/use-shipping-store";
+import OrderApi from "~api/order.api";
+import {
+  Await,
+  useAsyncValue,
+  useLoaderData,
+  useNavigate,
+} from "react-router-dom";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useCartStore } from "~hooks/use-cart-store";
 import { useAuthStore } from "~hooks/use-auth-store";
-import { Dropdown } from "~components/Dropdown";
 import { useSpot } from "~hooks";
+import { IGetShippingMethodsResponse } from "~api/shipping.api";
+import { IGetPaymentMethodsResponse } from "~api/payment.api";
 
 // todo: logout user if his token is expired
 // timer may be solution
 
 export const CheckoutForm = observer(() => {
-  const PaymentStore = usePaymentStore();
-  const ShippingStore = useShippingStore();
   const CartStore = useCartStore();
   const AuthStore = useAuthStore();
+  const { paymentMethods, shippingMethods } = useLoaderData() as any;
 
   const { t } = useTranslation();
   const [pending, setPending] = useState(false);
@@ -97,18 +103,6 @@ export const CheckoutForm = observer(() => {
     },
   });
 
-  const getShippingType = () => {
-    return ShippingStore.items.find(
-      (item) => item.id === +formik.values.shipping_method_id
-    );
-  };
-
-  const getPaymentType = () => {
-    return PaymentStore.items.find(
-      (item) => item.id === +formik.values.payment_method_id
-    );
-  };
-
   return (
     <S.Form onSubmit={formik.handleSubmit}>
       {!AuthStore.isAuthorized && (
@@ -120,23 +114,12 @@ export const CheckoutForm = observer(() => {
         </FlexBox>
       )}
 
-      <Switcher
-        name={"shipping_method_id"}
-        options={ShippingStore.items.map((item) => ({
-          id: item.id,
-          name: t("shippingMethods." + item.code, item.name),
-        }))}
-        selected={(option) => {
-          return option.id === getShippingType().id;
-        }}
-        handleChange={({ e, index }) => {
-          formik.handleChange(e);
-        }}
-      />
+      <Suspense fallback={"...loading shipping methods"}>
+        <Await resolve={shippingMethods}>
+          <ShippingMethods formik={formik} />
+        </Await>
+      </Suspense>
 
-      {getShippingType()?.id === 2 && (
-        <AddressDropdownOrInput formik={formik} />
-      )}
       <S.Control>
         <Input
           name={"name"}
@@ -185,30 +168,11 @@ export const CheckoutForm = observer(() => {
           value={formik.values.comment}
         />
       </S.Control>
-
-      <S.Control>
-        <Switcher
-          name={"payment_method_id"}
-          options={PaymentStore.items.map((item) => ({
-            id: item.id,
-            name: t("paymentMethods." + item.code, item.name),
-          }))}
-          handleChange={({ e, index }) => {
-            formik.handleChange(e);
-          }}
-          selected={(option) => option.id === getPaymentType().id}
-        />
-      </S.Control>
-      {getPaymentType()?.code === "cash" && (
-        <S.Control>
-          <Input
-            name={"change"}
-            placeholder={t("checkout.form.change")}
-            onChange={formik.handleChange}
-            value={formik.values.change}
-          />
-        </S.Control>
-      )}
+      <Suspense>
+        <Await resolve={paymentMethods}>
+          <PaymentMethods formik={formik} />
+        </Await>
+      </Suspense>
       {Object.keys(formik.errors).length > 0 && (
         <S.Control>
           <S.ErrorBag>
@@ -232,6 +196,74 @@ export const CheckoutForm = observer(() => {
     </S.Form>
   );
 });
+
+const ShippingMethods = ({ formik }) => {
+  const { t } = useTranslation();
+
+  const shippingMethods = useAsyncValue() as IGetShippingMethodsResponse;
+  const getShippingType = () => {
+    return shippingMethods.data.find(
+      (item) => item.id === +formik.values.shipping_method_id
+    );
+  };
+  return (
+    <>
+      <Switcher
+        name={"shipping_method_id"}
+        options={shippingMethods.data.map((item) => ({
+          id: item.id,
+          name: t("shippingMethods." + item.code, item.name),
+        }))}
+        selected={(option) => {
+          return option.id === getShippingType().id;
+        }}
+        handleChange={({ e, index }) => {
+          formik.handleChange(e);
+        }}
+      />
+      {getShippingType()?.id === 2 && (
+        <AddressDropdownOrInput formik={formik} />
+      )}
+    </>
+  );
+};
+
+const PaymentMethods = ({ formik }) => {
+  const { t } = useTranslation();
+  const paymentMethods = useAsyncValue() as IGetPaymentMethodsResponse;
+  const getPaymentType = () => {
+    return paymentMethods.data.find(
+      (item) => item.id === +formik.values.payment_method_id
+    );
+  };
+  return (
+    <>
+      <S.Control>
+        <Switcher
+          name={"payment_method_id"}
+          options={paymentMethods.data.map((item) => ({
+            id: item.id,
+            name: t("paymentMethods." + item.code, item.name),
+          }))}
+          handleChange={({ e, index }) => {
+            formik.handleChange(e);
+          }}
+          selected={(option) => option.id === getPaymentType().id}
+        />
+      </S.Control>
+      {getPaymentType()?.code === "cash" && (
+        <S.Control>
+          <Input
+            name={"change"}
+            placeholder={t("checkout.form.change")}
+            onChange={formik.handleChange}
+            value={formik.values.change}
+          />
+        </S.Control>
+      )}
+    </>
+  );
+};
 
 const AddressDropdownOrInput = ({ formik }) => {
   const { t } = useTranslation();

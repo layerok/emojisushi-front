@@ -2,6 +2,7 @@ import { AxiosResponse } from "axios";
 import { client } from "~clients/client";
 import { ICartProduct } from "./cart.api.types";
 
+// todo: rename to IGetCartResponse
 export type IGetCartProductsResponse = {
   data: ICartProduct[];
   total: string;

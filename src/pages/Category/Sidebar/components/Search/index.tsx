@@ -8,7 +8,11 @@ import {
   useSubmit,
 } from "react-router-dom";
 
-export const Search = ({ loading = false }: { loading?: boolean }) => {
+type TSearchProps = {
+  loading?: boolean;
+};
+
+export const Search = ({ loading = false }: TSearchProps) => {
   const isTablet = useIsTablet();
   const submit = useSubmit();
   const { q } = useLoaderData() as {

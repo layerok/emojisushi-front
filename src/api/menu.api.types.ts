@@ -194,6 +194,7 @@ export type IGetCategoriesParams = {
 };
 
 export type SortKey =
+  | "default"
   | "bestseller"
   | "ratings"
   | "latest"

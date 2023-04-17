@@ -24,3 +24,4 @@ export * from "./CloseIcon";
 export * from "./LanguageSelector";
 export * from "./StickyToTopBtn";
 export * from "./OptimisticCartTotalPrice";
+export * from "./Dropdown";

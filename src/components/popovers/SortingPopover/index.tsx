@@ -17,6 +17,7 @@ export const SortingPopover = ({ loading = false }: TSortingPopoverProps) => {
   // todo: fetch this options from backend, becase backend is a source of truth
   // but for now, it is ok
   const options: SortKey[] = [
+    "default",
     "bestseller",
     "latest",
     "oldest",
@@ -34,7 +35,7 @@ const InternalSortingDropdown = ({ options = [] }: { options?: SortKey[] }) => {
   const sortFromUrl = searchParams.get("sort") as SortKey;
   // todo: validate provided search params from url
   const initialSelectedIndex = options.indexOf(
-    sortFromUrl ? sortFromUrl : "bestseller"
+    sortFromUrl ? sortFromUrl : "default"
   );
   const submit = useSubmit();
 

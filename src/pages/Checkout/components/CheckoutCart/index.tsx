@@ -8,14 +8,15 @@ import { observer } from "mobx-react";
 
 import { SvgIcon } from "~components/SvgIcon";
 import { LogoSvg } from "~components/svg/LogoSvg";
-import { useCartStore } from "~hooks/use-cart-store";
 import { CartProduct } from "~models/CartProduct";
 import React from "react";
 import { If } from "~components/If";
+import { useAsyncValue } from "react-router-dom";
+import { IGetCartProductsResponse } from "~api/cart.api";
 
 const CheckoutCartRaw = () => {
-  const CartStore = useCartStore();
-  const { items } = CartStore;
+  const cart = useAsyncValue() as IGetCartProductsResponse;
+  const items = cart.data.map((json) => new CartProduct(json));
   return (
     <S.Wrapper>
       <div

@@ -185,6 +185,8 @@ const AwaitedCartModal = ({
   const city = useCity();
   const spot = useSpot();
   const lang = useLang();
+  const citySlug = useCitySlug();
+  const spotSlug = useSpotSlug();
   // todo: add type
   const cart = useAsyncValue() as IGetCartProductsResponse;
 
@@ -263,7 +265,7 @@ const AwaitedCartModal = ({
                   disabled={items.length === 0}
                   onClick={() => {
                     navigate(
-                      "/" + [lang, city.slug, spot.slug, "checkout"].join("/")
+                      "/" + [lang, citySlug, spotSlug, "checkout"].join("/")
                     );
                     close();
                   }}

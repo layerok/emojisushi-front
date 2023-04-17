@@ -3,24 +3,44 @@ import { CheckoutForm } from "./components/CheckoutForm";
 import { CheckoutCart } from "./components/CheckoutCart";
 import { Heading } from "~components/Heading";
 import { useIsMobile } from "~common/hooks/useBreakpoint";
-import { defer, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import {
+  Await,
+  defer,
+  useAsyncValue,
+  useNavigate,
+  useRouteLoaderData,
+} from "react-router-dom";
+import { Suspense, useEffect } from "react";
 import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
-import { useCartStore } from "~hooks/use-cart-store";
-import { CartStore, PaymentStore, ShippingStore } from "~stores";
+import { IGetCartProductsResponse } from "~api/cart.api";
+import { queryClient } from "~query-client";
+import { paymentQuery, shippingQuery } from "~queries";
 
 export const Checkout = observer(() => {
+  const { cart } = useRouteLoaderData("layout") as any;
+
+  return (
+    <Suspense fallback={"...loading"}>
+      <Await resolve={cart}>
+        <AwaitedCheckout />
+      </Await>
+    </Suspense>
+  );
+});
+
+const AwaitedCheckout = () => {
   const isMobile = useIsMobile();
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const CartStore = useCartStore();
+  const cart = useAsyncValue() as IGetCartProductsResponse;
 
   useEffect(() => {
-    if (CartStore.items.length === 0) {
+    if (cart.data.length === 0) {
+      // todo: redirect to previous page, not to index page
       navigate("/");
     }
-  }, [CartStore.items]);
-  const { t } = useTranslation();
+  }, [cart.data]);
   return (
     <>
       <Heading>{t("checkout.title")}</Heading>
@@ -34,7 +54,7 @@ export const Checkout = observer(() => {
       </FlexBox>
     </>
   );
-});
+};
 
 export const Component = Checkout;
 Object.assign(Component, {
@@ -42,15 +62,12 @@ Object.assign(Component, {
 });
 
 export const loader = async () => {
-  await PaymentStore.fetchItems();
-  await ShippingStore.fetchItems();
-  //await CartStore.fetchItems();
-  return true;
-};
-
-export const shouldRevalidate = ({ currentParams, nextParams }) => {
-  return (
-    currentParams.spotSlug !== nextParams.spotSlug ||
-    currentParams.citySlug !== nextParams.citySlug
-  );
+  return defer({
+    paymentMethods:
+      queryClient.getQueryData(paymentQuery.queryKey) ??
+      queryClient.fetchQuery(paymentQuery),
+    shippingMethods:
+      queryClient.getQueryData(shippingQuery.queryKey) ??
+      queryClient.fetchQuery(shippingQuery),
+  });
 };
