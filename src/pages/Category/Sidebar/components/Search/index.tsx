@@ -12,10 +12,10 @@ export const Search = ({ loading = false }: { loading?: boolean }) => {
   };
 
   const debouncedFetch = useDebounce((form) => {
-    // let filter =
-    //   "&category_id=" +
-    //   CategoriesStore.publishedCategories.map((_) => _.id).join(".");
-    console.log("dbg ", form);
+    const isFirstSearch = q == null;
+    submit(form, {
+      replace: !isFirstSearch,
+    });
   }, 500);
 
   if (loading) {
@@ -40,12 +40,8 @@ export const Search = ({ loading = false }: { loading?: boolean }) => {
       <Form role="search">
         <S.SearchInput
           onChange={(event) => {
-            // todo: debounce search
-            // todo: and fix loading indicator
-            const isFirstSearch = q == null;
-            submit(event.currentTarget.form, {
-              replace: !isFirstSearch,
-            });
+            // todo: add loading indicator when searching
+            debouncedFetch(event.target.form);
           }}
           type="search"
           name="q"
