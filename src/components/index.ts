@@ -25,3 +25,6 @@ export * from "./LanguageSelector";
 export * from "./StickyToTopBtn";
 export * from "./OptimisticCartTotalPrice";
 export * from "./Dropdown";
+export * from "./If";
+export * from "./Heading";
+export * from "./AwaitedCart";

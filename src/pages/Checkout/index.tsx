@@ -1,46 +1,23 @@
-import { FlexBox } from "~components/FlexBox";
+import { FlexBox, Heading, AwaitedCart } from "~components";
 import { CheckoutForm } from "./components/CheckoutForm";
 import { CheckoutCart } from "./components/CheckoutCart";
-import { Heading } from "~components/Heading";
-import { useIsMobile } from "~common/hooks/useBreakpoint";
-import {
-  Await,
-  defer,
-  useAsyncValue,
-  useNavigate,
-  useRouteLoaderData,
-} from "react-router-dom";
-import { Suspense, useEffect } from "react";
+import { useIsMobile } from "~common/hooks";
+import { Await, defer, useRouteLoaderData } from "react-router-dom";
 import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
-import { IGetCartProductsResponse } from "~api/cart.api";
 import { queryClient } from "~query-client";
 import { paymentQuery, shippingQuery } from "~queries";
+import { Suspense } from "react";
 
 export const Checkout = observer(() => {
-  const { cart } = useRouteLoaderData("layout") as any;
-
-  return (
-    <Suspense fallback={"...loading"}>
-      <Await resolve={cart}>
-        <AwaitedCheckout />
-      </Await>
-    </Suspense>
-  );
+  return <InternalCheckout />;
 });
 
-const AwaitedCheckout = () => {
+const InternalCheckout = () => {
   const isMobile = useIsMobile();
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const cart = useAsyncValue() as IGetCartProductsResponse;
+  const { cart } = useRouteLoaderData("layout") as any;
 
-  useEffect(() => {
-    if (cart.data.length === 0) {
-      // todo: redirect to previous page, not to index page
-      navigate("/");
-    }
-  }, [cart.data]);
   return (
     <>
       <Heading>{t("checkout.title")}</Heading>
@@ -49,8 +26,18 @@ const AwaitedCheckout = () => {
         justifyContent={"space-between"}
         style={{ marginTop: "30px" }}
       >
-        <CheckoutForm />
-        <CheckoutCart />
+        <Suspense fallback={"...loading cart"}>
+          <Await resolve={cart}>
+            <AwaitedCart>
+              {({ items }) => (
+                <>
+                  <CheckoutForm />
+                  <CheckoutCart items={items} />
+                </>
+              )}
+            </AwaitedCart>
+          </Await>
+        </Suspense>
       </FlexBox>
     </>
   );

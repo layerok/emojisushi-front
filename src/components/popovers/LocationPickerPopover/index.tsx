@@ -1,8 +1,5 @@
 import * as S from "./styled";
-import { SvgIcon } from "../../SvgIcon";
-import { CaretDownSvg } from "../../svg/CaretDownSvg";
-import { FlexBox } from "../../FlexBox";
-import { DropdownPopover } from "../DropdownPopover";
+import { SvgIcon, CaretDownSvg, FlexBox, DropdownPopover } from "~components";
 import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg";
 import {
   Await,
@@ -14,7 +11,7 @@ import {
 import { useCitySlug, useLang, useSpotSlug } from "~hooks";
 import Skeleton from "react-loading-skeleton";
 import { Suspense } from "react";
-import { ICity } from "~api/access.api.types";
+import { IGetCitiesResponse } from "~api/access.api";
 type LocationPickerPopoverProps = {
   offset?: number;
   backgroundColor?: string;
@@ -24,11 +21,11 @@ type LocationPickerPopoverProps = {
 export const LocationPickerPopover = (props: LocationPickerPopoverProps) => {
   const { width = "211px" } = props;
 
-  const { citiesQuery } = useRouteLoaderData("ensureLocation") as any;
+  const { cities } = useRouteLoaderData("ensureLocation") as any;
 
   return (
     <Suspense fallback={<Skeleton width={width} height={40} />}>
-      <Await resolve={citiesQuery}>
+      <Await resolve={cities}>
         <AwaitedLocationPickerPopover {...props} />
       </Await>
     </Suspense>
@@ -36,9 +33,7 @@ export const LocationPickerPopover = (props: LocationPickerPopoverProps) => {
 };
 
 const AwaitedLocationPickerPopover = (props: LocationPickerPopoverProps) => {
-  const citiesQuery = useAsyncValue() as any;
-
-  const cities: ICity[] = citiesQuery.data;
+  const cities = useAsyncValue() as IGetCitiesResponse;
 
   const { offset = 0, backgroundColor = "#171717", width = "211px" } = props;
   const navigate = useNavigate();
@@ -46,7 +41,7 @@ const AwaitedLocationPickerPopover = (props: LocationPickerPopoverProps) => {
   const spotSlug = useSpotSlug();
   const citySlug = useCitySlug();
 
-  const options = cities
+  const options = cities.data
     .map((city) =>
       city.spots.map((spot) => ({
         name: city.name + ", " + spot.name,

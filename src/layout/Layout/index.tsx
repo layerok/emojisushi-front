@@ -42,8 +42,7 @@ export const Layout = ({
 
   const { cart } = useLoaderData() as LayoutLoaderReturnType;
 
-  // todo: rename citiesQuery, it is not query, it is response
-  const { citiesQuery } = useRouteLoaderData("ensureLocation") as ReturnType<
+  const { cities } = useRouteLoaderData("ensureLocation") as ReturnType<
     typeof ensureLocationLoader
   >["data"];
 
@@ -60,7 +59,7 @@ export const Layout = ({
   return (
     <S.Layout {...rest}>
       <Suspense fallback={<Header loading />}>
-        <Await resolve={citiesQuery}>
+        <Await resolve={cities}>
           <Header />
         </Await>
       </Suspense>
@@ -74,7 +73,7 @@ export const Layout = ({
       </S.Main>
 
       <Suspense fallback={<Footer loading={true} />}>
-        <Await resolve={citiesQuery}>
+        <Await resolve={cities}>
           <Footer />
         </Await>
       </Suspense>

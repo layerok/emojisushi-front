@@ -1,18 +1,17 @@
 import { observer } from "mobx-react";
 import * as S from "./styled";
-import { LogoSvg } from "~components/svg/LogoSvg";
-import { MapPinSvg } from "~components/svg/MapPinSvg";
-import { SvgIcon } from "~components/SvgIcon";
+import { MapPinSvg, LogoSvg, SvgIcon } from "~components";
 import { useTranslation } from "react-i18next";
-import { useIsMobile } from "~common/hooks/useBreakpoint";
+import { useIsMobile } from "~common/hooks";
 import { Cities, CitiesSkeleton } from "./components/City";
 import { Await, useRouteLoaderData } from "react-router-dom";
 import { Suspense } from "react";
 import { City } from "~models";
+import { IGetCitiesResponse } from "~api/access.api";
 
 export const SelectLocation = observer(() => {
   const { t } = useTranslation();
-  const { citiesQuery } = useRouteLoaderData("ensureLocation") as any;
+  const { cities } = useRouteLoaderData("ensureLocation") as any;
 
   const isMobile = useIsMobile();
   return (
@@ -32,13 +31,11 @@ export const SelectLocation = observer(() => {
         <S.Locations.Body>
           <Suspense fallback={<CitiesSkeleton />}>
             <Await
-              resolve={citiesQuery}
+              resolve={cities}
               errorElement={<p>Error loading locations</p>}
             >
-              {(citiesQuery) => (
-                <Cities
-                  items={citiesQuery.data.map((json) => new City(json))}
-                />
+              {(cities: IGetCitiesResponse) => (
+                <Cities items={cities.data.map((json) => new City(json))} />
               )}
             </Await>
           </Suspense>

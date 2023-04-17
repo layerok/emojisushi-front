@@ -19,18 +19,24 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { useCartStore } from "~hooks/use-cart-store";
 import { useAuthStore } from "~hooks/use-auth-store";
 import { useSpot } from "~hooks";
 import { IGetShippingMethodsResponse } from "~api/shipping.api";
 import { IGetPaymentMethodsResponse } from "~api/payment.api";
+import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
+import { CartProduct } from "~models";
+import { IGetCartProductsResponse } from "~api/cart.api";
 
 // todo: logout user if his token is expired
 // timer may be solution
 
 export const CheckoutForm = observer(() => {
-  const CartStore = useCartStore();
   const AuthStore = useAuthStore();
+
+  const cart = useAsyncValue() as IGetCartProductsResponse;
+  const optimisticCartTotal = useOptimisticCartTotalPrice({
+    items: cart.data.map((json) => new CartProduct(json)),
+  });
   const { paymentMethods, shippingMethods } = useLoaderData() as any;
 
   const { t } = useTranslation();
@@ -87,8 +93,8 @@ export const CheckoutForm = observer(() => {
         comment: values.comment,
       })
         .then((res) => {
+          // todo: revalidate cart, because it is empty now
           if (res.data?.success) {
-            CartStore.fetchItems();
             navigate("/thankyou");
           }
         })
@@ -189,7 +195,7 @@ export const CheckoutForm = observer(() => {
             {t("checkout.order")}
           </ButtonOutline>
           <S.Total>
-            {t("checkout.to_pay")} {CartStore.total}
+            {t("checkout.to_pay")} {optimisticCartTotal} ₴
           </S.Total>
         </FlexBox>
       </S.Control>

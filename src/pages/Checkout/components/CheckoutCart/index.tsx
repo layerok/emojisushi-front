@@ -1,22 +1,28 @@
 import * as S from "./styled";
-import { FlexBox } from "~components/FlexBox";
-import { Price } from "~components/Price";
-import { IngredientsTooltip } from "~components/tooltips/IngredientsTooltip";
-import { EditCartButton } from "~components/buttons/EditCartButton";
-import { CartModal } from "~components/modals/CartModal";
 import { observer } from "mobx-react";
+import { CartProduct } from "~models";
+import { useEffect } from "react";
+import {
+  If,
+  LogoSvg,
+  SvgIcon,
+  CartModal,
+  EditCartButton,
+  IngredientsTooltip,
+  Price,
+  FlexBox,
+} from "~components";
+import { useNavigate } from "react-router-dom";
 
-import { SvgIcon } from "~components/SvgIcon";
-import { LogoSvg } from "~components/svg/LogoSvg";
-import { CartProduct } from "~models/CartProduct";
-import React from "react";
-import { If } from "~components/If";
-import { useAsyncValue } from "react-router-dom";
-import { IGetCartProductsResponse } from "~api/cart.api";
+const CheckoutCartRaw = ({ items }: { items: CartProduct[] }) => {
+  const navigate = useNavigate();
 
-const CheckoutCartRaw = () => {
-  const cart = useAsyncValue() as IGetCartProductsResponse;
-  const items = cart.data.map((json) => new CartProduct(json));
+  useEffect(() => {
+    if (items.length === 0) {
+      // todo: redirect to previous page, not to index page
+      navigate("/");
+    }
+  }, [items]);
   return (
     <S.Wrapper>
       <div

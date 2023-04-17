@@ -1,6 +1,5 @@
-import { QueryClient, QueryOptions } from "react-query";
-import { defer, Navigate, Outlet, useLocation } from "react-router-dom";
-import AccessApi from "~api/access.api";
+import { QueryClient } from "react-query";
+import { defer, Outlet, useLocation } from "react-router-dom";
 import { useCity } from "~hooks/use-city";
 import { useSpot } from "~hooks/use-spot";
 import { citiesQuery } from "~queries/cities.query";
@@ -34,7 +33,7 @@ Object.assign(Component, {
 const qurifiedLoader = (queryClient: QueryClient) => {
   return ({ params }) => {
     return defer({
-      citiesQuery:
+      cities:
         queryClient.getQueryData(citiesQuery.queryKey) ??
         queryClient.fetchQuery(citiesQuery),
     });

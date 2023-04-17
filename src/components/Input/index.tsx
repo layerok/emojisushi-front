@@ -1,8 +1,7 @@
 import * as S from "./styled";
-import { SvgIcon } from "../SvgIcon";
-import { AsteriskSvg } from "../svg/AsteriskSvg";
 import React, { CSSProperties } from "react";
-import { If } from "~components/If";
+import { If, AsteriskSvg, SvgIcon } from "~components";
+import Skeleton from "react-loading-skeleton";
 
 export type IInputComponentProps = React.HTMLProps<HTMLInputElement> & {
   name: string;
@@ -12,6 +11,7 @@ export type IInputComponentProps = React.HTMLProps<HTMLInputElement> & {
   width?: string;
   error?: string | null;
   label?: string;
+  loading?: boolean;
   labelStyle?: CSSProperties;
   inputStyle?: CSSProperties;
   style?: CSSProperties;
@@ -28,8 +28,12 @@ export const Input = ({
   labelStyle = {},
   inputStyle = {},
   style = {},
+  loading = false,
   ...rest
 }: IInputComponentProps) => {
+  if (loading) {
+    return <Skeleton height={39.25} width={width} borderRadius={10} />;
+  }
   return (
     <S.Wrapper style={style}>
       <If condition={!!label}>
