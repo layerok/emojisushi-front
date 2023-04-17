@@ -1,8 +1,12 @@
 import * as S from "./styled";
-import { useIsTablet } from "~common/hooks/useBreakpoint";
-import { useDebounce } from "~common/hooks/useDebounce";
+import { useIsTablet, useDebounce } from "~common/hooks";
 import Skeleton from "react-loading-skeleton";
-import { Form, useLoaderData, useSubmit } from "react-router-dom";
+import {
+  Form,
+  useLoaderData,
+  useSearchParams,
+  useSubmit,
+} from "react-router-dom";
 
 export const Search = ({ loading = false }: { loading?: boolean }) => {
   const isTablet = useIsTablet();
@@ -10,6 +14,7 @@ export const Search = ({ loading = false }: { loading?: boolean }) => {
   const { q } = useLoaderData() as {
     q: string | undefined;
   };
+  const [searchParams] = useSearchParams();
 
   const debouncedFetch = useDebounce((form) => {
     const isFirstSearch = q == null;
@@ -38,6 +43,10 @@ export const Search = ({ loading = false }: { loading?: boolean }) => {
   return (
     <S.SearchContainer>
       <Form role="search">
+        {/* todo: preserve all search params, not only 'sort' param */}
+        {searchParams.has("sort") && (
+          <input type="hidden" name="sort" value={searchParams.get("sort")} />
+        )}
         <S.SearchInput
           onChange={(event) => {
             // todo: add loading indicator when searching
