@@ -30,178 +30,186 @@ import { IGetCartProductsResponse } from "~api/cart.api";
 // todo: logout user if his token is expired
 // timer may be solution
 
-export const CheckoutForm = observer(() => {
-  const AuthStore = useAuthStore();
+type TCheckoutFormProps = {
+  cart: IGetCartProductsResponse;
+  paymentMethods: IGetPaymentMethodsResponse;
+  shippingMethods: IGetShippingMethodsResponse;
+};
 
-  const cart = useAsyncValue() as IGetCartProductsResponse;
-  const optimisticCartTotal = useOptimisticCartTotalPrice({
-    items: cart.data.map((json) => new CartProduct(json)),
-  });
-  const { paymentMethods, shippingMethods } = useLoaderData() as any;
+export const CheckoutForm = observer(
+  ({ cart, paymentMethods, shippingMethods }: TCheckoutFormProps) => {
+    const AuthStore = useAuthStore();
 
-  const { t } = useTranslation();
-  const [pending, setPending] = useState(false);
-  const navigate = useNavigate();
-  const user = AuthStore.user;
-  const spot = useSpot();
-  const CheckoutSchema = Yup.object().shape({
-    phone: Yup.string()
-      .required(t("validation.required", { field: t("common.phone") }))
-      .test(
-        "is-possible-phone-number",
-        () => t("checkout.form.errors.ua_phone"),
-        (value) => {
-          const regex =
-            /^(((\+?)(38))\s?)?(([0-9]{3})|(\([0-9]{3}\)))(\-|\s)?(([0-9]{3})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{2})|([0-9]{2})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{3})|([0-9]{2})(\-|\s)?([0-9]{3})(\-|\s)?([0-9]{2}))$/;
-          return regex.test(value ?? "");
-        }
-      ),
-    email: Yup.string().email("Invalid email"),
-  });
+    const items = cart.data.map((json) => new CartProduct(json));
 
-  const formik = useFormik({
-    initialValues: {
-      name: user ? user.fullName : "",
-      email: user ? user.email : "",
-      phone: user ? user.phone : "",
-      address: "",
-      address_id: null,
-      comment: "",
-      sticks: "",
-      change: "",
-      payment_method_id: 1,
-      shipping_method_id: 1,
-    },
-    validationSchema: CheckoutSchema,
-    onSubmit: (values) => {
-      setPending(true);
-      const [firstname, lastname] = values.name.split(" ");
-      OrderApi.place({
-        phone: values.phone,
-        firstname: firstname,
-        lastname: lastname,
-        email: values.email,
-        spot_id_or_slug: spot.slug,
+    const optimisticCartTotal = useOptimisticCartTotalPrice({
+      items: items,
+    });
 
-        address: values.address,
-        address_id: values.address_id,
-        payment_method_id: values.payment_method_id,
-        shipping_method_id: values.shipping_method_id,
-
-        change: values.change,
-        sticks: +values.sticks,
-        comment: values.comment,
-      })
-        .then((res) => {
-          // todo: revalidate cart, because it is empty now
-          if (res.data?.success) {
-            navigate("/thankyou");
+    const { t } = useTranslation();
+    const [pending, setPending] = useState(false);
+    const navigate = useNavigate();
+    const user = AuthStore.user;
+    const spot = useSpot();
+    const CheckoutSchema = Yup.object().shape({
+      phone: Yup.string()
+        .required(t("validation.required", { field: t("common.phone") }))
+        .test(
+          "is-possible-phone-number",
+          () => t("checkout.form.errors.ua_phone"),
+          (value) => {
+            const regex =
+              /^(((\+?)(38))\s?)?(([0-9]{3})|(\([0-9]{3}\)))(\-|\s)?(([0-9]{3})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{2})|([0-9]{2})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{3})|([0-9]{2})(\-|\s)?([0-9]{3})(\-|\s)?([0-9]{2}))$/;
+            return regex.test(value ?? "");
           }
+        ),
+      email: Yup.string().email("Invalid email"),
+    });
+
+    const formik = useFormik({
+      initialValues: {
+        name: user ? user.fullName : "",
+        email: user ? user.email : "",
+        phone: user ? user.phone : "",
+        address: "",
+        address_id: null,
+        comment: "",
+        sticks: "",
+        change: "",
+        payment_method_id: 1,
+        shipping_method_id: 1,
+      },
+      validationSchema: CheckoutSchema,
+      onSubmit: (values) => {
+        setPending(true);
+        const [firstname, lastname] = values.name.split(" ");
+        OrderApi.place({
+          phone: values.phone,
+          firstname: firstname,
+          lastname: lastname,
+          email: values.email,
+          spot_id_or_slug: spot.slug,
+
+          address: values.address,
+          address_id: values.address_id,
+          payment_method_id: values.payment_method_id,
+          shipping_method_id: values.shipping_method_id,
+
+          change: values.change,
+          sticks: +values.sticks,
+          comment: values.comment,
         })
-        .catch((e) => {
-          if (e.response.data?.errors) {
-            formik.setErrors(e.response.data.errors);
-          }
-        })
-        .finally(() => {
-          setPending(false);
-        });
-    },
-  });
+          .then((res) => {
+            // todo: revalidate cart, because it is empty now
+            if (res.data?.success) {
+              navigate("/thankyou");
+            }
+          })
+          .catch((e) => {
+            if (e.response.data?.errors) {
+              formik.setErrors(e.response.data.errors);
+            }
+          })
+          .finally(() => {
+            setPending(false);
+          });
+      },
+    });
 
-  return (
-    <S.Form onSubmit={formik.handleSubmit}>
-      {!AuthStore.isAuthorized && (
-        <FlexBox style={{ marginBottom: "20px" }}>
-          {t("checkout.alreadyHaveAccount")}
-          <AuthModal>
-            <S.SignIn>{t("common.login")}</S.SignIn>
-          </AuthModal>
-        </FlexBox>
-      )}
+    return (
+      <S.Form onSubmit={formik.handleSubmit}>
+        {!AuthStore.isAuthorized && (
+          <FlexBox style={{ marginBottom: "20px" }}>
+            {t("checkout.alreadyHaveAccount")}
+            <AuthModal>
+              <S.SignIn>{t("common.login")}</S.SignIn>
+            </AuthModal>
+          </FlexBox>
+        )}
 
-      <Suspense fallback={"...loading shipping methods"}>
-        <Await resolve={shippingMethods}>
-          <ShippingMethods formik={formik} />
-        </Await>
-      </Suspense>
+        <Suspense fallback={"...loading shipping methods"}>
+          <Await resolve={shippingMethods}>
+            <ShippingMethods formik={formik} />
+          </Await>
+        </Suspense>
 
-      <S.Control>
-        <Input
-          name={"name"}
-          placeholder={t("common.first_name")}
-          onChange={formik.handleChange}
-          value={formik.values.name}
-        />
-      </S.Control>
-
-      {!user && (
         <S.Control>
           <Input
-            name={"email"}
-            placeholder={t("common.email")}
+            name={"name"}
+            placeholder={t("common.first_name")}
             onChange={formik.handleChange}
-            value={formik.values.email}
+            value={formik.values.name}
           />
         </S.Control>
-      )}
-      <S.Control>
-        <Input
-          name={"phone"}
-          required={true}
-          placeholder={t("common.phone")}
-          onChange={(e) => {
-            formik.handleChange(e);
-          }}
-          value={formik.values.phone}
-        />
-      </S.Control>
-      <S.Control>
-        <Input
-          name={"sticks"}
-          type={"number"}
-          min={"0"}
-          placeholder={t("checkout.form.sticks")}
-          onChange={formik.handleChange}
-          value={formik.values.sticks}
-        />
-      </S.Control>
-      <S.Control>
-        <Input
-          name={"comment"}
-          placeholder={t("checkout.form.comment")}
-          onChange={formik.handleChange}
-          value={formik.values.comment}
-        />
-      </S.Control>
-      <Suspense>
-        <Await resolve={paymentMethods}>
-          <PaymentMethods formik={formik} />
-        </Await>
-      </Suspense>
-      {Object.keys(formik.errors).length > 0 && (
-        <S.Control>
-          <S.ErrorBag>
-            {Object.keys(formik.errors).map((key, i) => (
-              <li key={key}>{formik.errors[key]}</li>
-            ))}
-          </S.ErrorBag>
-        </S.Control>
-      )}
 
-      <S.Control>
-        <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
-          <ButtonOutline loading={pending} type={"submit"} width={"160px"}>
-            {t("checkout.order")}
-          </ButtonOutline>
-          <S.Total>
-            {t("checkout.to_pay")} {optimisticCartTotal} ₴
-          </S.Total>
-        </FlexBox>
-      </S.Control>
-    </S.Form>
-  );
-});
+        {!user && (
+          <S.Control>
+            <Input
+              name={"email"}
+              placeholder={t("common.email")}
+              onChange={formik.handleChange}
+              value={formik.values.email}
+            />
+          </S.Control>
+        )}
+        <S.Control>
+          <Input
+            name={"phone"}
+            required={true}
+            placeholder={t("common.phone")}
+            onChange={(e) => {
+              formik.handleChange(e);
+            }}
+            value={formik.values.phone}
+          />
+        </S.Control>
+        <S.Control>
+          <Input
+            name={"sticks"}
+            type={"number"}
+            min={"0"}
+            placeholder={t("checkout.form.sticks")}
+            onChange={formik.handleChange}
+            value={formik.values.sticks}
+          />
+        </S.Control>
+        <S.Control>
+          <Input
+            name={"comment"}
+            placeholder={t("checkout.form.comment")}
+            onChange={formik.handleChange}
+            value={formik.values.comment}
+          />
+        </S.Control>
+        <Suspense>
+          <Await resolve={paymentMethods}>
+            <PaymentMethods formik={formik} />
+          </Await>
+        </Suspense>
+        {Object.keys(formik.errors).length > 0 && (
+          <S.Control>
+            <S.ErrorBag>
+              {Object.keys(formik.errors).map((key, i) => (
+                <li key={key}>{formik.errors[key]}</li>
+              ))}
+            </S.ErrorBag>
+          </S.Control>
+        )}
+
+        <S.Control>
+          <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
+            <ButtonOutline loading={pending} type={"submit"} width={"160px"}>
+              {t("checkout.order")}
+            </ButtonOutline>
+            <S.Total>
+              {t("checkout.to_pay")} {optimisticCartTotal} ₴
+            </S.Total>
+          </FlexBox>
+        </S.Control>
+      </S.Form>
+    );
+  }
+);
 
 const ShippingMethods = ({ formik }) => {
   const { t } = useTranslation();

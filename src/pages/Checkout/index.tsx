@@ -1,8 +1,13 @@
-import { FlexBox, Heading, AwaitedCart } from "~components";
+import { FlexBox, Heading } from "~components";
 import { CheckoutForm } from "./components/CheckoutForm";
 import { CheckoutCart } from "./components/CheckoutCart";
 import { useIsMobile } from "~common/hooks";
-import { Await, defer, useRouteLoaderData } from "react-router-dom";
+import {
+  Await,
+  defer,
+  useLoaderData,
+  useRouteLoaderData,
+} from "react-router-dom";
 import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { queryClient } from "~query-client";
@@ -17,6 +22,7 @@ const InternalCheckout = () => {
   const isMobile = useIsMobile();
   const { t } = useTranslation();
   const { cart } = useRouteLoaderData("layout") as any;
+  const { shippingMethods, paymentMethods } = useLoaderData() as any;
 
   return (
     <>
@@ -26,16 +32,26 @@ const InternalCheckout = () => {
         justifyContent={"space-between"}
         style={{ marginTop: "30px" }}
       >
-        <Suspense fallback={"...loading cart"}>
+        <Suspense fallback={"...loading"}>
           <Await resolve={cart}>
-            <AwaitedCart>
-              {({ items }) => (
-                <>
-                  <CheckoutForm />
-                  <CheckoutCart items={items} />
-                </>
-              )}
-            </AwaitedCart>
+            {(cart) => (
+              <Await resolve={shippingMethods}>
+                {(shippingMethods) => (
+                  <Await resolve={paymentMethods}>
+                    {(paymentMethods) => (
+                      <>
+                        <CheckoutForm
+                          shippingMethods={shippingMethods}
+                          paymentMethods={paymentMethods}
+                          cart={cart}
+                        />
+                        <CheckoutCart cart={cart} />
+                      </>
+                    )}
+                  </Await>
+                )}
+              </Await>
+            )}
           </Await>
         </Suspense>
       </FlexBox>

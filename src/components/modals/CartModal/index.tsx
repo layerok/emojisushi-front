@@ -20,7 +20,6 @@ import { ReactElement, Suspense, useEffect, useRef, useState } from "react";
 import { useDebounce, useBreakpoint } from "~common/hooks";
 import {
   Await,
-  FetcherWithComponents,
   useAsyncValue,
   useFetcher,
   useNavigate,
@@ -158,27 +157,18 @@ const CartItem = ({ item }: { item: CartProduct }) => {
 };
 
 export const CartModal = ({ children }) => {
-  const cartFetcher = useFetcher();
-
   const { cart } = useRouteLoaderData("layout") as LayoutLoaderReturnType;
   // todo: console.log('check why this component rerenders on window scroll');
   return (
     <Suspense fallback={children}>
       <Await resolve={cart}>
-        <AwaitedCartModal cartFetcher={cartFetcher}>
-          {children}
-        </AwaitedCartModal>
+        <AwaitedCartModal>{children}</AwaitedCartModal>
       </Await>
     </Suspense>
   );
 };
 
-const AwaitedCartModal = ({
-  children,
-}: {
-  children: ReactElement;
-  cartFetcher: FetcherWithComponents<any>;
-}) => {
+const AwaitedCartModal = ({ children }: { children: ReactElement }) => {
   const navigate = useNavigate();
   const windowSize = useWindowSize();
   const [height, setHeight] = useState(windowSize.height);

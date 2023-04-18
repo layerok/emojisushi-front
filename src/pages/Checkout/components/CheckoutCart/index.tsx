@@ -13,9 +13,12 @@ import {
   FlexBox,
 } from "~components";
 import { useNavigate } from "react-router-dom";
+import { IGetCartProductsResponse } from "~api/cart.api";
 
-const CheckoutCartRaw = ({ items }: { items: CartProduct[] }) => {
+const CheckoutCartRaw = ({ cart }: { cart: IGetCartProductsResponse }) => {
   const navigate = useNavigate();
+
+  const items = cart.data.map((json) => new CartProduct(json));
 
   useEffect(() => {
     if (items.length === 0) {
