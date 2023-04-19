@@ -1,23 +1,23 @@
-import { Modal } from "../Modal";
 import * as S from "./styled";
 import { cloneElement, useState } from "react";
-import { Input } from "../../Input";
-import { Button } from "../../buttons/Button";
-import { Checkbox } from "../../Checkbox";
-import { PasswordInput } from "../../PasswordInput";
-import { useBreakpoint, useIsMobile } from "~common/hooks/useBreakpoint";
-import { FlexBox } from "../../FlexBox";
-import AuthApi from "../../../api/auth.api";
-import authApi from "../../../api/auth.api";
+import {
+  PasswordInput,
+  Checkbox,
+  Button,
+  Input,
+  FlexBox,
+  If,
+  Modal,
+} from "~components";
+import { useIsMobile } from "~common/hooks";
+import { authApi } from "~api";
 import { observer, useLocalObservable } from "mobx-react";
 import { runInAction, transaction } from "mobx";
 import { stores } from "~stores/stores";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { FormModel } from "~common/FormModel";
-import { CheckboxInputModel, TextInputModel } from "~common/InputModel";
+import { CheckboxInputModel, TextInputModel, FormModel } from "~common/models";
 import { useTranslation } from "react-i18next";
-import { If } from "~components/If";
 import { useCity, useLang, useSpot } from "~hooks";
 
 export const AuthModal = ({ children }) => {
@@ -79,20 +79,22 @@ const SignUpForm = observer(({ setShowSignUp }) => {
         agree: new CheckboxInputModel("agree"),
       },
       onSubmit(fields, done, error) {
-        AuthApi.register({
-          email: fields.email.value,
-          password: fields.password.value,
-          password_confirmation: fields.password.value,
-          name: fields.name.value,
-          surname: fields.surname.value,
-          agree: fields.agree.checked,
-          spot_slug_or_id: spot.slug,
-        })
+        authApi
+          .register({
+            email: fields.email.value,
+            password: fields.password.value,
+            password_confirmation: fields.password.value,
+            name: fields.name.value,
+            surname: fields.surname.value,
+            agree: fields.agree.checked,
+            spot_slug_or_id: spot.slug,
+          })
           .then(() => {
-            return AuthApi.login({
-              email: fields.email.value,
-              password: fields.password.value,
-            })
+            return authApi
+              .login({
+                email: fields.email.value,
+                password: fields.password.value,
+              })
               .then((res) => {
                 const { token, expires, user } = res.data.data;
                 Cookies.set("jwt", token);
@@ -318,10 +320,11 @@ const LoginForm = ({ setShowSignUp, setShowPasswordRecovery }) => {
           setLoginError("");
           setPasswordError("");
           setLoading(true);
-          AuthApi.login({
-            email: login,
-            password: password,
-          })
+          authApi
+            .login({
+              email: login,
+              password: password,
+            })
             .then((res) => {
               const { token, expires, user } = res.data.data;
               Cookies.set("jwt", token);

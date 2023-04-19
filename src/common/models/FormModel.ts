@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { InputModel } from "~common/InputModel";
+import { InputModel } from "./InputModel";
 
 type ISubmitCallback<Fields = Record<string, InputModel>> = (
   data: Fields,

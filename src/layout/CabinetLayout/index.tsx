@@ -3,14 +3,13 @@ import { NavLink } from "~components/NavLink";
 import { ButtonDark } from "~components/buttons/Button";
 import { stores } from "~stores/stores";
 import { useTranslation } from "react-i18next";
-import { useCartStore, useCity, useLang, useSpot } from "~hooks";
+import { useCity, useLang, useSpot } from "~hooks";
 
 export const CabinetLayout = ({ children, title = "" }) => {
   const { t } = useTranslation();
   const city = useCity();
   const spot = useSpot();
   const lang = useLang();
-  const CartStore = useCartStore();
 
   return (
     <S.Wrapper>
@@ -76,7 +75,6 @@ export const CabinetLayout = ({ children, title = "" }) => {
                 <ButtonDark
                   onClick={() => {
                     stores.AuthStore.logout();
-                    CartStore.fetchItems();
                   }}
                   minWidth={"201px"}
                 >

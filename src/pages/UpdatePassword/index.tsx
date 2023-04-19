@@ -1,18 +1,13 @@
 import { observer, useLocalObservable } from "mobx-react";
-import { useEffect } from "react";
 import * as S from "./styled";
 import { CabinetLayout } from "~layout/CabinetLayout";
-import { PasswordInput } from "~components/PasswordInput";
-import { ButtonOutline } from "~components/buttons/Button";
-import { useAppStore } from "~hooks/use-app-store";
-import authApi from "~api/auth.api";
+import { ButtonOutline, PasswordInput } from "~components";
+import { authApi } from "~api";
 import { transaction } from "mobx";
-import { TextInputModel } from "~common/InputModel";
-import { FormModel } from "~common/FormModel";
+import { TextInputModel, FormModel } from "~common/models";
 import { useTranslation } from "react-i18next";
 
 export const UpdatePassword = observer(() => {
-  const AppStore = useAppStore();
   const { t } = useTranslation();
 
   const state = useLocalObservable(() => ({
@@ -56,10 +51,6 @@ export const UpdatePassword = observer(() => {
       this.showSuccessMessage = state;
     },
   }));
-
-  useEffect(() => {
-    AppStore.setLoading(false);
-  }, [AppStore]);
 
   return (
     <CabinetLayout title={t("account.changePassword.title")}>

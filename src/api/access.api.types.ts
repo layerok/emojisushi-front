@@ -1,4 +1,4 @@
-import { IFile } from "~common/types";
+import { IFile, IMeta } from "~common/types";
 
 export type ISpot = {
   id: number;
@@ -24,4 +24,15 @@ export type ICity = {
   id: number;
   slug: string;
   spots: ISpot[];
+};
+
+export type IGetCitiesParams = {
+  includeSpots?: boolean;
+  offset?: number;
+  limit?: number;
+};
+
+export type IGetCitiesResponse = {
+  data: ICity[];
+  meta: IMeta;
 };

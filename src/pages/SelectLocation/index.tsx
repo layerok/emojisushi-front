@@ -1,4 +1,3 @@
-import { observer } from "mobx-react";
 import * as S from "./styled";
 import { MapPinSvg, LogoSvg, SvgIcon } from "~components";
 import { useTranslation } from "react-i18next";
@@ -7,9 +6,9 @@ import { Cities, CitiesSkeleton } from "./components/City";
 import { Await, useRouteLoaderData } from "react-router-dom";
 import { Suspense } from "react";
 import { City } from "~models";
-import { IGetCitiesResponse } from "~api/access.api";
+import { IGetCitiesResponse } from "~api/types";
 
-export const SelectLocation = observer(() => {
+export const SelectLocation = () => {
   const { t } = useTranslation();
   const { cities } = useRouteLoaderData("ensureLocation") as any;
 
@@ -43,7 +42,7 @@ export const SelectLocation = observer(() => {
       </S.Locations.Container>
     </S.Locations>
   );
-});
+};
 
 export const Component = SelectLocation;
 

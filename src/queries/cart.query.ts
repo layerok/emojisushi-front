@@ -1,7 +1,7 @@
 import { QueryOptions } from "react-query";
-import CartApi from "~api/cart.api";
+import { cartApi } from "~api";
 
 export const cartQuery: QueryOptions = {
   queryKey: ["cart"],
-  queryFn: () => CartApi.getProducts().then((res) => res.data),
+  queryFn: () => cartApi.getProducts().then((res) => res.data),
 };

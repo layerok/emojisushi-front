@@ -11,13 +11,8 @@ import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import OrderApi from "~api/order.api";
-import {
-  Await,
-  useAsyncValue,
-  useLoaderData,
-  useNavigate,
-} from "react-router-dom";
+import { orderApi } from "~api";
+import { Await, useAsyncValue, useNavigate } from "react-router-dom";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useAuthStore } from "~hooks/use-auth-store";
 import { useSpot } from "~hooks";
@@ -83,22 +78,23 @@ export const CheckoutForm = observer(
       onSubmit: (values) => {
         setPending(true);
         const [firstname, lastname] = values.name.split(" ");
-        OrderApi.place({
-          phone: values.phone,
-          firstname: firstname,
-          lastname: lastname,
-          email: values.email,
-          spot_id_or_slug: spot.slug,
+        orderApi
+          .place({
+            phone: values.phone,
+            firstname: firstname,
+            lastname: lastname,
+            email: values.email,
+            spot_id_or_slug: spot.slug,
 
-          address: values.address,
-          address_id: values.address_id,
-          payment_method_id: values.payment_method_id,
-          shipping_method_id: values.shipping_method_id,
+            address: values.address,
+            address_id: values.address_id,
+            payment_method_id: values.payment_method_id,
+            shipping_method_id: values.shipping_method_id,
 
-          change: values.change,
-          sticks: +values.sticks,
-          comment: values.comment,
-        })
+            change: values.change,
+            sticks: +values.sticks,
+            comment: values.comment,
+          })
           .then((res) => {
             // todo: revalidate cart, because it is empty now
             if (res.data?.success) {

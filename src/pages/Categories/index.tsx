@@ -7,13 +7,12 @@ import {
 import * as S from "./styled";
 import { useSpotSlug } from "~hooks";
 import { useTranslation } from "react-i18next";
-import { SvgIcon } from "~components/SvgIcon";
-import { useIsMobile } from "~common/hooks/useBreakpoint";
-import { ToteSvg } from "~components/svg/ToteSvg";
+import { SvgIcon, ToteSvg } from "~components";
+import { useIsMobile } from "~common/hooks";
 import { Suspense } from "react";
 import { Category } from "./components/Category";
 import Skeleton from "react-loading-skeleton";
-import { IGetCategoriesResponse } from "~api/menu.api";
+import { IGetCategoriesResponse } from "~api/types";
 import { categoriesQuery } from "~queries";
 import { queryClient } from "~query-client";
 

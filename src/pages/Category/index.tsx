@@ -1,4 +1,3 @@
-import { observer } from "mobx-react";
 import {
   Await,
   defer,
@@ -17,18 +16,21 @@ import { useIsDesktop } from "~common/hooks";
 import { Sidebar } from "~pages/Category/Sidebar";
 import { Suspense } from "react";
 import { QueryClient } from "react-query";
-import { IGetProductsResponse } from "~api/menu.api";
-import { ICategory, SortKey } from "~api/menu.api.types";
+import { IGetProductsResponse } from "~api/types";
 import { queryClient } from "~query-client";
 import { Product } from "~models";
-import WishlistApi from "~api/wishlist.api";
+import { wishlistApi } from "~api";
 import { wishlistsQuery } from "~queries";
-import { IGetCategoriesResponse } from "~api/menu.api";
 import { productsQuery } from "~queries";
 import { CategoriesLoaderResolvedData } from "~pages/Categories";
-import { IGetWishlistResponse } from "~api/wishlist.api.types";
+import {
+  IGetWishlistResponse,
+  IGetCategoriesResponse,
+  ICategory,
+  SortKey,
+} from "~api/types";
 
-export const Category = observer(() => {
+export const Category = () => {
   const isDesktop = useIsDesktop();
 
   const { categories }: CategoriesLoaderResolvedData = useRouteLoaderData(
@@ -58,7 +60,7 @@ export const Category = observer(() => {
       </FlexBox>
     </>
   );
-});
+};
 
 export const AwaitedCategory = () => {
   const spotSlug = useSpotSlug();
@@ -182,7 +184,7 @@ export const categoryAction = async ({ request }) => {
   const product_id = formData.get("product_id");
   const quantity = formData.get("quantity");
 
-  const res = await WishlistApi.addItem({
+  const res = await wishlistApi.addItem({
     product_id,
     quantity,
   });

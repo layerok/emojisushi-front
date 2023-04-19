@@ -1,6 +1,6 @@
 import { client } from "~clients/client";
 
-class Order {
+export const orderApi = {
   place(params: {
     phone: string;
     firstname?: string; // це ім'я зберігаеться на сайті
@@ -19,9 +19,5 @@ class Order {
     change?: string;
   }) {
     return client.post("order/place", params);
-  }
-}
-
-const OrderApi = new Order();
-
-export default OrderApi;
+  },
+};

@@ -22,7 +22,7 @@ import {
 import { loader as ensureLocationLoader } from "~components/EnsureLocation";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
-import CartApi, { IGetCartProductsResponse } from "~api/cart.api";
+import { cartApi, IGetCartProductsResponse } from "~api";
 import { CartProduct } from "~models";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
 
@@ -116,7 +116,7 @@ const updateCartProduct = async ({ formData }: { formData: FormData }) => {
   const variant_id = formData.get("variant_id");
   const quantity = formData.get("quantity");
 
-  const res = await CartApi.addProduct({
+  const res = await cartApi.addProduct({
     product_id,
     quantity,
     variant_id,
@@ -128,7 +128,7 @@ const updateCartProduct = async ({ formData }: { formData: FormData }) => {
 
 const deleteCartProduct = async ({ formData }: { formData: FormData }) => {
   const cart_product_id = formData.get("cart_product_id");
-  const res = await CartApi.removeCartProduct(cart_product_id);
+  const res = await cartApi.removeCartProduct(cart_product_id);
   queryClient.setQueryData(cartQuery.queryKey, res.data);
   return res.data;
 };

@@ -1,18 +1,9 @@
-import { Layout } from "~layout/Layout";
-import { Heading } from "~components/Heading";
-import { CheckCircleSvg } from "~components/svg/CheckCircleSvg";
-import { SvgIcon } from "~components/SvgIcon";
+import { Heading, CheckCircleSvg, SvgIcon } from "~components";
 import * as S from "./styled";
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useAppStore } from "~hooks/use-app-store";
 import { observer } from "mobx-react";
 
 export const ThankYou = observer(() => {
-  const AppStore = useAppStore();
-  useEffect(() => {
-    AppStore.setLoading(false);
-  }, []);
   const { t } = useTranslation();
   return (
     <S.Center>

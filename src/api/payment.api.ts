@@ -9,14 +9,10 @@ export type IGetPaymentMethodsResponse = {
   };
 };
 
-class Payment {
+export const paymentApi = {
   getMethods(params = {}): Promise<AxiosResponse<IGetPaymentMethodsResponse>> {
     return client.get("payments", {
       params,
     });
-  }
-}
-
-const PaymentApi = new Payment();
-
-export default PaymentApi;
+  },
+};

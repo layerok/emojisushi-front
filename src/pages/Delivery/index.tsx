@@ -1,11 +1,9 @@
-import { Heading } from "~components/Heading";
+import { Heading, If } from "~components";
 import * as S from "./styled";
-import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
-import { If } from "~components/If";
-import { useSpot } from "~hooks/use-spot";
+import { useSpot } from "~hooks";
 
-export const Delivery = observer(() => {
+export const Delivery = () => {
   const { t } = useTranslation();
   const spot = useSpot();
 
@@ -36,7 +34,7 @@ export const Delivery = observer(() => {
       </If>
     </S.FlexContainer>
   );
-});
+};
 
 export const Component = Delivery;
 

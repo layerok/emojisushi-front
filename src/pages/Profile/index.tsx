@@ -2,12 +2,14 @@ import { CabinetLayout } from "~layout/CabinetLayout";
 import { useEffect, useState } from "react";
 import { observer, useLocalObservable } from "mobx-react";
 import * as S from "./styled";
-import { ButtonDark, ButtonOutline } from "~components/buttons/Button";
-import { Dropdown } from "~components/Dropdown";
-import { useAppStore } from "~hooks/use-app-store";
-import { Input } from "~components/Input";
-import { FlexBox } from "~components/FlexBox";
-import { useAuthStore } from "~hooks/use-auth-store";
+import {
+  FlexBox,
+  Input,
+  Dropdown,
+  ButtonDark,
+  ButtonOutline,
+} from "~components";
+import { useAuthStore } from "~hooks";
 import { useNavigate } from "react-router-dom";
 import {
   DAY_OPTIONS,
@@ -16,8 +18,7 @@ import {
   YEAR_OPTIONS,
 } from "~pages/Profile/constants";
 
-import { FormModel } from "~common/FormModel";
-import { TextInputModel } from "~common/InputModel";
+import { TextInputModel, FormModel } from "~common/models";
 import { useTranslation } from "react-i18next";
 
 const EditForm = observer(
@@ -215,13 +216,9 @@ const ProfilePreview = ({ startEditing }: { startEditing: () => void }) => {
   );
 };
 
-export const Profile = observer(() => {
-  const AppStore = useAppStore();
+export const Profile = () => {
   const [editModeEnabled, setEditModeEnabled] = useState(false);
   const { t } = useTranslation();
-  useEffect(() => {
-    AppStore.setLoading(false);
-  }, []);
 
   return (
     <CabinetLayout title={t("account.profile.title")}>
@@ -232,7 +229,7 @@ export const Profile = observer(() => {
       )}
     </CabinetLayout>
   );
-});
+};
 
 export const Component = Profile;
 Object.assign(Component, {

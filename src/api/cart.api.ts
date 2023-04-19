@@ -9,14 +9,14 @@ export type IGetCartProductsResponse = {
   totalQuantity: number;
 };
 
-class Cart {
+export const cartApi = {
   getProducts(params = {}): Promise<AxiosResponse<IGetCartProductsResponse>> {
     return client.get("cart/products", {
       params,
       // @ts-ignore
       skipAuthRefresh: true,
     });
-  }
+  },
 
   addProduct(params = {}): Promise<
     AxiosResponse<{
@@ -30,7 +30,7 @@ class Cart {
       // @ts-ignore
       skipAuthRefresh: true,
     });
-  }
+  },
 
   removeCartProduct(cart_product_id): Promise<
     AxiosResponse<{
@@ -46,7 +46,7 @@ class Cart {
       // @ts-ignore
       skipAuthRefresh: true,
     });
-  }
+  },
 
   clearCart(params = {}): Promise<
     AxiosResponse<{
@@ -60,9 +60,5 @@ class Cart {
       // @ts-ignore
       skipAuthRefresh: true,
     });
-  }
-}
-
-const CartApi = new Cart();
-
-export default CartApi;
+  },
+};

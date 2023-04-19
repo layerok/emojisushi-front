@@ -1,23 +1,26 @@
 import { ProductsGrid, FlexBox } from "~components";
-import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useSpotSlug } from "~hooks";
-import WishlistApi, { IGetWishlistResponse } from "~api/wishlist.api";
+import { wishlistApi } from "~api";
 import { Await, defer, useAsyncValue, useLoaderData } from "react-router-dom";
-import { IGetCategoriesResponse, IGetProductsResponse } from "~api/menu.api";
+import {
+  IGetCategoriesResponse,
+  IGetProductsResponse,
+  IGetWishlistResponse,
+  SortKey,
+} from "~api/types";
 import { Product } from "~models";
 import { queryClient } from "~query-client";
 import { Suspense } from "react";
 import { Sidebar } from "~pages/Category/Sidebar";
 import { CategoriesStore } from "~stores/categories.store";
 import { categoriesQuery, productsQuery, wishlistsQuery } from "~queries";
-import { SortKey } from "~api/menu.api.types";
 
 // todo: fix layout for wishlist
 
 // todo: optimisticly filter out wishlisted products
 
-export const Wishlist = observer(() => {
+export const Wishlist = () => {
   const {
     products,
     wishlists,
@@ -45,7 +48,7 @@ export const Wishlist = observer(() => {
       </Suspense>
     </FlexBox>
   );
-});
+};
 
 export const AwaitedSidebar = () => {
   const spotSlug = useSpotSlug();
@@ -134,7 +137,7 @@ export const wishlistAction = async ({ request }) => {
   const product_id = formData.get("product_id");
   const quantity = formData.get("quantity");
 
-  const res = await WishlistApi.addItem({
+  const res = await wishlistApi.addItem({
     product_id,
     quantity,
   });

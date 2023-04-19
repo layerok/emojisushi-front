@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import authApi from "../api/auth.api";
+import { authApi } from "~api";
 import { RootStore } from "~stores/stores";
 import {
   IAddress,

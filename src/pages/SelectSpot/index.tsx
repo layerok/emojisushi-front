@@ -1,8 +1,7 @@
-import { observer } from "mobx-react";
 import { useNavigate } from "react-router-dom";
-import { useCity } from "~hooks/use-city";
+import { useCity } from "~hooks";
 
-export const SelectSpot = observer(() => {
+export const SelectSpot = () => {
   const city = useCity();
   const navigate = useNavigate();
   return (
@@ -17,4 +16,4 @@ export const SelectSpot = observer(() => {
       </ul>
     </div>
   );
-});
+};

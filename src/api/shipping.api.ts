@@ -9,14 +9,10 @@ export type IGetShippingMethodsResponse = {
   };
 };
 
-class Shipping {
+export const shippingApi = {
   getMethods(params = {}): Promise<AxiosResponse<IGetShippingMethodsResponse>> {
     return client.get("shipping", {
       params,
     });
-  }
-}
-
-const ShippingApi = new Shipping();
-
-export default ShippingApi;
+  },
+};

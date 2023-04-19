@@ -1,12 +1,10 @@
 import { Navigate } from "react-router-dom";
-import { ProtectedRoute } from "~components/ProtectedRoute";
+import { ProtectedRoute } from "~components";
 import { Layout, layoutAction, layoutLoader } from "~layout/Layout";
 import {
   EnsureLocation,
   loader as ensureLocationLoader,
 } from "~components/EnsureLocation";
-import { cartUpdateAction } from "~pages/Cart/UpdateCartPage/UpdateCartPage";
-import { cartDeleteAction } from "~pages/Cart/DeleteCartPage/DeleteCartPage";
 import { categoriesLoader } from "~pages/Categories";
 
 export const routes = [
@@ -110,19 +108,6 @@ export const routes = [
                       {
                         path: ":code",
                         lazy: () => import("~pages/ResetPassword"),
-                      },
-                    ],
-                  },
-                  {
-                    path: "cart",
-                    children: [
-                      {
-                        path: "update",
-                        action: cartUpdateAction,
-                      },
-                      {
-                        path: "delete",
-                        action: cartDeleteAction,
                       },
                     ],
                   },

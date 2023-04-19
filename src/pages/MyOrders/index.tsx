@@ -1,21 +1,14 @@
 import { observer } from "mobx-react";
-import React, { useEffect } from "react";
 import { CabinetLayout } from "~layout/CabinetLayout";
-import { AccordionItem } from "~components/AccordionItem";
-import { useAppStore } from "~hooks/use-app-store";
 import { useTranslation } from "react-i18next";
 import { useAuthStore } from "~hooks/use-auth-store";
-import { If } from "~components/If";
+import { If, AccordionItem } from "~components";
 
 export const MyOrders = observer(() => {
-  const AppStore = useAppStore();
   const { t } = useTranslation();
   const AuthStore = useAuthStore();
   const user = AuthStore.user;
   const customer = user.customer;
-  useEffect(() => {
-    AppStore.setLoading(false);
-  }, []);
 
   return (
     <CabinetLayout title={t("account.orders.title")}>

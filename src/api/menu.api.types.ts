@@ -212,3 +212,19 @@ export type IGetProductsParams = {
   wishlist_id?: number;
   wishlist?: boolean;
 };
+
+export type IGetCategoriesResponse = {
+  data: ICategory[];
+  meta: {
+    total: number;
+    offset: Nullable<number>;
+    limit: Nullable<number>;
+  };
+};
+
+export type IGetProductsResponse = {
+  data: IProduct[];
+  total: number;
+  sort_options: string[];
+  filters: IFilter[];
+};

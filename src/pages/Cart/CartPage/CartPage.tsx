@@ -1,5 +1,5 @@
 import { defer } from "react-router-dom";
-import { cartQuery } from "~queries/cart.query";
+import { cartQuery } from "~queries";
 import { queryClient } from "~query-client";
 
 export const loader = () => {

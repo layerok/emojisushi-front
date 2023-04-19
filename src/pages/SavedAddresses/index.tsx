@@ -1,18 +1,17 @@
 import { observer, useLocalObservable } from "mobx-react";
 import { CabinetLayout } from "~layout/CabinetLayout";
-import { useEffect } from "react";
 import * as S from "./styled";
-import { Input } from "~components/Input";
-import { SvgIcon } from "~components/SvgIcon";
-import { CloseSvg } from "~components/svg/CloseSvg";
-import { HeartSvg } from "~components/svg/HeartSvg";
-import { ButtonOutline } from "~components/buttons/Button";
-import { useAppStore } from "~hooks/use-app-store";
+import {
+  ButtonOutline,
+  HeartSvg,
+  CloseSvg,
+  Input,
+  SpinnerSvg,
+  SvgIcon,
+} from "~components";
 import { useAuthStore } from "~hooks/use-auth-store";
-import { TextInputModel } from "~common/InputModel";
-import { FormModel } from "~common/FormModel";
-import authApi from "~api/auth.api";
-import { SpinnerSvg } from "~components/svg/SpinnerSvg";
+import { TextInputModel, FormModel } from "~common/models";
+import { authApi } from "~api";
 import { IAddress } from "~api/auth.api.types";
 import { useTranslation } from "react-i18next";
 
@@ -20,7 +19,6 @@ const Address = observer(({ address }: { address: IAddress }) => {
   const AuthStore = useAuthStore();
   const user = AuthStore.user;
   const customer = user.customer;
-  const { t } = useTranslation();
 
   const state = useLocalObservable(() => ({
     loading: false,
@@ -108,7 +106,6 @@ const Address = observer(({ address }: { address: IAddress }) => {
 });
 
 export const SavedAddresses = observer(() => {
-  const AppStore = useAppStore();
   const AuthStore = useAuthStore();
   const user = AuthStore.user;
   const customer = user.customer;
@@ -139,10 +136,6 @@ export const SavedAddresses = observer(() => {
       },
     }),
   }));
-
-  useEffect(() => {
-    AppStore.setLoading(false);
-  }, []);
 
   return (
     <CabinetLayout title={t("account.addresses.title")}>

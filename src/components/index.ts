@@ -28,3 +28,7 @@ export * from "./Dropdown";
 export * from "./If";
 export * from "./Heading";
 export * from "./AwaitedCart";
+export * from "./PasswordInput";
+export * from "./Checkbox";
+export * from "./AccordionItem";
+export * from "./ProtectedRoute";

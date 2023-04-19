@@ -11,7 +11,7 @@ import {
 import { useCitySlug, useLang, useSpotSlug } from "~hooks";
 import Skeleton from "react-loading-skeleton";
 import { Suspense } from "react";
-import { IGetCitiesResponse } from "~api/access.api";
+import { IGetCitiesResponse } from "~api/access.api.types";
 type LocationPickerPopoverProps = {
   offset?: number;
   backgroundColor?: string;

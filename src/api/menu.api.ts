@@ -1,31 +1,13 @@
 import { client } from "~clients/client";
 import { AxiosResponse } from "axios";
 import {
-  ICategory,
-  IFilter,
   IGetCategoriesParams,
+  IGetCategoriesResponse,
   IGetProductsParams,
-  IProduct,
+  IGetProductsResponse,
 } from "~api/menu.api.types";
-import { Nullable } from "~common/types";
 
-export type IGetCategoriesResponse = {
-  data: ICategory[];
-  meta: {
-    total: number;
-    offset: Nullable<number>;
-    limit: Nullable<number>;
-  };
-};
-
-export type IGetProductsResponse = {
-  data: IProduct[];
-  total: number;
-  sort_options: string[];
-  filters: IFilter[];
-};
-
-class Menu {
+export const menuApi = {
   getProducts(
     params: IGetProductsParams = {}
   ): Promise<AxiosResponse<IGetProductsResponse>> {
@@ -34,7 +16,7 @@ class Menu {
       // @ts-ignore
       skipAuthRefresh: true,
     });
-  }
+  },
   getCategories(
     params: IGetCategoriesParams = {}
   ): Promise<AxiosResponse<IGetCategoriesResponse>> {
@@ -43,7 +25,7 @@ class Menu {
       // @ts-ignore
       skipAuthRefresh: true,
     });
-  }
+  },
 
   getIngredients(params = {}) {
     return client.get("ingredients", {
@@ -51,9 +33,5 @@ class Menu {
       // @ts-ignore
       skipAuthRefresh: true,
     });
-  }
-}
-
-const MenuApi = new Menu();
-
-export default MenuApi;
+  },
+};

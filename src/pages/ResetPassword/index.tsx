@@ -1,16 +1,12 @@
 import { Layout } from "~layout/Layout";
 import { useState } from "react";
-import { observer } from "mobx-react";
-import { Input } from "~components/Input";
 import * as S from "./styled";
-import { FlexBox } from "~components/FlexBox";
-import { Button } from "~components/buttons/Button";
+import { FlexBox, Button, Input, PasswordInput } from "~components";
 import { useParams } from "react-router-dom";
-import authApi from "../../api/auth.api";
-import { PasswordInput } from "~components/PasswordInput";
+import { authApi } from "~api";
 import { useTranslation } from "react-i18next";
 
-export const ResetPassword = observer(() => {
+export const ResetPassword = () => {
   const { t } = useTranslation();
   const { code: codeFromQuery } = useParams();
   const [code, setCode] = useState(codeFromQuery);
@@ -107,7 +103,7 @@ export const ResetPassword = observer(() => {
       </FlexBox>
     </Layout>
   );
-});
+};
 
 export const Component = ResetPassword;
 Object.assign(Component, {
