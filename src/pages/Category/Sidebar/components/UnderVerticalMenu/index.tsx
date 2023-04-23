@@ -1,9 +1,13 @@
 import * as S from "./styled";
 import { SvgIcon, SvgButton, Favorite, TelegramModal } from "~components";
 import { TelegramSvg, InstagramSvg } from "~components/svg";
-import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
+import {
+  useMatch,
+  useNavigate,
+  useParams,
+  useResolvedPath,
+} from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useLang, useCitySlug, useSpotSlug } from "~hooks";
 import Skeleton from "react-loading-skeleton";
 
 type UnderVerticalMenuProps = {
@@ -16,9 +20,7 @@ export const UnderVerticalMenu = ({
   const navigate = useNavigate();
   let resolved = useResolvedPath("/wishlist");
   let match = useMatch({ path: resolved.pathname, end: true });
-  const citySlug = useCitySlug();
-  const spotSlug = useSpotSlug();
-  const lang = useLang();
+  const { lang, spotSlug, citySlug } = useParams();
   const { t } = useTranslation();
   return (
     <>

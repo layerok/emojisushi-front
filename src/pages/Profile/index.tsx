@@ -9,8 +9,11 @@ import {
   ButtonDark,
   ButtonOutline,
 } from "~components";
-import { useAuthStore } from "~hooks";
-import { useNavigate } from "react-router-dom";
+import {
+  useLoaderData,
+  useNavigate,
+  useRouteLoaderData,
+} from "react-router-dom";
 import {
   DAY_OPTIONS,
   MONTH_OPTIONS,
@@ -20,11 +23,15 @@ import {
 
 import { TextInputModel, FormModel } from "~common/models";
 import { useTranslation } from "react-i18next";
+import { User } from "~models";
+import { requireUser } from "~utils/loader.utils";
 
 const EditForm = observer(
   ({ cancelEditing }: { cancelEditing: () => void }) => {
-    const AuthStore = useAuthStore();
-    const user = AuthStore.user;
+    const { user: userJson } = useLoaderData() as Awaited<
+      ReturnType<typeof loader>
+    >;
+    const user = new User(userJson);
     const customer = user.customer;
     const { t } = useTranslation();
 
@@ -88,7 +95,7 @@ const EditForm = observer(
             style={{ width: "calc(50% - 10px)" }}
             label={t("common.email")}
             name={"email"}
-            value={AuthStore.user.email}
+            value={user.email}
             disabled={true}
           />
           <Input
@@ -172,7 +179,10 @@ const EditForm = observer(
 );
 
 const ProfilePreview = ({ startEditing }: { startEditing: () => void }) => {
-  const AuthStore = useAuthStore();
+  const { user: userJson } = useLoaderData() as Awaited<
+    ReturnType<typeof loader>
+  >;
+  const user = new User(userJson);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -180,16 +190,16 @@ const ProfilePreview = ({ startEditing }: { startEditing: () => void }) => {
     <S.Properties>
       <S.Property>
         <S.Property.Label>{t("common.first_name")}</S.Property.Label>
-        <S.Property.Value>{AuthStore.user.fullName}</S.Property.Value>
+        <S.Property.Value>{user.fullName}</S.Property.Value>
       </S.Property>
 
       <S.Property>
         <S.Property.Label>{t("common.email")}</S.Property.Label>
-        <S.Property.Value>{AuthStore.user.email}</S.Property.Value>
+        <S.Property.Value>{user.email}</S.Property.Value>
       </S.Property>
       <S.Property>
         <S.Property.Label>{t("common.phone")}</S.Property.Label>
-        <S.Property.Value>{AuthStore.user.phone}</S.Property.Value>
+        <S.Property.Value>{user.phone}</S.Property.Value>
       </S.Property>
 
       <S.BtnGroup>
@@ -235,3 +245,11 @@ export const Component = Profile;
 Object.assign(Component, {
   displayName: "LazyProfile",
 });
+
+export const loader = async () => {
+  const user = await requireUser();
+
+  return {
+    user,
+  };
+};

@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { UserSvg } from "../../svg/UserSvg";
 import { AuthModal } from "../AuthModal";
 import { LanguageSelector } from "../../LanguageSelector";
-import { useCity, useLang, useSpot } from "~hooks";
+import { useParams } from "react-router-dom";
 
 export const MobMenuModal = ({ children }) => {
   const overlayStyles = {
@@ -22,9 +22,7 @@ export const MobMenuModal = ({ children }) => {
     zIndex: 999999,
   };
   const { t } = useTranslation();
-  const city = useCity();
-  const spot = useSpot();
-  const lang = useLang();
+  const { lang, spotSlug, citySlug } = useParams();
   return (
     <BaseModal
       overlayStyles={overlayStyles}
@@ -57,8 +55,7 @@ export const MobMenuModal = ({ children }) => {
           <S.Item>
             <NavLinkUnderline
               to={
-                "/" +
-                [lang, city.slug, spot.slug, "dostavka-i-oplata"].join("/")
+                "/" + [lang, citySlug, spotSlug, "dostavka-i-oplata"].join("/")
               }
             >
               <div>{t("mobMenuModal.delivery")}</div>
@@ -67,7 +64,7 @@ export const MobMenuModal = ({ children }) => {
           <S.Item>
             <FlexBox justifyContent={"space-between"} alignItems={"center"}>
               <NavLinkUnderline
-                to={"/" + [lang, city.slug, spot.slug, "wishlist"].join("/")}
+                to={"/" + [lang, citySlug, spotSlug, "wishlist"].join("/")}
               >
                 <div>{t("common.favorite")}</div>
               </NavLinkUnderline>

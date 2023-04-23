@@ -1,16 +1,16 @@
-import { LocationPickerPopover } from "~components/popovers/LocationPickerPopover";
 import * as S from "./styled";
-import { NavLinkUnderline } from "~components/NavLinkUnderline";
-import { ContactsModal } from "~components/modals/ContactsModal";
+import {
+  ContactsModal,
+  NavLinkUnderline,
+  LocationPickerPopover,
+} from "~components";
 import { useTranslation } from "react-i18next";
-import { useCitySlug, useLang, useSpotSlug } from "~hooks";
 import Skeleton from "react-loading-skeleton";
 import { Logo } from "../Logo";
+import { useParams } from "react-router-dom";
 
 export const Left = ({ loading = false }: { loading?: boolean }) => {
-  const citySlug = useCitySlug();
-  const spotSlug = useSpotSlug();
-  const lang = useLang();
+  const { lang, spotSlug, citySlug } = useParams();
   const { t } = useTranslation();
 
   return (

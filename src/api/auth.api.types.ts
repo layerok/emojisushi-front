@@ -190,7 +190,7 @@ export type IOrderState = {
   deleted_at: Nullable<string>;
 };
 
-export type IOfflineMallCustomer = {
+export type ICustomer = {
   firstname: string;
   lastname: string;
   is_guest: boolean;
@@ -200,8 +200,8 @@ export type IOfflineMallCustomer = {
   orders: IOrder[];
 };
 
-export type IOfflineMallUser = IRainLabUser & {
+export type IUser = IRainLabUser & {
   offline_mall_customer_group_id: number | null;
   phone: string | null;
-  customer: IOfflineMallCustomer | null;
+  customer: ICustomer | null;
 };

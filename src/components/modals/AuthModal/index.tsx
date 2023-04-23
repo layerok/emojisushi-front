@@ -12,13 +12,11 @@ import {
 import { useIsMobile } from "~common/hooks";
 import { authApi } from "~api";
 import { observer, useLocalObservable } from "mobx-react";
-import { runInAction, transaction } from "mobx";
-import { stores } from "~stores/stores";
-import { useNavigate } from "react-router-dom";
+import { runInAction } from "mobx";
+import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import { CheckboxInputModel, TextInputModel, FormModel } from "~common/models";
 import { useTranslation } from "react-i18next";
-import { useCity, useLang, useSpot } from "~hooks";
 
 export const AuthModal = ({ children }) => {
   const isMobile = useIsMobile();
@@ -65,9 +63,7 @@ const SignUpForm = observer(({ setShowSignUp }) => {
   const isMobile = useIsMobile();
 
   const navigate = useNavigate();
-  const city = useCity();
-  const spot = useSpot();
-  const lang = useLang();
+  const { lang, spotSlug, citySlug } = useParams();
 
   const state = useLocalObservable(() => ({
     form: new FormModel({
@@ -87,7 +83,7 @@ const SignUpForm = observer(({ setShowSignUp }) => {
             name: fields.name.value,
             surname: fields.surname.value,
             agree: fields.agree.checked,
-            spot_slug_or_id: spot.slug,
+            spot_slug_or_id: spotSlug,
           })
           .then(() => {
             return authApi
@@ -98,14 +94,10 @@ const SignUpForm = observer(({ setShowSignUp }) => {
               .then((res) => {
                 const { token, expires, user } = res.data.data;
                 Cookies.set("jwt", token);
-                transaction(() => {
-                  stores.AuthStore.setAuthToken(token);
-                  stores.AuthStore.userFromJson(user);
-                  stores.AuthStore.setExpires(expires);
-                });
+
                 navigate(
                   "/" +
-                    [lang, city.slug, spot.slug, "account", "profile"].join("/")
+                    [lang, citySlug, spotSlug, "account", "profile"].join("/")
                 );
               })
               .finally(() => {
@@ -268,9 +260,7 @@ const LoginForm = ({ setShowSignUp, setShowPasswordRecovery }) => {
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
   const isMobile = useIsMobile();
-  const city = useCity();
-  const spot = useSpot();
-  const lang = useLang();
+  const { lang, spotSlug, citySlug } = useParams();
 
   return (
     <S.LoginForm
@@ -328,14 +318,8 @@ const LoginForm = ({ setShowSignUp, setShowPasswordRecovery }) => {
             .then((res) => {
               const { token, expires, user } = res.data.data;
               Cookies.set("jwt", token);
-              transaction(() => {
-                stores.AuthStore.setAuthToken(token);
-                stores.AuthStore.userFromJson(user);
-                stores.AuthStore.setExpires(expires);
-              });
               navigate(
-                "/" +
-                  [lang, city.slug, spot.slug, "account", "profile"].join("/")
+                "/" + [lang, citySlug, spotSlug, "account", "profile"].join("/")
               );
             })
             .catch((e) => {

@@ -4,19 +4,15 @@ import { Modal } from "../Modal";
 import { observer } from "mobx-react";
 import { MapPinSvg } from "../../svg/MapPinSvg";
 import { useTranslation } from "react-i18next";
-import { useSpot } from "~hooks/use-spot";
-import { useNavigate } from "react-router-dom";
-import { useCity } from "~hooks/use-city";
-import { useCities, useLang } from "~hooks";
+import { useNavigate, useParams } from "react-router-dom";
+import { useCities } from "~hooks";
 
 export const SpotsModalRaw = ({ open = false }) => {
   const navigate = useNavigate();
 
   const cities = useCities();
   const { t } = useTranslation();
-  const selectedSpot = useSpot();
-  const selectedCity = useCity();
-  const lang = useLang();
+  const { lang, spotSlug, citySlug } = useParams();
 
   return (
     <Modal
@@ -42,10 +38,7 @@ export const SpotsModalRaw = ({ open = false }) => {
 
                       close();
                     }}
-                    selected={
-                      selectedSpot.slug === spot.slug &&
-                      selectedCity.slug === city.slug
-                    }
+                    selected={spotSlug === spot.slug && citySlug === city.slug}
                   >
                     {city.name}, {spot.name}
                   </S.Item>

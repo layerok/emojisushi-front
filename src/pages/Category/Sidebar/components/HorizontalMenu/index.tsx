@@ -3,7 +3,6 @@ import { HorizontalArrowsSvg } from "~components/svg";
 import { FlexBox, SvgIcon } from "~components";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useCitySlug, useLang, useSpotSlug } from "~hooks";
 import { observer } from "mobx-react";
 import { ICategory } from "~api/menu.api.types";
 import Skeleton from "react-loading-skeleton";
@@ -64,9 +63,7 @@ type TCategoryProps = {
 
 const Category = ({ loading = false, category }: TCategoryProps) => {
   const { categorySlug } = useParams();
-  const citySlug = useCitySlug();
-  const spotSlug = useSpotSlug();
-  const lang = useLang();
+  const { lang, spotSlug, citySlug } = useParams();
   const active = categorySlug === category?.slug;
   const nextSegments = [lang, citySlug, spotSlug, "category", category?.slug];
 

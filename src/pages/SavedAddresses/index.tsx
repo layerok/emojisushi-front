@@ -9,15 +9,17 @@ import {
   SpinnerSvg,
   SvgIcon,
 } from "~components";
-import { useAuthStore } from "~hooks/use-auth-store";
 import { TextInputModel, FormModel } from "~common/models";
 import { authApi } from "~api";
 import { IAddress } from "~api/auth.api.types";
 import { useTranslation } from "react-i18next";
+import { useRouteLoaderData } from "react-router-dom";
+import { User } from "~models";
+import { requireUser } from "~utils/loader.utils";
 
 const Address = observer(({ address }: { address: IAddress }) => {
-  const AuthStore = useAuthStore();
-  const user = AuthStore.user;
+  const { user: userJson } = useRouteLoaderData("protectedCabinet") as any;
+  const user = new User(userJson);
   const customer = user.customer;
 
   const state = useLocalObservable(() => ({
@@ -63,7 +65,7 @@ const Address = observer(({ address }: { address: IAddress }) => {
                   authApi
                     .makeAddressDefault(address.id)
                     .then(() => {
-                      AuthStore.fetchUser().finally(() => {
+                      authApi.fetchUser().finally(() => {
                         state.setLoading(false);
                       });
                     })
@@ -86,7 +88,7 @@ const Address = observer(({ address }: { address: IAddress }) => {
                   authApi
                     .deleteAddress(address.id)
                     .then(() => {
-                      AuthStore.fetchUser().finally(() => {
+                      authApi.fetchUser().finally(() => {
                         state.setLoading(false);
                       });
                     })
@@ -106,8 +108,8 @@ const Address = observer(({ address }: { address: IAddress }) => {
 });
 
 export const SavedAddresses = observer(() => {
-  const AuthStore = useAuthStore();
-  const user = AuthStore.user;
+  const { user: userJson } = useRouteLoaderData("protectedCabinet") as any;
+  const user = new User(userJson);
   const customer = user.customer;
   const { t } = useTranslation();
   const state = useLocalObservable(() => ({
@@ -125,7 +127,7 @@ export const SavedAddresses = observer(() => {
             two_letters_country_code: "UA",
           })
           .then(() => {
-            return AuthStore.fetchUser().finally(() => {
+            return authApi.fetchUser().finally(() => {
               done(true);
             });
           })
@@ -165,3 +167,11 @@ export const Component = SavedAddresses;
 Object.assign(Component, {
   displayName: "LazySavedAddresses",
 });
+
+export const loader = async () => {
+  const user = await requireUser();
+
+  return {
+    user,
+  };
+};

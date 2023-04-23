@@ -1,9 +1,9 @@
 import * as S from "./styled";
 import { observer } from "mobx-react";
-import { useLang, useSpotSlug, useCitySlug } from "~hooks";
 import { useCategorySlug } from "~hooks/use-category-slug";
 import { ICategory } from "~api/menu.api.types";
 import Skeleton from "react-loading-skeleton";
+import { useParams } from "react-router-dom";
 
 type TCategoryProps = {
   active?: boolean;
@@ -16,9 +16,7 @@ const Category = ({
   category,
   loading = false,
 }: TCategoryProps) => {
-  const citySlug = useCitySlug();
-  const spotSlug = useSpotSlug();
-  const lang = useLang();
+  const { lang, spotSlug, citySlug } = useParams();
 
   if (loading) {
     return (

@@ -1,16 +1,10 @@
-import { useFetcher } from "react-router-dom";
-import { useLang } from "./use-lang";
-import { useSpotSlug } from "./use-spot-slug";
-import { useCitySlug } from "./use-city-slug";
+import { useFetcher, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { CategoryLoaderResolvedDeferredData } from "~pages/Category";
 
 export const useLoadProducts = () => {
   const fetcher = useFetcher<CategoryLoaderResolvedDeferredData>();
-  const lang = useLang();
-  const spotSlug = useSpotSlug();
-  const citySlug = useCitySlug();
-
+  const { lang, spotSlug, citySlug } = useParams();
   useEffect(() => {
     fetcher.load(`/${lang}/${citySlug}/${spotSlug}/category`);
   }, []);

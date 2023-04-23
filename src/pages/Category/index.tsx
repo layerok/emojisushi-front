@@ -9,8 +9,7 @@ import {
   useRouteLoaderData,
   useSearchParams,
 } from "react-router-dom";
-import { useLang, useSpotSlug } from "~hooks";
-import { FlexBox, ProductsGrid } from "~components";
+import { FlexBox, ProductsGrid, RestaurantClosed } from "~components";
 import { Banner } from "./Banner";
 import { useIsDesktop } from "~common/hooks";
 import { Sidebar } from "~pages/Category/Sidebar";
@@ -29,6 +28,8 @@ import {
   ICategory,
   SortKey,
 } from "~api/types";
+import { isClosed } from "~utils/time.utils";
+import { appConfig } from "~config/app";
 
 export const Category = () => {
   const isDesktop = useIsDesktop();
@@ -40,6 +41,11 @@ export const Category = () => {
   // if (!selectedCategory && categories.length > 0) {
   //   return <Navigate to={categories[0].slug} />;
   // }
+
+  const closed = isClosed({
+    start: appConfig.workingHours[0],
+    end: appConfig.workingHours[1],
+  });
 
   return (
     <>
@@ -58,12 +64,13 @@ export const Category = () => {
           </Await>
         </Suspense>
       </FlexBox>
+      <RestaurantClosed open={closed} />
     </>
   );
 };
 
 export const AwaitedCategory = () => {
-  const spotSlug = useSpotSlug();
+  const { spotSlug } = useParams();
   const categories = useAsyncValue() as IGetCategoriesResponse;
 
   const publishedCategories = categories.data
@@ -95,7 +102,7 @@ export const AwaitedProducts = ({
   const [searchParams] = useSearchParams();
   const limit = searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
   const navigation = useNavigation();
-  const lang = useLang();
+  const { lang } = useParams();
   const navigate = useNavigate();
 
   const selectedCategory = categories.find((category) => {

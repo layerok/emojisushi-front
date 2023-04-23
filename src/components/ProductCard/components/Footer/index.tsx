@@ -1,8 +1,7 @@
 import * as S from "./styled";
 import { Price, AddToCartButton } from "~components";
 import { Product, Variant, CartProduct } from "~models";
-import { useFetcher } from "react-router-dom";
-import { useCitySlug, useLang, useSpotSlug } from "~hooks";
+import { useFetcher, useParams } from "react-router-dom";
 
 type TFooterProps = {
   loading?: boolean;
@@ -34,9 +33,7 @@ export const Footer = ({
   const newPrice = product?.getNewPrice(variant)?.price_formatted;
   const fetcher = useFetcher();
 
-  const lang = useLang();
-  const spot = useSpotSlug();
-  const city = useCitySlug();
+  const { lang, spotSlug, citySlug } = useParams();
 
   let count = cartProduct?.quantity || 0;
 
@@ -59,7 +56,7 @@ export const Footer = ({
         params.cart_product_id = cartProduct.id + "";
       }
       fetcher.submit(params, {
-        action: "/" + [lang, city, spot].join("/"),
+        action: "/" + [lang, citySlug, spotSlug].join("/"),
         method: "post",
       });
     };

@@ -1,15 +1,12 @@
 import * as S from "./styled";
-import { NavLink } from "~components/NavLink";
-import { ButtonDark } from "~components/buttons/Button";
-import { stores } from "~stores/stores";
+import { ButtonDark, NavLink } from "~components";
 import { useTranslation } from "react-i18next";
-import { useCity, useLang, useSpot } from "~hooks";
+import Cookies from "js-cookie";
+import { useParams } from "react-router-dom";
 
 export const CabinetLayout = ({ children, title = "" }) => {
   const { t } = useTranslation();
-  const city = useCity();
-  const spot = useSpot();
-  const lang = useLang();
+  const { lang, spotSlug, citySlug } = useParams();
 
   return (
     <S.Wrapper>
@@ -24,9 +21,9 @@ export const CabinetLayout = ({ children, title = "" }) => {
                   "/" +
                   lang +
                   "/" +
-                  city.slug +
+                  citySlug +
                   "/" +
-                  spot.slug +
+                  spotSlug +
                   "/account/profile"
                 }
               >
@@ -37,9 +34,9 @@ export const CabinetLayout = ({ children, title = "" }) => {
                   "/" +
                   lang +
                   "/" +
-                  city.slug +
+                  citySlug +
                   "/" +
-                  spot.slug +
+                  spotSlug +
                   "/account/orders"
                 }
               >
@@ -50,9 +47,9 @@ export const CabinetLayout = ({ children, title = "" }) => {
                   "/" +
                   lang +
                   "/" +
-                  city.slug +
+                  citySlug +
                   "/" +
-                  spot.slug +
+                  spotSlug +
                   "/account/recover-password"
                 }
               >
@@ -63,9 +60,9 @@ export const CabinetLayout = ({ children, title = "" }) => {
                   "/" +
                   lang +
                   "/" +
-                  city.slug +
+                  citySlug +
                   "/" +
-                  spot.slug +
+                  spotSlug +
                   "/account/saved-addresses"
                 }
               >
@@ -74,7 +71,7 @@ export const CabinetLayout = ({ children, title = "" }) => {
               <div style={{ marginTop: "10px" }}>
                 <ButtonDark
                   onClick={() => {
-                    stores.AuthStore.logout();
+                    Cookies.remove("jwt");
                   }}
                   minWidth={"201px"}
                 >

@@ -31,4 +31,5 @@ export * from "./AwaitedCart";
 export * from "./PasswordInput";
 export * from "./Checkbox";
 export * from "./AccordionItem";
-export * from "./ProtectedRoute";
+export * from "./NavLinkUnderline";
+export * from "./NavLink";

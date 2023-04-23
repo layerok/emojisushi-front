@@ -1,13 +1,12 @@
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
-import { MapPinSvg } from "~components/svg/MapPinSvg";
-import { SvgIcon } from "~components/SvgIcon";
-import { useLang } from "~hooks";
+import { SvgIcon, MapPinSvg } from "~components";
 import { Spot as SpotModel } from "~models";
 import * as S from "./styled";
+import { useParams } from "react-router-dom";
 
 export const Spot = ({ spot }: { spot?: SpotModel }) => {
-  const lang = useLang();
+  const { lang } = useParams();
   const { t } = useTranslation();
   return (
     <S.Link

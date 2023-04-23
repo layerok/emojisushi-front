@@ -2,10 +2,10 @@ import {
   Await,
   defer,
   useAsyncValue,
+  useParams,
   useRouteLoaderData,
 } from "react-router-dom";
 import * as S from "./styled";
-import { useSpotSlug } from "~hooks";
 import { useTranslation } from "react-i18next";
 import { SvgIcon, ToteSvg } from "~components";
 import { useIsMobile } from "~common/hooks";
@@ -17,7 +17,7 @@ import { categoriesQuery } from "~queries";
 import { queryClient } from "~query-client";
 
 const Categories = () => {
-  const spotSlug = useSpotSlug();
+  const { spotSlug } = useParams();
   const categories = useAsyncValue() as IGetCategoriesResponse;
 
   const publishedCategories = categories.data

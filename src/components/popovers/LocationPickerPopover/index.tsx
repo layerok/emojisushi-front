@@ -4,11 +4,11 @@ import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg";
 import {
   Await,
   useAsyncValue,
+  useLoaderData,
   useLocation,
   useNavigate,
-  useRouteLoaderData,
+  useParams,
 } from "react-router-dom";
-import { useCitySlug, useLang, useSpotSlug } from "~hooks";
 import Skeleton from "react-loading-skeleton";
 import { Suspense } from "react";
 import { IGetCitiesResponse } from "~api/access.api.types";
@@ -21,7 +21,7 @@ type LocationPickerPopoverProps = {
 export const LocationPickerPopover = (props: LocationPickerPopoverProps) => {
   const { width = "211px" } = props;
 
-  const { cities } = useRouteLoaderData("ensureLocation") as any;
+  const { cities } = useLoaderData() as any;
 
   return (
     <Suspense fallback={<Skeleton width={width} height={40} />}>
@@ -37,9 +37,7 @@ const AwaitedLocationPickerPopover = (props: LocationPickerPopoverProps) => {
 
   const { offset = 0, backgroundColor = "#171717", width = "211px" } = props;
   const navigate = useNavigate();
-  const lang = useLang();
-  const spotSlug = useSpotSlug();
-  const citySlug = useCitySlug();
+  const { lang, citySlug, spotSlug } = useParams();
 
   const options = cities.data
     .map((city) =>

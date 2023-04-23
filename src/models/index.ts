@@ -1,8 +1,8 @@
-import { CartProduct } from "./CartProduct";
-import { City } from "./City";
-import { Product } from "./Product";
-import { Spot } from "./Spot";
-import { Variant } from "./Variant";
-import { Category } from "./Category";
-
-export { City, Spot, Product, Variant, CartProduct, Category };
+export * from "./CartProduct";
+export * from "./City";
+export * from "./Product";
+export * from "./Spot";
+export * from "./Variant";
+export * from "./Category";
+export * from "./User";
+export * from "./Customer";

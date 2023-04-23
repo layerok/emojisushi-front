@@ -1,7 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import LocalStorageService from "../services/local-storage.service";
-import { stores } from "~stores/stores";
 import i18n from "~i18n";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 
@@ -81,21 +80,21 @@ client.interceptors.request.use((config = {}) => {
 //     return Promise.reject(error);
 // });
 
-const refreshAuthLogic = (failedRequest) => {
-  const jwt = Cookies.get("jwt");
-  if (!jwt) {
-    return Promise.resolve();
-  }
-  return client.post("auth/refresh").then((tokenRefreshResponse) => {
-    Cookies.set("jwt", tokenRefreshResponse.data.token);
-    failedRequest.response.config.headers["Authorization"] =
-      "Bearer " + tokenRefreshResponse.data.token;
-    return Promise.resolve();
-  });
-};
+// const refreshAuthLogic = (failedRequest) => {
+//   const jwt = Cookies.get("jwt");
+//   if (!jwt) {
+//     return Promise.resolve();
+//   }
+//   return client.post("auth/refresh").then((tokenRefreshResponse) => {
+//     Cookies.set("jwt", tokenRefreshResponse.data.token);
+//     failedRequest.response.config.headers["Authorization"] =
+//       "Bearer " + tokenRefreshResponse.data.token;
+//     return Promise.resolve();
+//   });
+// };
 
-createAuthRefreshInterceptor(client, refreshAuthLogic, {
-  statusCodes: [401, 406],
-});
+// createAuthRefreshInterceptor(client, refreshAuthLogic, {
+//   statusCodes: [401, 406],
+// });
 
 export { client };

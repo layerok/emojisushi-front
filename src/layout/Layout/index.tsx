@@ -1,57 +1,33 @@
 import { Header } from "../Header";
 import { Footer } from "../Footer";
 import * as S from "./styled";
-import { isClosed } from "~utils/time.utils";
 import { useWindowScroll } from "react-use";
 import {
   StickyToTopBtn,
   Sticky,
   TinyCartButton,
   CartModal,
-  RestaurantClosed,
   Container,
 } from "~components";
 import { ReactNode, Suspense } from "react";
-import {
-  Await,
-  defer,
-  Outlet,
-  useLoaderData,
-  useRouteLoaderData,
-} from "react-router-dom";
-import { loader as ensureLocationLoader } from "~components/EnsureLocation";
+import { Await, Outlet, redirect, useLoaderData } from "react-router-dom";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
-import { cartApi, IGetCartProductsResponse } from "~api";
+import { authApi, cartApi, IGetCartProductsResponse } from "~api";
 import { CartProduct } from "~models";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
+import { IUser } from "~api/auth.api.types";
+import { citiesQuery } from "~queries/cities.query";
+import { IGetCitiesResponse } from "~api/access.api.types";
 
-export const Layout = ({
-  children,
-  withRestaurantClosedModal = false,
-  mainProps = {},
-  containerProps = {},
-  ...rest
-}: {
-  children?: ReactNode;
-  withRestaurantClosedModal?: boolean;
-  mainProps?: Record<string, any>;
-  containerProps?: Record<string, any>;
-}) => {
+export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
   const { x, y } = useWindowScroll();
 
-  const { cart } = useLoaderData() as LayoutLoaderReturnType;
+  const { cart } = useLoaderData() as LayoutRouteLoaderData;
 
-  const { cities } = useRouteLoaderData("ensureLocation") as ReturnType<
-    typeof ensureLocationLoader
-  >["data"];
+  const { cities } = useLoaderData() as any;
 
   const showStickyCart = y > 100;
-
-  const closed = isClosed({
-    start: [10, 0],
-    end: [21, 15],
-  });
 
   const items = (cart?.data || []).map((json) => new CartProduct(json));
   const cartTotal = useOptimisticCartTotalPrice({ items });
@@ -64,8 +40,8 @@ export const Layout = ({
         </Await>
       </Suspense>
 
-      <S.Main {...mainProps}>
-        <Container {...containerProps}>
+      <S.Main>
+        <Container>
           <S.Content>
             <Outlet />
           </S.Content>
@@ -77,8 +53,6 @@ export const Layout = ({
           <Footer />
         </Await>
       </Suspense>
-
-      {withRestaurantClosedModal && <RestaurantClosed open={closed} />}
 
       <Suspense>
         <Await resolve={cart}>
@@ -99,16 +73,54 @@ export const Layout = ({
 
 export const Component = Layout;
 
-export type LayoutLoaderReturnType = {
+export type LayoutRouteLoaderData = {
   cart: IGetCartProductsResponse;
+  user: IUser | null;
 };
 
-export const layoutLoader = () => {
-  return defer({
-    cart:
-      queryClient.getQueryData(cartQuery.queryKey) ??
-      queryClient.fetchQuery(cartQuery),
-  } as LayoutLoaderReturnType);
+export const layoutLoader = async ({ params }) => {
+  // todo: maybe create endpoint for fetching specific city, to check if it exists
+  const fetchUserPromise = authApi.fetchUser();
+
+  const fetchCitiesPromise =
+    queryClient.getQueryData<IGetCitiesResponse>(citiesQuery.queryKey) ??
+    queryClient.fetchQuery(citiesQuery);
+
+  const fetchCartPromise =
+    queryClient.getQueryData(cartQuery.queryKey) ??
+    (await queryClient.fetchQuery(cartQuery));
+
+  const cities = await fetchCitiesPromise;
+
+  const city = cities.data.find((city) => city.slug === params.citySlug);
+
+  if (!city) {
+    throw redirect("/" + params.lang);
+  }
+
+  const spot = city.spots.find((spot) => spot.slug === params.spotSlug);
+
+  if (!spot) {
+    throw redirect("/" + params.lang);
+  }
+
+  const user = await fetchUserPromise
+    .then((res) => res.data)
+    .catch((e) => {
+      // // 406 simply means that user is not authorzied, no need to throw error in this case
+      if (![406].includes(e?.response.status)) {
+        throw e;
+      }
+      return null;
+    });
+
+  const cart = await fetchCartPromise;
+
+  return {
+    cart,
+    user,
+    cities,
+  } as LayoutRouteLoaderData;
 };
 
 const updateCartProduct = async ({ formData }: { formData: FormData }) => {

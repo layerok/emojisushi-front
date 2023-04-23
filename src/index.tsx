@@ -1,26 +1,18 @@
-import { stores } from "~stores/stores";
 import * as ReactDOM from "react-dom/client";
 import "./index.css";
 import { App } from "~App";
 import reportWebVitals from "./reportWebVitals";
-import { Provider } from "mobx-react";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
 import { sessionService } from "~services/session.service";
-import LocalStorageService from "~services/local-storage.service";
 
 sessionService.init();
-
-LocalStorageService.remove("city");
-LocalStorageService.remove("spot");
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <I18nextProvider i18n={i18n}>
-    <Provider {...stores}>
-      <App />
-    </Provider>
+    <App />
   </I18nextProvider>
 );
 

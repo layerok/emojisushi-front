@@ -1,13 +1,16 @@
-import { observer } from "mobx-react";
 import { CabinetLayout } from "~layout/CabinetLayout";
 import { useTranslation } from "react-i18next";
-import { useAuthStore } from "~hooks/use-auth-store";
 import { If, AccordionItem } from "~components";
+import { useLoaderData } from "react-router-dom";
+import { User } from "~models";
+import { requireUser } from "~utils/loader.utils";
 
-export const MyOrders = observer(() => {
+export const MyOrders = () => {
   const { t } = useTranslation();
-  const AuthStore = useAuthStore();
-  const user = AuthStore.user;
+  const { user: userJson } = useLoaderData() as Awaited<
+    ReturnType<typeof loader>
+  >;
+  const user = new User(userJson);
   const customer = user.customer;
 
   return (
@@ -28,9 +31,17 @@ export const MyOrders = observer(() => {
       </If>
     </CabinetLayout>
   );
-});
+};
 
 export const Component = MyOrders;
 Object.assign(Component, {
   displayName: "LazyMyOrders",
 });
+
+export const loader = async () => {
+  const user = await requireUser();
+
+  return {
+    user,
+  };
+};

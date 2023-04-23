@@ -1,7 +1,7 @@
 import { QueryOptions } from "react-query";
 import { accessApi } from "~api";
 
-export const citiesQuery: QueryOptions = {
+export const citiesQuery = {
   queryFn: () =>
     accessApi
       .getCities({

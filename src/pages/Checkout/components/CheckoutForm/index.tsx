@@ -12,15 +12,20 @@ import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { orderApi } from "~api";
-import { Await, useAsyncValue, useNavigate } from "react-router-dom";
+import {
+  Await,
+  useAsyncValue,
+  useNavigate,
+  useRouteLoaderData,
+} from "react-router-dom";
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { useAuthStore } from "~hooks/use-auth-store";
 import { useSpot } from "~hooks";
 import { IGetShippingMethodsResponse } from "~api/shipping.api";
 import { IGetPaymentMethodsResponse } from "~api/payment.api";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
-import { CartProduct } from "~models";
+import { CartProduct, User } from "~models";
 import { IGetCartProductsResponse } from "~api/cart.api";
+import { LayoutRouteLoaderData } from "~layout/Layout";
 
 // todo: logout user if his token is expired
 // timer may be solution
@@ -33,7 +38,11 @@ type TCheckoutFormProps = {
 
 export const CheckoutForm = observer(
   ({ cart, paymentMethods, shippingMethods }: TCheckoutFormProps) => {
-    const AuthStore = useAuthStore();
+    const { user: userJson } = useRouteLoaderData(
+      "layout"
+    ) as LayoutRouteLoaderData;
+
+    const user = userJson ? new User(userJson) : null;
 
     const items = cart.data.map((json) => new CartProduct(json));
 
@@ -44,7 +53,7 @@ export const CheckoutForm = observer(
     const { t } = useTranslation();
     const [pending, setPending] = useState(false);
     const navigate = useNavigate();
-    const user = AuthStore.user;
+
     const spot = useSpot();
     const CheckoutSchema = Yup.object().shape({
       phone: Yup.string()
@@ -114,7 +123,7 @@ export const CheckoutForm = observer(
 
     return (
       <S.Form onSubmit={formik.handleSubmit}>
-        {!AuthStore.isAuthorized && (
+        {!user && (
           <FlexBox style={{ marginBottom: "20px" }}>
             {t("checkout.alreadyHaveAccount")}
             <AuthModal>
@@ -277,8 +286,10 @@ const PaymentMethods = ({ formik }) => {
 
 const AddressDropdownOrInput = ({ formik }) => {
   const { t } = useTranslation();
-  const AuthStore = useAuthStore();
-  const user = AuthStore.user;
+  const { user: userJson } = useRouteLoaderData(
+    "layout"
+  ) as LayoutRouteLoaderData;
+  const user = new User(userJson);
 
   const [showTextAddress, setShowTextAddress] = useState(
     (user && !user.customer.hasAddresses) || !user
@@ -332,8 +343,10 @@ const AddressDropdownOrInput = ({ formik }) => {
 };
 
 const AddressDropdown = observer(({ formik }) => {
-  const AuthStore = useAuthStore();
-  const user = AuthStore.user;
+  const { user: userJson } = useRouteLoaderData(
+    "layout"
+  ) as LayoutRouteLoaderData;
+  const user = new User(userJson);
 
   const options = useMemo(
     () =>

@@ -3,14 +3,16 @@ import { MapPinSvg, LogoSvg, SvgIcon } from "~components";
 import { useTranslation } from "react-i18next";
 import { useIsMobile } from "~common/hooks";
 import { Cities, CitiesSkeleton } from "./components/City";
-import { Await, useRouteLoaderData } from "react-router-dom";
+import { Await, defer, useLoaderData } from "react-router-dom";
 import { Suspense } from "react";
 import { City } from "~models";
 import { IGetCitiesResponse } from "~api/types";
+import { queryClient } from "~query-client";
+import { citiesQuery } from "~queries/cities.query";
 
 export const SelectLocation = () => {
   const { t } = useTranslation();
-  const { cities } = useRouteLoaderData("ensureLocation") as any;
+  const { cities } = useLoaderData() as any;
 
   const isMobile = useIsMobile();
   return (
@@ -49,3 +51,11 @@ export const Component = SelectLocation;
 Object.assign(Component, {
   displayName: "LazySelectLocation",
 });
+
+export const loader = () => {
+  return defer({
+    cities:
+      queryClient.getQueryData(citiesQuery.queryKey) ??
+      queryClient.fetchQuery(citiesQuery),
+  });
+};

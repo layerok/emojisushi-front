@@ -1,6 +1,6 @@
 import { client } from "~clients/client";
 import { AxiosResponse } from "axios";
-import { IOfflineMallUser } from "~api/auth.api.types";
+import { IUser } from "~api/auth.api.types";
 
 export const authApi = {
   register(
@@ -33,7 +33,7 @@ export const authApi = {
   login(credentials: { email: string; password: string }): Promise<
     AxiosResponse<{
       data: {
-        user: IOfflineMallUser;
+        user: IUser;
         expires: string;
         token: string;
       };
@@ -61,7 +61,7 @@ export const authApi = {
     return client.post("user/password", data);
   },
 
-  fetchUser(): Promise<AxiosResponse<IOfflineMallUser>> {
+  fetchUser(): Promise<AxiosResponse<IUser>> {
     const config = {
       params: {},
     };

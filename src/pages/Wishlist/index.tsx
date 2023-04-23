@@ -1,8 +1,13 @@
 import { ProductsGrid, FlexBox } from "~components";
 import { useTranslation } from "react-i18next";
-import { useSpotSlug } from "~hooks";
 import { wishlistApi } from "~api";
-import { Await, defer, useAsyncValue, useLoaderData } from "react-router-dom";
+import {
+  Await,
+  defer,
+  useAsyncValue,
+  useLoaderData,
+  useParams,
+} from "react-router-dom";
 import {
   IGetCategoriesResponse,
   IGetProductsResponse,
@@ -51,7 +56,7 @@ export const Wishlist = () => {
 };
 
 export const AwaitedSidebar = () => {
-  const spotSlug = useSpotSlug();
+  const { spotSlug } = useParams();
 
   const categories = useAsyncValue() as IGetCategoriesResponse;
 
@@ -73,7 +78,7 @@ const AwaitedWishlist = ({
   const handleLoadMore = () => {
     // todo: implement load more
   };
-  const spotSlug = useSpotSlug();
+  const { spotSlug } = useParams();
 
   const items = products.data
     .map((json) => new Product(json))

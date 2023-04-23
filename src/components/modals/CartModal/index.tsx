@@ -23,12 +23,12 @@ import {
   useAsyncValue,
   useFetcher,
   useNavigate,
+  useParams,
   useRouteLoaderData,
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CartProduct } from "~models";
-import { useCity, useCitySlug, useLang, useSpot, useSpotSlug } from "~hooks";
-import { LayoutLoaderReturnType } from "~layout/Layout";
+import { LayoutRouteLoaderData } from "~layout/Layout";
 import { useDeletingCartProducts } from "~hooks/use-layout-fetchers";
 import { IGetCartProductsResponse } from "~api/cart.api";
 import {
@@ -42,9 +42,7 @@ const CartItem = ({ item }: { item: CartProduct }) => {
   const newPrice = item.product.getNewPrice(item.variant)?.price_formatted;
   const oldPrice = item.product.getOldPrice(item.variant)?.price_formatted;
   const nameWithMods = item.nameWithMods;
-  const lang = useLang();
-  const spotSlug = useSpotSlug();
-  const citySlug = useCitySlug();
+  const { lang, spotSlug, citySlug } = useParams();
   const isDeleting = useDeletingCartProducts().includes(item.id);
   const [open, setOpen] = useState(false);
   let count = item.quantity;
@@ -157,7 +155,7 @@ const CartItem = ({ item }: { item: CartProduct }) => {
 };
 
 export const CartModal = ({ children }) => {
-  const { cart } = useRouteLoaderData("layout") as LayoutLoaderReturnType;
+  const { cart } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
   // todo: console.log('check why this component rerenders on window scroll');
   return (
     <Suspense fallback={children}>
@@ -172,11 +170,7 @@ const AwaitedCartModal = ({ children }: { children: ReactElement }) => {
   const navigate = useNavigate();
   const windowSize = useWindowSize();
   const [height, setHeight] = useState(windowSize.height);
-  const city = useCity();
-  const spot = useSpot();
-  const lang = useLang();
-  const citySlug = useCitySlug();
-  const spotSlug = useSpotSlug();
+  const { lang, spotSlug, citySlug } = useParams();
   // todo: add type
   const cart = useAsyncValue() as IGetCartProductsResponse;
 

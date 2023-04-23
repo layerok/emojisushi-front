@@ -10,18 +10,20 @@ import {
   CartButton,
   TinyCartButton,
 } from "~components";
-import { stores } from "~stores/stores";
-import { Await, useNavigate, useRouteLoaderData } from "react-router-dom";
-import { useCitySlug, useLang, useSpotSlug } from "~hooks";
+import {
+  Await,
+  useNavigate,
+  useParams,
+  useRouteLoaderData,
+} from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { Suspense } from "react";
 import { AwaitedCart } from "~components/AwaitedCart";
+import { LayoutRouteLoaderData } from "~layout/Layout";
 
 export const Right = ({ loading = false }: { loading?: boolean }) => {
-  const citySlug = useCitySlug();
-  const spotSlug = useSpotSlug();
-  const lang = useLang();
-  const { cart } = useRouteLoaderData("layout") as any;
+  const { lang, spotSlug, citySlug } = useParams();
+  const { cart, user } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
   const navigate = useNavigate();
 
   return (
@@ -70,7 +72,7 @@ export const Right = ({ loading = false }: { loading?: boolean }) => {
         )}
       </S.BurgerBtn>
 
-      {stores.AuthStore.isAuthorized ? (
+      {user ? (
         loading ? (
           <Skeleton width={40} height={40} />
         ) : (
