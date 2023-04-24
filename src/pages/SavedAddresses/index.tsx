@@ -13,12 +13,12 @@ import { TextInputModel, FormModel } from "~common/models";
 import { authApi } from "~api";
 import { IAddress } from "~api/auth.api.types";
 import { useTranslation } from "react-i18next";
-import { useRouteLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { User } from "~models";
 import { requireUser } from "~utils/loader.utils";
 
 const Address = observer(({ address }: { address: IAddress }) => {
-  const { user: userJson } = useRouteLoaderData("protectedCabinet") as any;
+  const { user: userJson } = useLoaderData() as any;
   const user = new User(userJson);
   const customer = user.customer;
 
@@ -108,7 +108,7 @@ const Address = observer(({ address }: { address: IAddress }) => {
 });
 
 export const SavedAddresses = observer(() => {
-  const { user: userJson } = useRouteLoaderData("protectedCabinet") as any;
+  const { user: userJson } = useLoaderData() as any;
   const user = new User(userJson);
   const customer = user.customer;
   const { t } = useTranslation();
