@@ -35,6 +35,7 @@ export const AuthModal = ({ children }) => {
         <S.Wrapper>
           <If condition={showLoginForm}>
             <LoginForm
+              close={close}
               setShowSignUp={setShowSignUp}
               setShowPasswordRecovery={setShowPasswordRecovery}
             />
@@ -251,7 +252,7 @@ const PasswordRecoveryForm = observer(({ setShowPasswordRecovery }) => {
   );
 });
 
-const LoginForm = ({ setShowSignUp, setShowPasswordRecovery }) => {
+const LoginForm = ({ setShowSignUp, setShowPasswordRecovery, close }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [login, setLogin] = useState("");
@@ -338,6 +339,7 @@ const LoginForm = ({ setShowSignUp, setShowPasswordRecovery }) => {
               }
             })
             .finally(() => {
+              close();
               setLoading(false);
             });
         }}
