@@ -4,7 +4,7 @@ import { FlexBox, SvgIcon } from "~components";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { observer } from "mobx-react";
-import { ICategory } from "~api/menu.api.types";
+import { ICategory } from "~api/types";
 import Skeleton from "react-loading-skeleton";
 import { clamp } from "~utils/utils";
 

@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { IAddress, ICustomer } from "~api/auth.api.types";
+import { IAddress, ICustomer } from "~api/types";
 import { User } from "./User";
 
 export class Customer {

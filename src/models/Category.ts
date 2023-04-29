@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { ICategory } from "~api/menu.api.types";
+import { ICategory } from "~api/types";
 
 export class Category {
   json: ICategory;

@@ -15,7 +15,6 @@ import { useIsDesktop } from "~common/hooks";
 import { Sidebar } from "~pages/Category/Sidebar";
 import { Suspense } from "react";
 import { QueryClient } from "react-query";
-import { IGetProductsResponse } from "~api/types";
 import { queryClient } from "~query-client";
 import { Product } from "~models";
 import { wishlistApi } from "~api";
@@ -23,9 +22,10 @@ import { wishlistsQuery } from "~queries";
 import { productsQuery } from "~queries";
 import { CategoriesLoaderResolvedData } from "~pages/Categories";
 import {
-  IGetWishlistResponse,
-  IGetCategoriesResponse,
+  IGetWishlistRes,
+  IGetCategoriesRes,
   ICategory,
+  IGetProductsRes,
   SortKey,
 } from "~api/types";
 import { isClosed } from "~utils/time.utils";
@@ -71,7 +71,7 @@ export const Category = () => {
 
 export const AwaitedCategory = () => {
   const { spotSlug } = useParams();
-  const categories = useAsyncValue() as IGetCategoriesResponse;
+  const categories = useAsyncValue() as IGetCategoriesRes;
 
   const publishedCategories = categories.data
     .filter((category) => category.published)
@@ -119,7 +119,7 @@ export const AwaitedProducts = ({
         nextLimit
     );
   };
-  const productsQuery = useAsyncValue() as IGetProductsResponse;
+  const productsQuery = useAsyncValue() as IGetProductsRes;
   const items = productsQuery.data
     .map((product) => new Product(product))
     .filter((product: Product) => {
@@ -150,8 +150,8 @@ Object.assign(Component, {
 export const PRODUCTS_LIMIT_STEP = 25;
 
 export type CategoryLoaderResolvedDeferredData = {
-  products: IGetProductsResponse;
-  wishlists: IGetWishlistResponse;
+  products: IGetProductsRes;
+  wishlists: IGetWishlistRes;
   q: string | undefined;
   sort: string | undefined;
 };

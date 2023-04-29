@@ -10,3 +10,10 @@ export type IPaymentMethod = {
   fee_percentage: null | number;
   pdf_partial: null | string;
 };
+
+export type IGetPaymentMethodsRes = {
+  data: IPaymentMethod[];
+  meta: {
+    total: number;
+  };
+};

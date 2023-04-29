@@ -6,7 +6,7 @@ import { Cities, CitiesSkeleton } from "./components/City";
 import { Await, defer, useLoaderData } from "react-router-dom";
 import { Suspense } from "react";
 import { City } from "~models";
-import { IGetCitiesResponse } from "~api/types";
+import { IGetCitiesRes } from "~api/types";
 import { queryClient } from "~query-client";
 import { citiesQuery } from "~queries/cities.query";
 
@@ -35,7 +35,7 @@ export const SelectLocation = () => {
               resolve={cities}
               errorElement={<p>Error loading locations</p>}
             >
-              {(cities: IGetCitiesResponse) => (
+              {(cities: IGetCitiesRes) => (
                 <Cities items={cities.data.map((json) => new City(json))} />
               )}
             </Await>

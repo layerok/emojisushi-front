@@ -1,7 +1,7 @@
-import { ICartProduct } from "~api/cart.api.types";
+import { ICartProduct } from "~api/types";
 import { makeAutoObservable } from "mobx";
-import { Product } from "~models/Product";
-import { Variant } from "~models/Variant";
+import { Product } from "./Product";
+import { Variant } from "./Variant";
 
 export class CartProduct {
   json: ICartProduct;

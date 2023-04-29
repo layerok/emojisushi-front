@@ -1,7 +1,7 @@
-import { IPrice, IShippingMethod } from "~api/shipping.api.types";
-import { IPaymentMethod } from "~api/payment.api.types";
-import { Nullable } from "~common/types";
-import { IProduct } from "~api/menu.api.types";
+import { IPrice, IShippingMethod } from "../shipping/shipping.api.types";
+import { IPaymentMethod } from "../payment/payment.api.types";
+import { IProduct } from "../menu/menu.api.types";
+import { Nullable } from "../common/common.api.types";
 
 export type IRainLabUser = {
   id: number;

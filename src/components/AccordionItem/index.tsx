@@ -4,7 +4,7 @@ import { FlexBox } from "../FlexBox";
 import { CaretUpSvg } from "../svg/CaretUpSvg";
 import { Collapsible } from "../Collapsible";
 import { useBreakpoint } from "~common/hooks/useBreakpoint";
-import { IOrder } from "~api/auth.api.types";
+import { IOrder } from "~api/types";
 import { LogoSvg } from "~components/svg/LogoSvg";
 import { useTranslation } from "react-i18next";
 import { Product } from "~models/Product";

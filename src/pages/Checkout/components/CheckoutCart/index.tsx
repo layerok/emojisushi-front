@@ -13,9 +13,9 @@ import {
   FlexBox,
 } from "~components";
 import { useNavigate } from "react-router-dom";
-import { IGetCartProductsResponse } from "~api/cart.api";
+import { IGetCartRes } from "~api/types";
 
-const CheckoutCartRaw = ({ cart }: { cart: IGetCartProductsResponse }) => {
+const CheckoutCartRaw = ({ cart }: { cart: IGetCartRes }) => {
   const navigate = useNavigate();
 
   const items = cart.data.map((json) => new CartProduct(json));

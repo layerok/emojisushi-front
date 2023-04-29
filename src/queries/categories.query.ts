@@ -1,4 +1,4 @@
-import { IGetCategoriesParams } from "~api/menu.api.types";
+import { IGetCategoriesParams } from "~api/types";
 import { QueryOptions } from "react-query";
 import { menuApi } from "~api";
 

@@ -1,5 +1,5 @@
 import Skeleton from "react-loading-skeleton";
-import { ICategory } from "~api/menu.api.types";
+import { ICategory } from "~api/types";
 import { SvgIcon, LogoSvg } from "~components";
 import * as S from "./styled";
 import { useParams } from "react-router-dom";

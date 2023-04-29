@@ -1,9 +1,6 @@
 import Cookies from "js-cookie";
-import { LoaderFunctionArgs, redirect } from "react-router-dom";
+import { redirect } from "react-router-dom";
 import { authApi } from "~api";
-import { IGetCitiesResponse } from "~api/access.api.types";
-import { citiesQuery } from "~queries/cities.query";
-import { queryClient } from "~query-client";
 
 export const requireUser = async () => {
   const token = Cookies.get("jwt");

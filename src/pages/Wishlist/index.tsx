@@ -9,9 +9,9 @@ import {
   useParams,
 } from "react-router-dom";
 import {
-  IGetCategoriesResponse,
-  IGetProductsResponse,
-  IGetWishlistResponse,
+  IGetCategoriesRes,
+  IGetProductsRes,
+  IGetWishlistRes,
   SortKey,
 } from "~api/types";
 import { Product } from "~models";
@@ -58,7 +58,7 @@ export const Wishlist = () => {
 export const AwaitedSidebar = () => {
   const { spotSlug } = useParams();
 
-  const categories = useAsyncValue() as IGetCategoriesResponse;
+  const categories = useAsyncValue() as IGetCategoriesRes;
 
   const categoriesStore = new CategoriesStore(categories.data);
   const publishedCategories = categoriesStore.getPublishedItems(spotSlug);
@@ -70,8 +70,8 @@ const AwaitedWishlist = ({
   products,
   wishlists,
 }: {
-  products: IGetProductsResponse;
-  wishlists: IGetWishlistResponse;
+  products: IGetProductsRes;
+  wishlists: IGetWishlistRes;
 }) => {
   const { t } = useTranslation();
 
@@ -97,9 +97,9 @@ const AwaitedWishlist = ({
 };
 
 export type WishlistLoaderResolvedDeferredData = {
-  products: IGetProductsResponse;
-  wishlists: IGetWishlistResponse;
-  categories: IGetCategoriesResponse;
+  products: IGetProductsRes;
+  wishlists: IGetWishlistRes;
+  categories: IGetCategoriesRes;
   q: string | undefined;
 };
 

@@ -1,7 +1,7 @@
 import * as S from "./styled";
 import { useIsDesktop, useIsMobile } from "~common/hooks";
 import { FlexBox } from "~components";
-import { ICategory } from "~api/menu.api.types";
+import { ICategory } from "~api/types";
 import { Search } from "./components/Search";
 import {
   HorizontalMenu,

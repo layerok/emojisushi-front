@@ -1,7 +1,7 @@
 import * as S from "./styled";
 import { observer } from "mobx-react";
 import { useCategorySlug } from "~hooks/use-category-slug";
-import { ICategory } from "~api/menu.api.types";
+import { ICategory } from "~api/types";
 import Skeleton from "react-loading-skeleton";
 import { useParams } from "react-router-dom";
 

@@ -20,20 +20,22 @@ import {
 } from "react-router-dom";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSpot } from "~hooks";
-import { IGetShippingMethodsResponse } from "~api/shipping.api";
-import { IGetPaymentMethodsResponse } from "~api/payment.api";
+import {
+  IGetShippingMethodsRes,
+  IGetPaymentMethodsRes,
+  IGetCartRes,
+} from "~api/types";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
 import { CartProduct, User } from "~models";
-import { IGetCartProductsResponse } from "~api/cart.api";
 import { LayoutRouteLoaderData } from "~layout/Layout";
 
 // todo: logout user if his token is expired
 // timer may be solution
 
 type TCheckoutFormProps = {
-  cart: IGetCartProductsResponse;
-  paymentMethods: IGetPaymentMethodsResponse;
-  shippingMethods: IGetShippingMethodsResponse;
+  cart: IGetCartRes;
+  paymentMethods: IGetPaymentMethodsRes;
+  shippingMethods: IGetShippingMethodsRes;
 };
 
 export const CheckoutForm = observer(
@@ -219,7 +221,7 @@ export const CheckoutForm = observer(
 const ShippingMethods = ({ formik }) => {
   const { t } = useTranslation();
 
-  const shippingMethods = useAsyncValue() as IGetShippingMethodsResponse;
+  const shippingMethods = useAsyncValue() as IGetShippingMethodsRes;
   const getShippingType = () => {
     return shippingMethods.data.find(
       (item) => item.id === +formik.values.shipping_method_id
@@ -249,7 +251,7 @@ const ShippingMethods = ({ formik }) => {
 
 const PaymentMethods = ({ formik }) => {
   const { t } = useTranslation();
-  const paymentMethods = useAsyncValue() as IGetPaymentMethodsResponse;
+  const paymentMethods = useAsyncValue() as IGetPaymentMethodsRes;
   const getPaymentType = () => {
     return paymentMethods.data.find(
       (item) => item.id === +formik.values.payment_method_id

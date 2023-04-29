@@ -1,4 +1,4 @@
-import { IShippingMethod } from "./shipping.api.types";
+import { IShippingMethod } from "../shipping/shipping.api.types";
 
 export type IWishlistItem = {
   id: number;
@@ -23,4 +23,4 @@ export type IWishlist = {
   shipping_method: null | IShippingMethod;
 };
 
-export type IGetWishlistResponse = IWishlist[];
+export type IGetWishlistRes = IWishlist[];

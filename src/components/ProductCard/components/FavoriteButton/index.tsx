@@ -10,7 +10,7 @@ import { CartProduct, Product } from "~models";
 import * as S from "./styled";
 import { Favorite } from "~components";
 import Skeleton from "react-loading-skeleton";
-import { IWishlist } from "~api/wishlist.api.types";
+import { IWishlist } from "~api/types";
 
 type FavoriteButtonProps = {
   cartProduct?: CartProduct;

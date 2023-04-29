@@ -1,5 +1,5 @@
 import { menuApi } from "~api";
-import { IGetProductsParams } from "~api/menu.api.types";
+import { IGetProductsParams } from "~api/types";
 import { QueryOptions } from "react-query";
 
 export const productsQuery = (params: IGetProductsParams): QueryOptions => ({

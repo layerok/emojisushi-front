@@ -13,12 +13,11 @@ import { ReactNode, Suspense } from "react";
 import { Await, Outlet, redirect, useLoaderData } from "react-router-dom";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
-import { authApi, cartApi, IGetCartProductsResponse } from "~api";
+import { authApi, cartApi } from "~api";
 import { CartProduct } from "~models";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
-import { IUser } from "~api/auth.api.types";
+import { IUser, IGetCartRes, IGetCitiesRes } from "~api/types";
 import { citiesQuery } from "~queries/cities.query";
-import { IGetCitiesResponse } from "~api/access.api.types";
 
 export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
   const { x, y } = useWindowScroll();
@@ -74,7 +73,7 @@ export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
 export const Component = Layout;
 
 export type LayoutRouteLoaderData = {
-  cart: IGetCartProductsResponse;
+  cart: IGetCartRes;
   user: IUser | null;
 };
 
@@ -83,8 +82,8 @@ export const layoutLoader = async ({ params }) => {
   const fetchUserPromise = authApi.fetchUser();
 
   const fetchCitiesPromise =
-    queryClient.getQueryData<IGetCitiesResponse>(citiesQuery.queryKey) ??
-    queryClient.fetchQuery(citiesQuery);
+    queryClient.getQueryData<IGetCitiesRes>(citiesQuery.queryKey) ??
+    queryClient.fetchQuery<IGetCitiesRes>(citiesQuery);
 
   const fetchCartPromise =
     queryClient.getQueryData(cartQuery.queryKey) ??

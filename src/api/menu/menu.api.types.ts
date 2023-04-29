@@ -1,6 +1,6 @@
-import { IFile, Nullable } from "~common/types";
-import { IPrice } from "~api/shipping.api.types";
-import { ISpot } from "./access.api.types";
+import { IFile, Nullable } from "../common/common.api.types";
+import { IPrice } from "../shipping/shipping.api.types";
+import { ISpot } from "../access/access.api.types";
 
 export type ICategory = {
   id: number;
@@ -213,7 +213,7 @@ export type IGetProductsParams = {
   wishlist?: boolean;
 };
 
-export type IGetCategoriesResponse = {
+export type IGetCategoriesRes = {
   data: ICategory[];
   meta: {
     total: number;
@@ -222,7 +222,7 @@ export type IGetCategoriesResponse = {
   };
 };
 
-export type IGetProductsResponse = {
+export type IGetProductsRes = {
   data: IProduct[];
   total: number;
   sort_options: string[];

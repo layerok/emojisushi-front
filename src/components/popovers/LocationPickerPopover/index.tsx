@@ -11,7 +11,7 @@ import {
 } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { Suspense } from "react";
-import { IGetCitiesResponse } from "~api/access.api.types";
+import { IGetCitiesRes } from "~api/types";
 type LocationPickerPopoverProps = {
   offset?: number;
   backgroundColor?: string;
@@ -33,7 +33,7 @@ export const LocationPickerPopover = (props: LocationPickerPopoverProps) => {
 };
 
 const AwaitedLocationPickerPopover = (props: LocationPickerPopoverProps) => {
-  const cities = useAsyncValue() as IGetCitiesResponse;
+  const cities = useAsyncValue() as IGetCitiesRes;
 
   const { offset = 0, backgroundColor = "#171717", width = "211px" } = props;
   const navigate = useNavigate();

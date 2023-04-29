@@ -11,7 +11,7 @@ import {
 } from "~components";
 import { TextInputModel, FormModel } from "~common/models";
 import { authApi } from "~api";
-import { IAddress } from "~api/auth.api.types";
+import { IAddress } from "~api/types";
 import { useTranslation } from "react-i18next";
 import { useLoaderData } from "react-router-dom";
 import { User } from "~models";

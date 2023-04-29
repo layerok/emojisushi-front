@@ -30,7 +30,7 @@ import { useTranslation } from "react-i18next";
 import { CartProduct } from "~models";
 import { LayoutRouteLoaderData } from "~layout/Layout";
 import { useDeletingCartProducts } from "~hooks/use-layout-fetchers";
-import { IGetCartProductsResponse } from "~api/cart.api";
+import { IGetCartRes } from "~api/types";
 import {
   DeleteCartProductFormDataPayload,
   UpdateCartProductFormDataPayload,
@@ -172,7 +172,7 @@ const AwaitedCartModal = ({ children }: { children: ReactElement }) => {
   const [height, setHeight] = useState(windowSize.height);
   const { lang, spotSlug, citySlug } = useParams();
   // todo: add type
-  const cart = useAsyncValue() as IGetCartProductsResponse;
+  const cart = useAsyncValue() as IGetCartRes;
 
   const { data, total } = cart;
 

@@ -1,4 +1,4 @@
-import { IFile, IMeta } from "~common/types";
+import { IFile, IMeta } from "../common/common.api.types";
 
 export type ISpot = {
   id: number;
@@ -32,7 +32,7 @@ export type IGetCitiesParams = {
   limit?: number;
 };
 
-export type IGetCitiesResponse = {
+export type IGetCitiesRes = {
   data: ICity[];
   meta: IMeta;
 };

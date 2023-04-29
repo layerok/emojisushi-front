@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { ISpot } from "~api/access.api.types";
+import { ISpot } from "~api/types";
 import { City } from "./City";
 
 export class Spot {

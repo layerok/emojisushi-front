@@ -1,6 +1,6 @@
 import { client } from "~clients/client";
 import { AxiosResponse } from "axios";
-import { IUser } from "~api/auth.api.types";
+import { IUser } from "./auth.api.types";
 
 export const authApi = {
   register(

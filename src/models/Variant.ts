@@ -1,4 +1,4 @@
-import { IVariant } from "~api/menu.api.types";
+import { IVariant } from "~api/types";
 import { makeAutoObservable } from "mobx";
 
 export class Variant {

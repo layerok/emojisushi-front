@@ -1,4 +1,4 @@
-import { Nullable } from "~common/types";
+import { Nullable } from "../common/common.api.types";
 
 export type ICurrency = {
   id: number;
@@ -29,4 +29,11 @@ export type IShippingMethod = {
   code: string;
   price_formatted: string | null;
   prices: IPrice[];
+};
+
+export type IGetShippingMethodsRes = {
+  data: IShippingMethod[];
+  meta: {
+    total: number;
+  };
 };

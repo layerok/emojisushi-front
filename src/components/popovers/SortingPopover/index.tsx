@@ -3,7 +3,7 @@ import { SortOrderButton } from "~components/buttons/SortOrderButton";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
-import { SortKey } from "~api/menu.api.types";
+import { SortKey } from "~api/types";
 import { useLocation, useSearchParams, useSubmit } from "react-router-dom";
 
 type TSortingPopoverProps = {

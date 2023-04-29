@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { useAsyncValue } from "react-router-dom";
-import { IGetCartProductsResponse } from "~api/cart.api";
+import { IGetCartRes } from "~api/types";
 import { useOptimisticCartTotals } from "~hooks/use-layout-fetchers";
 import { CartProduct } from "~models";
 
@@ -16,7 +16,7 @@ export const AwaitedCart = ({
     items: CartProduct[];
   }) => ReactElement;
 }) => {
-  const cart = useAsyncValue() as IGetCartProductsResponse;
+  const cart = useAsyncValue() as IGetCartRes;
   const items = cart.data.map((json) => new CartProduct(json));
   const { price, quantity } = useOptimisticCartTotals({ items });
 

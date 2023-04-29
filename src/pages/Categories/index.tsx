@@ -12,13 +12,13 @@ import { useIsMobile } from "~common/hooks";
 import { Suspense } from "react";
 import { Category } from "./components/Category";
 import Skeleton from "react-loading-skeleton";
-import { IGetCategoriesResponse } from "~api/types";
+import { IGetCategoriesRes } from "~api/types";
 import { categoriesQuery } from "~queries";
 import { queryClient } from "~query-client";
 
 const Categories = () => {
   const { spotSlug } = useParams();
-  const categories = useAsyncValue() as IGetCategoriesResponse;
+  const categories = useAsyncValue() as IGetCategoriesRes;
 
   const publishedCategories = categories.data
     .filter((category) => category.published)
@@ -108,7 +108,7 @@ Object.assign(CategoriesPage, {
 });
 
 export type CategoriesLoaderResolvedData = {
-  categories: IGetCategoriesResponse;
+  categories: IGetCategoriesRes;
 };
 
 export const categoriesLoader = ({ params }) => {
