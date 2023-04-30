@@ -1,5 +1,4 @@
 import { Navigate } from "react-router-dom";
-import { categoriesLoader } from "~pages/Categories";
 
 export const routes = [
   {
@@ -14,7 +13,7 @@ export const routes = [
         children: [
           {
             index: true,
-            lazy: () => import("~pages/SelectLocation"),
+            lazy: () => import("~domains/spot/pages/SelectLocationPage"),
           },
           {
             path: ":citySlug/:spotSlug",
@@ -27,36 +26,36 @@ export const routes = [
               },
               {
                 path: "category",
-                loader: categoriesLoader,
                 id: "categories",
                 children: [
                   {
                     index: true,
-                    lazy: () => import("~pages/Categories"),
+                    lazy: () =>
+                      import("~domains/category/pages/SelectCategoryPage"),
                   },
                   {
                     path: ":categorySlug",
-                    lazy: () => import("~pages/Category"),
+                    lazy: () => import("~domains/product/pages/CategoryPage"),
                     id: "category",
                   },
                 ],
               },
               {
                 path: "thankyou",
-                lazy: () => import("~pages/ThankYou"),
+                lazy: () => import("~domains/order/pages/ThankYouPage"),
               },
               {
                 path: "dostavka-i-oplata",
-                lazy: () => import("~pages/Delivery"),
+                lazy: () => import("~domains/spot/pages/DeliveryPage"),
               },
               {
                 path: "checkout",
-                lazy: () => import("~pages/Checkout"),
+                lazy: () => import("~domains/order/pages/CheckoutPage"),
               },
               {
                 id: "wishlist",
                 path: "wishlist",
-                lazy: () => import("~pages/Wishlist"),
+                lazy: () => import("~domains/wishlist/pages/WishlistPage"),
               },
 
               {
@@ -65,19 +64,19 @@ export const routes = [
               },
               {
                 path: "account/profile",
-                lazy: () => import("~pages/Profile"),
+                lazy: () => import("~domains/cabinet/pages/ProfilePage"),
               },
               {
                 path: "account/recover-password",
-                lazy: () => import("~pages/UpdatePassword"),
+                lazy: () => import("~domains/cabinet/pages/UpdatePasswordPage"),
               },
               {
                 path: "account/saved-addresses",
-                lazy: () => import("~pages/SavedAddresses"),
+                lazy: () => import("~domains/cabinet/pages/SavedAddressesPage"),
               },
               {
                 path: "account/orders",
-                lazy: () => import("~pages/MyOrders"),
+                lazy: () => import("~domains/cabinet/pages/MyOrdersPage"),
               },
             ],
           },
@@ -86,11 +85,11 @@ export const routes = [
             children: [
               {
                 index: true,
-                lazy: () => import("~pages/ResetPassword"),
+                lazy: () => import("~domains/cabinet/pages/ResetPasswordPage"),
               },
               {
                 path: ":code",
-                lazy: () => import("~pages/ResetPassword"),
+                lazy: () => import("~domains/cabinet/pages/ResetPasswordPage"),
               },
             ],
           },

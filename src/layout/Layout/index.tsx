@@ -10,7 +10,13 @@ import {
   Container,
 } from "~components";
 import { ReactNode, Suspense } from "react";
-import { Await, Outlet, redirect, useLoaderData } from "react-router-dom";
+import {
+  Await,
+  Outlet,
+  defer,
+  redirect,
+  useLoaderData,
+} from "react-router-dom";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
 import { authApi, cartApi } from "~api";
@@ -18,13 +24,12 @@ import { CartProduct } from "~models";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
 import { IUser, IGetCartRes, IGetCitiesRes } from "~api/types";
 import { citiesQuery } from "~queries/cities.query";
+import { AwaitAll } from "~components/AwaitAll";
 
 export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
   const { x, y } = useWindowScroll();
 
-  const { cart } = useLoaderData() as LayoutRouteLoaderData;
-
-  const { cities } = useLoaderData() as any;
+  const { cart, cities, user } = useLoaderData() as LayoutRouteLoaderData;
 
   const showStickyCart = y > 100;
 
@@ -34,9 +39,11 @@ export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
   return (
     <S.Layout {...rest}>
       <Suspense fallback={<Header loading />}>
-        <Await resolve={cities}>
-          <Header />
-        </Await>
+        <AwaitAll cities={cities} user={user} cart={cart}>
+          {({ cart, cities, user }) => (
+            <Header cart={cart} cities={cities.data} user={user} />
+          )}
+        </AwaitAll>
       </Suspense>
 
       <S.Main>
@@ -75,35 +82,13 @@ export const Component = Layout;
 export type LayoutRouteLoaderData = {
   cart: IGetCartRes;
   user: IUser | null;
+  cities: IGetCitiesRes;
 };
 
 export const layoutLoader = async ({ params }) => {
   // todo: maybe create endpoint for fetching specific city, to check if it exists
-  const fetchUserPromise = authApi.fetchUser();
-
-  const fetchCitiesPromise =
-    queryClient.getQueryData<IGetCitiesRes>(citiesQuery.queryKey) ??
-    queryClient.fetchQuery<IGetCitiesRes>(citiesQuery);
-
-  const fetchCartPromise =
-    queryClient.getQueryData(cartQuery.queryKey) ??
-    (await queryClient.fetchQuery(cartQuery));
-
-  const cities = await fetchCitiesPromise;
-
-  const city = cities.data.find((city) => city.slug === params.citySlug);
-
-  if (!city) {
-    throw redirect("/" + params.lang);
-  }
-
-  const spot = city.spots.find((spot) => spot.slug === params.spotSlug);
-
-  if (!spot) {
-    throw redirect("/" + params.lang);
-  }
-
-  const user = await fetchUserPromise
+  const fetchUserPromise = authApi
+    .fetchUser()
     .then((res) => res.data)
     .catch((e) => {
       // // 406 simply means that user is not authorzied, no need to throw error in this case
@@ -113,13 +98,32 @@ export const layoutLoader = async ({ params }) => {
       return null;
     });
 
-  const cart = await fetchCartPromise;
+  const fetchCitiesPromise =
+    queryClient.getQueryData<IGetCitiesRes>(citiesQuery.queryKey) ??
+    queryClient.fetchQuery<IGetCitiesRes>(citiesQuery).then((cities) => {
+      const city = cities.data.find((city) => city.slug === params.citySlug);
 
-  return {
-    cart,
-    user,
-    cities,
-  } as LayoutRouteLoaderData;
+      if (!city) {
+        throw redirect("/" + params.lang);
+      }
+
+      const spot = city.spots.find((spot) => spot.slug === params.spotSlug);
+
+      if (!spot) {
+        throw redirect("/" + params.lang);
+      }
+      return cities;
+    });
+
+  const fetchCartPromise =
+    queryClient.getQueryData<IGetCartRes>(cartQuery.queryKey) ??
+    queryClient.fetchQuery<IGetCartRes>(cartQuery);
+
+  return defer({
+    cart: fetchCartPromise,
+    user: fetchUserPromise,
+    cities: fetchCitiesPromise,
+  });
 };
 
 const updateCartProduct = async ({ formData }: { formData: FormData }) => {

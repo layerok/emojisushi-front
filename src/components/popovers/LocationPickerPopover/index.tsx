@@ -1,45 +1,38 @@
 import * as S from "./styled";
 import { SvgIcon, CaretDownSvg, FlexBox, DropdownPopover } from "~components";
 import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg";
-import {
-  Await,
-  useAsyncValue,
-  useLoaderData,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
-import { Suspense } from "react";
-import { IGetCitiesRes } from "~api/types";
+import { ICity } from "~api/types";
 type LocationPickerPopoverProps = {
   offset?: number;
   backgroundColor?: string;
   width?: string;
+  loading?: boolean;
+  cities?: ICity[];
 };
 
 export const LocationPickerPopover = (props: LocationPickerPopoverProps) => {
-  const { width = "211px" } = props;
+  const { width = "211px", loading = false } = props;
 
-  const { cities } = useLoaderData() as any;
+  if (loading) {
+    return <Skeleton width={width} height={40} />;
+  }
 
-  return (
-    <Suspense fallback={<Skeleton width={width} height={40} />}>
-      <Await resolve={cities}>
-        <AwaitedLocationPickerPopover {...props} />
-      </Await>
-    </Suspense>
-  );
+  return <InternalLocationPickerPopover {...props} />;
 };
 
-const AwaitedLocationPickerPopover = (props: LocationPickerPopoverProps) => {
-  const cities = useAsyncValue() as IGetCitiesRes;
-
-  const { offset = 0, backgroundColor = "#171717", width = "211px" } = props;
+const InternalLocationPickerPopover = (props: LocationPickerPopoverProps) => {
+  const {
+    offset = 0,
+    backgroundColor = "#171717",
+    width = "211px",
+    cities,
+  } = props;
   const navigate = useNavigate();
   const { lang, citySlug, spotSlug } = useParams();
 
-  const options = cities.data
+  const options = cities
     .map((city) =>
       city.spots.map((spot) => ({
         name: city.name + ", " + spot.name,

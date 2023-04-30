@@ -8,8 +8,11 @@ import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { Logo } from "../Logo";
 import { useParams } from "react-router-dom";
+import { ICity } from "~api/types";
 
-export const Left = ({ loading = false }: { loading?: boolean }) => {
+type LeftProps = { loading?: boolean; cities?: ICity[] };
+
+export const Left = ({ loading = false, cities = [] }: LeftProps) => {
   const { lang, spotSlug, citySlug } = useParams();
   const { t } = useTranslation();
 
@@ -17,7 +20,7 @@ export const Left = ({ loading = false }: { loading?: boolean }) => {
     <S.Left>
       <Logo loading={loading} />
       <S.PcHeaderItem>
-        <LocationPickerPopover offset={22} />
+        <LocationPickerPopover cities={cities} loading={loading} offset={22} />
       </S.PcHeaderItem>
       <S.PcHeaderItem>
         {loading ? (

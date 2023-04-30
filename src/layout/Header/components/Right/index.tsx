@@ -10,21 +10,30 @@ import {
   CartButton,
   TinyCartButton,
 } from "~components";
-import {
-  Await,
-  useNavigate,
-  useParams,
-  useRouteLoaderData,
-} from "react-router-dom";
+import { Await, useNavigate, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
-import { Suspense } from "react";
-import { AwaitedCart } from "~components/AwaitedCart";
-import { LayoutRouteLoaderData } from "~layout/Layout";
+import { useOptimisticCartTotals } from "~hooks";
+import { CartProduct } from "~models";
+import { ICity, IGetCartRes, IUser } from "~api/types";
 
-export const Right = ({ loading = false }: { loading?: boolean }) => {
+type RightProps = {
+  loading?: boolean;
+  cities?: ICity[];
+  cart?: IGetCartRes;
+  user?: IUser;
+};
+
+export const Right = ({
+  loading = false,
+  cities = [],
+  cart,
+  user,
+}: RightProps) => {
   const { lang, spotSlug, citySlug } = useParams();
-  const { cart, user } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
+
   const navigate = useNavigate();
+  const items = loading ? [] : cart.data.map((json) => new CartProduct(json));
+  const { price, quantity } = useOptimisticCartTotals({ items });
 
   return (
     <S.Right>
@@ -34,29 +43,13 @@ export const Right = ({ loading = false }: { loading?: boolean }) => {
 
       <CartModal>
         <S.CartBtn>
-          <Suspense
-            fallback={<Skeleton width={170} height={40} borderRadius={10} />}
-          >
-            <Await resolve={cart}>
-              <AwaitedCart>
-                {({ price, quantity }) => (
-                  <CartButton count={quantity} total={price} />
-                )}
-              </AwaitedCart>
-            </Await>
-          </Suspense>
+          <CartButton loading={loading} count={quantity} total={price} />
         </S.CartBtn>
       </CartModal>
 
       <CartModal>
         <S.TinyCartBtn>
-          <Suspense fallback={<Skeleton width={55} height={40} />}>
-            <Await resolve={cart}>
-              <AwaitedCart>
-                {({ price }) => <TinyCartButton price={price} />}
-              </AwaitedCart>
-            </Await>
-          </Suspense>
+          <TinyCartButton loading={loading} price={price} />
         </S.TinyCartBtn>
       </CartModal>
 
@@ -64,7 +57,7 @@ export const Right = ({ loading = false }: { loading?: boolean }) => {
         {loading ? (
           <Skeleton width={32} height={32} />
         ) : (
-          <MobMenuModal>
+          <MobMenuModal cities={cities}>
             <SvgIcon width={"32px"} color={"white"}>
               <BurgerSvg />
             </SvgIcon>

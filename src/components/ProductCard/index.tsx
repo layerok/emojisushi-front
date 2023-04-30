@@ -2,7 +2,6 @@ import * as S from "./styled";
 import { EqualHeightElement } from "react-equal-height";
 import { useMemo, useState } from "react";
 import { CartProduct, Product } from "~models";
-import { useCart } from "~hooks/use-cart";
 import {
   Image,
   Weight,
@@ -14,16 +13,13 @@ import {
 } from "./components";
 import { TProductCardProps } from "./types";
 import { findInCart } from "./utils";
-import { useRouteLoaderData } from "react-router-dom";
-import { LayoutRouteLoaderData } from "~layout/Layout";
 
 export const ProductCard = ({
   product,
   loading = false,
+  cart,
 }: TProductCardProps) => {
-  const { cart } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
-
-  const cartProducts = cart.data.map((json) => new CartProduct(json));
+  const cartProducts = cart?.data.map((json) => new CartProduct(json)) || [];
 
   const initialModificatorsState = product?.modGroups.reduce((acc, group) => {
     return {

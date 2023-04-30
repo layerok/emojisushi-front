@@ -3,10 +3,12 @@ import { ICartProduct, IGetCartRes } from "./cart.api.types";
 import { AxiosAuthRefreshRequestConfig } from "axios-auth-refresh";
 
 const getCartProducts = (params = {}) => {
-  return client.get<IGetCartRes>("cart/products", {
-    params,
-    skipAuthRefresh: true,
-  } as AxiosAuthRefreshRequestConfig);
+  return client
+    .get<IGetCartRes>("cart/products", {
+      params,
+      skipAuthRefresh: true,
+    } as AxiosAuthRefreshRequestConfig)
+    .then((res) => res.data);
 };
 
 function addCartProduct(params = {}) {

@@ -8,7 +8,6 @@ import {
 } from "~components";
 import { TelegramSvg, InstagramSvg, PhoneSvg, LogoSvg } from "~components/svg";
 import { useTranslation } from "react-i18next";
-import { observer } from "mobx-react";
 import { useSpot } from "~hooks/use-spot";
 import Skeleton from "react-loading-skeleton";
 
@@ -32,7 +31,9 @@ export const Footer = ({ loading = false }: FooterProps) => {
   );
 };
 
-const Map = ({ loading = false }: { loading?: boolean }) => {
+type IMapProps = { loading?: boolean };
+
+const Map = ({ loading = false }: IMapProps) => {
   return (
     <S.StaticMap>
       {loading ? (
@@ -51,7 +52,9 @@ const Map = ({ loading = false }: { loading?: boolean }) => {
   );
 };
 
-const Socials = ({ loading = false }: { loading?: boolean }) => {
+type ISocialsProps = { loading?: boolean };
+
+const Socials = ({ loading = false }: ISocialsProps) => {
   return (
     <S.List>
       <Phones loading={loading} />
@@ -61,7 +64,9 @@ const Socials = ({ loading = false }: { loading?: boolean }) => {
   );
 };
 
-const Phones = observer(({ loading = false }: { loading?: boolean }) => {
+type IPhonesProps = { loading?: boolean };
+
+const Phones = ({ loading = false }: IPhonesProps) => {
   const spot = useSpot();
   const { t } = useTranslation();
   return (
@@ -89,21 +94,22 @@ const Phones = observer(({ loading = false }: { loading?: boolean }) => {
               <Phone loading />
             </>
           ) : (
-            spot.phones.split(",").map((phone, i) => <Phone phone={phone} />)
+            spot.phones
+              .split(",")
+              .map((phone, i) => <Phone key={i} phone={phone} />)
           )}
         </FlexBox>
       </>
     )
   );
-});
+};
 
-const Phone = ({
-  loading = false,
-  phone,
-}: {
+type IPhoneProps = {
   loading?: boolean;
   phone?: string;
-}) => {
+};
+
+const Phone = ({ loading = false, phone }: IPhoneProps) => {
   if (loading) {
     return (
       <S.Phone>
@@ -114,7 +120,9 @@ const Phone = ({
   return <S.Phone href={`tel:${phone}`}>{phone}</S.Phone>;
 };
 
-const Instagram = ({ loading = false }) => {
+type TInstagramProps = { loading?: boolean };
+
+const Instagram = ({ loading = false }: TInstagramProps) => {
   return (
     <FlexBox alignItems={"center"}>
       <SvgIcon loading={loading} width={"25px"} color={"white"}>
@@ -140,7 +148,9 @@ const Instagram = ({ loading = false }) => {
   );
 };
 
-const Telegram = ({ loading = false }: { loading?: boolean }) => {
+type ITelegramProps = { loading?: boolean };
+
+const Telegram = ({ loading = false }: ITelegramProps) => {
   return (
     <TelegramModal>
       <FlexBox
@@ -160,7 +170,9 @@ const Telegram = ({ loading = false }: { loading?: boolean }) => {
   );
 };
 
-const Logo = ({ loading }: { loading?: boolean }) => {
+type ILogoProps = { loading?: boolean };
+
+const Logo = ({ loading }: ILogoProps) => {
   return (
     <S.Logo>
       {loading ? (

@@ -1,19 +1,27 @@
-import { cloneElement } from "react";
-import { BaseModal } from "../BaseModal";
+import { ReactElement, cloneElement } from "react";
 import * as S from "./styled";
-import { ContactsModal } from "../ContactsModal";
-import { NavLinkUnderline } from "../../NavLinkUnderline";
-import { FlexBox } from "../../FlexBox";
-import { LocationPickerPopover } from "../../popovers/LocationPickerPopover";
-import { SvgIcon } from "../../SvgIcon";
-import { HeartSvg } from "../../svg/HeartSvg";
+import {
+  LocationPickerPopover,
+  SvgIcon,
+  FlexBox,
+  NavLinkUnderline,
+  ContactsModal,
+  BaseModal,
+  HeartSvg,
+  UserSvg,
+  AuthModal,
+  LanguageSelector,
+} from "~components";
 import { useTranslation } from "react-i18next";
-import { UserSvg } from "../../svg/UserSvg";
-import { AuthModal } from "../AuthModal";
-import { LanguageSelector } from "../../LanguageSelector";
 import { useParams } from "react-router-dom";
+import { ICity } from "~api/types";
 
-export const MobMenuModal = ({ children }) => {
+type MobMenuModalProps = {
+  children: ReactElement;
+  cities?: ICity[];
+};
+
+export const MobMenuModal = ({ children, cities = [] }: MobMenuModalProps) => {
   const overlayStyles = {
     justifyItems: "end",
     alignItems: "start",
@@ -33,6 +41,7 @@ export const MobMenuModal = ({ children }) => {
           </S.Item>
           <S.Item style={{ height: "25px" }}>
             <LocationPickerPopover
+              cities={cities}
               width={"226px"}
               backgroundColor={"#1C1C1C"}
             />

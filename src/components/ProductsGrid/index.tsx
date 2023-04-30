@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import { Loader } from "~components";
 import { Product } from "~models";
 import { Footer, Items, Header } from "./components";
+import { IGetCartRes } from "~api/types";
 
 // todo: fix design at 1280px breakpoing
 
@@ -14,6 +15,7 @@ type TProductsGridProps = {
   loadingMore?: boolean;
   loadable?: boolean;
   loading?: boolean;
+  cart?: IGetCartRes;
 };
 
 export const ProductsGrid = observer(
@@ -24,6 +26,7 @@ export const ProductsGrid = observer(
     loading = false,
     loadingMore = false,
     loadable = false,
+    cart,
   }: TProductsGridProps) => {
     const breakpoint = useBreakpoint();
 
@@ -37,7 +40,7 @@ export const ProductsGrid = observer(
         <Loader loading={false} />
         <Header loading={loading} title={title} />
         <EqualHeight updateOnChange={debouncedBreakpoint}>
-          <Items loading={loading} items={items} />
+          <Items cart={cart} loading={loading} items={items} />
         </EqualHeight>
         {loadable && (
           <Footer
