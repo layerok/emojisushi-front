@@ -4,7 +4,7 @@ import { ActiveNavLink } from "src/components/ActiveNavLink";
 
 const Categories = styled.div`
   position: relative;
-  padding-top: 50px;
+  padding-top: 20px;
 `;
 
 const HorizontalContainer = styled.div`

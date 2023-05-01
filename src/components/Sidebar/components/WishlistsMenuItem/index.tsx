@@ -33,7 +33,13 @@ export const WishlistsMenuItem = ({
           ) : (
             t("common.favorite")
           )}
-          <Favorite loading={loading} isFavorite={true} />
+          <div
+            style={{
+              width: 30,
+            }}
+          >
+            <Favorite loading={loading} isFavorite={true} />
+          </div>
         </S.Favorite>
       )}
     </NavLink>

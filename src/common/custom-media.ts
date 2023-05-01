@@ -19,3 +19,5 @@ export const breakpoints = {
 const customMedia = generateMedia(breakpoints);
 
 export default customMedia;
+
+export const media = customMedia;

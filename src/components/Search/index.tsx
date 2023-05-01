@@ -1,12 +1,11 @@
-import * as S from "./styled";
 import { useDebounce } from "src/common/hooks";
-import Skeleton from "react-loading-skeleton";
 import {
   Form,
   useLoaderData,
   useSearchParams,
   useSubmit,
 } from "react-router-dom";
+import { SearchInput } from "~components/SearchInput";
 
 type TSearchProps = {
   loading?: boolean;
@@ -26,36 +25,22 @@ export const Search = ({ loading = false }: TSearchProps) => {
     });
   }, 500);
 
-  if (loading) {
-    return (
-      <S.SearchContainer
-        style={{
-          flexGrow: 1,
-          width: "100%",
-        }}
-      >
-        <Skeleton borderRadius={10} width={"100%"} height={40} />
-      </S.SearchContainer>
-    );
-  }
-
   return (
-    <S.SearchContainer>
-      <Form role="search">
-        {/* todo: preserve all search params, not only 'sort' param */}
-        {searchParams.has("sort") && (
-          <input type="hidden" name="sort" value={searchParams.get("sort")} />
-        )}
-        <S.SearchInput
-          onChange={(event) => {
-            // todo: add loading indicator when searching
-            debouncedFetch(event.target.form);
-          }}
-          type="search"
-          name="q"
-          defaultValue={q}
-        />
-      </Form>
-    </S.SearchContainer>
+    <Form role="search">
+      {/* todo: preserve all search params, not only 'sort' param */}
+      {searchParams.has("sort") && (
+        <input type="hidden" name="sort" value={searchParams.get("sort")} />
+      )}
+      <SearchInput
+        loading={loading}
+        onChange={(event) => {
+          // todo: add loading indicator when searching
+          debouncedFetch(event.target.form);
+        }}
+        type="search"
+        name="q"
+        defaultValue={q}
+      />
+    </Form>
   );
 };

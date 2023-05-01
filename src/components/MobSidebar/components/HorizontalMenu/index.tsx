@@ -1,8 +1,5 @@
 import * as S from "./styled";
-import { HorizontalArrowsSvg } from "src/components/svg";
-import { FlexBox, SvgIcon } from "src/components";
 import { useParams } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { observer } from "mobx-react";
 import { ICategory } from "src/api/types";
 import Skeleton from "react-loading-skeleton";
@@ -15,24 +12,9 @@ type THorizontalMenuProps = {
 
 const HorizontalMenu = observer(
   ({ categories = [], loading = false }: THorizontalMenuProps) => {
-    const { t } = useTranslation();
-
     return (
       <nav>
         <S.Categories>
-          <S.Hint>
-            {loading ? (
-              <Skeleton width={87} height={25} />
-            ) : (
-              <FlexBox alignItems={"center"}>
-                <SvgIcon width={"25px"}>
-                  <HorizontalArrowsSvg />
-                </SvgIcon>
-                <div style={{ marginLeft: "10px" }}>{t("common.swipe")}</div>
-              </FlexBox>
-            )}
-          </S.Hint>
-
           <S.HorizontalContainer>
             {loading ? (
               <>

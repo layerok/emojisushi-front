@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 const Search = styled.div`
   position: relative;
-  width: 100%;
 `;
 
 const IconBtn = styled.button`

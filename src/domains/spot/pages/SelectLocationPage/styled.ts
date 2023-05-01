@@ -4,17 +4,28 @@ import media from "~common/custom-media";
 const Locations = styled.div`
   display: flex;
   flex-direction: column;
-
   width: 100%;
-
   padding: 60px 0;
   padding-bottom: 100px;
-
   min-height: 100vh;
 
   ${media.lessThan("tablet")`
-      padding: 50px 0;
-    `}
+    padding: 50px 0;
+  `}
+`;
+
+const LogoWrapper = styled.div`
+  width: 255px;
+  ${media.greaterThan("mobile")`
+    width: 160px;
+  `}
+`;
+
+const MapWrapper = styled.div`
+  width: 20px;
+  ${media.greaterThan("mobile")`
+    width: "25px";
+  `}
 `;
 
 Locations.Container = styled.div`
@@ -60,4 +71,4 @@ Locations.Body = styled.div`
   width: 100%;
 `;
 
-export { Locations };
+export { Locations, LogoWrapper, MapWrapper };

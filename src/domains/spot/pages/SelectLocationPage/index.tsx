@@ -1,7 +1,6 @@
 import * as S from "./styled";
 import { MapPinSvg, LogoSvg, SvgIcon } from "~components";
 import { useTranslation } from "react-i18next";
-import { useBreakpoint2 } from "~common/hooks";
 import { Cities, CitiesSkeleton } from "./components/City";
 import { Await, defer, useLoaderData } from "react-router-dom";
 import { Suspense } from "react";
@@ -14,19 +13,23 @@ export const SelectLocationPage = () => {
   const { t } = useTranslation();
   const { cities } = useLoaderData() as any;
 
-  const { isMobile } = useBreakpoint2();
   return (
     <S.Locations>
       <S.Locations.Container>
         <S.Locations.Head>
-          <SvgIcon width={isMobile ? "160px" : "255px"}>
-            <LogoSvg />
-          </SvgIcon>
+          <S.LogoWrapper>
+            <SvgIcon width={"100%"}>
+              <LogoSvg />
+            </SvgIcon>
+          </S.LogoWrapper>
+
           <S.Locations.Label>
             {t("spotsModal.title")}
-            <SvgIcon width={isMobile ? "20px" : "25px"} color={"white"}>
-              <MapPinSvg />
-            </SvgIcon>
+            <S.MapWrapper>
+              <SvgIcon width={"100%"} color={"white"}>
+                <MapPinSvg />
+              </SvgIcon>
+            </S.MapWrapper>
           </S.Locations.Label>
         </S.Locations.Head>
         <S.Locations.Body>

@@ -27,4 +27,11 @@ const Header = styled.div`
   `}
 `;
 
-export { Title, Header };
+const Controls = styled.div`
+  display: flex;
+  ${media.lessThan("pc")`
+    display: none;
+  `}
+`;
+
+export { Title, Header, Controls };

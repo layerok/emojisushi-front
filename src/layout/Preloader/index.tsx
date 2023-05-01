@@ -1,13 +1,8 @@
 import * as S from "./styled";
-import { SvgIcon } from "~components/SvgIcon";
-import { LogoSvg } from "~components/svg/LogoSvg";
+import { SvgIcon, LogoSvg } from "~components";
 import FadeLoader from "react-spinners/FadeLoader";
-import { useBreakpoint2 } from "~common/hooks/useBreakpoint";
 
 export const Preloader = () => {
-  const { isMobile } = useBreakpoint2();
-  const width = isMobile ? "350px" : "540px";
-
   const override = {
     position: "absolute",
     left: "50%",
@@ -15,9 +10,12 @@ export const Preloader = () => {
   };
   return (
     <S.Container>
-      <SvgIcon color={"white"} width={width} style={{ opacity: 0.05 }}>
-        <LogoSvg />
-      </SvgIcon>
+      <S.ImageWrapper>
+        <SvgIcon color={"white"} width={"100%"} style={{ opacity: 0.05 }}>
+          <LogoSvg />
+        </SvgIcon>
+      </S.ImageWrapper>
+
       <FadeLoader
         color={"#FFE600"}
         width={2}

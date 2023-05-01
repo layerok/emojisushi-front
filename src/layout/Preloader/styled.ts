@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import media from "~common/custom-media";
 
 const Container = styled.div`
   position: fixed;
@@ -13,4 +14,11 @@ const Container = styled.div`
   align-items: center;
 `;
 
-export { Container };
+const ImageWrapper = styled.div`
+  width: 350px;
+  ${media.greaterThan("mobile")`
+    width: 540px;
+  `}
+`;
+
+export { Container, ImageWrapper };

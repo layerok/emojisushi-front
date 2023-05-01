@@ -41,7 +41,8 @@ export const CategoryPage = () => {
     end: appConfig.workingHours[1],
   });
 
-  const { products, categories } = useLoaderData() as CategoryPageLoaderData;
+  const { products, categories, wishlists } =
+    useLoaderData() as CategoryPageLoaderData;
   const { cart, cities } = useRouteLoaderData(
     "layout"
   ) as LayoutRouteLoaderData;
@@ -56,6 +57,7 @@ export const CategoryPage = () => {
             cart={cart}
             categories={categories}
             products={products}
+            wishlists={wishlists}
           >
             {({ categories, cart, products }) => (
               <PublishedCategories categories={categories.data}>

@@ -1,10 +1,9 @@
-import { SvgIcon } from "../../SvgIcon";
-import { InfoSvg } from "../../svg/InfoSvg";
+import { SvgIcon, InfoSvg } from "~components";
 import { AnimatedTooltip } from "../AnimatedTooltip";
 import * as S from "./styled";
 import { useTranslation } from "react-i18next";
 
-export const IngredientsTooltip = ({ iconSize = "25px", items = [] }) => {
+export const IngredientsTooltip = ({ items = [] }) => {
   const { t } = useTranslation();
   const Content = () => {
     return (
@@ -21,9 +20,11 @@ export const IngredientsTooltip = ({ iconSize = "25px", items = [] }) => {
 
   return (
     <AnimatedTooltip placement={"bottom-start"} label={<Content />}>
-      <SvgIcon width={iconSize} color={"#999"}>
-        <InfoSvg />
-      </SvgIcon>
+      <S.IconWrapper>
+        <SvgIcon width="100%" color={"#999"}>
+          <InfoSvg />
+        </SvgIcon>
+      </S.IconWrapper>
     </AnimatedTooltip>
   );
 };

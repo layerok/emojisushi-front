@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import media from "~common/custom-media";
 
 const Wrapper = styled.div`
   width: 255px;
@@ -32,4 +33,11 @@ const ListItem = styled.li`
   }
 `;
 
-export { Wrapper, Title, List, ListItem };
+const IconWrapper = styled.div`
+  width: 25px;
+  ${media.greaterThan("mobile")`
+  width: 33px;
+`}
+`;
+
+export { Wrapper, Title, List, ListItem, IconWrapper };

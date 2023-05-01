@@ -11,6 +11,12 @@ const Favorite = styled.div`
     top: 30px;
     right: 17px;
   `}
+
+  width: 33px;
+
+  ${media.greaterThan("pc")`
+    width: 25px;
+  `}
 `;
 
 export { Favorite };
