@@ -1,7 +1,6 @@
 import * as S from "./styled";
-import { FlexBox } from "~components/FlexBox";
-import { useIsDesktop } from "~common/hooks/useBreakpoint";
-import { SortingPopover } from "~components/popovers/SortingPopover";
+import { useBreakpoint2 } from "~common/hooks";
+import { SortingPopover, FlexBox } from "~components";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 
@@ -13,7 +12,7 @@ type THeaderProps = {
 export const Header = ({ title, loading = false }: THeaderProps) => {
   const search = ""; // todo: here must be react value
   const { t } = useTranslation();
-  const isDesktop = useIsDesktop();
+  const breakpoint = useBreakpoint2();
   const titleOrSearch = search
     ? `${t("search.everywhere")} "${search}"`
     : title;
@@ -22,7 +21,7 @@ export const Header = ({ title, loading = false }: THeaderProps) => {
       <S.Title>
         {loading ? <Skeleton width={260} height={22} /> : titleOrSearch}
       </S.Title>
-      {isDesktop && (
+      {breakpoint.isDesktop && (
         <FlexBox>
           {/*                   <FiltersModal>
                         <FiltersButton text={t('common.filters')}/>

@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { useIsMobile } from "~common/hooks";
+import { useBreakpoint2 } from "~common/hooks";
 import { FlexBox } from "~components";
 import { ICategory } from "~api/types";
 import { Search } from "~components/Search";
@@ -8,7 +8,7 @@ import { VerticalMenu, Socials, WishlistsMenuItem } from "./components";
 type SidebarProps = { loading?: boolean; categories?: ICategory[] };
 
 export const Sidebar = ({ loading = false, categories = [] }: SidebarProps) => {
-  const isMobile = useIsMobile();
+  const { isMobile } = useBreakpoint2();
   // todo: make sidebar sticky
   return (
     <S.Sidebar>

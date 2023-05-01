@@ -2,7 +2,7 @@ import { ReactElement, cloneElement } from "react";
 import * as S from "./styled";
 import { SvgIcon, FlexBox, StaticMap, TelegramModal, Modal } from "~components";
 import { PhoneSvg, InstagramSvg, TelegramSvg } from "~components/svg";
-import { useBreakpoint } from "~common/hooks";
+import { useBreakpoint2 } from "~common/hooks";
 import { useTranslation } from "react-i18next";
 import { InstagramLink } from "~layout/Footer/styled";
 import { useSpot } from "~hooks/use-spot";
@@ -10,8 +10,8 @@ import { useSpot } from "~hooks/use-spot";
 // todo: fix that if we provide Fragment as children, then popup doesn't get opened
 
 export const ContactsModal = ({ children }: { children: ReactElement }) => {
-  const breakpoint = useBreakpoint();
-  const width = breakpoint !== "pc" ? "375px" : undefined;
+  const { isDesktop } = useBreakpoint2();
+  const width = !isDesktop ? "375px" : undefined;
   const { t } = useTranslation();
   const spot = useSpot();
 

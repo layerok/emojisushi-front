@@ -2,7 +2,7 @@ import { Await, defer, useAsyncValue, useLoaderData } from "react-router-dom";
 import * as S from "./styled";
 import { useTranslation } from "react-i18next";
 import { SvgIcon, ToteSvg } from "~components";
-import { useIsMobile } from "~common/hooks";
+import { useBreakpoint2 } from "~common/hooks";
 import { Suspense } from "react";
 import { Category } from "./components/Category";
 import Skeleton from "react-loading-skeleton";
@@ -50,7 +50,7 @@ export const SelectCategoryPage = () => {
   const { t } = useTranslation();
 
   const { categories } = useLoaderData() as SelectCategoryPageLoaderData;
-  const isMobile = useIsMobile();
+  const { isMobile } = useBreakpoint2();
 
   return (
     <S.Category>

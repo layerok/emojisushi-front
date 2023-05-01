@@ -1,6 +1,6 @@
 import { FlexBox, Heading, Loader } from "~components";
 import { CheckoutForm, CheckoutCart } from "./components";
-import { useIsMobile } from "~common/hooks";
+import { useBreakpoint2 } from "~common/hooks";
 import {
   Await,
   defer,
@@ -16,7 +16,7 @@ import { LayoutRouteLoaderData } from "~layout/Layout";
 
 // todo: add skeletons
 const CheckoutPage = () => {
-  const isMobile = useIsMobile();
+  const { isMobile } = useBreakpoint2();
   const { t } = useTranslation();
   const { cart, user } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
   const { shippingMethods, paymentMethods } = useLoaderData() as any;

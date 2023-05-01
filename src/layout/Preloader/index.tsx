@@ -2,11 +2,11 @@ import * as S from "./styled";
 import { SvgIcon } from "~components/SvgIcon";
 import { LogoSvg } from "~components/svg/LogoSvg";
 import FadeLoader from "react-spinners/FadeLoader";
-import { useBreakpoint } from "~common/hooks/useBreakpoint";
+import { useBreakpoint2 } from "~common/hooks/useBreakpoint";
 
 export const Preloader = () => {
-  const breakpoint = useBreakpoint();
-  const width = breakpoint === "mobile" ? "350px" : "540px";
+  const { isMobile } = useBreakpoint2();
+  const width = isMobile ? "350px" : "540px";
 
   const override = {
     position: "absolute",

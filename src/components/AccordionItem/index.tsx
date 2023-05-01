@@ -3,7 +3,7 @@ import { SvgIcon } from "../SvgIcon";
 import { FlexBox } from "../FlexBox";
 import { CaretUpSvg } from "../svg/CaretUpSvg";
 import { Collapsible } from "../Collapsible";
-import { useBreakpoint } from "~common/hooks/useBreakpoint";
+import { useBreakpoint2 } from "~common/hooks/useBreakpoint";
 import { IOrder } from "~api/types";
 import { LogoSvg } from "~components/svg/LogoSvg";
 import { useTranslation } from "react-i18next";
@@ -11,8 +11,8 @@ import { Product } from "~models/Product";
 
 export const AccordionItem = ({ order }: { order: IOrder }) => {
   const { t } = useTranslation();
-  const breakpoint = useBreakpoint();
-  const isPc = breakpoint === "pc";
+  const breakpoint = useBreakpoint2();
+
   const renderContainer = ({ Header, Panel }) => {
     return (
       <S.Container>
@@ -26,7 +26,9 @@ export const AccordionItem = ({ order }: { order: IOrder }) => {
       <S.Header>
         <S.Header.MobileTextContainer>
           <S.MutedText>№{order.order_number}</S.MutedText>
-          <S.Pan.Props.Prop.Value style={{ marginTop: !isPc ? "5px" : "0" }}>
+          <S.Pan.Props.Prop.Value
+            style={{ marginTop: !breakpoint.isDesktop ? "5px" : "0" }}
+          >
             {order.updated_at}
           </S.Pan.Props.Prop.Value>
         </S.Header.MobileTextContainer>

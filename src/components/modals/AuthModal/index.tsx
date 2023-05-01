@@ -9,7 +9,7 @@ import {
   If,
   Modal,
 } from "~components";
-import { useIsMobile } from "~common/hooks";
+import { useBreakpoint2 } from "~common/hooks";
 import { authApi } from "~api";
 import { observer, useLocalObservable } from "mobx-react";
 import { runInAction } from "mobx";
@@ -19,7 +19,7 @@ import { CheckboxInputModel, TextInputModel, FormModel } from "~common/models";
 import { useTranslation } from "react-i18next";
 
 export const AuthModal = ({ children }) => {
-  const isMobile = useIsMobile();
+  const { isMobile } = useBreakpoint2();
 
   const [showPasswordRecovery, setShowPasswordRecovery] = useState();
   const [showSignUp, setShowSignUp] = useState(false);
@@ -61,7 +61,7 @@ export const AuthModal = ({ children }) => {
 
 const SignUpForm = observer(({ setShowSignUp }) => {
   const { t } = useTranslation();
-  const isMobile = useIsMobile();
+  const { isMobile } = useBreakpoint2();
 
   const navigate = useNavigate();
   const { lang, spotSlug, citySlug } = useParams();
@@ -260,7 +260,7 @@ const LoginForm = ({ setShowSignUp, setShowPasswordRecovery, close }) => {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
-  const isMobile = useIsMobile();
+  const { isMobile } = useBreakpoint2();
   const { lang, spotSlug, citySlug } = useParams();
 
   return (

@@ -1,5 +1,5 @@
 import { useFetcher } from "react-router-dom";
-import { useIsMobile } from "~common/hooks";
+import { useBreakpoint2 } from "~common/hooks";
 import { CartProduct, Product } from "~models";
 import * as S from "./styled";
 import { Favorite } from "~components";
@@ -17,7 +17,7 @@ export const FavoriteButton = ({
   loading = false,
   favorite,
 }: FavoriteButtonProps) => {
-  const isMobile = useIsMobile();
+  const { isMobile } = useBreakpoint2();
   const iconSize = isMobile ? 33 : 25;
 
   // todo: saving count is useless for now, we don't use it anyhow

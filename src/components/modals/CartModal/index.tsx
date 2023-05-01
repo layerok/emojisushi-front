@@ -17,7 +17,7 @@ import {
 
 import { useWindowSize } from "react-use";
 import { ReactElement, Suspense, useEffect, useRef, useState } from "react";
-import { useDebounce, useBreakpoint } from "~common/hooks";
+import { useDebounce, useBreakpoint, useBreakpoint2 } from "~common/hooks";
 import {
   Await,
   useAsyncValue,
@@ -175,7 +175,7 @@ const AwaitedCartModal = ({ children }: { children: ReactElement }) => {
 
   const { data, total } = cart;
 
-  const breakpoint = useBreakpoint();
+  const { isMobile } = useBreakpoint2();
   const deletingCartProducts = useDeletingCartProducts();
 
   const { t } = useTranslation();
@@ -189,8 +189,8 @@ const AwaitedCartModal = ({ children }: { children: ReactElement }) => {
   );
 
   const overlayStyles = {
-    justifyItems: breakpoint === "mobile" ? "center" : "end",
-    alignItems: breakpoint === "mobile" ? "center" : "start",
+    justifyItems: isMobile ? "center" : "end",
+    alignItems: isMobile ? "center" : "start",
     background: "rgba(0, 0, 0, 0.4)",
     display: "grid",
     zIndex: 999999,

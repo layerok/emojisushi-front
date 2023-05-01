@@ -1,7 +1,7 @@
 import * as S from "./styled";
 import { MapPinSvg, LogoSvg, SvgIcon } from "~components";
 import { useTranslation } from "react-i18next";
-import { useIsMobile } from "~common/hooks";
+import { useBreakpoint2 } from "~common/hooks";
 import { Cities, CitiesSkeleton } from "./components/City";
 import { Await, defer, useLoaderData } from "react-router-dom";
 import { Suspense } from "react";
@@ -14,7 +14,7 @@ export const SelectLocationPage = () => {
   const { t } = useTranslation();
   const { cities } = useLoaderData() as any;
 
-  const isMobile = useIsMobile();
+  const { isMobile } = useBreakpoint2();
   return (
     <S.Locations>
       <S.Locations.Container>
