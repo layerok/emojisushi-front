@@ -1,10 +1,4 @@
-import {
-  Await,
-  defer,
-  useAsyncValue,
-  useLoaderData,
-  useParams,
-} from "react-router-dom";
+import { Await, defer, useAsyncValue, useLoaderData } from "react-router-dom";
 import * as S from "./styled";
 import { useTranslation } from "react-i18next";
 import { SvgIcon, ToteSvg } from "~components";
@@ -16,31 +10,20 @@ import { IGetCategoriesRes } from "~api/types";
 import { categoriesQuery } from "~queries";
 import { queryClient } from "~query-client";
 import { SelectCategoryPageLoaderData } from "~domains/category/types";
+import { PublishedCategories } from "~domains/category/components/PublishedCategories";
 
 const CategoriesList = () => {
-  const { spotSlug } = useParams();
   const categories = useAsyncValue() as IGetCategoriesRes;
-
-  const publishedCategories = categories.data
-    .filter((category) => category.published)
-    .filter((category) => {
-      return !category.hide_categories_in_spot
-        .map((spot) => spot.slug)
-        .includes(spotSlug);
-    });
 
   return (
     <S.Category.List>
-      {publishedCategories
-        .filter((category) => {
-          const hidden = category.hide_categories_in_spot.find(
-            (spot) => spot.slug === spotSlug
-          );
-          return !hidden;
-        })
-        .map((category) => (
-          <Category key={category.id} category={category} />
-        ))}
+      <PublishedCategories categories={categories.data}>
+        {({ categories }) =>
+          categories.map((category) => (
+            <Category key={category.id} category={category} />
+          ))
+        }
+      </PublishedCategories>
     </S.Category.List>
   );
 };

@@ -13,6 +13,7 @@ import {
 } from "./components";
 import { TProductCardProps } from "./types";
 import { findInCart } from "./utils";
+import { useAsyncValues } from "~components/AwaitAll";
 
 export const ProductCard = ({
   product,
@@ -20,6 +21,7 @@ export const ProductCard = ({
   cart,
 }: TProductCardProps) => {
   const cartProducts = cart?.data.map((json) => new CartProduct(json)) || [];
+  const { wishlists } = useAsyncValues() as any;
 
   const initialModificatorsState = product?.modGroups.reduce((acc, group) => {
     return {
@@ -43,12 +45,15 @@ export const ProductCard = ({
     [product, variant]
   );
 
+  const favorite = product?.isInWishlists(wishlists || []);
+
   return (
     <S.Wrapper>
       <FavoriteButton
         loading={loading}
         cartProduct={cartProduct}
         product={product}
+        favorite={favorite}
       />
       <Image product={product} loading={loading} />
 

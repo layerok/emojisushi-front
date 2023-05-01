@@ -2,6 +2,17 @@ import styled from "styled-components";
 import media from "src/common/custom-media";
 import { SearchInput as SearchInputBase } from "src/components/SearchInput";
 
+const Sidebar = styled.div`
+  width: 100%;
+  margin-bottom: 30px;
+  flex-shrink: 0;
+
+  ${media.greaterThan("pc")`
+    margin-right: 30px;
+    width: 255px;
+  `}
+`;
+
 const SearchContainer = styled.div`
   margin-bottom: 30px;
   ${media.greaterThan("tablet")`
@@ -17,4 +28,4 @@ const SearchInput = styled(SearchInputBase)`
  `}
 `;
 
-export { SearchInput, SearchContainer };
+export { Sidebar, SearchInput, SearchContainer };

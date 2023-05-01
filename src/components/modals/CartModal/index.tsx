@@ -168,24 +168,16 @@ export const CartModal = ({ children }) => {
 
 const AwaitedCartModal = ({ children }: { children: ReactElement }) => {
   const navigate = useNavigate();
-  const windowSize = useWindowSize();
-  const [height, setHeight] = useState(windowSize.height);
+
   const { lang, spotSlug, citySlug } = useParams();
   // todo: add type
   const cart = useAsyncValue() as IGetCartRes;
 
   const { data, total } = cart;
 
-  const debounceHeight = useDebounce(() => {
-    setHeight(windowSize.height);
-  }, 300);
-
   const breakpoint = useBreakpoint();
   const deletingCartProducts = useDeletingCartProducts();
 
-  useEffect(() => {
-    debounceHeight();
-  }, [windowSize.height]);
   const { t } = useTranslation();
 
   // we don't unmount deleted cart product right away, because if we do so,
@@ -206,7 +198,7 @@ const AwaitedCartModal = ({ children }: { children: ReactElement }) => {
 
   // max cart items wrapper height is 500px and min is 300px
   // 252px is sum of heights another element in cart modal
-  const finalHeight = Math.max(Math.min(height - 252, 500), 300);
+  const finalHeight = Math.max(Math.min(500 - 252, 500), 300);
 
   return (
     <BaseModal

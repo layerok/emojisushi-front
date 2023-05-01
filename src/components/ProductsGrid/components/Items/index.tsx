@@ -5,6 +5,7 @@ import { Product } from "~models";
 import { useSearchParams } from "react-router-dom";
 import { PRODUCTS_LIMIT_STEP } from "~domains/category/constants";
 import { IGetCartRes } from "~api/types";
+import { useMemo } from "react";
 
 type TItemsProps = {
   loading?: boolean;
@@ -17,31 +18,30 @@ export const Items = ({ loading = false, items = [], cart }: TItemsProps) => {
 
   const [searchParams] = useSearchParams();
 
+  const skeletons = useMemo(
+    () =>
+      new Array(+searchParams.get("limit") || PRODUCTS_LIMIT_STEP).fill(null),
+    [searchParams.get("limit")]
+  );
+
   if (loading) {
     return (
       <S.Grid>
-        {new Array(+searchParams.get("limit") || PRODUCTS_LIMIT_STEP)
-          .fill(null)
-          .map((_, index) => (
-            <ProductCard key={index} loading />
-          ))}
+        {skeletons.map((_, i) => (
+          <ProductCard key={i} loading />
+        ))}
       </S.Grid>
     );
   }
 
+  if (items.length === 0) {
+    return <div>{t("common.not_found")}</div>;
+  }
   return (
-    <>
-      {items.length !== 0 ? (
-        <S.Grid>
-          {items.map((product) => {
-            return (
-              <ProductCard cart={cart} key={product.id} product={product} />
-            );
-          })}
-        </S.Grid>
-      ) : (
-        t("common.not_found")
-      )}
-    </>
+    <S.Grid>
+      {items.map((product) => {
+        return <ProductCard cart={cart} key={product.id} product={product} />;
+      })}
+    </S.Grid>
   );
 };

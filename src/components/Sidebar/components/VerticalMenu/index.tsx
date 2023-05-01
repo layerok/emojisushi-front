@@ -70,7 +70,9 @@ const VerticalMenu = observer(
         <S.Categories>
           {categories.map((category) => {
             const active = categorySlug === category.slug;
-            return <Category category={category} active={active} />;
+            return (
+              <Category key={category.id} category={category} active={active} />
+            );
           })}
         </S.Categories>
       </nav>

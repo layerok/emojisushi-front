@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { useIsTablet, useDebounce } from "src/common/hooks";
+import { useDebounce } from "src/common/hooks";
 import Skeleton from "react-loading-skeleton";
 import {
   Form,
@@ -13,7 +13,6 @@ type TSearchProps = {
 };
 
 export const Search = ({ loading = false }: TSearchProps) => {
-  const isTablet = useIsTablet();
   const submit = useSubmit();
   const { q } = useLoaderData() as {
     q: string | undefined;
@@ -35,11 +34,7 @@ export const Search = ({ loading = false }: TSearchProps) => {
           width: "100%",
         }}
       >
-        <Skeleton
-          borderRadius={10}
-          width={isTablet ? 255 : "100%"}
-          height={40}
-        />
+        <Skeleton borderRadius={10} width={"100%"} height={40} />
       </S.SearchContainer>
     );
   }
