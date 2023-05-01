@@ -1,4 +1,13 @@
 import { Navigate } from "react-router-dom";
+import { useBreakpoint } from "~common/hooks";
+
+export const isBrowser = typeof window !== "undefined";
+
+const Test = () => {
+  const breakpoint = useBreakpoint();
+  console.log("rerender Test", breakpoint);
+  return <div>test</div>;
+};
 
 export const routes = [
   {
@@ -96,6 +105,10 @@ export const routes = [
         ],
       },
     ],
+  },
+  {
+    path: "/test",
+    element: <Test />,
   },
   {
     path: "*",

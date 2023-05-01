@@ -1,4 +1,4 @@
-import { createBreakpoint } from "react-use";
+import { createBreakpoint } from "~common/factory/createBreakpoint";
 import { breakpointsInPixels } from "../custom-media";
 
 export const useBreakpoint = createBreakpoint(breakpointsInPixels);
