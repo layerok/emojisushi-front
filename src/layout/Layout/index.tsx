@@ -13,6 +13,7 @@ import { ReactNode, Suspense } from "react";
 import {
   Await,
   Outlet,
+  ShouldRevalidateFunction,
   defer,
   redirect,
   useLoaderData,
@@ -164,3 +165,18 @@ export const loader = layoutLoader;
 Object.assign(Component, {
   displayName: "LazyLayout",
 });
+
+export const shouldRevalidate: ShouldRevalidateFunction = ({
+  currentParams,
+  nextParams,
+}) => {
+  if (currentParams.lang !== nextParams.lang) {
+    return false;
+  }
+  if (currentParams.spotSlug !== nextParams.spotSlug) {
+    return false;
+  }
+  if (currentParams.citySlug !== nextParams.citySlug) {
+    return false;
+  }
+};

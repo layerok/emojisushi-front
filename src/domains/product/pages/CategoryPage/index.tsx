@@ -55,13 +55,9 @@ export const CategoryPage = () => {
       {false && <Banner />}
       <FlexBox flexDirection={isDesktop ? "row" : "column"}>
         <Suspense fallback={<Sidebar loading />}>
-          <Await resolve={categories}>
-            {(categories) => (
-              <Await resolve={cities}>
-                <Sidebar categories={categories.data} />
-              </Await>
-            )}
-          </Await>
+          <AwaitAll categories={categories} cities={cities}>
+            {({ categories }) => <Sidebar categories={categories.data} />}
+          </AwaitAll>
         </Suspense>
         <Suspense fallback={<ProductsGrid loading />}>
           <AwaitAll
@@ -78,25 +74,6 @@ export const CategoryPage = () => {
               />
             )}
           </AwaitAll>
-          {/* <Await resolve={cities}>
-            <Await resolve={cart}>
-              {(cart) => (
-                <Await resolve={categories}>
-                  {(categories) => (
-                    <Await resolve={products}>
-                      {(products) => (
-                        <AwaitedProducts
-                          cart={cart}
-                          categories={categories.data}
-                          products={products}
-                        />
-                      )}
-                    </Await>
-                  )}
-                </Await>
-              )}
-            </Await>
-          </Await> */}
         </Suspense>
       </FlexBox>
       <RestaurantClosed open={closed} />

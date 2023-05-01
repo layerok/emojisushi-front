@@ -1,32 +1,40 @@
-import { ReactElement } from "react";
+import React from "react";
 import { Await } from "react-router-dom";
+const AsyncValuesContext = React.createContext({});
 
-type RenderFn = (values: Record<any, unknown>) => ReactElement;
+export const useAsyncValues = () => {
+  return React.useContext(AsyncValuesContext);
+};
 
 export const AwaitAll = ({ children, ...rest }) => {
   const keys = Object.keys(rest);
 
-  const render = (children) =>
-    keys.reduce(
-      (acc, key) => {
-        return (higherValues) => {
-          return (
-            <Await resolve={rest[key]}>
-              {(value) =>
-                acc({
-                  ...higherValues,
-                  [key]: value,
-                })
-              }
-            </Await>
-          );
-        };
-      },
-      ((higherValues) =>
-        typeof children === "function"
-          ? children(higherValues)
-          : children) as RenderFn
+  const initialValue = (higherValues) => {
+    const child =
+      typeof children === "function" ? children(higherValues) : children;
+    return (
+      <AsyncValuesContext.Provider value={higherValues}>
+        {child}
+      </AsyncValuesContext.Provider>
     );
+  };
 
-  return render(children)({});
+  const reducer = (acc, key) => {
+    return (higherValues) => {
+      return (
+        <Await resolve={rest[key]}>
+          {(value) =>
+            acc({
+              ...higherValues,
+              [key]: value,
+            })
+          }
+        </Await>
+      );
+    };
+  };
+
+  const render = keys.reduce(reducer, initialValue);
+
+  return render({});
 };

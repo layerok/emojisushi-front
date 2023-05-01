@@ -1,3 +1,4 @@
+import Skeleton from "react-loading-skeleton";
 import * as S from "./styled";
 import { ChangeEvent, HTMLProps, ReactElement, useId } from "react";
 
@@ -43,6 +44,7 @@ const Option = ({
 type ISwitcherProps = Omit<HTMLProps<HTMLDivElement>, "selected" | "name"> & {
   options: IOption[];
   name: string;
+  loading?: boolean;
   handleChange: ({
     e,
     index,
@@ -59,9 +61,14 @@ export const Switcher = ({
   options = [],
   name,
   handleChange,
+  loading,
   selected,
   ...rest
 }: ISwitcherProps): ReactElement => {
+  if (loading) {
+    return <Skeleton width={"100%"} height={40} />;
+  }
+
   const isSelected = (option) => {
     return typeof selected === "function" ? selected(option) : selected;
   };

@@ -212,7 +212,7 @@ const PasswordRecoveryForm = observer(({ setShowPasswordRecovery }) => {
           {t("common.back")}
         </S.NavigateButton>
         <Button
-          loading={state.loading}
+          submitting={state.loading}
           onClick={() => {
             runInAction(() => {
               state.loading = true;
@@ -306,7 +306,7 @@ const LoginForm = ({ setShowSignUp, setShowPasswordRecovery, close }) => {
       </FlexBox>
 
       <Button
-        loading={loading}
+        submitting={loading}
         onClick={() => {
           setLoginError("");
           setPasswordError("");

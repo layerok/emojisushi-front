@@ -1,8 +1,7 @@
 import * as S from "./styled";
-import { SvgIcon } from "../../SvgIcon";
-import { SpinnerSvg } from "../../svg/SpinnerSvg";
+import { SpinnerSvg, SvgIcon, IJustifyContent } from "~components";
 import { HTMLProps, PropsWithChildren } from "react";
-import { IJustifyContent } from "~components/FlexBox";
+import Skeleton from "react-loading-skeleton";
 
 type IProps = HTMLProps<HTMLButtonElement> &
   PropsWithChildren<{
@@ -10,6 +9,7 @@ type IProps = HTMLProps<HTMLButtonElement> &
     filled?: boolean;
     padding?: string;
     loading?: boolean;
+    submitting?: boolean;
     justifyContent?: IJustifyContent;
     outline?: boolean;
     color?: string;
@@ -26,6 +26,7 @@ export const Button = ({
   filled = false,
   padding,
   loading = false,
+  submitting = false,
   justifyContent,
   outline = true,
   color = "#FFE600",
@@ -36,11 +37,16 @@ export const Button = ({
   minWidth = "130px",
   ...rest
 }: IProps) => {
+  if (loading) {
+    return <Skeleton height={40} width={width} borderRadius={10} />;
+  }
+
+  // todo:  this is propsapacalypses, need to refactor
   return (
     <S.Button
       minWidth={minWidth}
       outline={outline}
-      backgroundColor={loading ? "#FFE600" : backgroundColor}
+      backgroundColor={submitting ? "#FFE600" : backgroundColor}
       hoverBackgroundColor={hoverBackgroundColor}
       hoverOutline={hoverOutline}
       color={color}
@@ -51,7 +57,7 @@ export const Button = ({
       justifyContent={justifyContent}
       {...rest}
     >
-      {loading ? (
+      {submitting ? (
         <SvgIcon width={"25px"} color={"black"}>
           <SpinnerSvg />
         </SvgIcon>

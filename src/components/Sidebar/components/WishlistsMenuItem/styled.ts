@@ -29,22 +29,4 @@ const Favorite = styled.li`
   )}
 `;
 
-const Text = styled.p`
-  color: #ffffff;
-  font-weight: 400;
-  font-size: 16px;
-  margin-top: 20px;
-  margin-bottom: 15px;
-`;
-
-const OneSvg = styled.a`
-  margin-right: 10px;
-  display: inline-block;
-`;
-
-const SvgContainer = styled.div`
-  display: flex;
-  margin-right: 10px;
-`;
-
-export { Favorite, Text, SvgContainer, OneSvg };
+export { Favorite };

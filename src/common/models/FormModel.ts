@@ -75,7 +75,7 @@ export class FormModel<
 
   get asSubmitButtonProps() {
     return {
-      loading: this.submitting,
+      submitting: this.submitting,
     };
   }
 

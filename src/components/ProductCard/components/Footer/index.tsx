@@ -69,7 +69,6 @@ export const Footer = ({
       <AddToCartButton
         loading={loading}
         count={count}
-        pending={false}
         handleAdd={handleAdd()}
       />
     </S.Footer>

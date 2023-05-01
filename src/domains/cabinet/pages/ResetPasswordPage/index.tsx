@@ -65,7 +65,7 @@ export const ResetPasswordPage = () => {
           )}
 
           <Button
-            loading={loading}
+            submitting={loading}
             onClick={() => {
               setLoading(true);
               authApi

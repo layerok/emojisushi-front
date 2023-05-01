@@ -11,16 +11,14 @@ import { useTranslation } from "react-i18next";
 import { queryClient } from "~query-client";
 import { paymentQuery, shippingQuery } from "~queries";
 import { Suspense } from "react";
-
-export const CheckoutPage = () => {
-  return <InternalCheckout />;
-};
+import { AwaitAll } from "~components/AwaitAll";
+import { LayoutRouteLoaderData } from "~layout/Layout";
 
 // todo: add skeletons
-const InternalCheckout = () => {
+const CheckoutPage = () => {
   const isMobile = useIsMobile();
   const { t } = useTranslation();
-  const { cart } = useRouteLoaderData("layout") as any;
+  const { cart, user } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
   const { shippingMethods, paymentMethods } = useLoaderData() as any;
 
   return (
@@ -31,27 +29,25 @@ const InternalCheckout = () => {
         justifyContent={"space-between"}
         style={{ marginTop: "30px" }}
       >
-        <Suspense fallback={<Loader loading={true} />}>
-          <Await resolve={cart}>
-            {(cart) => (
-              <Await resolve={shippingMethods}>
-                {(shippingMethods) => (
-                  <Await resolve={paymentMethods}>
-                    {(paymentMethods) => (
-                      <>
-                        <CheckoutForm
-                          shippingMethods={shippingMethods}
-                          paymentMethods={paymentMethods}
-                          cart={cart}
-                        />
-                        <CheckoutCart cart={cart} />
-                      </>
-                    )}
-                  </Await>
-                )}
-              </Await>
+        <Suspense fallback={<CheckoutForm loading />}>
+          <AwaitAll
+            cart={cart}
+            shippingMethods={shippingMethods}
+            paymentMethods={paymentMethods}
+            user={user}
+          >
+            {({ cart, shippingMethods, paymentMethods, user }) => (
+              <CheckoutForm
+                cart={cart}
+                shippingMethods={shippingMethods}
+                paymentMethods={paymentMethods}
+                user={user}
+              />
             )}
-          </Await>
+          </AwaitAll>
+        </Suspense>
+        <Suspense fallback={<Loader loading={true} />}>
+          <Await resolve={cart}>{(cart) => <CheckoutCart cart={cart} />}</Await>
         </Suspense>
       </FlexBox>
     </>

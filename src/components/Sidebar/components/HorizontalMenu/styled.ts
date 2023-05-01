@@ -5,13 +5,6 @@ import { ActiveNavLink } from "src/components/ActiveNavLink";
 const Categories = styled.div`
   position: relative;
   padding-top: 50px;
-  .slick-slide {
-    margin-right: 20px;
-  }
-
-  .slick-list {
-    overflow: visible;
-  }
 `;
 
 const HorizontalContainer = styled.div`

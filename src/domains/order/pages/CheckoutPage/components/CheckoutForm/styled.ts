@@ -4,16 +4,6 @@ const Form = styled.form`
   width: 350px;
 `;
 
-const Control = styled.div`
-  margin-top: 20px;
-`;
-
-const Total = styled.div`
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 22px;
-`;
-
 const ErrorBag = styled.ol`
   background: #cd3838;
   box-shadow: 0 0 15px rgba(34, 34, 34, 0.3);
@@ -29,9 +19,4 @@ const ErrorBag = styled.ol`
   }
 `;
 
-const SignIn = styled.p`
-  color: #ffe600;
-  margin-left: 5px;
-`;
-
-export { Form, Control, ErrorBag, Total, SignIn };
+export { Form, ErrorBag };

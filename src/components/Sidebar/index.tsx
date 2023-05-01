@@ -5,9 +5,10 @@ import { ICategory } from "~api/types";
 import { Search } from "./components/Search";
 import {
   HorizontalMenu,
-  UnderVerticalMenu,
   VerticalMenu,
   NotDesktopView,
+  Socials,
+  WishlistsMenuItem,
 } from "./components";
 import { useParams } from "react-router-dom";
 
@@ -42,7 +43,8 @@ export const Sidebar = ({ loading = false, categories = [] }: SidebarProps) => {
       {isDesktop ? (
         <>
           <VerticalMenu categories={publishedCategories} loading={loading} />
-          <UnderVerticalMenu loading={loading} />
+          <WishlistsMenuItem loading={loading} />
+          <Socials loading={loading} />
         </>
       ) : (
         <HorizontalMenu loading={loading} categories={publishedCategories} />

@@ -1,43 +1,18 @@
-import * as S from "./styled";
-import { SvgIcon, SvgButton, Favorite, TelegramModal } from "src/components";
-import { TelegramSvg, InstagramSvg } from "src/components/svg";
-import {
-  useMatch,
-  useNavigate,
-  useParams,
-  useResolvedPath,
-} from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
-
-type UnderVerticalMenuProps = {
+import * as S from "./styled";
+import { SvgButton } from "~components/SvgButton";
+import { SvgIcon } from "~components/SvgIcon";
+import { InstagramSvg, TelegramSvg } from "~components/svg";
+import { TelegramModal } from "~components/modals";
+type SocialsProps = {
   loading?: boolean;
 };
 
-export const UnderVerticalMenu = ({
-  loading = false,
-}: UnderVerticalMenuProps) => {
-  const navigate = useNavigate();
-  let resolved = useResolvedPath("/wishlist");
-  let match = useMatch({ path: resolved.pathname, end: true });
-  const { lang, spotSlug, citySlug } = useParams();
+export const Socials = ({ loading = false }: SocialsProps) => {
   const { t } = useTranslation();
   return (
     <>
-      <S.Favorite
-        active={!!match}
-        onClick={() => {
-          navigate("/" + [lang, citySlug, spotSlug, "wishlist"].join("/"));
-        }}
-      >
-        {loading ? <Skeleton height={26} width={120} /> : t("common.favorite")}
-        {loading ? (
-          <Skeleton circle width={25} height={25} />
-        ) : (
-          <Favorite isFavorite={true} />
-        )}
-      </S.Favorite>
-
       <S.Text>
         {loading ? <Skeleton /> : t("underVerticalMenu.in_touch")}
       </S.Text>

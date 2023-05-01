@@ -10,6 +10,7 @@ import {
   useRouteLoaderData,
 } from "react-router-dom";
 import {
+  IGetCartRes,
   IGetCategoriesRes,
   IGetProductsRes,
   IGetWishlistRes,
@@ -22,17 +23,16 @@ import { Sidebar } from "~components/Sidebar";
 import { CategoriesStore } from "src/stores/categories.store";
 import { categoriesQuery, productsQuery, wishlistsQuery } from "src/queries";
 import { LayoutRouteLoaderData } from "~layout/Layout";
+import { AwaitAll } from "~components/AwaitAll";
+import { WishlistPageLoaderData } from "~domains/wishlist/types";
 
 // todo: fix layout for wishlist
 
 // todo: optimisticly filter out wishlisted products
 
 export const WishlistPage = () => {
-  const {
-    products,
-    wishlists,
-    categories,
-  }: WishlistLoaderResolvedDeferredData = useLoaderData() as any;
+  const { products, wishlists, categories } =
+    useLoaderData() as WishlistPageLoaderData;
 
   const { cart } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
 
@@ -45,17 +45,20 @@ export const WishlistPage = () => {
       </Suspense>
 
       <Suspense fallback={<ProductsGrid loading />}>
-        <Await resolve={cart}>
-          <Await resolve={products}>
-            {(products) => (
-              <Await resolve={wishlists}>
-                {(wishlists) => (
-                  <AwaitedWishlist products={products} wishlists={wishlists} />
-                )}
-              </Await>
-            )}
-          </Await>
-        </Await>
+        <AwaitAll
+          cart={cart}
+          categories={categories}
+          wishlists={wishlists}
+          products={products}
+        >
+          {({ cart, categories, wishlists, products }) => (
+            <AwaitedWishlist
+              cart={cart}
+              products={products}
+              wishlists={wishlists}
+            />
+          )}
+        </AwaitAll>
       </Suspense>
     </FlexBox>
   );
@@ -75,9 +78,11 @@ export const AwaitedSidebar = () => {
 const AwaitedWishlist = ({
   products,
   wishlists,
+  cart,
 }: {
   products: IGetProductsRes;
   wishlists: IGetWishlistRes;
+  cart: IGetCartRes;
 }) => {
   const { t } = useTranslation();
 
@@ -95,18 +100,12 @@ const AwaitedWishlist = ({
   return (
     <ProductsGrid
       loadable={false}
+      cart={cart}
       items={items}
       handleLoadMore={handleLoadMore}
       title={t("common.favorite")}
     />
   );
-};
-
-export type WishlistLoaderResolvedDeferredData = {
-  products: IGetProductsRes;
-  wishlists: IGetWishlistRes;
-  categories: IGetCategoriesRes;
-  q: string | undefined;
 };
 
 export const wishlistLoader = async ({ params, request }) => {
@@ -140,7 +139,7 @@ export const wishlistLoader = async ({ params, request }) => {
     categories: categoriesPromise,
     q,
     sort,
-  } as WishlistLoaderResolvedDeferredData);
+  } as WishlistPageLoaderData);
 };
 
 export const wishlistAction = async ({ request }) => {

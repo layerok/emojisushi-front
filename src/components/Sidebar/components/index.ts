@@ -1,5 +1,6 @@
 export * from "./HorizontalMenu";
-export * from "./UnderVerticalMenu";
+export * from "./Socials";
+export * from "./WishlistsMenuItem";
 export * from "./VerticalMenu";
 export * from "./HorizontalMenu";
 export * from "./NotDesktopView";
