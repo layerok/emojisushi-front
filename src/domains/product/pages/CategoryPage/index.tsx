@@ -154,16 +154,21 @@ export const querifiedLoader = (queryClient: QueryClient) => {
     });
     const query = categoriesQuery();
 
+    const categories =
+      queryClient.getQueryData(query.queryKey) ?? queryClient.fetchQuery(query);
+
+    const products =
+      queryClient.getQueryData(productQuery.queryKey) ??
+      queryClient.fetchQuery(productQuery);
+
+    const wishlists =
+      queryClient.getQueryData(wishlistsQuery.queryKey) ??
+      queryClient.fetchQuery(wishlistsQuery);
+
     return defer({
-      categories:
-        queryClient.getQueryData(query.queryKey) ??
-        queryClient.fetchQuery(query),
-      products:
-        queryClient.getQueryData(productQuery.queryKey) ??
-        queryClient.fetchQuery(productQuery),
-      wishlists:
-        queryClient.getQueryData(wishlistsQuery.queryKey) ??
-        queryClient.fetchQuery(wishlistsQuery),
+      categories,
+      products,
+      wishlists,
       q,
       sort,
     });
