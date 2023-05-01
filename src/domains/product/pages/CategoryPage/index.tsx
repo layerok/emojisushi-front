@@ -1,7 +1,5 @@
 import {
-  Await,
   defer,
-  useAsyncValue,
   useLoaderData,
   useNavigate,
   useNavigation,
@@ -9,10 +7,8 @@ import {
   useRouteLoaderData,
   useSearchParams,
 } from "react-router-dom";
-import { FlexBox, ProductsGrid, RestaurantClosed } from "src/components";
+import { ProductsGrid, RestaurantClosed } from "src/components";
 import { Banner } from "./Banner";
-import { useIsDesktop } from "src/common/hooks";
-import { Sidebar } from "~components/Sidebar";
 import { Suspense } from "react";
 import { QueryClient } from "react-query";
 import { queryClient } from "src/query-client";
@@ -32,10 +28,10 @@ import { PRODUCTS_LIMIT_STEP } from "~domains/category/constants";
 import { CategoryPageLoaderData } from "~domains/product/types";
 import { LayoutRouteLoaderData } from "~layout/Layout";
 import { AwaitAll } from "~components/AwaitAll";
+import { MenuLayout } from "~domains/product/components/MenuLayout";
+import { PublishedCategories } from "~domains/category/components/PublishedCategories";
 
 export const CategoryPage = () => {
-  const isDesktop = useIsDesktop();
-
   // if (!selectedCategory && categories.length > 0) {
   //   return <Navigate to={categories[0].slug} />;
   // }
@@ -53,12 +49,7 @@ export const CategoryPage = () => {
   return (
     <>
       {false && <Banner />}
-      <FlexBox flexDirection={isDesktop ? "row" : "column"}>
-        <Suspense fallback={<Sidebar loading />}>
-          <AwaitAll categories={categories} cities={cities}>
-            {({ categories }) => <Sidebar categories={categories.data} />}
-          </AwaitAll>
-        </Suspense>
+      <MenuLayout>
         <Suspense fallback={<ProductsGrid loading />}>
           <AwaitAll
             cities={cities}
@@ -67,15 +58,20 @@ export const CategoryPage = () => {
             products={products}
           >
             {({ categories, cart, products }) => (
-              <AwaitedProducts
-                products={products}
-                cart={cart}
-                categories={categories.data}
-              />
+              <PublishedCategories categories={categories.data}>
+                {({ categories }) => (
+                  <AwaitedProducts
+                    products={products}
+                    cart={cart}
+                    categories={categories}
+                  />
+                )}
+              </PublishedCategories>
             )}
           </AwaitAll>
         </Suspense>
-      </FlexBox>
+      </MenuLayout>
+
       <RestaurantClosed open={closed} />
     </>
   );
@@ -91,13 +87,6 @@ export const AwaitedProducts = ({
   products?: IGetProductsRes;
 }) => {
   const { categorySlug, spotSlug, citySlug } = useParams();
-  const publishedCategories = categories
-    .filter((category) => category.published)
-    .filter((category) => {
-      return !category.hide_categories_in_spot
-        .map((spot) => spot.slug)
-        .includes(spotSlug);
-    });
 
   const [searchParams] = useSearchParams();
   const limit = searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
@@ -105,7 +94,7 @@ export const AwaitedProducts = ({
   const { lang } = useParams();
   const navigate = useNavigate();
 
-  const selectedCategory = publishedCategories.find((category) => {
+  const selectedCategory = categories.find((category) => {
     return category.slug === categorySlug;
   });
   const title = selectedCategory?.name;

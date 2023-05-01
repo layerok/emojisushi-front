@@ -46,7 +46,7 @@ const HorizontalMenu = observer(
               </>
             ) : (
               categories.map((category) => {
-                return <Category category={category} />;
+                return <Category key={category.id} category={category} />;
               })
             )}
           </S.HorizontalContainer>

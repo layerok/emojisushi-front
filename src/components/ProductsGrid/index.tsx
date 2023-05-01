@@ -18,38 +18,34 @@ type TProductsGridProps = {
   cart?: IGetCartRes;
 };
 
-export const ProductsGrid = observer(
-  ({
-    title = "Меню",
-    items = [],
-    handleLoadMore,
-    loading = false,
-    loadingMore = false,
-    loadable = false,
-    cart,
-  }: TProductsGridProps) => {
-    const breakpoint = useBreakpoint();
+export const ProductsGrid = ({
+  title = "Меню",
+  items = [],
+  handleLoadMore,
+  loading = false,
+  loadingMore = false,
+  loadable = false,
+  cart,
+}: TProductsGridProps) => {
+  const breakpoint = useBreakpoint();
 
-    const debouncedBreakpoint = useDebounce(() => {
-      return breakpoint;
-    }, 300);
+  const debouncedBreakpoint = useDebounce(() => {
+    return breakpoint;
+  }, 300);
 
-    return (
-      <div style={{ position: "relative", width: "100%" }}>
-        {/* show loader or skeleton when adding to favorites */}
-        <Loader loading={false} />
-        <Header loading={loading} title={title} />
-        <EqualHeight updateOnChange={debouncedBreakpoint}>
-          <Items cart={cart} loading={loading} items={items} />
-        </EqualHeight>
-        {loadable && (
-          <Footer
-            loading={loading}
-            loadingMore={loadingMore}
-            handleLoadMore={handleLoadMore}
-          />
-        )}
-      </div>
-    );
-  }
-);
+  return (
+    <div style={{ position: "relative", width: "100%" }}>
+      <Header loading={loading} title={title} />
+      <EqualHeight updateOnChange={debouncedBreakpoint}>
+        <Items cart={cart} loading={loading} items={items} />
+      </EqualHeight>
+      {loadable && (
+        <Footer
+          loading={loading}
+          loadingMore={loadingMore}
+          handleLoadMore={handleLoadMore}
+        />
+      )}
+    </div>
+  );
+};

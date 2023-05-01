@@ -1,17 +1,14 @@
-import { ProductsGrid, FlexBox } from "~components";
+import { ProductsGrid } from "~components";
 import { useTranslation } from "react-i18next";
 import { wishlistApi } from "src/api";
 import {
-  Await,
   defer,
-  useAsyncValue,
   useLoaderData,
   useParams,
   useRouteLoaderData,
 } from "react-router-dom";
 import {
   IGetCartRes,
-  IGetCategoriesRes,
   IGetProductsRes,
   IGetWishlistRes,
   SortKey,
@@ -19,15 +16,13 @@ import {
 import { Product } from "src/models";
 import { queryClient } from "src/query-client";
 import { Suspense } from "react";
-import { Sidebar } from "~components/Sidebar";
-import { CategoriesStore } from "src/stores/categories.store";
 import { categoriesQuery, productsQuery, wishlistsQuery } from "src/queries";
 import { LayoutRouteLoaderData } from "~layout/Layout";
 import { AwaitAll } from "~components/AwaitAll";
 import { WishlistPageLoaderData } from "~domains/wishlist/types";
+import { MenuLayout } from "~domains/product/components/MenuLayout";
 
 // todo: fix layout for wishlist
-
 // todo: optimisticly filter out wishlisted products
 
 export const WishlistPage = () => {
@@ -37,13 +32,7 @@ export const WishlistPage = () => {
   const { cart } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
 
   return (
-    <FlexBox>
-      <Suspense fallback={<Sidebar loading />}>
-        <Await resolve={categories}>
-          <AwaitedSidebar />
-        </Await>
-      </Suspense>
-
+    <MenuLayout>
       <Suspense fallback={<ProductsGrid loading />}>
         <AwaitAll
           cart={cart}
@@ -52,30 +41,15 @@ export const WishlistPage = () => {
           products={products}
         >
           {({ cart, categories, wishlists, products }) => (
-            <AwaitedWishlist
-              cart={cart}
-              products={products}
-              wishlists={wishlists}
-            />
+            <Wishlist cart={cart} products={products} wishlists={wishlists} />
           )}
         </AwaitAll>
       </Suspense>
-    </FlexBox>
+    </MenuLayout>
   );
 };
 
-export const AwaitedSidebar = () => {
-  const { spotSlug } = useParams();
-
-  const categories = useAsyncValue() as IGetCategoriesRes;
-
-  const categoriesStore = new CategoriesStore(categories.data);
-  const publishedCategories = categoriesStore.getPublishedItems(spotSlug);
-
-  return <Sidebar categories={publishedCategories} />;
-};
-
-const AwaitedWishlist = ({
+const Wishlist = ({
   products,
   wishlists,
   cart,
