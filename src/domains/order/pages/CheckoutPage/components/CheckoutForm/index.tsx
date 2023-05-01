@@ -123,6 +123,7 @@ export const CheckoutForm = ({
       <Login user={user} loading={loading} />
 
       <ShippingMethods
+        user={user}
         loading={loading}
         items={shippingMethods?.data || []}
         formik={formik}

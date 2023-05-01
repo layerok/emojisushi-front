@@ -10,10 +10,12 @@ export const ShippingMethods = ({
   formik,
   items = [],
   loading = false,
+  user,
 }: {
   formik: any;
   loading?: boolean;
   items?: IShippingMethod[];
+  user: User | null;
 }) => {
   const { t } = useTranslation();
 
@@ -53,7 +55,7 @@ export const ShippingMethods = ({
         handleChange={handleChange}
       />
       {getShippingType()?.id === 2 && (
-        <AddressDropdownOrInput formik={formik} />
+        <AddressDropdownOrInput user={user} formik={formik} />
       )}
     </>
   );
@@ -61,13 +63,12 @@ export const ShippingMethods = ({
 
 const AddressDropdownOrInput = ({
   formik,
-  user: userJson,
+  user,
 }: {
   formik: any;
-  user?: IUser;
+  user: User | null;
 }) => {
   const { t } = useTranslation();
-  const user = new User(userJson);
 
   const [showTextAddress, setShowTextAddress] = useState(
     (user && !user.customer.hasAddresses) || !user
@@ -89,7 +90,7 @@ const AddressDropdownOrInput = ({
           />
         </SharedStyles.Control>
       ) : (
-        <AddressDropdown formik={formik} />
+        <AddressDropdown user={user} formik={formik} />
       )}
       {user?.customer.hasAddresses && (
         <button
@@ -121,9 +122,7 @@ const AddressDropdownOrInput = ({
 };
 
 const AddressDropdown = observer(
-  ({ formik, user: userJson }: { formik: any; user?: IUser }) => {
-    const user = new User(userJson);
-
+  ({ formik, user }: { formik: any; user: User | null }) => {
     const options = useMemo(
       () =>
         user?.customer.addresses.map((address) => ({
