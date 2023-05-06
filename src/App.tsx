@@ -10,6 +10,8 @@ import { SkeletonTheme } from "react-loading-skeleton";
 import { QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { queryClient } from "~query-client";
+import { Suspense } from "react";
+import { Loader } from "~components";
 
 const router = createBrowserRouter(routes);
 
@@ -19,16 +21,18 @@ const FallbackElement = () => {
 
 export const App = observer(() => {
   return (
-    <ThemeProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <SkeletonTheme baseColor="#1F1F1F" highlightColor="#2F2F2F">
-          <RouterProvider
-            fallbackElement={<FallbackElement />}
-            router={router}
-          />
-        </SkeletonTheme>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </ThemeProvider>
+    <Suspense fallback={<Loader loading={true} />}>
+      <ThemeProvider theme={theme}>
+        <QueryClientProvider client={queryClient}>
+          <SkeletonTheme baseColor="#1F1F1F" highlightColor="#2F2F2F">
+            <RouterProvider
+              fallbackElement={<FallbackElement />}
+              router={router}
+            />
+          </SkeletonTheme>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </ThemeProvider>
+    </Suspense>
   );
 });

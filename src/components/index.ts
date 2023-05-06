@@ -12,7 +12,6 @@ export * from "./InfoTooltip";
 export * from "./Switcher";
 export * from "./tooltips";
 export * from "./Price";
-export * from "./Favorite";
 export * from "./ProductsGrid";
 export * from "./ProductCard";
 export * from "./Input";

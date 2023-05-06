@@ -1,5 +1,10 @@
 import { client } from "~clients/client";
-import { ISpot, IGetCitiesParams, IGetCitiesRes } from "./access.api.types";
+import {
+  ISpot,
+  IGetCitiesParams,
+  IGetCitiesRes,
+  ICity,
+} from "./access.api.types";
 import { IMeta } from "../common/common.api.types";
 import { AxiosAuthRefreshRequestConfig } from "axios-auth-refresh";
 
@@ -17,6 +22,20 @@ function getSpots(params = {}) {
   } as AxiosAuthRefreshRequestConfig);
 }
 
+function getSpot(params: { slug_or_id: string | number }) {
+  return client.get<ISpot>("spot", {
+    params,
+    skipAuthRefresh: true,
+  } as AxiosAuthRefreshRequestConfig);
+}
+
+function getCity(params: { slug_or_id: string | number }) {
+  return client.get<ICity>("city", {
+    params,
+    skipAuthRefresh: true,
+  } as AxiosAuthRefreshRequestConfig);
+}
+
 function getCities(params: IGetCitiesParams = getCitiesDefaults) {
   return client
     .get<IGetCitiesRes>("cities", {
@@ -29,4 +48,6 @@ function getCities(params: IGetCitiesParams = getCitiesDefaults) {
 export const accessApi = {
   getSpots,
   getCities,
+  getSpot,
+  getCity,
 };

@@ -1,3 +1,4 @@
+import i18next from "i18next";
 import { Navigate } from "react-router-dom";
 
 export const routes = [
@@ -10,6 +11,10 @@ export const routes = [
       },
       {
         path: ":lang",
+        loader: ({ params }) => {
+          i18next.changeLanguage(params.lang);
+          return null;
+        },
         children: [
           {
             index: true,
@@ -35,7 +40,7 @@ export const routes = [
                   },
                   {
                     path: ":categorySlug",
-                    lazy: () => import("~domains/product/pages/CategoryPage"),
+                    lazy: () => import("~domains/product/pages/ProductPage"),
                     id: "category",
                   },
                 ],

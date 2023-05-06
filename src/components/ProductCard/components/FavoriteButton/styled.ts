@@ -1,22 +1,35 @@
 import styled from "styled-components";
 import media from "~common/custom-media";
 
-const Favorite = styled.div`
+const Wrapper = styled.div`
   position: absolute;
   top: 22px;
   right: 12px;
-  z-index: 2;
+  z-index: 1;
+
+  background: rgba(20, 20, 20, 0.7);
+  border-radius: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 35px;
+  height: 35px;
 
   ${media.lessThan("tablet")`
     top: 30px;
     right: 17px;
-  `}
-
-  width: 33px;
-
-  ${media.greaterThan("pc")`
-    width: 25px;
+    width: 47px;
+    height: 47px;
   `}
 `;
 
-export { Favorite };
+const IconWrapper = styled.div`
+  width: 25px;
+  ${media.lessThan("tablet")`
+    width: 33px;
+  `}
+`;
+
+export { IconWrapper, Wrapper };

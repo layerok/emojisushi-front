@@ -15,7 +15,6 @@ import {
   Outlet,
   ShouldRevalidateFunction,
   defer,
-  redirect,
   useLoaderData,
 } from "react-router-dom";
 import { queryClient } from "~query-client";
@@ -23,9 +22,11 @@ import { cartQuery } from "~queries";
 import { authApi, cartApi } from "~api";
 import { CartProduct } from "~models";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
-import { IUser, IGetCartRes, IGetCitiesRes } from "~api/types";
+import { IUser, IGetCartRes, IGetCitiesRes, ICity, ISpot } from "~api/types";
 import { citiesQuery } from "~queries/cities.query";
 import { AwaitAll } from "~components/AwaitAll";
+import { spotQuery } from "~domains/spot/queries/spot.query";
+import { cityQuery } from "~domains/spot/queries/city.query";
 
 export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
   const { x, y } = useWindowScroll();
@@ -72,7 +73,6 @@ export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
           </Sticky>
         </Await>
       </Suspense>
-
       <StickyToTopBtn />
     </S.Layout>
   );
@@ -84,11 +84,12 @@ export type LayoutRouteLoaderData = {
   cart: IGetCartRes;
   user: IUser | null;
   cities: IGetCitiesRes;
+  city: ICity;
+  spot: ISpot;
 };
 
 export const layoutLoader = async ({ params }) => {
-  // todo: maybe create endpoint for fetching specific city, to check if it exists
-  const fetchUserPromise = authApi
+  const userPromise = authApi
     .fetchUser()
     .then((res) => res.data)
     .catch((e) => {
@@ -99,31 +100,32 @@ export const layoutLoader = async ({ params }) => {
       return null;
     });
 
-  const fetchCitiesPromise =
+  const citiesPromise =
     queryClient.getQueryData<IGetCitiesRes>(citiesQuery.queryKey) ??
-    queryClient.fetchQuery<IGetCitiesRes>(citiesQuery).then((cities) => {
-      const city = cities.data.find((city) => city.slug === params.citySlug);
+    queryClient.fetchQuery<IGetCitiesRes>(citiesQuery);
 
-      if (!city) {
-        throw redirect("/" + params.lang);
-      }
+  const cityQuery_ = cityQuery(params.citySlug);
 
-      const spot = city.spots.find((spot) => spot.slug === params.spotSlug);
+  const cityPromise =
+    queryClient.getQueryData<ICity>(cityQuery_.queryKey) ??
+    queryClient.fetchQuery<ICity>(cityQuery_);
 
-      if (!spot) {
-        throw redirect("/" + params.lang);
-      }
-      return cities;
-    });
+  const spotQuery_ = spotQuery(params.spotSlug);
 
-  const fetchCartPromise =
+  const spotPromise =
+    queryClient.getQueryData<ISpot>(spotQuery_.queryKey) ??
+    queryClient.fetchQuery<ISpot>(spotQuery_);
+
+  const cartPromise =
     queryClient.getQueryData<IGetCartRes>(cartQuery.queryKey) ??
     queryClient.fetchQuery<IGetCartRes>(cartQuery);
 
   return defer({
-    cart: fetchCartPromise,
-    user: fetchUserPromise,
-    cities: fetchCitiesPromise,
+    cart: cartPromise,
+    user: userPromise,
+    cities: citiesPromise,
+    city: await cityPromise,
+    spot: await spotPromise,
   });
 };
 
@@ -171,12 +173,6 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
   nextParams,
 }) => {
   if (currentParams.lang !== nextParams.lang) {
-    return false;
-  }
-  if (currentParams.spotSlug !== nextParams.spotSlug) {
-    return false;
-  }
-  if (currentParams.citySlug !== nextParams.citySlug) {
     return false;
   }
 };

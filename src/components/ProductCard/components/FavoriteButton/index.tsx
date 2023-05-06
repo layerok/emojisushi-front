@@ -1,7 +1,7 @@
 import { useFetcher } from "react-router-dom";
 import { CartProduct, Product } from "~models";
 import * as S from "./styled";
-import { Favorite } from "~components";
+import { HeartSvg, SvgIcon } from "~components";
 
 type FavoriteButtonProps = {
   cartProduct?: CartProduct;
@@ -38,8 +38,18 @@ export const FavoriteButton = ({
   };
 
   return (
-    <S.Favorite onClick={handleToggleFavorite}>
-      <Favorite loading={loading} isFavorite={favorite} />
-    </S.Favorite>
+    <S.Wrapper onClick={handleToggleFavorite}>
+      <S.IconWrapper>
+        <SvgIcon
+          clickable={true}
+          width={"100%"}
+          color={favorite ? "#FFE600" : "white"}
+          hoverColor={"#FFE600"}
+          loading={loading}
+        >
+          <HeartSvg />
+        </SvgIcon>
+      </S.IconWrapper>
+    </S.Wrapper>
   );
 };

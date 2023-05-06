@@ -1,9 +1,10 @@
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { NavLink, useParams } from "react-router-dom";
-import { Favorite } from "~components/Favorite";
 import * as S from "./styled";
 import { theme } from "~theme";
+import { HeartSvg } from "~components/svg";
+import { SvgIcon } from "~components/SvgIcon";
 
 type WishlistsMenuItemProps = { loading?: boolean };
 
@@ -35,10 +36,17 @@ export const WishlistsMenuItem = ({
           )}
           <div
             style={{
-              width: 30,
+              width: 25,
             }}
           >
-            <Favorite loading={loading} isFavorite={true} />
+            <SvgIcon
+              clickable={true}
+              width={"100%"}
+              color={"#FFE600"}
+              loading={loading}
+            >
+              <HeartSvg />
+            </SvgIcon>
           </div>
         </S.Favorite>
       )}

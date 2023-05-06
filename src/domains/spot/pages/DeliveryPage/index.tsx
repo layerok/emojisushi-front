@@ -1,11 +1,23 @@
 import { Heading, If } from "~components";
 import * as S from "./styled";
 import { useTranslation } from "react-i18next";
-import { useSpot } from "~hooks";
+import { useRouteLoaderData } from "react-router-dom";
+import { ICity, ISpot } from "~api/types";
+import { City, Spot } from "~models";
+
+type DeliverPageLoaderData = {
+  spot: ISpot;
+  city: ICity;
+};
 
 export const DeliveryPage = () => {
   const { t } = useTranslation();
-  const spot = useSpot();
+  const { spot: spotJson, city: cityJson } = useRouteLoaderData(
+    "layout"
+  ) as DeliverPageLoaderData;
+
+  const city = new City(cityJson);
+  const spot = new Spot(spotJson, city);
 
   return (
     <S.FlexContainer>

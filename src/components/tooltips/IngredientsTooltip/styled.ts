@@ -34,10 +34,10 @@ const ListItem = styled.li`
 `;
 
 const IconWrapper = styled.div`
-  width: 25px;
-  ${media.greaterThan("mobile")`
   width: 33px;
-`}
+  ${media.greaterThan("mobile")`
+    width:25px;
+  `}
 `;
 
 export { Wrapper, Title, List, ListItem, IconWrapper };

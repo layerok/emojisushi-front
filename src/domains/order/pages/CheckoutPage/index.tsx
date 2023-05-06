@@ -3,8 +3,10 @@ import { CheckoutForm, CheckoutCart } from "./components";
 import { useBreakpoint2 } from "~common/hooks";
 import {
   Await,
+  Navigate,
   defer,
   useLoaderData,
+  useParams,
   useRouteLoaderData,
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -14,15 +16,29 @@ import { Suspense } from "react";
 import { AwaitAll } from "~components/AwaitAll";
 import { LayoutRouteLoaderData } from "~layout/Layout";
 
-// todo: add skeletons
 const CheckoutPage = () => {
   const { isMobile } = useBreakpoint2();
   const { t } = useTranslation();
-  const { cart, user } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
+  const { user, cart } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
   const { shippingMethods, paymentMethods } = useLoaderData() as any;
+  const { lang, citySlug, spotSlug } = useParams();
 
   return (
     <>
+      <Suspense>
+        <Await resolve={cart}>
+          {(cart) => {
+            if (cart.data.length < 1) {
+              return (
+                <Navigate to={"/" + [lang, citySlug, spotSlug].join("/")} />
+              );
+            } else {
+              return null;
+            }
+          }}
+        </Await>
+      </Suspense>
+
       <Heading>{t("checkout.title")}</Heading>
       <FlexBox
         flexDirection={isMobile ? "column" : "row"}
@@ -46,7 +62,7 @@ const CheckoutPage = () => {
             )}
           </AwaitAll>
         </Suspense>
-        <Suspense fallback={<Loader loading={true} />}>
+        <Suspense fallback={<CheckoutCart loading={true} />}>
           <Await resolve={cart}>{(cart) => <CheckoutCart cart={cart} />}</Await>
         </Suspense>
       </FlexBox>
