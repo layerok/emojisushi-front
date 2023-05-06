@@ -10,7 +10,11 @@ export const Spot = ({ spot }: { spot?: SpotModel }) => {
   const { t } = useTranslation();
   return (
     <S.Link
-      to={"/" + lang + "/" + spot?.city.slug + "/" + spot?.slug + "/category"}
+      to={
+        spot
+          ? "/" + [lang, spot.city.slug, spot.slug, "category"].join("/")
+          : undefined
+      }
     >
       <S.Inner>
         <S.Content>
