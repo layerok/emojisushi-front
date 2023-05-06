@@ -15,15 +15,14 @@ const Main = styled.main`
 
 const Content = styled.div`
   width: 100%;
-  margin-bottom: 50px;
-  margin-top: 50px;
+  padding-bottom: 50px;
+  padding-top: 50px;
   ${media.lessThan("pc")`
-        margin-top: 60px;
-    `}
-
+    padding-top: 60px;
+  `}
   ${media.lessThan("tablet")`
-        margin-top: 40px;
-    `}
+    padding-top: 40px;
+  `}
 `;
 
 export { Layout, Main, Content };

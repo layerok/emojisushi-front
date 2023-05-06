@@ -1,4 +1,3 @@
-import { CabinetLayout } from "~layout/CabinetLayout";
 import { useTranslation } from "react-i18next";
 import { If, AccordionItem } from "~components";
 import { useLoaderData } from "react-router-dom";
@@ -12,9 +11,8 @@ export const MyOrdersPage = () => {
   >;
   const user = new User(userJson);
   const customer = user.customer;
-
   return (
-    <CabinetLayout title={t("account.orders.title")}>
+    <>
       <If condition={customer.hasOrders}>
         {customer.orders.map((order, index) => (
           <div
@@ -29,7 +27,7 @@ export const MyOrdersPage = () => {
       <If condition={!customer.hasOrders}>
         <p>{t("account.orders.noOrders")}</p>
       </If>
-    </CabinetLayout>
+    </>
   );
 };
 

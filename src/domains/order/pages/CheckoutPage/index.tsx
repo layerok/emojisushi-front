@@ -1,4 +1,4 @@
-import { FlexBox, Heading, Loader } from "~components";
+import { Container, FlexBox, Heading, Loader } from "~components";
 import { CheckoutForm, CheckoutCart } from "./components";
 import { useBreakpoint2 } from "~common/hooks";
 import {
@@ -24,7 +24,7 @@ const CheckoutPage = () => {
   const { lang, citySlug, spotSlug } = useParams();
 
   return (
-    <>
+    <Container>
       <Suspense>
         <Await resolve={cart}>
           {(cart) => {
@@ -66,7 +66,7 @@ const CheckoutPage = () => {
           <Await resolve={cart}>{(cart) => <CheckoutCart cart={cart} />}</Await>
         </Suspense>
       </FlexBox>
-    </>
+    </Container>
   );
 };
 

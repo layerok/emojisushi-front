@@ -54,7 +54,7 @@ const InternalLocationPickerPopover = (props: LocationPickerPopoverProps) => {
       <DropdownPopover
         backgroundColor={backgroundColor}
         width={width}
-        disable={false}
+        disable={true}
         offset={offset}
         options={options}
         selectedIndex={selectedIndex}

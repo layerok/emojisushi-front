@@ -1,5 +1,6 @@
 import i18next from "i18next";
 import { Navigate } from "react-router-dom";
+import { Trans } from "react-i18next";
 
 export const routes = [
   {
@@ -65,23 +66,47 @@ export const routes = [
 
               {
                 path: "account",
-                element: <Navigate to={"/account/profile"} />,
-              },
-              {
-                path: "account/profile",
-                lazy: () => import("~domains/cabinet/pages/ProfilePage"),
-              },
-              {
-                path: "account/recover-password",
-                lazy: () => import("~domains/cabinet/pages/UpdatePasswordPage"),
-              },
-              {
-                path: "account/saved-addresses",
-                lazy: () => import("~domains/cabinet/pages/SavedAddressesPage"),
-              },
-              {
-                path: "account/orders",
-                lazy: () => import("~domains/cabinet/pages/MyOrdersPage"),
+                lazy: () => import("~layout/CabinetLayout"),
+                children: [
+                  {
+                    index: true,
+                    element: <Navigate to={"profile"} />,
+                  },
+                  {
+                    path: "profile",
+                    lazy: () => import("~domains/cabinet/pages/ProfilePage"),
+                    handle: {
+                      title: () => <Trans i18nKey={"account.profile.title"} />,
+                    },
+                  },
+                  {
+                    path: "recover-password",
+                    lazy: () =>
+                      import("~domains/cabinet/pages/UpdatePasswordPage"),
+                    handle: {
+                      title: () => (
+                        <Trans i18nKey={"account.changePassword.title"} />
+                      ),
+                    },
+                  },
+                  {
+                    path: "saved-addresses",
+                    lazy: () =>
+                      import("~domains/cabinet/pages/SavedAddressesPage"),
+                    handle: {
+                      title: () => (
+                        <Trans i18nKey={"account.addresses.title"} />
+                      ),
+                    },
+                  },
+                  {
+                    path: "orders",
+                    lazy: () => import("~domains/cabinet/pages/MyOrdersPage"),
+                    handle: {
+                      title: () => <Trans i18nKey={"account.orders.title"} />,
+                    },
+                  },
+                ],
               },
             ],
           },

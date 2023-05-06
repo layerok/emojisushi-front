@@ -1,25 +1,8 @@
-import { CabinetLayout } from "src/layout/CabinetLayout";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { observer, useLocalObservable } from "mobx-react";
 import * as S from "./styled";
-import {
-  FlexBox,
-  Input,
-  Dropdown,
-  ButtonDark,
-  ButtonOutline,
-} from "src/components";
-import {
-  useLoaderData,
-  useNavigate,
-  useRouteLoaderData,
-} from "react-router-dom";
-import {
-  DAY_OPTIONS,
-  MONTH_OPTIONS,
-  SEX_OPTIONS,
-  YEAR_OPTIONS,
-} from "./constants";
+import { FlexBox, Input, ButtonDark, ButtonOutline } from "src/components";
+import { useLoaderData, useNavigate } from "react-router-dom";
 
 import { TextInputModel, FormModel } from "src/common/models";
 import { useTranslation } from "react-i18next";
@@ -105,52 +88,6 @@ const EditForm = observer(
           />
         </FlexBox>
 
-        {/*        <S.Birth>
-            <S.Birth.Heading>Дата Рождения</S.Birth.Heading>
-            <S.Birth.Properties>
-                <S.Birth.Property>
-                    <S.Birth.Label>День</S.Birth.Label>
-                    <Dropdown
-                      width={"100px"}
-                      initiallySelectedValue={1}
-                      options={DAY_OPTIONS}
-                    />
-
-                </S.Birth.Property>
-                <S.Birth.Property>
-                    <S.Birth.Label>Месяц</S.Birth.Label>
-                    <Dropdown width={"128px"}
-                              initiallySelectedValue={1}
-                              options={MONTH_OPTIONS}
-                    />
-
-                </S.Birth.Property>
-
-                <S.Birth.Property>
-                    <S.Birth.Label>Год</S.Birth.Label>
-                    <Dropdown
-                      width={"107px"}
-                      initiallySelectedValue={1976}
-                      options={YEAR_OPTIONS}
-                    />
-
-                </S.Birth.Property>
-
-            </S.Birth.Properties>
-
-        </S.Birth>
-
-        <S.Sex>
-            <S.Sex.Label>Пол</S.Sex.Label>
-            <Dropdown
-              width={"128px"}
-              initiallySelectedValue={"male"}
-              options={SEX_OPTIONS}
-            />
-        </S.Sex>
-
-        <S.HorizontalBar/>*/}
-
         <FlexBox
           style={{
             marginTop: "30px",
@@ -228,16 +165,11 @@ const ProfilePreview = ({ startEditing }: { startEditing: () => void }) => {
 
 export const ProfilePage = () => {
   const [editModeEnabled, setEditModeEnabled] = useState(false);
-  const { t } = useTranslation();
 
-  return (
-    <CabinetLayout title={t("account.profile.title")}>
-      {editModeEnabled ? (
-        <EditForm cancelEditing={() => setEditModeEnabled(false)} />
-      ) : (
-        <ProfilePreview startEditing={() => setEditModeEnabled(true)} />
-      )}
-    </CabinetLayout>
+  return editModeEnabled ? (
+    <EditForm cancelEditing={() => setEditModeEnabled(false)} />
+  ) : (
+    <ProfilePreview startEditing={() => setEditModeEnabled(true)} />
   );
 };
 

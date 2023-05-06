@@ -1,7 +1,7 @@
 import { Await, defer, useAsyncValue, useLoaderData } from "react-router-dom";
 import * as S from "./styled";
 import { useTranslation } from "react-i18next";
-import { SvgIcon, ToteSvg } from "~components";
+import { Container, SvgIcon, ToteSvg } from "~components";
 import { useBreakpoint2 } from "~common/hooks";
 import { Suspense } from "react";
 import { Category } from "./components/Category";
@@ -53,32 +53,34 @@ export const SelectCategoryPage = () => {
   const { isMobile } = useBreakpoint2();
 
   return (
-    <S.Category>
-      <S.Category.Container>
-        <S.Category.Label>
-          <Suspense fallback={<Skeleton width={220} height={20} />}>
-            <Await resolve={categories}>
-              <>
-                {t("categoryIndex.title")}
-                <SvgIcon width={isMobile ? "20px" : "25px"} color={"white"}>
-                  <ToteSvg />
-                </SvgIcon>
-              </>
-            </Await>
-          </Suspense>
-        </S.Category.Label>
-        <S.Category.Items>
-          <Suspense fallback={<CategoriesSkeleton />}>
-            <Await
-              resolve={categories}
-              errorElement={<p>Error fetching categories!</p>}
-            >
-              <CategoriesList />
-            </Await>
-          </Suspense>
-        </S.Category.Items>
-      </S.Category.Container>
-    </S.Category>
+    <Container>
+      <S.Category>
+        <S.Category.Container>
+          <S.Category.Label>
+            <Suspense fallback={<Skeleton width={220} height={20} />}>
+              <Await resolve={categories}>
+                <>
+                  {t("categoryIndex.title")}
+                  <SvgIcon width={isMobile ? "20px" : "25px"} color={"white"}>
+                    <ToteSvg />
+                  </SvgIcon>
+                </>
+              </Await>
+            </Suspense>
+          </S.Category.Label>
+          <S.Category.Items>
+            <Suspense fallback={<CategoriesSkeleton />}>
+              <Await
+                resolve={categories}
+                errorElement={<p>Error fetching categories!</p>}
+              >
+                <CategoriesList />
+              </Await>
+            </Suspense>
+          </S.Category.Items>
+        </S.Category.Container>
+      </S.Category>
+    </Container>
   );
 };
 

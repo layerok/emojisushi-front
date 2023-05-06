@@ -5,7 +5,7 @@ const Left = styled.div`
   display: flex;
 `;
 
-const PcHeaderItem = styled.div`
+const HeaderItem = styled.div`
   margin-right: 60px;
   display: flex;
   align-items: center;
@@ -15,4 +15,4 @@ const PcHeaderItem = styled.div`
     `}
 `;
 
-export { Left, PcHeaderItem };
+export { Left, HeaderItem };

@@ -57,6 +57,10 @@ export class Customer {
     return this.json.default_shipping_address_id;
   }
 
+  set defaultShippingAddressId(id: number) {
+    this.json.default_shipping_address_id = id;
+  }
+
   get defaultAddress() {
     return this.addresses.find(
       (address) => this.defaultShippingAddressId === address.id

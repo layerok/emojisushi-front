@@ -49,11 +49,9 @@ export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
       </Suspense>
 
       <S.Main>
-        <Container>
-          <S.Content>
-            <Outlet />
-          </S.Content>
-        </Container>
+        <S.Content>
+          <Outlet />
+        </S.Content>
       </S.Main>
 
       <Suspense fallback={<Footer loading={true} />}>

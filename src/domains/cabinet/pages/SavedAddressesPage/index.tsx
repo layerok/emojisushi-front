@@ -1,33 +1,78 @@
-import { observer, useLocalObservable } from "mobx-react";
-import { CabinetLayout } from "~layout/CabinetLayout";
 import * as S from "./styled";
 import {
   ButtonOutline,
   HeartSvg,
   CloseSvg,
   Input,
-  SpinnerSvg,
   SvgIcon,
+  SpinnerSvg,
 } from "~components";
-import { TextInputModel, FormModel } from "~common/models";
 import { authApi } from "~api";
-import { IAddress } from "~api/types";
+import { IAddress, IUser } from "~api/types";
 import { useTranslation } from "react-i18next";
-import { useLoaderData } from "react-router-dom";
+import {
+  ActionFunctionArgs,
+  Form,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+  useSubmit,
+} from "react-router-dom";
 import { User } from "~models";
 import { requireUser } from "~utils/loader.utils";
+import { useRef } from "react";
+import { AxiosError } from "axios";
 
-const Address = observer(({ address }: { address: IAddress }) => {
-  const { user: userJson } = useLoaderData() as any;
+type ActionData = {
+  errors: {
+    lines: string[];
+  };
+};
+
+type LoaderData = {
+  user: IUser;
+};
+
+const Address = ({ address }: { address: IAddress }) => {
+  const { user: userJson } = useLoaderData() as LoaderData;
   const user = new User(userJson);
   const customer = user.customer;
+  const submit = useSubmit();
+  const navigation = useNavigation();
 
-  const state = useLocalObservable(() => ({
-    loading: false,
-    setLoading(state: boolean) {
-      this.loading = state;
-    },
-  }));
+  const isDefault = customer.isDefaultShippingAddress(address);
+
+  const makeAddressDefault = () => {
+    if (!isDefault) {
+      const formData = new FormData();
+      formData.append("type", "default");
+      formData.append("id", address.id + "");
+
+      submit(formData, {
+        method: "post",
+      });
+    }
+  };
+
+  const deleteAddress = () => {
+    const formData = new FormData();
+    formData.append("type", "delete");
+    formData.append("id", address.id + "");
+
+    submit(formData, {
+      method: "post",
+    });
+  };
+
+  const deleting =
+    navigation.formData?.get("type") === "delete" &&
+    ["submitting", "loading"].includes(navigation.state) &&
+    +navigation.formData?.get("id") === address.id;
+
+  const makingDefault =
+    navigation.formData?.get("type") === "default" &&
+    ["submitting", "loading"].includes(navigation.state) &&
+    +navigation.formData?.get("id") === address.id;
 
   return (
     <S.AddressWrapper>
@@ -38,7 +83,7 @@ const Address = observer(({ address }: { address: IAddress }) => {
         width={"350px"}
       />
       <S.IconWrapper>
-        {state.loading ? (
+        {deleting || makingDefault ? (
           <SvgIcon
             style={{ marginLeft: "10px" }}
             width={"25px"}
@@ -51,29 +96,10 @@ const Address = observer(({ address }: { address: IAddress }) => {
             <SvgIcon
               clickable={true}
               width={"25px"}
-              color={
-                customer.isDefaultShippingAddress(address) ? "#FFE600" : "white"
-              }
+              color={isDefault ? "#FFE600" : "white"}
               hoverColor={"#FFE600"}
               style={{ marginLeft: "10px" }}
-              onClick={() => {
-                if (
-                  !state.loading &&
-                  !customer.isDefaultShippingAddress(address)
-                ) {
-                  state.setLoading(true);
-                  authApi
-                    .makeAddressDefault(address.id)
-                    .then(() => {
-                      authApi.fetchUser().finally(() => {
-                        state.setLoading(false);
-                      });
-                    })
-                    .catch(() => {
-                      state.setLoading(false);
-                    });
-                }
-              }}
+              onClick={makeAddressDefault}
             >
               <HeartSvg />
             </SvgIcon>
@@ -82,21 +108,7 @@ const Address = observer(({ address }: { address: IAddress }) => {
               clickable={true}
               hoverColor={"#CD3838;"}
               style={{ marginLeft: "10px" }}
-              onClick={() => {
-                if (!state.loading) {
-                  state.setLoading(true);
-                  authApi
-                    .deleteAddress(address.id)
-                    .then(() => {
-                      authApi.fetchUser().finally(() => {
-                        state.setLoading(false);
-                      });
-                    })
-                    .catch(() => {
-                      state.setLoading(false);
-                    });
-                }
-              }}
+              onClick={deleteAddress}
             >
               <CloseSvg />
             </SvgIcon>
@@ -105,63 +117,61 @@ const Address = observer(({ address }: { address: IAddress }) => {
       </S.IconWrapper>
     </S.AddressWrapper>
   );
-});
+};
 
-export const SavedAddressesPage = observer(() => {
+export const SavedAddressesPage = () => {
   const { user: userJson } = useLoaderData() as any;
   const user = new User(userJson);
   const customer = user.customer;
   const { t } = useTranslation();
-  const state = useLocalObservable(() => ({
-    form: new FormModel({
-      fields: {
-        lines: new TextInputModel("lines"),
-      },
-      onSubmit(fields, done, error) {
-        authApi
-          .addAddress({
-            name: user.fullName,
-            lines: fields.lines.value,
-            zip: "65125",
-            city: "Одеса",
-            two_letters_country_code: "UA",
-          })
-          .then(() => {
-            return authApi.fetchUser().finally(() => {
-              done(true);
-            });
-          })
-          .catch((e) => {
-            error(e);
-            done();
-          });
-      },
-    }),
-  }));
+
+  const navigation = useNavigation();
+
+  const isAddingAddress =
+    navigation.formData?.get("type") === "add" &&
+    ["submitting"].includes(navigation.state);
+
+  const inputRef = useRef(null);
+
+  const actionData = useActionData() as ActionData;
 
   return (
-    <CabinetLayout title={t("account.addresses.title")}>
+    <>
       {customer.addresses.map((address) => {
         return <Address key={address.id} address={address} />;
       })}
 
-      <form {...state.form.asProps}>
+      <Form
+        onSubmit={() => {
+          setTimeout(() => {
+            inputRef.current.value = "";
+          });
+        }}
+        method="post"
+      >
+        <input name="name" value={user.fullName} type="hidden" />
+        <input name="zip" value="65125" type="hidden" />
+        <input name="city" value="Одеса" type="hidden" />
+        <input name="two_letters_country_code" value="UA" type="hidden" />
+        <input name="type" value="add" type="hidden" />
         <S.AddressWrapper>
           <Input
+            ref={inputRef}
             placeholder={t("account.addresses.typeAddress")}
+            error={actionData?.errors?.lines[0]}
             width={"350px"}
-            {...state.form.fields.lines.asProps}
+            name="lines"
           />
         </S.AddressWrapper>
         <S.ButtonWrapper>
-          <ButtonOutline {...state.form.asSubmitButtonProps} width={""}>
+          <ButtonOutline submitting={isAddingAddress} type="submit" width={""}>
             {t("account.addresses.addAddress")}
           </ButtonOutline>
         </S.ButtonWrapper>
-      </form>
-    </CabinetLayout>
+      </Form>
+    </>
   );
-});
+};
 
 export const Component = SavedAddressesPage;
 Object.assign(Component, {
@@ -169,9 +179,51 @@ Object.assign(Component, {
 });
 
 export const loader = async () => {
+  // todo: user is fetched multiple type, fix this
   const user = await requireUser();
 
   return {
     user,
   };
+};
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData();
+  const type = formData.get("type");
+
+  try {
+    if (type === "add") {
+      const name = formData.get("name") + "";
+      const lines = formData.get("lines") + "";
+      const zip = formData.get("zip") + "";
+      const city = formData.get("city") + "";
+      const two_letters_country_code =
+        formData.get("two_letters_country_code") + "";
+
+      const data = {
+        name,
+        lines,
+        zip,
+        city,
+        two_letters_country_code,
+      };
+
+      await authApi.addAddress(data);
+    } else if (type === "default") {
+      const id = +formData.get("id");
+      await authApi.makeAddressDefault(id);
+    } else if (type === "delete") {
+      const id = +formData.get("id");
+      await authApi.deleteAddress(id);
+    }
+  } catch (e) {
+    if (e instanceof AxiosError && e.response.status === 422) {
+      return {
+        errors: e.response.data?.errors || {},
+      };
+    }
+    throw e;
+  }
+
+  return null;
 };

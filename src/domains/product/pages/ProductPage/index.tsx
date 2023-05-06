@@ -1,13 +1,15 @@
 import {
   defer,
+  useAsyncError,
   useLoaderData,
   useNavigate,
   useNavigation,
   useParams,
+  useRouteError,
   useRouteLoaderData,
   useSearchParams,
 } from "react-router-dom";
-import { ProductsGrid, RestaurantClosed } from "src/components";
+import { ProductsGrid, RestaurantClosed, Container } from "~components";
 import { Banner } from "./Banner";
 import { Suspense } from "react";
 import { QueryClient } from "react-query";
@@ -30,6 +32,7 @@ import { LayoutRouteLoaderData } from "~layout/Layout";
 import { AwaitAll } from "~components/AwaitAll";
 import { MenuLayout } from "~domains/product/components/MenuLayout";
 import { PublishedCategories } from "~domains/category/components/PublishedCategories";
+import { AxiosError } from "axios";
 
 export const CategoryPage = () => {
   // if (!selectedCategory && categories.length > 0) {
@@ -48,7 +51,7 @@ export const CategoryPage = () => {
   ) as LayoutRouteLoaderData;
 
   return (
-    <>
+    <Container>
       {false && <Banner />}
       <MenuLayout>
         <Suspense fallback={<ProductsGrid loading />}>
@@ -75,7 +78,7 @@ export const CategoryPage = () => {
       </MenuLayout>
 
       <RestaurantClosed open={closed} />
-    </>
+    </Container>
   );
 };
 
@@ -192,3 +195,25 @@ export const categoryAction = async ({ request }) => {
 };
 
 export const action = categoryAction;
+
+export const ErrorBoundary = () => {
+  const error = useRouteError() as unknown;
+  if (error instanceof AxiosError) {
+    if (error.response.status === 404) {
+      return (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          404! <br />
+          Page not found
+        </div>
+      );
+    }
+  }
+  return <div>Oops! Something went wrong</div>;
+};

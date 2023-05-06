@@ -1,6 +1,5 @@
 import { observer, useLocalObservable } from "mobx-react";
 import * as S from "./styled";
-import { CabinetLayout } from "~layout/CabinetLayout";
 import { ButtonOutline, PasswordInput } from "~components";
 import { authApi } from "~api";
 import { transaction } from "mobx";
@@ -53,7 +52,7 @@ export const UpdatePasswordPage = observer(() => {
   }));
 
   return (
-    <CabinetLayout title={t("account.changePassword.title")}>
+    <>
       <S.Form {...state.form.asProps}>
         <S.Text>{t("common.oldPassword")}</S.Text>
         <PasswordInput {...state.form.fields.password_old.asProps} />
@@ -78,7 +77,7 @@ export const UpdatePasswordPage = observer(() => {
           </p>
         )}
       </S.Form>
-    </CabinetLayout>
+    </>
   );
 });
 
