@@ -1,119 +1,105 @@
-import { useState } from "react";
-import { observer, useLocalObservable } from "mobx-react";
+import { useEffect, useState } from "react";
 import * as S from "./styled";
 import { FlexBox, Input, ButtonDark, ButtonOutline } from "src/components";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import {
+  ActionFunctionArgs,
+  Form,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+  useNavigation,
+} from "react-router-dom";
 
-import { TextInputModel, FormModel } from "src/common/models";
 import { useTranslation } from "react-i18next";
 import { User } from "src/models";
 import { requireUser } from "~utils/loader.utils";
+import { authApi } from "~api";
+import { AxiosError } from "axios";
 
-const EditForm = observer(
-  ({ cancelEditing }: { cancelEditing: () => void }) => {
-    const { user: userJson } = useLoaderData() as Awaited<
-      ReturnType<typeof loader>
-    >;
-    const user = new User(userJson);
-    const customer = user.customer;
-    const { t } = useTranslation();
+type ActionData =
+  | {
+      errors?: Record<string, string[]>;
+      ok?: boolean;
+    }
+  | undefined;
 
-    const form = useLocalObservable(
-      () =>
-        new FormModel({
-          fields: {
-            name: new TextInputModel("name", {
-              value: user.name,
-            }),
-            surname: new TextInputModel("surname", {
-              value: user.surname,
-            }),
-            phone: new TextInputModel("phone", {
-              value: user.phone,
-            }),
-          },
-          onSubmit(fields, done, error) {
-            user.name = fields.name.value;
-            customer.firstName = fields.name.value;
-            user.surname = fields.surname.value;
-            customer.lastName = fields.surname.value;
-            user.phone = fields.phone.value;
+const EditForm = ({ cancelEditing }: { cancelEditing: () => void }) => {
+  const { user: userJson } = useLoaderData() as Awaited<
+    ReturnType<typeof loader>
+  >;
+  const user = new User(userJson);
+  const { t } = useTranslation();
+  const navigation = useNavigation();
+  const actionData = useActionData() as ActionData;
 
-            user
-              .save()
-              .then(() => {
-                cancelEditing();
-              })
-              .catch((e) => {
-                error(e);
-              })
-              .finally(() => {
-                done();
-              });
-          },
-        })
-    );
+  useEffect(() => {
+    // react-router has to provide an alternative way of handling successful form submission
+    // it will be more linear than useEffect, that I have to use now
+    // https://github.com/remix-run/react-router/discussions/10013
+    if (actionData?.ok) {
+      cancelEditing();
+    }
+  }, [actionData]);
 
-    return (
-      <form {...form.asProps}>
-        <FlexBox justifyContent={"space-between"}>
-          <Input
-            style={{ width: "calc(50% - 10px)" }}
-            label={t("common.first_name")}
-            {...form.fields.name.asProps}
-          />
-          <Input
-            style={{ width: "calc(50% - 10px)" }}
-            label={t("common.last_name")}
-            {...form.fields.surname.asProps}
-          />
-        </FlexBox>
-        <FlexBox
-          justifyContent={"space-between"}
+  return (
+    <Form method="post">
+      <FlexBox justifyContent={"space-between"}>
+        <Input
+          style={{ width: "calc(50% - 10px)" }}
+          label={t("common.first_name")}
+          defaultValue={user.name}
+          name="name"
+          error={actionData?.errors?.name?.[0]}
+        />
+        <Input
+          style={{ width: "calc(50% - 10px)" }}
+          label={t("common.last_name")}
+          defaultValue={user.surname}
+          name="surname"
+          error={actionData?.errors?.surname?.[0]}
+        />
+      </FlexBox>
+      <FlexBox
+        justifyContent={"space-between"}
+        style={{
+          marginTop: "10px",
+        }}
+      >
+        <Input
+          style={{ width: "calc(50% - 10px)" }}
+          label={t("common.email")}
+          name={"email"}
+          value={user.email}
+          disabled={true}
+        />
+        <Input
+          style={{ width: "calc(50% - 10px)" }}
+          label={t("common.phone")}
+          defaultValue={user.phone}
+          error={actionData?.errors?.phone?.[0]}
+          name="phone"
+        />
+      </FlexBox>
+
+      <FlexBox
+        style={{
+          marginTop: "30px",
+        }}
+      >
+        <ButtonOutline
+          submitting={navigation.state === "submitting"}
           style={{
-            marginTop: "10px",
+            marginRight: "16px",
           }}
         >
-          <Input
-            style={{ width: "calc(50% - 10px)" }}
-            label={t("common.email")}
-            name={"email"}
-            value={user.email}
-            disabled={true}
-          />
-          <Input
-            style={{ width: "calc(50% - 10px)" }}
-            label={t("common.phone")}
-            {...form.fields.phone.asProps}
-          />
-        </FlexBox>
-
-        <FlexBox
-          style={{
-            marginTop: "30px",
-          }}
-        >
-          <ButtonOutline
-            {...form.asSubmitButtonProps}
-            style={{
-              marginRight: "16px",
-            }}
-          >
-            {" "}
-            {t("common.save")}
-          </ButtonOutline>
-          <ButtonDark
-            onClick={() => {
-              cancelEditing();
-            }}
-          >
-            {t("common.cancel")}
-          </ButtonDark>
-        </FlexBox>
-      </form>
-    );
-  }
-);
+          {" "}
+          {t("common.save")}
+        </ButtonOutline>
+        <ButtonDark onClick={cancelEditing}>{t("common.cancel")}</ButtonDark>
+      </FlexBox>
+    </Form>
+  );
+};
 
 const ProfilePreview = ({ startEditing }: { startEditing: () => void }) => {
   const { user: userJson } = useLoaderData() as Awaited<
@@ -165,11 +151,18 @@ const ProfilePreview = ({ startEditing }: { startEditing: () => void }) => {
 
 export const ProfilePage = () => {
   const [editModeEnabled, setEditModeEnabled] = useState(false);
+  const navigation = useNavigation();
+  let actionData = useActionData();
 
   return editModeEnabled ? (
     <EditForm cancelEditing={() => setEditModeEnabled(false)} />
   ) : (
-    <ProfilePreview startEditing={() => setEditModeEnabled(true)} />
+    <ProfilePreview
+      startEditing={() => {
+        actionData = undefined;
+        setEditModeEnabled(true);
+      }}
+    />
   );
 };
 
@@ -183,5 +176,33 @@ export const loader = async () => {
 
   return {
     user,
+  };
+};
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData();
+  const name = formData.get("name");
+  const surname = formData.get("surname");
+  const phone = formData.get("phone");
+  const data = {
+    name: name + "",
+    surname: surname + "",
+    phone: phone + "",
+  };
+
+  try {
+    await authApi.updateUser(data);
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      if (e.response.status === 422) {
+        return {
+          errors: e.response.data.errors,
+        };
+      }
+    }
+    throw e;
+  }
+  return {
+    ok: true,
   };
 };

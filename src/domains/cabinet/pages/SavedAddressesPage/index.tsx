@@ -129,7 +129,7 @@ export const SavedAddressesPage = () => {
 
   const isAddingAddress =
     navigation.formData?.get("type") === "add" &&
-    ["submitting"].includes(navigation.state);
+    ["loading", "submitting"].includes(navigation.state);
 
   const inputRef = useRef(null);
 

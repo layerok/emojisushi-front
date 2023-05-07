@@ -12,6 +12,7 @@ type TSearchProps = {
 };
 
 export const Search = ({ loading = false }: TSearchProps) => {
+  // todo:  search value is not cleared after navigating to another category
   const submit = useSubmit();
   const { q } = useLoaderData() as {
     q: string | undefined;
@@ -27,10 +28,11 @@ export const Search = ({ loading = false }: TSearchProps) => {
 
   return (
     <Form role="search">
-      {/* todo: preserve all search params, not only 'sort' param */}
-      {searchParams.has("sort") && (
-        <input type="hidden" name="sort" value={searchParams.get("sort")} />
-      )}
+      {Array.from(searchParams.entries())
+        .filter(([k]) => k !== "q")
+        .map(([k, v], idx) => (
+          <input type="hidden" name={k} defaultValue={v} key={idx} />
+        ))}
       <SearchInput
         loading={loading}
         onChange={(event) => {

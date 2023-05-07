@@ -34,7 +34,7 @@ export const ProductCard = ({
 
   const getVariant = (product: Product) => {
     return product?.variants.find((variant) => {
-      return !!Object.values(modificators).includes("" + variant.posterId);
+      return !!Object.values(modificators).includes(variant.posterId);
     });
   };
 

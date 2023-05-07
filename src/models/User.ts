@@ -106,21 +106,4 @@ export class User {
   get offlineMallCustomerGroupId() {
     return this.json.offline_mall_customer_group_id;
   }
-
-  setSaving = (state: boolean) => {
-    this.saving = state;
-  };
-
-  save() {
-    this.setSaving(true);
-    return authApi
-      .updateUser({
-        name: this.name,
-        surname: this.surname,
-        phone: this.phone,
-      })
-      .finally(() => {
-        this.setSaving(false);
-      });
-  }
 }
