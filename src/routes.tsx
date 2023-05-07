@@ -74,10 +74,27 @@ export const routes = [
                   },
                   {
                     path: "profile",
-                    lazy: () => import("~domains/cabinet/pages/ProfilePage"),
-                    handle: {
-                      title: () => <Trans i18nKey={"account.profile.title"} />,
-                    },
+
+                    children: [
+                      {
+                        index: true,
+                        lazy: () =>
+                          import("~domains/cabinet/pages/ProfilePage"),
+                        handle: {
+                          title: () => (
+                            <Trans i18nKey={"account.profile.title"} />
+                          ),
+                        },
+                      },
+                      {
+                        path: "edit",
+                        lazy: () =>
+                          import("~domains/cabinet/pages/EditProfilePage"),
+                        handle: {
+                          title: () => "Редагувати профіль",
+                        },
+                      },
+                    ],
                   },
                   {
                     path: "recover-password",
