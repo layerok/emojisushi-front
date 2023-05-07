@@ -1,4 +1,4 @@
-import { observer, useLocalObservable } from "mobx-react";
+import { observer } from "mobx-react";
 import * as S from "./styled";
 import { ButtonOutline, PasswordInput } from "~components";
 import { authApi } from "~api";
@@ -11,7 +11,7 @@ import {
   useActionData,
   useNavigation,
 } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AxiosError } from "axios";
 
 type UpdatePasswordPageActionData = {
@@ -33,25 +33,15 @@ const getError = (error: string | string[] | undefined) => {
 export const UpdatePasswordPage = observer(() => {
   const { t } = useTranslation();
   const actionData = useActionData() as UpdatePasswordPageActionData;
-
-  const state = useLocalObservable(() => ({
-    successMessageIntervalId: null,
-    setSuccessMessageIntervalId(id: NodeJS.Timeout | null) {
-      this.successMessageIntervalId = id;
-    },
-    showSuccessMessage: false,
-    setShowSuccessMessage(state: boolean) {
-      this.showSuccessMessage = state;
-    },
-  }));
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const intervalId = useRef(null);
 
   useEffect(() => {
     if (actionData?.ok) {
-      state.setShowSuccessMessage(true);
-      const id = setTimeout(() => {
-        state.setShowSuccessMessage(false);
+      setShowSuccessMessage(true);
+      intervalId.current = setTimeout(() => {
+        setShowSuccessMessage(false);
       }, 5000);
-      state.setSuccessMessageIntervalId(id);
     }
   }, [actionData]);
 
@@ -64,8 +54,8 @@ export const UpdatePasswordPage = observer(() => {
           method="post"
           onSubmit={() => {
             transaction(() => {
-              state.setSuccessMessageIntervalId(null);
-              state.setShowSuccessMessage(false);
+              intervalId.current = null;
+              setShowSuccessMessage(false);
             });
           }}
         >
@@ -94,7 +84,7 @@ export const UpdatePasswordPage = observer(() => {
             </ButtonOutline>
           </S.ButtonWrapper>
 
-          {state.showSuccessMessage && (
+          {showSuccessMessage && (
             <p
               style={{
                 marginTop: "10px",
