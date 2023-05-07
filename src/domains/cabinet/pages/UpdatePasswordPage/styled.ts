@@ -8,7 +8,7 @@ const Heading = styled.p`
   color: #ffffff;
 `;
 
-const Form = styled.form`
+const Container = styled.div`
   margin-top: 12px;
   width: 285px;
   ${media.lessThan("tablet")`
@@ -32,4 +32,4 @@ const ButtonWrapper = styled.div`
   margin-top: 20px;
 `;
 
-export { Heading, Form, Text, ButtonWrapper };
+export { Heading, Container, Text, ButtonWrapper };
