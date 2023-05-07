@@ -29,7 +29,7 @@ export const DeliveryPage = () => {
                 fontWeight: "600",
               }}
             >
-              Доставка и оплата
+              {t("delivery-and-payment.title")}
             </Heading>
           </S.HeadingWrapper>
 

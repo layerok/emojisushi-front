@@ -191,5 +191,8 @@
   },
   "categoryIndex": {
     "title": "Выберите категорию"
+  },
+  "delivery-and-payment": {
+    "title": "Доставка и оплата"
   }
 }
