@@ -91,7 +91,9 @@ export const routes = [
                         lazy: () =>
                           import("~domains/cabinet/pages/EditProfilePage"),
                         handle: {
-                          title: () => "Редагувати профіль",
+                          title: () => (
+                            <Trans i18nKey={"account.edit-profile.title"} />
+                          ),
                         },
                       },
                     ],

@@ -12,7 +12,11 @@ export const MyOrdersPage = () => {
   const user = new User(userJson);
   const customer = user.customer;
   return (
-    <>
+    <div
+      style={{
+        marginTop: 20,
+      }}
+    >
       <If condition={customer.hasOrders}>
         {customer.orders.map((order, index) => (
           <div
@@ -27,7 +31,7 @@ export const MyOrdersPage = () => {
       <If condition={!customer.hasOrders}>
         <p>{t("account.orders.noOrders")}</p>
       </If>
-    </>
+    </div>
   );
 };
 

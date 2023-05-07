@@ -31,7 +31,12 @@ export const EditProfilePage = () => {
   const actionData = useActionData() as ActionData;
   const navigate = useNavigate();
   return (
-    <Form method="post">
+    <Form
+      style={{
+        marginTop: 20,
+      }}
+      method="post"
+    >
       <FlexBox justifyContent={"space-between"}>
         <Input
           style={{ width: "calc(50% - 10px)" }}

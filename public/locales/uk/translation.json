@@ -159,6 +159,9 @@
   },
   "account": {
     "cabinet": "Мій кабінет",
+    "edit-profile": {
+      "title": "Редагувати профіль"
+    },
     "profile": {
       "title": "Особисті дані",
       "editProfile": "Редагувати особисті дані",
