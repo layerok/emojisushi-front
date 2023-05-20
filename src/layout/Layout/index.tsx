@@ -12,9 +12,10 @@ import {
   defer,
   redirect,
   useLoaderData,
+  useParams,
 } from "react-router-dom";
 import { queryClient } from "~query-client";
-import { cartQuery } from "~queries";
+import { cartQuery, wishlistsQuery } from "~queries";
 import { authApi, cartApi } from "~api";
 import { CartProduct } from "~models";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
@@ -179,6 +180,8 @@ const register = async ({
     });
     const { token } = res.data.data;
     Cookies.set("jwt", token);
+    await queryClient.removeQueries(wishlistsQuery.queryKey);
+    await queryClient.removeQueries(cartQuery.queryKey);
 
     return redirect(
       "/" + [lang, citySlug, spotSlug, "account", "profile"].join("/")
@@ -211,6 +214,9 @@ const login = async ({
 
     const { token } = res.data.data;
     Cookies.set("jwt", token);
+
+    await queryClient.removeQueries(wishlistsQuery.queryKey);
+    await queryClient.removeQueries(cartQuery.queryKey);
     return redirect(
       "/" + [lang, citySlug, spotSlug, "account", "profile"].join("/")
     );
@@ -248,6 +254,20 @@ const resetPassword = async ({
   }
 };
 
+const logout = async ({
+  formData,
+  params,
+}: {
+  formData: FormData;
+  params: any;
+}) => {
+  const { lang, citySlug, spotSlug } = params;
+  Cookies.remove("jwt");
+  await queryClient.removeQueries(wishlistsQuery.queryKey);
+  await queryClient.removeQueries(cartQuery.queryKey);
+  return redirect("/" + [lang, citySlug, spotSlug].join("/"));
+};
+
 export const layoutAction = async ({ request, params }: ActionFunctionArgs) => {
   let formData = await request.formData();
   const type = formData.get("type");
@@ -258,6 +278,8 @@ export const layoutAction = async ({ request, params }: ActionFunctionArgs) => {
       return login({ formData, params });
     } else if (type === "reset-password") {
       return resetPassword({ formData, params });
+    } else if (type === "logout") {
+      return logout({ formData, params });
     }
     return updateCartProduct({ formData });
   } else if (request.method === "DELETE") {

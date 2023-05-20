@@ -8,6 +8,7 @@ import {
   useNavigate,
   useParams,
   useRevalidator,
+  useSubmit,
 } from "react-router-dom";
 
 const CabinetLayout = () => {
@@ -17,6 +18,7 @@ const CabinetLayout = () => {
   const matches = useMatches();
   const match = matches[matches.length - 1];
   const revalidator = useRevalidator();
+  const submit = useSubmit();
 
   return (
     <Container>
@@ -74,11 +76,13 @@ const CabinetLayout = () => {
                 <div style={{ marginTop: "10px" }}>
                   <ButtonDark
                     onClick={() => {
-                      Cookies.remove("jwt");
-                      // I don't know why loaders don't run on navigation automatically
-                      // I'll fix it later, for now I will revalidate manually
-                      revalidator.revalidate();
-                      navigate("/" + [lang, citySlug, spotSlug].join("/"));
+                      const formData = new FormData();
+                      formData.append("type", "logout");
+
+                      submit(formData, {
+                        method: "post",
+                        action: "/" + [lang, citySlug, spotSlug].join("/"),
+                      });
                     }}
                     minWidth={"201px"}
                   >
