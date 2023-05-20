@@ -18,7 +18,7 @@ const Category = styled.div`
 
 Category.Container = styled.div`
   margin: 0 auto;
-  max-width: 564px;
+  max-width: 700px;
   width: 100%;
 
   padding: 0 12px;
