@@ -1,13 +1,10 @@
 import styled from "styled-components";
-import { prop, theme } from "styled-tools";
 import media from "src/common/custom-media";
 
 const Category = styled.div`
   display: flex;
   flex-direction: column;
-
   width: 100%;
-
   padding-bottom: 50px;
 
   ${media.lessThan("mobile")`
@@ -20,7 +17,6 @@ Category.Container = styled.div`
   margin: 0 auto;
   max-width: 700px;
   width: 100%;
-
   padding: 0 12px;
 `;
 
@@ -28,15 +24,11 @@ Category.Label = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
   margin-bottom: 30px;
-
   gap: 10px;
-
   font-weight: 500;
   font-size: 18px;
   line-height: 22px;
-
   text-transform: uppercase;
   color: #fff;
 
@@ -48,12 +40,9 @@ Category.Label = styled.div`
 
 Category.Image = styled.div`
   flex-shrink: 0;
-
   width: 100px;
   height: 100px;
-
   position: relative;
-
   display: flex;
   align-items: center;
   justify-content: center;

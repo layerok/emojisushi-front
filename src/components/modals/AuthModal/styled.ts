@@ -34,12 +34,16 @@ const InputWrapper = styled.div`
   }
 `;
 
-const NavigateButton = styled.button`
+const BaseButton = styled.button`
   font-size: 12px;
   color: #72bbff;
   display: block;
   cursor: pointer;
+`;
 
+const ResetPasswordButton = styled(BaseButton)``;
+
+const AuthButton = styled(BaseButton)`
   ${media.greaterThan("tablet")`
     display: none;
   `}
@@ -88,7 +92,8 @@ export {
   Wrapper,
   InputLabel,
   InputWrapper,
-  NavigateButton,
+  AuthButton,
+  ResetPasswordButton,
   LoginForm,
   SignUpForm,
   VerticalBar,

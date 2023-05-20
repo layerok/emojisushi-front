@@ -14,7 +14,7 @@ export const Checkbox = ({
   children: ReactNode;
   checked: boolean;
   name: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   error?: string;
 }) => {
   return (

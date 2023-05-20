@@ -2,7 +2,13 @@ import * as S from "./styled";
 import { ButtonDark, NavLink, Container } from "~components";
 import { useTranslation } from "react-i18next";
 import Cookies from "js-cookie";
-import { Outlet, useMatches, useNavigate, useParams } from "react-router-dom";
+import {
+  Outlet,
+  useMatches,
+  useNavigate,
+  useParams,
+  useRevalidator,
+} from "react-router-dom";
 
 const CabinetLayout = () => {
   const { t } = useTranslation();
@@ -10,6 +16,7 @@ const CabinetLayout = () => {
   const navigate = useNavigate();
   const matches = useMatches();
   const match = matches[matches.length - 1];
+  const revalidator = useRevalidator();
 
   return (
     <Container>
@@ -68,6 +75,9 @@ const CabinetLayout = () => {
                   <ButtonDark
                     onClick={() => {
                       Cookies.remove("jwt");
+                      // I don't know why loaders don't run on navigation automatically
+                      // I'll fix it later, for now I will revalidate manually
+                      revalidator.revalidate();
                       navigate("/" + [lang, citySlug, spotSlug].join("/"));
                     }}
                     minWidth={"201px"}

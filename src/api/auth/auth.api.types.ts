@@ -205,3 +205,19 @@ export type IUser = IRainLabUser & {
   phone: string | null;
   customer: ICustomer | null;
 };
+
+export type RegisterResData = {
+  data: {
+    expires: string;
+    token: string;
+    user: IUser;
+  };
+};
+
+export type LoginResData = {
+  data: {
+    user: IUser;
+    expires: string;
+    token: string;
+  };
+};

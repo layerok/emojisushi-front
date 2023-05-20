@@ -1,6 +1,6 @@
 import { client } from "~clients/client";
 import { AxiosResponse } from "axios";
-import { IUser } from "./auth.api.types";
+import { IUser, LoginResData, RegisterResData } from "./auth.api.types";
 
 export const authApi = {
   register(
@@ -18,7 +18,7 @@ export const authApi = {
   ) {
     const { email, password, password_confirmation, name, surname, agree } =
       data;
-    return client.post("auth/register", {
+    return client.post<RegisterResData>("auth/register", {
       email,
       password,
       password_confirmation,
@@ -30,16 +30,8 @@ export const authApi = {
     });
   },
 
-  login(credentials: { email: string; password: string }): Promise<
-    AxiosResponse<{
-      data: {
-        user: IUser;
-        expires: string;
-        token: string;
-      };
-    }>
-  > {
-    return client.post("auth/login", credentials);
+  login(credentials: { email: string; password: string }) {
+    return client.post<LoginResData>("auth/login", credentials);
   },
 
   restorePassword(email: string) {

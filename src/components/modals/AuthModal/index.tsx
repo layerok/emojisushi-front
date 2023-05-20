@@ -10,15 +10,12 @@ import {
   Modal,
 } from "~components";
 import { useBreakpoint2 } from "~common/hooks";
-import { authApi } from "~api";
-import { observer, useLocalObservable } from "mobx-react";
-import { runInAction } from "mobx";
-import { useNavigate, useParams } from "react-router-dom";
-import Cookies from "js-cookie";
-import { CheckboxInputModel, TextInputModel, FormModel } from "~common/models";
+import { observer } from "mobx-react";
+import { useFetcher, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 export const AuthModal = ({ children }) => {
+  // todo: don't use it
   const { isMobile } = useBreakpoint2();
 
   const [showPasswordRecovery, setShowPasswordRecovery] = useState();
@@ -59,91 +56,83 @@ export const AuthModal = ({ children }) => {
   );
 };
 
-const SignUpForm = observer(({ setShowSignUp }) => {
+const SignUpForm = ({ setShowSignUp }) => {
   const { t } = useTranslation();
-
-  const navigate = useNavigate();
   const { lang, spotSlug, citySlug } = useParams();
+  const fetcher = useFetcher<
+    | {
+        errors: Record<string, string[]>;
+      }
+    | undefined
+  >();
 
-  const state = useLocalObservable(() => ({
-    form: new FormModel({
-      fields: {
-        name: new TextInputModel("name"),
-        surname: new TextInputModel("surname"),
-        email: new TextInputModel("email"),
-        password: new TextInputModel("password"),
-        agree: new CheckboxInputModel("agree"),
-      },
-      onSubmit(fields, done, error) {
-        authApi
-          .register({
-            email: fields.email.value,
-            password: fields.password.value,
-            password_confirmation: fields.password.value,
-            name: fields.name.value,
-            surname: fields.surname.value,
-            agree: fields.agree.checked,
-            spot_slug_or_id: spotSlug,
-          })
-          .then(() => {
-            return authApi
-              .login({
-                email: fields.email.value,
-                password: fields.password.value,
-              })
-              .then((res) => {
-                const { token, expires, user } = res.data.data;
-                Cookies.set("jwt", token);
+  const [checked, setChecked] = useState(false);
 
-                navigate(
-                  "/" +
-                    [lang, citySlug, spotSlug, "account", "profile"].join("/")
-                );
-              })
-              .finally(() => {
-                done();
-              });
-          })
-          .catch((e) => {
-            error(e);
-          });
-      },
-    }),
-  }));
+  const actionData = fetcher.data;
 
   return (
-    <S.SignUpForm {...state.form.asProps}>
+    <S.SignUpForm
+      onSubmit={(e) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        formData.append("type", "register");
+
+        fetcher.submit(formData, {
+          method: "post",
+          action: "/" + [lang, citySlug, spotSlug].join("/"),
+        });
+      }}
+    >
       <S.Title>{t("authModal.registration.title")}</S.Title>
       <S.InputWrapper>
         <S.InputLabel>{t("common.first_name")}</S.InputLabel>
-        <Input {...state.form.fields.name.asProps} light={true} />
+        <Input name="name" error={actionData?.errors?.name?.[0]} light={true} />
       </S.InputWrapper>
       <S.InputWrapper>
         <S.InputLabel>{t("common.last_name")}</S.InputLabel>
-        <Input {...state.form.fields.surname.asProps} light={true} />
+        <Input
+          name="surname"
+          error={actionData?.errors?.surname?.[0]}
+          light={true}
+        />
       </S.InputWrapper>
       <S.InputWrapper>
         <S.InputLabel>{t("common.email")}</S.InputLabel>
-        <Input {...state.form.fields.email.asProps} light={true} />
+        <Input
+          name="email"
+          error={actionData?.errors?.email?.[0]}
+          light={true}
+        />
       </S.InputWrapper>
 
       <S.InputWrapper>
         <S.InputLabel>{t("common.password")}</S.InputLabel>
-        <PasswordInput {...state.form.fields.password.asProps} light={true} />
+        <PasswordInput
+          name="password"
+          error={actionData?.errors?.password?.[0]}
+          light={true}
+        />
       </S.InputWrapper>
       <S.CheckboxWrapper>
-        <Checkbox {...state.form.fields.agree.asProps}>
+        <Checkbox
+          checked={checked}
+          error={actionData?.errors?.agree?.[0]}
+          onChange={(e) => {
+            setChecked(e.target.checked);
+          }}
+          name="agree"
+        >
           {t("common.privacyPolicyAgreed")}
         </Checkbox>
       </S.CheckboxWrapper>
 
       <FlexBox>
         <FlexBox flexDirection={"column"} alignItems={"center"}>
-          <Button {...state.form.asSubmitButtonProps}>
+          <Button submitting={fetcher.state === "submitting"}>
             {t("common.registration")}
           </Button>
 
-          <S.NavigateButton
+          <S.AuthButton
             style={{ paddingTop: "10px" }}
             onClick={(e) => {
               e.preventDefault();
@@ -151,25 +140,34 @@ const SignUpForm = observer(({ setShowSignUp }) => {
             }}
           >
             {t("common.enter")}
-          </S.NavigateButton>
+          </S.AuthButton>
         </FlexBox>
       </FlexBox>
     </S.SignUpForm>
   );
-});
+};
 
 const PasswordRecoveryForm = observer(({ setShowPasswordRecovery }) => {
   const { t } = useTranslation();
-  const state = useLocalObservable(() => ({
-    email: "",
-    loading: false,
-    isSent: false,
-    error: "",
-  }));
+
+  const { lang, citySlug, spotSlug } = useParams();
+  const fetcher = useFetcher<
+    | {
+        errors?: Record<string, string[]>;
+        isSent?: boolean;
+      }
+    | undefined
+  >();
   return (
     <S.LoginForm
       onSubmit={(e) => {
         e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        formData.append("type", "reset-password");
+        fetcher.submit(formData, {
+          method: "post",
+          action: "/" + [lang, citySlug, spotSlug].join("/"),
+        });
       }}
     >
       <S.Title>{t("authModal.forgetPassword.title")}</S.Title>
@@ -177,17 +175,11 @@ const PasswordRecoveryForm = observer(({ setShowPasswordRecovery }) => {
         <S.InputLabel>{t("common.email")}</S.InputLabel>
         <Input
           name={"email"}
-          error={state.error}
+          error={fetcher.data?.errors?.email?.[0]}
           light={true}
-          onChange={(e) => {
-            runInAction(() => {
-              state.error = "";
-              state.email = (e.target as HTMLInputElement).value;
-            });
-          }}
         />
       </S.InputWrapper>
-      <If condition={state.isSent}>
+      <If condition={fetcher.data?.isSent}>
         <S.ForgotPassText
           style={{
             color: "green",
@@ -196,53 +188,20 @@ const PasswordRecoveryForm = observer(({ setShowPasswordRecovery }) => {
           {t("authModal.forgetPassword.mailSent")}
         </S.ForgotPassText>
       </If>
-      <If condition={!state.isSent}>
+      <If condition={!fetcher.data?.isSent}>
         <S.ForgotPassText>
           {t("authModal.forgetPassword.typeEmail")}
         </S.ForgotPassText>
       </If>
       <S.BtnGroup>
-        <S.NavigateButton
+        <S.ResetPasswordButton
           onClick={(e) => {
             setShowPasswordRecovery(false);
           }}
         >
           {t("common.back")}
-        </S.NavigateButton>
-        <Button
-          submitting={state.loading}
-          onClick={() => {
-            runInAction(() => {
-              state.loading = true;
-              state.error = "";
-            });
-            authApi
-              .restorePassword(state.email)
-              .then(() => {
-                runInAction(() => {
-                  state.isSent = true;
-                  state.email = "";
-                });
-              })
-              .catch((e) => {
-                const { errors } = e.response.data;
-                if (errors) {
-                  Object.keys(errors).forEach((key) => {
-                    if (key === "email") {
-                      runInAction(() => {
-                        state.error = errors[key][0];
-                      });
-                    }
-                  });
-                }
-              })
-              .finally(() => {
-                runInAction(() => {
-                  state.loading = false;
-                });
-              });
-          }}
-        >
+        </S.ResetPasswordButton>
+        <Button submitting={fetcher.state === "submitting"} type="submit">
           {t("common.recover")}
         </Button>
       </S.BtnGroup>
@@ -252,18 +211,25 @@ const PasswordRecoveryForm = observer(({ setShowPasswordRecovery }) => {
 
 const LoginForm = ({ setShowSignUp, setShowPasswordRecovery, close }) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const [login, setLogin] = useState("");
-  const [loginError, setLoginError] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [loading, setLoading] = useState(false);
+
   const { lang, spotSlug, citySlug } = useParams();
+  const fetcher = useFetcher<
+    | {
+        errors: Record<string, string[]>;
+      }
+    | undefined
+  >();
 
   return (
     <S.LoginForm
       onSubmit={(e) => {
         e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        formData.append("type", "login");
+        fetcher.submit(formData, {
+          method: "post",
+          action: "/" + [lang, citySlug, spotSlug].join("/"),
+        });
       }}
     >
       <S.Title>{t("authModal.login.title")}</S.Title>
@@ -271,11 +237,7 @@ const LoginForm = ({ setShowSignUp, setShowPasswordRecovery, close }) => {
         <S.InputLabel>{t("common.email")}</S.InputLabel>
         <Input
           name={"email"}
-          error={loginError}
-          onChange={(e) => {
-            setLogin((e.target as HTMLInputElement).value);
-            setLoginError("");
-          }}
+          error={fetcher?.data?.errors?.email?.[0]}
           light={true}
         />
       </S.InputWrapper>
@@ -283,69 +245,30 @@ const LoginForm = ({ setShowSignUp, setShowPasswordRecovery, close }) => {
         <S.InputLabel>{t("common.password")}</S.InputLabel>
         <PasswordInput
           name={"password"}
-          error={passwordError}
-          onChange={(e) => {
-            setPassword((e.target as HTMLInputElement).value);
-            setPasswordError("");
-          }}
+          error={fetcher?.data?.errors?.password?.[0]}
           light={true}
         />
       </S.InputWrapper>
       <FlexBox justifyContent={"flex-end"}>
-        <S.NavigateButton
+        <S.ResetPasswordButton
           style={{ paddingTop: "10px" }}
           onClick={(e) => {
             setShowPasswordRecovery(true);
           }}
         >
           {t("common.forgotPassword")}
-        </S.NavigateButton>
+        </S.ResetPasswordButton>
       </FlexBox>
 
       <Button
-        submitting={loading}
-        onClick={() => {
-          setLoginError("");
-          setPasswordError("");
-          setLoading(true);
-          authApi
-            .login({
-              email: login,
-              password: password,
-            })
-            .then((res) => {
-              const { token, expires, user } = res.data.data;
-              Cookies.set("jwt", token);
-              navigate(
-                "/" + [lang, citySlug, spotSlug, "account", "profile"].join("/")
-              );
-            })
-            .catch((e) => {
-              const { errors, message } = e.response.data;
-              if (errors) {
-                Object.keys(errors).forEach((key) => {
-                  if (key === "email") {
-                    setLoginError(errors[key][0]);
-                  }
-                  if (key === "password") {
-                    setPasswordError(errors[key][0]);
-                  }
-                });
-              } else {
-                setLoginError(message);
-              }
-            })
-            .finally(() => {
-              close();
-              setLoading(false);
-            });
-        }}
+        submitting={fetcher.state === "submitting"}
+        type="submit"
         style={{ marginTop: "20px", display: "flex" }}
       >
         {t("common.login")}
       </Button>
 
-      <S.NavigateButton
+      <S.AuthButton
         style={{ paddingTop: "10px" }}
         onClick={(e) => {
           e.preventDefault();
@@ -353,7 +276,7 @@ const LoginForm = ({ setShowSignUp, setShowPasswordRecovery, close }) => {
         }}
       >
         {t("common.registration")}
-      </S.NavigateButton>
+      </S.AuthButton>
     </S.LoginForm>
   );
 };
