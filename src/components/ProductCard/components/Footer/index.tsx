@@ -29,7 +29,6 @@ export const Footer = ({
   variant,
   cartProduct,
 }: TFooterProps) => {
-  console.log(product, variant);
   const oldPrice = product?.getOldPrice(variant)?.price_formatted;
   const newPrice = product?.getNewPrice(variant)?.price_formatted;
   const fetcher = useFetcher();
