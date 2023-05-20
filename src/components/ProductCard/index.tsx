@@ -26,7 +26,7 @@ export const ProductCard = ({
   const initialModificatorsState = product?.modGroups.reduce((acc, group) => {
     return {
       ...acc,
-      [group.property.id]: group.property.options[0].poster_id,
+      [group.property.id]: +group.property.options[0].poster_id,
     };
   }, {});
 
