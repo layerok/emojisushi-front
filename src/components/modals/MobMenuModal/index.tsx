@@ -52,7 +52,7 @@ export const MobMenuModal = ({ children, cities = [] }: MobMenuModalProps) => {
                 <SvgIcon width={"25px"} style={{ marginRight: "10px" }}>
                   <UserSvg />
                 </SvgIcon>
-                Вход в аккаунт
+                {t("common.enter_account")}
               </FlexBox>
             </AuthModal>
           </S.Item>
