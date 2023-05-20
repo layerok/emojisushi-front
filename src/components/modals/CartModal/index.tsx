@@ -15,9 +15,8 @@ import {
   OptimisticCartTotalPrice,
 } from "~components";
 
-import { useWindowSize } from "react-use";
-import { ReactElement, Suspense, useEffect, useRef, useState } from "react";
-import { useDebounce, useBreakpoint, useBreakpoint2 } from "~common/hooks";
+import { ReactElement, Suspense, useRef, useState } from "react";
+import { useBreakpoint2 } from "~common/hooks";
 import {
   Await,
   useAsyncValue,

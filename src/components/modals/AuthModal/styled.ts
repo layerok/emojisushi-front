@@ -1,9 +1,13 @@
 import styled from "styled-components";
+import { media } from "~common/custom-media";
 
 const Wrapper = styled.div`
   display: flex;
-
   padding: 20px;
+  width: 350px;
+  ${media.greaterThan("tablet")`
+    width: 675px;
+  `}
 `;
 
 const Title = styled.p`
@@ -35,6 +39,10 @@ const NavigateButton = styled.button`
   color: #72bbff;
   display: block;
   cursor: pointer;
+
+  ${media.greaterThan("tablet")`
+    display: none;
+  `}
 `;
 
 const LoginForm = styled.form`
@@ -45,6 +53,9 @@ const VerticalBar = styled.div`
   border: 1px solid #2d2d2d;
   margin-left: 42px;
   margin-right: 42px;
+  ${media.lessThan("tablet")`
+    display: none;
+  `}
 `;
 
 const SignUpForm = styled.form`

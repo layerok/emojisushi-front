@@ -1,5 +1,4 @@
 import * as S from "./styled";
-import { useBreakpoint2 } from "~common/hooks";
 import { FlexBox, SortingPopover } from "~components";
 import { ICategory } from "~api/types";
 import { Search } from "../Search";
@@ -11,8 +10,6 @@ export const MobSidebar = ({
   loading = false,
   categories = [],
 }: SidebarProps) => {
-  const breakpoint = useBreakpoint2();
-
   // todo: make sidebar sticky
   return (
     <S.Sidebar>

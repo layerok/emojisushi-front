@@ -30,7 +30,7 @@ export const AuthModal = ({ children }) => {
 
   return (
     <Modal
-      width={isMobile ? "350px" : "675px"}
+      width={"auto"}
       render={({ close }) => (
         <S.Wrapper>
           <If condition={showLoginForm}>
@@ -45,9 +45,9 @@ export const AuthModal = ({ children }) => {
               setShowPasswordRecovery={setShowPasswordRecovery}
             />
           </If>
-          <If condition={!isMobile}>
-            <S.VerticalBar />
-          </If>
+
+          <S.VerticalBar />
+
           <If condition={showSignUpForm}>
             <SignUpForm setShowSignUp={setShowSignUp} />
           </If>
@@ -61,7 +61,6 @@ export const AuthModal = ({ children }) => {
 
 const SignUpForm = observer(({ setShowSignUp }) => {
   const { t } = useTranslation();
-  const { isMobile } = useBreakpoint2();
 
   const navigate = useNavigate();
   const { lang, spotSlug, citySlug } = useParams();
@@ -143,17 +142,16 @@ const SignUpForm = observer(({ setShowSignUp }) => {
           <Button {...state.form.asSubmitButtonProps}>
             {t("common.registration")}
           </Button>
-          <If condition={isMobile}>
-            <S.NavigateButton
-              style={{ paddingTop: "10px" }}
-              onClick={(e) => {
-                e.preventDefault();
-                setShowSignUp(false);
-              }}
-            >
-              {t("common.enter")}
-            </S.NavigateButton>
-          </If>
+
+          <S.NavigateButton
+            style={{ paddingTop: "10px" }}
+            onClick={(e) => {
+              e.preventDefault();
+              setShowSignUp(false);
+            }}
+          >
+            {t("common.enter")}
+          </S.NavigateButton>
         </FlexBox>
       </FlexBox>
     </S.SignUpForm>
@@ -260,7 +258,6 @@ const LoginForm = ({ setShowSignUp, setShowPasswordRecovery, close }) => {
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { isMobile } = useBreakpoint2();
   const { lang, spotSlug, citySlug } = useParams();
 
   return (
@@ -348,17 +345,15 @@ const LoginForm = ({ setShowSignUp, setShowPasswordRecovery, close }) => {
         {t("common.login")}
       </Button>
 
-      <If condition={isMobile}>
-        <S.NavigateButton
-          style={{ paddingTop: "10px" }}
-          onClick={(e) => {
-            e.preventDefault();
-            setShowSignUp(true);
-          }}
-        >
-          {t("common.registration")}
-        </S.NavigateButton>
-      </If>
+      <S.NavigateButton
+        style={{ paddingTop: "10px" }}
+        onClick={(e) => {
+          e.preventDefault();
+          setShowSignUp(true);
+        }}
+      >
+        {t("common.registration")}
+      </S.NavigateButton>
     </S.LoginForm>
   );
 };

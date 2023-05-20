@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { media } from "~common/custom-media";
 
 const Title = styled.div`
   font-weight: 500;
@@ -8,6 +9,9 @@ const Title = styled.div`
 
 const Wrapper = styled.div`
   padding: 10px;
+  ${media.lessThan("pc")`
+  width: 375px;
+  `}
 `;
 
 const Phones = styled.div`

@@ -118,6 +118,7 @@ Pan.Props.Prop.Value = styled.p`
   ${media.lessThan("pc")`
     display: flex;
     width: 95px;  
+       margin-top: 5px;
   `}
 `;
 

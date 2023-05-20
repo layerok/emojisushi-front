@@ -1,6 +1,5 @@
-import { Container, FlexBox, Heading, Loader } from "~components";
+import { Container, Heading } from "~components";
 import { CheckoutForm, CheckoutCart } from "./components";
-import { useBreakpoint2 } from "~common/hooks";
 import {
   Await,
   Navigate,
@@ -15,9 +14,9 @@ import { paymentQuery, shippingQuery } from "~queries";
 import { Suspense } from "react";
 import { AwaitAll } from "~components/AwaitAll";
 import { LayoutRouteLoaderData } from "~layout/Layout";
+import * as S from "./styled";
 
 const CheckoutPage = () => {
-  const { isMobile } = useBreakpoint2();
   const { t } = useTranslation();
   const { user, cart } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
   const { shippingMethods, paymentMethods } = useLoaderData() as any;
@@ -40,11 +39,7 @@ const CheckoutPage = () => {
       </Suspense>
 
       <Heading>{t("checkout.title")}</Heading>
-      <FlexBox
-        flexDirection={isMobile ? "column" : "row"}
-        justifyContent={"space-between"}
-        style={{ marginTop: "30px" }}
-      >
+      <S.Container>
         <Suspense fallback={<CheckoutForm loading />}>
           <AwaitAll
             cart={cart}
@@ -65,7 +60,7 @@ const CheckoutPage = () => {
         <Suspense fallback={<CheckoutCart loading={true} />}>
           <Await resolve={cart}>{(cart) => <CheckoutCart cart={cart} />}</Await>
         </Suspense>
-      </FlexBox>
+      </S.Container>
     </Container>
   );
 };

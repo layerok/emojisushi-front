@@ -1,4 +1,3 @@
-import { useBreakpoint2 } from "~common/hooks";
 import { IngredientsTooltip } from "~components";
 import { Product } from "~models";
 import Skeleton from "react-loading-skeleton";

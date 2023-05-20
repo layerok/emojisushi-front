@@ -93,4 +93,11 @@ Category.List = styled.ul`
     `}
 `;
 
-export { Category };
+const IconWrapper = styled.div`
+  width: 25px;
+  ${media.lessThan("tablet")`
+width: 20px;
+`}
+`;
+
+export { Category, IconWrapper };

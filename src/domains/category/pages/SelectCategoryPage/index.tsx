@@ -2,7 +2,6 @@ import { Await, defer, useAsyncValue, useLoaderData } from "react-router-dom";
 import * as S from "./styled";
 import { useTranslation } from "react-i18next";
 import { Container, SvgIcon, ToteSvg } from "~components";
-import { useBreakpoint2 } from "~common/hooks";
 import { Suspense } from "react";
 import { Category } from "./components/Category";
 import Skeleton from "react-loading-skeleton";
@@ -50,7 +49,6 @@ export const SelectCategoryPage = () => {
   const { t } = useTranslation();
 
   const { categories } = useLoaderData() as SelectCategoryPageLoaderData;
-  const { isMobile } = useBreakpoint2();
 
   return (
     <Container>
@@ -61,9 +59,11 @@ export const SelectCategoryPage = () => {
               <Await resolve={categories}>
                 <>
                   {t("categoryIndex.title")}
-                  <SvgIcon width={isMobile ? "20px" : "25px"} color={"white"}>
-                    <ToteSvg />
-                  </SvgIcon>
+                  <S.IconWrapper>
+                    <SvgIcon width={"auto"} color={"white"}>
+                      <ToteSvg />
+                    </SvgIcon>
+                  </S.IconWrapper>
                 </>
               </Await>
             </Suspense>
