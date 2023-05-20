@@ -1,6 +1,5 @@
 export * from "./Weight";
 export * from "./Image";
-export * from "./Footer";
 export * from "./FavoriteButton";
 export * from "./Ingredients";
 export * from "./Modificators";

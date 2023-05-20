@@ -33,7 +33,7 @@ import { IGetCartRes } from "~api/types";
 import {
   DeleteCartProductFormDataPayload,
   UpdateCartProductFormDataPayload,
-} from "~components/ProductCard/components";
+} from "~domains/product/types";
 
 const CartItem = ({ item }: { item: CartProduct }) => {
   const fetcher = useFetcher();

@@ -2,13 +2,7 @@ import { Header } from "../Header";
 import { Footer } from "../Footer";
 import * as S from "./styled";
 import { useWindowScroll } from "react-use";
-import {
-  StickyToTopBtn,
-  Sticky,
-  TinyCartButton,
-  CartModal,
-  Container,
-} from "~components";
+import { StickyToTopBtn, Sticky, TinyCartButton, CartModal } from "~components";
 import { ReactNode, Suspense } from "react";
 import {
   Await,
@@ -126,6 +120,8 @@ export const layoutLoader = async ({ params }) => {
     spot: await spotPromise,
   });
 };
+
+// todo: figure out how to not refetch user after modifying cart products
 
 const updateCartProduct = async ({ formData }: { formData: FormData }) => {
   const product_id = formData.get("product_id");

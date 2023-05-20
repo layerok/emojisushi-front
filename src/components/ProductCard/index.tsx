@@ -7,13 +7,16 @@ import {
   Weight,
   Modificators,
   Ingredients,
-  Footer,
   FavoriteButton,
   Name,
 } from "./components";
 import { TProductCardProps } from "./types";
 import { findInCart } from "./utils";
 import { useAsyncValues } from "~components/AwaitAll";
+import { Price } from "~components/Price";
+import { useFetcher, useParams } from "react-router-dom";
+import { AddToCartButton } from "~components/buttons";
+import { UpdateCartProductFormDataPayload } from "~domains/product/types";
 
 export const ProductCard = ({
   product,
@@ -47,6 +50,40 @@ export const ProductCard = ({
 
   const favorite = product?.isInWishlists(wishlists || []);
 
+  const oldPrice = product?.getOldPrice(variant)?.price_formatted;
+  const newPrice = product?.getNewPrice(variant)?.price_formatted;
+
+  const fetcher = useFetcher();
+
+  const { lang, spotSlug, citySlug } = useParams();
+
+  let count = cartProduct?.quantity || 0;
+
+  if (fetcher.formData) {
+    count = +fetcher.formData.get("count");
+  }
+
+  const handleAdd = () => {
+    return async (quantity: number) => {
+      const params: UpdateCartProductFormDataPayload = {
+        product_id: product.id + "",
+        quantity: quantity + "",
+        count: `${count + quantity}`,
+        price: product.getNewPrice(variant).price + "",
+      };
+      if (variant) {
+        params.variant_id = variant.id + "";
+      }
+      if (cartProduct) {
+        params.cart_product_id = cartProduct.id + "";
+      }
+      fetcher.submit(params, {
+        action: "/" + [lang, citySlug, spotSlug].join("/"),
+        method: "post",
+      });
+    };
+  };
+
   return (
     <S.Wrapper>
       <FavoriteButton
@@ -73,12 +110,14 @@ export const ProductCard = ({
         </S.Description>
       </EqualHeightElement>
 
-      <Footer
-        cartProduct={cartProduct}
-        product={product}
-        variant={variant}
-        loading={loading}
-      />
+      <S.Footer>
+        <Price loading={loading} oldPrice={oldPrice} newPrice={newPrice} />
+        <AddToCartButton
+          loading={loading}
+          count={count}
+          handleAdd={handleAdd()}
+        />
+      </S.Footer>
     </S.Wrapper>
   );
 };
