@@ -1,13 +1,13 @@
 name: Build and deploy
-on: 
+on:
   push:
     branches: [master]
-  workflow_dispatch: 
-  
-jobs: 
+  workflow_dispatch:
+
+jobs:
   build:
     name: Build
-    env: 
+    env:
       CI: false
     runs-on: ubuntu-latest
     steps:
@@ -19,7 +19,7 @@ jobs:
         run: yarn run build
       - name: Archive production artifact
         uses: actions/upload-artifact@main
-        with: 
+        with:
           name: build
           path: build
   deploy:
@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@main
       - name: Download artifact
         uses: actions/download-artifact@main
-        with: 
+        with:
           name: build
           path: build
       - name: Sync files to hosting
@@ -40,3 +40,4 @@ jobs:
           server: ftp.emojisushi.com.ua
           username: u852991700.stage_front
           password: ${{ secrets.ftp_password }}
+          local-dir: /build
