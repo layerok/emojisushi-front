@@ -1,7 +1,5 @@
 name: (Stage) Build and deploy
 on:
-  push:
-    branches: [stage]
   workflow_dispatch:
 
 jobs:
