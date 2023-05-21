@@ -40,4 +40,4 @@ jobs:
           server: ftp.emojisushi.com.ua
           username: u852991700.stage_front
           password: ${{ secrets.ftp_password }}
-          local-dir: /build
+          local-dir: build/
