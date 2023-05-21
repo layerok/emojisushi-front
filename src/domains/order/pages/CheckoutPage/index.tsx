@@ -49,6 +49,8 @@ const CheckoutPage = () => {
           >
             {({ cart, shippingMethods, paymentMethods, user }) => (
               <CheckoutForm
+                // remount component after signin to update form
+                key={user ? "one" : "second"}
                 cart={cart}
                 shippingMethods={shippingMethods}
                 paymentMethods={paymentMethods}

@@ -88,7 +88,7 @@ export const Right = ({
           {loading ? (
             <Skeleton width={40} height={40} borderRadius={10} />
           ) : (
-            <AuthModal>
+            <AuthModal redirect_to={undefined}>
               <SvgButton>
                 <SvgIcon clickable={true} width={"25px"} color={"black"}>
                   <UserSvg />

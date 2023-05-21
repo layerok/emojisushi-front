@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { orderApi } from "~api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { useSpot } from "~hooks";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
@@ -50,6 +50,7 @@ export const CheckoutForm = ({
   const { t } = useTranslation();
   const [pending, setPending] = useState(false);
   const navigate = useNavigate();
+  const { lang, citySlug, spotSlug } = useParams();
 
   const spot = useSpot();
   const CheckoutSchema = Yup.object().shape({
@@ -104,7 +105,7 @@ export const CheckoutForm = ({
         .then((res) => {
           // todo: revalidate cart, because it is empty now
           if (res.data?.success) {
-            navigate("/thankyou");
+            navigate("/" + [lang, citySlug, spotSlug, "thankyou"].join("/"));
           }
         })
         .catch((e) => {

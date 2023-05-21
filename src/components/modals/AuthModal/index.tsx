@@ -14,7 +14,7 @@ import { observer } from "mobx-react";
 import { useFetcher, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-export const AuthModal = ({ children }) => {
+export const AuthModal = ({ children, redirect_to }) => {
   // todo: don't use it
   const { isMobile } = useBreakpoint2();
 
@@ -32,6 +32,7 @@ export const AuthModal = ({ children }) => {
         <S.Wrapper>
           <If condition={showLoginForm}>
             <LoginForm
+              redirect_to={redirect_to}
               close={close}
               setShowSignUp={setShowSignUp}
               setShowPasswordRecovery={setShowPasswordRecovery}
@@ -209,7 +210,12 @@ const PasswordRecoveryForm = observer(({ setShowPasswordRecovery }) => {
   );
 });
 
-const LoginForm = ({ setShowSignUp, setShowPasswordRecovery, close }) => {
+const LoginForm = ({
+  setShowSignUp,
+  setShowPasswordRecovery,
+  close,
+  redirect_to,
+}) => {
   const { t } = useTranslation();
 
   const { lang, spotSlug, citySlug } = useParams();
@@ -226,6 +232,7 @@ const LoginForm = ({ setShowSignUp, setShowPasswordRecovery, close }) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         formData.append("type", "login");
+        formData.append("redirect_to", redirect_to);
         fetcher.submit(formData, {
           method: "post",
           action: "/" + [lang, citySlug, spotSlug].join("/"),

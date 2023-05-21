@@ -47,7 +47,7 @@ export const MobMenuModal = ({ children, cities = [] }: MobMenuModalProps) => {
             />
           </S.Item>
           <S.Item>
-            <AuthModal>
+            <AuthModal redirect_to={undefined}>
               <FlexBox alignItems={"center"}>
                 <SvgIcon width={"25px"} style={{ marginRight: "10px" }}>
                   <UserSvg />

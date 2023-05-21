@@ -12,7 +12,6 @@ import {
   defer,
   redirect,
   useLoaderData,
-  useParams,
 } from "react-router-dom";
 import { queryClient } from "~query-client";
 import { cartQuery, wishlistsQuery } from "~queries";
@@ -205,21 +204,22 @@ const login = async ({
 }) => {
   const email = formData.get("email") + "";
   const password = formData.get("password") + "";
+  const redirect_to = formData.get("redirect_to") + "";
+  const { spotSlug, lang, citySlug } = params;
+  const default_redirect_to =
+    "/" + [lang, citySlug, spotSlug, "account", "profile"].join("/");
   try {
     const res = await authApi.login({
       email,
       password,
     });
-    const { spotSlug, lang, citySlug } = params;
 
     const { token } = res.data.data;
     Cookies.set("jwt", token);
 
     await queryClient.removeQueries(wishlistsQuery.queryKey);
     await queryClient.removeQueries(cartQuery.queryKey);
-    return redirect(
-      "/" + [lang, citySlug, spotSlug, "account", "profile"].join("/")
-    );
+    return redirect(redirect_to || default_redirect_to);
   } catch (e) {
     if (e instanceof AxiosError) {
       if (e.response.data?.errors) {
