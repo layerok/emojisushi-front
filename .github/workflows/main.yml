@@ -7,6 +7,8 @@ on:
 jobs: 
   build:
     name: Build
+    env: 
+      CI: false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
