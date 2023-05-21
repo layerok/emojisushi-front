@@ -1,4 +1,4 @@
-name: \[Stage\] Build and deploy
+name: (Stage) Build and deploy
 on:
   push:
     branches: [stage]
