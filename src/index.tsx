@@ -4,9 +4,11 @@ import { App } from "~App";
 import reportWebVitals from "./reportWebVitals";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
-import { sessionService } from "~services/session.service";
+import { createSession, getSession } from "~utils/session.utils";
 
-sessionService.init();
+if (!getSession()) {
+  createSession();
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
