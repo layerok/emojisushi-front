@@ -202,9 +202,9 @@ const login = async ({
   formData: FormData;
   params: any;
 }) => {
-  const email = formData.get("email") + "";
-  const password = formData.get("password") + "";
-  const redirect_to = formData.get("redirect_to") + "";
+  const email = formData.get("email") as string | null;
+  const password = formData.get("password") as string | null;
+  const redirect_to = formData.get("redirect_to") as string | null;
   const { spotSlug, lang, citySlug } = params;
   const default_redirect_to =
     "/" + [lang, citySlug, spotSlug, "account", "profile"].join("/");
@@ -219,6 +219,7 @@ const login = async ({
 
     await queryClient.removeQueries(wishlistsQuery.queryKey);
     await queryClient.removeQueries(cartQuery.queryKey);
+    console.log("redirect", redirect_to, default_redirect_to);
     return redirect(redirect_to || default_redirect_to);
   } catch (e) {
     if (e instanceof AxiosError) {

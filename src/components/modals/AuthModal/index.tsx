@@ -232,7 +232,10 @@ const LoginForm = ({
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         formData.append("type", "login");
-        formData.append("redirect_to", redirect_to);
+        if (redirect_to) {
+          formData.append("redirect_to", redirect_to);
+        }
+
         fetcher.submit(formData, {
           method: "post",
           action: "/" + [lang, citySlug, spotSlug].join("/"),
