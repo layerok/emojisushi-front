@@ -1,13 +1,12 @@
 import styled, { css } from "styled-components";
 import { ifProp, theme } from "styled-tools";
-import { NavLink } from "react-router-dom";
 
-const Categories = styled.div`
+const Chips = styled.div`
   position: relative;
   padding-top: 20px;
 `;
 
-const HorizontalContainer = styled.div`
+const Container = styled.div`
   display: flex;
   overflow-x: scroll;
   flex-wrap: nowrap;
@@ -19,7 +18,7 @@ const Hint = styled.div`
   right: 0;
 `;
 
-const Category = styled.div`
+const ChipContainer = styled.div`
   margin-right: 16px;
   flex-shrink: 0;
 `;
@@ -49,4 +48,4 @@ const Chip = styled.span`
   )}
 `;
 
-export { Categories, Category, Chip, Hint, HorizontalContainer };
+export { Chips, ChipContainer, Chip, Hint, Container };

@@ -35,3 +35,4 @@ export * from "./NavLink";
 export * from "./AwaitAll";
 export * from "./MobSidebar";
 export * from "./Sidebar";
+export * from "./ChipCloud";

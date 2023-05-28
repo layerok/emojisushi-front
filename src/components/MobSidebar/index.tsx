@@ -1,8 +1,9 @@
 import * as S from "./styled";
-import { FlexBox, SortingPopover } from "~components";
+import { Chip, FlexBox, SortingPopover } from "~components";
 import { ICategory } from "~api/types";
 import { Search } from "../Search";
-import { HorizontalMenu } from "./components";
+import { ChipCloud } from "~components";
+import { NavLink, useParams } from "react-router-dom";
 
 type SidebarProps = { loading?: boolean; categories?: ICategory[] };
 
@@ -11,6 +12,8 @@ export const MobSidebar = ({
   categories = [],
 }: SidebarProps) => {
   // todo: make sidebar sticky
+  const { lang, spotSlug, citySlug } = useParams();
+
   return (
     <S.Sidebar>
       <S.Controls>
@@ -28,7 +31,38 @@ export const MobSidebar = ({
         </FlexBox>
       </S.Controls>
 
-      <HorizontalMenu loading={loading} categories={categories} />
+      <ChipCloud loading={loading}>
+        {loading ? (
+          <>
+            <Chip loading />
+            <Chip loading />
+            <Chip loading />
+            <Chip loading />
+            <Chip loading />
+            <Chip loading />
+            <Chip loading />
+          </>
+        ) : (
+          categories.map((item) => {
+            const nextSegments = [
+              lang,
+              citySlug,
+              spotSlug,
+              "category",
+              item.slug,
+            ];
+            return (
+              <NavLink
+                key={item.id}
+                style={{ textDecoration: "none", flexShrink: 0 }}
+                to={"/" + nextSegments.join("/")}
+              >
+                {({ isActive }) => <Chip isActive={isActive}>{item.name}</Chip>}
+              </NavLink>
+            );
+          })
+        )}
+      </ChipCloud>
     </S.Sidebar>
   );
 };
