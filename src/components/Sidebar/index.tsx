@@ -1,7 +1,7 @@
 import * as S from "./styled";
 import { ICategory } from "~api/types";
 import { Search } from "~components/Search";
-import { VerticalMenu, Socials, WishlistsMenuItem } from "./components";
+import { SidebarMenu, Socials, WishlistsMenuItem } from "./components";
 
 type SidebarProps = { loading?: boolean; categories?: ICategory[] };
 
@@ -12,7 +12,7 @@ export const Sidebar = ({ loading = false, categories = [] }: SidebarProps) => {
       <S.SearchContainer>
         <Search loading={loading} />
       </S.SearchContainer>
-      <VerticalMenu categories={categories} loading={loading} />
+      <SidebarMenu categories={categories} loading={loading} />
       <WishlistsMenuItem loading={loading} />
       <Socials loading={loading} />
     </S.Sidebar>

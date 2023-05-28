@@ -42,7 +42,7 @@ type TVerticalMenuProps = {
   loading?: boolean;
 };
 
-const VerticalMenu = ({
+const SidebarMenu = ({
   categories = [],
   loading = true,
 }: TVerticalMenuProps) => {
@@ -73,4 +73,4 @@ const VerticalMenu = ({
     </nav>
   );
 };
-export { VerticalMenu };
+export { SidebarMenu };
