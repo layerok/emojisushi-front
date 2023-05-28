@@ -20,15 +20,17 @@ export const Weight = ({ product, loading = false }: TWeightProps) => {
     <InfoTooltip label={t("menu.weightComment")}>
       <S.Weight>
         {weightWithUnit}
-        <span
-          style={{
-            fontSize: "12px",
-            position: "relative",
-            top: "-3px",
-          }}
-        >
-          ?
-        </span>
+        {weight !== 0 && (
+          <span
+            style={{
+              fontSize: "12px",
+              position: "relative",
+              top: "-3px",
+            }}
+          >
+            ?
+          </span>
+        )}
       </S.Weight>
     </InfoTooltip>
   );
