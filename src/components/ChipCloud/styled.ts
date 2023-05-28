@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import { ifProp, theme } from "styled-tools";
 
-const Chips = styled.div`
+const Chips = styled.nav`
   position: relative;
   padding-top: 20px;
 `;
@@ -20,8 +20,8 @@ const Hint = styled.div`
 
 const ChipContainer = styled.div`
   margin-right: 16px;
-  flex-shrink: 0;
 `;
+
 const Chip = styled.span`
   display: flex;
   text-transform: uppercase;

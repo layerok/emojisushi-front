@@ -16,11 +16,9 @@ type TChipCloudProps = {
 
 const ChipCloud = ({ children }: TChipCloudProps) => {
   return (
-    <nav>
-      <S.Chips>
-        <S.Container>{children}</S.Container>
-      </S.Chips>
-    </nav>
+    <S.Chips>
+      <S.Container>{children}</S.Container>
+    </S.Chips>
   );
 };
 type TCategoryProps = {
