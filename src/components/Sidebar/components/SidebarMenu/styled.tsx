@@ -1,7 +1,5 @@
 import styled from "styled-components";
-import { ifProp } from "styled-tools";
-import { theme } from "styled-tools";
-import { NavLink } from "react-router-dom";
+import { ifProp, theme } from "styled-tools";
 
 const Categories = styled.nav`
   margin-top: 30px;
@@ -9,7 +7,7 @@ const Categories = styled.nav`
   flex-direction: column;
 `;
 
-const Category = styled(NavLink)`
+const Category = styled.span`
   text-transform: uppercase;
   line-height: 20px;
   font-weight: 500;
