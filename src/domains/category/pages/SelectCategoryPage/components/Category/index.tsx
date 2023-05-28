@@ -24,7 +24,11 @@ export const Category = ({ category }: { category?: ICategory }) => {
     <S.Item>
       <S.Link to={category ? to : undefined}>
         <S.Image>
-          {category ? <Image category={category} /> : <Skeleton />}
+          {category ? (
+            <Image category={category} />
+          ) : (
+            <Skeleton width={80} height={80} />
+          )}
         </S.Image>
         <span>{category?.name ?? <Skeleton />}</span>
       </S.Link>
