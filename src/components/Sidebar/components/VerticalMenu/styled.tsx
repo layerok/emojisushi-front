@@ -1,6 +1,7 @@
 import styled from "styled-components";
+import { ifProp } from "styled-tools";
 import { theme } from "styled-tools";
-import { ActiveNavLink } from "src/components/ActiveNavLink";
+import { NavLink } from "react-router-dom";
 
 const Categories = styled.nav`
   margin-top: 30px;
@@ -8,13 +9,13 @@ const Categories = styled.nav`
   flex-direction: column;
 `;
 
-const Category = styled(ActiveNavLink)`
-  margin-top: 20px;
+const Category = styled(NavLink)`
   text-transform: uppercase;
   line-height: 20px;
   font-weight: 500;
   cursor: pointer;
   text-decoration: none;
+  color: ${ifProp("isActive", "#FFE600", "white")};
 
   &:hover {
     color: ${theme("link.active")};

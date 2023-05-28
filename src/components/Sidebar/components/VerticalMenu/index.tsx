@@ -1,8 +1,7 @@
 import * as S from "./styled";
-import { observer } from "mobx-react";
 import { ICategory } from "src/api/types";
 import Skeleton from "react-loading-skeleton";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 
 type TCategoryProps = {
   active?: boolean;
@@ -10,11 +9,7 @@ type TCategoryProps = {
   loading?: boolean;
 };
 
-const Category = ({
-  active = false,
-  category,
-  loading = false,
-}: TCategoryProps) => {
+const Category = ({ category, loading = false }: TCategoryProps) => {
   const { lang, spotSlug, citySlug } = useParams();
 
   if (loading) {
@@ -28,14 +23,17 @@ const Category = ({
       />
     );
   }
+
   return (
-    <S.Category
-      to={"/" + [lang, citySlug, spotSlug, "category", category.slug].join("/")}
-      isActive={active}
+    <NavLink
+      style={{ textDecoration: "none", display: "inline-block", marginTop: 20 }}
       key={category.id}
+      to={"/" + [lang, citySlug, spotSlug, "category", category.slug].join("/")}
     >
-      {category.name}
-    </S.Category>
+      {({ isActive }) => (
+        <S.Category isActive={isActive}>{category.name}</S.Category>
+      )}
+    </NavLink>
   );
 };
 
@@ -44,40 +42,35 @@ type TVerticalMenuProps = {
   loading?: boolean;
 };
 
-const VerticalMenu = observer(
-  ({ categories = [], loading = true }: TVerticalMenuProps) => {
-    const { categorySlug } = useParams();
-
-    if (loading) {
-      return (
-        <S.Categories>
-          <Category loading />
-          <Category loading />
-          <Category loading />
-          <Category loading />
-          <Category loading />
-          <Category loading />
-          <Category loading />
-          <Category loading />
-          <Category loading />
-          <Category loading />
-        </S.Categories>
-      );
-    }
-
+const VerticalMenu = ({
+  categories = [],
+  loading = true,
+}: TVerticalMenuProps) => {
+  if (loading) {
     return (
-      <nav style={{ width: "255px", position: "relative" }}>
-        <S.Categories>
-          {categories.map((category) => {
-            const active = categorySlug === category.slug;
-            return (
-              <Category key={category.id} category={category} active={active} />
-            );
-          })}
-        </S.Categories>
-      </nav>
+      <S.Categories>
+        <Category loading />
+        <Category loading />
+        <Category loading />
+        <Category loading />
+        <Category loading />
+        <Category loading />
+        <Category loading />
+        <Category loading />
+        <Category loading />
+        <Category loading />
+      </S.Categories>
     );
   }
-);
 
+  return (
+    <nav style={{ width: "255px", position: "relative" }}>
+      <S.Categories>
+        {categories.map((category) => {
+          return <Category key={category.id} category={category} />;
+        })}
+      </S.Categories>
+    </nav>
+  );
+};
 export { VerticalMenu };

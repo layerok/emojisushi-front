@@ -14,18 +14,19 @@ type TChipCloudProps = {
   children?: ReactNode;
 };
 
+type TCategoryProps = {
+  loading?: boolean;
+  item?: TChip;
+  children?: ReactNode;
+  isActive?: boolean;
+};
+
 const ChipCloud = ({ children }: TChipCloudProps) => {
   return (
     <S.Chips>
       <S.Container>{children}</S.Container>
     </S.Chips>
   );
-};
-type TCategoryProps = {
-  loading?: boolean;
-  item?: TChip;
-  children?: ReactNode;
-  isActive?: boolean;
 };
 
 export const Chip = ({
