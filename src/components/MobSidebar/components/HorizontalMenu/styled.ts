@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 import { ifProp, theme } from "styled-tools";
-import { ActiveNavLink } from "src/components/ActiveNavLink";
+import { NavLink } from "react-router-dom";
 
 const Categories = styled.div`
   position: relative;
@@ -23,14 +23,13 @@ const Category = styled.div`
   margin-right: 16px;
   flex-shrink: 0;
 `;
-const CategoryLink = styled(ActiveNavLink)`
+const Chip = styled.span`
   display: flex;
   text-transform: uppercase;
   line-height: 20px;
   font-weight: 500;
   cursor: pointer;
   color: white;
-  text-decoration: none;
 
   &:hover {
     color: ${theme("link.active")};
@@ -50,4 +49,4 @@ const CategoryLink = styled(ActiveNavLink)`
   )}
 `;
 
-export { Categories, Category, CategoryLink, Hint, HorizontalContainer };
+export { Categories, Category, Chip, Hint, HorizontalContainer };
