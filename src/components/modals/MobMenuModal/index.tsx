@@ -14,7 +14,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { NavLink, useParams } from "react-router-dom";
 import { ICity } from "~api/types";
-import { HightlightText } from "~components/HighlightText";
+import { HightlightText } from "~components";
 
 type MobMenuModalProps = {
   children: ReactElement;

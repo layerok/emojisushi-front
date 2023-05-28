@@ -1,11 +1,14 @@
 import * as S from "./styled";
-import { ContactsModal, LocationPickerPopover } from "~components";
+import {
+  ContactsModal,
+  LocationPickerPopover,
+  HightlightText,
+} from "~components";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { Logo } from "../Logo";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { ICity } from "~api/types";
-import { HightlightText } from "~components/HighlightText";
 
 type LeftProps = { loading?: boolean; cities?: ICity[] };
 

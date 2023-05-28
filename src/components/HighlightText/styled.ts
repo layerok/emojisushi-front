@@ -1,4 +1,3 @@
-import { ReactElement } from "react";
 import styled from "styled-components";
 import { ifProp } from "styled-tools";
 
@@ -25,12 +24,4 @@ const Container = styled.div`
   }
 `;
 
-export const HightlightText = ({
-  children,
-  isActive = false,
-}: {
-  children: ReactElement;
-  isActive?: boolean;
-}) => {
-  return <Container isActive={isActive}>{children}</Container>;
-};
+export { Container };
