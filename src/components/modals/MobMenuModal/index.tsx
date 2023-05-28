@@ -4,7 +4,6 @@ import {
   LocationPickerPopover,
   SvgIcon,
   FlexBox,
-  NavLinkUnderline,
   ContactsModal,
   BaseModal,
   HeartSvg,
@@ -13,8 +12,9 @@ import {
   LanguageSelector,
 } from "~components";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { ICity } from "~api/types";
+import { HightlightText } from "~components/HighlightText";
 
 type MobMenuModalProps = {
   children: ReactElement;
@@ -62,21 +62,31 @@ export const MobMenuModal = ({ children, cities = [] }: MobMenuModalProps) => {
             </ContactsModal>
           </S.Item>
           <S.Item>
-            <NavLinkUnderline
+            <NavLink
+              style={{ color: "white", textDecoration: "none" }}
               to={
                 "/" + [lang, citySlug, spotSlug, "dostavka-i-oplata"].join("/")
               }
             >
-              <div>{t("mobMenuModal.delivery")}</div>
-            </NavLinkUnderline>
+              {({ isActive }) => (
+                <HightlightText isActive={isActive}>
+                  <div>{t("mobMenuModal.delivery")}</div>
+                </HightlightText>
+              )}
+            </NavLink>
           </S.Item>
           <S.Item>
             <FlexBox justifyContent={"space-between"} alignItems={"center"}>
-              <NavLinkUnderline
+              <NavLink
+                style={{ color: "white", textDecoration: "none" }}
                 to={"/" + [lang, citySlug, spotSlug, "wishlist"].join("/")}
               >
-                <div>{t("common.favorite")}</div>
-              </NavLinkUnderline>
+                {({ isActive }) => (
+                  <HightlightText isActive={isActive}>
+                    <div>{t("common.favorite")}</div>
+                  </HightlightText>
+                )}
+              </NavLink>
               <SvgIcon color={"#FFE600"} width={"25px"}>
                 <HeartSvg />
               </SvgIcon>

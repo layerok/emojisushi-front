@@ -1,11 +1,9 @@
+import { ReactElement } from "react";
 import styled from "styled-components";
 import { ifProp } from "styled-tools";
-import { NavLink } from "react-router-dom";
 
-const Link = styled(NavLink)`
-  color: white;
+const Container = styled.div`
   position: relative;
-  text-decoration: none;
   display: inline-block;
 
   :hover {
@@ -16,7 +14,7 @@ const Link = styled(NavLink)`
 
   :after {
     content: "";
-    opacity: ${ifProp({ className: "active" }, 1, 0)};
+    opacity: ${ifProp("isActive", 1, 0)};
     position: absolute;
     width: 100%;
     left: 0;
@@ -27,4 +25,12 @@ const Link = styled(NavLink)`
   }
 `;
 
-export { Link };
+export const HightlightText = ({
+  children,
+  isActive = false,
+}: {
+  children: ReactElement;
+  isActive?: boolean;
+}) => {
+  return <Container isActive={isActive}>{children}</Container>;
+};

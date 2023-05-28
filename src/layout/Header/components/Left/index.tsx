@@ -1,14 +1,11 @@
 import * as S from "./styled";
-import {
-  ContactsModal,
-  NavLinkUnderline,
-  LocationPickerPopover,
-} from "~components";
+import { ContactsModal, LocationPickerPopover } from "~components";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { Logo } from "../Logo";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { ICity } from "~api/types";
+import { HightlightText } from "~components/HighlightText";
 
 type LeftProps = { loading?: boolean; cities?: ICity[] };
 
@@ -41,12 +38,16 @@ export const Left = ({ loading = false, cities = [] }: LeftProps) => {
         {loading ? (
           <Skeleton width={144} height={17.25} />
         ) : (
-          <NavLinkUnderline
-            style={{ width: "144px" }}
+          <NavLink
+            style={{ color: "white", textDecoration: "none", width: "144px" }}
             to={"/" + [lang, citySlug, spotSlug, "dostavka-i-oplata"].join("/")}
           >
-            {t("header.delivery")}
-          </NavLinkUnderline>
+            {({ isActive }) => (
+              <HightlightText isActive={isActive}>
+                {t("header.delivery")}
+              </HightlightText>
+            )}
+          </NavLink>
         )}
       </S.HeaderItem>
     </S.Left>
