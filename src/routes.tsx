@@ -1,6 +1,41 @@
 import i18next from "i18next";
-import { Navigate } from "react-router-dom";
+import { Navigate, redirect } from "react-router-dom";
 import { Trans } from "react-i18next";
+import { accessApi, menuApi } from "~api";
+import { CategoriesStore } from "~stores/categories.store";
+import { getFromLocalStorage, setToLocalStorage } from "~utils/ls.utils";
+
+const indexPageLoader = async () => {
+  const citiesPromise = accessApi.getCities({
+    includeSpots: true,
+  });
+  const categoriesPromise = menuApi.getCategories();
+
+  const citiesRes = await citiesPromise;
+  const categoriesRes = await categoriesPromise;
+  const cities = citiesRes.data;
+
+  if (cities.length > 0) {
+    const city = citiesRes.data[0];
+    if (city.spots.length > 0) {
+      const spot = city.spots[0];
+
+      const categoriesStore = new CategoriesStore(categoriesRes.data.data);
+      const publishedCategories = categoriesStore.getPublishedItems(spot.slug);
+      if (publishedCategories.length > 0) {
+        const category = publishedCategories[0];
+        const lang = getFromLocalStorage("i18nextLang") || "uk";
+
+        return redirect(
+          "/" +
+            [lang, city.slug, spot.slug, "category", category.slug].join("/")
+        );
+      }
+    }
+  }
+
+  return redirect("/uk");
+};
 
 export const routes = [
   {
@@ -8,12 +43,14 @@ export const routes = [
     children: [
       {
         index: true,
-        element: <Navigate to={"/uk"} />,
+        loader: indexPageLoader,
       },
       {
         path: ":lang",
         loader: ({ params }) => {
           i18next.changeLanguage(params.lang);
+          console.log(i18next.languages);
+          setToLocalStorage("i18nextLang", params.lang);
           return null;
         },
         children: [
@@ -151,3 +188,7 @@ export const routes = [
     element: <Navigate to="/" />,
   },
 ];
+
+const NotFoundPage = () => {
+  return <div>404 not found</div>;
+};

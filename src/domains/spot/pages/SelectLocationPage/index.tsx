@@ -11,7 +11,9 @@ import { citiesQuery } from "~queries/cities.query";
 
 export const SelectLocationPage = () => {
   const { t } = useTranslation();
-  const { cities } = useLoaderData() as any;
+  const { cities } = useLoaderData() as {
+    cities: IGetCitiesRes;
+  };
 
   return (
     <S.Locations>

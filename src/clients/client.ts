@@ -1,8 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import LocalStorageService from "../services/local-storage.service";
 import i18n from "~i18n";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
+import { getFromLocalStorage } from "~utils/ls.utils";
 
 const client = axios.create({
   baseURL: `${process.env.REACT_APP_API_BASE_URL}`,
@@ -20,18 +20,8 @@ client.interceptors.request.use((config = {}) => {
   const { method } = config;
 
   const params: IParams = {};
-  const citySlug = LocalStorageService.get("city");
-  const spotSlug = LocalStorageService.get("spot");
 
   let session_id = Cookies.get("session_id");
-
-  if (citySlug) {
-    session_id += citySlug;
-  }
-
-  if (spotSlug) {
-    session_id += spotSlug;
-  }
 
   if (session_id) {
     params.session_id = session_id;
@@ -44,7 +34,7 @@ client.interceptors.request.use((config = {}) => {
   params.lang =
     i18n.resolvedLanguage ||
     i18n.options.lng ||
-    LocalStorageService.get("i18next_lang", "uk");
+    getFromLocalStorage("i18nextLang", "uk");
 
   if (method === "post") {
     config.data = {

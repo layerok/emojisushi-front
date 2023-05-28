@@ -1,6 +1,5 @@
 import {
   defer,
-  useAsyncError,
   useLoaderData,
   useNavigate,
   useNavigation,
@@ -35,10 +34,6 @@ import { PublishedCategories } from "~domains/category/components/PublishedCateg
 import { AxiosError } from "axios";
 
 export const CategoryPage = () => {
-  // if (!selectedCategory && categories.length > 0) {
-  //   return <Navigate to={categories[0].slug} />;
-  // }
-
   const closed = isClosed({
     start: appConfig.workingHours[0],
     end: appConfig.workingHours[1],
@@ -119,8 +114,8 @@ export const AwaitedProducts = ({
     .filter((product: Product) => {
       return !product.isHiddenInSpot(spotSlug);
     });
-  // todo: Total is not right because hidden products are also counted
-  const total = products.total;
+  // subtracting hidden products from total
+  const total = products.total - (products.data.length - items.length);
 
   // todo: show skeleton while searching products
   return (

@@ -1,4 +1,5 @@
 import Cookies from "js-cookie";
+import { generateHash } from "~utils/hash.utils";
 
 class SessionService {
   init = () => {
@@ -10,15 +11,12 @@ class SessionService {
   };
 
   create() {
-    Cookies.set("session_id", gen(100));
+    Cookies.set("session_id", generateHash(100));
   }
 
   remove = () => {
     Cookies.remove("session_id");
   };
 }
-
-// @ts-ignore
-const gen = (n) => [...Array(n)].map((_) => (Math.random() * 10) | 0).join``;
 
 export const sessionService = new SessionService();
