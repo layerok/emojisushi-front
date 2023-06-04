@@ -17,6 +17,7 @@ export type ISpot = {
   slug: string;
   cover: null | string;
   photos: IFile[];
+  city: ICity | null;
 };
 
 export type ICity = {

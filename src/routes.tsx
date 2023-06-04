@@ -6,31 +6,26 @@ import { CategoriesStore } from "~stores/categories.store";
 import { getFromLocalStorage, setToLocalStorage } from "~utils/ls.utils";
 
 const indexPageLoader = async () => {
-  const citiesPromise = accessApi.getCities({
-    includeSpots: true,
-  });
+  const spotsPromise = accessApi.getSpots();
   const categoriesPromise = menuApi.getCategories();
 
-  const citiesRes = await citiesPromise;
+  const spotsRes = await spotsPromise;
   const categoriesRes = await categoriesPromise;
-  const cities = citiesRes.data;
+  const spots = spotsRes.data;
 
-  if (cities.length > 0) {
-    const city = citiesRes.data[0];
-    if (city.spots.length > 0) {
-      const spot = city.spots[0];
+  if (spots.length > 0) {
+    const spot = spots[0];
+    const city = spot.city;
 
-      const categoriesStore = new CategoriesStore(categoriesRes.data.data);
-      const publishedCategories = categoriesStore.getPublishedItems(spot.slug);
-      if (publishedCategories.length > 0) {
-        const category = publishedCategories[0];
-        const lang = getFromLocalStorage("i18nextLang") || "uk";
+    const categoriesStore = new CategoriesStore(categoriesRes.data.data);
+    const publishedCategories = categoriesStore.getPublishedItems(spot.slug);
+    if (publishedCategories.length > 0) {
+      const category = publishedCategories[0];
+      const lang = getFromLocalStorage("i18nextLang") || "uk";
 
-        return redirect(
-          "/" +
-            [lang, city.slug, spot.slug, "category", category.slug].join("/")
-        );
-      }
+      return redirect(
+        "/" + [lang, city.slug, spot.slug, "category", category.slug].join("/")
+      );
     }
   }
 

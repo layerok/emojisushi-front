@@ -13,13 +13,15 @@ const getCitiesDefaults: IGetCitiesParams = {
 };
 
 function getSpots(params = {}) {
-  return client.get<{
-    data: ISpot[];
-    meta: IMeta;
-  }>("spots", {
-    params,
-    skipAuthRefresh: true,
-  } as AxiosAuthRefreshRequestConfig);
+  return client
+    .get<{
+      data: ISpot[];
+      meta: IMeta;
+    }>("spots", {
+      params,
+      skipAuthRefresh: true,
+    } as AxiosAuthRefreshRequestConfig)
+    .then((res) => res.data);
 }
 
 function getSpot(params: { slug_or_id: string | number }) {

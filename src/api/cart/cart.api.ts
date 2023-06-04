@@ -11,37 +11,38 @@ const getCartProducts = (params = {}) => {
     .then((res) => res.data);
 };
 
-function addCartProduct(params = {}) {
-  return client.get<{
+function addCartProduct(data = {}) {
+  return client.post<{
     data: ICartProduct[];
     total: string;
     totalQuantity: number;
-  }>("cart/add", {
-    params,
+  }>("cart/add", data, {
     skipAuthRefresh: true,
   } as AxiosAuthRefreshRequestConfig);
 }
 
 function removeCartProduct(cart_product_id) {
-  return client.get<{
+  return client.post<{
     data: ICartProduct[];
     total: string;
     totalQuantity: number;
-  }>("cart/remove", {
-    params: {
+  }>(
+    "cart/remove",
+    {
       cart_product_id,
     },
-    skipAuthRefresh: true,
-  } as AxiosAuthRefreshRequestConfig);
+    {
+      skipAuthRefresh: true,
+    } as AxiosAuthRefreshRequestConfig
+  );
 }
 
-function clearCart(params = {}) {
-  return client.get<{
+function clearCart(data = {}) {
+  return client.post<{
     data: ICartProduct[];
     total: string;
     totalQuantity: number;
-  }>("cart/clear", {
-    params,
+  }>("cart/clear", data, {
     skipAuthRefresh: true,
   } as AxiosAuthRefreshRequestConfig);
 }

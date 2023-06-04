@@ -3,9 +3,8 @@ import { FlexBox, Input, ButtonOutline } from "~components";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { orderApi } from "~api";
-import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useActionData, useNavigation, useSubmit } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useSpot } from "~hooks";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
 import { CartProduct, User } from "~models";
@@ -43,14 +42,17 @@ export const CheckoutForm = ({
 
   const items = loading ? [] : cart.data.map((json) => new CartProduct(json));
 
+  const actionData = useActionData() as {
+    errors?: Record<string, string[]>;
+    message?: string;
+  };
+
   const optimisticCartTotal = useOptimisticCartTotalPrice({
     items: items,
   });
 
   const { t } = useTranslation();
-  const [pending, setPending] = useState(false);
-  const navigate = useNavigate();
-  const { lang, citySlug, spotSlug } = useParams();
+  const navigation = useNavigation();
 
   const spot = useSpot();
   const CheckoutSchema = Yup.object().shape({
@@ -68,6 +70,10 @@ export const CheckoutForm = ({
     email: Yup.string().email("Invalid email"),
   });
 
+  const submit = useSubmit();
+
+  const [errorShown, setErrorShown] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       name: user ? user.fullName : "",
@@ -82,42 +88,42 @@ export const CheckoutForm = ({
       shipping_method_id: 1,
     },
     validationSchema: CheckoutSchema,
-    onSubmit: (values) => {
-      setPending(true);
+    onSubmit: async (values) => {
       const [firstname, lastname] = values.name.split(" ");
-      orderApi
-        .place({
-          phone: values.phone,
-          firstname: firstname,
-          lastname: lastname,
-          email: values.email,
-          spot_id_or_slug: spot.slug,
 
-          address: values.address,
-          address_id: values.address_id,
-          payment_method_id: values.payment_method_id,
-          shipping_method_id: values.shipping_method_id,
+      const formData = new FormData();
+      formData.append("phone", values.phone);
+      formData.append("firstname", firstname);
+      formData.append("lastname", lastname);
+      formData.append("email", values.email);
+      formData.append("spot_id_or_slug", spot.slug);
+      formData.append("address", values.address);
+      formData.append("payment_method_id", values.payment_method_id + "");
+      formData.append("shipping_method_id", values.shipping_method_id + "");
+      formData.append("change", values.change);
 
-          change: values.change,
-          sticks: +values.sticks,
-          comment: values.comment,
-        })
-        .then((res) => {
-          // todo: revalidate cart, because it is empty now
-          if (res.data?.success) {
-            navigate("/" + [lang, citySlug, spotSlug, "thankyou"].join("/"));
-          }
-        })
-        .catch((e) => {
-          if (e.response.data?.errors) {
-            formik.setErrors(e.response.data.errors);
-          }
-        })
-        .finally(() => {
-          setPending(false);
-        });
+      if (values.address_id) {
+        formData.append("address_id", values.address_id);
+      }
+      if (values.sticks) {
+        formData.append("sticks", +values.sticks + "");
+      }
+
+      formData.append("comment", values.comment);
+      formik.setErrors({});
+      setErrorShown(false);
+      submit(formData, {
+        method: "post",
+      });
     },
   });
+
+  useEffect(() => {
+    if (actionData?.errors && !errorShown) {
+      setErrorShown(true);
+      formik.setErrors(actionData.errors);
+    }
+  }, [actionData, formik, errorShown]);
 
   return (
     <S.Form onSubmit={formik.handleSubmit}>
@@ -203,7 +209,7 @@ export const CheckoutForm = ({
       <SharedStyles.Control>
         <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
           <ButtonOutline
-            submitting={pending}
+            submitting={["submitting", "loading"].includes(navigation.state)}
             loading={loading}
             type={"submit"}
             width={"160px"}
