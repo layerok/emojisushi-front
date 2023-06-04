@@ -1,7 +1,7 @@
 import * as S from "./styled";
 import { SvgIcon, CaretDownSvg, FlexBox, DropdownPopover } from "~components";
 import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { ICity } from "~api/types";
 type LocationPickerPopoverProps = {
@@ -47,28 +47,17 @@ const InternalLocationPickerPopover = (props: LocationPickerPopoverProps) => {
     (option) => option.city.slug === citySlug && option.spot.slug === spotSlug
   );
   const selectedIndex = options.indexOf(selectedOption);
-  const location = useLocation();
 
   return (
     <>
       <DropdownPopover
         backgroundColor={backgroundColor}
         width={width}
-        disable={true}
         offset={offset}
         options={options}
         selectedIndex={selectedIndex}
         onSelect={({ close, option, index }) => {
-          const segments = location.pathname.split("/");
-          // segments[0] is lang
-          // segments[1] index is city
-          // segments[2] index is spot
-          const nextSegments = [
-            lang,
-            option.city.slug,
-            option.spot.slug,
-            ...segments.splice(4),
-          ];
+          const nextSegments = [lang, option.city.slug, option.spot.slug];
           const nextUrl = nextSegments.join("/");
           navigate("/" + nextUrl);
           close();

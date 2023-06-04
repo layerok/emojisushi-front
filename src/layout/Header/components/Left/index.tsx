@@ -7,7 +7,7 @@ import {
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { Logo } from "../Logo";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { ICity } from "~api/types";
 
 type LeftProps = { loading?: boolean; cities?: ICity[] };
@@ -15,16 +15,11 @@ type LeftProps = { loading?: boolean; cities?: ICity[] };
 export const Left = ({ loading = false, cities = [] }: LeftProps) => {
   const { lang, spotSlug, citySlug } = useParams();
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   return (
     <S.Left>
       <Logo loading={loading} />
-      <S.HeaderItem
-        onClick={() => {
-          navigate("/" + lang);
-        }}
-      >
+      <S.HeaderItem>
         <LocationPickerPopover cities={cities} loading={loading} offset={22} />
       </S.HeaderItem>
       <S.HeaderItem>

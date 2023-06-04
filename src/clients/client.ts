@@ -1,8 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import i18n from "~i18n";
-import createAuthRefreshInterceptor from "axios-auth-refresh";
 import { getFromLocalStorage } from "~utils/ls.utils";
+// import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 const client = axios.create({
   baseURL: `${process.env.REACT_APP_API_BASE_URL}`,
