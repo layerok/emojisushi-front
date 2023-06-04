@@ -24,7 +24,7 @@ client.interceptors.request.use((config = {}) => {
   let session_id = Cookies.get("session_id");
 
   if (session_id) {
-    params.session_id = session_id;
+    config.headers["X-Session-ID"] = session_id;
   }
 
   if (process.env.REACT_APP_XDEBUG_SESSION_START === "true") {
