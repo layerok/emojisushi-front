@@ -12,26 +12,22 @@ export const Cities = ({ items }: { items: ICity[] }) => {
     <S.Cities>
       {items.map((city, index) => (
         <S.City key={index}>
-          <span>{city?.name ?? <Skeleton width={170} />}</span>
+          <span>{city.name}</span>
           <S.Spots>
             {city.spots.map((spot, index) => (
               <S.Spot.Link
                 key={index}
-                to={
-                  spot
-                    ? "/" + [lang, city.slug, spot.slug, "category"].join("/")
-                    : undefined
-                }
+                to={"/" + [lang, city.slug, spot.slug, "category"].join("/")}
               >
                 <S.Spot.Inner>
                   <S.Spot.Content>
                     <S.Spot.Head>
-                      {spot ? t("common.address") : <Skeleton width={50} />}
+                      {t("common.address")}
                       <SvgIcon width={"15px"} color={"#FFE600"}>
                         <MapPinSvg />
                       </SvgIcon>
                     </S.Spot.Head>
-                    {spot?.address?.lines ?? <Skeleton />}
+                    {spot?.address?.lines}
                   </S.Spot.Content>
                 </S.Spot.Inner>
               </S.Spot.Link>
