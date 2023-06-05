@@ -135,99 +135,100 @@ export const CheckoutForm = ({
   });
 
   return (
-    <S.Form onSubmit={formik.handleSubmit}>
+    <S.Container>
       <Login user={user} loading={loading} />
-
-      <ShippingMethods
-        user={user}
-        loading={loading}
-        items={shippingMethods?.data || []}
-        formik={formik}
-      />
-
-      <SharedStyles.Control>
-        <Input
+      <S.Form onSubmit={formik.handleSubmit}>
+        <ShippingMethods
+          user={user}
           loading={loading}
-          name={"name"}
-          placeholder={t("common.first_name")}
-          onChange={formik.handleChange}
-          value={formik.values.name}
+          items={shippingMethods?.data || []}
+          formik={formik}
         />
-      </SharedStyles.Control>
 
-      {!user && (
         <SharedStyles.Control>
           <Input
             loading={loading}
-            name={"email"}
-            placeholder={t("common.email")}
+            name={"name"}
+            placeholder={t("common.first_name")}
             onChange={formik.handleChange}
-            value={formik.values.email}
+            value={formik.values.name}
           />
         </SharedStyles.Control>
-      )}
-      <SharedStyles.Control>
-        <Input
-          loading={loading}
-          name={"phone"}
-          required={true}
-          placeholder={t("common.phone")}
-          onChange={(e) => {
-            formik.handleChange(e);
-          }}
-          value={formik.values.phone}
-        />
-      </SharedStyles.Control>
-      <SharedStyles.Control>
-        <Input
-          loading={loading}
-          name={"sticks"}
-          type={"number"}
-          min={"0"}
-          placeholder={t("checkout.form.sticks")}
-          onChange={formik.handleChange}
-          value={formik.values.sticks}
-        />
-      </SharedStyles.Control>
-      <SharedStyles.Control>
-        <Input
-          loading={loading}
-          name={"comment"}
-          placeholder={t("checkout.form.comment")}
-          onChange={formik.handleChange}
-          value={formik.values.comment}
-        />
-      </SharedStyles.Control>
 
-      <PaymentMethods
-        loading={loading}
-        items={paymentMethods?.data || []}
-        formik={formik}
-      />
-
-      {Object.keys(formik.errors).length > 0 && (
+        {!user && (
+          <SharedStyles.Control>
+            <Input
+              loading={loading}
+              name={"email"}
+              placeholder={t("common.email")}
+              onChange={formik.handleChange}
+              value={formik.values.email}
+            />
+          </SharedStyles.Control>
+        )}
         <SharedStyles.Control>
-          <S.ErrorBag>
-            {Object.keys(formik.errors).map((key, i) => (
-              <li key={key}>{formik.errors[key]}</li>
-            ))}
-          </S.ErrorBag>
-        </SharedStyles.Control>
-      )}
-
-      <SharedStyles.Control>
-        <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
-          <ButtonOutline
-            submitting={pending}
+          <Input
             loading={loading}
-            type={"submit"}
-            width={"160px"}
-          >
-            {t("checkout.order")}
-          </ButtonOutline>
-          <Total loading={loading} total={optimisticCartTotal} />
-        </FlexBox>
-      </SharedStyles.Control>
-    </S.Form>
+            name={"phone"}
+            required={true}
+            placeholder={t("common.phone")}
+            onChange={(e) => {
+              formik.handleChange(e);
+            }}
+            value={formik.values.phone}
+          />
+        </SharedStyles.Control>
+        <SharedStyles.Control>
+          <Input
+            loading={loading}
+            name={"sticks"}
+            type={"number"}
+            min={"0"}
+            placeholder={t("checkout.form.sticks")}
+            onChange={formik.handleChange}
+            value={formik.values.sticks}
+          />
+        </SharedStyles.Control>
+        <SharedStyles.Control>
+          <Input
+            loading={loading}
+            name={"comment"}
+            placeholder={t("checkout.form.comment")}
+            onChange={formik.handleChange}
+            value={formik.values.comment}
+          />
+        </SharedStyles.Control>
+
+        <PaymentMethods
+          loading={loading}
+          items={paymentMethods?.data || []}
+          formik={formik}
+        />
+
+        {Object.keys(formik.errors).length > 0 && (
+          <SharedStyles.Control>
+            <S.ErrorBag>
+              {Object.keys(formik.errors).map((key, i) => (
+                <li key={key}>{formik.errors[key]}</li>
+              ))}
+            </S.ErrorBag>
+          </SharedStyles.Control>
+        )}
+
+        <SharedStyles.Control>
+          <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
+            <ButtonOutline
+              submitting={pending}
+              loading={loading}
+              type={"submit"}
+              width={"160px"}
+            >
+              {t("checkout.order")}
+            </ButtonOutline>
+            <Total loading={loading} total={optimisticCartTotal} />
+          </FlexBox>
+        </SharedStyles.Control>
+      </S.Form>
+    </S.Container>
   );
 };

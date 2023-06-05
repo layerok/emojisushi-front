@@ -1,7 +1,11 @@
 import styled from "styled-components";
 
-const Form = styled.form`
+const Container = styled.div`
   width: 350px;
+`;
+
+const Form = styled.form`
+  width: 100%;
 `;
 
 const ErrorBag = styled.ol`
@@ -19,4 +23,4 @@ const ErrorBag = styled.ol`
   }
 `;
 
-export { Form, ErrorBag };
+export { Form, ErrorBag, Container };
