@@ -3,8 +3,7 @@ import { FlexBox, Input, ButtonOutline } from "~components";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useActionData, useNavigation, useSubmit } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSpot } from "~hooks";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
 import { CartProduct, User } from "~models";
@@ -19,6 +18,11 @@ import {
   IGetShippingMethodsRes,
   IUser,
 } from "~api/types";
+import { useState } from "react";
+import { orderApi } from "~api";
+import { queryClient } from "~query-client";
+import { cartQuery } from "~queries";
+import { AxiosError } from "axios";
 
 // todo: logout user if his token is expired
 // timer may be solution
@@ -42,17 +46,14 @@ export const CheckoutForm = ({
 
   const items = loading ? [] : cart.data.map((json) => new CartProduct(json));
 
-  const actionData = useActionData() as {
-    errors?: Record<string, string[]>;
-    message?: string;
-  };
-
   const optimisticCartTotal = useOptimisticCartTotalPrice({
     items: items,
   });
 
   const { t } = useTranslation();
-  const navigation = useNavigation();
+  const [pending, setPending] = useState(false);
+  const { lang, citySlug, spotSlug } = useParams();
+  const navigate = useNavigate();
 
   const spot = useSpot();
   const CheckoutSchema = Yup.object().shape({
@@ -70,10 +71,6 @@ export const CheckoutForm = ({
     email: Yup.string().email("Invalid email"),
   });
 
-  const submit = useSubmit();
-
-  const [errorShown, setErrorShown] = useState(false);
-
   const formik = useFormik({
     initialValues: {
       name: user ? user.fullName : "",
@@ -90,40 +87,52 @@ export const CheckoutForm = ({
     validationSchema: CheckoutSchema,
     onSubmit: async (values) => {
       const [firstname, lastname] = values.name.split(" ");
-
-      const formData = new FormData();
-      formData.append("phone", values.phone);
-      formData.append("firstname", firstname);
-      formData.append("lastname", lastname);
-      formData.append("email", values.email);
-      formData.append("spot_id_or_slug", spot.slug);
-      formData.append("address", values.address);
-      formData.append("payment_method_id", values.payment_method_id + "");
-      formData.append("shipping_method_id", values.shipping_method_id + "");
-      formData.append("change", values.change);
-
-      if (values.address_id) {
-        formData.append("address_id", values.address_id);
-      }
-      if (values.sticks) {
-        formData.append("sticks", +values.sticks + "");
-      }
-
-      formData.append("comment", values.comment);
       formik.setErrors({});
-      setErrorShown(false);
-      submit(formData, {
-        method: "post",
-      });
+
+      const phone = values.phone;
+      const email = values.email;
+      const spot_id_or_slug = spot.slug;
+      const address = values.address;
+      const address_id = values.address_id;
+      const payment_method_id = +values.payment_method_id;
+      const shipping_method_id = +values.shipping_method_id;
+      const change = values.change;
+      const sticks = +values.sticks;
+      const comment = values.comment;
+
+      setPending(true);
+
+      try {
+        await orderApi.place({
+          phone,
+          firstname,
+          lastname,
+          email,
+          spot_id_or_slug,
+
+          address,
+          address_id,
+          payment_method_id,
+          shipping_method_id,
+
+          change,
+          sticks: +sticks,
+          comment,
+        });
+
+        queryClient.removeQueries(cartQuery.queryKey);
+        navigate("/" + [lang, citySlug, spotSlug, "thankyou"].join("/"));
+      } catch (e) {
+        if (e instanceof AxiosError) {
+          if (e.response?.data?.errors) {
+            formik.setErrors(e.response.data.errors);
+          }
+        }
+      } finally {
+        setPending(false);
+      }
     },
   });
-
-  useEffect(() => {
-    if (actionData?.errors && !errorShown) {
-      setErrorShown(true);
-      formik.setErrors(actionData.errors);
-    }
-  }, [actionData, formik, errorShown]);
 
   return (
     <S.Form onSubmit={formik.handleSubmit}>
@@ -209,7 +218,7 @@ export const CheckoutForm = ({
       <SharedStyles.Control>
         <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
           <ButtonOutline
-            submitting={["submitting", "loading"].includes(navigation.state)}
+            submitting={pending}
             loading={loading}
             type={"submit"}
             width={"160px"}
