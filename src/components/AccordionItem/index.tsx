@@ -6,7 +6,6 @@ import { Collapsible } from "../Collapsible";
 import { IOrder } from "~api/types";
 import { LogoSvg } from "~components/svg/LogoSvg";
 import { useTranslation } from "react-i18next";
-import { Product } from "~models/Product";
 
 export const AccordionItem = ({ order }: { order: IOrder }) => {
   const { t } = useTranslation();
@@ -92,12 +91,18 @@ export const AccordionItem = ({ order }: { order: IOrder }) => {
 
         <div>
           {order.products.map((product, index) => {
-            // todo: dont create Product instance when mapping, map Product instances instead of 'raw' products
-            const productInst = new Product(product.product);
+            const mainImage =
+              product.product &&
+              product.product.image_sets.length > 0 &&
+              product.product.image_sets[0] &&
+              product.product.image_sets[0].images?.length > 0
+                ? product.product.image_sets[0].images[0].path
+                : undefined;
+
             return (
               <S.Pan.Prod key={product.id}>
-                {productInst.mainImage ? (
-                  <S.Pan.Prod.Img src={productInst.mainImage} />
+                {mainImage ? (
+                  <S.Pan.Prod.Img src={mainImage} />
                 ) : (
                   <SvgIcon
                     color={"white"}
