@@ -18,7 +18,6 @@ import {
   useNavigation,
   useSubmit,
 } from "react-router-dom";
-import { User } from "~models";
 import { requireUser } from "~utils/loader.utils";
 import { useRef } from "react";
 import { AxiosError } from "axios";
@@ -34,13 +33,11 @@ type LoaderData = {
 };
 
 const Address = ({ address }: { address: IAddress }) => {
-  const { user: userJson } = useLoaderData() as LoaderData;
-  const user = new User(userJson);
-  const customer = user.customer;
+  const { user } = useLoaderData() as LoaderData;
   const submit = useSubmit();
   const navigation = useNavigation();
 
-  const isDefault = customer.isDefaultShippingAddress(address);
+  const isDefault = user.customer.default_shipping_address_id === address.id;
 
   const makeAddressDefault = () => {
     if (!isDefault) {
@@ -120,9 +117,8 @@ const Address = ({ address }: { address: IAddress }) => {
 };
 
 export const SavedAddressesPage = () => {
-  const { user: userJson } = useLoaderData() as any;
-  const user = new User(userJson);
-  const customer = user.customer;
+  const { user } = useLoaderData() as any;
+
   const { t } = useTranslation();
 
   const navigation = useNavigation();
@@ -137,7 +133,7 @@ export const SavedAddressesPage = () => {
 
   return (
     <>
-      {customer.addresses.map((address) => {
+      {user.customer.addresses.map((address) => {
         return <Address key={address.id} address={address} />;
       })}
 

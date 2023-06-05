@@ -2,14 +2,11 @@ import * as S from "./styled";
 import { ButtonDark } from "src/components";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { User } from "src/models";
 import { requireUser } from "~utils/loader.utils";
 
 export const ProfilePage = () => {
-  const { user: userJson } = useLoaderData() as Awaited<
-    ReturnType<typeof loader>
-  >;
-  const user = new User(userJson);
+  const { user } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -17,7 +14,9 @@ export const ProfilePage = () => {
     <S.Properties>
       <S.Property>
         <S.Property.Label>{t("common.first_name")}</S.Property.Label>
-        <S.Property.Value>{user.fullName}</S.Property.Value>
+        <S.Property.Value>
+          {user.name} {user.surname}
+        </S.Property.Value>
       </S.Property>
 
       <S.Property>

@@ -10,7 +10,6 @@ import {
 } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
-import { User } from "src/models";
 import { requireUser } from "~utils/loader.utils";
 import { authApi } from "~api";
 import { AxiosError } from "axios";
@@ -22,10 +21,7 @@ type ActionData =
   | undefined;
 
 export const EditProfilePage = () => {
-  const { user: userJson } = useLoaderData() as Awaited<
-    ReturnType<typeof loader>
-  >;
-  const user = new User(userJson);
+  const { user } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const { t } = useTranslation();
   const navigation = useNavigation();
   const actionData = useActionData() as ActionData;

@@ -1,15 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { If, AccordionItem } from "~components";
 import { useLoaderData } from "react-router-dom";
-import { User } from "~models";
 import { requireUser } from "~utils/loader.utils";
 
 export const MyOrdersPage = () => {
   const { t } = useTranslation();
-  const { user: userJson } = useLoaderData() as Awaited<
-    ReturnType<typeof loader>
-  >;
-  const user = new User(userJson);
+  const { user } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+
   const customer = user.customer;
   return (
     <div
@@ -17,7 +14,7 @@ export const MyOrdersPage = () => {
         marginTop: 20,
       }}
     >
-      <If condition={customer.hasOrders}>
+      <If condition={!!user.customer.orders.length}>
         {customer.orders.map((order, index) => (
           <div
             style={{
@@ -28,7 +25,7 @@ export const MyOrdersPage = () => {
           </div>
         ))}
       </If>
-      <If condition={!customer.hasOrders}>
+      <If condition={!user.customer.orders}>
         <p>{t("account.orders.noOrders")}</p>
       </If>
     </div>

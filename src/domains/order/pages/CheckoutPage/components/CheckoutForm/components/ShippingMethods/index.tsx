@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IShippingMethod, IUser } from "~api/types";
 import { Dropdown, Input, Switcher } from "~components";
-import { User } from "~models";
 import * as SharedStyles from "../../shared/styled";
 
 export const ShippingMethods = ({
@@ -15,7 +14,7 @@ export const ShippingMethods = ({
   formik: any;
   loading?: boolean;
   items?: IShippingMethod[];
-  user: User | null;
+  user?: IUser | null;
 }) => {
   const { t } = useTranslation();
 
@@ -66,12 +65,12 @@ const AddressDropdownOrInput = ({
   user,
 }: {
   formik: any;
-  user: User | null;
+  user: IUser | null;
 }) => {
   const { t } = useTranslation();
 
   const [showTextAddress, setShowTextAddress] = useState(
-    (user && !user.customer.hasAddresses) || !user
+    (user && !user.customer.addresses.length) || !user
   );
 
   return (
@@ -80,7 +79,7 @@ const AddressDropdownOrInput = ({
         position: "relative",
       }}
     >
-      {showTextAddress || !user?.customer.hasAddresses ? (
+      {showTextAddress || !user?.customer.addresses.length ? (
         <SharedStyles.Control>
           <Input
             name={"address"}
@@ -92,7 +91,7 @@ const AddressDropdownOrInput = ({
       ) : (
         <AddressDropdown user={user} formik={formik} />
       )}
-      {user?.customer.hasAddresses && (
+      {user?.customer.addresses.length && (
         <button
           type={"button"}
           style={{
@@ -122,7 +121,7 @@ const AddressDropdownOrInput = ({
 };
 
 const AddressDropdown = observer(
-  ({ formik, user }: { formik: any; user: User | null }) => {
+  ({ formik, user }: { formik: any; user: IUser | null }) => {
     const options = useMemo(
       () =>
         user?.customer.addresses.map((address) => ({
@@ -132,10 +131,14 @@ const AddressDropdown = observer(
       [user]
     );
 
-    const initialValue = user.customer.defaultAddress?.id || options[0].value;
+    const defaultAddress = user.customer.addresses.find(
+      (address) => address.id === user.customer.default_shipping_address_id
+    );
+
+    const initialValue = defaultAddress?.id || options[0].value;
 
     const [value, setValue] = useState<number | string>(
-      user.customer.defaultAddress?.id || options[0].value
+      defaultAddress?.id || options[0].value
     );
 
     useEffect(() => {

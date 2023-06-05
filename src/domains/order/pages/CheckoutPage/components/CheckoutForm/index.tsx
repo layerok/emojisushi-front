@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate, useParams, useRevalidator } from "react-router-dom";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
-import { CartProduct, User } from "~models";
+import { CartProduct } from "~models";
 import { ShippingMethods } from "./components/ShippingMethods";
 import { PaymentMethods } from "./components/PaymentMethods";
 import { Login } from "./components/Login";
@@ -38,11 +38,9 @@ export const CheckoutForm = ({
   cart,
   shippingMethods,
   paymentMethods,
-  user: userJson,
+  user,
   loading = false,
 }: TCheckoutFormProps) => {
-  const user = userJson ? new User(userJson) : null;
-
   const items = loading ? [] : cart.data.map((json) => new CartProduct(json));
 
   const optimisticCartTotal = useOptimisticCartTotalPrice({
@@ -73,7 +71,7 @@ export const CheckoutForm = ({
 
   const formik = useFormik({
     initialValues: {
-      name: user ? user.fullName : "",
+      name: user ? `${user.name} ${user.surname}` : "",
       email: user ? user.email : "",
       phone: user ? user.phone : "",
       address: "",

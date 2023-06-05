@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { AuthModal, FlexBox } from "~components";
-import { User } from "~models";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
+import { IUser } from "~api/types";
 
 const Text = styled.p`
   color: #ffe600;
@@ -14,7 +14,7 @@ export const Login = ({
   user,
   loading = false,
 }: {
-  user?: User;
+  user?: IUser;
   loading?: boolean;
 }) => {
   const { t } = useTranslation();

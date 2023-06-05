@@ -120,8 +120,6 @@ export const layoutLoader = async ({ params }) => {
     queryClient.getQueryData<IGetCartRes>(cartQuery.queryKey) ??
     queryClient.fetchQuery<IGetCartRes>(cartQuery);
 
-  console.log("loader", cartPromise);
-
   return defer({
     cart: cartPromise,
     user: userPromise,
