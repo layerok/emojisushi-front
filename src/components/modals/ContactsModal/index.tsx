@@ -4,13 +4,19 @@ import { SvgIcon, FlexBox, StaticMap, TelegramModal, Modal } from "~components";
 import { PhoneSvg, InstagramSvg, TelegramSvg } from "~components/svg";
 import { useTranslation } from "react-i18next";
 import { InstagramLink } from "~layout/Footer/styled";
-import { useSpot } from "~hooks/use-spot";
+import { useRouteLoaderData } from "react-router-dom";
+import { LayoutRouteLoaderData } from "~layout/Layout";
+import { City, Spot } from "~models";
 
 // todo: fix that if we provide Fragment as children, then popup doesn't get opened
 
 export const ContactsModal = ({ children }: { children: ReactElement }) => {
   const { t } = useTranslation();
-  const spot = useSpot();
+  const { spot: spotJson, city: cityJson } = useRouteLoaderData(
+    "layout"
+  ) as LayoutRouteLoaderData;
+  const city = new City(cityJson);
+  const spot = new Spot(spotJson, city);
 
   return (
     <Modal
@@ -18,7 +24,7 @@ export const ContactsModal = ({ children }: { children: ReactElement }) => {
       render={({ close }) => (
         <div>
           <S.Wrapper>
-            {spot.hasPhones && (
+            {spot.phones && (
               <>
                 <S.Title>{t("contactsModal.contacts")}</S.Title>
                 <S.Phones>

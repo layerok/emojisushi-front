@@ -44,7 +44,6 @@ export const routes = [
         path: ":lang",
         loader: ({ params }) => {
           i18next.changeLanguage(params.lang);
-          console.log(i18next.languages);
           setToLocalStorage("i18nextLang", params.lang);
           return null;
         },

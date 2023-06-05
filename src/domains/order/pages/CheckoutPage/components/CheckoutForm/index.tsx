@@ -3,10 +3,14 @@ import { FlexBox, Input, ButtonOutline } from "~components";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useNavigate, useParams } from "react-router-dom";
-import { useSpot } from "~hooks";
+import {
+  useNavigate,
+  useParams,
+  useRevalidator,
+  useRouteLoaderData,
+} from "react-router-dom";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
-import { CartProduct, User } from "~models";
+import { CartProduct, City, Spot, User } from "~models";
 import { ShippingMethods } from "./components/ShippingMethods";
 import { PaymentMethods } from "./components/PaymentMethods";
 import { Login } from "./components/Login";
@@ -23,6 +27,7 @@ import { orderApi } from "~api";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
 import { AxiosError } from "axios";
+import { LayoutRouteLoaderData } from "~layout/Layout";
 
 // todo: logout user if his token is expired
 // timer may be solution
@@ -55,7 +60,12 @@ export const CheckoutForm = ({
   const { lang, citySlug, spotSlug } = useParams();
   const navigate = useNavigate();
 
-  const spot = useSpot();
+  const { spot: spotJson, city: cityJson } = useRouteLoaderData(
+    "layout"
+  ) as LayoutRouteLoaderData;
+  const city = new City(cityJson);
+  const spot = new Spot(spotJson, city);
+
   const CheckoutSchema = Yup.object().shape({
     phone: Yup.string()
       .required(t("validation.required", { field: t("common.phone") }))
@@ -70,6 +80,8 @@ export const CheckoutForm = ({
       ),
     email: Yup.string().email("Invalid email"),
   });
+
+  const revalidator = useRevalidator();
 
   const formik = useFormik({
     initialValues: {
@@ -120,7 +132,8 @@ export const CheckoutForm = ({
           comment,
         });
 
-        queryClient.removeQueries(cartQuery.queryKey);
+        await queryClient.removeQueries(cartQuery.queryKey);
+        revalidator.revalidate();
         navigate("/" + [lang, citySlug, spotSlug, "thankyou"].join("/"));
       } catch (e) {
         if (e instanceof AxiosError) {

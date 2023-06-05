@@ -3,12 +3,11 @@ import { Footer } from "../Footer";
 import * as S from "./styled";
 import { useWindowScroll } from "react-use";
 import { StickyToTopBtn, Sticky, TinyCartButton, CartModal } from "~components";
-import { ReactNode, Suspense } from "react";
+import { ReactNode, Suspense, useMemo } from "react";
 import {
   ActionFunctionArgs,
   Await,
   Outlet,
-  ShouldRevalidateFunction,
   defer,
   redirect,
   useLoaderData,
@@ -20,13 +19,13 @@ import { CartProduct } from "~models";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
 import { IUser, IGetCartRes, IGetCitiesRes, ICity, ISpot } from "~api/types";
 import { citiesQuery } from "~queries/cities.query";
-import { AwaitAll } from "~components/AwaitAll";
 import { spotQuery } from "~domains/spot/queries/spot.query";
 import { cityQuery } from "~domains/spot/queries/city.query";
 import Cookies from "js-cookie";
 import { AxiosError } from "axios";
 
 export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
+  // todo: debounce it
   const { x, y } = useWindowScroll();
 
   const { cart, cities, user } = useLoaderData() as LayoutRouteLoaderData;
@@ -36,14 +35,19 @@ export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
   const items = (cart?.data || []).map((json) => new CartProduct(json));
   const cartTotal = useOptimisticCartTotalPrice({ items });
 
+  const promiseComposition = useMemo(
+    () => Promise.all([cart, cities, user]),
+    [cities, user, cart]
+  );
+
   return (
     <S.Layout {...rest}>
       <Suspense fallback={<Header loading />}>
-        <AwaitAll cities={cities} user={user} cart={cart}>
-          {({ cart, cities, user }) => (
+        <Await resolve={promiseComposition}>
+          {([cart, cities, user]) => (
             <Header cart={cart} cities={cities.data} user={user} />
           )}
-        </AwaitAll>
+        </Await>
       </Suspense>
 
       <S.Main>
@@ -116,6 +120,8 @@ export const layoutLoader = async ({ params }) => {
     queryClient.getQueryData<IGetCartRes>(cartQuery.queryKey) ??
     queryClient.fetchQuery<IGetCartRes>(cartQuery);
 
+  console.log("loader", cartPromise);
+
   return defer({
     cart: cartPromise,
     user: userPromise,
@@ -138,7 +144,7 @@ const updateCartProduct = async ({ formData }: { formData: FormData }) => {
     variant_id,
   });
 
-  queryClient.setQueryData(cartQuery.queryKey, res.data);
+  await queryClient.setQueryData(cartQuery.queryKey, res.data);
   return res.data;
 };
 
@@ -219,7 +225,6 @@ const login = async ({
 
     await queryClient.removeQueries(wishlistsQuery.queryKey);
     await queryClient.removeQueries(cartQuery.queryKey);
-    console.log("redirect", redirect_to, default_redirect_to);
     return redirect(redirect_to || default_redirect_to);
   } catch (e) {
     if (e instanceof AxiosError) {
@@ -295,12 +300,3 @@ export const loader = layoutLoader;
 Object.assign(Component, {
   displayName: "LazyLayout",
 });
-
-export const shouldRevalidate: ShouldRevalidateFunction = ({
-  currentParams,
-  nextParams,
-}) => {
-  if (currentParams.lang !== nextParams.lang) {
-    return false;
-  }
-};
