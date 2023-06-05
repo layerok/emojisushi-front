@@ -3,14 +3,9 @@ import { FlexBox, Input, ButtonOutline } from "~components";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-  useNavigate,
-  useParams,
-  useRevalidator,
-  useRouteLoaderData,
-} from "react-router-dom";
+import { useNavigate, useParams, useRevalidator } from "react-router-dom";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
-import { CartProduct, City, Spot, User } from "~models";
+import { CartProduct, User } from "~models";
 import { ShippingMethods } from "./components/ShippingMethods";
 import { PaymentMethods } from "./components/PaymentMethods";
 import { Login } from "./components/Login";
@@ -27,7 +22,6 @@ import { orderApi } from "~api";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
 import { AxiosError } from "axios";
-import { LayoutRouteLoaderData } from "~layout/Layout";
 
 // todo: logout user if his token is expired
 // timer may be solution
@@ -59,12 +53,6 @@ export const CheckoutForm = ({
   const [pending, setPending] = useState(false);
   const { lang, citySlug, spotSlug } = useParams();
   const navigate = useNavigate();
-
-  const { spot: spotJson, city: cityJson } = useRouteLoaderData(
-    "layout"
-  ) as LayoutRouteLoaderData;
-  const city = new City(cityJson);
-  const spot = new Spot(spotJson, city);
 
   const CheckoutSchema = Yup.object().shape({
     phone: Yup.string()
@@ -103,7 +91,7 @@ export const CheckoutForm = ({
 
       const phone = values.phone;
       const email = values.email;
-      const spot_id_or_slug = spot.slug;
+      const spot_id_or_slug = spotSlug;
       const address = values.address;
       const address_id = values.address_id;
       const payment_method_id = +values.payment_method_id;

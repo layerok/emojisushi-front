@@ -6,17 +6,10 @@ import { useTranslation } from "react-i18next";
 import { InstagramLink } from "~layout/Footer/styled";
 import { useRouteLoaderData } from "react-router-dom";
 import { LayoutRouteLoaderData } from "~layout/Layout";
-import { City, Spot } from "~models";
-
-// todo: fix that if we provide Fragment as children, then popup doesn't get opened
 
 export const ContactsModal = ({ children }: { children: ReactElement }) => {
   const { t } = useTranslation();
-  const { spot: spotJson, city: cityJson } = useRouteLoaderData(
-    "layout"
-  ) as LayoutRouteLoaderData;
-  const city = new City(cityJson);
-  const spot = new Spot(spotJson, city);
+  const { spot } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
 
   return (
     <Modal
@@ -76,7 +69,7 @@ export const ContactsModal = ({ children }: { children: ReactElement }) => {
         </div>
       )}
     >
-      {cloneElement(children)}
+      <div>{cloneElement(children)}</div>
     </Modal>
   );
 };

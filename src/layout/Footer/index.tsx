@@ -8,11 +8,9 @@ import {
 } from "~components";
 import { TelegramSvg, InstagramSvg, PhoneSvg, LogoSvg } from "~components/svg";
 import { useTranslation } from "react-i18next";
-import { useSpot } from "~hooks/use-spot";
 import Skeleton from "react-loading-skeleton";
 import { useRouteLoaderData } from "react-router-dom";
 import { LayoutRouteLoaderData } from "~layout/Layout";
-import { City, Spot } from "~models";
 
 type FooterProps = {
   loading?: boolean;
@@ -70,14 +68,11 @@ const Socials = ({ loading = false }: ISocialsProps) => {
 type IPhonesProps = { loading?: boolean };
 
 const Phones = ({ loading = false }: IPhonesProps) => {
-  const { spot: spotJson, city: cityJson } = useRouteLoaderData(
-    "layout"
-  ) as LayoutRouteLoaderData;
-  const city = new City(cityJson);
-  const spot = new Spot(spotJson, city);
+  const { spot } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
+
   const { t } = useTranslation();
   return (
-    spot?.hasPhones && (
+    spot?.phones?.length > 0 && (
       <>
         <FlexBox
           style={{

@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { Cities, CitiesSkeleton } from "./components/City";
 import { Await, defer, useLoaderData } from "react-router-dom";
 import { Suspense } from "react";
-import { City } from "~models";
 import { IGetCitiesRes } from "~api/types";
 import { queryClient } from "~query-client";
 import { citiesQuery } from "~queries/cities.query";
@@ -40,9 +39,7 @@ export const SelectLocationPage = () => {
               resolve={cities}
               errorElement={<p>Error loading locations</p>}
             >
-              {(cities: IGetCitiesRes) => (
-                <Cities items={cities.data.map((json) => new City(json))} />
-              )}
+              {(cities: IGetCitiesRes) => <Cities items={cities.data} />}
             </Await>
           </Suspense>
         </S.Locations.Body>

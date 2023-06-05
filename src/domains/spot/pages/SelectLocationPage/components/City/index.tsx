@@ -1,15 +1,15 @@
-import { City as CityModel } from "~models";
 import { Spot } from "../Spot";
 import * as S from "./styled";
 import Skeleton from "react-loading-skeleton";
 import { ReactNode } from "react";
+import { ICity } from "~api/types";
 
 export const City = ({
   children,
   city,
 }: {
   children: ReactNode;
-  city?: CityModel;
+  city?: ICity;
 }) => {
   return (
     <S.City>
@@ -23,7 +23,7 @@ export const Spots = ({ children }: { children: ReactNode }) => {
   return <S.Spots>{children}</S.Spots>;
 };
 
-export const Cities = ({ items }: { items: CityModel[] }) => {
+export const Cities = ({ items }: { items: ICity[] }) => {
   return (
     <S.Cities>
       {items.map((city, index) => (

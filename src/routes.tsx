@@ -2,10 +2,9 @@ import i18next from "i18next";
 import { Navigate, redirect } from "react-router-dom";
 import { Trans } from "react-i18next";
 import { accessApi, menuApi } from "~api";
-import { CategoriesStore } from "~stores/categories.store";
 import { getFromLocalStorage, setToLocalStorage } from "~utils/ls.utils";
 
-const indexPageLoader = async () => {
+const indexPageLoader = async ({ params }) => {
   const spotsPromise = accessApi.getSpots();
   const categoriesPromise = menuApi.getCategories();
 
@@ -17,8 +16,13 @@ const indexPageLoader = async () => {
     const spot = spots[0];
     const city = spot.city;
 
-    const categoriesStore = new CategoriesStore(categoriesRes.data.data);
-    const publishedCategories = categoriesStore.getPublishedItems(spot.slug);
+    const publishedCategories = categoriesRes.data.data.filter((category) => {
+      return (
+        category.published &&
+        !category.hide_categories_in_spot.find((s) => s.slug === spot.slug)
+      );
+    });
+
     if (publishedCategories.length > 0) {
       const category = publishedCategories[0];
       const lang = getFromLocalStorage("i18nextLang") || "uk";

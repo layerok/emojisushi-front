@@ -3,7 +3,6 @@ import * as S from "./styled";
 import { useTranslation } from "react-i18next";
 import { useRouteLoaderData } from "react-router-dom";
 import { ICity, ISpot } from "~api/types";
-import { City, Spot } from "~models";
 
 type DeliverPageLoaderData = {
   spot: ISpot;
@@ -12,12 +11,7 @@ type DeliverPageLoaderData = {
 
 export const DeliveryPage = () => {
   const { t } = useTranslation();
-  const { spot: spotJson, city: cityJson } = useRouteLoaderData(
-    "layout"
-  ) as DeliverPageLoaderData;
-
-  const city = new City(cityJson);
-  const spot = new Spot(spotJson, city);
+  const { spot } = useRouteLoaderData("layout") as DeliverPageLoaderData;
 
   return (
     <Container>
@@ -37,12 +31,14 @@ export const DeliveryPage = () => {
             <b>{t("common.address")}</b>: {spot.address}
           </S.AdresText>
 
-          <S.DeliveryText dangerouslySetInnerHTML={{ __html: spot.content }} />
+          <S.DeliveryText
+            dangerouslySetInnerHTML={{ __html: spot.html_content }}
+          />
         </S.Left>
 
-        <If condition={!!spot.googleMapUrl}>
+        <If condition={!!spot.google_map_url}>
           <S.Right>
-            <iframe src={spot.googleMapUrl} width="100%" height="480" />
+            <iframe src={spot.google_map_url} width="100%" height="480" />
           </S.Right>
         </If>
       </S.FlexContainer>
