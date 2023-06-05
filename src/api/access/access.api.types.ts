@@ -1,3 +1,4 @@
+import { IAddress } from "~api/types";
 import { IFile, IMeta } from "../common/common.api.types";
 
 export type ISpot = {
@@ -7,7 +8,7 @@ export type ISpot = {
   chat_id: number;
   code: string;
   phones: string;
-  address: string;
+  address?: IAddress;
   published: number;
   created_at: string;
   updated_at: string;
