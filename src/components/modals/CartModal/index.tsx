@@ -25,8 +25,6 @@ import {
   DeleteCartProductFormDataPayload,
   UpdateCartProductFormDataPayload,
 } from "~domains/product/types";
-import { useQuery } from "react-query";
-import { cartQuery } from "~queries";
 import { IGetCartRes } from "~api/types";
 
 const CartItem = ({ item }: { item: CartProduct }) => {

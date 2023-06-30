@@ -4,7 +4,6 @@ import { ButtonOutline, PasswordInput } from "~components";
 import { authApi } from "~api";
 import { transaction } from "mobx";
 import { useTranslation } from "react-i18next";
-import { requireUser } from "~utils/loader.utils";
 import {
   ActionFunctionArgs,
   Form,
@@ -13,6 +12,7 @@ import {
 } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { AxiosError } from "axios";
+import { useUser } from "~hooks/use-auth";
 
 type UpdatePasswordPageActionData = {
   ok?: boolean;
@@ -46,6 +46,19 @@ export const UpdatePasswordPage = observer(() => {
   }, [actionData]);
 
   const navigation = useNavigation();
+
+  const { data: user, isLoading: isUserLoading, error: userError } = useUser();
+
+  if (isUserLoading) {
+    return <div>Loading...</div>;
+  }
+  if (userError) {
+    return <div>{JSON.stringify(userError, null, 2)}</div>;
+  }
+
+  if (!user) {
+    return <div>Not logged in</div>;
+  }
 
   return (
     <>
@@ -122,13 +135,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   return {
     ok: true,
-  };
-};
-
-export const loader = async () => {
-  const user = await requireUser();
-  return {
-    user,
   };
 };
 

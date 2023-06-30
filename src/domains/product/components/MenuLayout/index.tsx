@@ -1,7 +1,7 @@
 import { MobSidebar, Sidebar, Container } from "~components";
 import { PublishedCategories } from "~domains/category/components/PublishedCategories";
 import * as S from "./styled";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { citiesQuery } from "~queries/cities.query";
 
 // todo: it looks like RR route layout

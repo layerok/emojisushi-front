@@ -35,6 +35,8 @@ export const Right = ({
   const items = loading ? [] : cart.data.map((json) => new CartProduct(json));
   const { price, quantity } = useOptimisticCartTotals({ items });
 
+  console.log("user", user);
+
   return (
     <S.Right>
       <S.LanguageSelectorContainer>

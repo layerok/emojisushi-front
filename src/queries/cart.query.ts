@@ -1,4 +1,4 @@
-import { QueryOptions } from "react-query";
+import { QueryOptions } from "@tanstack/react-query";
 import { cartApi } from "~api";
 import { IGetCartRes } from "~api/types";
 

@@ -4,15 +4,14 @@ import {
   Form,
   redirect,
   useActionData,
-  useLoaderData,
   useNavigate,
   useNavigation,
 } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
-import { requireUser } from "~utils/loader.utils";
 import { authApi } from "~api";
 import { AxiosError } from "axios";
+import { useUser } from "~hooks/use-auth";
 
 type ActionData =
   | {
@@ -21,11 +20,23 @@ type ActionData =
   | undefined;
 
 export const EditProfilePage = () => {
-  const { user } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const { t } = useTranslation();
   const navigation = useNavigation();
   const actionData = useActionData() as ActionData;
   const navigate = useNavigate();
+  const { data: user, isLoading: isUserLoading, error: userError } = useUser();
+
+  if (isUserLoading) {
+    return <div>Loading...</div>;
+  }
+  if (userError) {
+    return <div>{JSON.stringify(userError, null, 2)}</div>;
+  }
+
+  if (!user) {
+    return <div>Not logged in</div>;
+  }
+
   return (
     <Form
       style={{
@@ -96,14 +107,6 @@ export const Component = EditProfilePage;
 Object.assign(Component, {
   displayName: "LazyEditProfilePage",
 });
-
-export const loader = async () => {
-  const user = await requireUser();
-
-  return {
-    user,
-  };
-};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();

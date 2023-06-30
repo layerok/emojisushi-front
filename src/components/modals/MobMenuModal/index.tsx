@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import { NavLink, useParams } from "react-router-dom";
 import { ICity } from "~api/types";
 import { HightlightText } from "~components";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { spotQuery } from "~domains/spot/queries/spot.query";
 
 type MobMenuModalProps = {

@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { ProductsGrid, RestaurantClosed, Container } from "~components";
 import { Banner } from "./Banner";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { queryClient } from "src/query-client";
 import { Product } from "src/models";
 import { wishlistApi } from "src/api";

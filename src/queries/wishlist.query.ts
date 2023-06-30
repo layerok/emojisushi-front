@@ -1,5 +1,5 @@
 import { wishlistApi } from "~api";
-import { QueryOptions } from "react-query";
+import { QueryOptions } from "@tanstack/react-query";
 import { IGetWishlistRes } from "~api/types";
 
 export const wishlistsQuery: QueryOptions<IGetWishlistRes> = {

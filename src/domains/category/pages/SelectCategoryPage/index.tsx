@@ -6,7 +6,7 @@ import Skeleton from "react-loading-skeleton";
 import { IGetCategoriesRes } from "~api/types";
 import { categoriesQuery } from "~queries";
 import { PublishedCategories } from "~domains/category/components/PublishedCategories";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 const CategoriesList = ({ categories }: { categories: IGetCategoriesRes }) => {
   return (

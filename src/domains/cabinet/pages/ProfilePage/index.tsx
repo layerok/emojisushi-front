@@ -1,14 +1,14 @@
 import * as S from "./styled";
 import { ButtonDark } from "src/components";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { requireUser } from "~utils/loader.utils";
+import { useUser } from "~hooks/use-auth";
 
 export const ProfilePage = () => {
-  const { user } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
-
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  const { data: user } = useUser();
 
   return (
     <S.Properties>
@@ -56,11 +56,3 @@ export const Component = ProfilePage;
 Object.assign(Component, {
   displayName: "LazyProfilePage",
 });
-
-export const loader = async () => {
-  const user = await requireUser();
-
-  return {
-    user,
-  };
-};

@@ -1,4 +1,4 @@
-import { QueryOptions } from "react-query";
+import { QueryOptions } from "@tanstack/react-query";
 import { paymentApi } from "~api";
 import { IGetPaymentMethodsRes } from "~api/types";
 

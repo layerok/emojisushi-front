@@ -1,6 +1,6 @@
 import { menuApi } from "~api";
 import { IGetProductsParams, IGetProductsRes } from "~api/types";
-import { QueryOptions } from "react-query";
+import { QueryOptions } from "@tanstack/react-query";
 
 export const productsQuery = (
   params: IGetProductsParams

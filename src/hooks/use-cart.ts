@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { cartQuery } from "~queries/cart.query";
 
 export const useCart = () => {

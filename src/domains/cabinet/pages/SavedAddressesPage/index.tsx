@@ -14,13 +14,12 @@ import {
   ActionFunctionArgs,
   Form,
   useActionData,
-  useLoaderData,
   useNavigation,
   useSubmit,
 } from "react-router-dom";
-import { requireUser } from "~utils/loader.utils";
 import { useRef } from "react";
 import { AxiosError } from "axios";
+import { useUser } from "~hooks/use-auth";
 
 type ActionData = {
   errors: {
@@ -28,12 +27,7 @@ type ActionData = {
   };
 };
 
-type LoaderData = {
-  user: IUser;
-};
-
-const Address = ({ address }: { address: IAddress }) => {
-  const { user } = useLoaderData() as LoaderData;
+const Address = ({ address, user }: { address: IAddress; user: IUser }) => {
   const submit = useSubmit();
   const navigation = useNavigation();
 
@@ -117,8 +111,6 @@ const Address = ({ address }: { address: IAddress }) => {
 };
 
 export const SavedAddressesPage = () => {
-  const { user } = useLoaderData() as any;
-
   const { t } = useTranslation();
 
   const navigation = useNavigation();
@@ -131,10 +123,23 @@ export const SavedAddressesPage = () => {
 
   const actionData = useActionData() as ActionData;
 
+  const { data: user, isLoading: isUserLoading, error: userError } = useUser();
+
+  if (isUserLoading) {
+    return <div>Loading...</div>;
+  }
+  if (userError) {
+    return <div>{JSON.stringify(userError, null, 2)}</div>;
+  }
+
+  if (!user) {
+    return <div>Not logged in</div>;
+  }
+
   return (
     <>
       {user.customer.addresses.map((address) => {
-        return <Address key={address.id} address={address} />;
+        return <Address user={user} key={address.id} address={address} />;
       })}
 
       <Form
@@ -145,7 +150,11 @@ export const SavedAddressesPage = () => {
         }}
         method="post"
       >
-        <input name="name" value={user.fullName} type="hidden" />
+        <input
+          name="name"
+          value={user.name + " " + user.surname}
+          type="hidden"
+        />
         <input name="zip" value="65125" type="hidden" />
         <input name="city" value="Одеса" type="hidden" />
         <input name="two_letters_country_code" value="UA" type="hidden" />
@@ -173,15 +182,6 @@ export const Component = SavedAddressesPage;
 Object.assign(Component, {
   displayName: "LazySavedAddressesPage",
 });
-
-export const loader = async () => {
-  // todo: user is fetched multiple type, fix this
-  const user = await requireUser();
-
-  return {
-    user,
-  };
-};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();

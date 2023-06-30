@@ -3,7 +3,7 @@ import { MapPinSvg, LogoSvg, SvgIcon } from "~components";
 import { useTranslation } from "react-i18next";
 import { Cities, CitiesSkeleton } from "./components/City";
 import { citiesQuery } from "~queries/cities.query";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export const SelectLocationPage = () => {
   const { t } = useTranslation();

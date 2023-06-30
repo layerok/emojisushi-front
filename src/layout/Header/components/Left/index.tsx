@@ -9,7 +9,7 @@ import Skeleton from "react-loading-skeleton";
 import { Logo } from "../Logo";
 import { NavLink, useParams } from "react-router-dom";
 import { ICity } from "~api/types";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { spotQuery } from "~domains/spot/queries/spot.query";
 
 type LeftProps = { loading?: boolean; cities?: ICity[] };

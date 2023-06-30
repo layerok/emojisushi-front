@@ -20,7 +20,8 @@ import { citiesQuery } from "~queries/cities.query";
 import { spotQuery } from "~domains/spot/queries/spot.query";
 import Cookies from "js-cookie";
 import { AxiosError } from "axios";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
+import { useUser } from "~hooks/use-auth";
 
 export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
   // todo: debounce it
@@ -30,21 +31,7 @@ export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
 
   const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
-  const { data: user, isLoading: isUserLoading } = useQuery({
-    queryFn: () => {
-      return authApi
-        .fetchUser()
-        .then((res) => res.data)
-        .catch((e) => {
-          // // 406 simply means that user is not authorzied, no need to throw error in this case
-          if (![406].includes(e?.response.status)) {
-            throw e;
-          }
-          return null;
-        });
-    },
-    queryKey: ["user"],
-  });
+  const { data: user, isLoading: isUserLoading } = useUser();
 
   const { data: spot, isLoading: isSpotLoading } = useQuery(
     spotQuery(spotSlug)

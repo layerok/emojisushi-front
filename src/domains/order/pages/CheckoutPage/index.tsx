@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { cartQuery, paymentQuery, shippingQuery } from "~queries";
 import * as S from "./styled";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { authApi } from "~api";
 
 const CheckoutPage = () => {

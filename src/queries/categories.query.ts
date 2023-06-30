@@ -1,5 +1,5 @@
 import { IGetCategoriesParams, IGetCategoriesRes } from "~api/types";
-import { QueryOptions } from "react-query";
+import { QueryOptions } from "@tanstack/react-query";
 import { menuApi } from "~api";
 
 export const categoriesQuery = (

@@ -1,24 +1,16 @@
 import * as S from "./styled";
 import { ButtonDark, NavLink, Container } from "~components";
 import { useTranslation } from "react-i18next";
-import Cookies from "js-cookie";
-import {
-  Outlet,
-  useMatches,
-  useNavigate,
-  useParams,
-  useRevalidator,
-  useSubmit,
-} from "react-router-dom";
+import { Outlet, useMatches, useParams, useSubmit } from "react-router-dom";
+import { AuthLoader, useLogout } from "~hooks/use-auth";
 
 const CabinetLayout = () => {
   const { t } = useTranslation();
   const { lang, spotSlug, citySlug } = useParams();
-  const navigate = useNavigate();
   const matches = useMatches();
   const match = matches[matches.length - 1];
-  const revalidator = useRevalidator();
   const submit = useSubmit();
+  const logout = useLogout();
 
   return (
     <Container>
@@ -83,6 +75,7 @@ const CabinetLayout = () => {
                         method: "post",
                         action: "/" + [lang, citySlug, spotSlug].join("/"),
                       });
+                      logout.mutate({});
                     }}
                     minWidth={"201px"}
                   >
@@ -96,7 +89,14 @@ const CabinetLayout = () => {
 
         <S.RightSide>
           <S.Heading>{(match.handle as any)?.title()}</S.Heading>
-          <Outlet />
+          <AuthLoader
+            renderLoading={() => <div>...loading user</div>}
+            renderUnauthenticated={() => {
+              return <div>not logged in</div>;
+            }}
+          >
+            <Outlet />
+          </AuthLoader>
         </S.RightSide>
       </S.Wrapper>
     </Container>

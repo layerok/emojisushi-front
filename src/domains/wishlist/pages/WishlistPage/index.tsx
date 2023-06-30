@@ -17,7 +17,7 @@ import {
   wishlistsQuery,
 } from "src/queries";
 import { MenuLayout } from "~domains/product/components/MenuLayout";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 // todo: fix layout for wishlist
 // todo: optimisticly filter out wishlisted products
