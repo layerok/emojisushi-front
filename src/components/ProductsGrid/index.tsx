@@ -2,7 +2,7 @@ import { useBreakpoint, useDebounce } from "~common/hooks";
 import { EqualHeight } from "react-equal-height";
 import { Product } from "~models";
 import { Footer, Items, Header } from "./components";
-import { IGetCartRes } from "~api/types";
+import { IGetCartRes, IGetWishlistRes } from "~api/types";
 
 // todo: fix design at 1280px breakpoing
 
@@ -14,6 +14,7 @@ type TProductsGridProps = {
   loadable?: boolean;
   loading?: boolean;
   cart?: IGetCartRes;
+  wishlists?: IGetWishlistRes;
 };
 
 export const ProductsGrid = ({
@@ -24,6 +25,7 @@ export const ProductsGrid = ({
   loadingMore = false,
   loadable = false,
   cart,
+  wishlists,
 }: TProductsGridProps) => {
   const breakpoint = useBreakpoint();
 
@@ -35,7 +37,12 @@ export const ProductsGrid = ({
     <div style={{ position: "relative", width: "100%" }}>
       <Header loading={loading} title={title} />
       <EqualHeight updateOnChange={debouncedBreakpoint}>
-        <Items cart={cart} loading={loading} items={items} />
+        <Items
+          wishlists={wishlists}
+          cart={cart}
+          loading={loading}
+          items={items}
+        />
       </EqualHeight>
       {loadable && (
         <Footer

@@ -1,6 +1,5 @@
 import { ProductsGrid } from "~components";
 import { useTranslation } from "react-i18next";
-import { wishlistApi } from "src/api";
 import { useParams, useSearchParams } from "react-router-dom";
 import {
   IGetCartRes,
@@ -9,7 +8,6 @@ import {
   SortKey,
 } from "src/api/types";
 import { Product } from "src/models";
-import { queryClient } from "src/query-client";
 import {
   cartQuery,
   categoriesQuery,
@@ -80,6 +78,7 @@ const Wishlist = ({
     });
   return (
     <ProductsGrid
+      wishlists={wishlists}
       loadable={false}
       cart={cart}
       items={items}
@@ -87,19 +86,6 @@ const Wishlist = ({
       title={t("common.favorite")}
     />
   );
-};
-
-export const action = async ({ request }) => {
-  let formData = await request.formData();
-  const product_id = formData.get("product_id");
-  const quantity = formData.get("quantity");
-
-  const res = await wishlistApi.addItem({
-    product_id,
-    quantity,
-  });
-  queryClient.setQueryData(wishlistsQuery.queryKey, res.data);
-  return res.data;
 };
 
 export const Component = WishlistPage;

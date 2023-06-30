@@ -8,15 +8,14 @@ import {
 import { ProductsGrid, RestaurantClosed, Container } from "~components";
 import { Banner } from "./Banner";
 import { useQuery } from "@tanstack/react-query";
-import { queryClient } from "src/query-client";
 import { Product } from "src/models";
-import { wishlistApi } from "src/api";
 import { cartQuery, categoriesQuery, wishlistsQuery } from "src/queries";
 import { productsQuery } from "src/queries";
 import {
   ICategory,
   IGetCartRes,
   IGetProductsRes,
+  IGetWishlistRes,
   SortKey,
 } from "src/api/types";
 import { isClosed } from "src/utils/time.utils";
@@ -44,7 +43,7 @@ export const CategoryPage = () => {
   const { data: categories, isLoading: isCategoriesLoading } = useQuery(
     categoriesQuery()
   );
-  const { data: wishlist, isLoading: isWishlistLoading } =
+  const { data: wishlists, isLoading: isWishlistLoading } =
     useQuery(wishlistsQuery);
   const { data: products, isLoading: isProductsLoading } = useQuery(
     productsQuery({
@@ -70,6 +69,7 @@ export const CategoryPage = () => {
           <PublishedCategories categories={categories.data}>
             {({ categories }) => (
               <AwaitedProducts
+                wishlists={wishlists}
                 products={products}
                 cart={cart}
                 categories={categories}
@@ -88,10 +88,12 @@ export const AwaitedProducts = ({
   categories,
   cart,
   products,
+  wishlists,
 }: {
   categories: ICategory[];
   cart?: IGetCartRes;
   products?: IGetProductsRes;
+  wishlists?: IGetWishlistRes;
 }) => {
   const { categorySlug, spotSlug, citySlug } = useParams();
 
@@ -127,6 +129,7 @@ export const AwaitedProducts = ({
   // todo: show skeleton while searching products
   return (
     <ProductsGrid
+      wishlists={wishlists}
       cart={cart}
       handleLoadMore={handleLoadMore}
       title={title}
@@ -143,22 +146,6 @@ export const Component = CategoryPage;
 Object.assign(Component, {
   displayName: "LazyCategoryPage",
 });
-
-// todo: duplicated code, the same action is defined on the Wishlist page
-export const categoryAction = async ({ request }) => {
-  let formData = await request.formData();
-  const product_id = formData.get("product_id");
-  const quantity = formData.get("quantity");
-
-  const res = await wishlistApi.addItem({
-    product_id,
-    quantity,
-  });
-  queryClient.setQueryData(wishlistsQuery.queryKey, res.data);
-  return res.data;
-};
-
-export const action = categoryAction;
 
 export const ErrorBoundary = () => {
   const error = useRouteError() as unknown;

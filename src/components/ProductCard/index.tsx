@@ -10,26 +10,31 @@ import {
   FavoriteButton,
   Name,
 } from "./components";
-import { TProductCardProps } from "./types";
 import { findInCart } from "./utils";
-import { useAsyncValues } from "~components/AwaitAll";
 import { Price } from "~components/Price";
 import { AddToCartButton } from "~components/buttons";
 import { useMutation } from "@tanstack/react-query";
 import { cartApi } from "~api";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
-import { ICartProduct, IGetCartRes } from "~api/types";
+import { ICartProduct, IGetCartRes, IGetWishlistRes } from "~api/types";
 import { formatUAHPrice } from "~utils/price.utils";
 import { arrImmutableReplaceAt, arrImmutableDeleteAt } from "~utils/arr.utils";
+
+export type TProductCardProps = {
+  product?: Product;
+  loading?: boolean;
+  cart?: IGetCartRes;
+  wishlists?: IGetWishlistRes;
+};
 
 export const ProductCard = ({
   product,
   loading = false,
   cart,
+  wishlists,
 }: TProductCardProps) => {
   const cartProducts = cart?.data.map((json) => new CartProduct(json)) || [];
-  const { wishlists } = useAsyncValues() as any;
 
   const initialModificatorsState = product?.modGroups.reduce((acc, group) => {
     return {

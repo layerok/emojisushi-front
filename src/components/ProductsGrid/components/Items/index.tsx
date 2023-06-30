@@ -4,16 +4,22 @@ import { useTranslation } from "react-i18next";
 import { Product } from "~models";
 import { useSearchParams } from "react-router-dom";
 import { PRODUCTS_LIMIT_STEP } from "~domains/category/constants";
-import { IGetCartRes } from "~api/types";
+import { IGetCartRes, IGetWishlistRes } from "~api/types";
 import { useMemo } from "react";
 
 type TItemsProps = {
   loading?: boolean;
   items: Product[];
   cart?: IGetCartRes;
+  wishlists?: IGetWishlistRes;
 };
 
-export const Items = ({ loading = false, items = [], cart }: TItemsProps) => {
+export const Items = ({
+  loading = false,
+  items = [],
+  cart,
+  wishlists,
+}: TItemsProps) => {
   const { t } = useTranslation();
 
   const [searchParams] = useSearchParams();
@@ -40,7 +46,14 @@ export const Items = ({ loading = false, items = [], cart }: TItemsProps) => {
   return (
     <S.Grid>
       {items.map((product) => {
-        return <ProductCard cart={cart} key={product.id} product={product} />;
+        return (
+          <ProductCard
+            wishlists={wishlists}
+            cart={cart}
+            key={product.id}
+            product={product}
+          />
+        );
       })}
     </S.Grid>
   );
