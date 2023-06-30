@@ -4,18 +4,8 @@ import { useUser } from "~hooks/use-auth";
 
 export const MyOrdersPage = () => {
   const { t } = useTranslation();
-  const { data: user, isLoading: isUserLoading, error: userError } = useUser();
+  const { data: user } = useUser();
 
-  if (isUserLoading) {
-    return <div>Loading...</div>;
-  }
-  if (userError) {
-    return <div>{JSON.stringify(userError, null, 2)}</div>;
-  }
-
-  if (!user) {
-    return <div>Not logged in</div>;
-  }
   const customer = user.customer;
   return (
     <div
@@ -34,7 +24,7 @@ export const MyOrdersPage = () => {
           </div>
         ))}
       </If>
-      <If condition={!user.customer.orders}>
+      <If condition={!user.customer.orders.length}>
         <p>{t("account.orders.noOrders")}</p>
       </If>
     </div>

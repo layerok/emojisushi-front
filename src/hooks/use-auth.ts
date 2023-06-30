@@ -20,6 +20,8 @@ export const { useUser, useLogin, useRegister, useLogout, AuthLoader } =
         email,
         password,
       });
+      const { token } = res.data.data;
+      Cookies.set("jwt", token);
       return res.data.data.user;
     },
     registerFn: async ({
@@ -42,10 +44,13 @@ export const { useUser, useLogin, useRegister, useLogout, AuthLoader } =
         // check if this field is needed
         spot_slug_or_id,
       });
+      const { token } = res.data.data;
+      Cookies.set("jwt", token);
       return res.data.data.user;
     },
     logoutFn: async () => {
       Cookies.remove("jwt");
+
       return true;
     },
   });

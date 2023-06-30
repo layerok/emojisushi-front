@@ -1,7 +1,5 @@
 import { useBreakpoint, useDebounce } from "~common/hooks";
 import { EqualHeight } from "react-equal-height";
-import { observer } from "mobx-react";
-import { Loader } from "~components";
 import { Product } from "~models";
 import { Footer, Items, Header } from "./components";
 import { IGetCartRes } from "~api/types";

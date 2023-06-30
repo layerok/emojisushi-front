@@ -11,8 +11,14 @@ import {
 } from "~components";
 import { useBreakpoint2 } from "~common/hooks";
 import { observer } from "mobx-react";
-import { useFetcher, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useLogin, useRegister } from "~hooks/use-auth";
+import { AxiosError } from "axios";
+import { queryClient } from "~query-client";
+import { cartQuery, wishlistsQuery } from "~queries";
+import { authApi } from "~api";
+import { useMutation } from "@tanstack/react-query";
 
 export const AuthModal = ({ children, redirect_to }) => {
   // todo: don't use it
@@ -60,64 +66,92 @@ export const AuthModal = ({ children, redirect_to }) => {
 const SignUpForm = ({ setShowSignUp }) => {
   const { t } = useTranslation();
   const { lang, spotSlug, citySlug } = useParams();
-  const fetcher = useFetcher<
-    | {
-        errors: Record<string, string[]>;
-      }
-    | undefined
-  >();
-
   const [checked, setChecked] = useState(false);
-
-  const actionData = fetcher.data;
+  const register = useRegister();
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState({
+    name: "",
+    surname: "",
+    email: "",
+    password: "",
+    agree: "",
+  });
 
   return (
     <S.SignUpForm
       onSubmit={(e) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        formData.append("type", "register");
+        const email = formData.get("email") + "";
+        const password = formData.get("password") + "";
+        const password_confirmation = formData.get("password") + "";
+        const name = formData.get("name") + "";
+        const surname = formData.get("surname") + "";
+        const agree = !!formData.get("agree");
+        const spot_slug_or_id = spotSlug;
 
-        fetcher.submit(formData, {
-          method: "post",
-          action: "/" + [lang, citySlug, spotSlug].join("/"),
+        setErrors({
+          name: "",
+          surname: "",
+          email: "",
+          password: "",
+          agree: "",
         });
+
+        register.mutate(
+          {
+            email,
+            password,
+            password_confirmation,
+            name,
+            surname,
+            agree,
+            // check if this field is needed
+            spot_slug_or_id,
+          },
+          {
+            onSuccess: () => {
+              queryClient.invalidateQueries(wishlistsQuery.queryKey);
+              queryClient.invalidateQueries(cartQuery.queryKey);
+              navigate(
+                "/" + [lang, citySlug, spotSlug, "account", "profile"].join("/")
+              );
+            },
+            onError: (error) => {
+              if (error instanceof AxiosError) {
+                setErrors(error.response.data.errors);
+              }
+            },
+          }
+        );
       }}
     >
       <S.Title>{t("authModal.registration.title")}</S.Title>
       <S.InputWrapper>
         <S.InputLabel>{t("common.first_name")}</S.InputLabel>
-        <Input name="name" error={actionData?.errors?.name?.[0]} light={true} />
+        <Input name="name" error={errors?.name?.[0]} light={true} />
       </S.InputWrapper>
       <S.InputWrapper>
         <S.InputLabel>{t("common.last_name")}</S.InputLabel>
-        <Input
-          name="surname"
-          error={actionData?.errors?.surname?.[0]}
-          light={true}
-        />
+        <Input name="surname" error={errors?.surname?.[0]} light={true} />
       </S.InputWrapper>
       <S.InputWrapper>
         <S.InputLabel>{t("common.email")}</S.InputLabel>
-        <Input
-          name="email"
-          error={actionData?.errors?.email?.[0]}
-          light={true}
-        />
+        <Input name="email" error={errors?.email?.[0]} light={true} />
       </S.InputWrapper>
 
       <S.InputWrapper>
         <S.InputLabel>{t("common.password")}</S.InputLabel>
         <PasswordInput
           name="password"
-          error={actionData?.errors?.password?.[0]}
+          error={errors?.password?.[0]}
           light={true}
         />
       </S.InputWrapper>
       <S.CheckboxWrapper>
         <Checkbox
           checked={checked}
-          error={actionData?.errors?.agree?.[0]}
+          error={errors?.agree?.[0]}
           onChange={(e) => {
             setChecked(e.target.checked);
           }}
@@ -129,7 +163,7 @@ const SignUpForm = ({ setShowSignUp }) => {
 
       <FlexBox>
         <FlexBox flexDirection={"column"} alignItems={"center"}>
-          <Button submitting={fetcher.state === "submitting"}>
+          <Button submitting={register.isLoading}>
             {t("common.registration")}
           </Button>
 
@@ -151,36 +185,47 @@ const SignUpForm = ({ setShowSignUp }) => {
 const PasswordRecoveryForm = observer(({ setShowPasswordRecovery }) => {
   const { t } = useTranslation();
 
-  const { lang, citySlug, spotSlug } = useParams();
-  const fetcher = useFetcher<
-    | {
-        errors?: Record<string, string[]>;
-        isSent?: boolean;
-      }
-    | undefined
-  >();
+  const resetPassword = useMutation({
+    mutationFn: (email: string) => {
+      return authApi.restorePassword(email);
+    },
+  });
+
+  const [errors, setErrors] = useState({
+    email: [""],
+  });
+  const [isSent, setIsSent] = useState(false);
   return (
     <S.LoginForm
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        formData.append("type", "reset-password");
-        fetcher.submit(formData, {
-          method: "post",
-          action: "/" + [lang, citySlug, spotSlug].join("/"),
+        const email = formData.get("email") + "";
+
+        resetPassword.mutate(email, {
+          onSuccess: () => {
+            setIsSent(true);
+          },
+          onError: (e) => {
+            if (e instanceof AxiosError) {
+              if (!e.response.data?.errors) {
+                setErrors({
+                  email: [e.response.data.message],
+                });
+              } else {
+                setErrors(e.response.data.errors);
+              }
+            }
+          },
         });
       }}
     >
       <S.Title>{t("authModal.forgetPassword.title")}</S.Title>
       <S.InputWrapper>
         <S.InputLabel>{t("common.email")}</S.InputLabel>
-        <Input
-          name={"email"}
-          error={fetcher.data?.errors?.email?.[0]}
-          light={true}
-        />
+        <Input name={"email"} error={errors?.email?.[0]} light={true} />
       </S.InputWrapper>
-      <If condition={fetcher.data?.isSent}>
+      <If condition={isSent}>
         <S.ForgotPassText
           style={{
             color: "green",
@@ -189,7 +234,7 @@ const PasswordRecoveryForm = observer(({ setShowPasswordRecovery }) => {
           {t("authModal.forgetPassword.mailSent")}
         </S.ForgotPassText>
       </If>
-      <If condition={!fetcher.data?.isSent}>
+      <If condition={!isSent}>
         <S.ForgotPassText>
           {t("authModal.forgetPassword.typeEmail")}
         </S.ForgotPassText>
@@ -202,7 +247,7 @@ const PasswordRecoveryForm = observer(({ setShowPasswordRecovery }) => {
         >
           {t("common.back")}
         </S.ResetPasswordButton>
-        <Button submitting={fetcher.state === "submitting"} type="submit">
+        <Button submitting={resetPassword.isLoading} type="submit">
           {t("common.recover")}
         </Button>
       </S.BtnGroup>
@@ -219,43 +264,57 @@ const LoginForm = ({
   const { t } = useTranslation();
 
   const { lang, spotSlug, citySlug } = useParams();
-  const fetcher = useFetcher<
-    | {
-        errors: Record<string, string[]>;
-      }
-    | undefined
-  >();
+
+  const login = useLogin();
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
 
   return (
     <S.LoginForm
       onSubmit={(e) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        formData.append("type", "login");
-        if (redirect_to) {
-          formData.append("redirect_to", redirect_to);
-        }
-
-        fetcher.submit(formData, {
-          method: "post",
-          action: "/" + [lang, citySlug, spotSlug].join("/"),
+        const email = formData.get("email") as string | null;
+        const password = formData.get("password") as string | null;
+        const default_redirect_to =
+          "/" + [lang, citySlug, spotSlug, "account", "profile"].join("/");
+        setErrors({
+          email: "",
+          password: "",
         });
+        login.mutate(
+          {
+            email,
+            password,
+          },
+          {
+            onSuccess: () => {
+              queryClient.invalidateQueries(wishlistsQuery.queryKey);
+              queryClient.invalidateQueries(cartQuery.queryKey);
+              navigate(redirect_to || default_redirect_to);
+            },
+            onError: (error) => {
+              if (error instanceof AxiosError) {
+                setErrors(error.response.data.errors);
+              }
+            },
+          }
+        );
       }}
     >
       <S.Title>{t("authModal.login.title")}</S.Title>
       <S.InputWrapper>
         <S.InputLabel>{t("common.email")}</S.InputLabel>
-        <Input
-          name={"email"}
-          error={fetcher?.data?.errors?.email?.[0]}
-          light={true}
-        />
+        <Input name={"email"} error={errors?.email?.[0]} light={true} />
       </S.InputWrapper>
       <S.InputWrapper>
         <S.InputLabel>{t("common.password")}</S.InputLabel>
         <PasswordInput
           name={"password"}
-          error={fetcher?.data?.errors?.password?.[0]}
+          error={errors?.password?.[0]}
           light={true}
         />
       </S.InputWrapper>
@@ -271,7 +330,7 @@ const LoginForm = ({
       </FlexBox>
 
       <Button
-        submitting={fetcher.state === "submitting"}
+        submitting={login.isLoading}
         type="submit"
         style={{ marginTop: "20px", display: "flex" }}
       >

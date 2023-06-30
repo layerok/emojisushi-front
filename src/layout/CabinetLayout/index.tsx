@@ -1,16 +1,18 @@
 import * as S from "./styled";
 import { ButtonDark, NavLink, Container } from "~components";
 import { useTranslation } from "react-i18next";
-import { Outlet, useMatches, useParams, useSubmit } from "react-router-dom";
+import { Outlet, useMatches, useNavigate, useParams } from "react-router-dom";
 import { AuthLoader, useLogout } from "~hooks/use-auth";
+import { queryClient } from "~query-client";
+import { cartQuery, wishlistsQuery } from "~queries";
 
 const CabinetLayout = () => {
   const { t } = useTranslation();
-  const { lang, spotSlug, citySlug } = useParams();
   const matches = useMatches();
   const match = matches[matches.length - 1];
-  const submit = useSubmit();
   const logout = useLogout();
+  const { lang, citySlug, spotSlug } = useParams();
+  const navigate = useNavigate();
 
   return (
     <Container>
@@ -67,15 +69,11 @@ const CabinetLayout = () => {
                 </NavLink>
                 <div style={{ marginTop: "10px" }}>
                   <ButtonDark
-                    onClick={() => {
-                      const formData = new FormData();
-                      formData.append("type", "logout");
-
-                      submit(formData, {
-                        method: "post",
-                        action: "/" + [lang, citySlug, spotSlug].join("/"),
-                      });
+                    onClick={async () => {
                       logout.mutate({});
+                      queryClient.invalidateQueries(wishlistsQuery.queryKey);
+                      queryClient.invalidateQueries(cartQuery.queryKey);
+                      navigate("/" + [lang, citySlug, spotSlug].join("/"));
                     }}
                     minWidth={"201px"}
                   >
