@@ -11,7 +11,7 @@ type CheckoutCartProps = { cart?: IGetCartRes; loading?: boolean };
 export const CheckoutCart = ({ cart, loading = false }: CheckoutCartProps) => {
   const items = loading
     ? [new CartProduct(dummyCartProduct), new CartProduct(dummyCartProduct)]
-    : cart.data.map((json) => new CartProduct(json));
+    : (cart?.data || []).map((json) => new CartProduct(json));
 
   return (
     <S.Wrapper>
@@ -27,11 +27,13 @@ export const CheckoutCart = ({ cart, loading = false }: CheckoutCartProps) => {
         })}
       </S.Items>
 
-      <CartModal>
-        <S.EditButton>
-          {loading ? <Skeleton /> : <EditCartButton />}
-        </S.EditButton>
-      </CartModal>
+      {cart && (
+        <CartModal cart={cart}>
+          <S.EditButton>
+            {loading ? <Skeleton /> : <EditCartButton />}
+          </S.EditButton>
+        </CartModal>
+      )}
     </S.Wrapper>
   );
 };

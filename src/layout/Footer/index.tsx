@@ -9,20 +9,20 @@ import {
 import { TelegramSvg, InstagramSvg, PhoneSvg, LogoSvg } from "~components/svg";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
-import { useRouteLoaderData } from "react-router-dom";
-import { LayoutRouteLoaderData } from "~layout/Layout";
+import { ISpot } from "~api/types";
 
 type FooterProps = {
   loading?: boolean;
+  spot?: ISpot;
 };
 
-export const Footer = ({ loading = false }: FooterProps) => {
+export const Footer = ({ loading = false, spot }: FooterProps) => {
   return (
     <S.Footer>
       <Container>
         <S.Left>
           <Logo loading={loading} />
-          <Socials loading={loading} />
+          <Socials loading={loading} spot={spot} />
         </S.Left>
         <S.Right>
           <Map loading={loading} />
@@ -53,23 +53,21 @@ const Map = ({ loading = false }: IMapProps) => {
   );
 };
 
-type ISocialsProps = { loading?: boolean };
+type ISocialsProps = { loading?: boolean; spot: ISpot };
 
-const Socials = ({ loading = false }: ISocialsProps) => {
+const Socials = ({ loading = false, spot }: ISocialsProps) => {
   return (
     <S.List>
-      <Phones loading={loading} />
+      <Phones loading={loading} spot={spot} />
       <Instagram loading={loading} />
       <Telegram loading={loading} />
     </S.List>
   );
 };
 
-type IPhonesProps = { loading?: boolean };
+type IPhonesProps = { loading?: boolean; spot: ISpot };
 
-const Phones = ({ loading = false }: IPhonesProps) => {
-  const { spot } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
-
+const Phones = ({ loading = false, spot }: IPhonesProps) => {
   const { t } = useTranslation();
   return (
     spot?.phones?.length > 0 && (

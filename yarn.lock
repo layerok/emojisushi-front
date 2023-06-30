@@ -8350,6 +8350,11 @@ react-loading-skeleton@^3.2.0:
   resolved "https://registry.yarnpkg.com/react-loading-skeleton/-/react-loading-skeleton-3.2.0.tgz#c79f1390195bcd8625c30e68454a1b95508a9c74"
   integrity sha512-kN12x4Ud69jbksr2EdhYywAFeW4bPdvFQ9p3ID1OM/QeFjgwFSmSUY2a6P6uOb5ACzWp3ozY8C+7+04KR6+PHA==
 
+react-query-auth@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-query-auth/-/react-query-auth-2.2.0.tgz#e19446ef0652e43c65adf14eefb6502cacda9195"
+  integrity sha512-NOHyO59AhxKHQjRH3KKCe7Kt9VSChSfEr30fSLOuuF/v8XOGI7O+m869pnVUq3+GHuSJQew232Ad5bdSMFoG9Q==
+
 react-query@^3.39.3:
   version "3.39.3"
   resolved "https://registry.yarnpkg.com/react-query/-/react-query-3.39.3.tgz#4cea7127c6c26bdea2de5fb63e51044330b03f35"

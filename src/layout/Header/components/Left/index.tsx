@@ -9,12 +9,15 @@ import Skeleton from "react-loading-skeleton";
 import { Logo } from "../Logo";
 import { NavLink, useParams } from "react-router-dom";
 import { ICity } from "~api/types";
+import { useQuery } from "react-query";
+import { spotQuery } from "~domains/spot/queries/spot.query";
 
 type LeftProps = { loading?: boolean; cities?: ICity[] };
 
 export const Left = ({ loading = false, cities = [] }: LeftProps) => {
   const { lang, spotSlug, citySlug } = useParams();
   const { t } = useTranslation();
+  const { data: spot, isLoading } = useQuery(spotQuery(spotSlug));
 
   return (
     <S.Left>
@@ -23,10 +26,10 @@ export const Left = ({ loading = false, cities = [] }: LeftProps) => {
         <LocationPickerPopover cities={cities} loading={loading} offset={22} />
       </S.HeaderItem>
       <S.HeaderItem>
-        {loading ? (
+        {isLoading ? (
           <Skeleton width={71} height={17.25} />
         ) : (
-          <ContactsModal>
+          <ContactsModal spot={spot}>
             <div>{t("header.contacts")}</div>
           </ContactsModal>
         )}

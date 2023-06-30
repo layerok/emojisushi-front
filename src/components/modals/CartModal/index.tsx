@@ -15,25 +15,19 @@ import {
   OptimisticCartTotalPrice,
 } from "~components";
 
-import { ReactElement, Suspense, useRef, useState } from "react";
+import { ReactElement, useRef, useState } from "react";
 import { useBreakpoint2 } from "~common/hooks";
-import {
-  Await,
-  useAsyncValue,
-  useFetcher,
-  useNavigate,
-  useParams,
-  useRouteLoaderData,
-} from "react-router-dom";
+import { useFetcher, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CartProduct } from "~models";
-import { LayoutRouteLoaderData } from "~layout/Layout";
 import { useDeletingCartProducts } from "~hooks/use-layout-fetchers";
-import { IGetCartRes } from "~api/types";
 import {
   DeleteCartProductFormDataPayload,
   UpdateCartProductFormDataPayload,
 } from "~domains/product/types";
+import { useQuery } from "react-query";
+import { cartQuery } from "~queries";
+import { IGetCartRes } from "~api/types";
 
 const CartItem = ({ item }: { item: CartProduct }) => {
   const fetcher = useFetcher();
@@ -153,24 +147,16 @@ const CartItem = ({ item }: { item: CartProduct }) => {
   );
 };
 
-export const CartModal = ({ children }) => {
-  const { cart } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
-  // todo: console.log('check why this component rerenders on window scroll');
-  return (
-    <Suspense fallback={children}>
-      <Await resolve={cart}>
-        <AwaitedCartModal>{children}</AwaitedCartModal>
-      </Await>
-    </Suspense>
-  );
-};
-
-const AwaitedCartModal = ({ children }: { children: ReactElement }) => {
+export const CartModal = ({
+  children,
+  cart,
+}: {
+  cart: IGetCartRes;
+  children: ReactElement;
+}) => {
   const navigate = useNavigate();
 
   const { lang, spotSlug, citySlug } = useParams();
-  // todo: add type
-  const cart = useAsyncValue() as IGetCartRes;
 
   const { data, total } = cart;
 

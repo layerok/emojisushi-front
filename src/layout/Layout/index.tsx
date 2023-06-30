@@ -3,14 +3,12 @@ import { Footer } from "../Footer";
 import * as S from "./styled";
 import { useWindowScroll } from "react-use";
 import { StickyToTopBtn, Sticky, TinyCartButton, CartModal } from "~components";
-import { ReactNode, Suspense, useMemo } from "react";
+import { ReactNode } from "react";
 import {
   ActionFunctionArgs,
-  Await,
   Outlet,
-  defer,
   redirect,
-  useLoaderData,
+  useParams,
 } from "react-router-dom";
 import { queryClient } from "~query-client";
 import { cartQuery, wishlistsQuery } from "~queries";
@@ -20,35 +18,48 @@ import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
 import { IUser, IGetCartRes, IGetCitiesRes, ICity, ISpot } from "~api/types";
 import { citiesQuery } from "~queries/cities.query";
 import { spotQuery } from "~domains/spot/queries/spot.query";
-import { cityQuery } from "~domains/spot/queries/city.query";
 import Cookies from "js-cookie";
 import { AxiosError } from "axios";
+import { useQuery } from "react-query";
 
 export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
   // todo: debounce it
   const { x, y } = useWindowScroll();
-
-  const { cart, cities, user } = useLoaderData() as LayoutRouteLoaderData;
-
+  const { spotSlug, citySlug } = useParams();
   const showStickyCart = y > 100;
+
+  const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
+  const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
+  const { data: user, isLoading: isUserLoading } = useQuery({
+    queryFn: () => {
+      return authApi
+        .fetchUser()
+        .then((res) => res.data)
+        .catch((e) => {
+          // // 406 simply means that user is not authorzied, no need to throw error in this case
+          if (![406].includes(e?.response.status)) {
+            throw e;
+          }
+          return null;
+        });
+    },
+    queryKey: ["user"],
+  });
+
+  const { data: spot, isLoading: isSpotLoading } = useQuery(
+    spotQuery(spotSlug)
+  );
 
   const items = (cart?.data || []).map((json) => new CartProduct(json));
   const cartTotal = useOptimisticCartTotalPrice({ items });
 
-  const promiseComposition = useMemo(
-    () => Promise.all([cart, cities, user]),
-    [cities, user, cart]
-  );
-
   return (
     <S.Layout {...rest}>
-      <Suspense fallback={<Header loading />}>
-        <Await resolve={promiseComposition}>
-          {([cart, cities, user]) => (
-            <Header cart={cart} cities={cities.data} user={user} />
-          )}
-        </Await>
-      </Suspense>
+      {isCartLoading || isUserLoading || isCitiesLoading ? (
+        <Header loading />
+      ) : (
+        <Header cart={cart} cities={cities.data} user={user} />
+      )}
 
       <S.Main>
         <S.Content>
@@ -56,23 +67,17 @@ export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
         </S.Content>
       </S.Main>
 
-      <Suspense fallback={<Footer loading={true} />}>
-        <Await resolve={cities}>
-          <Footer />
-        </Await>
-      </Suspense>
+      {isSpotLoading ? <Footer loading={true} /> : <Footer spot={spot} />}
 
-      <Suspense>
-        <Await resolve={cart}>
-          <Sticky top={"30px"} right={"30px"} show={showStickyCart}>
-            <CartModal>
-              <div>
-                <TinyCartButton price={cartTotal} />
-              </div>
-            </CartModal>
-          </Sticky>
-        </Await>
-      </Suspense>
+      {!isCartLoading && (
+        <Sticky top={"30px"} right={"30px"} show={showStickyCart}>
+          <CartModal cart={cart}>
+            <div>
+              <TinyCartButton price={cartTotal} />
+            </div>
+          </CartModal>
+        </Sticky>
+      )}
       <StickyToTopBtn />
     </S.Layout>
   );
@@ -86,47 +91,6 @@ export type LayoutRouteLoaderData = {
   cities: IGetCitiesRes;
   city: ICity;
   spot: ISpot;
-};
-
-export const layoutLoader = async ({ params }) => {
-  const userPromise = authApi
-    .fetchUser()
-    .then((res) => res.data)
-    .catch((e) => {
-      // // 406 simply means that user is not authorzied, no need to throw error in this case
-      if (![406].includes(e?.response.status)) {
-        throw e;
-      }
-      return null;
-    });
-
-  const citiesPromise =
-    queryClient.getQueryData<IGetCitiesRes>(citiesQuery.queryKey) ??
-    queryClient.fetchQuery<IGetCitiesRes>(citiesQuery);
-
-  const cityQuery_ = cityQuery(params.citySlug);
-
-  const cityPromise =
-    queryClient.getQueryData<ICity>(cityQuery_.queryKey) ??
-    queryClient.fetchQuery<ICity>(cityQuery_);
-
-  const spotQuery_ = spotQuery(params.spotSlug);
-
-  const spotPromise =
-    queryClient.getQueryData<ISpot>(spotQuery_.queryKey) ??
-    queryClient.fetchQuery<ISpot>(spotQuery_);
-
-  const cartPromise =
-    queryClient.getQueryData<IGetCartRes>(cartQuery.queryKey) ??
-    queryClient.fetchQuery<IGetCartRes>(cartQuery);
-
-  return defer({
-    cart: cartPromise,
-    user: userPromise,
-    cities: citiesPromise,
-    city: await cityPromise,
-    spot: await spotPromise,
-  });
 };
 
 // todo: figure out how to not refetch user after modifying cart products
@@ -293,7 +257,11 @@ export const layoutAction = async ({ request, params }: ActionFunctionArgs) => {
 
 export const action = layoutAction;
 
-export const loader = layoutLoader;
+export const shouldRevalidate = ({ currentParams, nextParams }) => {
+  if (currentParams.lang !== nextParams.lang) {
+    return false;
+  }
+};
 
 Object.assign(Component, {
   displayName: "LazyLayout",

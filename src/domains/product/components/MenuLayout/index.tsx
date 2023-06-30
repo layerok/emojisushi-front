@@ -1,52 +1,33 @@
-import { Suspense } from "react";
-import { useLoaderData, useRouteLoaderData } from "react-router-dom";
-import { ICategory } from "~api/types";
-import { MobSidebar, AwaitAll, Sidebar, FlexBox, Container } from "~components";
+import { MobSidebar, Sidebar, Container } from "~components";
 import { PublishedCategories } from "~domains/category/components/PublishedCategories";
-import { WishlistPageLoaderData } from "~domains/wishlist/types";
-import { LayoutRouteLoaderData } from "~layout/Layout";
 import * as S from "./styled";
+import { useQuery } from "react-query";
+import { citiesQuery } from "~queries/cities.query";
 
 // todo: it looks like RR route layout
-export const MenuLayout = ({ children }) => {
-  const { categories } = useLoaderData() as WishlistPageLoaderData;
-  const { cities } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
+export const MenuLayout = ({ children, categories }) => {
+  const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
 
   return (
     <Container>
       <S.Container>
-        <Suspense fallback={<Fallback />}>
-          <AwaitAll categories={categories} cities={cities}>
+        {isCitiesLoading || !categories ? (
+          <>
+            <Sidebar loading />
+            <MobSidebar loading />
+          </>
+        ) : (
+          <PublishedCategories categories={categories.data}>
             {({ categories }) => (
-              <PublishedCategories categories={categories.data}>
-                {({ categories }) => (
-                  <InternalSidebar categories={categories} />
-                )}
-              </PublishedCategories>
+              <>
+                <Sidebar categories={categories} />
+                <MobSidebar categories={categories} />
+              </>
             )}
-          </AwaitAll>
-        </Suspense>
-
+          </PublishedCategories>
+        )}
         {children}
       </S.Container>
     </Container>
-  );
-};
-
-const Fallback = () => {
-  return (
-    <>
-      <Sidebar loading />
-      <MobSidebar loading />
-    </>
-  );
-};
-
-const InternalSidebar = ({ categories }: { categories: ICategory[] }) => {
-  return (
-    <>
-      <Sidebar categories={categories} />
-      <MobSidebar categories={categories} />
-    </>
   );
 };

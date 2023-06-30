@@ -4,12 +4,16 @@ import { SvgIcon, FlexBox, StaticMap, TelegramModal, Modal } from "~components";
 import { PhoneSvg, InstagramSvg, TelegramSvg } from "~components/svg";
 import { useTranslation } from "react-i18next";
 import { InstagramLink } from "~layout/Footer/styled";
-import { useRouteLoaderData } from "react-router-dom";
-import { LayoutRouteLoaderData } from "~layout/Layout";
+import { ISpot } from "~api/types";
 
-export const ContactsModal = ({ children }: { children: ReactElement }) => {
+export const ContactsModal = ({
+  children,
+  spot,
+}: {
+  children: ReactElement;
+  spot: ISpot;
+}) => {
   const { t } = useTranslation();
-  const { spot } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
 
   return (
     <Modal

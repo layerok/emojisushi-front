@@ -2,17 +2,12 @@ import * as S from "./styled";
 import { MapPinSvg, LogoSvg, SvgIcon } from "~components";
 import { useTranslation } from "react-i18next";
 import { Cities, CitiesSkeleton } from "./components/City";
-import { Await, defer, useLoaderData } from "react-router-dom";
-import { Suspense } from "react";
-import { IGetCitiesRes } from "~api/types";
-import { queryClient } from "~query-client";
 import { citiesQuery } from "~queries/cities.query";
+import { useQuery } from "react-query";
 
 export const SelectLocationPage = () => {
   const { t } = useTranslation();
-  const { cities } = useLoaderData() as {
-    cities: IGetCitiesRes;
-  };
+  const { data: cities, isLoading } = useQuery(citiesQuery);
 
   return (
     <S.Locations>
@@ -34,14 +29,7 @@ export const SelectLocationPage = () => {
           </S.Locations.Label>
         </S.Locations.Head>
         <S.Locations.Body>
-          <Suspense fallback={<CitiesSkeleton />}>
-            <Await
-              resolve={cities}
-              errorElement={<p>Error loading locations</p>}
-            >
-              {(cities: IGetCitiesRes) => <Cities items={cities.data} />}
-            </Await>
-          </Suspense>
+          {isLoading ? <CitiesSkeleton /> : <Cities items={cities.data} />}
         </S.Locations.Body>
       </S.Locations.Container>
     </S.Locations>
@@ -53,11 +41,3 @@ export const Component = SelectLocationPage;
 Object.assign(Component, {
   displayName: "LazySelectLocationPage",
 });
-
-export const loader = () => {
-  return defer({
-    cities:
-      queryClient.getQueryData(citiesQuery.queryKey) ??
-      queryClient.fetchQuery(citiesQuery),
-  });
-};

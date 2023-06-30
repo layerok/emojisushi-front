@@ -1,6 +1,8 @@
+import { QueryOptions } from "react-query";
 import { accessApi } from "~api";
+import { IGetCitiesRes } from "~api/types";
 
-export const citiesQuery = {
+export const citiesQuery: QueryOptions<IGetCitiesRes> = {
   queryFn: () =>
     accessApi.getCities({
       includeSpots: true,

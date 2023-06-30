@@ -10,7 +10,7 @@ import {
   CartButton,
   TinyCartButton,
 } from "~components";
-import { Await, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { useOptimisticCartTotals } from "~hooks";
 import { CartProduct } from "~models";
@@ -41,17 +41,21 @@ export const Right = ({
         <LanguageSelector loading={loading} />
       </S.LanguageSelectorContainer>
 
-      <CartModal>
-        <S.CartBtn>
-          <CartButton loading={loading} count={quantity} total={price} />
-        </S.CartBtn>
-      </CartModal>
+      {cart && (
+        <CartModal cart={cart}>
+          <S.CartBtn>
+            <CartButton loading={loading} count={quantity} total={price} />
+          </S.CartBtn>
+        </CartModal>
+      )}
 
-      <CartModal>
-        <S.TinyCartBtn>
-          <TinyCartButton loading={loading} price={price} />
-        </S.TinyCartBtn>
-      </CartModal>
+      {cart && (
+        <CartModal cart={cart}>
+          <S.TinyCartBtn>
+            <TinyCartButton loading={loading} price={price} />
+          </S.TinyCartBtn>
+        </CartModal>
+      )}
 
       <S.BurgerBtn>
         {loading ? (

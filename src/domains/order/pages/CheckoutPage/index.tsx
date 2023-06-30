@@ -1,67 +1,71 @@
 import { Container, Heading } from "~components";
 import { CheckoutForm, CheckoutCart } from "./components";
-import {
-  Await,
-  Navigate,
-  defer,
-  useLoaderData,
-  useParams,
-  useRouteLoaderData,
-} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { queryClient } from "~query-client";
-import { paymentQuery, shippingQuery } from "~queries";
-import { Suspense } from "react";
-import { AwaitAll } from "~components/AwaitAll";
-import { LayoutRouteLoaderData } from "~layout/Layout";
+import { cartQuery, paymentQuery, shippingQuery } from "~queries";
 import * as S from "./styled";
+import { useQuery } from "react-query";
+import { authApi } from "~api";
 
 const CheckoutPage = () => {
   const { t } = useTranslation();
-  const { user, cart } = useRouteLoaderData("layout") as LayoutRouteLoaderData;
-  const { shippingMethods, paymentMethods } = useLoaderData() as any;
   const { lang, citySlug, spotSlug } = useParams();
+  const navigate = useNavigate();
+
+  const { data: user, isLoading: isUserLoading } = useQuery({
+    queryFn: () => {
+      return authApi
+        .fetchUser()
+        .then((res) => res.data)
+        .catch((e) => {
+          // // 406 simply means that user is not authorzied, no need to throw error in this case
+          if (![406].includes(e?.response.status)) {
+            throw e;
+          }
+          return null;
+        });
+    },
+    queryKey: ["user"],
+  });
+
+  const { data: cart, isLoading: isCartLoading } = useQuery({
+    ...cartQuery,
+    onSuccess: (data) => {
+      if (data.data.length < 1) {
+        navigate("/" + [lang, citySlug, spotSlug].join("/"));
+      }
+    },
+  });
+  const { data: shippingMethods, isLoading: isShippingMethodsLoading } =
+    useQuery(shippingQuery);
+  const { data: paymentMethods, isLoading: isPaymentMethodsLoading } =
+    useQuery(paymentQuery);
 
   return (
     <Container>
-      <Suspense>
-        <Await resolve={cart}>
-          {(cart) => {
-            if (cart.data.length < 1) {
-              return (
-                <Navigate to={"/" + [lang, citySlug, spotSlug].join("/")} />
-              );
-            } else {
-              return null;
-            }
-          }}
-        </Await>
-      </Suspense>
-
       <Heading>{t("checkout.title")}</Heading>
       <S.Container>
-        <Suspense fallback={<CheckoutForm loading />}>
-          <AwaitAll
+        {isCartLoading ||
+        isUserLoading ||
+        isShippingMethodsLoading ||
+        isPaymentMethodsLoading ? (
+          <CheckoutForm loading />
+        ) : (
+          <CheckoutForm
+            // remount component after signin to update form
+            key={user ? "one" : "second"}
             cart={cart}
             shippingMethods={shippingMethods}
             paymentMethods={paymentMethods}
             user={user}
-          >
-            {({ cart, shippingMethods, paymentMethods, user }) => (
-              <CheckoutForm
-                // remount component after signin to update form
-                key={user ? "one" : "second"}
-                cart={cart}
-                shippingMethods={shippingMethods}
-                paymentMethods={paymentMethods}
-                user={user}
-              />
-            )}
-          </AwaitAll>
-        </Suspense>
-        <Suspense fallback={<CheckoutCart loading={true} />}>
-          <Await resolve={cart}>{(cart) => <CheckoutCart cart={cart} />}</Await>
-        </Suspense>
+          />
+        )}
+
+        {isCartLoading ? (
+          <CheckoutCart loading={true} />
+        ) : (
+          <CheckoutCart cart={cart} />
+        )}
       </S.Container>
     </Container>
   );
@@ -72,14 +76,3 @@ export const Component = CheckoutPage;
 Object.assign(Component, {
   displayName: "LazyCheckoutPage",
 });
-
-export const loader = () => {
-  return defer({
-    paymentMethods:
-      queryClient.getQueryData(paymentQuery.queryKey) ??
-      queryClient.fetchQuery(paymentQuery),
-    shippingMethods:
-      queryClient.getQueryData(shippingQuery.queryKey) ??
-      queryClient.fetchQuery(shippingQuery),
-  });
-};

@@ -65,7 +65,7 @@ client.interceptors.request.use((config = {}) => {
 //     // Any status codes that falls outside the range of 2xx cause this function to trigger
 //     // Do something with response error
 //     if([406].includes(error?.response?.status)) {
-//         stores.AuthStore.logout();
+//       window.location.href = '/';
 //     }
 //     return Promise.reject(error);
 // });

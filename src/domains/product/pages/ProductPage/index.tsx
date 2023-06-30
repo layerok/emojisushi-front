@@ -1,21 +1,17 @@
 import {
-  defer,
-  useLoaderData,
   useNavigate,
   useNavigation,
   useParams,
   useRouteError,
-  useRouteLoaderData,
   useSearchParams,
 } from "react-router-dom";
 import { ProductsGrid, RestaurantClosed, Container } from "~components";
 import { Banner } from "./Banner";
-import { Suspense } from "react";
-import { QueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { queryClient } from "src/query-client";
 import { Product } from "src/models";
 import { wishlistApi } from "src/api";
-import { categoriesQuery, wishlistsQuery } from "src/queries";
+import { cartQuery, categoriesQuery, wishlistsQuery } from "src/queries";
 import { productsQuery } from "src/queries";
 import {
   ICategory,
@@ -26,50 +22,61 @@ import {
 import { isClosed } from "src/utils/time.utils";
 import { appConfig } from "src/config/app";
 import { PRODUCTS_LIMIT_STEP } from "~domains/category/constants";
-import { CategoryPageLoaderData } from "~domains/product/types";
-import { LayoutRouteLoaderData } from "~layout/Layout";
-import { AwaitAll } from "~components/AwaitAll";
 import { MenuLayout } from "~domains/product/components/MenuLayout";
 import { PublishedCategories } from "~domains/category/components/PublishedCategories";
 import { AxiosError } from "axios";
+import { citiesQuery } from "~queries/cities.query";
 
 export const CategoryPage = () => {
   const closed = isClosed({
     start: appConfig.workingHours[0],
     end: appConfig.workingHours[1],
   });
+  const { categorySlug } = useParams();
 
-  const { products, categories, wishlists } =
-    useLoaderData() as CategoryPageLoaderData;
-  const { cart, cities } = useRouteLoaderData(
-    "layout"
-  ) as LayoutRouteLoaderData;
+  const [searchParams] = useSearchParams();
+  const limit = searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
+  const q = searchParams.get("q");
+  const sort = searchParams.get("sort") as SortKey;
+
+  const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
+  const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
+  const { data: categories, isLoading: isCategoriesLoading } = useQuery(
+    categoriesQuery()
+  );
+  const { data: wishlist, isLoading: isWishlistLoading } =
+    useQuery(wishlistsQuery);
+  const { data: products, isLoading: isProductsLoading } = useQuery(
+    productsQuery({
+      category_slug: q || !categorySlug ? "menu" : categorySlug,
+      search: q,
+      sort: sort,
+      offset: 0,
+      limit: +limit,
+    })
+  );
 
   return (
     <Container>
       {false && <Banner />}
-      <MenuLayout>
-        <Suspense fallback={<ProductsGrid loading />}>
-          <AwaitAll
-            cities={cities}
-            cart={cart}
-            categories={categories}
-            products={products}
-            wishlists={wishlists}
-          >
-            {({ categories, cart, products }) => (
-              <PublishedCategories categories={categories.data}>
-                {({ categories }) => (
-                  <AwaitedProducts
-                    products={products}
-                    cart={cart}
-                    categories={categories}
-                  />
-                )}
-              </PublishedCategories>
+      <MenuLayout categories={categories}>
+        {isWishlistLoading ||
+        isCartLoading ||
+        isProductsLoading ||
+        isCategoriesLoading ||
+        isCitiesLoading ? (
+          <ProductsGrid loading />
+        ) : (
+          <PublishedCategories categories={categories.data}>
+            {({ categories }) => (
+              <AwaitedProducts
+                products={products}
+                cart={cart}
+                categories={categories}
+              />
             )}
-          </AwaitAll>
-        </Suspense>
+          </PublishedCategories>
+        )}
       </MenuLayout>
 
       <RestaurantClosed open={closed} />
@@ -136,44 +143,6 @@ export const Component = CategoryPage;
 Object.assign(Component, {
   displayName: "LazyCategoryPage",
 });
-
-export const querifiedLoader = (queryClient: QueryClient) => {
-  return ({ params, request }) => {
-    const url = new URL(request.url);
-    const limit = url.searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
-    const q = url.searchParams.get("q");
-    const sort = url.searchParams.get("sort") as SortKey;
-    const productQuery = productsQuery({
-      category_slug: q || !params.categorySlug ? "menu" : params.categorySlug,
-      search: q,
-      sort: sort,
-      offset: 0,
-      limit: +limit,
-    });
-    const query = categoriesQuery();
-
-    const categories =
-      queryClient.getQueryData(query.queryKey) ?? queryClient.fetchQuery(query);
-
-    const products =
-      queryClient.getQueryData(productQuery.queryKey) ??
-      queryClient.fetchQuery(productQuery);
-
-    const wishlists =
-      queryClient.getQueryData(wishlistsQuery.queryKey) ??
-      queryClient.fetchQuery(wishlistsQuery);
-
-    return defer({
-      categories,
-      products,
-      wishlists,
-      q,
-      sort,
-    });
-  };
-};
-
-export const loader = querifiedLoader(queryClient);
 
 // todo: duplicated code, the same action is defined on the Wishlist page
 export const categoryAction = async ({ request }) => {

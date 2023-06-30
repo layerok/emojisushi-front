@@ -15,6 +15,8 @@ import { useTranslation } from "react-i18next";
 import { NavLink, useParams } from "react-router-dom";
 import { ICity } from "~api/types";
 import { HightlightText } from "~components";
+import { useQuery } from "react-query";
+import { spotQuery } from "~domains/spot/queries/spot.query";
 
 type MobMenuModalProps = {
   children: ReactElement;
@@ -31,6 +33,7 @@ export const MobMenuModal = ({ children, cities = [] }: MobMenuModalProps) => {
   };
   const { t } = useTranslation();
   const { lang, spotSlug, citySlug } = useParams();
+  const { data: spot, isLoading } = useQuery(spotQuery(spotSlug));
   return (
     <BaseModal
       overlayStyles={overlayStyles}
@@ -57,9 +60,11 @@ export const MobMenuModal = ({ children, cities = [] }: MobMenuModalProps) => {
             </AuthModal>
           </S.Item>
           <S.Item>
-            <ContactsModal>
-              <div>{t("mobMenuModal.contacts")}</div>
-            </ContactsModal>
+            {!isLoading && (
+              <ContactsModal spot={spot}>
+                <div>{t("mobMenuModal.contacts")}</div>
+              </ContactsModal>
+            )}
           </S.Item>
           <S.Item>
             <NavLink

@@ -1,10 +1,5 @@
 import { useDebounce } from "src/common/hooks";
-import {
-  Form,
-  useLoaderData,
-  useSearchParams,
-  useSubmit,
-} from "react-router-dom";
+import { Form, useSearchParams, useSubmit } from "react-router-dom";
 import { SearchInput } from "~components/SearchInput";
 
 type TSearchProps = {
@@ -14,10 +9,9 @@ type TSearchProps = {
 export const Search = ({ loading = false }: TSearchProps) => {
   // todo:  search value is not cleared after navigating to another category
   const submit = useSubmit();
-  const { q } = useLoaderData() as {
-    q: string | undefined;
-  };
+
   const [searchParams] = useSearchParams();
+  const q = searchParams.get("q");
 
   const debouncedFetch = useDebounce((form) => {
     const isFirstSearch = q == null;
