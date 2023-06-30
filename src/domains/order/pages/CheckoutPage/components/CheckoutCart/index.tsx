@@ -6,9 +6,17 @@ import { CheckoutCartItem } from "./components/CheckoutCartItem";
 import Skeleton from "react-loading-skeleton";
 import { dummyCartProduct } from "~domains/order/mocks";
 
-type CheckoutCartProps = { cart?: IGetCartRes; loading?: boolean };
+type CheckoutCartProps = {
+  cart?: IGetCartRes;
+  loading?: boolean;
+  onEmpty?: () => void;
+};
 
-export const CheckoutCart = ({ cart, loading = false }: CheckoutCartProps) => {
+export const CheckoutCart = ({
+  cart,
+  loading = false,
+  onEmpty,
+}: CheckoutCartProps) => {
   const items = loading
     ? [new CartProduct(dummyCartProduct), new CartProduct(dummyCartProduct)]
     : (cart?.data || []).map((json) => new CartProduct(json));
@@ -28,7 +36,7 @@ export const CheckoutCart = ({ cart, loading = false }: CheckoutCartProps) => {
       </S.Items>
 
       {cart && (
-        <CartModal cart={cart}>
+        <CartModal onEmpty={onEmpty} cart={cart}>
           <S.EditButton>
             {loading ? <Skeleton /> : <EditCartButton />}
           </S.EditButton>

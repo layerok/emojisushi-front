@@ -29,7 +29,13 @@ import { cartApi } from "~api";
 import { formatUAHPrice } from "~utils/price.utils";
 import { arrImmutableDeleteAt, arrImmutableReplaceAt } from "~utils/arr.utils";
 
-const CartItem = ({ item }: { item: CartProduct }) => {
+const CartItem = ({
+  item,
+  onDelete,
+}: {
+  item: CartProduct;
+  onDelete: (item: CartProduct) => void;
+}) => {
   const key = useRef(0);
   const newPrice = item.product.getNewPrice(item.variant)?.price_formatted;
   const oldPrice = item.product.getOldPrice(item.variant)?.price_formatted;
@@ -59,7 +65,6 @@ const CartItem = ({ item }: { item: CartProduct }) => {
         const cartProduct = old.data.find(
           (cartProduct) => cartProduct.product.id === item.product.id
         );
-        console.log("cart product", cartProduct);
 
         if (cartProduct) {
           const index = old.data.indexOf(cartProduct);
@@ -88,6 +93,7 @@ const CartItem = ({ item }: { item: CartProduct }) => {
               total: formatUAHPrice(optimisticTotal),
             };
           } else {
+            onDelete(item);
             const optimisticCartProducts = arrImmutableDeleteAt(
               old.data,
               index
@@ -188,9 +194,11 @@ const CartItem = ({ item }: { item: CartProduct }) => {
 export const CartModal = ({
   children,
   cart,
+  onEmpty,
 }: {
   cart: IGetCartRes;
   children: ReactElement;
+  onEmpty?: () => void;
 }) => {
   const navigate = useNavigate();
 
@@ -248,7 +256,15 @@ export const CartModal = ({
               }}
             >
               {items.map((item, i) => (
-                <CartItem key={item.id} item={item} />
+                <CartItem
+                  onDelete={() => {
+                    if (items.length === 1) {
+                      onEmpty?.();
+                    }
+                  }}
+                  key={item.id}
+                  item={item}
+                />
               ))}
             </div>
           </S.Items>

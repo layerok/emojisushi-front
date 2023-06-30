@@ -1,37 +1,21 @@
 import { Container, Heading } from "~components";
 import { CheckoutForm, CheckoutCart } from "./components";
-import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { cartQuery, paymentQuery, shippingQuery } from "~queries";
 import * as S from "./styled";
 import { useQuery } from "@tanstack/react-query";
-import { authApi } from "~api";
+import { useUser } from "~hooks/use-auth";
+import { useNavigate, useParams } from "react-router-dom";
 
 const CheckoutPage = () => {
   const { t } = useTranslation();
-  const { lang, citySlug, spotSlug } = useParams();
-  const navigate = useNavigate();
 
-  const { data: user, isLoading: isUserLoading } = useQuery({
-    queryFn: () => {
-      return authApi
-        .fetchUser()
-        .then((res) => res.data)
-        .catch((e) => {
-          // // 406 simply means that user is not authorzied, no need to throw error in this case
-          if (![406].includes(e?.response.status)) {
-            throw e;
-          }
-          return null;
-        });
-    },
-    queryKey: ["user"],
-  });
+  const { data: user, isLoading: isUserLoading } = useUser();
 
   const { data: cart, isLoading: isCartLoading } = useQuery({
     ...cartQuery,
-    onSuccess: (data) => {
-      if (data.data.length < 1) {
+    onSuccess: (res) => {
+      if (res.data.length < 1) {
         navigate("/" + [lang, citySlug, spotSlug].join("/"));
       }
     },
@@ -40,6 +24,9 @@ const CheckoutPage = () => {
     useQuery(shippingQuery);
   const { data: paymentMethods, isLoading: isPaymentMethodsLoading } =
     useQuery(paymentQuery);
+
+  const { lang, citySlug, spotSlug } = useParams();
+  const navigate = useNavigate();
 
   return (
     <Container>
@@ -64,7 +51,12 @@ const CheckoutPage = () => {
         {isCartLoading ? (
           <CheckoutCart loading={true} />
         ) : (
-          <CheckoutCart cart={cart} />
+          <CheckoutCart
+            cart={cart}
+            onEmpty={() => {
+              navigate("/" + [lang, citySlug, spotSlug].join("/"));
+            }}
+          />
         )}
       </S.Container>
     </Container>
