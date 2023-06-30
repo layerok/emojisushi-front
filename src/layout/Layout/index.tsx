@@ -4,10 +4,8 @@ import * as S from "./styled";
 import { useWindowScroll } from "react-use";
 import { StickyToTopBtn, Sticky, TinyCartButton, CartModal } from "~components";
 import { ReactNode } from "react";
-import { ActionFunctionArgs, Outlet, useParams } from "react-router-dom";
-import { queryClient } from "~query-client";
+import { Outlet, useParams } from "react-router-dom";
 import { cartQuery } from "~queries";
-import { cartApi } from "~api";
 import { CartProduct } from "~models";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
 import { IUser, IGetCartRes, IGetCitiesRes, ICity, ISpot } from "~api/types";
@@ -61,46 +59,6 @@ export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
       <StickyToTopBtn />
     </S.Layout>
   );
-};
-
-// todo: figure out how to not refetch user after modifying cart products
-
-const updateCartProduct = async ({ formData }: { formData: FormData }) => {
-  const product_id = formData.get("product_id");
-  const variant_id = formData.get("variant_id");
-  const quantity = formData.get("quantity");
-
-  const res = await cartApi.addProduct({
-    product_id,
-    quantity,
-    variant_id,
-  });
-
-  await queryClient.setQueryData(cartQuery.queryKey, res.data);
-  return res.data;
-};
-
-const deleteCartProduct = async ({ formData }: { formData: FormData }) => {
-  const cart_product_id = formData.get("cart_product_id");
-  const res = await cartApi.removeCartProduct(cart_product_id);
-  queryClient.setQueryData(cartQuery.queryKey, res.data);
-  return res.data;
-};
-
-export const action = async ({ request, params }: ActionFunctionArgs) => {
-  let formData = await request.formData();
-  const type = formData.get("type");
-  if (request.method === "POST") {
-    return updateCartProduct({ formData });
-  } else if (request.method === "DELETE") {
-    return deleteCartProduct({ formData });
-  }
-};
-
-export const shouldRevalidate = ({ currentParams, nextParams }) => {
-  if (currentParams.lang !== nextParams.lang) {
-    return false;
-  }
 };
 
 export const Component = Layout;

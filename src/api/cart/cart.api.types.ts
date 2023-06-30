@@ -7,6 +7,8 @@ export type ICartProduct = {
   variant?: IVariant;
   product_id: number;
   variant_id?: number;
+  price: Record<string, number>;
+  price_formatted: null | string;
 };
 
 export type IGetCartRes = {

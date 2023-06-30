@@ -5,12 +5,14 @@ type AddToCartButtonProps = {
   loading: boolean;
   count: number;
   handleAdd: (count: number) => void;
+  submitting: boolean;
 };
 
 export const AddToCartButton = ({
   count,
   handleAdd,
   loading = false,
+  submitting = false,
 }: AddToCartButtonProps) => {
   const { t } = useTranslation();
 
@@ -30,6 +32,7 @@ export const AddToCartButton = ({
   return (
     <ButtonOutline
       loading={loading}
+      submitting={submitting}
       onClick={() => {
         handleAdd(1);
       }}

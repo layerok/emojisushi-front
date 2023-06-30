@@ -69,13 +69,13 @@ const SignUpForm = ({ setShowSignUp }) => {
   const [checked, setChecked] = useState(false);
   const register = useRegister();
   const navigate = useNavigate();
-  const [errors, setErrors] = useState({
-    name: "",
-    surname: "",
-    email: "",
-    password: "",
-    agree: "",
-  });
+  const [errors, setErrors] = useState<{
+    email?: string[];
+    password?: string[];
+    name?: string[];
+    surname?: string[];
+    agree?: string[];
+  }>({});
 
   return (
     <S.SignUpForm
@@ -90,13 +90,7 @@ const SignUpForm = ({ setShowSignUp }) => {
         const agree = !!formData.get("agree");
         const spot_slug_or_id = spotSlug;
 
-        setErrors({
-          name: "",
-          surname: "",
-          email: "",
-          password: "",
-          agree: "",
-        });
+        setErrors({});
 
         register.mutate(
           {
@@ -267,10 +261,10 @@ const LoginForm = ({
 
   const login = useLogin();
   const navigate = useNavigate();
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-  });
+  const [errors, setErrors] = useState<{
+    email?: string[];
+    password?: string[];
+  }>({});
 
   return (
     <S.LoginForm
@@ -281,10 +275,7 @@ const LoginForm = ({
         const password = formData.get("password") as string | null;
         const default_redirect_to =
           "/" + [lang, citySlug, spotSlug, "account", "profile"].join("/");
-        setErrors({
-          email: "",
-          password: "",
-        });
+        setErrors({});
         login.mutate(
           {
             email,
@@ -298,7 +289,14 @@ const LoginForm = ({
             },
             onError: (error) => {
               if (error instanceof AxiosError) {
-                setErrors(error.response.data.errors);
+                // todo: unify the error response
+                if (!error.response.data.errors) {
+                  setErrors({
+                    email: [error.response.data.message],
+                  });
+                } else {
+                  setErrors(error.response.data.errors);
+                }
               }
             },
           }

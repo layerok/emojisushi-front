@@ -1,7 +1,7 @@
 import * as S from "./styled";
 import { EqualHeightElement } from "react-equal-height";
 import { useMemo, useState } from "react";
-import { CartProduct, Product } from "~models";
+import { CartProduct, Product, Variant } from "~models";
 import {
   Image,
   Weight,
@@ -14,9 +14,14 @@ import { TProductCardProps } from "./types";
 import { findInCart } from "./utils";
 import { useAsyncValues } from "~components/AwaitAll";
 import { Price } from "~components/Price";
-import { useFetcher, useParams } from "react-router-dom";
 import { AddToCartButton } from "~components/buttons";
-import { UpdateCartProductFormDataPayload } from "~domains/product/types";
+import { useMutation } from "@tanstack/react-query";
+import { cartApi } from "~api";
+import { queryClient } from "~query-client";
+import { cartQuery } from "~queries";
+import { ICartProduct, IGetCartRes } from "~api/types";
+import { formatUAHPrice } from "~utils/price.utils";
+import { arrImmutableReplaceAt, arrImmutableDeleteAt } from "~utils/arr.utils";
 
 export const ProductCard = ({
   product,
@@ -53,35 +58,114 @@ export const ProductCard = ({
   const oldPrice = product?.getOldPrice(variant)?.price_formatted;
   const newPrice = product?.getNewPrice(variant)?.price_formatted;
 
-  const fetcher = useFetcher();
-
-  const { lang, spotSlug, citySlug } = useParams();
-
-  let count = cartProduct?.quantity || 0;
-
-  if (fetcher.formData) {
-    count = +fetcher.formData.get("count");
-  }
-
-  const handleAdd = () => {
-    return async (quantity: number) => {
-      const params: UpdateCartProductFormDataPayload = {
-        product_id: product.id + "",
-        quantity: quantity + "",
-        count: `${count + quantity}`,
-        price: product.getNewPrice(variant).price + "",
-      };
-      if (variant) {
-        params.variant_id = variant.id + "";
-      }
-      if (cartProduct) {
-        params.cart_product_id = cartProduct.id + "";
-      }
-      fetcher.submit(params, {
-        action: "/" + [lang, citySlug, spotSlug].join("/"),
-        method: "post",
+  const mutation = useMutation({
+    mutationFn: ({
+      product,
+      quantity,
+      variant,
+    }: {
+      product: Product;
+      quantity: number;
+      variant?: Variant;
+    }) => {
+      return cartApi.addProduct({
+        product_id: product.id,
+        quantity,
+        variant_id: variant?.id,
       });
-    };
+    },
+    onMutate: async ({ product, variant, quantity }) => {
+      await queryClient.cancelQueries(cartQuery);
+
+      const previousCart = queryClient.getQueryData(cartQuery.queryKey);
+
+      queryClient.setQueryData(cartQuery.queryKey, (old: IGetCartRes) => {
+        const cartProduct = old.data.find(
+          (cartProduct) =>
+            cartProduct.product.id === product.id &&
+            (!variant || variant.id === cartProduct.variant.id)
+        );
+
+        if (cartProduct) {
+          const index = old.data.indexOf(cartProduct);
+          const optimisticQuantity = cartProduct.quantity + quantity;
+
+          if (optimisticQuantity > 0) {
+            const optimisticCartProduct = {
+              ...cartProduct,
+              quantity: cartProduct.quantity + quantity,
+            };
+            const optimisticCartProducts = arrImmutableReplaceAt(
+              old.data,
+              index,
+              optimisticCartProduct
+            );
+            const optimisticTotal = optimisticCartProducts.reduce(
+              (acc, cartProduct: ICartProduct) => {
+                return acc + cartProduct.quantity * cartProduct.price.UAH;
+              },
+              0
+            );
+
+            return {
+              ...old,
+              data: optimisticCartProducts,
+              total: formatUAHPrice(optimisticTotal),
+            };
+          } else {
+            const optimisticCartProducts = arrImmutableDeleteAt(
+              old.data,
+              index
+            );
+            const optimisticTotal = optimisticCartProducts.reduce(
+              (acc, cartProduct: ICartProduct) => {
+                return acc + cartProduct.quantity * cartProduct.price.UAH;
+              },
+              0
+            );
+
+            return {
+              ...old,
+              data: optimisticCartProducts,
+              total: formatUAHPrice(optimisticTotal),
+            };
+          }
+        }
+
+        const optimisticCartProduct = {
+          product: product.json,
+          product_id: product.id,
+          variant: variant,
+          variant_id: variant?.id,
+          quantity: quantity,
+          weight: product.weight,
+          price: {
+            UAH: product.getNewPrice(variant).price,
+          },
+        };
+
+        return {
+          ...old,
+          data: [...old.data, optimisticCartProduct],
+          total: formatUAHPrice(optimisticCartProduct.price.UAH),
+        };
+      });
+
+      return {
+        previousCart,
+      };
+    },
+    onError: (err, newCartProduct, context) => {
+      queryClient.setQueryData(cartQuery.queryKey, context.previousCart);
+    },
+  });
+
+  const handleAdd = async (quantity: number) => {
+    mutation.mutate({
+      variant: variant,
+      product: product,
+      quantity: quantity,
+    });
   };
 
   return (
@@ -113,9 +197,10 @@ export const ProductCard = ({
       <S.Footer>
         <Price loading={loading} oldPrice={oldPrice} newPrice={newPrice} />
         <AddToCartButton
+          submitting={false}
           loading={loading}
-          count={count}
-          handleAdd={handleAdd()}
+          count={cartProduct?.quantity || 0}
+          handleAdd={handleAdd}
         />
       </S.Footer>
     </S.Wrapper>

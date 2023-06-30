@@ -1,17 +1,14 @@
 import { Container, Heading, If } from "~components";
 import * as S from "./styled";
 import { useTranslation } from "react-i18next";
-import { useRouteLoaderData } from "react-router-dom";
-import { ICity, ISpot } from "~api/types";
-
-type DeliverPageLoaderData = {
-  spot: ISpot;
-  city: ICity;
-};
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { spotQuery } from "~domains/spot/queries/spot.query";
 
 export const DeliveryPage = () => {
   const { t } = useTranslation();
-  const { spot } = useRouteLoaderData("layout") as DeliverPageLoaderData;
+  const { spotSlug } = useParams();
+  const { data: spot } = useQuery(spotQuery(spotSlug));
 
   return (
     <Container>

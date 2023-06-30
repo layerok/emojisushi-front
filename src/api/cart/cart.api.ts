@@ -11,7 +11,11 @@ const getCartProducts = (params = {}) => {
     .then((res) => res.data);
 };
 
-function addCartProduct(data = {}) {
+function addCartProduct(data: {
+  product_id: number;
+  variant_id?: number;
+  quantity: number;
+}) {
   return client.post<{
     data: ICartProduct[];
     total: string;

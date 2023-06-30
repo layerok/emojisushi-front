@@ -17,84 +17,121 @@ import {
 
 import { ReactElement, useRef, useState } from "react";
 import { useBreakpoint2 } from "~common/hooks";
-import { useFetcher, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CartProduct } from "~models";
 import { useDeletingCartProducts } from "~hooks/use-layout-fetchers";
-import {
-  DeleteCartProductFormDataPayload,
-  UpdateCartProductFormDataPayload,
-} from "~domains/product/types";
-import { IGetCartRes } from "~api/types";
+import { ICartProduct, IGetCartRes } from "~api/types";
+import { queryClient } from "~query-client";
+import { cartQuery } from "~queries";
+import { useMutation } from "@tanstack/react-query";
+import { cartApi } from "~api";
+import { formatUAHPrice } from "~utils/price.utils";
+import { arrImmutableDeleteAt, arrImmutableReplaceAt } from "~utils/arr.utils";
 
 const CartItem = ({ item }: { item: CartProduct }) => {
-  const fetcher = useFetcher();
   const key = useRef(0);
   const newPrice = item.product.getNewPrice(item.variant)?.price_formatted;
   const oldPrice = item.product.getOldPrice(item.variant)?.price_formatted;
   const nameWithMods = item.nameWithMods;
-  const { lang, spotSlug, citySlug } = useParams();
-  const isDeleting = useDeletingCartProducts().includes(item.id);
   const [open, setOpen] = useState(false);
-  let count = item.quantity;
 
-  if (fetcher.formData) {
-    count = +fetcher.formData.get("count");
-  }
+  const updateCartProduct = useMutation({
+    mutationFn: ({
+      item,
+      quantity,
+    }: {
+      item: CartProduct;
+      quantity: number;
+    }) => {
+      return cartApi.addProduct({
+        product_id: item.product.id,
+        quantity,
+        variant_id: item?.variant?.id,
+      });
+    },
+    onMutate: async ({ item, quantity }) => {
+      await queryClient.cancelQueries(cartQuery);
 
-  const deleteCartItem = () => {
-    const params: DeleteCartProductFormDataPayload = {
-      cart_product_id: item.id + "",
-    };
-    fetcher.submit(params, {
-      action: "/" + [lang, citySlug, spotSlug].join("/"),
-      method: "delete",
-    });
-  };
+      const previousCart = queryClient.getQueryData(cartQuery.queryKey);
 
-  const updateCartItem = ({
-    item,
-    quantity,
-  }: {
-    item: CartProduct;
-    quantity: number;
-  }) => {
-    const params: UpdateCartProductFormDataPayload = {
-      product_id: item.product.id + "",
-      quantity: quantity + "",
-      count: `${count + quantity}`,
-      price: item.product.getNewPrice(item.variant).price + "",
-      cart_product_id: item.id + "",
-    };
+      queryClient.setQueryData(cartQuery.queryKey, (old: IGetCartRes) => {
+        const cartProduct = old.data.find(
+          (cartProduct) => cartProduct.product.id === item.product.id
+        );
+        console.log("cart product", cartProduct);
 
-    if (item.variant) {
-      params.variant_id = item.variant.id + "";
+        if (cartProduct) {
+          const index = old.data.indexOf(cartProduct);
+          const optimisticQuantity = cartProduct.quantity + quantity;
+
+          if (optimisticQuantity > 0) {
+            const optimisticCartProduct = {
+              ...cartProduct,
+              quantity: cartProduct.quantity + quantity,
+            };
+            const optimisticCartProducts = arrImmutableReplaceAt(
+              old.data,
+              index,
+              optimisticCartProduct
+            );
+            const optimisticTotal = optimisticCartProducts.reduce(
+              (acc, cartProduct: ICartProduct) => {
+                return acc + cartProduct.quantity * cartProduct.price.UAH;
+              },
+              0
+            );
+
+            return {
+              ...old,
+              data: optimisticCartProducts,
+              total: formatUAHPrice(optimisticTotal),
+            };
+          } else {
+            const optimisticCartProducts = arrImmutableDeleteAt(
+              old.data,
+              index
+            );
+            const optimisticTotal = optimisticCartProducts.reduce(
+              (acc, cartProduct: ICartProduct) => {
+                return acc + cartProduct.quantity * cartProduct.price.UAH;
+              },
+              0
+            );
+
+            return {
+              ...old,
+              data: optimisticCartProducts,
+              total: formatUAHPrice(optimisticTotal),
+            };
+          }
+        }
+
+        return old;
+      });
+
+      return {
+        previousCart,
+      };
+    },
+    onError: (err, data, context) => {
+      queryClient.setQueryData(cartQuery.queryKey, context.previousCart);
+    },
+  });
+
+  const changeCartItemQuantity = async (item: CartProduct, quantity) => {
+    if (item.quantity + quantity <= 0) {
+      key.current++;
+      setOpen(true);
+    } else {
+      updateCartProduct.mutate({
+        item: item,
+        quantity: quantity,
+      });
     }
-
-    fetcher.submit(params, {
-      action: `/${lang}/${citySlug}/${spotSlug}`,
-      method: "post",
-    });
   };
 
-  const handleAdd = (item: CartProduct) => {
-    return async (quantity) => {
-      if (count + quantity <= 0) {
-        key.current++;
-        setOpen(true);
-      } else {
-        updateCartItem({
-          item: item,
-          quantity,
-        });
-      }
-    };
-  };
   const { t } = useTranslation();
-
-  if (isDeleting) {
-    return null;
-  }
 
   return (
     <S.Item>
@@ -104,7 +141,10 @@ const CartItem = ({ item }: { item: CartProduct }) => {
           key={key.current}
           initiallyOpen={open}
           onConfirm={({ close }) => {
-            deleteCartItem();
+            updateCartProduct.mutate({
+              item: item,
+              quantity: -item.quantity,
+            });
             setOpen(false);
             close();
           }}
@@ -130,12 +170,12 @@ const CartItem = ({ item }: { item: CartProduct }) => {
           <S.Item.Counter>
             <LightCounter
               handleIncrement={() => {
-                handleAdd(item)(1);
+                changeCartItemQuantity(item, 1);
               }}
               handleDecrement={() => {
-                handleAdd(item)(-1);
+                changeCartItemQuantity(item, -1);
               }}
-              count={count}
+              count={item.quantity}
             />
           </S.Item.Counter>
           <Price newPrice={newPrice} oldPrice={oldPrice} />
@@ -156,7 +196,7 @@ export const CartModal = ({
 
   const { lang, spotSlug, citySlug } = useParams();
 
-  const { data, total } = cart;
+  const { data } = cart;
 
   const { isMobile } = useBreakpoint2();
   const deletingCartProducts = useDeletingCartProducts();
