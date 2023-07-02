@@ -1,48 +1,76 @@
 import { FlexBox, Input, ButtonDark, ButtonOutline } from "src/components";
-import {
-  ActionFunctionArgs,
-  Form,
-  redirect,
-  useActionData,
-  useNavigate,
-  useNavigation,
-} from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { authApi } from "~api";
 import { AxiosError } from "axios";
 import { useUser } from "~hooks/use-auth";
-
-type ActionData =
-  | {
-      errors?: Record<string, string[]>;
-    }
-  | undefined;
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+import { queryClient } from "~query-client";
 
 export const EditProfilePage = () => {
   const { t } = useTranslation();
-  const navigation = useNavigation();
-  const actionData = useActionData() as ActionData;
   const navigate = useNavigate();
-  const { data: user, isLoading: isUserLoading, error: userError } = useUser();
+  const { data: user } = useUser();
+  const [errors, setErrors] = useState<{
+    name?: string[];
+    surname?: string[];
+    phone?: string[];
+  }>({});
 
-  if (isUserLoading) {
-    return <div>Loading...</div>;
-  }
-  if (userError) {
-    return <div>{JSON.stringify(userError, null, 2)}</div>;
-  }
-
-  if (!user) {
-    return <div>Not logged in</div>;
-  }
+  const mutation = useMutation({
+    mutationFn: ({
+      name,
+      surname,
+      phone,
+    }: {
+      name: string;
+      surname: string;
+      phone: string;
+    }) => {
+      return authApi.updateUser({
+        name,
+        surname,
+        phone,
+      });
+    },
+    onError: (e) => {
+      if (e instanceof AxiosError) {
+        if (e.response.status === 422) {
+          setErrors(e.response.data.errors);
+        }
+      }
+    },
+    onSuccess: (res) => {
+      queryClient.setQueryData(["authenticated-user"], res.data);
+      navigate("./../");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(["authenticated-user"]);
+    },
+  });
 
   return (
-    <Form
+    <form
       style={{
         marginTop: 20,
       }}
       method="post"
+      onSubmit={(e) => {
+        e.preventDefault();
+        setErrors({});
+
+        const formData = new FormData(e.currentTarget);
+        const name = formData.get("name");
+        const surname = formData.get("surname");
+        const phone = formData.get("phone");
+
+        mutation.mutate({
+          name: name + "",
+          surname: surname + "",
+          phone: phone + "",
+        });
+      }}
     >
       <FlexBox justifyContent={"space-between"}>
         <Input
@@ -50,14 +78,14 @@ export const EditProfilePage = () => {
           label={t("common.first_name")}
           defaultValue={user.name}
           name="name"
-          error={actionData?.errors?.name?.[0]}
+          error={errors?.name?.[0]}
         />
         <Input
           style={{ width: "calc(50% - 10px)" }}
           label={t("common.last_name")}
           defaultValue={user.surname}
           name="surname"
-          error={actionData?.errors?.surname?.[0]}
+          error={errors?.surname?.[0]}
         />
       </FlexBox>
       <FlexBox
@@ -77,7 +105,7 @@ export const EditProfilePage = () => {
           style={{ width: "calc(50% - 10px)" }}
           label={t("common.phone")}
           defaultValue={user.phone}
-          error={actionData?.errors?.phone?.[0]}
+          error={errors?.phone?.[0]}
           name="phone"
         />
       </FlexBox>
@@ -88,7 +116,7 @@ export const EditProfilePage = () => {
         }}
       >
         <ButtonOutline
-          submitting={navigation.state === "submitting"}
+          submitting={mutation.isLoading}
           style={{
             marginRight: "16px",
           }}
@@ -99,7 +127,7 @@ export const EditProfilePage = () => {
           {t("common.cancel")}
         </ButtonDark>
       </FlexBox>
-    </Form>
+    </form>
   );
 };
 
@@ -107,30 +135,3 @@ export const Component = EditProfilePage;
 Object.assign(Component, {
   displayName: "LazyEditProfilePage",
 });
-
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData();
-  const name = formData.get("name");
-  const surname = formData.get("surname");
-  const phone = formData.get("phone");
-  const data = {
-    name: name + "",
-    surname: surname + "",
-    phone: phone + "",
-  };
-
-  try {
-    await authApi.updateUser(data);
-  } catch (e) {
-    if (e instanceof AxiosError) {
-      if (e.response.status === 422) {
-        return {
-          errors: e.response.data.errors,
-        };
-      }
-    }
-    throw e;
-  }
-
-  return redirect("./../");
-};
