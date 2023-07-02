@@ -4,24 +4,10 @@ import { ButtonOutline, PasswordInput } from "~components";
 import { authApi } from "~api";
 import { transaction } from "mobx";
 import { useTranslation } from "react-i18next";
-import {
-  ActionFunctionArgs,
-  Form,
-  useActionData,
-  useNavigation,
-} from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { Form } from "react-router-dom";
+import { useRef, useState } from "react";
 import { AxiosError } from "axios";
-import { useUser } from "~hooks/use-auth";
-
-type UpdatePasswordPageActionData = {
-  ok?: boolean;
-  errors?: {
-    password: string[];
-    password_old: string[];
-    password_confirmation: string[];
-  };
-};
+import { useMutation } from "@tanstack/react-query";
 
 const getError = (error: string | string[] | undefined) => {
   if (Array.isArray(error)) {
@@ -32,65 +18,83 @@ const getError = (error: string | string[] | undefined) => {
 
 export const UpdatePasswordPage = observer(() => {
   const { t } = useTranslation();
-  const actionData = useActionData() as UpdatePasswordPageActionData;
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const intervalId = useRef(null);
+  const [errors, setErrors] = useState<{
+    password?: string[] | string;
+    password_confirmation?: string[] | string;
+    password_old?: string[] | string;
+  }>({});
 
-  useEffect(() => {
-    if (actionData?.ok) {
+  const mutation = useMutation({
+    mutationFn: ({
+      password,
+      password_confirmation,
+      password_old,
+    }: {
+      password: string;
+      password_confirmation: string;
+      password_old: string;
+    }) => {
+      return authApi.updateUserPassword({
+        password: password + "",
+        password_confirmation: password_confirmation + "",
+        password_old: password_old + "",
+      });
+    },
+    onError: (e) => {
+      if (e instanceof AxiosError && e.response?.status === 422) {
+        setErrors(e.response.data.errors);
+      }
+    },
+    onSuccess: () => {
       setShowSuccessMessage(true);
       intervalId.current = setTimeout(() => {
         setShowSuccessMessage(false);
       }, 5000);
-    }
-  }, [actionData]);
-
-  const navigation = useNavigation();
-
-  const { data: user, isLoading: isUserLoading, error: userError } = useUser();
-
-  if (isUserLoading) {
-    return <div>Loading...</div>;
-  }
-  if (userError) {
-    return <div>{JSON.stringify(userError, null, 2)}</div>;
-  }
-
-  if (!user) {
-    return <div>Not logged in</div>;
-  }
+    },
+  });
 
   return (
     <>
       <S.Container>
         <Form
           method="post"
-          onSubmit={() => {
+          onSubmit={(e) => {
+            e.preventDefault();
             transaction(() => {
               intervalId.current = null;
               setShowSuccessMessage(false);
+            });
+            const formData = new FormData(e.currentTarget);
+            const password = formData.get("password") + "";
+            const password_old = formData.get("password_old") + "";
+            const password_confirmation =
+              formData.get("password_confirmation") + "";
+
+            mutation.mutate({
+              password,
+              password_confirmation,
+              password_old,
             });
           }}
         >
           <S.Text>{t("common.oldPassword")}</S.Text>
           <PasswordInput
             name="password_old"
-            error={getError(actionData?.errors?.password_old)}
+            error={getError(errors?.password_old)}
           />
           <S.Text>{t("common.newPassword")}</S.Text>
-          <PasswordInput
-            name="password"
-            error={getError(actionData?.errors?.password)}
-          />
+          <PasswordInput name="password" error={getError(errors?.password)} />
           <S.Text>{t("common.confirmPassword")}</S.Text>
           <PasswordInput
             name="password_confirmation"
-            error={getError(actionData?.errors?.password_confirmation)}
+            error={getError(errors?.password_confirmation)}
           />
           <S.ButtonWrapper>
             <ButtonOutline
               type="submit"
-              submitting={navigation.state === "submitting"}
+              submitting={mutation.isLoading}
               width={"224px"}
             >
               {t("account.changePassword.btnText")}
@@ -112,31 +116,6 @@ export const UpdatePasswordPage = observer(() => {
     </>
   );
 });
-
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData();
-  const password = formData.get("password");
-  const password_old = formData.get("password_old");
-  const password_confirmation = formData.get("password_confirmation");
-
-  try {
-    await authApi.updateUserPassword({
-      password: password + "",
-      password_confirmation: password_confirmation + "",
-      password_old: password_old + "",
-    });
-  } catch (e) {
-    if (e instanceof AxiosError && e.response?.status === 422) {
-      return {
-        errors: e.response.data.errors,
-      };
-    }
-  }
-
-  return {
-    ok: true,
-  };
-};
 
 export const Component = UpdatePasswordPage;
 Object.assign(Component, {
