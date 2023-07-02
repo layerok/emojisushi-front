@@ -7,6 +7,8 @@ import { useUser } from "~hooks/use-auth";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { queryClient } from "~query-client";
+import { AUTHENTICATED_USER_QUERY_KEY } from "~common/constants";
+import { IUser } from "~api/types";
 
 export const EditProfilePage = () => {
   const { t } = useTranslation();
@@ -42,11 +44,19 @@ export const EditProfilePage = () => {
       }
     },
     onSuccess: (res) => {
-      queryClient.setQueryData(["authenticated-user"], res.data);
+      queryClient.setQueryData(
+        AUTHENTICATED_USER_QUERY_KEY,
+        (oldUser: IUser) => {
+          return {
+            ...oldUser,
+            ...res.data,
+          };
+        }
+      );
       navigate("./../");
     },
     onSettled: () => {
-      queryClient.invalidateQueries(["authenticated-user"]);
+      queryClient.invalidateQueries(AUTHENTICATED_USER_QUERY_KEY);
     },
   });
 

@@ -221,3 +221,5 @@ export type LoginResData = {
     token: string;
   };
 };
+
+export type IFetchUserResData = IUser;

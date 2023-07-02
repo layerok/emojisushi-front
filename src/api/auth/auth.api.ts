@@ -1,6 +1,10 @@
 import { client } from "~clients/client";
-import { AxiosResponse } from "axios";
-import { IUser, LoginResData, RegisterResData } from "./auth.api.types";
+import {
+  IAddress,
+  IFetchUserResData,
+  LoginResData,
+  RegisterResData,
+} from "./auth.api.types";
 
 export const authApi = {
   register(
@@ -53,11 +57,11 @@ export const authApi = {
     return client.post("user/password", data);
   },
 
-  fetchUser(): Promise<AxiosResponse<IUser>> {
+  fetchUser() {
     const config = {
       params: {},
     };
-    return client.get("user", config);
+    return client.get<IFetchUserResData>("user", config);
   },
 
   updateUser(data: { name?: string; surname?: string; phone?: string }) {
@@ -75,7 +79,7 @@ export const authApi = {
     city: string;
     two_letters_country_code?: string;
   }) {
-    return client.post("user/address", data);
+    return client.post<IAddress>("user/address", data);
   },
 
   deleteAddress(id: number) {
