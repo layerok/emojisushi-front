@@ -23,4 +23,21 @@ const ErrorBag = styled.ol`
   }
 `;
 
-export { Form, ErrorBag, Container };
+const Control = styled.div`
+  margin-top: 20px;
+`;
+
+const ButtonContainer = styled.div`
+  position: relative;
+`;
+
+const Button = styled.button`
+  color: rgb(255, 230, 0);
+  font-size: 10px;
+  right: 0;
+  top: calc(100% + 2px);
+  position: absolute;
+  cursor: pointer;
+`;
+
+export { Form, ErrorBag, Container, ButtonContainer, Button, Control };

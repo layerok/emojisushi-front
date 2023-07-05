@@ -28,21 +28,16 @@ export const Modificators = ({
             setModificators((state) => {
               return {
                 ...state,
-                [group.property.id]: option.id,
+                [group.property.id]: option.value,
               };
             });
           }}
           name={"modificator_" + group.property.id}
           options={group.property.options.map((option) => ({
-            id: +option.poster_id,
-            name: option.value,
+            value: +option.poster_id,
+            label: option.value,
           }))}
-          selected={(option) => {
-            if (!option) {
-              return false;
-            }
-            return +modificators[group.property.id] === option.id;
-          }}
+          value={+modificators[group.property.id]}
         />
       ))}
     </>

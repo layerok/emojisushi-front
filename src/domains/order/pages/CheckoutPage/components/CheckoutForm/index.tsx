@@ -1,16 +1,13 @@
-import * as S from "./styled";
-import { FlexBox, Input, ButtonOutline } from "~components";
+import { FlexBox, Input, ButtonOutline, Switcher, Dropdown } from "~components";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate, useParams, useRevalidator } from "react-router-dom";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
 import { CartProduct } from "~models";
-import { ShippingMethods } from "./components/ShippingMethods";
-import { PaymentMethods } from "./components/PaymentMethods";
 import { Login } from "./components/Login";
 import { Total } from "./components/Total";
-import * as SharedStyles from "./shared/styled";
+import * as S from "./styled";
 import {
   IGetCartRes,
   IGetPaymentMethodsRes,
@@ -90,8 +87,13 @@ export const CheckoutForm = ({
       const phone = values.phone;
       const email = values.email;
       const spot_id_or_slug = spotSlug;
-      const address = values.address;
-      const address_id = values.address_id;
+
+      const address = values.address_id
+        ? user.customer.addresses.find(
+            (address) => address.id === values.address_id
+          ).lines
+        : values.address;
+
       const payment_method_id = +values.payment_method_id;
       const shipping_method_id = +values.shipping_method_id;
       const change = values.change;
@@ -109,7 +111,6 @@ export const CheckoutForm = ({
           spot_id_or_slug,
 
           address,
-          address_id,
           payment_method_id,
           shipping_method_id,
 
@@ -133,18 +134,107 @@ export const CheckoutForm = ({
     },
   });
 
+  const addressDropdown = {
+    options: user?.customer.addresses.map((address) => ({
+      label: address.lines,
+      value: address.id,
+    })),
+    selectedAddress: (user?.customer.addresses || []).find(
+      (item) => item.id === +formik.values.address_id
+    ),
+  };
+
+  const [showAddressInput, setShowAddressInput] = useState(true);
+
+  const shippingMethodsSwitcher = {
+    options: (shippingMethods?.data || []).map((item) => ({
+      value: item.id,
+      label: t("shippingMethods." + item.code, item.name),
+    })),
+    selectedMethod: (shippingMethods?.data || []).find(
+      (item) => item.id === +formik.values.shipping_method_id
+    ),
+  };
+
+  const paymentMethodsSwitcher = {
+    options: (paymentMethods?.data || []).map((item) => ({
+      value: item.id,
+      label: t("paymentMethods." + item.code, item.name),
+    })),
+    selectedMethod: (paymentMethods?.data || []).find(
+      (item) => item.id === +formik.values.payment_method_id
+    ),
+  };
+
   return (
     <S.Container>
       <Login user={user} loading={loading} />
       <S.Form onSubmit={formik.handleSubmit}>
-        <ShippingMethods
-          user={user}
+        <Switcher
           loading={loading}
-          items={shippingMethods?.data || []}
-          formik={formik}
+          name={"shipping_method_id"}
+          options={shippingMethodsSwitcher.options}
+          value={+shippingMethodsSwitcher.selectedMethod?.id}
+          handleChange={({ e, index }) => {
+            formik.handleChange(e);
+          }}
         />
+        {shippingMethodsSwitcher.selectedMethod?.code === "courier" && (
+          <S.ButtonContainer>
+            {showAddressInput ? (
+              <S.Control>
+                <Input
+                  name={"address"}
+                  placeholder={t("checkout.form.address")}
+                  onChange={formik.handleChange}
+                  value={formik.values.address}
+                />
+              </S.Control>
+            ) : (
+              <S.Control>
+                <Dropdown
+                  options={addressDropdown.options}
+                  width={"350px"}
+                  value={addressDropdown.selectedAddress?.id}
+                  onChange={(id) => {
+                    formik.setFieldValue("address_id", id);
+                  }}
+                />
+              </S.Control>
+            )}
+            {user && !!user?.customer.addresses.length && (
+              <S.Button
+                type={"button"}
+                onClick={() => {
+                  if (showAddressInput) {
+                    const defaultAddress = user.customer.addresses.find(
+                      (address) =>
+                        address.id === user.customer.default_shipping_address_id
+                    );
 
-        <SharedStyles.Control>
+                    if (defaultAddress) {
+                      formik.setFieldValue("address_id", defaultAddress.id);
+                    } else {
+                      formik.setFieldValue(
+                        "address_id",
+                        user.customer.addresses[0].id
+                      );
+                    }
+                  } else {
+                    formik.setFieldValue("address_id", null);
+                  }
+                  setShowAddressInput((state) => !state);
+                }}
+              >
+                {showAddressInput
+                  ? t("checkout.selectSavedAddress")
+                  : t("checkout.inputAnotherAddress")}
+              </S.Button>
+            )}
+          </S.ButtonContainer>
+        )}
+
+        <S.Control>
           <Input
             loading={loading}
             name={"name"}
@@ -152,20 +242,19 @@ export const CheckoutForm = ({
             onChange={formik.handleChange}
             value={formik.values.name}
           />
-        </SharedStyles.Control>
+        </S.Control>
 
-        {!user && (
-          <SharedStyles.Control>
-            <Input
-              loading={loading}
-              name={"email"}
-              placeholder={t("common.email")}
-              onChange={formik.handleChange}
-              value={formik.values.email}
-            />
-          </SharedStyles.Control>
-        )}
-        <SharedStyles.Control>
+        <S.Control>
+          <Input
+            loading={loading}
+            name={"email"}
+            placeholder={t("common.email")}
+            onChange={formik.handleChange}
+            value={formik.values.email}
+          />
+        </S.Control>
+
+        <S.Control>
           <Input
             loading={loading}
             name={"phone"}
@@ -176,8 +265,8 @@ export const CheckoutForm = ({
             }}
             value={formik.values.phone}
           />
-        </SharedStyles.Control>
-        <SharedStyles.Control>
+        </S.Control>
+        <S.Control>
           <Input
             loading={loading}
             name={"sticks"}
@@ -187,8 +276,8 @@ export const CheckoutForm = ({
             onChange={formik.handleChange}
             value={formik.values.sticks}
           />
-        </SharedStyles.Control>
-        <SharedStyles.Control>
+        </S.Control>
+        <S.Control>
           <Input
             loading={loading}
             name={"comment"}
@@ -196,25 +285,41 @@ export const CheckoutForm = ({
             onChange={formik.handleChange}
             value={formik.values.comment}
           />
-        </SharedStyles.Control>
-
-        <PaymentMethods
-          loading={loading}
-          items={paymentMethods?.data || []}
-          formik={formik}
-        />
+        </S.Control>
+        <S.Control>
+          <Switcher
+            loading={loading}
+            name={"payment_method_id"}
+            options={paymentMethodsSwitcher.options}
+            handleChange={({ e, index }) => {
+              formik.handleChange(e);
+            }}
+            value={paymentMethodsSwitcher.selectedMethod?.id}
+          />
+        </S.Control>
+        {paymentMethodsSwitcher.selectedMethod?.code === "cash" && (
+          <S.Control>
+            <Input
+              loading={loading}
+              name={"change"}
+              placeholder={t("checkout.form.change")}
+              onChange={formik.handleChange}
+              value={formik.values.change}
+            />
+          </S.Control>
+        )}
 
         {Object.keys(formik.errors).length > 0 && (
-          <SharedStyles.Control>
+          <S.Control>
             <S.ErrorBag>
               {Object.keys(formik.errors).map((key, i) => (
                 <li key={key}>{formik.errors[key]}</li>
               ))}
             </S.ErrorBag>
-          </SharedStyles.Control>
+          </S.Control>
         )}
 
-        <SharedStyles.Control>
+        <S.Control>
           <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
             <ButtonOutline
               submitting={pending}
@@ -226,7 +331,7 @@ export const CheckoutForm = ({
             </ButtonOutline>
             <Total loading={loading} total={optimisticCartTotal} />
           </FlexBox>
-        </SharedStyles.Control>
+        </S.Control>
       </S.Form>
     </S.Container>
   );

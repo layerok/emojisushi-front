@@ -10,9 +10,7 @@ export const orderApi = {
 
     shipping_method_id: number;
     payment_method_id: number;
-    // 'address' has priority over 'address_id'
     address?: string;
-    address_id?: string;
 
     comment?: string;
     sticks?: number;

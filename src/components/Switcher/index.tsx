@@ -3,8 +3,8 @@ import * as S from "./styled";
 import { ChangeEvent, HTMLProps, ReactElement, useId } from "react";
 
 type IOption = {
-  id: number;
-  name: string;
+  value: number;
+  label: string;
 };
 
 const Option = ({
@@ -30,13 +30,13 @@ const Option = ({
         length={length}
         index={index}
         id={internal_id}
-        value={option.id}
+        value={option.value}
         type={"radio"}
         name={name}
         checked={selected}
         onChange={handleChange}
       />
-      <S.Label htmlFor={internal_id}>{option.name}</S.Label>
+      <S.Label htmlFor={internal_id}>{option.label}</S.Label>
     </>
   );
 };
@@ -54,7 +54,7 @@ type ISwitcherProps = Omit<HTMLProps<HTMLDivElement>, "selected" | "name"> & {
     index: number;
     option: IOption;
   }) => void;
-  selected: { (option: IOption): boolean } | boolean;
+  value: string | number | null;
 };
 
 export const Switcher = ({
@@ -62,16 +62,12 @@ export const Switcher = ({
   name,
   handleChange,
   loading,
-  selected,
+  value,
   ...rest
 }: ISwitcherProps): ReactElement => {
   if (loading) {
     return <Skeleton width={"100%"} height={40} />;
   }
-
-  const isSelected = (option) => {
-    return typeof selected === "function" ? selected(option) : selected;
-  };
 
   if (!options.length) {
     return null;
@@ -86,14 +82,14 @@ export const Switcher = ({
           index={index}
           name={name}
           handleChange={(e) => handleChange({ e, index, option })}
-          selected={isSelected(option)}
+          selected={option.value === value}
           key={index}
         />
       ))}
       <S.Slide length={options.length}>
         {options.reduce((acc, option) => {
-          if (isSelected(option)) {
-            return option.name;
+          if (option.value === value) {
+            return option.label;
           }
           return acc;
         }, "")}
