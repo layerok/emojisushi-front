@@ -5,7 +5,9 @@ import { cartQuery, paymentQuery, shippingQuery } from "~queries";
 import * as S from "./styled";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "~hooks/use-auth";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useRouteError } from "react-router-dom";
+import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
+import { logApi } from "~api/log/log.api";
 
 const CheckoutPage = () => {
   const { t } = useTranslation();
@@ -20,6 +22,7 @@ const CheckoutPage = () => {
       }
     },
   });
+
   const { data: shippingMethods, isLoading: isShippingMethodsLoading } =
     useQuery(shippingQuery);
   const { data: paymentMethods, isLoading: isPaymentMethodsLoading } =
@@ -64,6 +67,8 @@ const CheckoutPage = () => {
 };
 
 export const Component = CheckoutPage;
+
+export const ErrorBoundary = DefaultErrorBoundary;
 
 Object.assign(Component, {
   displayName: "LazyCheckoutPage",

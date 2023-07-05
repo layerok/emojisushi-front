@@ -1,5 +1,5 @@
 import * as S from "./styled";
 
-export const Container = ({ children }) => {
-  return <S.Container>{children}</S.Container>;
+export const Container = ({ children, ...rest }) => {
+  return <S.Container {...rest}>{children}</S.Container>;
 };

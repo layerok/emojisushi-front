@@ -2,7 +2,6 @@ import {
   useNavigate,
   useNavigation,
   useParams,
-  useRouteError,
   useSearchParams,
 } from "react-router-dom";
 import { ProductsGrid, RestaurantClosed, Container } from "~components";
@@ -23,8 +22,8 @@ import { appConfig } from "src/config/app";
 import { PRODUCTS_LIMIT_STEP } from "~domains/category/constants";
 import { MenuLayout } from "~domains/product/components/MenuLayout";
 import { PublishedCategories } from "~domains/category/components/PublishedCategories";
-import { AxiosError } from "axios";
 import { citiesQuery } from "~queries/cities.query";
+import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 
 export const CategoryPage = () => {
   const closed = isClosed({
@@ -45,15 +44,17 @@ export const CategoryPage = () => {
   );
   const { data: wishlists, isLoading: isWishlistLoading } =
     useQuery(wishlistsQuery);
-  const { data: products, isLoading: isProductsLoading } = useQuery(
-    productsQuery({
+
+  const { data: products, isLoading: isProductsLoading } = useQuery({
+    ...productsQuery({
       category_slug: q || !categorySlug ? "menu" : categorySlug,
       search: q,
       sort: sort,
       offset: 0,
       limit: +limit,
-    })
-  );
+    }),
+    onError: () => {},
+  });
 
   return (
     <Container>
@@ -147,24 +148,4 @@ Object.assign(Component, {
   displayName: "LazyCategoryPage",
 });
 
-export const ErrorBoundary = () => {
-  const error = useRouteError() as unknown;
-  if (error instanceof AxiosError) {
-    if (error.response.status === 404) {
-      return (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-          }}
-        >
-          404! <br />
-          Page not found
-        </div>
-      );
-    }
-  }
-  return <div>Oops! Something went wrong</div>;
-};
+export const ErrorBoundary = DefaultErrorBoundary;

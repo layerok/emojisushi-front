@@ -2,10 +2,12 @@ import i18next from "i18next";
 import { Navigate } from "react-router-dom";
 import { Trans } from "react-i18next";
 import { getFromLocalStorage, setToLocalStorage } from "~utils/ls.utils";
+import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 
 export const routes = [
   {
     path: "/",
+    ErrorBoundary: DefaultErrorBoundary,
     children: [
       {
         index: true,

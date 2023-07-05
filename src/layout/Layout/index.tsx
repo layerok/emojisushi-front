@@ -13,6 +13,7 @@ import { citiesQuery } from "~queries/cities.query";
 import { spotQuery } from "~domains/spot/queries/spot.query";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "~hooks/use-auth";
+import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 
 export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
   // todo: debounce it
@@ -70,6 +71,8 @@ export type LayoutRouteLoaderData = {
   city: ICity;
   spot: ISpot;
 };
+
+export const ErrorBoundary = DefaultErrorBoundary;
 
 Object.assign(Component, {
   displayName: "LazyLayout",
