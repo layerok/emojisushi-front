@@ -42,7 +42,10 @@ export const FavoriteButton = ({
       queryClient.setQueryData(
         wishlistsQuery.queryKey,
         (oldWishlists: IGetWishlistRes) => {
-          const firstWishlist = oldWishlists[0];
+          const firstWishlist = oldWishlists[0] || {
+            items: [],
+            id: 0,
+          };
           const wishlistItem = firstWishlist.items.find(
             (item) => item.product_id === product_id
           );
@@ -61,7 +64,10 @@ export const FavoriteButton = ({
             ];
             return optimisticWishlists;
           } else {
-            const firstWishlist = oldWishlists[0];
+            const firstWishlist = oldWishlists[0] || {
+              items: [],
+              id: 0,
+            };
             const optimisticItem = {
               product_id: product_id,
               quantity: quantity,
