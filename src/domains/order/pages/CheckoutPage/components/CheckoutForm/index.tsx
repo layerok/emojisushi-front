@@ -2,7 +2,7 @@ import { FlexBox, Input, ButtonOutline, Switcher, Dropdown } from "~components";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useNavigate, useParams, useRevalidator } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
 import { CartProduct } from "~models";
 import { Login } from "./components/Login";
@@ -14,7 +14,7 @@ import {
   IGetShippingMethodsRes,
   IUser,
 } from "~api/types";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { orderApi } from "~api";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
@@ -64,7 +64,7 @@ export const CheckoutForm = ({
     email: Yup.string().email("Invalid email"),
   });
 
-  const revalidator = useRevalidator();
+  const wayforpayFormContainer = useRef(null);
 
   const formik = useFormik({
     initialValues: {
@@ -103,7 +103,7 @@ export const CheckoutForm = ({
       setPending(true);
 
       try {
-        await orderApi.place({
+        const res = await orderApi.place({
           phone,
           firstname,
           lastname,
@@ -120,8 +120,16 @@ export const CheckoutForm = ({
         });
 
         await queryClient.removeQueries(cartQuery.queryKey);
-        revalidator.revalidate();
-        navigate("/" + [lang, citySlug, spotSlug, "thankyou"].join("/"));
+
+        if (res.data?.form) {
+          wayforpayFormContainer.current.innerHTML = res.data.form;
+          wayforpayFormContainer.current.querySelector("form").submit();
+        } else {
+          navigate({
+            pathname: "/" + [lang, citySlug, spotSlug, "thankyou"].join("/"),
+            search: "?order_id=" + res.data.poster_order.incoming_order_id,
+          });
+        }
       } catch (e) {
         if (e instanceof AxiosError) {
           if (e.response?.data?.errors) {
@@ -333,6 +341,7 @@ export const CheckoutForm = ({
           </FlexBox>
         </S.Control>
       </S.Form>
+      <div style={{ display: "none" }} ref={wayforpayFormContainer}></div>
     </S.Container>
   );
 };

@@ -1,9 +1,11 @@
 import { Heading, CheckCircleSvg, SvgIcon, Container } from "~components";
 import * as S from "./styled";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 
 export const ThankYouPage = () => {
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
   return (
     <Container>
       <S.Center>
@@ -14,7 +16,7 @@ export const ThankYouPage = () => {
             textAlign: "center",
           }}
         >
-          {t("thankYou.title")}
+          {t("thankYou.subtitle", { id: searchParams.get("order_id") })}
         </Heading>
         <SvgIcon color={"#FFE600"} style={{ width: "60px" }}>
           <CheckCircleSvg />
