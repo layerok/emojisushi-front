@@ -20,7 +20,6 @@ import { getFromLocalStorage } from "~utils/ls.utils";
 import { accessApi } from "~api";
 
 // todo: fix layout for wishlist
-// todo: optimisticly filter out wishlisted products
 
 export const WishlistPage = () => {
   const [searchParams] = useSearchParams();
@@ -34,6 +33,7 @@ export const WishlistPage = () => {
           slug_or_id: getFromLocalStorage("selectedSpotSlug"),
         })
         .then((res) => res.data),
+    queryKey: ["spot", getFromLocalStorage("selectedSpotSlug")],
   });
 
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
@@ -51,6 +51,7 @@ export const WishlistPage = () => {
       search: q,
       limit: 2000,
       sort: sort,
+      spot_slug_or_id: spot?.slug,
     }),
     enabled: !!spot?.id,
   });
@@ -86,10 +87,6 @@ const Wishlist = ({
 
   const items = products.data
     .map((json) => new Product(json))
-    .filter(
-      (product) =>
-        !product.isHiddenInSpot(getFromLocalStorage("selectedSpotSlug"))
-    )
     .filter((product) => {
       return product.isInWishlists(wishlists);
     });

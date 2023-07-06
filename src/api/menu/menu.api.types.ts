@@ -212,6 +212,7 @@ export type IGetProductsParams = {
   limit?: number;
   wishlist_id?: number;
   wishlist?: boolean;
+  spot_slug_or_id: string | number;
 };
 
 export type IGetCategoriesRes = {

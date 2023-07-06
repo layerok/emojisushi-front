@@ -34,7 +34,7 @@ export const Cities = ({ items }: { items: ICity[] }) => {
                         <MapPinSvg />
                       </SvgIcon>
                     </S.Spot.Head>
-                    {spot?.address?.lines}
+                    {spot?.address}
                   </S.Spot.Content>
                 </S.Spot.Inner>
               </S.Spot.Link>

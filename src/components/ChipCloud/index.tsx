@@ -1,6 +1,5 @@
 import * as S from "./styled";
 import Skeleton from "react-loading-skeleton";
-import { clamp } from "src/utils/utils";
 import { ReactNode } from "react";
 
 type TChip = {
@@ -19,6 +18,7 @@ type TCategoryProps = {
   item?: TChip;
   children?: ReactNode;
   isActive?: boolean;
+  skeletonWidth?: number;
 };
 
 const ChipCloud = ({ children }: TChipCloudProps) => {
@@ -33,16 +33,12 @@ export const Chip = ({
   loading = false,
   children,
   isActive = false,
+  skeletonWidth = 100,
 }: TCategoryProps) => {
   if (loading) {
-    const randomWidth = Math.floor(Math.random() * 250);
     return (
       <S.ChipContainer>
-        <Skeleton
-          borderRadius={5}
-          height={40}
-          width={clamp(randomWidth, 80, 250)}
-        />
+        <Skeleton borderRadius={5} height={40} width={skeletonWidth} />
       </S.ChipContainer>
     );
   }

@@ -45,6 +45,7 @@ export const CategoryPage = () => {
           slug_or_id: getFromLocalStorage("selectedSpotSlug"),
         })
         .then((res) => res.data),
+    queryKey: ["spot", getFromLocalStorage("selectedSpotSlug")],
   });
 
   const { data: cities, isLoading: isCitiesLoading } = useQuery({
@@ -67,6 +68,7 @@ export const CategoryPage = () => {
       sort: sort,
       offset: 0,
       limit: +limit,
+      spot_slug_or_id: spot?.slug,
     }),
     enabled: !!spot?.id,
   });
@@ -126,15 +128,8 @@ export const AwaitedProducts = ({
     );
   };
 
-  const items = products.data
-    .map((product) => new Product(product))
-    .filter((product: Product) => {
-      return !product.isHiddenInSpot(getFromLocalStorage("selectedSpotSlug"));
-    });
-  // subtracting hidden products from total
-  const total = products.total - (products.data.length - items.length);
+  const items = products.data.map((product) => new Product(product));
 
-  // todo: show skeleton while searching products
   return (
     <ProductsGrid
       wishlists={wishlists}
@@ -142,7 +137,7 @@ export const AwaitedProducts = ({
       handleLoadMore={handleLoadMore}
       title={title}
       loading={false}
-      loadable={total > items.length}
+      loadable={products.total > items.length}
       loadingMore={navigation.state === "loading"}
       items={items}
     />

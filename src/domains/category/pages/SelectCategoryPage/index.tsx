@@ -3,39 +3,10 @@ import { useTranslation } from "react-i18next";
 import { Container, SvgIcon, ToteSvg } from "~components";
 import { Category } from "./components/Category";
 import Skeleton from "react-loading-skeleton";
-import { IGetCategoriesRes } from "~api/types";
 import { categoriesQuery } from "~queries";
 import { useQuery } from "@tanstack/react-query";
 import { accessApi } from "~api";
 import { getFromLocalStorage } from "~utils/ls.utils";
-
-const CategoriesList = ({ categories }: { categories: IGetCategoriesRes }) => {
-  return (
-    <S.Category.List>
-      {categories.data.map((category) => (
-        <Category key={category.id} category={category} />
-      ))}
-    </S.Category.List>
-  );
-};
-
-const CategoriesSkeleton = () => {
-  return (
-    <S.Category.List>
-      <Category />
-      <Category />
-      <Category />
-      <Category />
-      <Category />
-      <Category />
-      <Category />
-      <Category />
-      <Category />
-      <Category />
-      <Category />
-    </S.Category.List>
-  );
-};
 
 export const SelectCategoryPage = () => {
   const { t } = useTranslation();
@@ -47,13 +18,15 @@ export const SelectCategoryPage = () => {
           slug_or_id: getFromLocalStorage("selectedSpotSlug"),
         })
         .then((res) => res.data),
+    queryKey: ["spot", getFromLocalStorage("selectedSpotSlug")],
   });
 
-  const { data: categories, isLoading } = useQuery(
-    categoriesQuery({
-      spot_slug_or_id: spot.slug,
-    })
-  );
+  const { data: categories, isLoading } = useQuery({
+    ...categoriesQuery({
+      spot_slug_or_id: spot?.slug,
+    }),
+    enabled: !!spot?.slug,
+  });
 
   return (
     <Container>
@@ -75,9 +48,25 @@ export const SelectCategoryPage = () => {
           </S.Category.Label>
           <S.Category.Items>
             {isLoading ? (
-              <CategoriesSkeleton />
+              <S.Category.List>
+                <Category />
+                <Category />
+                <Category />
+                <Category />
+                <Category />
+                <Category />
+                <Category />
+                <Category />
+                <Category />
+                <Category />
+                <Category />
+              </S.Category.List>
             ) : (
-              <CategoriesList categories={categories} />
+              <S.Category.List>
+                {categories.data.map((category) => (
+                  <Category key={category.id} category={category} />
+                ))}
+              </S.Category.List>
             )}
           </S.Category.Items>
         </S.Category.Container>

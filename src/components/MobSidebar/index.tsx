@@ -32,13 +32,13 @@ export const MobSidebar = ({
       <ChipCloud loading={loading}>
         {loading ? (
           <>
-            <Chip loading />
-            <Chip loading />
-            <Chip loading />
-            <Chip loading />
-            <Chip loading />
-            <Chip loading />
-            <Chip loading />
+            <Chip skeletonWidth={80} loading />
+            <Chip skeletonWidth={120} loading />
+            <Chip skeletonWidth={90} loading />
+            <Chip skeletonWidth={100} loading />
+            <Chip skeletonWidth={80} loading />
+            <Chip skeletonWidth={80} loading />
+            <Chip skeletonWidth={105} loading />
           </>
         ) : (
           categories.map((item) => {
