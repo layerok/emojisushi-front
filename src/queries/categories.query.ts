@@ -3,8 +3,8 @@ import { QueryOptions } from "@tanstack/react-query";
 import { menuApi } from "~api";
 
 export const categoriesQuery = (
-  params?: IGetCategoriesParams
+  params: IGetCategoriesParams
 ): QueryOptions<IGetCategoriesRes> => ({
-  queryKey: ["categories", "list", params ?? "all"],
+  queryKey: ["categories", "list", params],
   queryFn: () => menuApi.getCategories(params).then((res) => res.data),
 });

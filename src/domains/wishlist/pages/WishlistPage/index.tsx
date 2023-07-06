@@ -1,6 +1,6 @@
 import { ProductsGrid } from "~components";
 import { useTranslation } from "react-i18next";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import {
   IGetCartRes,
   IGetProductsRes,
@@ -17,6 +17,7 @@ import {
 import { MenuLayout } from "~domains/product/components/MenuLayout";
 import { useQuery } from "@tanstack/react-query";
 import { getFromLocalStorage } from "~utils/ls.utils";
+import { accessApi } from "~api";
 
 // todo: fix layout for wishlist
 // todo: optimisticly filter out wishlisted products
@@ -26,20 +27,33 @@ export const WishlistPage = () => {
   const q = searchParams.get("q");
   const sort = searchParams.get("sort") as SortKey;
 
+  const { data: spot } = useQuery({
+    queryFn: () =>
+      accessApi
+        .getSpot({
+          slug_or_id: getFromLocalStorage("selectedSpotSlug"),
+        })
+        .then((res) => res.data),
+  });
+
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
-  const { data: categories, isLoading: isCategoriesLoading } = useQuery(
-    categoriesQuery()
-  );
+  const { data: categories, isLoading: isCategoriesLoading } = useQuery({
+    ...categoriesQuery({
+      spot_slug_or_id: spot.slug,
+    }),
+    enabled: !!spot?.id,
+  });
   const { data: wishlists, isLoading: isWishlistLoading } =
     useQuery(wishlistsQuery);
-  const { data: products, isLoading: isProductsLoading } = useQuery(
-    productsQuery({
+  const { data: products, isLoading: isProductsLoading } = useQuery({
+    ...productsQuery({
       category_slug: "menu",
       search: q,
       limit: 2000,
       sort: sort,
-    })
-  );
+    }),
+    enabled: !!spot?.id,
+  });
 
   return (
     <MenuLayout categories={categories}>

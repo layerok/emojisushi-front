@@ -21,10 +21,10 @@ import { isClosed } from "src/utils/time.utils";
 import { appConfig } from "src/config/app";
 import { PRODUCTS_LIMIT_STEP } from "~domains/category/constants";
 import { MenuLayout } from "~domains/product/components/MenuLayout";
-import { PublishedCategories } from "~domains/category/components/PublishedCategories";
 import { citiesQuery } from "~queries/cities.query";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { getFromLocalStorage } from "~utils/ls.utils";
+import { accessApi } from "~api";
 
 export const CategoryPage = () => {
   const closed = isClosed({
@@ -38,11 +38,25 @@ export const CategoryPage = () => {
   const q = searchParams.get("q");
   const sort = searchParams.get("sort") as SortKey;
 
-  const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
+  const { data: spot } = useQuery({
+    queryFn: () =>
+      accessApi
+        .getSpot({
+          slug_or_id: getFromLocalStorage("selectedSpotSlug"),
+        })
+        .then((res) => res.data),
+  });
+
+  const { data: cities, isLoading: isCitiesLoading } = useQuery({
+    ...citiesQuery,
+  });
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
-  const { data: categories, isLoading: isCategoriesLoading } = useQuery(
-    categoriesQuery()
-  );
+  const { data: categories, isLoading: isCategoriesLoading } = useQuery({
+    ...categoriesQuery({
+      spot_slug_or_id: spot?.slug,
+    }),
+    enabled: !!spot?.id,
+  });
   const { data: wishlists, isLoading: isWishlistLoading } =
     useQuery(wishlistsQuery);
 
@@ -54,7 +68,7 @@ export const CategoryPage = () => {
       offset: 0,
       limit: +limit,
     }),
-    onError: () => {},
+    enabled: !!spot?.id,
   });
 
   return (
@@ -68,16 +82,12 @@ export const CategoryPage = () => {
         isCitiesLoading ? (
           <ProductsGrid loading />
         ) : (
-          <PublishedCategories categories={categories.data}>
-            {({ categories }) => (
-              <AwaitedProducts
-                wishlists={wishlists}
-                products={products}
-                cart={cart}
-                categories={categories}
-              />
-            )}
-          </PublishedCategories>
+          <AwaitedProducts
+            wishlists={wishlists}
+            products={products}
+            cart={cart}
+            categories={categories.data}
+          />
         )}
       </MenuLayout>
 

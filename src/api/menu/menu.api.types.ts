@@ -191,6 +191,7 @@ export type IFilter = {
 export type IGetCategoriesParams = {
   offset?: number;
   limit?: number;
+  spot_slug_or_id: number | string;
 };
 
 export type SortKey =

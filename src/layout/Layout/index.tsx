@@ -2,11 +2,16 @@ import { Header } from "../Header";
 import { Footer } from "../Footer";
 import * as S from "./styled";
 import { useWindowScroll } from "react-use";
-import { StickyToTopBtn, Sticky, TinyCartButton, CartModal } from "~components";
+import {
+  StickyToTopBtn,
+  Sticky,
+  TinyCartButton,
+  CartModal,
+  Loader,
+} from "~components";
 import { ReactNode } from "react";
 import { Outlet } from "react-router-dom";
 import { cartQuery } from "~queries";
-import { CartProduct } from "~models";
 import { IUser, IGetCartRes, IGetCitiesRes, ICity, ISpot } from "~api/types";
 import { citiesQuery } from "~queries/cities.query";
 import { spotQuery } from "~domains/spot/queries/spot.query";
@@ -23,12 +28,9 @@ export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
   const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
   const { data: user, isLoading: isUserLoading } = useUser();
-
   const { data: spot, isLoading: isSpotLoading } = useQuery(
     spotQuery(getFromLocalStorage("selectedSpotSlug"))
   );
-
-  const items = (cart?.data || []).map((json) => new CartProduct(json));
 
   return (
     <S.Layout {...rest}>

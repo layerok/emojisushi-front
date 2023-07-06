@@ -14,7 +14,7 @@ function getProducts(params: IGetProductsParams = {}) {
   } as AxiosAuthRefreshRequestConfig);
 }
 
-function getCategories(params: IGetCategoriesParams = {}) {
+function getCategories(params: IGetCategoriesParams) {
   return client.get<IGetCategoriesRes>("categories", {
     params,
     skipAuthRefresh: true,

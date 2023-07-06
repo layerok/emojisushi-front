@@ -5,19 +5,16 @@ import { Category } from "./components/Category";
 import Skeleton from "react-loading-skeleton";
 import { IGetCategoriesRes } from "~api/types";
 import { categoriesQuery } from "~queries";
-import { PublishedCategories } from "~domains/category/components/PublishedCategories";
 import { useQuery } from "@tanstack/react-query";
+import { accessApi } from "~api";
+import { getFromLocalStorage } from "~utils/ls.utils";
 
 const CategoriesList = ({ categories }: { categories: IGetCategoriesRes }) => {
   return (
     <S.Category.List>
-      <PublishedCategories categories={categories.data}>
-        {({ categories }) =>
-          categories.map((category) => (
-            <Category key={category.id} category={category} />
-          ))
-        }
-      </PublishedCategories>
+      {categories.data.map((category) => (
+        <Category key={category.id} category={category} />
+      ))}
     </S.Category.List>
   );
 };
@@ -43,7 +40,20 @@ const CategoriesSkeleton = () => {
 export const SelectCategoryPage = () => {
   const { t } = useTranslation();
 
-  const { data: categories, isLoading } = useQuery(categoriesQuery());
+  const { data: spot } = useQuery({
+    queryFn: () =>
+      accessApi
+        .getSpot({
+          slug_or_id: getFromLocalStorage("selectedSpotSlug"),
+        })
+        .then((res) => res.data),
+  });
+
+  const { data: categories, isLoading } = useQuery(
+    categoriesQuery({
+      spot_slug_or_id: spot.slug,
+    })
+  );
 
   return (
     <Container>
