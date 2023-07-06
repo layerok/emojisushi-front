@@ -12,12 +12,13 @@ export const SelectCategoryPage = () => {
   const { t } = useTranslation();
 
   const { data: spot } = useQuery({
-    queryFn: () =>
+    queryFn: async () =>
       accessApi
         .getSpot({
           slug_or_id: getFromLocalStorage("selectedSpotSlug"),
         })
         .then((res) => res.data),
+
     queryKey: ["spot", getFromLocalStorage("selectedSpotSlug")],
   });
 
