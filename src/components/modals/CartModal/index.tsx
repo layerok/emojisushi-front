@@ -12,15 +12,13 @@ import {
   LogoSvg,
   // todo: replace SushiSvg because it is fake svg, it is png actually
   SushiSvg,
-  OptimisticCartTotalPrice,
 } from "~components";
 
 import { ReactElement, useRef, useState } from "react";
 import { useBreakpoint2 } from "~common/hooks";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CartProduct } from "~models";
-import { useDeletingCartProducts } from "~hooks/use-layout-fetchers";
 import { ICartProduct, IGetCartRes } from "~api/types";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
@@ -82,7 +80,9 @@ const CartItem = ({
             );
             const optimisticTotal = optimisticCartProducts.reduce(
               (acc, cartProduct: ICartProduct) => {
-                return acc + cartProduct.quantity * cartProduct.price.UAH;
+                return (
+                  acc + (cartProduct.quantity * cartProduct.price.UAH) / 100
+                );
               },
               0
             );
@@ -91,6 +91,10 @@ const CartItem = ({
               ...old,
               data: optimisticCartProducts,
               total: formatUAHPrice(optimisticTotal),
+              totalQuantity: optimisticCartProducts.reduce(
+                (acc, item: ICartProduct) => acc + item.quantity,
+                0
+              ),
             };
           } else {
             onDelete(item);
@@ -100,7 +104,9 @@ const CartItem = ({
             );
             const optimisticTotal = optimisticCartProducts.reduce(
               (acc, cartProduct: ICartProduct) => {
-                return acc + cartProduct.quantity * cartProduct.price.UAH;
+                return (
+                  acc + (cartProduct.quantity * cartProduct.price.UAH) / 100
+                );
               },
               0
             );
@@ -109,6 +115,10 @@ const CartItem = ({
               ...old,
               data: optimisticCartProducts,
               total: formatUAHPrice(optimisticTotal),
+              totalQuantity: optimisticCartProducts.reduce(
+                (acc, item: ICartProduct) => acc + item.quantity,
+                0
+              ),
             };
           }
         }
@@ -202,12 +212,9 @@ export const CartModal = ({
 }) => {
   const navigate = useNavigate();
 
-  const { lang, spotSlug, citySlug } = useParams();
-
   const { data } = cart;
 
   const { isMobile } = useBreakpoint2();
-  const deletingCartProducts = useDeletingCartProducts();
 
   const { t } = useTranslation();
 
@@ -215,9 +222,6 @@ export const CartModal = ({
   // then cart product's fetcher will be aborted,
   // and therefore revalidation won't be triggered and we will see stale cart products
   const items = data.map((json) => new CartProduct(json));
-  const optimisticItems = items.filter(
-    (item) => !deletingCartProducts.includes(item.id)
-  );
 
   const overlayStyles = {
     justifyItems: isMobile ? "center" : "end",
@@ -241,10 +245,8 @@ export const CartModal = ({
           </S.CloseIcon>
 
           <S.EmptyCartImgContainer>
-            {optimisticItems.length === 0 && <SushiSvg />}
-            <S.Title>
-              {optimisticItems.length === 0 && t("cartModal.empty")}
-            </S.Title>
+            {items.length === 0 && <SushiSvg />}
+            <S.Title>{items.length === 0 && t("cartModal.empty")}</S.Title>
           </S.EmptyCartImgContainer>
 
           <S.Items>
@@ -269,19 +271,17 @@ export const CartModal = ({
             </div>
           </S.Items>
 
-          {optimisticItems.length !== 0 && (
+          {items.length !== 0 && (
             <S.Footer>
               <FlexBox alignItems={"center"} justifyContent={"space-between"}>
                 <S.Sum>{t("cartModal.sum_order")}</S.Sum>
-                <Price newPrice={<OptimisticCartTotalPrice items={items} />} />
+                <Price newPrice={cart.total} />
               </FlexBox>
               <S.Button>
                 <ButtonOutline
                   disabled={items.length === 0}
                   onClick={() => {
-                    navigate(
-                      "/" + [lang, citySlug, spotSlug, "checkout"].join("/")
-                    );
+                    navigate("/checkout");
                     close();
                   }}
                   width={"100%"}

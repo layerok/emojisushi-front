@@ -10,10 +10,8 @@ import {
   CartButton,
   TinyCartButton,
 } from "~components";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
-import { useOptimisticCartTotals } from "~hooks";
-import { CartProduct } from "~models";
 import { ICity, IGetCartRes, IUser } from "~api/types";
 
 type RightProps = {
@@ -29,12 +27,7 @@ export const Right = ({
   cart,
   user,
 }: RightProps) => {
-  const { lang, spotSlug, citySlug } = useParams();
-
   const navigate = useNavigate();
-  const items = loading ? [] : cart.data.map((json) => new CartProduct(json));
-  const { price, quantity } = useOptimisticCartTotals({ items });
-
   return (
     <S.Right>
       <S.LanguageSelectorContainer>
@@ -44,7 +37,11 @@ export const Right = ({
       {cart && (
         <CartModal cart={cart}>
           <S.CartBtn>
-            <CartButton loading={loading} count={quantity} total={price} />
+            <CartButton
+              loading={loading}
+              count={cart?.totalQuantity}
+              total={cart?.total}
+            />
           </S.CartBtn>
         </CartModal>
       )}
@@ -52,7 +49,7 @@ export const Right = ({
       {cart && (
         <CartModal cart={cart}>
           <S.TinyCartBtn>
-            <TinyCartButton loading={loading} price={price} />
+            <TinyCartButton loading={loading} price={cart?.total} />
           </S.TinyCartBtn>
         </CartModal>
       )}
@@ -75,9 +72,7 @@ export const Right = ({
         ) : (
           <S.UserBtn
             onClick={() => {
-              navigate(
-                "/" + [lang, citySlug, spotSlug, "account", "profile"].join("/")
-              );
+              navigate("/account/profile");
             }}
           >
             <SvgButton>

@@ -4,13 +4,13 @@ import { FlexBox, SvgIcon, BagSvg, ButtonFilled } from "~components";
 
 type TCartButton = {
   count?: number;
-  total?: number;
+  total?: string;
   loading?: boolean;
 };
 
 export const CartButton = ({
   count = 0,
-  total = 0,
+  total = "0 ₴",
   loading = false,
 }: TCartButton) => {
   if (loading) {
@@ -24,7 +24,7 @@ export const CartButton = ({
             <BagSvg />
           </SvgIcon>
         </S.Icon>
-        <S.Price>{total} ₴</S.Price>
+        <S.Price>{total}</S.Price>
         <S.Delimiter />
         <S.Count>{count}</S.Count>
       </FlexBox>

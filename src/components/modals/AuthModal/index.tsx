@@ -19,6 +19,7 @@ import { queryClient } from "~query-client";
 import { cartQuery, wishlistsQuery } from "~queries";
 import { authApi } from "~api";
 import { useMutation } from "@tanstack/react-query";
+import { getFromLocalStorage } from "~utils/ls.utils";
 
 export const AuthModal = ({ children, redirect_to }) => {
   // todo: don't use it
@@ -65,7 +66,6 @@ export const AuthModal = ({ children, redirect_to }) => {
 
 const SignUpForm = ({ setShowSignUp }) => {
   const { t } = useTranslation();
-  const { lang, spotSlug, citySlug } = useParams();
   const [checked, setChecked] = useState(false);
   const register = useRegister();
   const navigate = useNavigate();
@@ -88,7 +88,7 @@ const SignUpForm = ({ setShowSignUp }) => {
         const name = formData.get("name") + "";
         const surname = formData.get("surname") + "";
         const agree = !!formData.get("agree");
-        const spot_slug_or_id = spotSlug;
+        const spot_slug_or_id = getFromLocalStorage("selectedSpotSlug");
 
         setErrors({});
 
@@ -107,9 +107,7 @@ const SignUpForm = ({ setShowSignUp }) => {
             onSuccess: () => {
               queryClient.invalidateQueries(wishlistsQuery.queryKey);
               queryClient.invalidateQueries(cartQuery.queryKey);
-              navigate(
-                "/" + [lang, citySlug, spotSlug, "account", "profile"].join("/")
-              );
+              navigate("/" + ["account", "profile"].join("/"));
             },
             onError: (error) => {
               if (error instanceof AxiosError) {
@@ -257,8 +255,6 @@ const LoginForm = ({
 }) => {
   const { t } = useTranslation();
 
-  const { lang, spotSlug, citySlug } = useParams();
-
   const login = useLogin();
   const navigate = useNavigate();
   const [errors, setErrors] = useState<{
@@ -273,8 +269,7 @@ const LoginForm = ({
         const formData = new FormData(e.currentTarget);
         const email = formData.get("email") as string | null;
         const password = formData.get("password") as string | null;
-        const default_redirect_to =
-          "/" + [lang, citySlug, spotSlug, "account", "profile"].join("/");
+        const default_redirect_to = "/" + ["account", "profile"].join("/");
         setErrors({});
         login.mutate(
           {

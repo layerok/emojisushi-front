@@ -1,7 +1,7 @@
 import * as S from "./styled";
 import { ICategory } from "src/api/types";
 import Skeleton from "react-loading-skeleton";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 type TCategoryProps = {
   active?: boolean;
@@ -10,8 +10,6 @@ type TCategoryProps = {
 };
 
 const Category = ({ category, loading = false }: TCategoryProps) => {
-  const { lang, spotSlug, citySlug } = useParams();
-
   if (loading) {
     return (
       <Skeleton
@@ -28,7 +26,7 @@ const Category = ({ category, loading = false }: TCategoryProps) => {
     <NavLink
       style={{ textDecoration: "none", display: "inline-block", marginTop: 20 }}
       key={category.id}
-      to={"/" + [lang, citySlug, spotSlug, "category", category.slug].join("/")}
+      to={"/" + ["category", category.slug].join("/")}
     >
       {({ isActive }) => (
         <S.Category isActive={isActive}>{category.name}</S.Category>

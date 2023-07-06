@@ -12,11 +12,13 @@ import {
   LanguageSelector,
 } from "~components";
 import { useTranslation } from "react-i18next";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { ICity } from "~api/types";
 import { HightlightText } from "~components";
 import { useQuery } from "@tanstack/react-query";
 import { spotQuery } from "~domains/spot/queries/spot.query";
+import { getFromLocalStorage } from "~utils/ls.utils";
+import { useUser } from "~hooks/use-auth";
 
 type MobMenuModalProps = {
   children: ReactElement;
@@ -31,9 +33,13 @@ export const MobMenuModal = ({ children, cities = [] }: MobMenuModalProps) => {
     display: "grid",
     zIndex: 999999,
   };
+  const { data: user } = useUser();
   const { t } = useTranslation();
-  const { lang, spotSlug, citySlug } = useParams();
-  const { data: spot, isLoading } = useQuery(spotQuery(spotSlug));
+  const { data: spot, isLoading } = useQuery(
+    spotQuery(getFromLocalStorage("selectedSpotSlug"))
+  );
+
+  const navigate = useNavigate();
   return (
     <BaseModal
       overlayStyles={overlayStyles}
@@ -50,14 +56,31 @@ export const MobMenuModal = ({ children, cities = [] }: MobMenuModalProps) => {
             />
           </S.Item>
           <S.Item>
-            <AuthModal redirect_to={undefined}>
-              <FlexBox alignItems={"center"}>
+            {user ? (
+              <FlexBox
+                style={{
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  navigate("/account");
+                }}
+                alignItems={"center"}
+              >
                 <SvgIcon width={"25px"} style={{ marginRight: "10px" }}>
                   <UserSvg />
                 </SvgIcon>
-                {t("common.enter_account")}
+                {t("account.cabinet")}
               </FlexBox>
-            </AuthModal>
+            ) : (
+              <AuthModal redirect_to={undefined}>
+                <FlexBox alignItems={"center"}>
+                  <SvgIcon width={"25px"} style={{ marginRight: "10px" }}>
+                    <UserSvg />
+                  </SvgIcon>
+                  {t("common.enter_account")}
+                </FlexBox>
+              </AuthModal>
+            )}
           </S.Item>
           <S.Item>
             {!isLoading && (
@@ -69,9 +92,7 @@ export const MobMenuModal = ({ children, cities = [] }: MobMenuModalProps) => {
           <S.Item>
             <NavLink
               style={{ color: "white", textDecoration: "none" }}
-              to={
-                "/" + [lang, citySlug, spotSlug, "dostavka-i-oplata"].join("/")
-              }
+              to={"/dostavka-i-oplata"}
             >
               {({ isActive }) => (
                 <HightlightText isActive={isActive}>
@@ -84,7 +105,7 @@ export const MobMenuModal = ({ children, cities = [] }: MobMenuModalProps) => {
             <FlexBox justifyContent={"space-between"} alignItems={"center"}>
               <NavLink
                 style={{ color: "white", textDecoration: "none" }}
-                to={"/" + [lang, citySlug, spotSlug, "wishlist"].join("/")}
+                to={"/wishlist"}
               >
                 {({ isActive }) => (
                   <HightlightText isActive={isActive}>

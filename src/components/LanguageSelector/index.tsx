@@ -1,7 +1,8 @@
 import * as S from "./styled";
 import { useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
+import i18next from "i18next";
+import { getFromLocalStorage, setToLocalStorage } from "~utils/ls.utils";
 
 type TLanguateSelectorProps = {
   loading?: boolean;
@@ -10,11 +11,7 @@ type TLanguateSelectorProps = {
 export const LanguageSelector = ({
   loading = false,
 }: TLanguateSelectorProps) => {
-  const { lang: selectedLang } = useParams();
-
   const [langs] = useState(["uk", "ru"]);
-  const location = useLocation();
-  const navigate = useNavigate();
 
   if (loading) {
     return <Skeleton borderRadius={10} height={40} width={75} />;
@@ -26,13 +23,12 @@ export const LanguageSelector = ({
         <S.Item
           key={lang}
           style={{
-            color: lang === selectedLang ? "white" : "#B6B6B6",
+            color:
+              lang === getFromLocalStorage("i18nextLang") ? "white" : "#B6B6B6",
           }}
           onClick={() => {
-            const currentSegments = location.pathname.split("/");
-            const nextSegments = [lang, ...currentSegments.splice(2)];
-            const nextUrl = "/" + nextSegments.join("/");
-            navigate(nextUrl);
+            i18next.changeLanguage(lang);
+            setToLocalStorage("i18nextLang", lang);
           }}
         >
           {lang.toUpperCase()}

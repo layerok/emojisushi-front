@@ -40,4 +40,24 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-export { Form, ErrorBag, Container, ButtonContainer, Button, Control };
+const Total = styled.div`
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+`;
+
+const Login = styled.div`
+  color: #ffe600;
+  margin-left: 5px;
+`;
+
+export {
+  Form,
+  ErrorBag,
+  Container,
+  ButtonContainer,
+  Button,
+  Control,
+  Total,
+  Login,
+};

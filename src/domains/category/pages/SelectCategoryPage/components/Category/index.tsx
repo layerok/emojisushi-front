@@ -2,7 +2,6 @@ import Skeleton from "react-loading-skeleton";
 import { ICategory } from "~api/types";
 import { SvgIcon, LogoSvg } from "~components";
 import * as S from "./styled";
-import { useParams } from "react-router-dom";
 
 const Image = ({ category }: { category?: ICategory }) => {
   const imageElement = category?.image?.path ? (
@@ -16,9 +15,7 @@ const Image = ({ category }: { category?: ICategory }) => {
 };
 
 export const Category = ({ category }: { category?: ICategory }) => {
-  const { lang, spotSlug, citySlug } = useParams();
-  const to =
-    "/" + [lang, citySlug, spotSlug, "category", category?.slug].join("/");
+  const to = "/" + ["category", category?.slug].join("/");
 
   return (
     <S.Item>

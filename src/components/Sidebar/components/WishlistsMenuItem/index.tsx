@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import * as S from "./styled";
 import { theme } from "~theme";
 import { HeartSvg } from "~components/svg";
@@ -11,9 +11,8 @@ type WishlistsMenuItemProps = { loading?: boolean };
 export const WishlistsMenuItem = ({
   loading = false,
 }: WishlistsMenuItemProps) => {
-  const { lang, spotSlug, citySlug } = useParams();
   const { t } = useTranslation();
-  const to = "/" + [lang, citySlug, spotSlug, "wishlist"].join("/");
+  const to = "/wishlist";
 
   return (
     <NavLink

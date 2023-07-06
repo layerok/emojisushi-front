@@ -4,21 +4,20 @@ import * as S from "./styled";
 import { useWindowScroll } from "react-use";
 import { StickyToTopBtn, Sticky, TinyCartButton, CartModal } from "~components";
 import { ReactNode } from "react";
-import { Outlet, useParams } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { cartQuery } from "~queries";
 import { CartProduct } from "~models";
-import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
 import { IUser, IGetCartRes, IGetCitiesRes, ICity, ISpot } from "~api/types";
 import { citiesQuery } from "~queries/cities.query";
 import { spotQuery } from "~domains/spot/queries/spot.query";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "~hooks/use-auth";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
+import { getFromLocalStorage } from "~utils/ls.utils";
 
 export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
   // todo: debounce it
   const { x, y } = useWindowScroll();
-  const { spotSlug } = useParams();
   const showStickyCart = y > 100;
 
   const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
@@ -26,11 +25,10 @@ export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
   const { data: user, isLoading: isUserLoading } = useUser();
 
   const { data: spot, isLoading: isSpotLoading } = useQuery(
-    spotQuery(spotSlug)
+    spotQuery(getFromLocalStorage("selectedSpotSlug"))
   );
 
   const items = (cart?.data || []).map((json) => new CartProduct(json));
-  const cartTotal = useOptimisticCartTotalPrice({ items });
 
   return (
     <S.Layout {...rest}>
@@ -52,7 +50,7 @@ export const Layout = ({ children, ...rest }: { children?: ReactNode }) => {
         <Sticky top={"30px"} right={"30px"} show={showStickyCart}>
           <CartModal cart={cart}>
             <div>
-              <TinyCartButton price={cartTotal} />
+              <TinyCartButton price={cart.total} />
             </div>
           </CartModal>
         </Sticky>

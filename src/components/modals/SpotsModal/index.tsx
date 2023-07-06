@@ -4,15 +4,15 @@ import { Modal } from "../Modal";
 import { observer } from "mobx-react";
 import { MapPinSvg } from "../../svg/MapPinSvg";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCities } from "~hooks";
+import { getFromLocalStorage, setToLocalStorage } from "~utils/ls.utils";
 
 export const SpotsModalRaw = ({ open = false }) => {
   const navigate = useNavigate();
 
   const cities = useCities();
   const { t } = useTranslation();
-  const { lang, spotSlug, citySlug } = useParams();
 
   return (
     <Modal
@@ -32,13 +32,15 @@ export const SpotsModalRaw = ({ open = false }) => {
                   <S.Item
                     key={city.id + "-" + spot.id}
                     onClick={() => {
-                      navigate(
-                        "/" + [lang, city.slug, spot.slug, "category"].join("/")
-                      );
+                      setToLocalStorage("selectedSpotId", spot.id);
+                      setToLocalStorage("selectedSpotSlug", spot.slug);
+                      navigate("/category");
 
                       close();
                     }}
-                    selected={spotSlug === spot.slug && citySlug === city.slug}
+                    selected={
+                      getFromLocalStorage("selectedSpotSlug") === spot.slug
+                    }
                   >
                     {city.name}, {spot.name}
                   </S.Item>

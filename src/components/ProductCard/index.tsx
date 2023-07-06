@@ -107,7 +107,9 @@ export const ProductCard = ({
             );
             const optimisticTotal = optimisticCartProducts.reduce(
               (acc, cartProduct: ICartProduct) => {
-                return acc + cartProduct.quantity * cartProduct.price.UAH;
+                return (
+                  acc + (cartProduct.quantity * cartProduct.price.UAH) / 100
+                );
               },
               0
             );
@@ -116,6 +118,10 @@ export const ProductCard = ({
               ...old,
               data: optimisticCartProducts,
               total: formatUAHPrice(optimisticTotal),
+              totalQuantity: optimisticCartProducts.reduce(
+                (acc, item: ICartProduct) => acc + item.quantity,
+                0
+              ),
             };
           } else {
             const optimisticCartProducts = arrImmutableDeleteAt(
@@ -124,7 +130,9 @@ export const ProductCard = ({
             );
             const optimisticTotal = optimisticCartProducts.reduce(
               (acc, cartProduct: ICartProduct) => {
-                return acc + cartProduct.quantity * cartProduct.price.UAH;
+                return (
+                  acc + (cartProduct.quantity * cartProduct.price.UAH) / 100
+                );
               },
               0
             );
@@ -133,6 +141,10 @@ export const ProductCard = ({
               ...old,
               data: optimisticCartProducts,
               total: formatUAHPrice(optimisticTotal),
+              totalQuantity: optimisticCartProducts.reduce(
+                (acc, item: ICartProduct) => acc + item.quantity,
+                0
+              ),
             };
           }
         }
@@ -149,10 +161,23 @@ export const ProductCard = ({
           },
         };
 
+        const optimisticCartProducts = [...old.data, optimisticCartProduct];
+
+        const optimisticTotal = optimisticCartProducts.reduce(
+          (acc, cartProduct: ICartProduct) => {
+            return acc + (cartProduct.quantity * cartProduct.price.UAH) / 100;
+          },
+          0
+        );
+
         return {
           ...old,
           data: [...old.data, optimisticCartProduct],
-          total: formatUAHPrice(optimisticCartProduct.price.UAH),
+          total: formatUAHPrice(optimisticTotal),
+          totalQuantity: optimisticCartProducts.reduce(
+            (acc, item: ICartProduct) => acc + item.quantity,
+            0
+          ),
         };
       });
 

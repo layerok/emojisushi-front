@@ -5,9 +5,8 @@ import { cartQuery, paymentQuery, shippingQuery } from "~queries";
 import * as S from "./styled";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "~hooks/use-auth";
-import { useNavigate, useParams, useRouteError } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
-import { logApi } from "~api/log/log.api";
 
 const CheckoutPage = () => {
   const { t } = useTranslation();
@@ -18,7 +17,7 @@ const CheckoutPage = () => {
     ...cartQuery,
     onSuccess: (res) => {
       if (res.data.length < 1) {
-        navigate("/" + [lang, citySlug, spotSlug].join("/"));
+        navigate("/category");
       }
     },
   });
@@ -27,8 +26,6 @@ const CheckoutPage = () => {
     useQuery(shippingQuery);
   const { data: paymentMethods, isLoading: isPaymentMethodsLoading } =
     useQuery(paymentQuery);
-
-  const { lang, citySlug, spotSlug } = useParams();
   const navigate = useNavigate();
 
   return (
@@ -57,7 +54,7 @@ const CheckoutPage = () => {
           <CheckoutCart
             cart={cart}
             onEmpty={() => {
-              navigate("/" + [lang, citySlug, spotSlug].join("/"));
+              navigate("/category");
             }}
           />
         )}

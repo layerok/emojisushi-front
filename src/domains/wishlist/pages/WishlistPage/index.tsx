@@ -16,6 +16,7 @@ import {
 } from "src/queries";
 import { MenuLayout } from "~domains/product/components/MenuLayout";
 import { useQuery } from "@tanstack/react-query";
+import { getFromLocalStorage } from "~utils/ls.utils";
 
 // todo: fix layout for wishlist
 // todo: optimisticly filter out wishlisted products
@@ -68,11 +69,13 @@ const Wishlist = ({
   const handleLoadMore = () => {
     // todo: implement load more
   };
-  const { spotSlug } = useParams();
 
   const items = products.data
     .map((json) => new Product(json))
-    .filter((product) => !product.isHiddenInSpot(spotSlug))
+    .filter(
+      (product) =>
+        !product.isHiddenInSpot(getFromLocalStorage("selectedSpotSlug"))
+    )
     .filter((product) => {
       return product.isInWishlists(wishlists);
     });

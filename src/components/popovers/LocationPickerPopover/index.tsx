@@ -1,9 +1,10 @@
 import * as S from "./styled";
 import { SvgIcon, CaretDownSvg, FlexBox, DropdownPopover } from "~components";
 import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { ICity } from "~api/types";
+import { getFromLocalStorage, setToLocalStorage } from "~utils/ls.utils";
 type LocationPickerPopoverProps = {
   offset?: number;
   backgroundColor?: string;
@@ -30,7 +31,6 @@ const InternalLocationPickerPopover = (props: LocationPickerPopoverProps) => {
     cities,
   } = props;
   const navigate = useNavigate();
-  const { lang, citySlug, spotSlug } = useParams();
 
   const options = cities
     .map((city) =>
@@ -44,7 +44,7 @@ const InternalLocationPickerPopover = (props: LocationPickerPopoverProps) => {
     .flat();
 
   const selectedOption = options.find(
-    (option) => option.city.slug === citySlug && option.spot.slug === spotSlug
+    (option) => option.spot.slug === getFromLocalStorage("selectedSpotSlug")
   );
   const selectedIndex = options.indexOf(selectedOption);
 
@@ -57,9 +57,9 @@ const InternalLocationPickerPopover = (props: LocationPickerPopoverProps) => {
         options={options}
         selectedIndex={selectedIndex}
         onSelect={({ close, option, index }) => {
-          const nextSegments = [lang, option.city.slug, option.spot.slug];
-          const nextUrl = nextSegments.join("/");
-          navigate("/" + nextUrl);
+          setToLocalStorage("selectedSpotId", option.spot.id);
+          setToLocalStorage("selectedSpotSlug", option.spot.slug);
+          navigate("/category");
           close();
         }}
       >

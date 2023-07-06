@@ -7,17 +7,19 @@ import {
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { Logo } from "../Logo";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { ICity } from "~api/types";
 import { useQuery } from "@tanstack/react-query";
 import { spotQuery } from "~domains/spot/queries/spot.query";
+import { getFromLocalStorage } from "~utils/ls.utils";
 
 type LeftProps = { loading?: boolean; cities?: ICity[] };
 
 export const Left = ({ loading = false, cities = [] }: LeftProps) => {
-  const { lang, spotSlug, citySlug } = useParams();
   const { t } = useTranslation();
-  const { data: spot, isLoading } = useQuery(spotQuery(spotSlug));
+  const { data: spot, isLoading } = useQuery(
+    spotQuery(getFromLocalStorage("selectedSpotSlug"))
+  );
 
   return (
     <S.Left>
@@ -41,7 +43,7 @@ export const Left = ({ loading = false, cities = [] }: LeftProps) => {
         ) : (
           <NavLink
             style={{ color: "white", textDecoration: "none", width: "144px" }}
-            to={"/" + [lang, citySlug, spotSlug, "dostavka-i-oplata"].join("/")}
+            to={"/dostavka-i-oplata"}
           >
             {({ isActive }) => (
               <HightlightText isActive={isActive}>

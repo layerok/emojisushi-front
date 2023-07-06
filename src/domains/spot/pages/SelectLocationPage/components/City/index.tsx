@@ -2,12 +2,13 @@ import * as S from "./styled";
 import Skeleton from "react-loading-skeleton";
 import { ICity } from "~api/types";
 import { MapPinSvg, SvgIcon } from "~components";
-import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { setToLocalStorage } from "~utils/ls.utils";
 
 export const Cities = ({ items }: { items: ICity[] }) => {
-  const { lang } = useParams();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   return (
     <S.Cities>
       {items.map((city, index) => (
@@ -17,7 +18,13 @@ export const Cities = ({ items }: { items: ICity[] }) => {
             {city.spots.map((spot, index) => (
               <S.Spot.Link
                 key={index}
-                to={"/" + [lang, city.slug, spot.slug, "category"].join("/")}
+                to={"/category"}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/category");
+                  setToLocalStorage("selectedSpotId", spot.id);
+                  setToLocalStorage("selectedSpotSlug", spot.slug);
+                }}
               >
                 <S.Spot.Inner>
                   <S.Spot.Content>

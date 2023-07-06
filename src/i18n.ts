@@ -6,6 +6,7 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .use(HttpBackend)
   .init({
+    lng: "uk",
     interpolation: {
       escapeValue: false, // react already safes from xss
     },

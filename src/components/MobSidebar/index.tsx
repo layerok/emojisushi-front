@@ -3,7 +3,7 @@ import { Chip, FlexBox, SortingPopover } from "~components";
 import { ICategory } from "~api/types";
 import { Search } from "../Search";
 import { ChipCloud } from "~components";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 type SidebarProps = { loading?: boolean; categories?: ICategory[] };
 
@@ -12,8 +12,6 @@ export const MobSidebar = ({
   categories = [],
 }: SidebarProps) => {
   // todo: make sidebar sticky
-  const { lang, spotSlug, citySlug } = useParams();
-
   return (
     <S.Sidebar>
       <S.Controls>
@@ -44,13 +42,7 @@ export const MobSidebar = ({
           </>
         ) : (
           categories.map((item) => {
-            const nextSegments = [
-              lang,
-              citySlug,
-              spotSlug,
-              "category",
-              item.slug,
-            ];
+            const nextSegments = ["category", item.slug];
             return (
               <NavLink
                 key={item.id}

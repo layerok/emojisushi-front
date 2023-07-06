@@ -24,6 +24,7 @@ import { MenuLayout } from "~domains/product/components/MenuLayout";
 import { PublishedCategories } from "~domains/category/components/PublishedCategories";
 import { citiesQuery } from "~queries/cities.query";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
+import { getFromLocalStorage } from "~utils/ls.utils";
 
 export const CategoryPage = () => {
   const closed = isClosed({
@@ -96,12 +97,11 @@ export const AwaitedProducts = ({
   products?: IGetProductsRes;
   wishlists?: IGetWishlistRes;
 }) => {
-  const { categorySlug, spotSlug, citySlug } = useParams();
+  const { categorySlug } = useParams();
 
   const [searchParams] = useSearchParams();
   const limit = searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
   const navigation = useNavigation();
-  const { lang } = useParams();
   const navigate = useNavigate();
 
   const selectedCategory = categories.find((category) => {
@@ -112,17 +112,14 @@ export const AwaitedProducts = ({
   const handleLoadMore = () => {
     const nextLimit = +limit + PRODUCTS_LIMIT_STEP;
     navigate(
-      "/" +
-        [lang, citySlug, spotSlug, "category", categorySlug].join("/") +
-        "?limit=" +
-        nextLimit
+      "/" + ["category", categorySlug].join("/") + "?limit=" + nextLimit
     );
   };
 
   const items = products.data
     .map((product) => new Product(product))
     .filter((product: Product) => {
-      return !product.isHiddenInSpot(spotSlug);
+      return !product.isHiddenInSpot(getFromLocalStorage("selectedSpotSlug"));
     });
   // subtracting hidden products from total
   const total = products.total - (products.data.length - items.length);

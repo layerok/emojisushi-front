@@ -11,7 +11,6 @@ const CabinetLayout = () => {
   const matches = useMatches();
   const match = matches[matches.length - 1];
   const logout = useLogout();
-  const { lang, citySlug, spotSlug } = useParams();
   const navigate = useNavigate();
 
   return (
@@ -23,48 +22,16 @@ const CabinetLayout = () => {
               <S.Navbar>
                 <S.NavbarHeader>{t("account.cabinet")}</S.NavbarHeader>
                 <S.HorizontalBar />
-                <NavLink
-                  to={
-                    "/" +
-                    [lang, citySlug, spotSlug, "account", "profile"].join("/")
-                  }
-                >
+                <NavLink to={"/" + ["account", "profile"].join("/")}>
                   {t("account.profile.title")}
                 </NavLink>
-                <NavLink
-                  to={
-                    "/" +
-                    [lang, citySlug, spotSlug, "account", "orders"].join("/")
-                  }
-                >
+                <NavLink to={"/" + ["account", "orders"].join("/")}>
                   {t("account.orders.title")}
                 </NavLink>
-                <NavLink
-                  to={
-                    "/" +
-                    [
-                      lang,
-                      citySlug,
-                      spotSlug,
-                      "account",
-                      "recover-password",
-                    ].join("/")
-                  }
-                >
+                <NavLink to={"/" + ["account", "recover-password"].join("/")}>
                   {t("account.changePassword.title")}
                 </NavLink>
-                <NavLink
-                  to={
-                    "/" +
-                    [
-                      lang,
-                      citySlug,
-                      spotSlug,
-                      "account",
-                      "saved-addresses",
-                    ].join("/")
-                  }
-                >
+                <NavLink to={"/" + ["account", "saved-addresses"].join("/")}>
                   {t("account.addresses.title")}
                 </NavLink>
                 <div style={{ marginTop: "10px" }}>
@@ -73,7 +40,7 @@ const CabinetLayout = () => {
                       logout.mutate({});
                       queryClient.invalidateQueries(wishlistsQuery.queryKey);
                       queryClient.invalidateQueries(cartQuery.queryKey);
-                      navigate("/" + [lang, citySlug, spotSlug].join("/"));
+                      navigate("/category");
                     }}
                     minWidth={"201px"}
                   >

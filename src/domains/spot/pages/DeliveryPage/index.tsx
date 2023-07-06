@@ -1,14 +1,15 @@
 import { Container, Heading, If } from "~components";
 import * as S from "./styled";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { spotQuery } from "~domains/spot/queries/spot.query";
+import { getFromLocalStorage } from "~utils/ls.utils";
 
 export const DeliveryPage = () => {
   const { t } = useTranslation();
-  const { spotSlug } = useParams();
-  const { data: spot } = useQuery(spotQuery(spotSlug));
+  const { data: spot } = useQuery(
+    spotQuery(getFromLocalStorage("selectedSpotSlug"))
+  );
 
   return (
     <Container>

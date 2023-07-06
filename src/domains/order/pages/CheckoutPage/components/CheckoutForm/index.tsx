@@ -1,12 +1,15 @@
-import { FlexBox, Input, ButtonOutline, Switcher, Dropdown } from "~components";
+import {
+  FlexBox,
+  Input,
+  ButtonOutline,
+  Switcher,
+  Dropdown,
+  AuthModal,
+} from "~components";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useNavigate, useParams } from "react-router-dom";
-import { useOptimisticCartTotalPrice } from "~hooks/use-layout-fetchers";
-import { CartProduct } from "~models";
-import { Login } from "./components/Login";
-import { Total } from "./components/Total";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as S from "./styled";
 import {
   IGetCartRes,
@@ -19,6 +22,8 @@ import { orderApi } from "~api";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
 import { AxiosError } from "axios";
+import { getFromLocalStorage } from "~utils/ls.utils";
+import Skeleton from "react-loading-skeleton";
 
 // todo: logout user if his token is expired
 // timer may be solution
@@ -38,16 +43,10 @@ export const CheckoutForm = ({
   user,
   loading = false,
 }: TCheckoutFormProps) => {
-  const items = loading ? [] : cart.data.map((json) => new CartProduct(json));
-
-  const optimisticCartTotal = useOptimisticCartTotalPrice({
-    items: items,
-  });
-
   const { t } = useTranslation();
   const [pending, setPending] = useState(false);
-  const { lang, citySlug, spotSlug } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const CheckoutSchema = Yup.object().shape({
     phone: Yup.string()
@@ -86,7 +85,7 @@ export const CheckoutForm = ({
 
       const phone = values.phone;
       const email = values.email;
-      const spot_id_or_slug = spotSlug;
+      const spot_id_or_slug = getFromLocalStorage("selectedSpotSlug");
 
       const address = values.address_id
         ? user.customer.addresses.find(
@@ -126,7 +125,7 @@ export const CheckoutForm = ({
           wayforpayFormContainer.current.querySelector("form").submit();
         } else {
           navigate({
-            pathname: "/" + [lang, citySlug, spotSlug, "thankyou"].join("/"),
+            pathname: "/thankyou",
             search: "?order_id=" + res.data.poster_order.incoming_order_id,
           });
         }
@@ -176,7 +175,18 @@ export const CheckoutForm = ({
 
   return (
     <S.Container>
-      <Login user={user} loading={loading} />
+      {loading ? (
+        <Skeleton height={18} style={{ marginBottom: "20px" }} />
+      ) : (
+        !user && (
+          <FlexBox style={{ marginBottom: "20px" }}>
+            {t("checkout.alreadyHaveAccount")}
+            <AuthModal redirect_to={location.pathname}>
+              <S.Login>{t("common.login")}</S.Login>
+            </AuthModal>
+          </FlexBox>
+        )
+      )}
       <S.Form onSubmit={formik.handleSubmit}>
         <Switcher
           loading={loading}
@@ -337,7 +347,13 @@ export const CheckoutForm = ({
             >
               {t("checkout.order")}
             </ButtonOutline>
-            <Total loading={loading} total={optimisticCartTotal} />
+            {loading ? (
+              <Skeleton height={22} width={128} />
+            ) : (
+              <S.Total>
+                {t("checkout.to_pay")} {cart?.total}
+              </S.Total>
+            )}
           </FlexBox>
         </S.Control>
       </S.Form>
