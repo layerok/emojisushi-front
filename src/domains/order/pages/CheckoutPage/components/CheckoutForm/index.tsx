@@ -69,7 +69,7 @@ export const CheckoutForm = ({
     initialValues: {
       name: user ? `${user.name} ${user.surname}` : "",
       email: user ? user.email : "",
-      phone: user ? user.phone : "",
+      phone: user ? user.phone || "" : "",
       address: "",
       address_id: null,
       comment: "",
