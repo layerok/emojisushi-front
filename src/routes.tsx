@@ -145,6 +145,10 @@ export const routes = [
               },
             ],
           },
+          {
+            path: "refund",
+            lazy: () => import("~domains/payment/pages/RefundPage"),
+          },
         ],
       },
     ],
