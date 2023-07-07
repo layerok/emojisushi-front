@@ -1,33 +1,58 @@
 import { QueryOptions } from "@tanstack/react-query";
 import { Trans } from "react-i18next";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLoaderData } from "react-router-dom";
 import { accessApi } from "~api";
-import { ISpot } from "~api/types";
+import { IGetCategoriesRes, ISpot } from "~api/types";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
+import { categoriesQuery } from "~queries";
 import { queryClient } from "~query-client";
 import { appStore } from "~stores/appStore";
+
+const RootIndexElement = () => {
+  const loaderData = useLoaderData() as Awaited<
+    ReturnType<typeof rootIndexLoader>
+  >;
+  return <Navigate to={"/category/" + loaderData.categories.data[0].slug} />;
+};
+
+const rootIndexLoader = async () => {
+  const _categoriesQuery = categoriesQuery();
+
+  const categories =
+    queryClient.getQueryData<IGetCategoriesRes>(_categoriesQuery.queryKey) ??
+    (await queryClient.fetchQuery<IGetCategoriesRes>(_categoriesQuery));
+
+  return {
+    categories,
+  };
+};
+
+const rootLoader = async () => {
+  const query: QueryOptions<ISpot> = {
+    queryKey: ["main-spot"],
+    queryFn: () => accessApi.getMainSpot().then((res) => res.data),
+  };
+  const spot =
+    queryClient.getQueryData<ISpot>(query.queryKey) ??
+    (await queryClient.fetchQuery(query));
+  appStore.setSpot(spot);
+
+  return {
+    spot,
+  };
+};
+
 export const routes = [
   {
     path: "/",
     ErrorBoundary: DefaultErrorBoundary,
-    loader: async () => {
-      const query: QueryOptions<ISpot> = {
-        queryKey: ["main-spot"],
-        queryFn: () => accessApi.getMainSpot().then((res) => res.data),
-      };
-      const spot =
-        queryClient.getQueryData<ISpot>(query.queryKey) ??
-        (await queryClient.fetchQuery(query));
-      appStore.setSpot(spot);
-
-      return {
-        spot,
-      };
-    },
+    loader: rootLoader,
+    id: "root",
     children: [
       {
         index: true,
-        element: <Navigate to="category" />,
+        element: <RootIndexElement />,
+        loader: rootIndexLoader,
       },
       {
         id: "layout",
