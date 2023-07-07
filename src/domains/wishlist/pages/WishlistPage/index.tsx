@@ -16,13 +16,15 @@ import {
 } from "src/queries";
 import { MenuLayout } from "~domains/product/components/MenuLayout";
 import { useQuery } from "@tanstack/react-query";
-import { getFromLocalStorage } from "~utils/ls.utils";
 import { accessApi } from "~api";
+import { observer } from "mobx-react";
+import { useAppStore } from "~stores/appStore";
 
 // todo: fix layout for wishlist
 
-export const WishlistPage = () => {
+export const WishlistPage = observer(() => {
   const [searchParams] = useSearchParams();
+  const appStore = useAppStore();
   const q = searchParams.get("q");
   const sort = searchParams.get("sort") as SortKey;
 
@@ -30,10 +32,10 @@ export const WishlistPage = () => {
     queryFn: () =>
       accessApi
         .getSpot({
-          slug_or_id: getFromLocalStorage("selectedSpotSlug"),
+          slug_or_id: appStore.spot.slug,
         })
         .then((res) => res.data),
-    queryKey: ["spot", getFromLocalStorage("selectedSpotSlug")],
+    queryKey: ["spot", appStore.spot.slug],
   });
 
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
@@ -68,7 +70,7 @@ export const WishlistPage = () => {
       )}
     </MenuLayout>
   );
-};
+});
 
 const Wishlist = ({
   products,

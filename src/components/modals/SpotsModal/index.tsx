@@ -6,13 +6,14 @@ import { MapPinSvg } from "../../svg/MapPinSvg";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useCities } from "~hooks";
-import { getFromLocalStorage, setToLocalStorage } from "~utils/ls.utils";
+import { useAppStore } from "~stores/appStore";
 
-export const SpotsModalRaw = ({ open = false }) => {
+export const SpotsModal = observer(({ open = false }) => {
   const navigate = useNavigate();
 
   const cities = useCities();
   const { t } = useTranslation();
+  const appStore = useAppStore();
 
   return (
     <Modal
@@ -32,15 +33,12 @@ export const SpotsModalRaw = ({ open = false }) => {
                   <S.Item
                     key={city.id + "-" + spot.id}
                     onClick={() => {
-                      setToLocalStorage("selectedSpotId", spot.id);
-                      setToLocalStorage("selectedSpotSlug", spot.slug);
+                      appStore.setSpot(spot);
                       navigate("/category");
 
                       close();
                     }}
-                    selected={
-                      getFromLocalStorage("selectedSpotSlug") === spot.slug
-                    }
+                    selected={appStore.spot.slug === spot.slug}
                   >
                     {city.name}, {spot.name}
                   </S.Item>
@@ -54,6 +52,4 @@ export const SpotsModalRaw = ({ open = false }) => {
       <div></div>
     </Modal>
   );
-};
-
-export const SpotsModal = observer(SpotsModalRaw);
+});

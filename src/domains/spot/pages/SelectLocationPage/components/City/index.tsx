@@ -4,11 +4,12 @@ import { ICity } from "~api/types";
 import { MapPinSvg, SvgIcon } from "~components";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { setToLocalStorage } from "~utils/ls.utils";
+import { useAppStore } from "~stores/appStore";
 
 export const Cities = ({ items }: { items: ICity[] }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const appStore = useAppStore();
   return (
     <S.Cities>
       {items.map((city, index) => (
@@ -22,8 +23,7 @@ export const Cities = ({ items }: { items: ICity[] }) => {
                 onClick={(e) => {
                   e.preventDefault();
                   navigate("/category");
-                  setToLocalStorage("selectedSpotId", spot.id);
-                  setToLocalStorage("selectedSpotSlug", spot.slug);
+                  appStore.setSpot(spot);
                 }}
               >
                 <S.Spot.Inner>

@@ -1,4 +1,4 @@
-export const LogoSvg = ({ patriotic = false }) => {
+export const LogoSvg = ({ patriotic = true }) => {
   if (patriotic) {
     return (
       <svg

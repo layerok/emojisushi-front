@@ -2,7 +2,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "normalize.css";
 import { theme } from "~theme";
 import { ThemeProvider } from "styled-components";
-import { observer } from "mobx-react";
 import { routes } from "~routes";
 import { Preloader } from "~layout/Preloader";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -19,7 +18,7 @@ const FallbackElement = () => {
   return <Preloader />;
 };
 
-export const App = observer(() => {
+export const App = () => {
   return (
     <Suspense fallback={<Loader loading={true} />}>
       <ThemeProvider theme={theme}>
@@ -35,4 +34,4 @@ export const App = observer(() => {
       </ThemeProvider>
     </Suspense>
   );
-});
+};

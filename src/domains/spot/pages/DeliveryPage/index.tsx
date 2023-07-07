@@ -3,13 +3,13 @@ import * as S from "./styled";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { spotQuery } from "~domains/spot/queries/spot.query";
-import { getFromLocalStorage } from "~utils/ls.utils";
+import { useAppStore } from "~stores/appStore";
+import { observer } from "mobx-react";
 
-export const DeliveryPage = () => {
+export const DeliveryPage = observer(() => {
   const { t } = useTranslation();
-  const { data: spot } = useQuery(
-    spotQuery(getFromLocalStorage("selectedSpotSlug"))
-  );
+  const appStore = useAppStore();
+  const { data: spot } = useQuery(spotQuery(appStore.spot.slug));
 
   return (
     <Container>
@@ -42,7 +42,7 @@ export const DeliveryPage = () => {
       </S.FlexContainer>
     </Container>
   );
-};
+});
 
 export const Component = DeliveryPage;
 

@@ -23,15 +23,17 @@ import { PRODUCTS_LIMIT_STEP } from "~domains/category/constants";
 import { MenuLayout } from "~domains/product/components/MenuLayout";
 import { citiesQuery } from "~queries/cities.query";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
-import { getFromLocalStorage } from "~utils/ls.utils";
 import { accessApi } from "~api";
+import { observer } from "mobx-react";
+import { useAppStore } from "~stores/appStore";
 
-export const CategoryPage = () => {
+export const CategoryPage = observer(() => {
   const closed = isClosed({
     start: appConfig.workingHours[0],
     end: appConfig.workingHours[1],
   });
   const { categorySlug } = useParams();
+  const appStore = useAppStore();
 
   const [searchParams] = useSearchParams();
   const limit = searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
@@ -42,10 +44,10 @@ export const CategoryPage = () => {
     queryFn: () =>
       accessApi
         .getSpot({
-          slug_or_id: getFromLocalStorage("selectedSpotSlug"),
+          slug_or_id: appStore.spot.slug,
         })
         .then((res) => res.data),
-    queryKey: ["spot", getFromLocalStorage("selectedSpotSlug")],
+    queryKey: ["spot", appStore.spot.slug],
   });
 
   const { data: cities, isLoading: isCitiesLoading } = useQuery({
@@ -96,7 +98,7 @@ export const CategoryPage = () => {
       <RestaurantClosed open={closed} />
     </Container>
   );
-};
+});
 
 export const AwaitedProducts = ({
   categories,

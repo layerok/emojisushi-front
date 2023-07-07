@@ -9,17 +9,14 @@ import Skeleton from "react-loading-skeleton";
 import { Logo } from "../Logo";
 import { NavLink } from "react-router-dom";
 import { ICity } from "~api/types";
-import { useQuery } from "@tanstack/react-query";
-import { spotQuery } from "~domains/spot/queries/spot.query";
-import { getFromLocalStorage } from "~utils/ls.utils";
+import { observer } from "mobx-react";
+import { useAppStore } from "~stores/appStore";
 
 type LeftProps = { loading?: boolean; cities?: ICity[] };
 
-export const Left = ({ loading = false, cities = [] }: LeftProps) => {
+export const Left = observer(({ loading = false, cities = [] }: LeftProps) => {
   const { t } = useTranslation();
-  const { data: spot, isLoading } = useQuery(
-    spotQuery(getFromLocalStorage("selectedSpotSlug"))
-  );
+  const appStore = useAppStore();
 
   return (
     <S.Left>
@@ -28,10 +25,10 @@ export const Left = ({ loading = false, cities = [] }: LeftProps) => {
         <LocationPickerPopover cities={cities} loading={loading} offset={22} />
       </S.HeaderItem>
       <S.HeaderItem>
-        {isLoading ? (
+        {loading ? (
           <Skeleton width={71} height={17.25} />
         ) : (
-          <ContactsModal spot={spot}>
+          <ContactsModal spot={appStore.spot}>
             <div>{t("header.contacts")}</div>
           </ContactsModal>
         )}
@@ -55,4 +52,4 @@ export const Left = ({ loading = false, cities = [] }: LeftProps) => {
       </S.HeaderItem>
     </S.Left>
   );
-};
+});

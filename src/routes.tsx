@@ -1,11 +1,36 @@
 import { Trans } from "react-i18next";
 import { Navigate } from "react-router-dom";
+import { ISpot } from "~api/types";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
+import { spotsQuery } from "~domains/spot/queries/spots.query";
+import { queryClient } from "~query-client";
+import { appStore } from "~stores/appStore";
+import { getFromLocalStorage } from "~utils/ls.utils";
 
 export const routes = [
   {
     path: "/",
     ErrorBoundary: DefaultErrorBoundary,
+    loader: async () => {
+      const query = spotsQuery();
+      const spots =
+        queryClient.getQueryData<ISpot[]>(query.queryKey) ??
+        (await queryClient.fetchQuery<ISpot[]>(query));
+
+      const selectedSpot = spots.find(
+        (spot) => spot.slug === getFromLocalStorage("selectedSpotSlug")
+      );
+
+      if (!selectedSpot) {
+        appStore.setSpot(spots[0]);
+      } else {
+        appStore.setSpot(selectedSpot);
+      }
+
+      return {
+        spots,
+      };
+    },
 
     children: [
       {

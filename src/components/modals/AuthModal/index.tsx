@@ -11,7 +11,7 @@ import {
 } from "~components";
 import { useBreakpoint2 } from "~common/hooks";
 import { observer } from "mobx-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLogin, useRegister } from "~hooks/use-auth";
 import { AxiosError } from "axios";
@@ -19,7 +19,7 @@ import { queryClient } from "~query-client";
 import { cartQuery, wishlistsQuery } from "~queries";
 import { authApi } from "~api";
 import { useMutation } from "@tanstack/react-query";
-import { getFromLocalStorage } from "~utils/ls.utils";
+import { useAppStore } from "~stores/appStore";
 
 export const AuthModal = ({ children, redirect_to }) => {
   // todo: don't use it
@@ -64,7 +64,7 @@ export const AuthModal = ({ children, redirect_to }) => {
   );
 };
 
-const SignUpForm = ({ setShowSignUp }) => {
+const SignUpForm = observer(({ setShowSignUp }) => {
   const { t } = useTranslation();
   const [checked, setChecked] = useState(false);
   const register = useRegister();
@@ -88,7 +88,8 @@ const SignUpForm = ({ setShowSignUp }) => {
         const name = formData.get("name") + "";
         const surname = formData.get("surname") + "";
         const agree = !!formData.get("agree");
-        const spot_slug_or_id = getFromLocalStorage("selectedSpotSlug");
+        const appStore = useAppStore();
+        const spot_slug_or_id = appStore.spot.slug;
 
         setErrors({});
 
@@ -172,7 +173,7 @@ const SignUpForm = ({ setShowSignUp }) => {
       </FlexBox>
     </S.SignUpForm>
   );
-};
+});
 
 const PasswordRecoveryForm = observer(({ setShowPasswordRecovery }) => {
   const { t } = useTranslation();

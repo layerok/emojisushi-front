@@ -3,7 +3,6 @@ import { EqualHeight } from "react-equal-height";
 import { Product } from "~models";
 import { Footer, Items, Header } from "./components";
 import { IGetCartRes, IGetWishlistRes } from "~api/types";
-
 // todo: fix design at 1280px breakpoing
 
 type TProductsGridProps = {
@@ -32,6 +31,8 @@ export const ProductsGrid = ({
   const debouncedBreakpoint = useDebounce(() => {
     return breakpoint;
   }, 300);
+
+  // todo: change title when searching
 
   return (
     <div style={{ position: "relative", width: "100%" }}>

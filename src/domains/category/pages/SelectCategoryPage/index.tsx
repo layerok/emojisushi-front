@@ -6,20 +6,22 @@ import Skeleton from "react-loading-skeleton";
 import { categoriesQuery } from "~queries";
 import { useQuery } from "@tanstack/react-query";
 import { accessApi } from "~api";
-import { getFromLocalStorage } from "~utils/ls.utils";
+import { observer } from "mobx-react";
+import { useAppStore } from "~stores/appStore";
 
-export const SelectCategoryPage = () => {
+export const SelectCategoryPage = observer(() => {
   const { t } = useTranslation();
+  const appStore = useAppStore();
 
   const { data: spot } = useQuery({
     queryFn: async () =>
       accessApi
         .getSpot({
-          slug_or_id: getFromLocalStorage("selectedSpotSlug"),
+          slug_or_id: appStore.spot.slug,
         })
         .then((res) => res.data),
 
-    queryKey: ["spot", getFromLocalStorage("selectedSpotSlug")],
+    queryKey: ["spot", appStore.spot.slug],
   });
 
   const { data: categories, isLoading } = useQuery({
@@ -74,7 +76,7 @@ export const SelectCategoryPage = () => {
       </S.Category>
     </Container>
   );
-};
+});
 
 export const Component = SelectCategoryPage;
 
