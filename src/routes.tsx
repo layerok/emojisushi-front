@@ -1,12 +1,19 @@
 import { QueryOptions } from "@tanstack/react-query";
 import { Trans } from "react-i18next";
-import { Navigate, useLoaderData } from "react-router-dom";
+import {
+  LoaderFunctionArgs,
+  Navigate,
+  Outlet,
+  useLoaderData,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { accessApi } from "~api";
 import { IGetCategoriesRes, ISpot } from "~api/types";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { categoriesQuery } from "~queries";
 import { queryClient } from "~query-client";
-import { appStore } from "~stores/appStore";
+import { appStore, useAppStore } from "~stores/appStore";
 
 const RootIndexElement = () => {
   const loaderData = useLoaderData() as Awaited<
@@ -25,6 +32,24 @@ const rootIndexLoader = async () => {
   return {
     categories,
   };
+};
+
+const RootElement = () => {
+  const [searchParams] = useSearchParams();
+  const appStore = useAppStore();
+
+  if (searchParams.has("location_confirmed")) {
+    searchParams.delete("location_confirmed");
+    appStore.setUserConfirmedLocation(true);
+    return (
+      <Navigate
+        to={{
+          search: searchParams.toString(),
+        }}
+      />
+    );
+  }
+  return <Outlet />;
 };
 
 const rootLoader = async () => {
@@ -48,6 +73,7 @@ export const routes = [
     ErrorBoundary: DefaultErrorBoundary,
     loader: rootLoader,
     id: "root",
+    element: <RootElement />,
     children: [
       {
         index: true,

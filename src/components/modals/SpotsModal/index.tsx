@@ -4,51 +4,56 @@ import { Modal } from "../Modal";
 import { observer } from "mobx-react";
 import { MapPinSvg } from "../../svg/MapPinSvg";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import { useCities } from "~hooks";
 import { useAppStore } from "~stores/appStore";
+import { ISpot } from "~api/types";
+import { useLocation } from "react-router-dom";
 
-export const SpotsModal = observer(({ open = false }) => {
-  const navigate = useNavigate();
+type SpotsModalProps = {
+  open?: boolean;
+  spots: ISpot[];
+};
 
-  const cities = useCities();
-  const { t } = useTranslation();
-  const appStore = useAppStore();
+export const SpotsModal = observer(
+  ({ open = false, spots }: SpotsModalProps) => {
+    const { t } = useTranslation();
+    const appStore = useAppStore();
+    const location = useLocation();
 
-  return (
-    <Modal
-      open={open}
-      render={({ close }) => (
-        <S.Wrapper>
-          <S.FilterMagnifier>
-            <S.Text>{t("spotsModal.title")}</S.Text>
-            <SvgIcon width={"25px"} style={{ marginLeft: "13px" }}>
-              <MapPinSvg />
-            </SvgIcon>
-          </S.FilterMagnifier>
-          <S.Content>
-            {cities.map((city, i) => {
-              return city.spots.map((spot, i) => {
+    return (
+      <Modal
+        open={open}
+        render={({ close }) => (
+          <S.Wrapper>
+            <S.FilterMagnifier>
+              <S.Text>{t("spotsModal.title")}</S.Text>
+              <SvgIcon width={"25px"} style={{ marginLeft: "13px" }}>
+                <MapPinSvg />
+              </SvgIcon>
+            </S.FilterMagnifier>
+            <S.Content>
+              {spots.map((spot, i) => {
                 return (
                   <S.Item
-                    key={city.id + "-" + spot.id}
+                    key={spot.slug}
                     onClick={() => {
-                      navigate("/category");
-
+                      window.location.href =
+                        spot.frontend_url +
+                        location.pathname +
+                        "?location_confirmed=true";
                       close();
                     }}
                     selected={appStore.spot.slug === spot.slug}
                   >
-                    {city.name}, {spot.name}
+                    {spot.name}
                   </S.Item>
                 );
-              });
-            })}
-          </S.Content>
-        </S.Wrapper>
-      )}
-    >
-      <div></div>
-    </Modal>
-  );
-});
+              })}
+            </S.Content>
+          </S.Wrapper>
+        )}
+      >
+        <div></div>
+      </Modal>
+    );
+  }
+);

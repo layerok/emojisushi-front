@@ -6,12 +6,16 @@ class AppStore {
     makeAutoObservable(this);
   }
   lng = "uk";
+  userConfirmedLocation = false;
   spot: ISpot = null;
   setLng(lng: string) {
     this.lng = lng;
   }
   setSpot(spot: ISpot) {
     this.spot = spot;
+  }
+  setUserConfirmedLocation(state: boolean) {
+    this.userConfirmedLocation = state;
   }
 }
 

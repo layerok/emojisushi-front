@@ -2,7 +2,13 @@ import { Header } from "../Header";
 import { Footer } from "../Footer";
 import * as S from "./styled";
 import { useWindowScroll } from "react-use";
-import { StickyToTopBtn, Sticky, TinyCartButton, CartModal } from "~components";
+import {
+  StickyToTopBtn,
+  Sticky,
+  TinyCartButton,
+  CartModal,
+  SpotsModal,
+} from "~components";
 import { ReactNode } from "react";
 import { Outlet } from "react-router-dom";
 import { cartQuery } from "~queries";
@@ -12,6 +18,7 @@ import { useUser } from "~hooks/use-auth";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { observer } from "mobx-react";
 import { spotsQuery } from "~domains/spot/queries/spots.query";
+import { useAppStore } from "~stores/appStore";
 
 export const Layout = observer(
   ({ children, ...rest }: { children?: ReactNode }) => {
@@ -22,6 +29,7 @@ export const Layout = observer(
     const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
     const { data: user, isLoading: isUserLoading } = useUser();
     const { data: spots, isLoading: isSpotsLoading } = useQuery(spotsQuery());
+    const appStore = useAppStore();
 
     return (
       <S.Layout {...rest}>
@@ -44,6 +52,9 @@ export const Layout = observer(
               </div>
             </CartModal>
           </Sticky>
+        )}
+        {!isSpotsLoading && (
+          <SpotsModal open={!appStore.userConfirmedLocation} spots={spots} />
         )}
         <StickyToTopBtn />
       </S.Layout>
