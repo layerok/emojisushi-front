@@ -33,7 +33,6 @@ export const Search = ({ loading = false }: TSearchProps) => {
           // todo: add loading indicator when searching
           debouncedFetch(event.target.form);
         }}
-        type="search"
         name="q"
         defaultValue={q}
       />

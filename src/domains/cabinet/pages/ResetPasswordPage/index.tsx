@@ -17,91 +17,89 @@ export const ResetPasswordPage = () => {
   const [isReset, setIsReset] = useState(false);
 
   return (
-    <Layout>
-      <FlexBox justifyContent={"center"}>
-        <S.Form
-          onSubmit={(e) => {
-            e.preventDefault();
+    <FlexBox justifyContent={"center"}>
+      <S.Form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
+        <h2>{t("passwordReset.title")}</h2>
+
+        <Input
+          error={codeError}
+          value={code}
+          onChange={(e) => {
+            setCode((e.target as HTMLInputElement).value);
+            setCodeError("");
           }}
-        >
-          <h2>{t("passwordReset.title")}</h2>
+          style={{
+            marginTop: "16px",
+          }}
+          name={"code"}
+          placeholder={t("common.code")}
+        />
 
-          <Input
-            error={codeError}
-            value={code}
-            onChange={(e) => {
-              setCode((e.target as HTMLInputElement).value);
-              setCodeError("");
-            }}
+        <PasswordInput
+          error={passwordError}
+          onChange={(e) => {
+            setPassword((e.target as HTMLInputElement).value);
+            setPasswordError("");
+          }}
+          style={{
+            marginTop: "16px",
+          }}
+          name={"password"}
+          placeholder={t("common.newPassword")}
+        />
+
+        {isReset && (
+          <p
             style={{
-              marginTop: "16px",
-            }}
-            name={"code"}
-            placeholder={t("common.code")}
-          />
-
-          <PasswordInput
-            error={passwordError}
-            onChange={(e) => {
-              setPassword((e.target as HTMLInputElement).value);
-              setPasswordError("");
-            }}
-            style={{
-              marginTop: "16px",
-            }}
-            name={"password"}
-            placeholder={t("common.newPassword")}
-          />
-
-          {isReset && (
-            <p
-              style={{
-                color: "green",
-                marginTop: "12px",
-              }}
-            >
-              Пароль успішно скинутий!
-            </p>
-          )}
-
-          <Button
-            submitting={loading}
-            onClick={() => {
-              setLoading(true);
-              authApi
-                .resetPassword({
-                  code,
-                  password,
-                })
-                .then((res) => {
-                  setIsReset(true);
-                })
-                .catch((e) => {
-                  const { errors } = e.response.data;
-                  if (errors) {
-                    Object.keys(errors).forEach((key) => {
-                      if (key === "password") {
-                        setPasswordError(errors[key][0]);
-                      }
-                      if (key === "code") {
-                        setCodeError(errors[key][0]);
-                      }
-                    });
-                  }
-                })
-                .finally(() => {
-                  setLoading(false);
-                });
-            }}
-            style={{
-              marginTop: "16px",
+              color: "green",
+              marginTop: "12px",
             }}
           >
-            {t("common.reset")}
-          </Button>
-        </S.Form>
-      </FlexBox>
-    </Layout>
+            Пароль успішно скинутий!
+          </p>
+        )}
+
+        <Button
+          submitting={loading}
+          onClick={() => {
+            setLoading(true);
+            authApi
+              .resetPassword({
+                code,
+                password,
+              })
+              .then((res) => {
+                setIsReset(true);
+              })
+              .catch((e) => {
+                const { errors } = e.response.data;
+                if (errors) {
+                  Object.keys(errors).forEach((key) => {
+                    if (key === "password") {
+                      setPasswordError(errors[key][0]);
+                    }
+                    if (key === "code") {
+                      setCodeError(errors[key][0]);
+                    }
+                  });
+                }
+              })
+              .finally(() => {
+                setLoading(false);
+              });
+          }}
+          style={{
+            marginTop: "16px",
+          }}
+        >
+          {t("common.reset")}
+        </Button>
+      </S.Form>
+    </FlexBox>
   );
 };
 

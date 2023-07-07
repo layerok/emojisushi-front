@@ -131,18 +131,19 @@ export const routes = [
               },
             ],
           },
-        ],
-      },
-      {
-        path: "reset-password",
-        children: [
+
           {
-            index: true,
-            lazy: () => import("~domains/cabinet/pages/ResetPasswordPage"),
-          },
-          {
-            path: ":code",
-            lazy: () => import("~domains/cabinet/pages/ResetPasswordPage"),
+            path: "reset-password",
+            children: [
+              {
+                index: true,
+                lazy: () => import("~domains/cabinet/pages/ResetPasswordPage"),
+              },
+              {
+                path: ":code",
+                lazy: () => import("~domains/cabinet/pages/ResetPasswordPage"),
+              },
+            ],
           },
         ],
       },
