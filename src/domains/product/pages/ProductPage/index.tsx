@@ -21,11 +21,8 @@ import { isClosed } from "src/utils/time.utils";
 import { appConfig } from "src/config/app";
 import { PRODUCTS_LIMIT_STEP } from "~domains/category/constants";
 import { MenuLayout } from "~domains/product/components/MenuLayout";
-import { citiesQuery } from "~queries/cities.query";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
-import { accessApi } from "~api";
 import { observer } from "mobx-react";
-import { useAppStore } from "~stores/appStore";
 
 export const CategoryPage = observer(() => {
   const closed = isClosed({
@@ -33,32 +30,15 @@ export const CategoryPage = observer(() => {
     end: appConfig.workingHours[1],
   });
   const { categorySlug } = useParams();
-  const appStore = useAppStore();
 
   const [searchParams] = useSearchParams();
   const limit = searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
   const q = searchParams.get("q");
   const sort = searchParams.get("sort") as SortKey;
 
-  const { data: spot } = useQuery({
-    queryFn: () =>
-      accessApi
-        .getSpot({
-          slug_or_id: appStore.spot.slug,
-        })
-        .then((res) => res.data),
-    queryKey: ["spot", appStore.spot.slug],
-  });
-
-  const { data: cities, isLoading: isCitiesLoading } = useQuery({
-    ...citiesQuery,
-  });
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
   const { data: categories, isLoading: isCategoriesLoading } = useQuery({
-    ...categoriesQuery({
-      spot_slug_or_id: spot?.slug,
-    }),
-    enabled: !!spot?.id,
+    ...categoriesQuery(),
   });
   const { data: wishlists, isLoading: isWishlistLoading } =
     useQuery(wishlistsQuery);
@@ -70,9 +50,7 @@ export const CategoryPage = observer(() => {
       sort: sort,
       offset: 0,
       limit: +limit,
-      spot_slug_or_id: spot?.slug,
     }),
-    enabled: !!spot?.id,
   });
 
   return (
@@ -82,8 +60,7 @@ export const CategoryPage = observer(() => {
         {isWishlistLoading ||
         isCartLoading ||
         isProductsLoading ||
-        isCategoriesLoading ||
-        isCitiesLoading ? (
+        isCategoriesLoading ? (
           <ProductsGrid loading />
         ) : (
           <AwaitedProducts

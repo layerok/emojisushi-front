@@ -1,11 +1,11 @@
 import * as S from "./styled";
 import { SvgIcon, CaretDownSvg, FlexBox, DropdownPopover } from "~components";
 import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg";
-import { useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { ICity } from "~api/types";
-import { useAppStore } from "~stores/appStore";
 import { observer } from "mobx-react";
+import { appStore } from "~stores/appStore";
+import { useLocation } from "react-router-dom";
 
 type LocationPickerPopoverProps = {
   offset?: number;
@@ -20,25 +20,17 @@ export const LocationPickerPopover = observer(
     offset = 0,
     backgroundColor = "#171717",
     width = "211px",
-    cities,
     loading,
   }: LocationPickerPopoverProps) => {
-    const navigate = useNavigate();
-    const appStore = useAppStore();
-
-    const options = cities
-      .map((city) =>
-        city.spots.map((spot) => ({
-          name: city.name + ", " + spot.name,
-          id: city.id + "-" + spot.id,
-          city: city,
-          spot: spot,
-        }))
-      )
-      .flat();
+    const location = useLocation();
+    const options = appStore.spots.map((spot) => ({
+      id: spot.slug,
+      name: spot.name,
+      url: spot.url,
+    }));
 
     const selectedOption = options.find(
-      (option) => option.spot.slug === appStore.spot.slug
+      (option) => option.id === appStore.spot.slug
     );
     const selectedIndex = options.indexOf(selectedOption);
     if (loading) {
@@ -52,8 +44,8 @@ export const LocationPickerPopover = observer(
         options={options}
         selectedIndex={selectedIndex}
         onSelect={({ close, option, index }) => {
-          appStore.setSpot(option.spot);
-          navigate("/category");
+          window.location.href = option.url + location.pathname;
+
           close();
         }}
       >

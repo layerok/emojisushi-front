@@ -191,7 +191,6 @@ export type IFilter = {
 export type IGetCategoriesParams = {
   offset?: number;
   limit?: number;
-  spot_slug_or_id: number | string;
 };
 
 export type SortKey =
@@ -212,7 +211,6 @@ export type IGetProductsParams = {
   limit?: number;
   wishlist_id?: number;
   wishlist?: boolean;
-  spot_slug_or_id: string | number;
 };
 
 export type IGetCategoriesRes = {

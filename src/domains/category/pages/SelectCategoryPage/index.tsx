@@ -5,30 +5,13 @@ import { Category } from "./components/Category";
 import Skeleton from "react-loading-skeleton";
 import { categoriesQuery } from "~queries";
 import { useQuery } from "@tanstack/react-query";
-import { accessApi } from "~api";
 import { observer } from "mobx-react";
-import { useAppStore } from "~stores/appStore";
 
 export const SelectCategoryPage = observer(() => {
   const { t } = useTranslation();
-  const appStore = useAppStore();
-
-  const { data: spot } = useQuery({
-    queryFn: async () =>
-      accessApi
-        .getSpot({
-          slug_or_id: appStore.spot.slug,
-        })
-        .then((res) => res.data),
-
-    queryKey: ["spot", appStore.spot.slug],
-  });
 
   const { data: categories, isLoading } = useQuery({
-    ...categoriesQuery({
-      spot_slug_or_id: spot?.slug,
-    }),
-    enabled: !!spot?.slug,
+    ...categoriesQuery(),
   });
 
   return (

@@ -1,24 +1,30 @@
-import { makeAutoObservable, reaction } from "mobx";
-import { ISpot } from "~api/types";
-import { setToLocalStorage } from "~utils/ls.utils";
+import { makeAutoObservable } from "mobx";
+import spots from "../spots.json";
+
+type Spot = {
+  id: number;
+  phones: string;
+  html_content: string;
+  google_map_url: string;
+  slug: string;
+  address: string;
+  url: string;
+  name: string;
+};
+
+const spot = spots.find(
+  (spot) => spot.slug === process.env.REACT_APP_SPOT_SLUG
+);
 
 class AppStore {
   constructor() {
     makeAutoObservable(this);
-    reaction(
-      () => this.spot,
-      (spot) => {
-        setToLocalStorage("selectedSpotSlug", spot.slug);
-      }
-    );
   }
   lng = "uk";
-  spot: ISpot | null = null;
+  spots: Spot[] = spots as Spot[];
+  spot: Spot = spot as Spot;
   setLng(lng: string) {
     this.lng = lng;
-  }
-  setSpot(spot: ISpot) {
-    this.spot = spot;
   }
 }
 

@@ -4,16 +4,12 @@ import { SvgIcon, FlexBox, StaticMap, TelegramModal, Modal } from "~components";
 import { PhoneSvg, InstagramSvg, TelegramSvg } from "~components/svg";
 import { useTranslation } from "react-i18next";
 import { InstagramLink } from "~layout/Footer/styled";
-import { ISpot } from "~api/types";
+import { useAppStore } from "~stores/appStore";
 
-export const ContactsModal = ({
-  children,
-  spot,
-}: {
-  children: ReactElement;
-  spot: ISpot;
-}) => {
+export const ContactsModal = ({ children }: { children: ReactElement }) => {
   const { t } = useTranslation();
+  const appStore = useAppStore();
+  const spot = appStore.spot;
 
   return (
     <Modal

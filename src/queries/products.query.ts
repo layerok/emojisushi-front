@@ -4,7 +4,7 @@ import { QueryOptions } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 export const productsQuery = (
-  params: IGetProductsParams
+  params: IGetProductsParams = {}
 ): QueryOptions<IGetProductsRes> => ({
   queryKey: ["products", "list", params ?? "all"],
   queryFn: async () => {

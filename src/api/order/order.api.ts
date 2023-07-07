@@ -6,7 +6,6 @@ export const orderApi = {
     firstname?: string; // це ім'я зберігаеться на сайті
     lastname?: string;
     email?: string;
-    spot_id_or_slug: string | number;
 
     shipping_method_id: number;
     payment_method_id: number;

@@ -88,7 +88,6 @@ export const CheckoutForm = observer(
 
         const phone = values.phone;
         const email = values.email;
-        const spot_id_or_slug = appStore.spot.slug;
 
         const address = values.address_id
           ? user.customer.addresses.find(
@@ -110,7 +109,6 @@ export const CheckoutForm = observer(
             firstname,
             lastname,
             email,
-            spot_id_or_slug,
 
             address,
             payment_method_id,

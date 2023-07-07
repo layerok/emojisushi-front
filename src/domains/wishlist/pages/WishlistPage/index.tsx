@@ -16,34 +16,18 @@ import {
 } from "src/queries";
 import { MenuLayout } from "~domains/product/components/MenuLayout";
 import { useQuery } from "@tanstack/react-query";
-import { accessApi } from "~api";
 import { observer } from "mobx-react";
-import { useAppStore } from "~stores/appStore";
 
 // todo: fix layout for wishlist
 
 export const WishlistPage = observer(() => {
   const [searchParams] = useSearchParams();
-  const appStore = useAppStore();
   const q = searchParams.get("q");
   const sort = searchParams.get("sort") as SortKey;
 
-  const { data: spot } = useQuery({
-    queryFn: () =>
-      accessApi
-        .getSpot({
-          slug_or_id: appStore.spot.slug,
-        })
-        .then((res) => res.data),
-    queryKey: ["spot", appStore.spot.slug],
-  });
-
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
   const { data: categories, isLoading: isCategoriesLoading } = useQuery({
-    ...categoriesQuery({
-      spot_slug_or_id: spot.slug,
-    }),
-    enabled: !!spot?.id,
+    ...categoriesQuery(),
   });
   const { data: wishlists, isLoading: isWishlistLoading } =
     useQuery(wishlistsQuery);
@@ -53,9 +37,7 @@ export const WishlistPage = observer(() => {
       search: q,
       limit: 2000,
       sort: sort,
-      spot_slug_or_id: spot?.slug,
     }),
-    enabled: !!spot?.id,
   });
 
   return (

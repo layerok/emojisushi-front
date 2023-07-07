@@ -89,7 +89,6 @@ const SignUpForm = observer(({ setShowSignUp }) => {
         const surname = formData.get("surname") + "";
         const agree = !!formData.get("agree");
         const appStore = useAppStore();
-        const spot_slug_or_id = appStore.spot.slug;
 
         setErrors({});
 
@@ -101,8 +100,6 @@ const SignUpForm = observer(({ setShowSignUp }) => {
             name,
             surname,
             agree,
-            // check if this field is needed
-            spot_slug_or_id,
           },
           {
             onSuccess: () => {

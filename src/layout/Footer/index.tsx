@@ -9,20 +9,19 @@ import {
 import { TelegramSvg, InstagramSvg, PhoneSvg, LogoSvg } from "~components/svg";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
-import { ISpot } from "~api/types";
+import { useAppStore } from "~stores/appStore";
 
 type FooterProps = {
   loading?: boolean;
-  spot?: ISpot;
 };
 
-export const Footer = ({ loading = false, spot }: FooterProps) => {
+export const Footer = ({ loading = false }: FooterProps) => {
   return (
     <S.Footer>
       <Container>
         <S.Left>
           <Logo loading={loading} />
-          <Socials loading={loading} spot={spot} />
+          <Socials loading={loading} />
         </S.Left>
         <S.Right>
           <Map loading={loading} />
@@ -53,22 +52,24 @@ const Map = ({ loading = false }: IMapProps) => {
   );
 };
 
-type ISocialsProps = { loading?: boolean; spot: ISpot };
+type ISocialsProps = { loading?: boolean };
 
-const Socials = ({ loading = false, spot }: ISocialsProps) => {
+const Socials = ({ loading = false }: ISocialsProps) => {
   return (
     <S.List>
-      <Phones loading={loading} spot={spot} />
+      <Phones loading={loading} />
       <Instagram loading={loading} />
       <Telegram loading={loading} />
     </S.List>
   );
 };
 
-type IPhonesProps = { loading?: boolean; spot: ISpot };
+type IPhonesProps = { loading?: boolean };
 
-const Phones = ({ loading = false, spot }: IPhonesProps) => {
+const Phones = ({ loading = false }: IPhonesProps) => {
   const { t } = useTranslation();
+  const appStore = useAppStore();
+  const spot = appStore.spot;
   return (
     spot?.phones?.length > 0 && (
       <>

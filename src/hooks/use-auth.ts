@@ -31,8 +31,6 @@ export const { useUser, useLogin, useRegister, useLogout, AuthLoader } =
       name,
       surname,
       agree,
-      // check if this field is needed
-      spot_slug_or_id,
     }) => {
       const res = await authApi.register({
         email,
@@ -41,8 +39,6 @@ export const { useUser, useLogin, useRegister, useLogout, AuthLoader } =
         name,
         surname,
         agree,
-        // check if this field is needed
-        spot_slug_or_id,
       });
       const { token } = res.data.data;
       Cookies.set("jwt", token);

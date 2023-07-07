@@ -1,7 +1,7 @@
 import * as S from "./styled";
 import { ButtonDark, NavLink, Container } from "~components";
 import { useTranslation } from "react-i18next";
-import { Outlet, useMatches, useNavigate, useParams } from "react-router-dom";
+import { Outlet, useMatches, useNavigate } from "react-router-dom";
 import { AuthLoader, useLogout } from "~hooks/use-auth";
 import { queryClient } from "~query-client";
 import { cartQuery, wishlistsQuery } from "~queries";

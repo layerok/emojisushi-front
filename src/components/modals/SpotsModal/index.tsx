@@ -33,7 +33,6 @@ export const SpotsModal = observer(({ open = false }) => {
                   <S.Item
                     key={city.id + "-" + spot.id}
                     onClick={() => {
-                      appStore.setSpot(spot);
                       navigate("/category");
 
                       close();

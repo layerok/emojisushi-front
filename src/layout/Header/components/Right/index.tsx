@@ -21,12 +21,7 @@ type RightProps = {
   user?: IUser;
 };
 
-export const Right = ({
-  loading = false,
-  cities = [],
-  cart,
-  user,
-}: RightProps) => {
+export const Right = ({ loading = false, cart, user }: RightProps) => {
   const navigate = useNavigate();
   return (
     <S.Right>
@@ -58,7 +53,7 @@ export const Right = ({
         {loading ? (
           <Skeleton width={32} height={32} />
         ) : (
-          <MobMenuModal cities={cities}>
+          <MobMenuModal>
             <SvgIcon width={"32px"} color={"white"}>
               <BurgerSvg />
             </SvgIcon>

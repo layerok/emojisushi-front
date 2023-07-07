@@ -12,7 +12,6 @@ type IParams = {
   XDEBUG_SESSION_START?: boolean;
   lang?: string;
   session_id?: string;
-  spot_id?: number;
 };
 
 client.interceptors.request.use((config = {}) => {
