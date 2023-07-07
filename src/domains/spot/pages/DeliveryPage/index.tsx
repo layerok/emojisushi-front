@@ -27,29 +27,9 @@ export const DeliveryPage = observer(() => {
             <b>{t("common.address")}</b>: {appStore.spot.address}
           </S.AdresText>
 
-          <S.DeliveryText>
-            {appStore.spot.slug === "chornomorsk-mira" && (
-              <>
-                <h3>Умови доставки:</h3>
-                <ol>
-                  <li>Місто - від 400₴ безкоштовно, інакше 50₴&nbsp;</li>
-                  <li>Олександрівка - від 550₴ безкоштовно, інакше 50₴</li>
-                  <li>Молодіжне - від 500₴ безкоштовно, інашке 50₴</li>
-                  <li>
-                    Великодолинське - від 800₴ &nbsp;безкоштовно, інакше 100₴
-                  </li>
-                  <li>
-                    Малодолинське - від 600₴ безкоштовно, інакше 100₴&nbsp;
-                  </li>
-                  <li>Ветеран , Волна - від 500грн безкоштовно, інашке 50₴</li>
-                  <li>
-                    Бурлача балка - від 1000грн безкоштовно, інакше таксі за
-                    рахунок клієнта
-                  </li>
-                </ol>
-              </>
-            )}
-          </S.DeliveryText>
+          <S.DeliveryText
+            dangerouslySetInnerHTML={{ __html: appStore.spot.html_content }}
+          />
           <Link
             style={{
               color: "white",

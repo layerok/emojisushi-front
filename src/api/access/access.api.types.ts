@@ -18,6 +18,8 @@ export type ISpot = {
   cover: null | string;
   photos: IFile[];
   city: ICity | null;
+  frontend_url: string;
+  is_main: boolean;
 };
 
 export type ICity = {

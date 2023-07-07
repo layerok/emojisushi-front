@@ -1,11 +1,29 @@
+import { QueryOptions } from "@tanstack/react-query";
 import { Trans } from "react-i18next";
 import { Navigate } from "react-router-dom";
+import { accessApi } from "~api";
+import { ISpot } from "~api/types";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
+import { queryClient } from "~query-client";
+import { appStore } from "~stores/appStore";
 export const routes = [
   {
     path: "/",
     ErrorBoundary: DefaultErrorBoundary,
+    loader: async () => {
+      const query: QueryOptions<ISpot> = {
+        queryKey: ["main-spot"],
+        queryFn: () => accessApi.getMainSpot().then((res) => res.data),
+      };
+      const spot =
+        queryClient.getQueryData<ISpot>(query.queryKey) ??
+        (await queryClient.fetchQuery(query));
+      appStore.setSpot(spot);
 
+      return {
+        spot,
+      };
+    },
     children: [
       {
         index: true,

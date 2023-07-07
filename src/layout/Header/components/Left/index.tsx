@@ -8,19 +8,19 @@ import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { Logo } from "../Logo";
 import { NavLink } from "react-router-dom";
-import { ICity } from "~api/types";
+import { ISpot } from "~api/types";
 import { observer } from "mobx-react";
 
-type LeftProps = { loading?: boolean; cities?: ICity[] };
+type LeftProps = { loading?: boolean; spots?: ISpot[] };
 
-export const Left = observer(({ loading = false, cities = [] }: LeftProps) => {
+export const Left = observer(({ loading = false, spots = [] }: LeftProps) => {
   const { t } = useTranslation();
 
   return (
     <S.Left>
       <Logo loading={loading} />
       <S.HeaderItem>
-        <LocationPickerPopover cities={cities} loading={loading} offset={22} />
+        <LocationPickerPopover spots={spots} loading={loading} offset={22} />
       </S.HeaderItem>
       <S.HeaderItem>
         {loading ? (

@@ -7,11 +7,11 @@ import { ReactNode } from "react";
 import { Outlet } from "react-router-dom";
 import { cartQuery } from "~queries";
 import { IUser, IGetCartRes, IGetCitiesRes, ICity, ISpot } from "~api/types";
-import { citiesQuery } from "~queries/cities.query";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "~hooks/use-auth";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { observer } from "mobx-react";
+import { spotsQuery } from "~domains/spot/queries/spots.query";
 
 export const Layout = observer(
   ({ children, ...rest }: { children?: ReactNode }) => {
@@ -21,13 +21,14 @@ export const Layout = observer(
 
     const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
     const { data: user, isLoading: isUserLoading } = useUser();
+    const { data: spots, isLoading: isSpotsLoading } = useQuery(spotsQuery());
 
     return (
       <S.Layout {...rest}>
-        {isCartLoading || isUserLoading ? (
+        {isCartLoading || isUserLoading || isSpotsLoading ? (
           <Header loading />
         ) : (
-          <Header cart={cart} user={user} />
+          <Header spots={spots} cart={cart} user={user} />
         )}
         <S.Main>
           <S.Content>

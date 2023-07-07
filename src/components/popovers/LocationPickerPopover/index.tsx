@@ -2,7 +2,7 @@ import * as S from "./styled";
 import { SvgIcon, CaretDownSvg, FlexBox, DropdownPopover } from "~components";
 import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg";
 import Skeleton from "react-loading-skeleton";
-import { ICity } from "~api/types";
+import { ICity, ISpot } from "~api/types";
 import { observer } from "mobx-react";
 import { appStore } from "~stores/appStore";
 import { useLocation } from "react-router-dom";
@@ -12,7 +12,7 @@ type LocationPickerPopoverProps = {
   backgroundColor?: string;
   width?: string;
   loading?: boolean;
-  cities?: ICity[];
+  spots?: ISpot[];
 };
 
 export const LocationPickerPopover = observer(
@@ -20,13 +20,14 @@ export const LocationPickerPopover = observer(
     offset = 0,
     backgroundColor = "#171717",
     width = "211px",
+    spots = [],
     loading,
   }: LocationPickerPopoverProps) => {
     const location = useLocation();
-    const options = appStore.spots.map((spot) => ({
+    const options = spots.map((spot) => ({
       id: spot.slug,
       name: spot.name,
-      url: spot.url,
+      url: spot.frontend_url,
     }));
 
     const selectedOption = options.find(

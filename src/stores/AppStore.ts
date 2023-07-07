@@ -1,30 +1,17 @@
 import { makeAutoObservable } from "mobx";
-import spots from "../spots.json";
-
-type Spot = {
-  id: number;
-  phones: string;
-  html_content: string;
-  google_map_url: string;
-  slug: string;
-  address: string;
-  url: string;
-  name: string;
-};
-
-const spot = spots.find(
-  (spot) => spot.slug === process.env.REACT_APP_SPOT_SLUG
-);
+import { ISpot } from "~api/types";
 
 class AppStore {
   constructor() {
     makeAutoObservable(this);
   }
   lng = "uk";
-  spots: Spot[] = spots as Spot[];
-  spot: Spot = spot as Spot;
+  spot: ISpot = null;
   setLng(lng: string) {
     this.lng = lng;
+  }
+  setSpot(spot: ISpot) {
+    this.spot = spot;
   }
 }
 

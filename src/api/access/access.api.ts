@@ -31,6 +31,12 @@ function getSpot(params: { slug_or_id: string | number }) {
   } as AxiosAuthRefreshRequestConfig);
 }
 
+function getMainSpot() {
+  return client.get<ISpot>("spot-main", {
+    skipAuthRefresh: true,
+  } as AxiosAuthRefreshRequestConfig);
+}
+
 function getCity(params: { slug_or_id: string | number }) {
   return client.get<ICity>("city", {
     params,
@@ -52,4 +58,5 @@ export const accessApi = {
   getCities,
   getSpot,
   getCity,
+  getMainSpot,
 };
