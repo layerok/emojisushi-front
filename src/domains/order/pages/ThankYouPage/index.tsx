@@ -21,7 +21,6 @@ export const ThankYouPage = () => {
         <SvgIcon color={"#FFE600"} style={{ width: "60px" }}>
           <CheckCircleSvg />
         </SvgIcon>
-        <S.MediumText>{t("thankYou.subtitle")}</S.MediumText>
         <S.Text>{t("thankYou.text")}</S.Text>
       </S.Center>
     </Container>
