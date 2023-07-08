@@ -21,7 +21,7 @@ export const Header = ({
       <Container>
         <FlexBox justifyContent={"space-between"} alignItems={"center"}>
           <Left spots={spots} loading={loading} />
-          <Right user={user} cart={cart} loading={loading} />
+          <Right user={user} cart={cart} loading={loading} spots={spots} />
         </FlexBox>
       </Container>
     </S.Header>

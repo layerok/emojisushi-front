@@ -13,106 +13,109 @@ import {
 } from "~components";
 import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate } from "react-router-dom";
-import { ICity } from "~api/types";
+import { ISpot } from "~api/types";
 import { HightlightText } from "~components";
 import { useUser } from "~hooks/use-auth";
 import { observer } from "mobx-react";
 
 type MobMenuModalProps = {
   children: ReactElement;
-  cities?: ICity[];
+  spots?: ISpot[];
 };
 
-export const MobMenuModal = observer(({ children }: MobMenuModalProps) => {
-  const overlayStyles = {
-    justifyItems: "end",
-    alignItems: "start",
-    background: "rgba(0, 0, 0, 0.4)",
-    display: "grid",
-    zIndex: 999999,
-  };
-  const { data: user } = useUser();
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-  return (
-    <BaseModal
-      overlayStyles={overlayStyles}
-      render={({ close }) => (
-        <S.Wrapper>
-          <S.Item>
-            <LanguageSelector />
-          </S.Item>
-          <S.Item style={{ height: "25px" }}>
-            <LocationPickerPopover
-              width={"226px"}
-              backgroundColor={"#1C1C1C"}
-            />
-          </S.Item>
-          <S.Item>
-            {user ? (
-              <FlexBox
-                style={{
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  navigate("/account");
-                }}
-                alignItems={"center"}
-              >
-                <SvgIcon width={"25px"} style={{ marginRight: "10px" }}>
-                  <UserSvg />
-                </SvgIcon>
-                {t("account.cabinet")}
-              </FlexBox>
-            ) : (
-              <AuthModal redirect_to={undefined}>
-                <FlexBox alignItems={"center"}>
+export const MobMenuModal = observer(
+  ({ children, spots }: MobMenuModalProps) => {
+    const overlayStyles = {
+      justifyItems: "end",
+      alignItems: "start",
+      background: "rgba(0, 0, 0, 0.4)",
+      display: "grid",
+      zIndex: 999999,
+    };
+    const { data: user } = useUser();
+    const { t } = useTranslation();
+    const navigate = useNavigate();
+    return (
+      <BaseModal
+        overlayStyles={overlayStyles}
+        render={({ close }) => (
+          <S.Wrapper>
+            <S.Item>
+              <LanguageSelector />
+            </S.Item>
+            <S.Item style={{ height: "25px" }}>
+              <LocationPickerPopover
+                width={"226px"}
+                spots={spots}
+                backgroundColor={"#1C1C1C"}
+              />
+            </S.Item>
+            <S.Item>
+              {user ? (
+                <FlexBox
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    navigate("/account");
+                  }}
+                  alignItems={"center"}
+                >
                   <SvgIcon width={"25px"} style={{ marginRight: "10px" }}>
                     <UserSvg />
                   </SvgIcon>
-                  {t("common.enter_account")}
+                  {t("account.cabinet")}
                 </FlexBox>
-              </AuthModal>
-            )}
-          </S.Item>
-          <S.Item>
-            <ContactsModal>
-              <div>{t("mobMenuModal.contacts")}</div>
-            </ContactsModal>
-          </S.Item>
-          <S.Item>
-            <NavLink
-              style={{ color: "white", textDecoration: "none" }}
-              to={"/dostavka-i-oplata"}
-            >
-              {({ isActive }) => (
-                <HightlightText isActive={isActive}>
-                  <div>{t("mobMenuModal.delivery")}</div>
-                </HightlightText>
+              ) : (
+                <AuthModal redirect_to={undefined}>
+                  <FlexBox alignItems={"center"}>
+                    <SvgIcon width={"25px"} style={{ marginRight: "10px" }}>
+                      <UserSvg />
+                    </SvgIcon>
+                    {t("common.enter_account")}
+                  </FlexBox>
+                </AuthModal>
               )}
-            </NavLink>
-          </S.Item>
-          <S.Item>
-            <FlexBox justifyContent={"space-between"} alignItems={"center"}>
+            </S.Item>
+            <S.Item>
+              <ContactsModal>
+                <div>{t("mobMenuModal.contacts")}</div>
+              </ContactsModal>
+            </S.Item>
+            <S.Item>
               <NavLink
                 style={{ color: "white", textDecoration: "none" }}
-                to={"/wishlist"}
+                to={"/dostavka-i-oplata"}
               >
                 {({ isActive }) => (
                   <HightlightText isActive={isActive}>
-                    <div>{t("common.favorite")}</div>
+                    <div>{t("mobMenuModal.delivery")}</div>
                   </HightlightText>
                 )}
               </NavLink>
-              <SvgIcon color={"#FFE600"} width={"25px"}>
-                <HeartSvg />
-              </SvgIcon>
-            </FlexBox>
-          </S.Item>
-        </S.Wrapper>
-      )}
-    >
-      {cloneElement(children)}
-    </BaseModal>
-  );
-});
+            </S.Item>
+            <S.Item>
+              <FlexBox justifyContent={"space-between"} alignItems={"center"}>
+                <NavLink
+                  style={{ color: "white", textDecoration: "none" }}
+                  to={"/wishlist"}
+                >
+                  {({ isActive }) => (
+                    <HightlightText isActive={isActive}>
+                      <div>{t("common.favorite")}</div>
+                    </HightlightText>
+                  )}
+                </NavLink>
+                <SvgIcon color={"#FFE600"} width={"25px"}>
+                  <HeartSvg />
+                </SvgIcon>
+              </FlexBox>
+            </S.Item>
+          </S.Wrapper>
+        )}
+      >
+        {cloneElement(children)}
+      </BaseModal>
+    );
+  }
+);

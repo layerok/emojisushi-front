@@ -12,16 +12,16 @@ import {
 } from "~components";
 import { useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
-import { ICity, IGetCartRes, IUser } from "~api/types";
+import { IGetCartRes, ISpot, IUser } from "~api/types";
 
 type RightProps = {
   loading?: boolean;
-  cities?: ICity[];
+  spots?: ISpot[];
   cart?: IGetCartRes;
   user?: IUser;
 };
 
-export const Right = ({ loading = false, cart, user }: RightProps) => {
+export const Right = ({ loading = false, cart, user, spots }: RightProps) => {
   const navigate = useNavigate();
   return (
     <S.Right>
@@ -53,7 +53,7 @@ export const Right = ({ loading = false, cart, user }: RightProps) => {
         {loading ? (
           <Skeleton width={32} height={32} />
         ) : (
-          <MobMenuModal>
+          <MobMenuModal spots={spots}>
             <SvgIcon width={"32px"} color={"white"}>
               <BurgerSvg />
             </SvgIcon>
