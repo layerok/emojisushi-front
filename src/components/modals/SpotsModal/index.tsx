@@ -36,10 +36,15 @@ export const SpotsModal = observer(
                   <S.Item
                     key={spot.slug}
                     onClick={() => {
-                      window.location.href =
-                        spot.frontend_url +
-                        location.pathname +
-                        "?location_confirmed=true";
+                      if (appStore.spot.slug === spot.slug) {
+                        appStore.setUserConfirmedLocation(true);
+                      } else {
+                        window.location.href =
+                          spot.frontend_url +
+                          location.pathname +
+                          "?location_confirmed=true";
+                      }
+
                       close();
                     }}
                     selected={appStore.spot.slug === spot.slug}

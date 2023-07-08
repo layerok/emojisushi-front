@@ -65,10 +65,6 @@ const Wishlist = ({
 }) => {
   const { t } = useTranslation();
 
-  const handleLoadMore = () => {
-    // todo: implement load more
-  };
-
   const items = products.data
     .map((json) => new Product(json))
     .filter((product) => {
@@ -77,10 +73,8 @@ const Wishlist = ({
   return (
     <ProductsGrid
       wishlists={wishlists}
-      loadable={false}
       cart={cart}
       items={items}
-      handleLoadMore={handleLoadMore}
       title={t("common.favorite")}
     />
   );

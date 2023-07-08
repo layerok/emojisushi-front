@@ -1,35 +1,35 @@
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
-  useNavigate,
-  useNavigation,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
-import { ProductsGrid, RestaurantClosed, Container } from "~components";
+  ProductsGrid,
+  RestaurantClosed,
+  Container,
+  LoadMoreButton,
+} from "~components";
 import { Banner } from "./Banner";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Product } from "src/models";
 import { cartQuery, categoriesQuery, wishlistsQuery } from "src/queries";
-import { productsQuery } from "src/queries";
-import {
-  ICategory,
-  IGetCartRes,
-  IGetProductsRes,
-  IGetWishlistRes,
-  SortKey,
-} from "src/api/types";
+import { SortKey } from "src/api/types";
 import { isClosed } from "src/utils/time.utils";
 import { appConfig } from "src/config/app";
 import { PRODUCTS_LIMIT_STEP } from "~domains/category/constants";
 import { MenuLayout } from "~domains/product/components/MenuLayout";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { observer } from "mobx-react";
+import { menuApi } from "~api";
+import { useInView } from "react-intersection-observer";
+import * as S from "./styled";
+import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 export const CategoryPage = observer(() => {
+  const { ref, inView } = useInView();
   const closed = isClosed({
     start: appConfig.workingHours[0],
     end: appConfig.workingHours[1],
   });
   const { categorySlug } = useParams();
+  const { t } = useTranslation();
 
   const [searchParams] = useSearchParams();
   const limit = searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
@@ -43,62 +43,44 @@ export const CategoryPage = observer(() => {
   const { data: wishlists, isLoading: isWishlistLoading } =
     useQuery(wishlistsQuery);
 
-  const { data: products, isLoading: isProductsLoading } = useQuery({
-    ...productsQuery({
+  const fetchProducts = async ({ pageParam = 0 }) => {
+    const res = await menuApi.getProducts({
       category_slug: q || !categorySlug ? "menu" : categorySlug,
       search: q,
       sort: sort,
-      offset: 0,
-      limit: +limit,
-    }),
-  });
+      offset: pageParam * PRODUCTS_LIMIT_STEP,
+      limit: PRODUCTS_LIMIT_STEP,
+    });
+    return res.data;
+  };
 
-  return (
-    <Container>
-      {false && <Banner />}
-      <MenuLayout categories={categories}>
-        {isWishlistLoading ||
-        isCartLoading ||
-        isProductsLoading ||
-        isCategoriesLoading ? (
-          <ProductsGrid loading />
-        ) : (
-          <AwaitedProducts
-            wishlists={wishlists}
-            products={products}
-            cart={cart}
-            categories={categories.data}
-          />
-        )}
-      </MenuLayout>
-
-      <RestaurantClosed open={closed} />
-    </Container>
+  const {
+    data: products,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+    status,
+  } = useInfiniteQuery(
+    [
+      "products",
+      {
+        category_slug: q || !categorySlug ? "menu" : categorySlug,
+        search: q,
+        sort: sort,
+      },
+    ],
+    fetchProducts,
+    {
+      getNextPageParam: (lastPage, pages) => {
+        if (pages.length * PRODUCTS_LIMIT_STEP > lastPage.total) {
+          return undefined;
+        }
+        return pages.length;
+      },
+    }
   );
-});
 
-export const AwaitedProducts = ({
-  categories,
-  cart,
-  products,
-  wishlists,
-}: {
-  categories: ICategory[];
-  cart?: IGetCartRes;
-  products?: IGetProductsRes;
-  wishlists?: IGetWishlistRes;
-}) => {
-  const { categorySlug } = useParams();
-
-  const [searchParams] = useSearchParams();
-  const limit = searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
-  const navigation = useNavigation();
   const navigate = useNavigate();
-
-  const selectedCategory = categories.find((category) => {
-    return category.slug === categorySlug;
-  });
-  const title = selectedCategory?.name;
 
   const handleLoadMore = () => {
     const nextLimit = +limit + PRODUCTS_LIMIT_STEP;
@@ -106,22 +88,61 @@ export const AwaitedProducts = ({
       "/" + ["category", categorySlug].join("/") + "?limit=" + nextLimit
     );
   };
+  const selectedCategory = (categories?.data || []).find((category) => {
+    return category.slug === categorySlug;
+  });
 
-  const items = products.data.map((product) => new Product(product));
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView]);
+
+  const items = (products?.pages || [])
+    .map((page) => page.data.map((product) => new Product(product)))
+    .flat();
 
   return (
-    <ProductsGrid
-      wishlists={wishlists}
-      cart={cart}
-      handleLoadMore={handleLoadMore}
-      title={title}
-      loading={false}
-      loadable={products.total > items.length}
-      loadingMore={navigation.state === "loading"}
-      items={items}
-    />
+    <Container>
+      {false && <Banner />}
+      <MenuLayout categories={categories}>
+        {(isWishlistLoading ||
+          isCartLoading ||
+          status === "loading" ||
+          isCategoriesLoading) &&
+        !products ? (
+          <ProductsGrid loading />
+        ) : (
+          <div>
+            <ProductsGrid
+              wishlists={wishlists}
+              cart={cart}
+              title={selectedCategory?.name}
+              loading={false}
+              items={items}
+            />
+            {hasNextPage && (
+              <S.Footer ref={ref}>
+                <LoadMoreButton
+                  loading={isFetchingNextPage}
+                  style={{ cursor: "pointer" }}
+                  text={t("common.show_more")}
+                  onClick={() => {
+                    if (!isFetchingNextPage) {
+                      handleLoadMore();
+                    }
+                  }}
+                />
+              </S.Footer>
+            )}
+          </div>
+        )}
+      </MenuLayout>
+
+      <RestaurantClosed open={closed} />
+    </Container>
   );
-};
+});
 
 export const Component = CategoryPage;
 
