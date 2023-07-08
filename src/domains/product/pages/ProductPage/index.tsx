@@ -72,7 +72,7 @@ export const CategoryPage = observer(() => {
     fetchProducts,
     {
       getNextPageParam: (lastPage, pages) => {
-        if (pages.length * PRODUCTS_LIMIT_STEP > lastPage.total) {
+        if (pages.length * PRODUCTS_LIMIT_STEP >= lastPage.total) {
           return undefined;
         }
         return pages.length;
