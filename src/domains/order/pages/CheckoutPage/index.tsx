@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useUser } from "~hooks/use-auth";
 import { useNavigate } from "react-router-dom";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
+import { spotsQuery } from "~domains/spot/queries/spots.query";
 
 const CheckoutPage = () => {
   const { t } = useTranslation();
@@ -22,6 +23,10 @@ const CheckoutPage = () => {
     },
   });
 
+  const { data: spots, isLoading: isSpotsLoading } = useQuery({
+    ...spotsQuery(),
+  });
+
   const { data: shippingMethods, isLoading: isShippingMethodsLoading } =
     useQuery(shippingQuery);
   const { data: paymentMethods, isLoading: isPaymentMethodsLoading } =
@@ -35,6 +40,7 @@ const CheckoutPage = () => {
         {isCartLoading ||
         isUserLoading ||
         isShippingMethodsLoading ||
+        isSpotsLoading ||
         isPaymentMethodsLoading ? (
           <CheckoutForm loading />
         ) : (
@@ -45,6 +51,7 @@ const CheckoutPage = () => {
             shippingMethods={shippingMethods}
             paymentMethods={paymentMethods}
             user={user}
+            spots={spots}
           />
         )}
 

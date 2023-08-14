@@ -8,5 +8,5 @@ export * from "./MobMenuModal";
 export * from "./Modal";
 export * from "./NotifyModal";
 export * from "./RestaurantClosed";
-export * from "./SpotsModal";
+export * from "./LocationsModal";
 export * from "./TelegramModal";

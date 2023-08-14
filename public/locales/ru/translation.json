@@ -79,8 +79,8 @@
   "filtersModal": {
     "search_filters": "Фильтры поиска"
   },
-  "spotsModal": {
-    "title": "Выберите заведение"
+  "locationsModal": {
+    "title": "Выберите город"
   },
   "mobMenuModal": {
     "contacts": "Контакты",

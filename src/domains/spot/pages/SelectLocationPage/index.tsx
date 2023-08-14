@@ -20,7 +20,7 @@ export const SelectLocationPage = () => {
           </S.LogoWrapper>
 
           <S.Locations.Label>
-            {t("spotsModal.title")}
+            {t("locationsModal.title")}
             <S.MapWrapper>
               <SvgIcon width={"100%"} color={"white"}>
                 <MapPinSvg />

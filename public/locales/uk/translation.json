@@ -79,8 +79,8 @@
   "filtersModal": {
     "search_filters": "Фільтри пошуку"
   },
-  "spotsModal": {
-    "title": "Оберіть заклад"
+  "locationsModal": {
+    "title": "Оберіть місто"
   },
   "mobMenuModal": {
     "contacts": "Контакти",

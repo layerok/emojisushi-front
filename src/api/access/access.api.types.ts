@@ -27,6 +27,9 @@ export type ICity = {
   id: number;
   slug: string;
   spots: ISpot[];
+  frontend_url: string;
+  google_map_url: string;
+  phones: string;
 };
 
 export type IGetCitiesParams = {
@@ -37,5 +40,10 @@ export type IGetCitiesParams = {
 
 export type IGetCitiesRes = {
   data: ICity[];
+  meta: IMeta;
+};
+
+export type IGetSpotsRes = {
+  data: ISpot[];
   meta: IMeta;
 };

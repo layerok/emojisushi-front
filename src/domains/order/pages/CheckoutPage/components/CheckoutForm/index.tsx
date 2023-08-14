@@ -15,6 +15,7 @@ import {
   IGetCartRes,
   IGetPaymentMethodsRes,
   IGetShippingMethodsRes,
+  ISpot,
   IUser,
 } from "~api/types";
 import { useRef, useState } from "react";
@@ -24,7 +25,6 @@ import { cartQuery } from "~queries";
 import { AxiosError } from "axios";
 import Skeleton from "react-loading-skeleton";
 import { observer } from "mobx-react";
-import { useAppStore } from "~stores/appStore";
 
 // todo: logout user if his token is expired
 // timer may be solution
@@ -35,6 +35,7 @@ type TCheckoutFormProps = {
   cart?: IGetCartRes | undefined;
   shippingMethods?: IGetShippingMethodsRes | undefined;
   paymentMethods?: IGetPaymentMethodsRes | undefined;
+  spots?: ISpot[];
 };
 
 export const CheckoutForm = observer(
@@ -43,13 +44,13 @@ export const CheckoutForm = observer(
     shippingMethods,
     paymentMethods,
     user,
+    spots,
     loading = false,
   }: TCheckoutFormProps) => {
     const { t } = useTranslation();
     const [pending, setPending] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
-    const appStore = useAppStore();
 
     const CheckoutSchema = Yup.object().shape({
       phone: Yup.string()
@@ -80,6 +81,7 @@ export const CheckoutForm = observer(
         change: "",
         payment_method_id: 1,
         shipping_method_id: 1,
+        spot_id: spots?.find((spot) => spot.is_main).id,
       },
       validationSchema: CheckoutSchema,
       onSubmit: async (values) => {
@@ -198,6 +200,26 @@ export const CheckoutForm = observer(
               formik.handleChange(e);
             }}
           />
+          <S.Control>
+            {loading ? (
+              <Skeleton height="40px" width="350px" />
+            ) : (
+              <Dropdown
+                options={(spots || []).map((spot) => {
+                  return {
+                    label: spot.name,
+                    value: spot.id,
+                  };
+                })}
+                width={"350px"}
+                value={formik.values.spot_id}
+                onChange={(value) => {
+                  formik.setFieldValue("spot_id", value);
+                }}
+              />
+            )}
+          </S.Control>
+
           {shippingMethodsSwitcher.selectedMethod?.code === "courier" && (
             <S.ButtonContainer>
               {showAddressInput ? (

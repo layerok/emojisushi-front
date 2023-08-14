@@ -7,6 +7,7 @@ const Dropdown = styled.div`
   line-height: 18px;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 `;
 
 const Reference = styled.div`

@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { ISpot } from "~api/types";
+import { ICity, ISpot } from "~api/types";
 
 class AppStore {
   constructor() {
@@ -8,11 +8,16 @@ class AppStore {
   lng = "uk";
   userConfirmedLocation = false;
   spot: ISpot = null;
+  city: ICity = null;
   setLng(lng: string) {
     this.lng = lng;
   }
   setSpot(spot: ISpot) {
     this.spot = spot;
+  }
+
+  setCity(city: ICity) {
+    this.city = city;
   }
   setUserConfirmedLocation(state: boolean) {
     this.userConfirmedLocation = state;

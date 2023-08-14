@@ -13,18 +13,18 @@ import {
 } from "~components";
 import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate } from "react-router-dom";
-import { ISpot } from "~api/types";
+import { ICity } from "~api/types";
 import { HightlightText } from "~components";
 import { useUser } from "~hooks/use-auth";
 import { observer } from "mobx-react";
 
 type MobMenuModalProps = {
   children: ReactElement;
-  spots?: ISpot[];
+  cities?: ICity[];
 };
 
 export const MobMenuModal = observer(
-  ({ children, spots }: MobMenuModalProps) => {
+  ({ children, cities }: MobMenuModalProps) => {
     const overlayStyles = {
       justifyItems: "end",
       alignItems: "start",
@@ -46,7 +46,7 @@ export const MobMenuModal = observer(
             <S.Item style={{ height: "25px" }}>
               <LocationPickerPopover
                 width={"226px"}
-                spots={spots}
+                cities={cities}
                 backgroundColor={"#1C1C1C"}
               />
             </S.Item>

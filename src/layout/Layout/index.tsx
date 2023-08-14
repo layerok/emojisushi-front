@@ -7,7 +7,7 @@ import {
   Sticky,
   TinyCartButton,
   CartModal,
-  SpotsModal,
+  LocationsModal,
 } from "~components";
 import { ReactNode } from "react";
 import { Outlet } from "react-router-dom";
@@ -17,8 +17,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useUser } from "~hooks/use-auth";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { observer } from "mobx-react";
-import { spotsQuery } from "~domains/spot/queries/spots.query";
 import { useAppStore } from "~stores/appStore";
+import { citiesQuery } from "~queries/cities.query";
 
 export const Layout = observer(
   ({ children, ...rest }: { children?: ReactNode }) => {
@@ -28,15 +28,16 @@ export const Layout = observer(
 
     const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
     const { data: user, isLoading: isUserLoading } = useUser();
-    const { data: spots, isLoading: isSpotsLoading } = useQuery(spotsQuery());
+
+    const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
     const appStore = useAppStore();
 
     return (
       <S.Layout {...rest}>
-        {isCartLoading || isUserLoading || isSpotsLoading ? (
+        {isCartLoading || isUserLoading || isCitiesLoading ? (
           <Header loading />
         ) : (
-          <Header spots={spots} cart={cart} user={user} />
+          <Header cities={cities.data} cart={cart} user={user} />
         )}
         <S.Main>
           <S.Content>
@@ -53,8 +54,11 @@ export const Layout = observer(
             </CartModal>
           </Sticky>
         )}
-        {!isSpotsLoading && (
-          <SpotsModal open={!appStore.userConfirmedLocation} spots={spots} />
+        {!isCitiesLoading && (
+          <LocationsModal
+            open={!appStore.userConfirmedLocation}
+            cities={cities.data}
+          />
         )}
         <StickyToTopBtn />
       </S.Layout>

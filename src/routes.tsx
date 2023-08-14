@@ -1,15 +1,13 @@
 import { QueryOptions } from "@tanstack/react-query";
 import { Trans } from "react-i18next";
 import {
-  LoaderFunctionArgs,
   Navigate,
   Outlet,
   useLoaderData,
-  useNavigate,
   useSearchParams,
 } from "react-router-dom";
 import { accessApi } from "~api";
-import { IGetCategoriesRes, ISpot } from "~api/types";
+import { ICity, IGetCategoriesRes } from "~api/types";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { categoriesQuery } from "~queries";
 import { queryClient } from "~query-client";
@@ -53,17 +51,17 @@ const RootElement = () => {
 };
 
 const rootLoader = async () => {
-  const query: QueryOptions<ISpot> = {
-    queryKey: ["main-spot"],
-    queryFn: () => accessApi.getMainSpot().then((res) => res.data),
+  const query: QueryOptions<ICity> = {
+    queryKey: ["main-city"],
+    queryFn: () => accessApi.getMainCity().then((res) => res.data),
   };
-  const spot =
-    queryClient.getQueryData<ISpot>(query.queryKey) ??
+  const city =
+    queryClient.getQueryData<ICity>(query.queryKey) ??
     (await queryClient.fetchQuery(query));
-  appStore.setSpot(spot);
+  appStore.setCity(city);
 
   return {
-    spot,
+    city,
   };
 };
 
