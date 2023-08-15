@@ -23,12 +23,12 @@ export const DeliveryPage = observer(() => {
             </Heading>
           </S.HeadingWrapper>
 
-          <S.AdresText>
-            <b>{t("common.address")}</b>: {appStore.spot.address}
-          </S.AdresText>
+          {/*<S.AdresText>*/}
+          {/*  <b>{t("common.address")}</b>: {appStore.city.address}*/}
+          {/*</S.AdresText>*/}
 
           <S.DeliveryText
-            dangerouslySetInnerHTML={{ __html: appStore.spot.html_content }}
+            dangerouslySetInnerHTML={{ __html: appStore.city.html_content }}
           />
           <Link
             style={{
@@ -40,10 +40,10 @@ export const DeliveryPage = observer(() => {
           </Link>
         </S.Left>
 
-        <If condition={!!appStore.spot.google_map_url}>
+        <If condition={!!appStore.city.google_map_url}>
           <S.Right>
             <iframe
-              src={appStore.spot.google_map_url}
+              src={appStore.city.google_map_url}
               width="100%"
               height="480"
             />

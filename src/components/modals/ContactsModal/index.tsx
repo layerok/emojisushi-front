@@ -9,7 +9,6 @@ import { useAppStore } from "~stores/appStore";
 export const ContactsModal = ({ children }: { children: ReactElement }) => {
   const { t } = useTranslation();
   const appStore = useAppStore();
-  const spot = appStore.spot;
 
   return (
     <Modal
@@ -17,7 +16,7 @@ export const ContactsModal = ({ children }: { children: ReactElement }) => {
       render={({ close }) => (
         <div>
           <S.Wrapper>
-            {spot.phones && (
+            {appStore.city.phones && (
               <>
                 <S.Title>{t("contactsModal.contacts")}</S.Title>
                 <S.Phones>
@@ -28,7 +27,7 @@ export const ContactsModal = ({ children }: { children: ReactElement }) => {
                   >
                     <PhoneSvg />
                   </SvgIcon>
-                  {spot.phones.split(",").map((phone, i) => (
+                  {appStore.city.phones.split(",").map((phone, i) => (
                     <S.Phone key={i}>{phone}</S.Phone>
                   ))}
                 </S.Phones>

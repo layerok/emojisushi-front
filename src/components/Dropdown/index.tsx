@@ -66,12 +66,14 @@ type IDropdownProps = {
   width: string;
   value: null | string | number;
   onChange: (value: string | number | null) => void;
+  placeholder?: string;
 };
 
 export const Dropdown = ({
   options = [],
   width = "100px",
   value,
+  placeholder,
   onChange,
 }: IDropdownProps) => {
   const [open, setOpen] = useState(false);
@@ -160,14 +162,10 @@ export const Dropdown = ({
         placement={resultantPlacement}
         ref={reference}
         id={buttonId}
-        aria-label="Choose day when you were born"
-        aria-describedby="day-label"
         {...getReferenceProps()}
       >
-        {value && (
-          <span id="day-label" aria-label={selectedOption?.label}>
-            {selectedOption?.label}
-          </span>
+        {(value || placeholder) && (
+          <span>{selectedOption?.label || placeholder}</span>
         )}
         <SvgIcon
           style={{

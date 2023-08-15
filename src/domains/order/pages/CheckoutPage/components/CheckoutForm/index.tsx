@@ -65,6 +65,7 @@ export const CheckoutForm = observer(
           }
         ),
       email: Yup.string().email("Invalid email"),
+      spot_id: Yup.number().required(t("checkout.form.spot.error")),
     });
 
     const wayforpayFormContainer = useRef(null);
@@ -81,7 +82,7 @@ export const CheckoutForm = observer(
         change: "",
         payment_method_id: 1,
         shipping_method_id: 1,
-        spot_id: spots?.find((spot) => spot.is_main).id,
+        spot_id: undefined,
       },
       validationSchema: CheckoutSchema,
       onSubmit: async (values) => {
@@ -102,6 +103,7 @@ export const CheckoutForm = observer(
         const change = values.change;
         const sticks = +values.sticks;
         const comment = values.comment;
+        const spot_id = values.spot_id;
 
         setPending(true);
 
@@ -115,6 +117,7 @@ export const CheckoutForm = observer(
             address,
             payment_method_id,
             shipping_method_id,
+            spot_id,
 
             change,
             sticks: +sticks,
@@ -205,9 +208,10 @@ export const CheckoutForm = observer(
               <Skeleton height="40px" width="350px" />
             ) : (
               <Dropdown
+                placeholder={t("checkout.form.spot.placeholder")}
                 options={(spots || []).map((spot) => {
                   return {
-                    label: spot.name,
+                    label: spot.address,
                     value: spot.id,
                   };
                 })}

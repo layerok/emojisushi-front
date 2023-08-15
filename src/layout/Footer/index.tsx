@@ -69,9 +69,9 @@ type IPhonesProps = { loading?: boolean };
 const Phones = ({ loading = false }: IPhonesProps) => {
   const { t } = useTranslation();
   const appStore = useAppStore();
-  const spot = appStore.spot;
+
   return (
-    spot?.phones?.length > 0 && (
+    appStore.city?.phones?.length > 0 && (
       <>
         <FlexBox
           style={{
@@ -95,7 +95,7 @@ const Phones = ({ loading = false }: IPhonesProps) => {
               <Phone loading />
             </>
           ) : (
-            spot.phones
+            appStore.city.phones
               .split(",")
               .map((phone, i) => <Phone key={i} phone={phone} />)
           )}

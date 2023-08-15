@@ -30,6 +30,7 @@ export type ICity = {
   frontend_url: string;
   google_map_url: string;
   phones: string;
+  html_content: string;
 };
 
 export type IGetCitiesParams = {

@@ -7,13 +7,9 @@ class AppStore {
   }
   lng = "uk";
   userConfirmedLocation = false;
-  spot: ISpot = null;
   city: ICity = null;
   setLng(lng: string) {
     this.lng = lng;
-  }
-  setSpot(spot: ISpot) {
-    this.spot = spot;
   }
 
   setCity(city: ICity) {
