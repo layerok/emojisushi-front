@@ -20,6 +20,14 @@ export type ISpot = {
   city: ICity | null;
   frontend_url: string;
   is_main: boolean;
+  district: IDistrict;
+};
+
+export type IDistrict = {
+  id: number;
+  name: string;
+  spots: ISpot[];
+  city: ICity;
 };
 
 export type ICity = {
@@ -31,10 +39,12 @@ export type ICity = {
   google_map_url: string;
   phones: string;
   html_content: string;
+  districts: IDistrict[];
 };
 
 export type IGetCitiesParams = {
   includeSpots?: boolean;
+  includeDistricts?: boolean;
   offset?: number;
   limit?: number;
 };

@@ -25,6 +25,8 @@ import { cartQuery } from "~queries";
 import { AxiosError } from "axios";
 import Skeleton from "react-loading-skeleton";
 import { observer } from "mobx-react";
+import { useAppStore } from "~stores/appStore";
+import { ObjectSchema } from "yup";
 
 // todo: logout user if his token is expired
 // timer may be solution
@@ -51,8 +53,9 @@ export const CheckoutForm = observer(
     const [pending, setPending] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+    const appStore = useAppStore();
 
-    const CheckoutSchema = Yup.object().shape({
+    const TakeAwaySchema = Yup.object().shape({
       phone: Yup.string()
         .required(t("validation.required", { field: t("common.phone") }))
         .test(
@@ -67,6 +70,26 @@ export const CheckoutForm = observer(
       email: Yup.string().email("Invalid email"),
       spot_id: Yup.number().required(t("checkout.form.spot.error")),
     });
+
+    const CourierSchema = Yup.object().shape({
+      phone: Yup.string()
+        .required(t("validation.required", { field: t("common.phone") }))
+        .test(
+          "is-possible-phone-number",
+          () => t("checkout.form.errors.ua_phone"),
+          (value) => {
+            const regex =
+              /^(((\+)(38)))(([0-9]{3})|(\([0-9]{3}\)))(\-|\s)?(([0-9]{3})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{2})|([0-9]{2})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{3})|([0-9]{2})(\-|\s)?([0-9]{3})(\-|\s)?([0-9]{2}))$/;
+            return regex.test(value ?? "");
+          }
+        ),
+      email: Yup.string().email("Invalid email"),
+      district_id: Yup.number().required(t("checkout.form.district.error")),
+    });
+
+    const [validationSchema, setValidationSchema] = useState<
+      typeof TakeAwaySchema | typeof CourierSchema
+    >(TakeAwaySchema);
 
     const wayforpayFormContainer = useRef(null);
 
@@ -83,8 +106,9 @@ export const CheckoutForm = observer(
         payment_method_id: 1,
         shipping_method_id: 1,
         spot_id: undefined,
+        district_id: undefined,
       },
-      validationSchema: CheckoutSchema,
+      validationSchema: validationSchema,
       onSubmit: async (values) => {
         const [firstname, lastname] = values.name.split(" ");
         formik.setErrors({});
@@ -103,7 +127,19 @@ export const CheckoutForm = observer(
         const change = values.change;
         const sticks = +values.sticks;
         const comment = values.comment;
-        const spot_id = values.spot_id;
+
+        function getSpotId() {
+          if (shippingMethodsSwitcher.selectedMethod().code === "takeaway") {
+            return values.spot_id;
+          } else {
+            const district = appStore.city.districts.find(
+              (district) => district.id === values.district_id
+            );
+            return district.spots[0].id;
+          }
+        }
+
+        let spot_id = getSpotId();
 
         setPending(true);
 
@@ -164,9 +200,10 @@ export const CheckoutForm = observer(
         value: item.id,
         label: t("shippingMethods." + item.code, item.name),
       })),
-      selectedMethod: (shippingMethods?.data || []).find(
-        (item) => item.id === +formik.values.shipping_method_id
-      ),
+      selectedMethod: () =>
+        (shippingMethods?.data || []).find(
+          (item) => item.id === +formik.values.shipping_method_id
+        ),
     };
 
     const paymentMethodsSwitcher = {
@@ -174,9 +211,12 @@ export const CheckoutForm = observer(
         value: item.id,
         label: t("paymentMethods." + item.code, item.name),
       })),
-      selectedMethod: (paymentMethods?.data || []).find(
-        (item) => item.id === +formik.values.payment_method_id
-      ),
+      selectedMethod: () =>
+        loading
+          ? null
+          : (paymentMethods?.data || []).find(
+              (item) => item.id === +formik.values.payment_method_id
+            ),
     };
 
     return (
@@ -198,20 +238,28 @@ export const CheckoutForm = observer(
             loading={loading}
             name={"shipping_method_id"}
             options={shippingMethodsSwitcher.options}
-            value={+shippingMethodsSwitcher.selectedMethod?.id}
+            value={+shippingMethodsSwitcher.selectedMethod()?.id}
             handleChange={({ e, index }) => {
+              if (e.target.value === "1") {
+                setValidationSchema(TakeAwaySchema);
+              } else {
+                setValidationSchema(CourierSchema);
+              }
+
               formik.handleChange(e);
             }}
           />
+
           <S.Control>
             {loading ? (
               <Skeleton height="40px" width="350px" />
-            ) : (
+            ) : shippingMethodsSwitcher.selectedMethod()?.code ===
+              "takeaway" ? (
               <Dropdown
-                placeholder={t("checkout.form.spot.placeholder")}
-                options={(spots || []).map((spot) => {
+                placeholder={"Оберіть заклад"}
+                options={(appStore.city.spots || []).map((spot) => {
                   return {
-                    label: spot.address,
+                    label: spot.name,
                     value: spot.id,
                   };
                 })}
@@ -221,10 +269,25 @@ export const CheckoutForm = observer(
                   formik.setFieldValue("spot_id", value);
                 }}
               />
+            ) : (
+              <Dropdown
+                placeholder={t("checkout.form.district.placeholder")}
+                options={(appStore.city.districts || []).map((district) => {
+                  return {
+                    label: district.name,
+                    value: district.id,
+                  };
+                })}
+                width={"350px"}
+                value={formik.values.spot_id}
+                onChange={(value) => {
+                  formik.setFieldValue("district_id", value);
+                }}
+              />
             )}
           </S.Control>
 
-          {shippingMethodsSwitcher.selectedMethod?.code === "courier" && (
+          {shippingMethodsSwitcher.selectedMethod()?.code === "courier" && (
             <S.ButtonContainer>
               {showAddressInput ? (
                 <S.Control>
@@ -340,10 +403,10 @@ export const CheckoutForm = observer(
               handleChange={({ e, index }) => {
                 formik.handleChange(e);
               }}
-              value={paymentMethodsSwitcher.selectedMethod?.id}
+              value={paymentMethodsSwitcher.selectedMethod()?.id}
             />
           </S.Control>
-          {paymentMethodsSwitcher.selectedMethod?.code === "cash" && (
+          {paymentMethodsSwitcher.selectedMethod()?.code === "cash" && (
             <S.Control>
               <Input
                 loading={loading}

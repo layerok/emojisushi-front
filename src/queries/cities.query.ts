@@ -6,6 +6,7 @@ export const citiesQuery: QueryOptions<IGetCitiesRes> = {
   queryFn: () =>
     accessApi.getCities({
       includeSpots: true,
+      includeDistricts: true,
     }),
   queryKey: ["cities", "list", "all"],
 };
