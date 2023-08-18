@@ -279,7 +279,7 @@ export const CheckoutForm = observer(
                   };
                 })}
                 width={"350px"}
-                value={formik.values.spot_id}
+                value={formik.values.district_id}
                 onChange={(value) => {
                   formik.setFieldValue("district_id", value);
                 }}
