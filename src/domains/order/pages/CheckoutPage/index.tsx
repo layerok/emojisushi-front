@@ -1,5 +1,9 @@
 import { Container, Heading } from "~components";
-import { CheckoutForm, CheckoutCart } from "./components";
+import {
+  CheckoutFormOdessa,
+  CheckoutFormChernomorsk,
+  CheckoutCart,
+} from "./components";
 import { useTranslation } from "react-i18next";
 import { cartQuery, paymentQuery, shippingQuery } from "~queries";
 import * as S from "./styled";
@@ -8,9 +12,11 @@ import { useUser } from "~hooks/use-auth";
 import { useNavigate } from "react-router-dom";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { spotsQuery } from "~domains/spot/queries/spots.query";
+import { useAppStore } from "~stores/appStore";
 
 const CheckoutPage = () => {
   const { t } = useTranslation();
+  const appStore = useAppStore();
 
   const { data: user, isLoading: isUserLoading } = useUser();
 
@@ -42,10 +48,23 @@ const CheckoutPage = () => {
         isShippingMethodsLoading ||
         isSpotsLoading ||
         isPaymentMethodsLoading ? (
-          <CheckoutForm loading />
-        ) : (
-          <CheckoutForm
+          appStore.city.slug === "odesa" ? (
+            <CheckoutFormOdessa loading />
+          ) : (
+            <CheckoutFormChernomorsk loading />
+          )
+        ) : appStore.city.slug === "odesa" ? (
+          <CheckoutFormOdessa
             // remount component after signin to update form
+            key={user ? "one" : "second"}
+            cart={cart}
+            shippingMethods={shippingMethods}
+            paymentMethods={paymentMethods}
+            user={user}
+            spots={spots}
+          />
+        ) : (
+          <CheckoutFormChernomorsk
             key={user ? "one" : "second"}
             cart={cart}
             shippingMethods={shippingMethods}

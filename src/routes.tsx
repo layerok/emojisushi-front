@@ -51,9 +51,15 @@ const RootElement = () => {
 };
 
 const rootLoader = async () => {
+  const domains = window.location.hostname.split(".");
   const query: QueryOptions<ICity> = {
-    queryKey: ["main-city"],
-    queryFn: () => accessApi.getMainCity().then((res) => res.data),
+    queryKey: ["main-city", domains[0]],
+    queryFn: () =>
+      accessApi
+        .getCity({
+          slug_or_id: domains[0],
+        })
+        .then((res) => res.data),
   };
   const city =
     queryClient.getQueryData<ICity>(query.queryKey) ??

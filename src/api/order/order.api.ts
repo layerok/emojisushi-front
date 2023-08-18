@@ -9,7 +9,7 @@ export const orderApi = {
 
     shipping_method_id: number;
     payment_method_id: number;
-    spot_id: number;
+    spot_id?: number;
     address?: string;
 
     comment?: string;
