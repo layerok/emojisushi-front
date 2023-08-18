@@ -51,13 +51,17 @@ const RootElement = () => {
 };
 
 const rootLoader = async () => {
+  const allowed = ["odesa", "chorno"];
   const domains = window.location.hostname.split(".");
   const query: QueryOptions<ICity> = {
-    queryKey: ["main-city", domains[0]],
+    queryKey: [
+      "main-city",
+      allowed.includes(domains[0]) ? domains[0] : allowed[0],
+    ],
     queryFn: () =>
       accessApi
         .getCity({
-          slug_or_id: domains[0],
+          slug_or_id: allowed.includes(domains[0]) ? domains[0] : allowed[0],
         })
         .then((res) => res.data),
   };

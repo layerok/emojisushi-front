@@ -8,6 +8,7 @@ i18n
   .use(HttpBackend)
   .init({
     lng: "uk",
+    defaultNS: "trans22",
     interpolation: {
       escapeValue: false, // react already safes from xss
     },

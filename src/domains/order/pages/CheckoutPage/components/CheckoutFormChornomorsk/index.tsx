@@ -25,6 +25,7 @@ import { cartQuery } from "~queries";
 import { AxiosError } from "axios";
 import Skeleton from "react-loading-skeleton";
 import { observer } from "mobx-react";
+import { appStore } from "~stores/appStore";
 
 // todo: logout user if his token is expired
 // timer may be solution
@@ -112,6 +113,7 @@ export const CheckoutFormChernomorsk = observer(
             firstname,
             lastname,
             email,
+            spot_id: appStore.city.spots[0].id,
 
             address,
             payment_method_id,
