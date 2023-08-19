@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import { formatWorkingHours } from "~utils/format.utils";
 import { appConfig } from "~config/app";
 
+// todo: reopen this modal every n seconds
 export const RestaurantClosed = observer(({ open }) => {
   const { t } = useTranslation();
   return (

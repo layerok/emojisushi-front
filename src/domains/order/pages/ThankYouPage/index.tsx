@@ -3,6 +3,7 @@ import * as S from "./styled";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
+// todo: don't prompt the user to choose a city
 export const ThankYouPage = () => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();

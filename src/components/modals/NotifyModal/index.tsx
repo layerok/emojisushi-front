@@ -21,6 +21,7 @@ export const NotifyModal = ({
 }: INotifyModalProps) => {
   return (
     <Modal
+      open={open}
       alignCenter={true}
       {...rest}
       render={({ close }) => (
