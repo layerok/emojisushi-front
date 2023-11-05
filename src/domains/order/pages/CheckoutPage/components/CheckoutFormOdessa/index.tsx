@@ -381,7 +381,7 @@ export const CheckoutFormOdessa = observer(
               name={"sticks"}
               type={"number"}
               min={"0"}
-              placeholder={t("checkout.form.sticks")}
+              placeholder={t("checkout.form.persons")}
               onChange={formik.handleChange}
               value={formik.values.sticks}
             />
