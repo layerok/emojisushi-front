@@ -26,7 +26,6 @@ import { AxiosError } from "axios";
 import Skeleton from "react-loading-skeleton";
 import { observer } from "mobx-react";
 import { useAppStore } from "~stores/appStore";
-import { ObjectSchema } from "yup";
 
 // todo: logout user if his token is expired
 // timer may be solution
@@ -144,6 +143,8 @@ export const CheckoutFormOdessa = observer(
         setPending(true);
 
         try {
+          // todo: clear cart after you redirected user to thankyou page
+          // otherwise user will be redirected to category page
           const res = await orderApi.place({
             phone,
             firstname,
@@ -160,6 +161,8 @@ export const CheckoutFormOdessa = observer(
             comment,
           });
 
+          // todo: clear cart after you redirected user to thankyou page
+          // otherwise user will be redirected to category page
           await queryClient.removeQueries(cartQuery.queryKey);
 
           if (res.data?.form) {
