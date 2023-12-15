@@ -98,6 +98,7 @@ export const CategoryPage = observer(() => {
     }
   }, [inView]);
 
+  // todo: add polyfill for `flat` function or flatten the array by other means
   const items = (products?.pages || [])
     .map((page) => page.data.map((product) => new Product(product)))
     .flat();
