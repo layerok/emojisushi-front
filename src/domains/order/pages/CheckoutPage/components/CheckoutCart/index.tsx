@@ -5,18 +5,15 @@ import { IGetCartRes } from "~api/types";
 import { CheckoutCartItem } from "./components/CheckoutCartItem";
 import Skeleton from "react-loading-skeleton";
 import { dummyCartProduct } from "~domains/order/mocks";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalIDEnum } from "~common/modal.constants";
 
 type CheckoutCartProps = {
   cart?: IGetCartRes;
   loading?: boolean;
-  onEmpty?: () => void;
 };
 
-export const CheckoutCart = ({
-  cart,
-  loading = false,
-  onEmpty,
-}: CheckoutCartProps) => {
+export const CheckoutCart = ({ cart, loading = false }: CheckoutCartProps) => {
   const items = loading
     ? [new CartProduct(dummyCartProduct), new CartProduct(dummyCartProduct)]
     : (cart?.data || []).map((json) => new CartProduct(json));
@@ -36,11 +33,13 @@ export const CheckoutCart = ({
       </S.Items>
 
       {cart && (
-        <CartModal onEmpty={onEmpty} cart={cart}>
-          <S.EditButton>
-            {loading ? <Skeleton /> : <EditCartButton />}
-          </S.EditButton>
-        </CartModal>
+        <S.EditButton
+          onClick={() => {
+            NiceModal.show(ModalIDEnum.CartModal);
+          }}
+        >
+          {loading ? <Skeleton /> : <EditCartButton />}
+        </S.EditButton>
       )}
     </S.Wrapper>
   );

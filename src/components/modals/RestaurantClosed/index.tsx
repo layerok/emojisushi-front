@@ -1,15 +1,16 @@
 import { LowKeySvg, NotifyModal, SvgIcon } from "~components";
 import { useTranslation } from "react-i18next";
-import { observer } from "mobx-react";
 import { formatWorkingHours } from "~utils/format.utils";
 import { appConfig } from "~config/app";
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 
 // todo: reopen this modal every n seconds
-export const RestaurantClosed = observer(({ open }) => {
+export const RestaurantClosed = NiceModal.create(() => {
   const { t } = useTranslation();
+  const modal = useModal();
   return (
     <NotifyModal
-      open={open}
+      open={modal.visible}
       renderTitle={() => t("restaurantClosed.closed")}
       renderSubtitle={() =>
         `${t("restaurantClosed.time")}: ${formatWorkingHours(

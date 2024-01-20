@@ -1,15 +1,13 @@
 import * as S from "./styled";
-import {
-  ContactsModal,
-  LocationPickerPopover,
-  HightlightText,
-} from "~components";
+import { LocationPickerPopover, HightlightText } from "~components";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { Logo } from "../Logo";
 import { NavLink } from "react-router-dom";
 import { ICity } from "~api/types";
 import { observer } from "mobx-react";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalIDEnum } from "~common/modal.constants";
 
 type LeftProps = { loading?: boolean; cities?: ICity[] };
 
@@ -26,9 +24,13 @@ export const Left = observer(({ loading = false, cities = [] }: LeftProps) => {
         {loading ? (
           <Skeleton width={71} height={17.25} />
         ) : (
-          <ContactsModal>
-            <div>{t("header.contacts")}</div>
-          </ContactsModal>
+          <div
+            onClick={() => {
+              NiceModal.show(ModalIDEnum.ContactsModal);
+            }}
+          >
+            {t("header.contacts")}
+          </div>
         )}
       </S.HeaderItem>
 

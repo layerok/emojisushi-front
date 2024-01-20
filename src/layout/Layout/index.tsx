@@ -8,17 +8,25 @@ import {
   TinyCartButton,
   CartModal,
   LocationsModal,
+  RestaurantClosed,
+  TelegramModal,
+  ContactsModal,
+  MobMenuModal,
+  AuthModal,
 } from "~components";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { cartQuery } from "~queries";
-import { IUser, IGetCartRes, IGetCitiesRes, ICity, ISpot } from "~api/types";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "~hooks/use-auth";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { observer } from "mobx-react";
 import { useAppStore } from "~stores/appStore";
 import { citiesQuery } from "~queries/cities.query";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalIDEnum } from "~common/modal.constants";
+import { isClosed } from "~utils/time.utils";
+import { appConfig } from "~config/app";
 
 export const Layout = observer(
   ({ children, ...rest }: { children?: ReactNode }) => {
@@ -31,6 +39,19 @@ export const Layout = observer(
 
     const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
     const appStore = useAppStore();
+
+    useEffect(() => {
+      const closed = isClosed({
+        start: appConfig.workingHours[0],
+        end: appConfig.workingHours[1],
+      });
+
+      if (closed) {
+        NiceModal.show(ModalIDEnum.RestaurantClosed);
+      } else if (!appStore.userConfirmedLocation) {
+        NiceModal.show(ModalIDEnum.LocationModal);
+      }
+    }, []);
 
     return (
       <S.Layout {...rest}>
@@ -47,19 +68,22 @@ export const Layout = observer(
         <Footer />
         {!isCartLoading && (
           <Sticky top={"30px"} right={"30px"} show={showStickyCart}>
-            <CartModal cart={cart}>
-              <div>
-                <TinyCartButton price={cart.total} />
-              </div>
-            </CartModal>
+            <TinyCartButton
+              onClick={() => {
+                NiceModal.show(ModalIDEnum.CartModal);
+              }}
+              price={cart.total}
+            />
           </Sticky>
         )}
-        {!isCitiesLoading && (
-          <LocationsModal
-            open={!appStore.userConfirmedLocation}
-            cities={cities.data}
-          />
-        )}
+        <LocationsModal id={ModalIDEnum.LocationModal} />
+        <RestaurantClosed id={ModalIDEnum.RestaurantClosed} />
+        <TelegramModal id={ModalIDEnum.TelegramModal} />
+        <ContactsModal id={ModalIDEnum.ContactsModal} />
+        <CartModal id={ModalIDEnum.CartModal} />
+
+        <AuthModal id={ModalIDEnum.AuthModal} />
+        <MobMenuModal id={ModalIDEnum.MobMenuModal} />
         <StickyToTopBtn />
       </S.Layout>
     );
@@ -67,14 +91,6 @@ export const Layout = observer(
 );
 
 export const Component = Layout;
-
-export type LayoutRouteLoaderData = {
-  cart: IGetCartRes;
-  user: IUser | null;
-  cities: IGetCitiesRes;
-  city: ICity;
-  spot: ISpot;
-};
 
 export const ErrorBoundary = DefaultErrorBoundary;
 

@@ -1,16 +1,21 @@
-import { cloneElement } from "react";
 import { SvgIcon } from "../../SvgIcon";
 import { TelegramSvg } from "../../svg/TelegramSvg";
 import { ButtonFilled } from "../../buttons/Button";
 import { NotifyModal } from "../NotifyModal";
 import { useTranslation } from "react-i18next";
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 
-export const TelegramModal = ({ children, ...rest }) => {
+export const TelegramModal = NiceModal.create(() => {
   const { t } = useTranslation();
+  const modal = useModal();
   return (
     <NotifyModal
+      open={modal.visible}
       renderTitle={() => t("telegramModal.appeared")}
       renderSubtitle={() => t("telegramModal.stock")}
+      onClose={() => {
+        modal.remove();
+      }}
       renderIcon={() => (
         <SvgIcon color={"#FFE600"} width={"60px"}>
           <TelegramSvg strokeWidth={1} />
@@ -26,9 +31,8 @@ export const TelegramModal = ({ children, ...rest }) => {
           {t("telegramModal.go_to")}
         </ButtonFilled>
       )}
-      {...rest}
     >
-      {cloneElement(children)}
+      <div></div>
     </NotifyModal>
   );
-};
+});

@@ -3,7 +3,6 @@ export * from "./BaseModal";
 export * from "./CartModal";
 export * from "./CloseModalIcon";
 export * from "./ContactsModal";
-export * from "./FiltersModal";
 export * from "./MobMenuModal";
 export * from "./Modal";
 export * from "./NotifyModal";

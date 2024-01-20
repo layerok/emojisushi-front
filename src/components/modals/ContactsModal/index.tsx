@@ -1,19 +1,24 @@
-import { ReactElement, cloneElement } from "react";
 import * as S from "./styled";
-import { SvgIcon, FlexBox, StaticMap, TelegramModal, Modal } from "~components";
+import { SvgIcon, FlexBox, StaticMap, Modal } from "~components";
 import { PhoneSvg, InstagramSvg, TelegramSvg } from "~components/svg";
 import { useTranslation } from "react-i18next";
 import { InstagramLink } from "~layout/Footer/styled";
 import { useAppStore } from "~stores/appStore";
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 
-export const ContactsModal = ({ children }: { children: ReactElement }) => {
+export const ContactsModal = NiceModal.create(() => {
   const { t } = useTranslation();
   const appStore = useAppStore();
+  const modal = useModal();
 
   return (
     <Modal
+      open={modal.visible}
+      onClose={() => {
+        modal.remove();
+      }}
       width={undefined}
-      render={({ close }) => (
+      render={() => (
         <div>
           <S.Wrapper>
             {appStore.city.phones && (
@@ -50,25 +55,31 @@ export const ContactsModal = ({ children }: { children: ReactElement }) => {
                   emoji_sushi
                 </InstagramLink>
               </FlexBox>
-              <TelegramModal>
-                <FlexBox alignItems={"center"}>
-                  <SvgIcon
-                    style={{ marginRight: "10px" }}
-                    width={"25px"}
-                    color={"white"}
-                  >
-                    <TelegramSvg />
-                  </SvgIcon>
-                  <span>Telegram</span>
-                </FlexBox>
-              </TelegramModal>
+
+              <FlexBox
+                style={{ cursor: "pointer" }}
+                alignItems={"center"}
+                onClick={() => {
+                  window.open("https://t.me/Emojisushibot", "_blank");
+                }}
+              >
+                <SvgIcon
+                  clickable={true}
+                  style={{ marginRight: "10px" }}
+                  width={"25px"}
+                  color={"white"}
+                >
+                  <TelegramSvg />
+                </SvgIcon>
+                <span>Telegram</span>
+              </FlexBox>
             </S.Socials>
           </S.Wrapper>
           <StaticMap style={{ marginTop: "30px" }} height={"220px"} />
         </div>
       )}
     >
-      <div>{cloneElement(children)}</div>
+      <div></div>
     </Modal>
   );
-};
+});

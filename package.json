@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "^7.16.0",
+    "@ebay/nice-modal-react": "^1.2.13",
     "@floating-ui/react-dom": "^0.6.3",
     "@floating-ui/react-dom-interactions": "^0.4.0",
     "@huse/action-pending": "^1.1.2",

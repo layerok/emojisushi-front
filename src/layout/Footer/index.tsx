@@ -1,15 +1,11 @@
 import * as S from "./styled";
-import {
-  TelegramModal,
-  StaticMap,
-  FlexBox,
-  Container,
-  SvgIcon,
-} from "~components";
+import { StaticMap, FlexBox, Container, SvgIcon } from "~components";
 import { TelegramSvg, InstagramSvg, PhoneSvg, LogoSvg } from "~components/svg";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { useAppStore } from "~stores/appStore";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalIDEnum } from "~common/modal.constants";
 
 type FooterProps = {
   loading?: boolean;
@@ -153,21 +149,22 @@ type ITelegramProps = { loading?: boolean };
 
 const Telegram = ({ loading = false }: ITelegramProps) => {
   return (
-    <TelegramModal>
-      <FlexBox
-        style={{
-          marginTop: "10px",
-          width: "100%",
-        }}
-        alignItems={"center"}
-      >
-        <SvgIcon loading={loading} width={"25px"} color={"white"}>
-          <TelegramSvg />
-        </SvgIcon>
+    <FlexBox
+      style={{
+        marginTop: "10px",
+        width: "100%",
+      }}
+      onClick={() => {
+        NiceModal.show(ModalIDEnum.TelegramModal);
+      }}
+      alignItems={"center"}
+    >
+      <SvgIcon loading={loading} width={"25px"} color={"white"}>
+        <TelegramSvg />
+      </SvgIcon>
 
-        <S.TelegramText>{loading ? <Skeleton /> : "Telegram"}</S.TelegramText>
-      </FlexBox>
-    </TelegramModal>
+      <S.TelegramText>{loading ? <Skeleton /> : "Telegram"}</S.TelegramText>
+    </FlexBox>
   );
 };
 

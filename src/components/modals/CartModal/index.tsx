@@ -14,7 +14,7 @@ import {
   SushiSvg,
 } from "~components";
 
-import { ReactElement, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useBreakpoint2 } from "~common/hooks";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -22,17 +22,18 @@ import { CartProduct } from "~models";
 import { ICartProduct, IGetCartRes } from "~api/types";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { cartApi } from "~api";
 import { formatUAHPrice } from "~utils/price.utils";
 import { arrImmutableDeleteAt, arrImmutableReplaceAt } from "~utils/arr.utils";
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 
 const CartItem = ({
   item,
-  onDelete,
+  onDelete = () => {},
 }: {
   item: CartProduct;
-  onDelete: (item: CartProduct) => void;
+  onDelete?: (item: CartProduct) => void;
 }) => {
   const key = useRef(0);
   const newPrice = item.product.getNewPrice(item.variant)?.price_formatted;
@@ -201,16 +202,10 @@ const CartItem = ({
   );
 };
 
-export const CartModal = ({
-  children,
-  cart,
-  onEmpty,
-}: {
-  cart: IGetCartRes;
-  children: ReactElement;
-  onEmpty?: () => void;
-}) => {
+export const CartModal = NiceModal.create(() => {
   const navigate = useNavigate();
+  const modal = useModal();
+  const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
 
   const { data } = cart;
 
@@ -237,6 +232,10 @@ export const CartModal = ({
 
   return (
     <BaseModal
+      open={modal.visible}
+      onClose={() => {
+        modal.remove();
+      }}
       overlayStyles={overlayStyles}
       render={({ close }) => (
         <S.Wrapper>
@@ -258,15 +257,7 @@ export const CartModal = ({
               }}
             >
               {items.map((item, i) => (
-                <CartItem
-                  onDelete={() => {
-                    if (items.length === 1) {
-                      onEmpty?.();
-                    }
-                  }}
-                  key={item.id}
-                  item={item}
-                />
+                <CartItem key={item.id} item={item} />
               ))}
             </div>
           </S.Items>
@@ -282,6 +273,7 @@ export const CartModal = ({
                   disabled={items.length === 0}
                   onClick={() => {
                     navigate("/checkout");
+                    modal.remove();
                     close();
                   }}
                   width={"100%"}
@@ -294,7 +286,7 @@ export const CartModal = ({
         </S.Wrapper>
       )}
     >
-      {children}
+      <div></div>
     </BaseModal>
   );
-};
+});

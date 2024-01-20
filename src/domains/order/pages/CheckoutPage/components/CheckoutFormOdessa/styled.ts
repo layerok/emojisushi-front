@@ -49,6 +49,7 @@ const Total = styled.div`
 const Login = styled.div`
   color: #ffe600;
   margin-left: 5px;
+  cursor: pointer;
 `;
 
 export {

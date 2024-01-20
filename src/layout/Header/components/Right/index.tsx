@@ -2,10 +2,7 @@ import * as S from "./styled";
 import { BurgerSvg, UserSvg } from "~components/svg";
 import {
   SvgButton,
-  AuthModal,
   LanguageSelector,
-  MobMenuModal,
-  CartModal,
   SvgIcon,
   CartButton,
   TinyCartButton,
@@ -13,6 +10,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { ICity, IGetCartRes, IUser } from "~api/types";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalIDEnum } from "~common/modal.constants";
 
 type RightProps = {
   loading?: boolean;
@@ -30,34 +29,42 @@ export const Right = ({ loading = false, cart, user, cities }: RightProps) => {
       </S.LanguageSelectorContainer>
 
       {cart && (
-        <CartModal cart={cart}>
-          <S.CartBtn>
-            <CartButton
-              loading={loading}
-              count={cart?.totalQuantity}
-              total={cart?.total}
-            />
-          </S.CartBtn>
-        </CartModal>
+        <S.CartBtn
+          onClick={() => {
+            NiceModal.show(ModalIDEnum.CartModal);
+          }}
+        >
+          <CartButton
+            loading={loading}
+            count={cart?.totalQuantity}
+            total={cart?.total}
+          />
+        </S.CartBtn>
       )}
 
       {cart && (
-        <CartModal cart={cart}>
-          <S.TinyCartBtn>
-            <TinyCartButton loading={loading} price={cart?.total} />
-          </S.TinyCartBtn>
-        </CartModal>
+        <S.TinyCartBtn
+          onClick={() => {
+            NiceModal.show(ModalIDEnum.CartModal);
+          }}
+        >
+          <TinyCartButton loading={loading} price={cart?.total} />
+        </S.TinyCartBtn>
       )}
 
       <S.BurgerBtn>
         {loading ? (
           <Skeleton width={32} height={32} />
         ) : (
-          <MobMenuModal cities={cities}>
-            <SvgIcon width={"32px"} color={"white"}>
-              <BurgerSvg />
-            </SvgIcon>
-          </MobMenuModal>
+          <SvgIcon
+            onClick={() => {
+              NiceModal.show(ModalIDEnum.MobMenuModal);
+            }}
+            width={"32px"}
+            color={"white"}
+          >
+            <BurgerSvg />
+          </SvgIcon>
         )}
       </S.BurgerBtn>
 
@@ -82,13 +89,15 @@ export const Right = ({ loading = false, cart, user, cities }: RightProps) => {
           {loading ? (
             <Skeleton width={40} height={40} borderRadius={10} />
           ) : (
-            <AuthModal redirect_to={undefined}>
-              <SvgButton>
-                <SvgIcon clickable={true} width={"25px"} color={"black"}>
-                  <UserSvg />
-                </SvgIcon>
-              </SvgButton>
-            </AuthModal>
+            <SvgButton
+              onClick={() => {
+                NiceModal.show(ModalIDEnum.AuthModal);
+              }}
+            >
+              <SvgIcon clickable={true} width={"25px"} color={"black"}>
+                <UserSvg />
+              </SvgIcon>
+            </SvgButton>
           )}
         </S.UserBtn>
       )}

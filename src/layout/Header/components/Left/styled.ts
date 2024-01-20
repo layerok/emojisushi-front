@@ -9,6 +9,7 @@ const HeaderItem = styled.div`
   margin-right: 60px;
   display: flex;
   align-items: center;
+  cursor: pointer;
 
   ${media.lessThan("pc")`
         display: none;

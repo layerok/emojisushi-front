@@ -1,17 +1,10 @@
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import {
-  ProductsGrid,
-  RestaurantClosed,
-  Container,
-  LoadMoreButton,
-} from "~components";
+import { ProductsGrid, Container, LoadMoreButton } from "~components";
 import { Banner } from "./Banner";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Product } from "src/models";
 import { cartQuery, categoriesQuery, wishlistsQuery } from "src/queries";
 import { SortKey } from "src/api/types";
-import { isClosed } from "src/utils/time.utils";
-import { appConfig } from "src/config/app";
 import { PRODUCTS_LIMIT_STEP } from "~domains/category/constants";
 import { MenuLayout } from "~domains/product/components/MenuLayout";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
@@ -24,10 +17,7 @@ import { useEffect } from "react";
 
 export const CategoryPage = observer(() => {
   const { ref, inView } = useInView();
-  const closed = isClosed({
-    start: appConfig.workingHours[0],
-    end: appConfig.workingHours[1],
-  });
+
   const { categorySlug } = useParams();
   const { t } = useTranslation();
 
@@ -139,8 +129,6 @@ export const CategoryPage = observer(() => {
           </div>
         )}
       </MenuLayout>
-
-      <RestaurantClosed open={closed} />
     </Container>
   );
 });

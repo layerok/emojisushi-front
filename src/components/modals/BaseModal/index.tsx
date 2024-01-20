@@ -37,6 +37,7 @@ export type IBaseModalProps = {
     toggle?: boolean;
     ignoreMouse?: boolean;
   };
+  onClose?: () => void;
 };
 
 export const BaseModalComponent = ({
@@ -44,12 +45,20 @@ export const BaseModalComponent = ({
   overlayStyles,
   open: passedOpen = false,
   children,
+  onClose,
   useClickOptions = {},
 }: IBaseModalProps) => {
-  const [open, setOpen] = useState(passedOpen);
+  const [open, baseSetOpen] = useState(passedOpen);
   const [allowDismiss, setAllowDismiss] = useState(true);
   const nodeId = useFloatingNodeId();
   const parentId = useFloatingParentNodeId();
+
+  const setOpen = (state: boolean) => {
+    if (!state) {
+      onClose?.();
+    }
+    baseSetOpen(state);
+  };
 
   const { reference, floating, context, refs } = useFloating({
     open,

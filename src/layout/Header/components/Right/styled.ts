@@ -7,6 +7,7 @@ const Right = styled.div`
 `;
 
 const CartBtn = styled.div`
+  cursor: pointer;
   ${media.lessThan("tablet")`
     display: none;
   `}
@@ -23,6 +24,7 @@ const BurgerBtn = styled.button`
   margin-left: 30px;
   ${media.greaterThan("pc")`
     display: none;
+    margin-left: 0;
   `}
 `;
 

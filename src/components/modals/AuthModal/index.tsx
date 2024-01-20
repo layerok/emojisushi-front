@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { cloneElement, useState } from "react";
+import { useState } from "react";
 import {
   PasswordInput,
   Checkbox,
@@ -19,52 +19,59 @@ import { queryClient } from "~query-client";
 import { cartQuery, wishlistsQuery } from "~queries";
 import { authApi } from "~api";
 import { useMutation } from "@tanstack/react-query";
-import { useAppStore } from "~stores/appStore";
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 
-export const AuthModal = ({ children, redirect_to }) => {
-  // todo: don't use it
-  const { isMobile } = useBreakpoint2();
+export const AuthModal = NiceModal.create(
+  ({ redirect_to }: { redirect_to?: string }) => {
+    // todo: don't use it
+    const { isMobile } = useBreakpoint2();
+    const modal = useModal();
 
-  const [showPasswordRecovery, setShowPasswordRecovery] = useState();
-  const [showSignUp, setShowSignUp] = useState(false);
-  const showLoginForm = isMobile
-    ? !showPasswordRecovery && !showSignUp
-    : !showPasswordRecovery;
-  const showSignUpForm = !isMobile || showSignUp;
+    const [showPasswordRecovery, setShowPasswordRecovery] = useState();
+    const [showSignUp, setShowSignUp] = useState(false);
+    const showLoginForm = isMobile
+      ? !showPasswordRecovery && !showSignUp
+      : !showPasswordRecovery;
+    const showSignUpForm = !isMobile || showSignUp;
 
-  return (
-    <Modal
-      width={"auto"}
-      render={({ close }) => (
-        <S.Wrapper>
-          <If condition={showLoginForm}>
-            <LoginForm
-              redirect_to={redirect_to}
-              close={close}
-              setShowSignUp={setShowSignUp}
-              setShowPasswordRecovery={setShowPasswordRecovery}
-            />
-          </If>
-          <If condition={showPasswordRecovery}>
-            <PasswordRecoveryForm
-              setShowPasswordRecovery={setShowPasswordRecovery}
-            />
-          </If>
+    return (
+      <Modal
+        open={modal.visible}
+        onClose={() => {
+          modal.remove();
+        }}
+        width={"auto"}
+        render={({ close }) => (
+          <S.Wrapper>
+            <If condition={showLoginForm}>
+              <LoginForm
+                redirect_to={redirect_to}
+                close={close}
+                setShowSignUp={setShowSignUp}
+                setShowPasswordRecovery={setShowPasswordRecovery}
+              />
+            </If>
+            <If condition={showPasswordRecovery}>
+              <PasswordRecoveryForm
+                setShowPasswordRecovery={setShowPasswordRecovery}
+              />
+            </If>
 
-          <S.VerticalBar />
+            <S.VerticalBar />
 
-          <If condition={showSignUpForm}>
-            <SignUpForm setShowSignUp={setShowSignUp} />
-          </If>
-        </S.Wrapper>
-      )}
-    >
-      {cloneElement(children)}
-    </Modal>
-  );
-};
+            <If condition={showSignUpForm}>
+              <SignUpForm close={close} setShowSignUp={setShowSignUp} />
+            </If>
+          </S.Wrapper>
+        )}
+      >
+        <div></div>
+      </Modal>
+    );
+  }
+);
 
-const SignUpForm = observer(({ setShowSignUp }) => {
+const SignUpForm = observer(({ setShowSignUp, close }) => {
   const { t } = useTranslation();
   const [checked, setChecked] = useState(false);
   const register = useRegister();
@@ -88,7 +95,6 @@ const SignUpForm = observer(({ setShowSignUp }) => {
         const name = formData.get("name") + "";
         const surname = formData.get("surname") + "";
         const agree = !!formData.get("agree");
-        const appStore = useAppStore();
 
         setErrors({});
 
@@ -106,6 +112,7 @@ const SignUpForm = observer(({ setShowSignUp }) => {
               queryClient.invalidateQueries(wishlistsQuery.queryKey);
               queryClient.invalidateQueries(cartQuery.queryKey);
               navigate("/" + ["account", "profile"].join("/"));
+              close();
             },
             onError: (error) => {
               if (error instanceof AxiosError) {
@@ -279,6 +286,7 @@ const LoginForm = ({
               queryClient.invalidateQueries(wishlistsQuery.queryKey);
               queryClient.invalidateQueries(cartQuery.queryKey);
               navigate(redirect_to || default_redirect_to);
+              close();
             },
             onError: (error) => {
               if (error instanceof AxiosError) {

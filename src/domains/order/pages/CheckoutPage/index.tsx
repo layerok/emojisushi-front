@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { spotsQuery } from "~domains/spot/queries/spots.query";
 import { useAppStore } from "~stores/appStore";
+import { useEffect } from "react";
 
 const CheckoutPage = () => {
   const { t } = useTranslation();
@@ -38,6 +39,12 @@ const CheckoutPage = () => {
   const { data: paymentMethods, isLoading: isPaymentMethodsLoading } =
     useQuery(paymentQuery);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (cart?.data && cart.data.length < 1) {
+      navigate("/category");
+    }
+  }, []);
 
   return (
     <Container>
@@ -77,12 +84,7 @@ const CheckoutPage = () => {
         {isCartLoading ? (
           <CheckoutCart loading={true} />
         ) : (
-          <CheckoutCart
-            cart={cart}
-            onEmpty={() => {
-              navigate("/category");
-            }}
-          />
+          <CheckoutCart cart={cart} />
         )}
       </S.Container>
     </Container>

@@ -1,11 +1,4 @@
-import {
-  FlexBox,
-  Input,
-  ButtonOutline,
-  Switcher,
-  Dropdown,
-  AuthModal,
-} from "~components";
+import { FlexBox, Input, ButtonOutline, Switcher, Dropdown } from "~components";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -26,6 +19,8 @@ import { AxiosError } from "axios";
 import Skeleton from "react-loading-skeleton";
 import { observer } from "mobx-react";
 import { useAppStore } from "~stores/appStore";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalIDEnum } from "~common/modal.constants";
 
 // todo: logout user if his token is expired
 // timer may be solution
@@ -230,9 +225,16 @@ export const CheckoutFormOdessa = observer(
           !user && (
             <FlexBox style={{ marginBottom: "20px" }}>
               {t("checkout.alreadyHaveAccount")}
-              <AuthModal redirect_to={location.pathname}>
-                <S.Login>{t("common.login")}</S.Login>
-              </AuthModal>
+
+              <S.Login
+                onClick={() => {
+                  NiceModal.show(ModalIDEnum.AuthModal, {
+                    redirect_to: location.pathname,
+                  });
+                }}
+              >
+                {t("common.login")}
+              </S.Login>
             </FlexBox>
           )
         )}
