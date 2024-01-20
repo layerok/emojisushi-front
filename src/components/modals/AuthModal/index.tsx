@@ -41,7 +41,8 @@ export const AuthModal = NiceModal.create(
           modal.remove();
         }}
         width={"auto"}
-        render={({ close }) => (
+      >
+        {({ close }) => (
           <S.Wrapper>
             <If condition={showLoginForm}>
               <LoginForm
@@ -64,8 +65,6 @@ export const AuthModal = NiceModal.create(
             </If>
           </S.Wrapper>
         )}
-      >
-        <div></div>
       </Modal>
     );
   }

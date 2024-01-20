@@ -1,12 +1,4 @@
-import {
-  cloneElement,
-  CSSProperties,
-  ReactElement,
-  ReactNode,
-  useEffect,
-  useId,
-  useState,
-} from "react";
+import { CSSProperties, ReactNode, useId, useState } from "react";
 import {
   useClick,
   useDismiss,
@@ -14,44 +6,32 @@ import {
   useInteractions,
   useRole,
   FloatingPortal,
-  FloatingNode,
-  FloatingTree,
-  useFloatingNodeId,
-  useFloatingTree,
   FloatingOverlay,
-  useFloatingParentNodeId,
 } from "@floating-ui/react-dom-interactions";
 
 export type IBaseModalProps = {
   open?: boolean;
-  children: ReactElement;
   overlayStyles: CSSProperties;
-  render: (props: {
-    close: () => void;
-    labelId: string;
-    descriptionId: string;
-  }) => ReactNode;
-  useClickOptions?: {
-    enabled?: boolean;
-    pointerDown?: boolean;
-    toggle?: boolean;
-    ignoreMouse?: boolean;
-  };
+  children:
+    | ReactNode
+    | {
+        (props: {
+          close: () => void;
+          labelId: string;
+          descriptionId: string;
+        }): ReactNode;
+      };
   onClose?: () => void;
 };
 
-export const BaseModalComponent = ({
-  render,
+export const BaseModal = ({
+  children,
   overlayStyles,
   open: passedOpen = false,
-  children,
   onClose,
-  useClickOptions = {},
 }: IBaseModalProps) => {
   const [open, baseSetOpen] = useState(passedOpen);
   const [allowDismiss, setAllowDismiss] = useState(true);
-  const nodeId = useFloatingNodeId();
-  const parentId = useFloatingParentNodeId();
 
   const setOpen = (state: boolean) => {
     if (!state) {
@@ -60,7 +40,7 @@ export const BaseModalComponent = ({
     baseSetOpen(state);
   };
 
-  const { reference, floating, context, refs } = useFloating({
+  const { floating, context, refs } = useFloating({
     open,
     onOpenChange: setOpen,
   });
@@ -69,88 +49,35 @@ export const BaseModalComponent = ({
   const labelId = `${id}-label`;
   const descriptionId = `${id}-description`;
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    useClick(context, useClickOptions),
+  const { getFloatingProps } = useInteractions([
+    useClick(context),
     useRole(context),
     useDismiss(context, {
       enabled: allowDismiss,
     }),
   ]);
 
-  const tree = useFloatingTree();
-
-  useEffect(() => {
-    function onTreeOpenChange({
-      open,
-      reference,
-      parentId: dataParentId,
-      nodeId: dataNodeId,
-    }) {
-      if (nodeId === dataParentId) {
-        // если открылка дочерний модал, то запрещаем закрывать родительский пока не закрыли дочерний
-        setAllowDismiss(!open);
-      }
-    }
-
-    tree?.events.on("openChange", onTreeOpenChange);
-
-    return () => {
-      tree?.events.off("openChange", onTreeOpenChange);
-    };
-  }, [nodeId, open, parentId, tree, refs.reference]);
-
-  useEffect(() => {
-    tree?.events.emit("openChange", {
-      open,
-      parentId,
-      nodeId,
-      reference: refs.reference.current,
-    });
-  }, [nodeId, parentId, tree, open, refs.reference]);
-
-  const close = () => setOpen(false);
-
   return (
-    <FloatingNode id={nodeId}>
-      <div style={{ cursor: "pointer", display: "flex" }}>
-        {cloneElement(
-          children,
-          getReferenceProps({ ref: reference, ...children.props })
-        )}
-      </div>
-      <FloatingPortal>
-        {open && (
-          <FloatingOverlay lockScroll style={{ ...overlayStyles }}>
-            <div
-              {...getFloatingProps({
-                ref: floating,
-                "aria-labelledby": labelId,
-                "aria-describedby": descriptionId,
-              })}
-            >
-              {render({
-                close,
-                labelId,
-                descriptionId,
-              })}
-            </div>
-          </FloatingOverlay>
-        )}
-      </FloatingPortal>
-    </FloatingNode>
+    <FloatingPortal>
+      {open && (
+        <FloatingOverlay lockScroll style={{ ...overlayStyles }}>
+          <div
+            {...getFloatingProps({
+              ref: floating,
+              "aria-labelledby": labelId,
+              "aria-describedby": descriptionId,
+            })}
+          >
+            {typeof children === "function"
+              ? children({
+                  close: () => setOpen(false),
+                  labelId,
+                  descriptionId,
+                })
+              : children}
+          </div>
+        </FloatingOverlay>
+      )}
+    </FloatingPortal>
   );
-};
-
-export const BaseModal = (props: IBaseModalProps) => {
-  const parentId = useFloatingParentNodeId();
-
-  if (parentId == null) {
-    return (
-      <FloatingTree>
-        <BaseModalComponent {...props} />
-      </FloatingTree>
-    );
-  }
-
-  return <BaseModalComponent {...props} />;
 };

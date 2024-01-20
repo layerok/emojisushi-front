@@ -33,7 +33,6 @@ export const MobMenuModal = NiceModal.create(() => {
   if (isCitiesLoading) {
     return null;
   }
-  debugger;
 
   const render = () => (
     <S.Wrapper>
@@ -55,6 +54,7 @@ export const MobMenuModal = NiceModal.create(() => {
             }}
             onClick={() => {
               navigate("/account");
+              modal.remove();
             }}
             alignItems={"center"}
           >
@@ -68,6 +68,7 @@ export const MobMenuModal = NiceModal.create(() => {
             alignItems={"center"}
             onClick={() => {
               NiceModal.show(ModalIDEnum.AuthModal);
+              modal.remove();
             }}
           >
             <SvgIcon width={"25px"} style={{ marginRight: "10px" }}>
@@ -81,6 +82,7 @@ export const MobMenuModal = NiceModal.create(() => {
         <div
           onClick={() => {
             NiceModal.show(ModalIDEnum.ContactsModal);
+            modal.remove();
           }}
         >
           {t("mobMenuModal.contacts")}
@@ -90,6 +92,9 @@ export const MobMenuModal = NiceModal.create(() => {
         <NavLink
           style={{ color: "white", textDecoration: "none" }}
           to={"/dostavka-i-oplata"}
+          onClick={() => {
+            modal.remove();
+          }}
         >
           {({ isActive }) => (
             <HightlightText isActive={isActive}>
@@ -103,6 +108,9 @@ export const MobMenuModal = NiceModal.create(() => {
           <NavLink
             style={{ color: "white", textDecoration: "none" }}
             to={"/wishlist"}
+            onClick={() => {
+              modal.remove();
+            }}
           >
             {({ isActive }) => (
               <HightlightText isActive={isActive}>
@@ -124,9 +132,8 @@ export const MobMenuModal = NiceModal.create(() => {
         modal.remove();
       }}
       overlayStyles={overlayStyles}
-      render={render}
     >
-      <div></div>
+      {render}
     </BaseModal>
   );
 });

@@ -5,19 +5,17 @@ import { ReactNode } from "react";
 import { IAlignItems, IJustifyContent } from "~components/FlexBox";
 
 export type IModalProps = {
-  children: ReactNode;
   alignItems?: IAlignItems;
   justifyContent?: IJustifyContent;
-  render: (props: { close: () => void }) => ReactNode;
+  children: ReactNode | { (props: { close: () => void }): ReactNode };
   width?: string;
   alignCenter?: boolean;
-} & Omit<IBaseModalProps, "overlayStyles" | "render">;
+} & Omit<IBaseModalProps, "overlayStyles" | "children">;
 
 export const Modal = ({
-  children,
   alignItems = "center",
   justifyContent = "center",
-  render,
+  children,
   width,
   alignCenter,
   ...rest
@@ -30,19 +28,15 @@ export const Modal = ({
     zIndex: 999999,
   };
   return (
-    <BaseModal
-      overlayStyles={overlayStyles}
-      render={({ close }) => (
+    <BaseModal overlayStyles={overlayStyles} {...rest}>
+      {({ close }) => (
         <S.Container width={width} alignCenter={alignCenter}>
           <S.CloseIcon>
             <CloseModalIcon close={close} />
           </S.CloseIcon>
-          {render({ close })}
+          {typeof children === "function" ? children({ close }) : children}
         </S.Container>
       )}
-      {...rest}
-    >
-      {children}
     </BaseModal>
   );
 };

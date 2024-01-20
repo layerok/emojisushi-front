@@ -237,7 +237,8 @@ export const CartModal = NiceModal.create(() => {
         modal.remove();
       }}
       overlayStyles={overlayStyles}
-      render={({ close }) => (
+    >
+      {({ close }) => (
         <S.Wrapper>
           <S.CloseIcon>
             <CloseModalIcon close={close} />
@@ -285,8 +286,6 @@ export const CartModal = NiceModal.create(() => {
           )}
         </S.Wrapper>
       )}
-    >
-      <div></div>
     </BaseModal>
   );
 });

@@ -57,10 +57,6 @@ export const LocationsModal = NiceModal.create(
       </S.Wrapper>
     );
 
-    return (
-      <Modal open={modal.visible} render={render}>
-        <div></div>
-      </Modal>
-    );
+    return <Modal open={modal.visible}>{render}</Modal>;
   })
 );

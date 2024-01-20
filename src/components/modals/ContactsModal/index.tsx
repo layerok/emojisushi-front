@@ -18,7 +18,8 @@ export const ContactsModal = NiceModal.create(() => {
         modal.remove();
       }}
       width={undefined}
-      render={() => (
+    >
+      {() => (
         <div>
           <S.Wrapper>
             {appStore.city.phones && (
@@ -78,8 +79,6 @@ export const ContactsModal = NiceModal.create(() => {
           <StaticMap style={{ marginTop: "30px" }} height={"220px"} />
         </div>
       )}
-    >
-      <div></div>
     </Modal>
   );
 });

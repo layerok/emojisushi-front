@@ -1,4 +1,4 @@
-import { cloneElement, ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode } from "react";
 import { IModalProps, Modal } from "../Modal";
 import * as S from "./styled";
 
@@ -20,11 +20,8 @@ export const NotifyModal = ({
   ...rest
 }: INotifyModalProps) => {
   return (
-    <Modal
-      open={open}
-      alignCenter={true}
-      {...rest}
-      render={({ close }) => (
+    <Modal open={open} alignCenter={true} {...rest}>
+      {({ close }) => (
         <S.Container>
           {renderIcon && renderIcon()}
           {renderTitle && <S.Title>{renderTitle()}</S.Title>}
@@ -32,8 +29,6 @@ export const NotifyModal = ({
           {renderButton && <S.Button>{renderButton()}</S.Button>}
         </S.Container>
       )}
-    >
-      {cloneElement(children)}
     </Modal>
   );
 };
