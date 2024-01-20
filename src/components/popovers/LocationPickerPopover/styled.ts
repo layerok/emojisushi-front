@@ -5,7 +5,7 @@ const Container = styled.button`
   align-items: center;
   cursor: pointer;
   color: white;
-  width: 217px;
+  width: 100%;
   text-align: left;
 `;
 

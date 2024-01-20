@@ -5,6 +5,7 @@ import * as S from "./styled";
 import { theme } from "~theme";
 import { HeartSvg } from "~components/svg";
 import { SvgIcon } from "~components/SvgIcon";
+import { SkeletonWrap } from "~components";
 
 type WishlistsMenuItemProps = { loading?: boolean };
 
@@ -38,14 +39,11 @@ export const WishlistsMenuItem = ({
               width: 25,
             }}
           >
-            <SvgIcon
-              clickable={true}
-              width={"100%"}
-              color={"#FFE600"}
-              loading={loading}
-            >
-              <HeartSvg />
-            </SvgIcon>
+            <SkeletonWrap loading={loading}>
+              <SvgIcon clickable={true} width={"100%"} color={"#FFE600"}>
+                <HeartSvg />
+              </SvgIcon>
+            </SkeletonWrap>
           </div>
         </S.Favorite>
       )}

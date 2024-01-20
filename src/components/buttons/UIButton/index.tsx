@@ -1,20 +1,22 @@
-import { SvgIcon } from "../../SvgIcon";
-import { FlexBox } from "../../FlexBox";
+import { FlexBox, SvgIcon } from "~components";
 import { forwardRef, HTMLProps, PropsWithChildren } from "react";
 
-export const UIButton = forwardRef<
-  HTMLDivElement,
-  HTMLProps<HTMLDivElement> &
-    PropsWithChildren<{
-      text: string;
-    }>
->(({ text, children, ...rest }, ref) => {
-  return (
-    <FlexBox alignItems={"center"} {...rest} ref={ref}>
-      <SvgIcon color={"white"} width={"25px"}>
-        {children}
-      </SvgIcon>
-      <div style={{ marginLeft: "10px" }}>{text}</div>
-    </FlexBox>
-  );
-});
+type UIButtonProps = PropsWithChildren<
+  HTMLProps<HTMLDivElement> & {
+    text: string;
+  }
+>;
+
+export const UIButton = forwardRef<HTMLDivElement, UIButtonProps>(
+  (props, ref) => {
+    const { text, children, ...rest } = props;
+    return (
+      <FlexBox alignItems={"center"} {...rest} ref={ref}>
+        <SvgIcon color={"white"} width={"25px"}>
+          {children}
+        </SvgIcon>
+        <div style={{ marginLeft: "10px" }}>{text}</div>
+      </FlexBox>
+    );
+  }
+);

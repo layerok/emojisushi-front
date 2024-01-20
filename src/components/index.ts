@@ -1,5 +1,6 @@
 export * from "./Container";
 export * from "./FlexBox";
+export * from "./Grid";
 export * from "./CartButton";
 export * from "./TinyCartButton";
 export * from "./Counter";
@@ -33,3 +34,4 @@ export * from "./MobSidebar";
 export * from "./Sidebar";
 export * from "./ChipCloud";
 export * from "./HighlightText";
+export * from "./SkeletonWrap";

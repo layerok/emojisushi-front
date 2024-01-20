@@ -19,12 +19,7 @@ export const MobSidebar = ({
           <Search loading={loading} />
         </S.SearchContainer>
 
-        <FlexBox
-          justifyContent={"flex-end"}
-          style={{
-            width: "100%",
-          }}
-        >
+        <FlexBox justifyContent={"flex-end"}>
           <SortingPopover loading={loading} />
         </FlexBox>
       </S.Controls>

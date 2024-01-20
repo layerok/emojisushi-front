@@ -1,12 +1,11 @@
 import { BaseModal, IBaseModalProps } from "../BaseModal";
 import * as S from "./styled";
 import { CloseModalIcon } from "../CloseModalIcon";
-import { ReactNode } from "react";
-import { IAlignItems, IJustifyContent } from "~components/FlexBox";
+import { CSSProperties, ReactNode } from "react";
 
 export type IModalProps = {
-  alignItems?: IAlignItems;
-  justifyContent?: IJustifyContent;
+  alignItems?: CSSProperties["alignItems"];
+  justifyContent?: CSSProperties["justifyContent"];
   children: ReactNode | { (props: { close: () => void }): ReactNode };
   width?: string;
   alignCenter?: boolean;

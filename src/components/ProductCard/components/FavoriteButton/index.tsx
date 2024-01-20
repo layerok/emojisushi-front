@@ -1,6 +1,6 @@
 import { CartProduct, Product } from "~models";
 import * as S from "./styled";
-import { HeartSvg, SvgIcon } from "~components";
+import { HeartSvg, SkeletonWrap, SvgIcon } from "~components";
 import { useMutation } from "@tanstack/react-query";
 import { wishlistApi } from "~api";
 import { queryClient } from "~query-client";
@@ -101,15 +101,16 @@ export const FavoriteButton = ({
       }}
     >
       <S.IconWrapper>
-        <SvgIcon
-          clickable={true}
-          width={"100%"}
-          color={favorite ? "#FFE600" : "white"}
-          hoverColor={"#FFE600"}
-          loading={loading}
-        >
-          <HeartSvg />
-        </SvgIcon>
+        <SkeletonWrap loading={loading}>
+          <SvgIcon
+            clickable={true}
+            width={"100%"}
+            color={favorite ? "#FFE600" : "white"}
+            hoverColor={"#FFE600"}
+          >
+            <HeartSvg />
+          </SvgIcon>
+        </SkeletonWrap>
       </S.IconWrapper>
     </S.Wrapper>
   );

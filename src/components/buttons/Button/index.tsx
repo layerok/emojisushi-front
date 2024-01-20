@@ -1,6 +1,6 @@
 import * as S from "./styled";
-import { SpinnerSvg, SvgIcon, IJustifyContent } from "~components";
-import { HTMLProps, PropsWithChildren } from "react";
+import { SpinnerSvg, SvgIcon } from "~components";
+import { CSSProperties, HTMLProps, PropsWithChildren } from "react";
 import Skeleton from "react-loading-skeleton";
 
 type IProps = HTMLProps<HTMLButtonElement> &
@@ -10,7 +10,7 @@ type IProps = HTMLProps<HTMLButtonElement> &
     padding?: string;
     loading?: boolean;
     submitting?: boolean;
-    justifyContent?: IJustifyContent;
+    justifyContent?: CSSProperties["justifyContent"];
     outline?: boolean;
     color?: string;
     hoverColor?: string;

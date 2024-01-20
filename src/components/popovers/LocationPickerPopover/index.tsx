@@ -1,17 +1,17 @@
 import * as S from "./styled";
 import { SvgIcon, CaretDownSvg, FlexBox, DropdownPopover } from "~components";
 import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg";
-import Skeleton from "react-loading-skeleton";
 import { ICity } from "~api/types";
 import { observer } from "mobx-react";
 import { appStore } from "~stores/appStore";
 import { useLocation } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { citiesQuery } from "~queries/cities.query";
 
 type LocationPickerPopoverProps = {
   offset?: number;
   backgroundColor?: string;
   width?: string;
-  loading?: boolean;
   cities?: ICity[];
 };
 
@@ -20,11 +20,11 @@ export const LocationPickerPopover = observer(
     offset = 0,
     backgroundColor = "#171717",
     width = "211px",
-    cities = [],
-    loading,
   }: LocationPickerPopoverProps) => {
     const location = useLocation();
-    const options = cities.map((spot) => ({
+    const { data: cities, isLoading } = useQuery(citiesQuery);
+
+    const options = (cities?.data || []).map((spot) => ({
       id: spot.slug,
       name: spot.name,
       url: spot.frontend_url,
@@ -34,9 +34,6 @@ export const LocationPickerPopover = observer(
       (option) => option.id === appStore.city.slug
     );
     const selectedIndex = options.indexOf(selectedOption);
-    if (loading) {
-      return <Skeleton width={width} height={40} />;
-    }
     return (
       <DropdownPopover
         backgroundColor={backgroundColor}
@@ -57,7 +54,7 @@ export const LocationPickerPopover = observer(
               <S.Icon>
                 <img src={MapLocationPinSrc} alt="location picker" />
               </S.Icon>
-              <S.Label>{selectedOption.name}</S.Label>
+              <S.Label>{selectedOption?.name}</S.Label>
             </FlexBox>
 
             <S.CaretDown>

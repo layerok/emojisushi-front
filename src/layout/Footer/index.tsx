@@ -1,7 +1,13 @@
 import * as S from "./styled";
-import { StaticMap, FlexBox, Container, SvgIcon } from "~components";
+import {
+  StaticMap,
+  FlexBox,
+  Container,
+  SvgIcon,
+  SkeletonWrap,
+} from "~components";
 import { TelegramSvg, InstagramSvg, PhoneSvg, LogoSvg } from "~components/svg";
-import { useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { useAppStore } from "~stores/appStore";
 import NiceModal from "@ebay/nice-modal-react";
@@ -14,9 +20,15 @@ type FooterProps = {
 export const Footer = ({ loading = false }: FooterProps) => {
   return (
     <S.Footer>
-      <Container>
+      <Container flexDirection={"row"}>
         <S.Left>
-          <Logo loading={loading} />
+          <S.Logo>
+            <SkeletonWrap loading={loading}>
+              <SvgIcon color={"#FFE600"}>
+                <LogoSvg />
+              </SvgIcon>
+            </SkeletonWrap>
+          </S.Logo>
           <Socials loading={loading} />
         </S.Left>
         <S.Right>
@@ -63,7 +75,6 @@ const Socials = ({ loading = false }: ISocialsProps) => {
 type IPhonesProps = { loading?: boolean };
 
 const Phones = ({ loading = false }: IPhonesProps) => {
-  const { t } = useTranslation();
   const appStore = useAppStore();
 
   return (
@@ -75,12 +86,16 @@ const Phones = ({ loading = false }: IPhonesProps) => {
           }}
           alignItems={"center"}
         >
-          <SvgIcon loading={loading} width={"25px"} color={"white"}>
-            <PhoneSvg />
-          </SvgIcon>
+          <SkeletonWrap loading={loading}>
+            <SvgIcon width={"25px"} color={"white"}>
+              <PhoneSvg />
+            </SvgIcon>
+          </SkeletonWrap>
 
           <S.PhoneLabel>
-            {loading ? <Skeleton width={100} /> : t("footerPhones.phones")}
+            <SkeletonWrap loading={loading}>
+              <Trans i18nKey="footerPhones.phones" />
+            </SkeletonWrap>
           </S.PhoneLabel>
         </FlexBox>
 
@@ -122,24 +137,25 @@ type TInstagramProps = { loading?: boolean };
 const Instagram = ({ loading = false }: TInstagramProps) => {
   return (
     <FlexBox alignItems={"center"}>
-      <SvgIcon loading={loading} width={"25px"} color={"white"}>
-        <InstagramSvg />
-      </SvgIcon>
+      <SkeletonWrap loading={loading}>
+        <SvgIcon width={"25px"} color={"white"}>
+          <InstagramSvg />
+        </SvgIcon>
+      </SkeletonWrap>
+
       <S.LinkContainer
         style={{
           flexGrow: 1,
         }}
       >
-        {loading ? (
-          <Skeleton />
-        ) : (
+        <SkeletonWrap loading={loading}>
           <S.InstagramLink
             href={"https://www.instagram.com/emoji_sushi_/"}
             target={"_blank"}
           >
             emoji_sushi
           </S.InstagramLink>
-        )}
+        </SkeletonWrap>
       </S.LinkContainer>
     </FlexBox>
   );
@@ -159,27 +175,15 @@ const Telegram = ({ loading = false }: ITelegramProps) => {
       }}
       alignItems={"center"}
     >
-      <SvgIcon loading={loading} width={"25px"} color={"white"}>
-        <TelegramSvg />
-      </SvgIcon>
-
-      <S.TelegramText>{loading ? <Skeleton /> : "Telegram"}</S.TelegramText>
-    </FlexBox>
-  );
-};
-
-type ILogoProps = { loading?: boolean };
-
-const Logo = ({ loading }: ILogoProps) => {
-  return (
-    <S.Logo>
-      {loading ? (
-        <Skeleton width={160} height={73} />
-      ) : (
-        <SvgIcon color={"#FFE600"}>
-          <LogoSvg />
+      <SkeletonWrap loading={loading}>
+        <SvgIcon width={"25px"} color={"white"}>
+          <TelegramSvg />
         </SvgIcon>
-      )}
-    </S.Logo>
+      </SkeletonWrap>
+
+      <S.TelegramText>
+        <SkeletonWrap loading={loading}>Telegram</SkeletonWrap>
+      </S.TelegramText>
+    </FlexBox>
   );
 };

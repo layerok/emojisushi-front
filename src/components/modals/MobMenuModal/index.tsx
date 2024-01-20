@@ -40,11 +40,7 @@ export const MobMenuModal = NiceModal.create(() => {
         <LanguageSelector />
       </S.Item>
       <S.Item style={{ height: "25px" }}>
-        <LocationPickerPopover
-          width={"226px"}
-          cities={cities.data}
-          backgroundColor={"#1C1C1C"}
-        />
+        <LocationPickerPopover width={"226px"} backgroundColor={"#1C1C1C"} />
       </S.Item>
       <S.Item>
         {user ? (
