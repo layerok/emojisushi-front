@@ -27,6 +27,7 @@ import { cartApi } from "~api";
 import { formatUAHPrice } from "~utils/price.utils";
 import { arrImmutableDeleteAt, arrImmutableReplaceAt } from "~utils/arr.utils";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import { ROUTES } from "~routes";
 
 const CartItem = ({
   item,
@@ -152,7 +153,7 @@ const CartItem = ({
 
   return (
     <S.Item>
-      <S.Item.RemoveIcon>
+      <S.ItemRemoveIcon>
         <ConfirmActionPopover
           // Hack: I'am changing key to remount component to reset 'initiallyOpen' state
           key={key.current}
@@ -173,18 +174,18 @@ const CartItem = ({
         >
           <CloseIcon color={"#4A4A4A"} />
         </ConfirmActionPopover>
-      </S.Item.RemoveIcon>
-      <S.Item.Img src={item.product.mainImage}>
+      </S.ItemRemoveIcon>
+      <S.ItemImg src={item.product.mainImage}>
         {!item.product.mainImage && (
           <SvgIcon color={"white"} width={"80%"} style={{ opacity: 0.05 }}>
             <LogoSvg />
           </SvgIcon>
         )}
-      </S.Item.Img>
-      <S.Item.Info>
-        <S.Item.Name title={nameWithMods}>{nameWithMods}</S.Item.Name>
+      </S.ItemImg>
+      <S.ItemInfo>
+        <S.ItemName title={nameWithMods}>{nameWithMods}</S.ItemName>
         <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
-          <S.Item.Counter>
+          <S.ItemCounter>
             <LightCounter
               handleIncrement={() => {
                 changeCartItemQuantity(item, 1);
@@ -194,10 +195,10 @@ const CartItem = ({
               }}
               count={item.quantity}
             />
-          </S.Item.Counter>
+          </S.ItemCounter>
           <Price newPrice={newPrice} oldPrice={oldPrice} />
         </FlexBox>
-      </S.Item.Info>
+      </S.ItemInfo>
     </S.Item>
   );
 };
@@ -273,7 +274,7 @@ export const CartModal = NiceModal.create(() => {
                 <ButtonOutline
                   disabled={items.length === 0}
                   onClick={() => {
-                    navigate("/checkout");
+                    navigate(ROUTES.CHECKOUT.path);
                     modal.remove();
                     close();
                   }}

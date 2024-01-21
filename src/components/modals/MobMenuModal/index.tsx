@@ -16,6 +16,7 @@ import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
 import { useQuery } from "@tanstack/react-query";
 import { citiesQuery } from "~queries/cities.query";
+import { ROUTES } from "~routes";
 
 export const MobMenuModal = NiceModal.create(() => {
   const modal = useModal();
@@ -49,7 +50,7 @@ export const MobMenuModal = NiceModal.create(() => {
               cursor: "pointer",
             }}
             onClick={() => {
-              navigate("/account");
+              navigate(ROUTES.ACCOUNT.path);
               modal.remove();
             }}
             alignItems={"center"}
@@ -87,7 +88,7 @@ export const MobMenuModal = NiceModal.create(() => {
       <S.Item>
         <NavLink
           style={{ color: "white", textDecoration: "none" }}
-          to={"/dostavka-i-oplata"}
+          to={ROUTES.DELIVERYANDPAYMENT.path}
           onClick={() => {
             modal.remove();
           }}
@@ -103,7 +104,7 @@ export const MobMenuModal = NiceModal.create(() => {
         <FlexBox justifyContent={"space-between"} alignItems={"center"}>
           <NavLink
             style={{ color: "white", textDecoration: "none" }}
-            to={"/wishlist"}
+            to={ROUTES.WISHLIST.path}
             onClick={() => {
               modal.remove();
             }}

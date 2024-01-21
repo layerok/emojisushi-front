@@ -14,6 +14,7 @@ import { useInView } from "react-intersection-observer";
 import * as S from "./styled";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
+import { ROUTES } from "~routes";
 
 export const CategoryPage = observer(() => {
   const { ref, inView } = useInView();
@@ -73,9 +74,15 @@ export const CategoryPage = observer(() => {
   const navigate = useNavigate();
 
   const handleLoadMore = () => {
-    const nextLimit = +limit + PRODUCTS_LIMIT_STEP;
     navigate(
-      "/" + ["category", categorySlug].join("/") + "?limit=" + nextLimit
+      ROUTES.CATEGORY.SHOW.buildPath(
+        {
+          categorySlug: categorySlug,
+        },
+        {
+          limit: +limit + PRODUCTS_LIMIT_STEP,
+        }
+      )
     );
   };
   const selectedCategory = (categories?.data || []).find((category) => {

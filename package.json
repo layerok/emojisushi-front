@@ -75,6 +75,7 @@
     "react-query-auth": "^2.2.0",
     "react-refresh": "^0.11.0",
     "react-router-dom": "6.9.0",
+    "react-router-typesafe-routes": "^1.2.1",
     "react-slick": "^0.29.0",
     "react-spinners": "^0.12.0",
     "react-use": "^17.3.2",
@@ -87,7 +88,7 @@
     "style-loader": "^3.3.1",
     "styled-components": "^5.3.5",
     "styled-media-query": "^2.1.2",
-    "styled-system": "^5.1.5",
+    "styled-system": "5.1.0",
     "styled-tools": "^1.7.2",
     "tailwindcss": "^3.0.2",
     "terser-webpack-plugin": "^5.2.5",
@@ -124,7 +125,7 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-system": "^5.1.22",
+    "@types/styled-system": "5.1.0",
     "babel-plugin-module-resolver": "^4.1.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",

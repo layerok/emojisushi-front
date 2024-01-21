@@ -1,20 +1,24 @@
 import Skeleton from "react-loading-skeleton";
-import { PropsWithChildren, ReactNode } from "react";
+import { CSSProperties, PropsWithChildren, ReactNode } from "react";
 
 export const SkeletonWrap = ({
   loading = false,
   borderRadius,
   children,
+  style = {},
 }: PropsWithChildren<{
   loading: boolean;
   children: ReactNode;
   borderRadius?: string | number;
+  style?: CSSProperties;
 }>) => {
   if (loading) {
     return (
       <span
         style={{
           position: "relative",
+          display: "inline-block",
+          ...style,
         }}
       >
         <span

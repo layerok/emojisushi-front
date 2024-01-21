@@ -5,7 +5,9 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const Input = styled.input`
+const Input = styled.input<{
+  light: boolean;
+}>`
   background: ${ifProp("light", "#272727", "#1C1C1C")};
   box-shadow: 0 0 15px rgba(34, 34, 34, 0.3);
   border-radius: 10px;

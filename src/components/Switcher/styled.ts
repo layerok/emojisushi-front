@@ -22,6 +22,7 @@ const Wrapper = styled.div`
   box-shadow: 0 0 15px rgba(34, 34, 34, 0.3);
   border-radius: 10px;
   height: 40px;
+  width: 100%;
   display: flex;
 `;
 

@@ -56,7 +56,9 @@ const Item = styled.div`
   }
 `;
 
-Item.Img = styled.div`
+const ItemImg = styled.div<{
+  src: string;
+}>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,13 +71,13 @@ Item.Img = styled.div`
   flex-shrink: 0;
 `;
 
-Item.Info = styled.div`
+const ItemInfo = styled.div`
   margin-left: 10px;
   width: 100%;
   padding-right: 20px;
 `;
 
-Item.Name = styled.div`
+const ItemName = styled.div`
   font-size: 15px;
   line-height: 18px;
   overflow: hidden;
@@ -88,12 +90,12 @@ Item.Name = styled.div`
   `}
 `;
 
-Item.Counter = styled.div`
+const ItemCounter = styled.div`
   margin-left: 20px;
   margin-top: 21px;
 `;
 
-Item.RemoveIcon = styled.div`
+const ItemRemoveIcon = styled.div`
   position: absolute;
   right: 20px;
   top: 0;
@@ -128,6 +130,11 @@ export {
   CloseIcon,
   Items,
   Item,
+  ItemImg,
+  ItemName,
+  ItemRemoveIcon,
+  ItemInfo,
+  ItemCounter,
   Footer,
   Sum,
   Button,

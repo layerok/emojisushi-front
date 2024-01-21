@@ -9,9 +9,17 @@ type UIButtonProps = PropsWithChildren<
 
 export const UIButton = forwardRef<HTMLDivElement, UIButtonProps>(
   (props, ref) => {
-    const { text, children, ...rest } = props;
+    const { text, children, style, as, ...rest } = props;
     return (
-      <FlexBox alignItems={"center"} {...rest} ref={ref}>
+      <FlexBox
+        alignItems={"center"}
+        style={{
+          cursor: "pointer",
+          ...style,
+        }}
+        {...rest}
+        ref={ref}
+      >
         <SvgIcon color={"white"} width={"25px"}>
           {children}
         </SvgIcon>

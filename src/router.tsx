@@ -1,6 +1,7 @@
 import { QueryOptions } from "@tanstack/react-query";
 import { Trans } from "react-i18next";
 import {
+  createBrowserRouter,
   Navigate,
   Outlet,
   useLoaderData,
@@ -12,12 +13,19 @@ import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { categoriesQuery } from "~queries";
 import { queryClient } from "~query-client";
 import { appStore, useAppStore } from "~stores/appStore";
+import { ROUTES } from "~routes";
 
 const RootIndexElement = () => {
   const loaderData = useLoaderData() as Awaited<
     ReturnType<typeof rootIndexLoader>
   >;
-  return <Navigate to={"/category/" + loaderData.categories.data[0].slug} />;
+  return (
+    <Navigate
+      to={ROUTES.CATEGORY.SHOW.buildPath({
+        categorySlug: loaderData.categories.data[0].slug,
+      })}
+    />
+  );
 };
 
 const rootIndexLoader = async () => {
@@ -75,9 +83,9 @@ const rootLoader = async () => {
   };
 };
 
-export const routes = [
+const routes = [
   {
-    path: "/",
+    path: ROUTES.INDEX.path,
     ErrorBoundary: DefaultErrorBoundary,
     loader: rootLoader,
     id: "root",
@@ -93,7 +101,7 @@ export const routes = [
         lazy: () => import("~layout/Layout"),
         children: [
           {
-            path: "category",
+            path: ROUTES.CATEGORY.path,
             id: "categories",
             children: [
               {
@@ -102,41 +110,40 @@ export const routes = [
                   import("~domains/category/pages/SelectCategoryPage"),
               },
               {
-                path: ":categorySlug",
+                path: ROUTES.CATEGORY.SHOW.path,
                 lazy: () => import("~domains/product/pages/ProductPage"),
                 id: "category",
               },
             ],
           },
           {
-            path: "thankyou",
+            path: ROUTES.THANKYOU.path,
             lazy: () => import("~domains/order/pages/ThankYouPage"),
           },
           {
-            path: "dostavka-i-oplata",
+            path: ROUTES.DELIVERYANDPAYMENT.path,
             lazy: () => import("~domains/spot/pages/DeliveryPage"),
           },
           {
-            path: "checkout",
+            path: ROUTES.CHECKOUT.path,
             lazy: () => import("~domains/order/pages/CheckoutPage"),
           },
           {
             id: "wishlist",
-            path: "wishlist",
+            path: ROUTES.WISHLIST.path,
             lazy: () => import("~domains/wishlist/pages/WishlistPage"),
           },
 
           {
-            path: "account",
+            path: ROUTES.ACCOUNT.path,
             lazy: () => import("~layout/CabinetLayout"),
             children: [
               {
                 index: true,
-                element: <Navigate to={"profile"} />,
+                element: <Navigate to={ROUTES.ACCOUNT.PROFILE.path} />,
               },
               {
-                path: "profile",
-
+                path: ROUTES.ACCOUNT.PROFILE.path,
                 children: [
                   {
                     index: true,
@@ -146,7 +153,7 @@ export const routes = [
                     },
                   },
                   {
-                    path: "edit",
+                    path: ROUTES.ACCOUNT.PROFILE.EDIT.path,
                     lazy: () =>
                       import("~domains/cabinet/pages/EditProfilePage"),
                     handle: {
@@ -158,7 +165,7 @@ export const routes = [
                 ],
               },
               {
-                path: "recover-password",
+                path: ROUTES.ACCOUNT.PASSWORD_RECOVERY.path,
                 lazy: () => import("~domains/cabinet/pages/UpdatePasswordPage"),
                 handle: {
                   title: () => (
@@ -167,14 +174,14 @@ export const routes = [
                 },
               },
               {
-                path: "saved-addresses",
+                path: ROUTES.ACCOUNT.SAVED_ADDRESSES.path,
                 lazy: () => import("~domains/cabinet/pages/SavedAddressesPage"),
                 handle: {
                   title: () => <Trans i18nKey={"account.addresses.title"} />,
                 },
               },
               {
-                path: "orders",
+                path: ROUTES.ACCOUNT.ORDER.path,
                 lazy: () => import("~domains/cabinet/pages/MyOrdersPage"),
                 handle: {
                   title: () => <Trans i18nKey={"account.orders.title"} />,
@@ -184,20 +191,20 @@ export const routes = [
           },
 
           {
-            path: "reset-password",
+            path: ROUTES.RESET_PASSWORD.path,
             children: [
               {
                 index: true,
                 lazy: () => import("~domains/cabinet/pages/ResetPasswordPage"),
               },
               {
-                path: ":code",
+                path: ROUTES.RESET_PASSWORD.CODE.path,
                 lazy: () => import("~domains/cabinet/pages/ResetPasswordPage"),
               },
             ],
           },
           {
-            path: "refund",
+            path: ROUTES.REFUND.path,
             lazy: () => import("~domains/payment/pages/RefundPage"),
           },
         ],
@@ -206,6 +213,8 @@ export const routes = [
   },
   {
     path: "*",
-    element: <Navigate to="/" />,
+    element: <Navigate to={ROUTES.INDEX.path} />,
   },
 ];
+
+export const router = createBrowserRouter(routes);

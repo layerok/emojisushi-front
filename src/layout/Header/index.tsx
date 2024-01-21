@@ -20,6 +20,7 @@ import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
+import { ROUTES } from "~routes";
 
 export const Header = ({
   loading = false,
@@ -43,7 +44,7 @@ export const Header = ({
         <FlexBox alignItems={"center"}>
           <S.LogoContainer>
             <SkeletonWrap loading={loading}>
-              <Link to={"/"}>
+              <Link to={ROUTES.INDEX.path}>
                 <SvgIcon clickable={true} color={"#FFE600"}>
                   <LogoSvg />
                 </SvgIcon>
@@ -73,7 +74,7 @@ export const Header = ({
                   textDecoration: "none",
                   width: "144px",
                 }}
-                to={"/dostavka-i-oplata"}
+                to={ROUTES.DELIVERYANDPAYMENT.path}
               >
                 {({ isActive }) => (
                   <HightlightText isActive={isActive}>
@@ -128,7 +129,7 @@ export const Header = ({
               <SvgButton
                 onClick={() => {
                   if (user) {
-                    navigate("/account/profile");
+                    navigate(ROUTES.ACCOUNT.PROFILE.path);
                   } else {
                     NiceModal.show(ModalIDEnum.AuthModal);
                   }

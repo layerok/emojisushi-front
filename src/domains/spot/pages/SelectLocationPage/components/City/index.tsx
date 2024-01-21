@@ -4,6 +4,7 @@ import { ICity } from "~api/types";
 import { MapPinSvg, SvgIcon } from "~components";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "~routes";
 
 export const Cities = ({ items }: { items: ICity[] }) => {
   const { t } = useTranslation();
@@ -17,10 +18,11 @@ export const Cities = ({ items }: { items: ICity[] }) => {
             {city.spots.map((spot, index) => (
               <S.Spot.Link
                 key={index}
-                to={"/category"}
+                to={ROUTES.CATEGORY.path}
                 onClick={(e) => {
                   e.preventDefault();
-                  navigate("/category");
+                  // todo: why do I need to call `navigate(...)` when clicking on the link?
+                  navigate(ROUTES.CATEGORY.path);
                 }}
               >
                 <S.Spot.Inner>

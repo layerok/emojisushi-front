@@ -7,7 +7,9 @@ const Categories = styled.nav`
   flex-direction: column;
 `;
 
-const Category = styled.span`
+const Category = styled.span<{
+  isActive: boolean;
+}>`
   text-transform: uppercase;
   line-height: 20px;
   font-weight: 500;

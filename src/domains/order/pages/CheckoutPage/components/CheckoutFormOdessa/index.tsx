@@ -1,4 +1,11 @@
-import { FlexBox, Input, ButtonOutline, Switcher, Dropdown } from "~components";
+import {
+  FlexBox,
+  Input,
+  ButtonOutline,
+  Switcher,
+  Dropdown,
+  SkeletonWrap,
+} from "~components";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -21,6 +28,7 @@ import { observer } from "mobx-react";
 import { useAppStore } from "~stores/appStore";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
+import { ROUTES } from "~routes";
 
 // todo: logout user if his token is expired
 // timer may be solution
@@ -165,7 +173,7 @@ export const CheckoutFormOdessa = observer(
             wayforpayFormContainer.current.querySelector("form").submit();
           } else {
             navigate({
-              pathname: "/thankyou",
+              pathname: ROUTES.THANKYOU.path,
               search: "?order_id=" + res.data.poster_order.incoming_order_id,
             });
           }
@@ -219,77 +227,81 @@ export const CheckoutFormOdessa = observer(
 
     return (
       <S.Container>
-        {loading ? (
-          <Skeleton height={18} style={{ marginBottom: "20px" }} />
-        ) : (
-          !user && (
-            <FlexBox style={{ marginBottom: "20px" }}>
-              {t("checkout.alreadyHaveAccount")}
-
-              <S.Login
-                onClick={() => {
-                  NiceModal.show(ModalIDEnum.AuthModal, {
-                    redirect_to: location.pathname,
-                  });
-                }}
-              >
-                {t("common.login")}
-              </S.Login>
-            </FlexBox>
-          )
+        {!user && (
+          <div style={{ marginBottom: "20px" }}>
+            <SkeletonWrap loading={loading}>
+              <FlexBox>
+                {t("checkout.alreadyHaveAccount")}
+                <S.Login
+                  onClick={() => {
+                    NiceModal.show(ModalIDEnum.AuthModal, {
+                      redirect_to: location.pathname,
+                    });
+                  }}
+                >
+                  {t("common.login")}
+                </S.Login>
+              </FlexBox>
+            </SkeletonWrap>
+          </div>
         )}
         <S.Form onSubmit={formik.handleSubmit}>
-          <Switcher
-            loading={loading}
-            name={"shipping_method_id"}
-            options={shippingMethodsSwitcher.options}
-            value={+shippingMethodsSwitcher.selectedMethod()?.id}
-            handleChange={({ e, index }) => {
-              if (e.target.value === "1") {
-                setValidationSchema(TakeAwaySchema);
-              } else {
-                setValidationSchema(CourierSchema);
-              }
-
-              formik.handleChange(e);
+          <SkeletonWrap
+            style={{
+              width: "100%",
             }}
-          />
+            loading={loading}
+          >
+            <Switcher
+              name={"shipping_method_id"}
+              options={shippingMethodsSwitcher.options}
+              value={+shippingMethodsSwitcher.selectedMethod()?.id}
+              handleChange={({ e, index }) => {
+                if (e.target.value === "1") {
+                  setValidationSchema(TakeAwaySchema);
+                } else {
+                  setValidationSchema(CourierSchema);
+                }
+
+                formik.handleChange(e);
+              }}
+            />
+          </SkeletonWrap>
 
           <S.Control>
-            {loading ? (
-              <Skeleton height="40px" width="350px" />
-            ) : shippingMethodsSwitcher.selectedMethod()?.code ===
-              "takeaway" ? (
-              <Dropdown
-                placeholder={"Оберіть заклад"}
-                options={(appStore.city.spots || []).map((spot) => {
-                  return {
-                    label: spot.name,
-                    value: spot.id,
-                  };
-                })}
-                width={"350px"}
-                value={formik.values.spot_id}
-                onChange={(value) => {
-                  formik.setFieldValue("spot_id", value);
-                }}
-              />
-            ) : (
-              <Dropdown
-                placeholder={t("checkout.form.district.placeholder")}
-                options={(appStore.city.districts || []).map((district) => {
-                  return {
-                    label: district.name,
-                    value: district.id,
-                  };
-                })}
-                width={"350px"}
-                value={formik.values.district_id}
-                onChange={(value) => {
-                  formik.setFieldValue("district_id", value);
-                }}
-              />
-            )}
+            <SkeletonWrap borderRadius={10} loading={loading}>
+              {shippingMethodsSwitcher.selectedMethod()?.code === "takeaway" ? (
+                <Dropdown
+                  placeholder={"Оберіть заклад"}
+                  options={(appStore.city.spots || []).map((spot) => {
+                    return {
+                      label: spot.name,
+                      value: spot.id,
+                    };
+                  })}
+                  width={"350px"}
+                  value={formik.values.spot_id}
+                  onChange={(value) => {
+                    formik.setFieldValue("spot_id", value);
+                  }}
+                />
+              ) : (
+                <Dropdown
+                  placeholder={t("checkout.form.district.placeholder")}
+                  options={(appStore.city.districts || []).map((district) => {
+                    return {
+                      label: district.name,
+                      value: district.id,
+                    };
+                  })}
+                  width={"350px"}
+                  value={formik.values.district_id}
+                  onChange={(value) => {
+                    formik.setFieldValue("district_id", value);
+                  }}
+                />
+              )}
+            </SkeletonWrap>
           </S.Control>
 
           {shippingMethodsSwitcher.selectedMethod()?.code === "courier" && (
@@ -401,15 +413,21 @@ export const CheckoutFormOdessa = observer(
             />
           </S.Control>
           <S.Control>
-            <Switcher
-              loading={loading}
-              name={"payment_method_id"}
-              options={paymentMethodsSwitcher.options}
-              handleChange={({ e, index }) => {
-                formik.handleChange(e);
+            <SkeletonWrap
+              style={{
+                width: "100%",
               }}
-              value={paymentMethodsSwitcher.selectedMethod()?.id}
-            />
+              loading={loading}
+            >
+              <Switcher
+                name={"payment_method_id"}
+                options={paymentMethodsSwitcher.options}
+                handleChange={({ e, index }) => {
+                  formik.handleChange(e);
+                }}
+                value={paymentMethodsSwitcher.selectedMethod()?.id}
+              />
+            </SkeletonWrap>
           </S.Control>
           {paymentMethodsSwitcher.selectedMethod()?.code === "cash" && (
             <S.Control>

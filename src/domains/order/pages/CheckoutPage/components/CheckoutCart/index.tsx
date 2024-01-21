@@ -1,12 +1,13 @@
 import * as S from "./styled";
 import { CartProduct } from "~models";
-import { CartModal, EditCartButton } from "~components";
+import { SkeletonWrap, SvgIcon, UIButton } from "~components";
 import { IGetCartRes } from "~api/types";
 import { CheckoutCartItem } from "./components/CheckoutCartItem";
-import Skeleton from "react-loading-skeleton";
 import { dummyCartProduct } from "~domains/order/mocks";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
+import { PencilSvg } from "~components/svg/PencilSvg";
+import { useTranslation } from "react-i18next";
 
 type CheckoutCartProps = {
   cart?: IGetCartRes;
@@ -14,6 +15,7 @@ type CheckoutCartProps = {
 };
 
 export const CheckoutCart = ({ cart, loading = false }: CheckoutCartProps) => {
+  const { t } = useTranslation();
   const items = loading
     ? [new CartProduct(dummyCartProduct), new CartProduct(dummyCartProduct)]
     : (cart?.data || []).map((json) => new CartProduct(json));
@@ -32,15 +34,20 @@ export const CheckoutCart = ({ cart, loading = false }: CheckoutCartProps) => {
         })}
       </S.Items>
 
-      {cart && (
-        <S.EditButton
-          onClick={() => {
-            NiceModal.show(ModalIDEnum.CartModal);
-          }}
-        >
-          {loading ? <Skeleton /> : <EditCartButton />}
-        </S.EditButton>
-      )}
+      <S.EditButton>
+        <SkeletonWrap loading={loading}>
+          <UIButton
+            onClick={() => {
+              NiceModal.show(ModalIDEnum.CartModal);
+            }}
+            text={t("editBtn.edit_order")}
+          >
+            <SvgIcon color={"white"} width={"25px"}>
+              <PencilSvg />
+            </SvgIcon>
+          </UIButton>
+        </SkeletonWrap>
+      </S.EditButton>
     </S.Wrapper>
   );
 };

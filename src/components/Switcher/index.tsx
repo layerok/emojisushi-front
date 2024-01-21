@@ -1,4 +1,3 @@
-import Skeleton from "react-loading-skeleton";
 import * as S from "./styled";
 import { ChangeEvent, HTMLProps, ReactElement, useId } from "react";
 
@@ -44,7 +43,6 @@ const Option = ({
 type ISwitcherProps = Omit<HTMLProps<HTMLDivElement>, "selected" | "name"> & {
   options: IOption[];
   name: string;
-  loading?: boolean;
   handleChange: ({
     e,
     index,
@@ -61,18 +59,10 @@ export const Switcher = ({
   options = [],
   name,
   handleChange,
-  loading,
   value,
+  as,
   ...rest
 }: ISwitcherProps): ReactElement => {
-  if (loading) {
-    return <Skeleton width={"100%"} height={40} />;
-  }
-
-  if (!options.length) {
-    return null;
-  }
-
   return (
     <S.Wrapper {...rest}>
       {options.map((option, index) => (

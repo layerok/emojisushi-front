@@ -1,7 +1,6 @@
 import * as S from "./styled";
 import React, { CSSProperties, forwardRef } from "react";
-import { If, AsteriskSvg, SvgIcon } from "~components";
-import Skeleton from "react-loading-skeleton";
+import { If, AsteriskSvg, SvgIcon, SkeletonWrap } from "~components";
 
 export type IInputComponentProps = React.HTMLProps<HTMLInputElement> & {
   name: string;
@@ -18,8 +17,8 @@ export type IInputComponentProps = React.HTMLProps<HTMLInputElement> & {
 };
 
 export const Input = forwardRef<HTMLInputElement, IInputComponentProps>(
-  (
-    {
+  (props, ref) => {
+    const {
       placeholder,
       required,
       name,
@@ -31,47 +30,51 @@ export const Input = forwardRef<HTMLInputElement, IInputComponentProps>(
       inputStyle = {},
       style = {},
       loading = false,
+      as,
       ...rest
-    },
-    ref
-  ) => {
-    if (loading) {
-      return <Skeleton height={39.25} width={width} borderRadius={10} />;
-    }
+    } = props;
     return (
-      <S.Wrapper style={style}>
-        <If condition={!!label}>
-          <p
-            style={{
-              fontSize: "15px",
-              color: "rgb(97, 97, 97)",
-              marginBottom: "5px",
-              ...labelStyle,
-            }}
-          >
-            {label}
-          </p>
-        </If>
-        <S.Input
-          ref={ref}
-          name={name}
-          width={width}
-          placeholder={placeholder}
-          light={light}
-          style={inputStyle}
-          {...rest}
-        />
-        <If condition={required}>
-          <S.Asterisk>
-            <SvgIcon width={"10px"} color={"#FFE600"}>
-              <AsteriskSvg />
-            </SvgIcon>
-          </S.Asterisk>
-        </If>
-        <If condition={!!error}>
-          <S.Error>{error}</S.Error>
-        </If>
-      </S.Wrapper>
+      <SkeletonWrap
+        style={{
+          width: "100%",
+        }}
+        loading={loading}
+        borderRadius={10}
+      >
+        <S.Wrapper style={style}>
+          <If condition={!!label}>
+            <p
+              style={{
+                fontSize: "15px",
+                color: "rgb(97, 97, 97)",
+                marginBottom: "5px",
+                ...labelStyle,
+              }}
+            >
+              {label}
+            </p>
+          </If>
+          <S.Input
+            name={name}
+            width={width}
+            placeholder={placeholder}
+            light={light}
+            style={inputStyle}
+            {...rest}
+            ref={ref}
+          />
+          <If condition={required}>
+            <S.Asterisk>
+              <SvgIcon width={"10px"} color={"#FFE600"}>
+                <AsteriskSvg />
+              </SvgIcon>
+            </S.Asterisk>
+          </If>
+          <If condition={!!error}>
+            <S.Error>{error}</S.Error>
+          </If>
+        </S.Wrapper>
+      </SkeletonWrap>
     );
   }
 );

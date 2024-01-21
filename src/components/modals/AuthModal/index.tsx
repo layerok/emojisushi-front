@@ -20,6 +20,7 @@ import { cartQuery, wishlistsQuery } from "~queries";
 import { authApi } from "~api";
 import { useMutation } from "@tanstack/react-query";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import { ROUTES } from "~routes";
 
 export const AuthModal = NiceModal.create(
   ({ redirect_to }: { redirect_to?: string }) => {
@@ -110,7 +111,7 @@ const SignUpForm = observer(({ setShowSignUp, close }) => {
             onSuccess: () => {
               queryClient.invalidateQueries(wishlistsQuery.queryKey);
               queryClient.invalidateQueries(cartQuery.queryKey);
-              navigate("/" + ["account", "profile"].join("/"));
+              navigate(ROUTES.ACCOUNT.PROFILE.path);
               close();
             },
             onError: (error) => {
@@ -270,10 +271,10 @@ const LoginForm = ({
     <S.LoginForm
       onSubmit={(e) => {
         e.preventDefault();
+        // TODO: use formik
         const formData = new FormData(e.currentTarget);
         const email = formData.get("email") as string | null;
         const password = formData.get("password") as string | null;
-        const default_redirect_to = "/" + ["account", "profile"].join("/");
         setErrors({});
         login.mutate(
           {
@@ -284,7 +285,7 @@ const LoginForm = ({
             onSuccess: () => {
               queryClient.invalidateQueries(wishlistsQuery.queryKey);
               queryClient.invalidateQueries(cartQuery.queryKey);
-              navigate(redirect_to || default_redirect_to);
+              navigate(redirect_to || ROUTES.ACCOUNT.PROFILE.path);
               close();
             },
             onError: (error) => {

@@ -3,6 +3,7 @@ import { ButtonDark } from "src/components";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useUser } from "~hooks/use-auth";
+import { ROUTES } from "~routes";
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
@@ -13,25 +14,25 @@ export const ProfilePage = () => {
   return (
     <S.Properties>
       <S.Property>
-        <S.Property.Label>{t("common.first_name")}</S.Property.Label>
-        <S.Property.Value>
+        <S.PropertyLabel>{t("common.first_name")}</S.PropertyLabel>
+        <S.PropertyValue>
           {user.name} {user.surname}
-        </S.Property.Value>
+        </S.PropertyValue>
       </S.Property>
 
       <S.Property>
-        <S.Property.Label>{t("common.email")}</S.Property.Label>
-        <S.Property.Value>{user.email}</S.Property.Value>
+        <S.PropertyLabel>{t("common.email")}</S.PropertyLabel>
+        <S.PropertyValue>{user.email}</S.PropertyValue>
       </S.Property>
       <S.Property>
-        <S.Property.Label>{t("common.phone")}</S.Property.Label>
-        <S.Property.Value>{user.phone}</S.Property.Value>
+        <S.PropertyLabel>{t("common.phone")}</S.PropertyLabel>
+        <S.PropertyValue>{user.phone}</S.PropertyValue>
       </S.Property>
 
       <S.BtnGroup>
         <ButtonDark
           onClick={() => {
-            navigate("edit");
+            navigate(ROUTES.ACCOUNT.PROFILE.EDIT.path);
           }}
           minWidth={"309px"}
         >
@@ -40,7 +41,7 @@ export const ProfilePage = () => {
         <S.BtnWrapper>
           <ButtonDark
             onClick={() => {
-              navigate("../recover-password");
+              navigate(ROUTES.ACCOUNT.PASSWORD_RECOVERY.path);
             }}
             minWidth={"202px"}
           >

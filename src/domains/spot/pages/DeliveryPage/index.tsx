@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useAppStore } from "~stores/appStore";
 import { observer } from "mobx-react";
 import { Link } from "react-router-dom";
+import { ROUTES } from "~routes";
 
 export const DeliveryPage = observer(() => {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ export const DeliveryPage = observer(() => {
             style={{
               color: "white",
             }}
-            to={"/refund"}
+            to={ROUTES.REFUND.path}
           >
             {t("payment.refund-rules")}
           </Link>

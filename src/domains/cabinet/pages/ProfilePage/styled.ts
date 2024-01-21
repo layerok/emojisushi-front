@@ -47,7 +47,7 @@ const Property = styled.div`
   }
 `;
 
-Property.Label = styled.div`
+const PropertyLabel = styled.div`
   color: #616161;
   width: 270px;
   flex-shrink: 0;
@@ -57,23 +57,23 @@ Property.Label = styled.div`
   `}
 `;
 
-Property.Value = styled.div`
+const PropertyValue = styled.div`
   color: #ffffff;
   word-break: break-all;
 `;
 
-export const Birth = styled.div`
+const Birth = styled.div`
   margin-top: 30px;
 `;
 
-Birth.Heading = styled.p`
+const BirthHeading = styled.p`
   font-weight: 600;
   font-size: 20px;
   line-height: 24px;
   color: #ffffff;
 `;
 
-Birth.Label = styled.p`
+const BirthLabel = styled.p`
   font-weight: 400;
   font-size: 15px;
   line-height: 18px;
@@ -81,11 +81,11 @@ Birth.Label = styled.p`
   color: #616161;
 `;
 
-Birth.Properties = styled.div`
+const BirthProperties = styled.div`
   display: flex;
 `;
 
-Birth.Property = styled.div`
+const BirthProperty = styled.div`
   margin-left: 35px;
   margin-top: 20px;
   :first-child {
@@ -99,7 +99,7 @@ Birth.Property = styled.div`
 const Sex = styled.div`
   margin-top: 20px;
 `;
-Sex.Label = styled.p`
+const SexLabel = styled.p`
   font-weight: 400;
   font-size: 15px;
   line-height: 18px;
@@ -112,4 +112,19 @@ const HorizontalBar = styled.div`
   margin-top: 30px;
 `;
 
-export { Properties, BtnGroup, BtnWrapper, Sex, HorizontalBar, Property };
+export {
+  Properties,
+  BtnGroup,
+  BtnWrapper,
+  Sex,
+  SexLabel,
+  HorizontalBar,
+  Property,
+  BirthProperty,
+  BirthProperties,
+  BirthLabel,
+  BirthHeading,
+  Birth,
+  PropertyLabel,
+  PropertyValue,
+};

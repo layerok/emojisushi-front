@@ -14,6 +14,7 @@ import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { spotsQuery } from "~domains/spot/queries/spots.query";
 import { useAppStore } from "~stores/appStore";
 import { useEffect } from "react";
+import { ROUTES } from "~routes";
 
 const CheckoutPage = () => {
   const { t } = useTranslation();
@@ -25,7 +26,7 @@ const CheckoutPage = () => {
     ...cartQuery,
     onSuccess: (res) => {
       if (res.data.length < 1) {
-        navigate("/category");
+        navigate(ROUTES.CATEGORY.path);
       }
     },
   });
@@ -42,7 +43,7 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     if (cart?.data && cart.data.length < 1) {
-      navigate("/category");
+      navigate(ROUTES.CATEGORY.path);
     }
   }, []);
 

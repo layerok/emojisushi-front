@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import { ifProp } from "styled-tools";
 
-const Link = styled.span`
+const Link = styled.span<{
+  isActive: boolean;
+  end: boolean;
+}>`
   font-weight: 400;
   text-decoration: none;
   font-size: 15px;

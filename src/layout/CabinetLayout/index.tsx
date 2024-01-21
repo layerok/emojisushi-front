@@ -5,6 +5,7 @@ import { Outlet, useMatches, useNavigate } from "react-router-dom";
 import { AuthLoader, useLogout } from "~hooks/use-auth";
 import { queryClient } from "~query-client";
 import { cartQuery, wishlistsQuery } from "~queries";
+import { ROUTES } from "~routes";
 
 const CabinetLayout = () => {
   const { t } = useTranslation();
@@ -22,16 +23,16 @@ const CabinetLayout = () => {
               <S.Navbar>
                 <S.NavbarHeader>{t("account.cabinet")}</S.NavbarHeader>
                 <S.HorizontalBar />
-                <NavLink to={"/" + ["account", "profile"].join("/")}>
+                <NavLink to={ROUTES.ACCOUNT.PROFILE.path}>
                   {t("account.profile.title")}
                 </NavLink>
-                <NavLink to={"/" + ["account", "orders"].join("/")}>
+                <NavLink to={ROUTES.ACCOUNT.ORDER.path}>
                   {t("account.orders.title")}
                 </NavLink>
-                <NavLink to={"/" + ["account", "recover-password"].join("/")}>
+                <NavLink to={ROUTES.ACCOUNT.PASSWORD_RECOVERY.path}>
                   {t("account.changePassword.title")}
                 </NavLink>
-                <NavLink to={"/" + ["account", "saved-addresses"].join("/")}>
+                <NavLink to={ROUTES.ACCOUNT.SAVED_ADDRESSES.path}>
                   {t("account.addresses.title")}
                 </NavLink>
                 <div style={{ marginTop: "10px" }}>
@@ -40,7 +41,7 @@ const CabinetLayout = () => {
                       logout.mutate({});
                       queryClient.invalidateQueries(wishlistsQuery.queryKey);
                       queryClient.invalidateQueries(cartQuery.queryKey);
-                      navigate("/category");
+                      navigate(ROUTES.CATEGORY.path);
                     }}
                     minWidth={"201px"}
                   >

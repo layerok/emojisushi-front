@@ -1,8 +1,7 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import "normalize.css";
 import { theme } from "~theme";
 import { ThemeProvider } from "styled-components";
-import { routes } from "~routes";
 import { Preloader } from "~layout/Preloader";
 import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from "react-loading-skeleton";
@@ -14,8 +13,7 @@ import { Loader } from "~components";
 import NiceModal from "@ebay/nice-modal-react";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
-
-const router = createBrowserRouter(routes);
+import { router } from "~router";
 
 const FallbackElement = () => {
   return <Preloader />;

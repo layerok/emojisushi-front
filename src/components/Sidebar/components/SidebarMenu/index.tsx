@@ -2,6 +2,7 @@ import * as S from "./styled";
 import { ICategory } from "src/api/types";
 import Skeleton from "react-loading-skeleton";
 import { NavLink } from "react-router-dom";
+import { ROUTES } from "~routes";
 
 type TCategoryProps = {
   active?: boolean;
@@ -26,7 +27,9 @@ const Category = ({ category, loading = false }: TCategoryProps) => {
     <NavLink
       style={{ textDecoration: "none", display: "inline-block", marginTop: 20 }}
       key={category.id}
-      to={"/" + ["category", category.slug].join("/")}
+      to={ROUTES.CATEGORY.SHOW.buildPath({
+        categorySlug: category.slug,
+      })}
     >
       {({ isActive }) => (
         <S.Category isActive={isActive}>{category.name}</S.Category>

@@ -2,6 +2,7 @@ import Skeleton from "react-loading-skeleton";
 import { ICategory } from "~api/types";
 import { SvgIcon, LogoSvg } from "~components";
 import * as S from "./styled";
+import { ROUTES } from "~routes";
 
 const Image = ({ category }: { category?: ICategory }) => {
   const imageElement = category?.image?.path ? (
@@ -15,11 +16,17 @@ const Image = ({ category }: { category?: ICategory }) => {
 };
 
 export const Category = ({ category }: { category?: ICategory }) => {
-  const to = "/" + ["category", category?.slug].join("/");
-
   return (
     <S.Item>
-      <S.Link to={category ? to : undefined}>
+      <S.Link
+        to={
+          category
+            ? ROUTES.CATEGORY.SHOW.buildPath({
+                categorySlug: category.slug,
+              })
+            : undefined
+        }
+      >
         <S.Image>
           {category ? (
             <Image category={category} />

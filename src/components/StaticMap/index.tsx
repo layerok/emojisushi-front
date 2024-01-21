@@ -2,6 +2,7 @@ import * as S from "./styled";
 import { SvgIcon, MapPinSvg, SvgButton } from "~components";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "~routes";
 
 export const StaticMap = ({
   width,
@@ -10,7 +11,6 @@ export const StaticMap = ({
   topRight,
   bottomRight,
   bottomLeft,
-  mobileFirst,
   style,
 }: any) => {
   const { t } = useTranslation();
@@ -26,9 +26,8 @@ export const StaticMap = ({
       topLeft={topLeft}
       bottomLeft={bottomLeft}
       bottomRight={bottomRight}
-      mobileFirst={mobileFirst}
       onClick={() => {
-        navigate("/dostavka-i-oplata");
+        navigate(ROUTES.DELIVERYANDPAYMENT.path);
       }}
     >
       <SvgButton>
