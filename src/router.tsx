@@ -14,6 +14,7 @@ import { categoriesQuery } from "~queries";
 import { queryClient } from "~query-client";
 import { appStore, useAppStore } from "~stores/appStore";
 import { ROUTES } from "~routes";
+import { CitySlug } from "~common/constants";
 
 const RootIndexElement = () => {
   const loaderData = useLoaderData() as Awaited<
@@ -59,7 +60,7 @@ const RootElement = () => {
 };
 
 const rootLoader = async () => {
-  const allowed = ["odesa", "chorno"];
+  const allowed = [CitySlug.Odesa, CitySlug.Chornomorsk] as string[];
   const domains = window.location.hostname.split(".");
   const query: QueryOptions<ICity> = {
     queryKey: [

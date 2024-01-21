@@ -56,6 +56,8 @@ client.interceptors.request.use((config = {}) => {
   return config;
 });
 
+// todo: logout user if his token is expired
+
 // client.interceptors.response.use(function (response) {
 //     // Any status code that lie within the range of 2xx cause this function to trigger
 //     // Do something with response data

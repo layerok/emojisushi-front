@@ -25,6 +25,7 @@ import { useEffect } from "react";
 import * as S from "./styled";
 import { SvgIcon } from "../SvgIcon";
 import { CaretDownSvg } from "../svg/CaretDownSvg";
+import { SkeletonWrap } from "~components";
 
 type IOptionProps = HTMLProps<HTMLDivElement> &
   PropsWithChildren<{
@@ -67,6 +68,7 @@ type IDropdownProps = {
   value: null | string | number;
   onChange: (value: string | number | null) => void;
   placeholder?: string;
+  showSkeleton?: boolean;
 };
 
 export const Dropdown = ({
@@ -75,6 +77,7 @@ export const Dropdown = ({
   value,
   placeholder,
   onChange,
+  showSkeleton = false,
 }: IDropdownProps) => {
   const [open, setOpen] = useState(false);
 
@@ -155,86 +158,88 @@ export const Dropdown = ({
   };
 
   return (
-    <S.Dropdown>
-      <S.Reference
-        width={width}
-        open={open}
-        placement={resultantPlacement}
-        ref={reference}
-        id={buttonId}
-        {...getReferenceProps()}
-      >
-        {(value || placeholder) && (
-          <span>{selectedOption?.label || placeholder}</span>
-        )}
-        <SvgIcon
-          style={{
-            position: "absolute",
-            right: "15px",
-            top: "12px",
-          }}
-          width={"15px"}
+    <SkeletonWrap borderRadius={10} loading={showSkeleton}>
+      <S.Dropdown>
+        <S.Reference
+          width={width}
+          open={open}
+          placement={resultantPlacement}
+          ref={reference}
+          id={buttonId}
+          {...getReferenceProps()}
         >
-          <CaretDownSvg />
-        </SvgIcon>
-      </S.Reference>
-      <FloatingPortal>
-        {open && (
-          <FloatingFocusManager context={context} initialFocus={1}>
-            <S.Content
-              width={width}
-              open={open}
-              placement={resultantPlacement}
-              ref={floating}
-              style={{
-                position: strategy,
-                left: x ?? 0,
-                top: y ?? 0,
-              }}
-              aria-labelledby={buttonId}
-              {...getFloatingProps({
-                onKeyDown: (e) => {
-                  if (e.key === "Enter") {
-                    handleOptionClick();
-                    onChange(options[activeIndex].value);
-                  }
-                },
-              })}
-            >
-              {options.length > 0 && (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                  role="listbox"
-                  id={listboxId}
-                >
-                  {options.map((option, index) => (
-                    <Option
-                      key={option.value}
-                      name={option.label}
-                      ref={(node) => {
-                        listRef.current[index] = node;
-                      }}
-                      selected={option.value === value}
-                      active={activeIndex === index}
-                      {...getItemProps({
-                        onClick: () => {
-                          handleOptionClick();
-                          onChange(option.value);
-                        },
-                      })}
-                    >
-                      {option.label}
-                    </Option>
-                  ))}
-                </div>
-              )}
-            </S.Content>
-          </FloatingFocusManager>
-        )}
-      </FloatingPortal>
-    </S.Dropdown>
+          {(value || placeholder) && (
+            <span>{selectedOption?.label || placeholder}</span>
+          )}
+          <SvgIcon
+            style={{
+              position: "absolute",
+              right: "15px",
+              top: "12px",
+            }}
+            width={"15px"}
+          >
+            <CaretDownSvg />
+          </SvgIcon>
+        </S.Reference>
+        <FloatingPortal>
+          {open && (
+            <FloatingFocusManager context={context} initialFocus={1}>
+              <S.Content
+                width={width}
+                open={open}
+                placement={resultantPlacement}
+                ref={floating}
+                style={{
+                  position: strategy,
+                  left: x ?? 0,
+                  top: y ?? 0,
+                }}
+                aria-labelledby={buttonId}
+                {...getFloatingProps({
+                  onKeyDown: (e) => {
+                    if (e.key === "Enter") {
+                      handleOptionClick();
+                      onChange(options[activeIndex].value);
+                    }
+                  },
+                })}
+              >
+                {options.length > 0 && (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                    role="listbox"
+                    id={listboxId}
+                  >
+                    {options.map((option, index) => (
+                      <Option
+                        key={option.value}
+                        name={option.label}
+                        ref={(node) => {
+                          listRef.current[index] = node;
+                        }}
+                        selected={option.value === value}
+                        active={activeIndex === index}
+                        {...getItemProps({
+                          onClick: () => {
+                            handleOptionClick();
+                            onChange(option.value);
+                          },
+                        })}
+                      >
+                        {option.label}
+                      </Option>
+                    ))}
+                  </div>
+                )}
+              </S.Content>
+            </FloatingFocusManager>
+          )}
+        </FloatingPortal>
+      </S.Dropdown>
+    </SkeletonWrap>
   );
 };

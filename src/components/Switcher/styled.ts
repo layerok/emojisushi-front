@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { prop } from "styled-tools";
 
-const Slide = styled.div`
+const Slide = styled.div<{
+  length: number;
+}>`
   padding: 0 4px;
   position: absolute;
   width: calc(100% / ${prop("length")});
@@ -36,7 +38,10 @@ const Label = styled.label`
   user-select: none;
 `;
 
-const Input = styled.input`
+const Input = styled.input<{
+  length: number;
+  index: number;
+}>`
   position: relative;
   display: none;
   :checked {

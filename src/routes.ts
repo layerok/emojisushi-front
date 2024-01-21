@@ -1,4 +1,4 @@
-import { number, route } from "react-router-typesafe-routes/dom";
+import { number, route, string } from "react-router-typesafe-routes/dom";
 
 export const ROUTES = {
   INDEX: route(""),
@@ -13,7 +13,11 @@ export const ROUTES = {
       }),
     }
   ),
-  THANKYOU: route("thankyou"),
+  THANKYOU: route("thankyou", {
+    searchParams: {
+      order_id: string().defined(),
+    },
+  }),
   DELIVERYANDPAYMENT: route("dostavka-i-oplata"),
   CHECKOUT: route("checkout"),
   WISHLIST: route("wishlist"),

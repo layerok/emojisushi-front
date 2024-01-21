@@ -1,5 +1,6 @@
 import * as S from "./styled";
 import { ChangeEvent, HTMLProps, ReactElement, useId } from "react";
+import { SkeletonWrap } from "~components";
 
 type IOption = {
   value: number;
@@ -53,6 +54,7 @@ type ISwitcherProps = Omit<HTMLProps<HTMLDivElement>, "selected" | "name"> & {
     option: IOption;
   }) => void;
   value: string | number | null;
+  showSkeleton?: boolean;
 };
 
 export const Switcher = ({
@@ -60,30 +62,38 @@ export const Switcher = ({
   name,
   handleChange,
   value,
+  showSkeleton = false,
   as,
   ...rest
 }: ISwitcherProps): ReactElement => {
   return (
-    <S.Wrapper {...rest}>
-      {options.map((option, index) => (
-        <Option
-          option={option}
-          length={options.length}
-          index={index}
-          name={name}
-          handleChange={(e) => handleChange({ e, index, option })}
-          selected={option.value === value}
-          key={index}
-        />
-      ))}
-      <S.Slide length={options.length}>
-        {options.reduce((acc, option) => {
-          if (option.value === value) {
-            return option.label;
-          }
-          return acc;
-        }, "")}
-      </S.Slide>
-    </S.Wrapper>
+    <SkeletonWrap
+      style={{
+        width: "100%",
+      }}
+      loading={showSkeleton}
+    >
+      <S.Wrapper {...rest}>
+        {options.map((option, index) => (
+          <Option
+            option={option}
+            length={options.length}
+            index={index}
+            name={name}
+            handleChange={(e) => handleChange({ e, index, option })}
+            selected={option.value === value}
+            key={index}
+          />
+        ))}
+        <S.Slide length={options.length}>
+          {options.reduce((acc, option) => {
+            if (option.value === value) {
+              return option.label;
+            }
+            return acc;
+          }, "")}
+        </S.Slide>
+      </S.Wrapper>
+    </SkeletonWrap>
   );
 };

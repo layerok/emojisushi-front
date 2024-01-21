@@ -15,6 +15,7 @@ import { spotsQuery } from "~domains/spot/queries/spots.query";
 import { useAppStore } from "~stores/appStore";
 import { useEffect } from "react";
 import { ROUTES } from "~routes";
+import { CitySlug } from "~common/constants";
 
 const CheckoutPage = () => {
   const { t } = useTranslation();
@@ -56,12 +57,12 @@ const CheckoutPage = () => {
         isShippingMethodsLoading ||
         isSpotsLoading ||
         isPaymentMethodsLoading ? (
-          appStore.city.slug === "odesa" ? (
+          appStore.city.slug === CitySlug.Odesa ? (
             <CheckoutFormOdessa loading />
           ) : (
             <CheckoutFormChernomorsk loading />
           )
-        ) : appStore.city.slug === "odesa" ? (
+        ) : appStore.city.slug === CitySlug.Odesa ? (
           <CheckoutFormOdessa
             // remount component after signin to update form
             key={user ? "one" : "second"}

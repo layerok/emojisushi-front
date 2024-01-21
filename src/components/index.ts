@@ -35,3 +35,4 @@ export * from "./Sidebar";
 export * from "./ChipCloud";
 export * from "./HighlightText";
 export * from "./SkeletonWrap";
+export * from "./Trans/Trans";

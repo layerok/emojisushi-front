@@ -5,6 +5,7 @@ import {
   Switcher,
   Dropdown,
   SkeletonWrap,
+  Trans,
 } from "~components";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
@@ -23,15 +24,13 @@ import { orderApi } from "~api";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
 import { AxiosError } from "axios";
-import Skeleton from "react-loading-skeleton";
 import { observer } from "mobx-react";
 import { useAppStore } from "~stores/appStore";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
 import { ROUTES } from "~routes";
-
-// todo: logout user if his token is expired
-// timer may be solution
+import { isValidUkrainianPhone, getUserFullName } from "~domains/order/utils";
+import { DeliveryMethodCode } from "~domains/order/constants";
 
 type TCheckoutFormProps = {
   loading?: boolean | undefined;
@@ -41,6 +40,9 @@ type TCheckoutFormProps = {
   paymentMethods?: IGetPaymentMethodsRes | undefined;
   spots?: ISpot[];
 };
+
+const DEFAULT_PAYMENT_METHOD_ID = 1;
+const DEFAULT_DELIVERY_METHOD_ID = 1;
 
 export const CheckoutFormOdessa = observer(
   ({
@@ -52,7 +54,6 @@ export const CheckoutFormOdessa = observer(
     loading = false,
   }: TCheckoutFormProps) => {
     const { t } = useTranslation();
-    const [pending, setPending] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const appStore = useAppStore();
@@ -63,11 +64,7 @@ export const CheckoutFormOdessa = observer(
         .test(
           "is-possible-phone-number",
           () => t("checkout.form.errors.ua_phone"),
-          (value) => {
-            const regex =
-              /^(((\+)(38)))(([0-9]{3})|(\([0-9]{3}\)))(\-|\s)?(([0-9]{3})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{2})|([0-9]{2})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{3})|([0-9]{2})(\-|\s)?([0-9]{3})(\-|\s)?([0-9]{2}))$/;
-            return regex.test(value ?? "");
-          }
+          isValidUkrainianPhone
         ),
       email: Yup.string().email("Invalid email"),
       spot_id: Yup.number().required(t("checkout.form.spot.error")),
@@ -79,11 +76,7 @@ export const CheckoutFormOdessa = observer(
         .test(
           "is-possible-phone-number",
           () => t("checkout.form.errors.ua_phone"),
-          (value) => {
-            const regex =
-              /^(((\+)(38)))(([0-9]{3})|(\([0-9]{3}\)))(\-|\s)?(([0-9]{3})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{2})|([0-9]{2})(\-|\s)?([0-9]{2})(\-|\s)?([0-9]{3})|([0-9]{2})(\-|\s)?([0-9]{3})(\-|\s)?([0-9]{2}))$/;
-            return regex.test(value ?? "");
-          }
+          isValidUkrainianPhone
         ),
       email: Yup.string().email("Invalid email"),
       district_id: Yup.number().required(t("checkout.form.district.error")),
@@ -97,7 +90,7 @@ export const CheckoutFormOdessa = observer(
 
     const formik = useFormik({
       initialValues: {
-        name: user ? `${user.name} ${user.surname}` : "",
+        name: user ? getUserFullName(user) : "",
         email: user ? user.email : "",
         phone: user ? user.phone || "" : "",
         address: "",
@@ -105,59 +98,62 @@ export const CheckoutFormOdessa = observer(
         comment: "",
         sticks: "",
         change: "",
-        payment_method_id: 1,
-        shipping_method_id: 1,
+        payment_method_id: DEFAULT_PAYMENT_METHOD_ID,
+        shipping_method_id: DEFAULT_DELIVERY_METHOD_ID,
         spot_id: undefined,
         district_id: undefined,
       },
-      validationSchema: validationSchema,
+      validationSchema,
       onSubmit: async (values) => {
-        const [firstname, lastname] = values.name.split(" ");
         formik.setErrors({});
 
-        const phone = values.phone;
-        const email = values.email;
+        const {
+          phone,
+          email,
+          name,
+          address_id,
+          address,
+          payment_method_id,
+          shipping_method_id,
+          change,
+          comment,
+          sticks,
+          spot_id,
+          district_id,
+        } = values;
 
-        const address = values.address_id
-          ? user.customer.addresses.find(
-              (address) => address.id === values.address_id
-            ).lines
-          : values.address;
+        const [firstname, lastname] = name.split(" ");
 
-        const payment_method_id = +values.payment_method_id;
-        const shipping_method_id = +values.shipping_method_id;
-        const change = values.change;
-        const sticks = +values.sticks;
-        const comment = values.comment;
+        const resultant_address = address_id
+          ? user.customer.addresses.find((address) => address.id === address_id)
+              .lines
+          : address;
 
         function getSpotId() {
-          if (shippingMethodsSwitcher.selectedMethod().code === "takeaway") {
-            return values.spot_id;
+          if (
+            shippingMethodsSwitcher.selectedMethod().code ===
+            DeliveryMethodCode.Takeaway
+          ) {
+            return spot_id;
           } else {
             const district = appStore.city.districts.find(
-              (district) => district.id === values.district_id
+              (district) => district.id === district_id
             );
             return district.spots[0].id;
           }
         }
 
-        let spot_id = getSpotId();
-
-        setPending(true);
-
         try {
-          // todo: clear cart after you redirected user to thankyou page
-          // otherwise user will be redirected to category page
           const res = await orderApi.place({
             phone,
             firstname,
             lastname,
             email,
 
-            address,
-            payment_method_id,
-            shipping_method_id,
-            spot_id,
+            address: resultant_address,
+            payment_method_id: +payment_method_id,
+            shipping_method_id: +shipping_method_id,
+            spot_id: getSpotId(),
 
             change,
             sticks: +sticks,
@@ -172,10 +168,14 @@ export const CheckoutFormOdessa = observer(
             wayforpayFormContainer.current.innerHTML = res.data.form;
             wayforpayFormContainer.current.querySelector("form").submit();
           } else {
-            navigate({
-              pathname: ROUTES.THANKYOU.path,
-              search: "?order_id=" + res.data.poster_order.incoming_order_id,
-            });
+            navigate(
+              ROUTES.THANKYOU.buildPath(
+                {},
+                {
+                  order_id: res.data.poster_order.incoming_order_id + "",
+                }
+              )
+            );
           }
         } catch (e) {
           if (e instanceof AxiosError) {
@@ -183,8 +183,6 @@ export const CheckoutFormOdessa = observer(
               formik.setErrors(e.response.data.errors);
             }
           }
-        } finally {
-          setPending(false);
         }
       },
     });
@@ -229,82 +227,79 @@ export const CheckoutFormOdessa = observer(
       <S.Container>
         {!user && (
           <div style={{ marginBottom: "20px" }}>
-            <SkeletonWrap loading={loading}>
-              <FlexBox>
-                {t("checkout.alreadyHaveAccount")}
-                <S.Login
-                  onClick={() => {
-                    NiceModal.show(ModalIDEnum.AuthModal, {
-                      redirect_to: location.pathname,
-                    });
-                  }}
-                >
-                  {t("common.login")}
-                </S.Login>
-              </FlexBox>
-            </SkeletonWrap>
+            <FlexBox>
+              <Trans
+                showSkeleton={loading}
+                i18nKey={"checkout.alreadyHaveAccount"}
+              />
+              <S.Login
+                onClick={() => {
+                  NiceModal.show(ModalIDEnum.AuthModal, {
+                    redirect_to: location.pathname,
+                  });
+                }}
+              >
+                <Trans i18nKey={"common.login"} showSkeleton={loading} />
+              </S.Login>
+            </FlexBox>
           </div>
         )}
         <S.Form onSubmit={formik.handleSubmit}>
-          <SkeletonWrap
-            style={{
-              width: "100%",
-            }}
-            loading={loading}
-          >
-            <Switcher
-              name={"shipping_method_id"}
-              options={shippingMethodsSwitcher.options}
-              value={+shippingMethodsSwitcher.selectedMethod()?.id}
-              handleChange={({ e, index }) => {
-                if (e.target.value === "1") {
-                  setValidationSchema(TakeAwaySchema);
-                } else {
-                  setValidationSchema(CourierSchema);
-                }
+          <Switcher
+            showSkeleton={loading}
+            name={"shipping_method_id"}
+            options={shippingMethodsSwitcher.options}
+            value={+shippingMethodsSwitcher.selectedMethod()?.id}
+            handleChange={({ e, index }) => {
+              if (e.target.value === "1") {
+                setValidationSchema(TakeAwaySchema);
+              } else {
+                setValidationSchema(CourierSchema);
+              }
 
-                formik.handleChange(e);
-              }}
-            />
-          </SkeletonWrap>
+              formik.handleChange(e);
+            }}
+          />
 
           <S.Control>
-            <SkeletonWrap borderRadius={10} loading={loading}>
-              {shippingMethodsSwitcher.selectedMethod()?.code === "takeaway" ? (
-                <Dropdown
-                  placeholder={"Оберіть заклад"}
-                  options={(appStore.city.spots || []).map((spot) => {
-                    return {
-                      label: spot.name,
-                      value: spot.id,
-                    };
-                  })}
-                  width={"350px"}
-                  value={formik.values.spot_id}
-                  onChange={(value) => {
-                    formik.setFieldValue("spot_id", value);
-                  }}
-                />
-              ) : (
-                <Dropdown
-                  placeholder={t("checkout.form.district.placeholder")}
-                  options={(appStore.city.districts || []).map((district) => {
-                    return {
-                      label: district.name,
-                      value: district.id,
-                    };
-                  })}
-                  width={"350px"}
-                  value={formik.values.district_id}
-                  onChange={(value) => {
-                    formik.setFieldValue("district_id", value);
-                  }}
-                />
-              )}
-            </SkeletonWrap>
+            {shippingMethodsSwitcher.selectedMethod()?.code ===
+            DeliveryMethodCode.Takeaway ? (
+              <Dropdown
+                showSkeleton={loading}
+                placeholder={"Оберіть заклад"}
+                options={(appStore.city.spots || []).map((spot) => {
+                  return {
+                    label: spot.name,
+                    value: spot.id,
+                  };
+                })}
+                width={"350px"}
+                value={formik.values.spot_id}
+                onChange={(value) => {
+                  formik.setFieldValue("spot_id", value);
+                }}
+              />
+            ) : (
+              <Dropdown
+                showSkeleton={loading}
+                placeholder={t("checkout.form.district.placeholder")}
+                options={(appStore.city.districts || []).map((district) => {
+                  return {
+                    label: district.name,
+                    value: district.id,
+                  };
+                })}
+                width={"350px"}
+                value={formik.values.district_id}
+                onChange={(value) => {
+                  formik.setFieldValue("district_id", value);
+                }}
+              />
+            )}
           </S.Control>
 
-          {shippingMethodsSwitcher.selectedMethod()?.code === "courier" && (
+          {shippingMethodsSwitcher.selectedMethod()?.code ===
+            DeliveryMethodCode.Courier && (
             <S.ButtonContainer>
               {showAddressInput ? (
                 <S.Control>
@@ -413,21 +408,15 @@ export const CheckoutFormOdessa = observer(
             />
           </S.Control>
           <S.Control>
-            <SkeletonWrap
-              style={{
-                width: "100%",
+            <Switcher
+              showSkeleton={loading}
+              name={"payment_method_id"}
+              options={paymentMethodsSwitcher.options}
+              handleChange={({ e, index }) => {
+                formik.handleChange(e);
               }}
-              loading={loading}
-            >
-              <Switcher
-                name={"payment_method_id"}
-                options={paymentMethodsSwitcher.options}
-                handleChange={({ e, index }) => {
-                  formik.handleChange(e);
-                }}
-                value={paymentMethodsSwitcher.selectedMethod()?.id}
-              />
-            </SkeletonWrap>
+              value={paymentMethodsSwitcher.selectedMethod()?.id}
+            />
           </S.Control>
           {paymentMethodsSwitcher.selectedMethod()?.code === "cash" && (
             <S.Control>
@@ -454,20 +443,21 @@ export const CheckoutFormOdessa = observer(
           <S.Control>
             <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
               <ButtonOutline
-                submitting={pending}
+                submitting={formik.isSubmitting}
                 loading={loading}
                 type={"submit"}
                 width={"160px"}
               >
                 {t("checkout.order")}
               </ButtonOutline>
-              {loading ? (
-                <Skeleton height={22} width={128} />
-              ) : (
-                <S.Total>
-                  {t("checkout.to_pay")} {cart?.total}
-                </S.Total>
-              )}
+
+              <S.Total>
+                <Trans showSkeleton={loading} i18nKey={"checkout.to_pay"} />
+                &nbsp;
+                <SkeletonWrap loading={loading}>
+                  {cart?.total ? cart.total : "🤪🤪🤪"}
+                </SkeletonWrap>
+              </S.Total>
             </FlexBox>
           </S.Control>
         </S.Form>
