@@ -31,8 +31,6 @@ export const TelegramModal = NiceModal.create(() => {
           {t("telegramModal.go_to")}
         </ButtonFilled>
       )}
-    >
-      <div></div>
-    </NotifyModal>
+    />
   );
 });

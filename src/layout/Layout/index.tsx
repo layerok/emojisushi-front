@@ -27,6 +27,7 @@ import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
 import { isClosed } from "~utils/time.utils";
 import { appConfig } from "~config/app";
+import { AppUpdateModal } from "src/components/modals/AppUpdateModal";
 
 export const Layout = observer(
   ({ children, ...rest }: { children?: ReactNode }) => {

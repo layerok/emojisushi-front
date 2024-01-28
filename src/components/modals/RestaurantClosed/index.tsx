@@ -22,8 +22,6 @@ export const RestaurantClosed = NiceModal.create(() => {
           <LowKeySvg />
         </SvgIcon>
       )}
-    >
-      <div></div>
-    </NotifyModal>
+    />
   );
 });

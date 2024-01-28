@@ -5,10 +5,12 @@ import { useAppStore } from "~stores/appStore";
 import { observer } from "mobx-react";
 import { Link } from "react-router-dom";
 import { ROUTES } from "~routes";
+import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 
 export const DeliveryPage = observer(() => {
   const { t } = useTranslation();
   const appStore = useAppStore();
+  console.log("update 2");
 
   return (
     <Container>
@@ -56,6 +58,8 @@ export const DeliveryPage = observer(() => {
 });
 
 export const Component = DeliveryPage;
+
+export const ErrorBoundary = DefaultErrorBoundary;
 
 Object.assign({
   displayName: "LazyDeliveryPage",

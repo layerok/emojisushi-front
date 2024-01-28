@@ -5,5 +5,6 @@ export enum ModalIDEnum {
   ContactsModal = "contacts-modal",
   CartModal = "cart-modal",
   MobMenuModal = "mob-menu-modal",
+  OutdatedAppWarning = "outdated-app-warning",
   AuthModal = "auth-modal",
 }

@@ -15,6 +15,7 @@ import { queryClient } from "~query-client";
 import { appStore, useAppStore } from "~stores/appStore";
 import { ROUTES } from "~routes";
 import { CitySlug } from "~common/constants";
+import { lazy } from "~lazy";
 
 const RootIndexElement = () => {
   const loaderData = useLoaderData() as Awaited<
@@ -99,114 +100,142 @@ const routes = [
       },
       {
         id: "layout",
-        lazy: () => import("~layout/Layout"),
+        lazy: lazy(() => import("~layout/Layout")),
         children: [
           {
-            path: ROUTES.CATEGORY.path,
-            id: "categories",
+            element: <Outlet />,
+            ErrorBoundary: DefaultErrorBoundary,
             children: [
               {
-                index: true,
-                lazy: () =>
-                  import("~domains/category/pages/SelectCategoryPage"),
-              },
-              {
-                path: ROUTES.CATEGORY.SHOW.path,
-                lazy: () => import("~domains/product/pages/ProductPage"),
-                id: "category",
-              },
-            ],
-          },
-          {
-            path: ROUTES.THANKYOU.path,
-            lazy: () => import("~domains/order/pages/ThankYouPage"),
-          },
-          {
-            path: ROUTES.DELIVERYANDPAYMENT.path,
-            lazy: () => import("~domains/spot/pages/DeliveryPage"),
-          },
-          {
-            path: ROUTES.CHECKOUT.path,
-            lazy: () => import("~domains/order/pages/CheckoutPage"),
-          },
-          {
-            id: "wishlist",
-            path: ROUTES.WISHLIST.path,
-            lazy: () => import("~domains/wishlist/pages/WishlistPage"),
-          },
-
-          {
-            path: ROUTES.ACCOUNT.path,
-            lazy: () => import("~layout/CabinetLayout"),
-            children: [
-              {
-                index: true,
-                element: <Navigate to={ROUTES.ACCOUNT.PROFILE.path} />,
-              },
-              {
-                path: ROUTES.ACCOUNT.PROFILE.path,
+                path: ROUTES.CATEGORY.path,
+                id: "categories",
                 children: [
                   {
                     index: true,
-                    lazy: () => import("~domains/cabinet/pages/ProfilePage"),
-                    handle: {
-                      title: () => <Trans i18nKey={"account.profile.title"} />,
-                    },
+                    lazy: lazy(
+                      () => import("~domains/category/pages/SelectCategoryPage")
+                    ),
                   },
                   {
-                    path: ROUTES.ACCOUNT.PROFILE.EDIT.path,
-                    lazy: () =>
-                      import("~domains/cabinet/pages/EditProfilePage"),
-                    handle: {
-                      title: () => (
-                        <Trans i18nKey={"account.edit-profile.title"} />
-                      ),
-                    },
+                    path: ROUTES.CATEGORY.SHOW.path,
+                    lazy: lazy(
+                      () => import("~domains/product/pages/ProductPage")
+                    ),
+                    id: "category",
                   },
                 ],
               },
               {
-                path: ROUTES.ACCOUNT.PASSWORD_RECOVERY.path,
-                lazy: () => import("~domains/cabinet/pages/UpdatePasswordPage"),
-                handle: {
-                  title: () => (
-                    <Trans i18nKey={"account.changePassword.title"} />
-                  ),
-                },
+                path: ROUTES.THANKYOU.path,
+                lazy: lazy(() => import("~domains/order/pages/ThankYouPage")),
               },
               {
-                path: ROUTES.ACCOUNT.SAVED_ADDRESSES.path,
-                lazy: () => import("~domains/cabinet/pages/SavedAddressesPage"),
-                handle: {
-                  title: () => <Trans i18nKey={"account.addresses.title"} />,
-                },
+                path: ROUTES.DELIVERYANDPAYMENT.path,
+                lazy: lazy(() => import("~domains/spot/pages/DeliveryPage")),
               },
               {
-                path: ROUTES.ACCOUNT.ORDER.path,
-                lazy: () => import("~domains/cabinet/pages/MyOrdersPage"),
-                handle: {
-                  title: () => <Trans i18nKey={"account.orders.title"} />,
-                },
+                path: ROUTES.CHECKOUT.path,
+                lazy: lazy(() => import("~domains/order/pages/CheckoutPage")),
               },
-            ],
-          },
+              {
+                id: "wishlist",
+                path: ROUTES.WISHLIST.path,
+                lazy: lazy(
+                  () => import("~domains/wishlist/pages/WishlistPage")
+                ),
+              },
 
-          {
-            path: ROUTES.RESET_PASSWORD.path,
-            children: [
               {
-                index: true,
-                lazy: () => import("~domains/cabinet/pages/ResetPasswordPage"),
+                path: ROUTES.ACCOUNT.path,
+                lazy: lazy(() => import("~layout/CabinetLayout")),
+                children: [
+                  {
+                    index: true,
+                    element: <Navigate to={ROUTES.ACCOUNT.PROFILE.path} />,
+                  },
+                  {
+                    path: ROUTES.ACCOUNT.PROFILE.path,
+                    children: [
+                      {
+                        index: true,
+                        lazy: lazy(
+                          () => import("~domains/cabinet/pages/ProfilePage")
+                        ),
+                        handle: {
+                          title: () => (
+                            <Trans i18nKey={"account.profile.title"} />
+                          ),
+                        },
+                      },
+                      {
+                        path: ROUTES.ACCOUNT.PROFILE.EDIT.path,
+                        lazy: lazy(
+                          () => import("~domains/cabinet/pages/EditProfilePage")
+                        ),
+                        handle: {
+                          title: () => (
+                            <Trans i18nKey={"account.edit-profile.title"} />
+                          ),
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    path: ROUTES.ACCOUNT.PASSWORD_RECOVERY.path,
+                    lazy: lazy(
+                      () => import("~domains/cabinet/pages/UpdatePasswordPage")
+                    ),
+                    handle: {
+                      title: () => (
+                        <Trans i18nKey={"account.changePassword.title"} />
+                      ),
+                    },
+                  },
+                  {
+                    path: ROUTES.ACCOUNT.SAVED_ADDRESSES.path,
+                    lazy: lazy(
+                      () => import("~domains/cabinet/pages/SavedAddressesPage")
+                    ),
+                    handle: {
+                      title: () => (
+                        <Trans i18nKey={"account.addresses.title"} />
+                      ),
+                    },
+                  },
+                  {
+                    path: ROUTES.ACCOUNT.ORDER.path,
+                    lazy: lazy(
+                      () => import("~domains/cabinet/pages/MyOrdersPage")
+                    ),
+                    handle: {
+                      title: () => <Trans i18nKey={"account.orders.title"} />,
+                    },
+                  },
+                ],
+              },
+
+              {
+                path: ROUTES.RESET_PASSWORD.path,
+                children: [
+                  {
+                    index: true,
+                    lazy: lazy(
+                      () => import("~domains/cabinet/pages/ResetPasswordPage")
+                    ),
+                  },
+                  {
+                    path: ROUTES.RESET_PASSWORD.CODE.path,
+                    lazy: lazy(
+                      () => import("~domains/cabinet/pages/ResetPasswordPage")
+                    ),
+                  },
+                ],
               },
               {
-                path: ROUTES.RESET_PASSWORD.CODE.path,
-                lazy: () => import("~domains/cabinet/pages/ResetPasswordPage"),
+                path: ROUTES.REFUND.path,
+                lazy: lazy(() => import("~domains/payment/pages/RefundPage")),
               },
             ],
-          },
-          {
-            path: ROUTES.REFUND.path,
-            lazy: () => import("~domains/payment/pages/RefundPage"),
           },
         ],
       },

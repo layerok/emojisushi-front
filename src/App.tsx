@@ -14,6 +14,8 @@ import NiceModal from "@ebay/nice-modal-react";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
 import { router } from "~router";
+import { ModalIDEnum } from "~common/modal.constants";
+import { AppUpdateModal } from "~components/modals/AppUpdateModal";
 
 const FallbackElement = () => {
   return <Preloader />;
@@ -31,6 +33,7 @@ export const App = () => {
                   fallbackElement={<FallbackElement />}
                   router={router}
                 />
+                <AppUpdateModal id={ModalIDEnum.OutdatedAppWarning} />
               </NiceModal.Provider>
             </SkeletonTheme>
             <ReactQueryDevtools initialIsOpen={false} />

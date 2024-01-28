@@ -1,17 +1,15 @@
-import { ReactElement, ReactNode } from "react";
+import { ReactNode } from "react";
 import { IModalProps, Modal } from "../Modal";
 import * as S from "./styled";
 
 export type INotifyModalProps = {
-  children: ReactElement;
   renderTitle?: () => ReactNode;
   renderSubtitle?: () => ReactNode;
   renderButton?: () => ReactNode;
   renderIcon?: () => ReactNode;
-} & Omit<IModalProps, "render">;
+} & Omit<IModalProps, "children">;
 
 export const NotifyModal = ({
-  children,
   renderTitle,
   renderSubtitle,
   renderButton,
