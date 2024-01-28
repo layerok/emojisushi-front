@@ -40,7 +40,7 @@ const Content = styled.div`
     `,
     css`
       border-bottom: ${ifProp("open", "1px solid #2D2D2D", "none")};
-      border-radius: 10px 105px 0 0;
+      border-radius: 10px 10px 0 0;
     `
   )};
 `;
