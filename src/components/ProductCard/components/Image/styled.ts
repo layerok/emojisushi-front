@@ -2,7 +2,9 @@ import styled from "styled-components";
 import { prop } from "styled-tools";
 import media from "~common/custom-media";
 
-const Image = styled.div`
+const Image = styled.div<{
+  src: string;
+}>`
   display: flex;
   align-items: center;
   justify-content: center;

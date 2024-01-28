@@ -28,7 +28,7 @@ const Header = styled.div`
   `}
 `;
 
-Header.MobileTextContainer = styled.div`
+const HeaderMobileTextContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 286px;
@@ -40,13 +40,13 @@ Header.MobileTextContainer = styled.div`
   `}
 `;
 
-Header.Status = styled.p`
+const HeaderStatus = styled.p`
   color: #ffe600;
 `;
 
 const Pan = styled.div``;
 
-Pan.Props = styled.div`
+const PanProps = styled.div`
   display: flex;
   justify-content: space-between;
   border-top: 1px solid #2d2d2d;
@@ -61,28 +61,30 @@ Pan.Props = styled.div`
   `}
 `;
 
-Pan.Props.ExceptStatus = styled.div`
+const PanPropsExceptStatus = styled.div`
   ${media.lessThan("pc")`
     border-bottom: 1px solid #2D2D2D; 
     padding-bottom: 10px;
   `}
 `;
-Pan.Props.Prop = styled.div`
+const PanPropsProp = styled.div`
   display: flex;
 `;
-Pan.Props.Prop.Label = styled.div`
+const PanPropsPropLabel = styled.div`
   word-break: break-all;
   flex-shrink: 0;
   width: 201px;
+
   :first-child {
     padding-bottom: 10px;
   }
+
   ${media.lessThan("pc")`
     width: 210px;  
   `}
 `;
 
-Pan.Status = styled.div`
+const PanStatus = styled.div`
   display: flex;
   margin-right: 149px;
   flex-direction: column;
@@ -101,7 +103,7 @@ Pan.Status = styled.div`
   `}
 `;
 
-Pan.Status.Value = styled.p`
+const PanStatusValue = styled.p`
   font-weight: 500;
   font-size: 20px;
   line-height: 24px;
@@ -111,9 +113,9 @@ Pan.Status.Value = styled.p`
   `}
 `;
 
-Pan.Status.Label = styled.p``;
+const PanStatusLabel = styled.p``;
 
-Pan.Props.Prop.Value = styled.p`
+const PanPropsPropValue = styled.p`
   word-break: break-all;
   ${media.lessThan("pc")`
     display: flex;
@@ -122,7 +124,7 @@ Pan.Props.Prop.Value = styled.p`
   `}
 `;
 
-Pan.Prod = styled.div`
+const PanProd = styled.div`
   display: flex;
   margin-top: 10px;
   border-bottom: 1px solid #2d2d2d;
@@ -134,44 +136,44 @@ Pan.Prod = styled.div`
   }
 `;
 
-Pan.Prod.Name = styled.p``;
+const PanProdName = styled.p``;
 
-Pan.Prod.Prop = styled.p`
+const PanProdProp = styled.p`
   font-size: 13px;
   line-height: 16px;
 `;
 
-Pan.Prod.Img = styled.img`
+const PanProdImg = styled.img`
   width: 80px;
   height: 52px;
 `;
 
-Pan.Prod.Description = styled.div`
+const PanProdDescription = styled.div`
   display: flex;
   margin-top: 10px;
   width: 350px;
 `;
 
-Pan.Prod.Sect1 = styled.div`
+const PanProdSect1 = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 15px;
 `;
 
-Pan.VerticalStick = styled.div`
+const PanVerticalStick = styled.div`
   border: 1px solid #ffffff;
   height: 13px;
   margin-left: 10px;
   margin-right: 10px;
 `;
 
-Pan.Prod.Price = styled.p`
+const PanProdPrice = styled.p`
   font-weight: 700;
   font-size: 20px;
   line-height: 24px;
 `;
 
-Pan.Prod.Sect2 = styled.div`
+const PanProdSect2 = styled.div`
   display: flex;
   ${media.lessThan("pc")`
     margin-top: 20px;
@@ -179,7 +181,7 @@ Pan.Prod.Sect2 = styled.div`
   `}
 `;
 
-Pan.Prod.TotalPrice = styled.div`
+const PanProdTotalPrice = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-right: 89px;
@@ -189,13 +191,13 @@ Pan.Prod.TotalPrice = styled.div`
   `}
 `;
 
-Pan.Prod.Amount = styled.p`
+const PanProdAmount = styled.p`
   font-size: 12px;
   line-height: 15px;
   color: #616161;
 `;
 
-Pan.Prod.Props = styled.div`
+const PanProdProps = styled.div`
   display: flex;
   width: 100%;
   ${media.lessThan("pc")`
@@ -203,4 +205,31 @@ Pan.Prod.Props = styled.div`
   `}
 `;
 
-export { Container, MutedText, Header, Pan };
+export {
+  Container,
+  MutedText,
+  Header,
+  HeaderStatus,
+  HeaderMobileTextContainer,
+  Pan,
+  PanProd,
+  PanProdPrice,
+  PanProdProps,
+  PanProdSect1,
+  PanProdAmount,
+  PanProdTotalPrice,
+  PanProdImg,
+  PanPropsPropValue,
+  PanProdName,
+  PanProdProp,
+  PanProdSect2,
+  PanProdDescription,
+  PanProps,
+  PanStatusValue,
+  PanVerticalStick,
+  PanStatus,
+  PanStatusLabel,
+  PanPropsPropLabel,
+  PanPropsProp,
+  PanPropsExceptStatus,
+};

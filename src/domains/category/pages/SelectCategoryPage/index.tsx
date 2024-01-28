@@ -17,8 +17,8 @@ export const SelectCategoryPage = observer(() => {
   return (
     <Container>
       <S.Category>
-        <S.Category.Container>
-          <S.Category.Label>
+        <S.CategoryContainer>
+          <S.CategoryLabel>
             {isLoading ? (
               <Skeleton width={220} height={20} />
             ) : (
@@ -31,10 +31,10 @@ export const SelectCategoryPage = observer(() => {
                 </S.IconWrapper>
               </>
             )}
-          </S.Category.Label>
-          <S.Category.Items>
+          </S.CategoryLabel>
+          <S.CategoryItems>
             {isLoading ? (
-              <S.Category.List>
+              <S.CategoryList>
                 <Category />
                 <Category />
                 <Category />
@@ -46,16 +46,16 @@ export const SelectCategoryPage = observer(() => {
                 <Category />
                 <Category />
                 <Category />
-              </S.Category.List>
+              </S.CategoryList>
             ) : (
-              <S.Category.List>
+              <S.CategoryList>
                 {categories.data.map((category) => (
                   <Category key={category.id} category={category} />
                 ))}
-              </S.Category.List>
+              </S.CategoryList>
             )}
-          </S.Category.Items>
-        </S.Category.Container>
+          </S.CategoryItems>
+        </S.CategoryContainer>
       </S.Category>
     </Container>
   );

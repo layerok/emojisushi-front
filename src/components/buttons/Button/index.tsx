@@ -1,10 +1,18 @@
 import * as S from "./styled";
 import { SpinnerSvg, SvgIcon } from "~components";
-import { CSSProperties, HTMLProps, PropsWithChildren } from "react";
+import {
+  CSSProperties,
+  forwardRef,
+  ButtonHTMLAttributes,
+  DetailedHTMLProps,
+  PropsWithChildren,
+  ReactNode,
+  HTMLProps,
+} from "react";
 import Skeleton from "react-loading-skeleton";
 
-type IProps = HTMLProps<HTMLButtonElement> &
-  PropsWithChildren<{
+type IProps = PropsWithChildren<
+  HTMLProps<HTMLButtonElement> & {
     width?: string;
     filled?: boolean;
     padding?: string;
@@ -18,31 +26,35 @@ type IProps = HTMLProps<HTMLButtonElement> &
     hoverOutline?: boolean;
     minWidth?: string;
     hoverBackgroundColor?: string;
-  }>;
+  }
+>;
 
-export const Button = ({
-  children,
-  width,
-  filled = false,
-  padding,
-  loading = false,
-  submitting = false,
-  justifyContent,
-  outline = true,
-  color = "#FFE600",
-  hoverColor = "black",
-  backgroundColor = "transparent",
-  hoverBackgroundColor = "#FFE600",
-  hoverOutline = true,
-  minWidth = "130px",
-  ...rest
-}: IProps) => {
+export const Button = forwardRef<HTMLButtonElement, IProps>((props, ref) => {
+  const {
+    children,
+    width,
+    filled = false,
+    padding,
+    loading = false,
+    submitting = false,
+    justifyContent,
+    outline = true,
+    color = "#FFE600",
+    hoverColor = "black",
+    backgroundColor = "transparent",
+    hoverBackgroundColor = "#FFE600",
+    hoverOutline = true,
+    minWidth = "130px",
+    ...rest
+  } = props;
+
   if (loading) {
     return <Skeleton height={40} width={width} borderRadius={10} />;
   }
 
   // todo:  this is propsapacalypses, need to refactor
   return (
+    // @ts-ignore
     <S.Button
       minWidth={minWidth}
       outline={outline}
@@ -56,6 +68,7 @@ export const Button = ({
       width={width}
       justifyContent={justifyContent}
       {...rest}
+      ref={ref}
     >
       {submitting ? (
         <SvgIcon width={"25px"} color={"black"}>
@@ -66,42 +79,52 @@ export const Button = ({
       )}
     </S.Button>
   );
-};
+});
 
-export const ButtonOutline = ({
-  children,
-  ...rest
-}: Omit<IProps, "filled" | "outline">) => {
+export const ButtonOutline = forwardRef<
+  HTMLButtonElement,
+  Omit<IProps, "filled" | "outline">
+>((props, ref) => {
+  const { children, ...rest } = props;
   return (
-    <Button {...rest} filled={false} outline={true}>
+    <Button {...rest} filled={false} outline={true} ref={ref}>
       {children}
     </Button>
   );
-};
+});
 
-export const ButtonFilled = ({
-  children,
-  ...rest
-}: Omit<IProps, "color" | "filled" | "backgroundColor">) => {
+export const ButtonFilled = forwardRef<
+  HTMLButtonElement,
+  Omit<IProps, "color" | "filled" | "backgroundColor">
+>((props, ref) => {
+  const { children, ...rest } = props;
+
   return (
-    <Button {...rest} backgroundColor={"#FFE600"} color={"black"} filled={true}>
+    <Button
+      {...rest}
+      backgroundColor={"#FFE600"}
+      color={"black"}
+      filled={true}
+      ref={ref}
+    >
       {children}
     </Button>
   );
-};
+});
 
-export const ButtonDark = ({
-  children,
-  ...rest
-}: Omit<
-  IProps,
-  | "outline"
-  | "color"
-  | "backgroundColor"
-  | "hoverBackgroundColor"
-  | "hoverColor"
-  | "hoverOutline"
->) => {
+export const ButtonDark = forwardRef<
+  HTMLButtonElement,
+  Omit<
+    IProps,
+    | "outline"
+    | "color"
+    | "backgroundColor"
+    | "hoverBackgroundColor"
+    | "hoverColor"
+    | "hoverOutline"
+  >
+>((props, ref) => {
+  const { children, ...rest } = props;
   return (
     <Button
       outline={false}
@@ -111,8 +134,9 @@ export const ButtonDark = ({
       hoverColor={"#FFE600"}
       hoverOutline={true}
       {...rest}
+      ref={ref}
     >
       {children}
     </Button>
   );
-};
+});

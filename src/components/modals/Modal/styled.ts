@@ -1,8 +1,12 @@
 import styled, { css } from "styled-components";
 import media from "../../../common/custom-media";
 import { ifProp, prop } from "styled-tools";
+import { CSSProperties } from "react";
 
-const Container = styled.div`
+const Container = styled.div<{
+  width?: CSSProperties["width"];
+  alignCenter?: boolean;
+}>`
   background: #1c1c1c;
   box-shadow: 0 4px 15px rgba(28, 28, 28, 0.3);
   border-radius: 15px;

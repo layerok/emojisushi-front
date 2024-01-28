@@ -26,7 +26,9 @@ const Content = styled.div`
   align-items: center;
 `;
 
-const Item = styled.div`
+const Item = styled.div<{
+  selected: boolean;
+}>`
   margin-top: 15px;
   font-size: 15px;
   line-height: 18px;

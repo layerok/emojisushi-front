@@ -22,6 +22,7 @@ export const SvgIcon = forwardRef<HTMLSpanElement, ISvgIconProps>(
       height,
       clickable = false,
       style = {},
+      as,
       ...rest
     },
     ref
@@ -34,10 +35,10 @@ export const SvgIcon = forwardRef<HTMLSpanElement, ISvgIconProps>(
           cursor: clickable ? "pointer" : "default",
           ...style,
         }}
-        ref={ref}
         noDomColor={color}
         hoverColor={hoverColor}
         {...rest}
+        ref={ref}
       >
         {children}
       </S.Parent>

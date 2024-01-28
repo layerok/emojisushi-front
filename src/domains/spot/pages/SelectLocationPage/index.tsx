@@ -11,27 +11,27 @@ export const SelectLocationPage = () => {
 
   return (
     <S.Locations>
-      <S.Locations.Container>
-        <S.Locations.Head>
+      <S.LocationsContainer>
+        <S.LocationsHead>
           <S.LogoWrapper>
             <SvgIcon width={"100%"}>
               <LogoSvg />
             </SvgIcon>
           </S.LogoWrapper>
 
-          <S.Locations.Label>
+          <S.LocationsLabel>
             {t("locationsModal.title")}
             <S.MapWrapper>
               <SvgIcon width={"100%"} color={"white"}>
                 <MapPinSvg />
               </SvgIcon>
             </S.MapWrapper>
-          </S.Locations.Label>
-        </S.Locations.Head>
-        <S.Locations.Body>
+          </S.LocationsLabel>
+        </S.LocationsHead>
+        <S.LocationsBody>
           {isLoading ? <CitiesSkeleton /> : <Cities items={cities.data} />}
-        </S.Locations.Body>
-      </S.Locations.Container>
+        </S.LocationsBody>
+      </S.LocationsContainer>
     </S.Locations>
   );
 };

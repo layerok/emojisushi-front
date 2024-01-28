@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { ChangeEvent, HTMLProps, ReactElement, useId } from "react";
+import { ChangeEvent, HTMLProps, ReactElement, useId, forwardRef } from "react";
 import { SkeletonWrap } from "~components";
 
 type IOption = {
@@ -57,43 +57,46 @@ type ISwitcherProps = Omit<HTMLProps<HTMLDivElement>, "selected" | "name"> & {
   showSkeleton?: boolean;
 };
 
-export const Switcher = ({
-  options = [],
-  name,
-  handleChange,
-  value,
-  showSkeleton = false,
-  as,
-  ...rest
-}: ISwitcherProps): ReactElement => {
-  return (
-    <SkeletonWrap
-      style={{
-        width: "100%",
-      }}
-      loading={showSkeleton}
-    >
-      <S.Wrapper {...rest}>
-        {options.map((option, index) => (
-          <Option
-            option={option}
-            length={options.length}
-            index={index}
-            name={name}
-            handleChange={(e) => handleChange({ e, index, option })}
-            selected={option.value === value}
-            key={index}
-          />
-        ))}
-        <S.Slide length={options.length}>
-          {options.reduce((acc, option) => {
-            if (option.value === value) {
-              return option.label;
-            }
-            return acc;
-          }, "")}
-        </S.Slide>
-      </S.Wrapper>
-    </SkeletonWrap>
-  );
-};
+export const Switcher = forwardRef<HTMLDivElement, ISwitcherProps>(
+  (props, ref) => {
+    const {
+      options = [],
+      name,
+      handleChange,
+      value,
+      showSkeleton = false,
+      as,
+      ...rest
+    } = props;
+    return (
+      <SkeletonWrap
+        style={{
+          width: "100%",
+        }}
+        loading={showSkeleton}
+      >
+        <S.Wrapper {...rest} ref={ref}>
+          {options.map((option, index) => (
+            <Option
+              option={option}
+              length={options.length}
+              index={index}
+              name={name}
+              handleChange={(e) => handleChange({ e, index, option })}
+              selected={option.value === value}
+              key={index}
+            />
+          ))}
+          <S.Slide length={options.length}>
+            {options.reduce((acc, option) => {
+              if (option.value === value) {
+                return option.label;
+              }
+              return acc;
+            }, "")}
+          </S.Slide>
+        </S.Wrapper>
+      </SkeletonWrap>
+    );
+  }
+);

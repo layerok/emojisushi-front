@@ -18,7 +18,9 @@ const Item = styled.div`
   `}
 `;
 
-const Image = styled.div`
+const Image = styled.div<{
+  src: string;
+}>`
   width: 190px;
   height: 122px;
   background-image: url("${prop("src")}");

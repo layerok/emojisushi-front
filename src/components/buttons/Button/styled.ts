@@ -1,7 +1,22 @@
 import styled, { css } from "styled-components";
 import { prop, ifProp } from "styled-tools";
+import { CSSProperties } from "react";
 
-const Button = styled.button`
+const Button = styled.button<{
+  color: CSSProperties["color"];
+  hoverColor: CSSProperties["color"];
+  padding?: CSSProperties["padding"];
+  width?: CSSProperties["width"];
+  minWidth?: CSSProperties["minWidth"];
+  outline?: boolean;
+  hoverOutline?: boolean;
+  justifyContent?: CSSProperties["justifyContent"];
+  border?: CSSProperties["border"];
+  background?: CSSProperties["background"];
+  hoverBackgroundColor?: CSSProperties["background"];
+  backgroundColor?: CSSProperties["backgroundColor"];
+  filled?: boolean;
+}>`
   border: ${ifProp("outline", "1px solid #FFE600", "none")};
   border-radius: 10px;
   color: ${prop("color")};

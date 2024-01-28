@@ -35,11 +35,11 @@ const Content = styled.div`
       placement: "bottom",
     },
     css`
-      border-top: ${ifProp("open", "1px solid #2D2D2D")};
+      border-top: ${ifProp("open", "1px solid #2D2D2D", "none")};
       border-radius: 0 0 10px 10px;
     `,
     css`
-      border-bottom: ${ifProp("open", "1px solid #2D2D2D")};
+      border-bottom: ${ifProp("open", "1px solid #2D2D2D", "none")};
       border-radius: 10px 105px 0 0;
     `
   )};

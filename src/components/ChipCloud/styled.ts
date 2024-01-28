@@ -22,7 +22,9 @@ const ChipContainer = styled.div`
   margin-right: 16px;
 `;
 
-const Chip = styled.span`
+const Chip = styled.span<{
+  isActive: boolean;
+}>`
   display: flex;
   text-transform: uppercase;
   line-height: 20px;

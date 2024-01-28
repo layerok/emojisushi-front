@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { ifProp } from "styled-tools";
 
-const Container = styled.div`
+const Container = styled.div<{
+  isActive: boolean;
+}>`
   position: relative;
   display: inline-block;
 

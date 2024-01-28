@@ -2,7 +2,9 @@ import styled from "styled-components";
 import { prop } from "styled-tools";
 import media from "src/common/custom-media";
 
-const Banner = styled.div`
+const Banner = styled.div<{
+  src: string;
+}>`
   margin-top: 40px;
   background-image: url("${prop("src")}");
   width: 100%;

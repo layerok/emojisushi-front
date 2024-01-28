@@ -6,7 +6,8 @@ export const SvgButton = forwardRef<
   {
     children: ReactElement;
   } & HTMLProps<HTMLDivElement>
->(({ children, ...rest }, ref) => {
+>((props, ref) => {
+  const { children, as, ...rest } = props;
   return (
     <S.Box {...rest} ref={ref}>
       {cloneElement(children)}
