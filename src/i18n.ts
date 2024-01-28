@@ -4,7 +4,7 @@ import HttpBackend, { HttpBackendOptions } from "i18next-http-backend";
 import { appStore } from "~stores/appStore";
 
 const getVersion = () => {
-  // todo: find a way to generate automatically an unique hash per each deployment
+  // todo: find a way to automatically generate an unique hash on each deployment
   const version = process.env.REACT_APP_TRANSLATIONS_VERSION;
   return version ? `?version=${version}` : "";
 };

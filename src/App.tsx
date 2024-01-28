@@ -17,10 +17,6 @@ import { router } from "~router";
 import { ModalIDEnum } from "~common/modal.constants";
 import { AppUpdateModal } from "~components/modals/AppUpdateModal";
 
-const FallbackElement = () => {
-  return <Preloader />;
-};
-
 export const App = () => {
   return (
     <Suspense fallback={<Loader loading={true} />}>
@@ -30,7 +26,7 @@ export const App = () => {
             <SkeletonTheme baseColor="#1F1F1F" highlightColor="#2F2F2F">
               <NiceModal.Provider>
                 <RouterProvider
-                  fallbackElement={<FallbackElement />}
+                  fallbackElement={<Preloader />}
                   router={router}
                 />
                 <AppUpdateModal id={ModalIDEnum.OutdatedAppWarning} />
