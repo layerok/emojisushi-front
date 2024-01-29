@@ -9,7 +9,7 @@ jobs:
     env:
       CI: false
       REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL }}
-      REACT_APP_TRANSLATIONS_VERSION: ${{ vars.REACT_APP_TRANSLATIONS_VERSION }}
+      REACT_APP_TRANSLATIONS_VERSION: ${{ GITHUB_RUN_ID }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
