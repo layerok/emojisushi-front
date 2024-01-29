@@ -4,11 +4,12 @@ on:
 
 jobs:
   build:
-    environment: stage
+    environment: prod
     name: Build
     env:
       CI: false
       REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL }}
+      REACT_APP_TRANSLATIONS_VERSION: ${{ vars.REACT_APP_TRANSLATIONS_VERSION }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -23,7 +24,7 @@ jobs:
           name: build
           path: build
   deploy:
-    environment: stage
+    environment: prod
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
