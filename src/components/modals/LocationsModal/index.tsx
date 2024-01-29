@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { citiesQuery } from "~queries/cities.query";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { observer } from "mobx-react-lite";
+import { LOCATION_CONFIRMED_SEARCH_PARAM } from "~common/constants";
 
 export const LocationsModal = NiceModal.create(
   observer(() => {
@@ -42,7 +43,7 @@ export const LocationsModal = NiceModal.create(
                     window.location.href =
                       city.frontend_url +
                       location.pathname +
-                      "?location_confirmed=true";
+                      `?${LOCATION_CONFIRMED_SEARCH_PARAM}=true`;
                   }
 
                   modal.remove();

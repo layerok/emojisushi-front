@@ -7,6 +7,7 @@ import { appStore } from "~stores/appStore";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { citiesQuery } from "~queries/cities.query";
+import { LOCATION_CONFIRMED_SEARCH_PARAM } from "~common/constants";
 
 type LocationPickerPopoverProps = {
   offset?: number;
@@ -43,7 +44,9 @@ export const LocationPickerPopover = observer(
         selectedIndex={selectedIndex}
         onSelect={({ close, option, index }) => {
           window.location.href =
-            option.url + location.pathname + "?location_confirmed=true";
+            option.url +
+            location.pathname +
+            `?${LOCATION_CONFIRMED_SEARCH_PARAM}=true`;
 
           close();
         }}

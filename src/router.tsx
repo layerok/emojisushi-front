@@ -14,7 +14,7 @@ import { categoriesQuery } from "~queries";
 import { queryClient } from "~query-client";
 import { appStore, useAppStore } from "~stores/appStore";
 import { ROUTES } from "~routes";
-import { CitySlug } from "~common/constants";
+import { CitySlug, LOCATION_CONFIRMED_SEARCH_PARAM } from "~common/constants";
 import { lazy } from "~lazy";
 
 const RootIndexElement = () => {
@@ -46,11 +46,12 @@ const RootElement = () => {
   const [searchParams] = useSearchParams();
   const appStore = useAppStore();
 
-  if (searchParams.has("location_confirmed")) {
-    searchParams.delete("location_confirmed");
+  if (searchParams.has(LOCATION_CONFIRMED_SEARCH_PARAM)) {
+    searchParams.delete(LOCATION_CONFIRMED_SEARCH_PARAM);
     appStore.setUserConfirmedLocation(true);
     return (
       <Navigate
+        replace
         to={{
           search: searchParams.toString(),
         }}

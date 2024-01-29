@@ -4,3 +4,5 @@ export enum CitySlug {
   Odesa = "odesa",
   Chornomorsk = "chorno",
 }
+
+export const LOCATION_CONFIRMED_SEARCH_PARAM = "location_confirmed";
