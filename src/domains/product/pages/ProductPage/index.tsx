@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 import { ROUTES } from "~routes";
 
-export const CategoryPage = observer(() => {
+export const ProductPage = observer(() => {
   const { ref, inView } = useInView();
 
   const { categorySlug } = useParams();
@@ -95,10 +95,9 @@ export const CategoryPage = observer(() => {
     }
   }, [inView]);
 
-  // todo: add polyfill for `flat` function or flatten the array by other means
   const items = (products?.pages || [])
     .map((page) => page.data.map((product) => new Product(product)))
-    .flat();
+    .reduce((acc, pageProducts) => [...acc, ...pageProducts], []); // flattening
 
   return (
     <Container>
@@ -140,7 +139,7 @@ export const CategoryPage = observer(() => {
   );
 });
 
-export const Component = CategoryPage;
+export const Component = ProductPage;
 
 Object.assign(Component, {
   displayName: "LazyCategoryPage",
