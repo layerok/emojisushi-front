@@ -74,7 +74,7 @@
     "react-loading-skeleton": "^3.2.0",
     "react-query-auth": "^2.2.0",
     "react-refresh": "^0.11.0",
-    "react-router-dom": "6.9.0",
+    "react-router-dom": "6.21.1",
     "react-router-typesafe-routes": "^1.2.1",
     "react-slick": "^0.29.0",
     "react-spinners": "^0.12.0",
