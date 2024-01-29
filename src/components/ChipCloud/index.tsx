@@ -35,17 +35,13 @@ export const Chip = ({
   isActive = false,
   skeletonWidth = 100,
 }: TCategoryProps) => {
-  if (loading) {
-    return (
-      <S.ChipContainer>
-        <Skeleton borderRadius={5} height={40} width={skeletonWidth} />
-      </S.ChipContainer>
-    );
-  }
-
   return (
     <S.ChipContainer>
-      <S.Chip isActive={isActive}>{children}</S.Chip>
+      {loading ? (
+        <Skeleton borderRadius={5} height={40} width={skeletonWidth} />
+      ) : (
+        <S.Chip isActive={isActive}>{children}</S.Chip>
+      )}
     </S.ChipContainer>
   );
 };

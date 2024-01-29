@@ -36,10 +36,11 @@ const TinyCartBtn = styled.div`
 `;
 
 const BurgerBtn = styled.button`
-  margin-left: 30px;
-  ${media.greaterThan("pc")`
-    display: none;
-    margin-left: 0;
+  display: none;
+
+  ${media.lessThan("pc")`
+    display: block;
+    margin-left: 30px;
   `}
 `;
 

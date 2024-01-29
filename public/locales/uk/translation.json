@@ -48,8 +48,8 @@
   },
   "search": {
     "input_search": "Пошук",
-    "in_category": "Шукаемо товары '{{word}}' в категорії {{category}}",
-    "everywhere": "Шукаемо товары"
+    "in_category": "Шукаемо страви '{{word}}' в категорії {{category}}",
+    "everywhere": "Шукаемо страви"
   },
   "underVerticalMenu": {
     "in_touch": "Залишайтеся на зв'язку"

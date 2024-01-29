@@ -48,8 +48,8 @@
   },
   "search": {
     "input_search": "Поиск",
-    "title": "Ищем товары '{{word}}' в категории {{category}}",
-    "everywhere": "Ищем товары"
+    "title": "Ищем блюда '{{word}}' в категории {{category}}",
+    "everywhere": "Ищем блюда"
   },
   "underVerticalMenu": {
     "in_touch": "Оставайтесь на связи"

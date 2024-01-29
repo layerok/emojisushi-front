@@ -18,23 +18,17 @@ const Wrapper = styled.div`
 `;
 
 const Description = styled.div`
-  margin-top: 25px;
+  margin-top: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  ${media.lessThan("tablet")`
-    margin-top: 36px;
-  `}
 `;
 
 const Footer = styled.div`
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  ${media.lessThan("tablet")`
-    margin-top: 28px;
-  `}
 `;
 
 export { Wrapper, Description, Footer };

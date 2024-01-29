@@ -111,7 +111,7 @@ export const CategoryPage = observer(() => {
         !products ? (
           <ProductsGrid loading />
         ) : (
-          <div>
+          <div style={{ flexGrow: 1 }}>
             <ProductsGrid
               wishlists={wishlists}
               cart={cart}

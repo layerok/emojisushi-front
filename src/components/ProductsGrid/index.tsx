@@ -3,7 +3,8 @@ import { EqualHeight } from "react-equal-height";
 import { Product } from "~models";
 import { Items, Header } from "./components";
 import { IGetCartRes, IGetWishlistRes } from "~api/types";
-// todo: fix design at 1280px breakpoing
+import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 type TProductsGridProps = {
   title?: string;
@@ -26,11 +27,17 @@ export const ProductsGrid = ({
     return breakpoint;
   }, 300);
 
-  // todo: change title when searching
+  const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
+
+  const search = searchParams.get("q");
+  const resultantTitle = search
+    ? `${t("search.everywhere")}: ${search}`
+    : title;
 
   return (
-    <div style={{ position: "relative", width: "100%" }}>
-      <Header loading={loading} title={title} />
+    <div style={{ position: "relative" }}>
+      <Header loading={loading} title={resultantTitle} />
       <EqualHeight updateOnChange={debouncedBreakpoint}>
         <Items
           wishlists={wishlists}

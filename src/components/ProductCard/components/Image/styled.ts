@@ -12,8 +12,8 @@ const Image = styled.div<{
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  width: ${prop("width", 190)}px;
-  height: ${prop("width", 170)}px;
+  width: 210px;
+  height: 210px;
   margin: 0 auto;
 
   ${media.lessThan("tablet")`
