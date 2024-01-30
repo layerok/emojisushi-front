@@ -11,6 +11,7 @@ const Slide = styled(motion.div)<{
   background-position: center;
   inset: 0;
   position: absolute;
+  border-radius: 15px;
 `;
 
 const Container = styled(motion.div)`
@@ -25,8 +26,6 @@ const Container = styled(motion.div)`
   ${media.greaterThan("pc")`
     height: 236px;
   `};
-  border-radius: 15px;
-  overflow: hidden;
 `;
 
 export { Container, Slide };
