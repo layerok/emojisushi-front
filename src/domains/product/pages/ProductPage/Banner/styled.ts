@@ -1,17 +1,23 @@
 import styled from "styled-components";
 import { prop } from "styled-tools";
 import media from "src/common/custom-media";
+import { motion } from "framer-motion";
 
-const Banner = styled.div<{
-  src: string;
+const Slide = styled(motion.div)<{
+  imageSrc: string;
 }>`
-  margin-top: 40px;
-  background-image: url("${prop("src")}");
-  width: 100%;
-  height: 130px;
+  background-image: url("${prop("imageSrc")}");
   background-size: cover;
   background-position: center;
-  border-radius: 15px;
+  inset: 0;
+  position: absolute;
+`;
+
+const Container = styled(motion.div)`
+  width: 100%;
+  height: 130px;
+  margin-bottom: 40px;
+  position: relative;
   ${media.greaterThan("tablet")`
     height: 180px;
   `};
@@ -19,6 +25,8 @@ const Banner = styled.div<{
   ${media.greaterThan("pc")`
     height: 236px;
   `};
+  border-radius: 15px;
+  overflow: hidden;
 `;
 
-export { Banner };
+export { Container, Slide };

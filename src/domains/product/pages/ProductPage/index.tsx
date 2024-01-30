@@ -101,7 +101,7 @@ export const ProductPage = observer(() => {
 
   return (
     <Container>
-      {false && <Banner />}
+      <Banner />
       <MenuLayout categories={categories}>
         {(isWishlistLoading ||
           isCartLoading ||
