@@ -18,7 +18,7 @@ const Image = styled.div<{
 
   ${media.lessThan("tablet")`
     width: 260px;
-    height: 167px;
+    height: 260px;
   `}
 `;
 
