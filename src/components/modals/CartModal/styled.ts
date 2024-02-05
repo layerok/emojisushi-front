@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { prop } from "styled-tools";
-import media from "../../../common/custom-media";
+import media from "~common/custom-media";
 
 const Wrapper = styled.div`
   position: relative;
@@ -9,14 +9,20 @@ const Wrapper = styled.div`
   box-shadow: 0 4px 15px rgba(28, 28, 28, 0.3);
   border-radius: 15px 0 0 15px;
 
-  ${media.lessThan("tablet")`
-    border-radius: 15px 15px 0 0;
-    width: 375px;
+  ${media.greaterThan("tablet")`
+    min-height: 500px;
   `}
 
-  padding: 40px 20px 31px 20px;
+  ${media.lessThan("tablet")`
+    border-radius: 0px;
+    width: 100%;
+    height: 100%;
+  `}
+
+  padding: 68px 20px 31px 20px;
   flex-direction: column;
   justify-content: space-between;
+  display: flex;
 `;
 
 const Title = styled.div`
@@ -33,13 +39,14 @@ const CloseIcon = styled.div`
   cursor: pointer;
 
   ${media.lessThan("tablet")`
+    top: 20px;
     right: 20px;
     left: auto;
+    
   `}
 `;
 
 const Items = styled.div`
-  margin-top: 28px;
   display: flex;
   flex-direction: column;
 `;
@@ -69,12 +76,19 @@ const ItemImg = styled.div<{
   background-repeat: no-repeat;
   background-position: center;
   flex-shrink: 0;
+
+  ${media.lessThan("tablet")`
+    width: 64px;
+  `}
 `;
 
 const ItemInfo = styled.div`
   margin-left: 10px;
   width: 100%;
   padding-right: 20px;
+  ${media.lessThan("tablet")`
+    padding-right: 0;
+  `}
 `;
 
 const ItemName = styled.div`
@@ -99,11 +113,19 @@ const ItemRemoveIcon = styled.div`
   position: absolute;
   right: 20px;
   top: 0;
+  ${media.lessThan("tablet")`
+     right: 0px;
+  `}
 `;
 
 const Footer = styled.div`
   margin-top: 30px;
   padding-right: 20px;
+  padding-left: 20px;
+  ${media.lessThan("tablet")`
+     padding-right: 0;
+     padding-left: 0;
+  `}
 `;
 
 const Sum = styled.div`
@@ -117,11 +139,14 @@ const Button = styled.div`
 `;
 
 const EmptyCartImgContainer = styled.div`
+  position: absolute;
+  inset: 0;
+  top: 50%;
+  transform-origin: center;
+  transform: translateY(-50%);
   display: flex;
-  align-items: center;
   flex-direction: column;
-  position: relative;
-  top: 200px;
+  align-items: center;
 `;
 
 export {

@@ -17,6 +17,8 @@ import { useEffect } from "react";
 import { ROUTES } from "~routes";
 import { CitySlug } from "~common/constants";
 
+// todo: scroll the page up when users visits the checkout page
+
 const CheckoutPage = () => {
   const { t } = useTranslation();
   const appStore = useAppStore();

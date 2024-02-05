@@ -211,6 +211,7 @@ export const CartModal = NiceModal.create(() => {
   const { data } = cart;
 
   const { isMobile } = useBreakpoint2();
+  console.log("isMObile", isMobile);
 
   const { t } = useTranslation();
 
@@ -220,11 +221,13 @@ export const CartModal = NiceModal.create(() => {
   const items = data.map((json) => new CartProduct(json));
 
   const overlayStyles = {
-    justifyItems: isMobile ? "center" : "end",
-    alignItems: isMobile ? "center" : "start",
     background: "rgba(0, 0, 0, 0.4)",
     display: "grid",
     zIndex: 999999,
+    ...(!isMobile && {
+      justifyItems: "end",
+      alignItems: "start",
+    }),
   };
 
   // max cart items wrapper height is 500px and min is 300px
@@ -245,24 +248,28 @@ export const CartModal = NiceModal.create(() => {
             <CloseModalIcon close={close} />
           </S.CloseIcon>
 
-          <S.EmptyCartImgContainer>
-            {items.length === 0 && <SushiSvg />}
-            <S.Title>{items.length === 0 && t("cartModal.empty")}</S.Title>
-          </S.EmptyCartImgContainer>
+          {items.length === 0 && (
+            <S.EmptyCartImgContainer>
+              <SushiSvg />
+              <S.Title>{t("cartModal.empty")}</S.Title>
+            </S.EmptyCartImgContainer>
+          )}
 
-          <S.Items>
-            <div
-              style={{
-                minHeight: 362 + "px",
-                maxHeight: finalHeight + "px",
-                overflowY: "auto",
-              }}
-            >
-              {items.map((item, i) => (
-                <CartItem key={item.id} item={item} />
-              ))}
-            </div>
-          </S.Items>
+          {items.length !== 0 && (
+            <S.Items>
+              <div
+                style={{
+                  minHeight: isMobile ? "auto" : 362 + "px",
+                  maxHeight: finalHeight + "px",
+                  overflowY: "auto",
+                }}
+              >
+                {items.map((item, i) => (
+                  <CartItem key={item.id} item={item} />
+                ))}
+              </div>
+            </S.Items>
+          )}
 
           {items.length !== 0 && (
             <S.Footer>
