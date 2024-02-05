@@ -6,7 +6,7 @@ import { appStore } from "~stores/appStore";
 const translationVersion = process.env.REACT_APP_TRANSLATIONS_VERSION;
 
 const getLoadPath = () => {
-  // todo: find a way to automatically generate an unique hash on each deployment
+  // todo: find a way to automatically generate a unique hash on each deployment
   const prefix = translationVersion ? `?version=${translationVersion}` : "";
   return `/locales/{{lng}}/{{ns}}.json${prefix}`;
 };
