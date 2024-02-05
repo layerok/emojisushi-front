@@ -8,7 +8,7 @@ type TCartButton = {
 
 export const CartButton = ({ count = 0, total = "0 ₴" }: TCartButton) => {
   return (
-    <ButtonFilled padding={"0 24px"} minWidth={"170px"}>
+    <ButtonFilled padding={"0 24px"} minWidth={"170px"} width="auto">
       <FlexBox alignItems={"center"}>
         <S.Icon>
           <SvgIcon color={"black"} width={"25px"} height={"25px"}>

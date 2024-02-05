@@ -26,7 +26,7 @@ const Content = styled.div`
 `;
 
 const TinyCartButtonOverlay = styled.div({
-  background: "rgba(0, 0, 0, 0.7)",
+  background: "rgba(0, 0, 0, 0.4)",
   padding: 6,
   borderRadius: 6,
 });
