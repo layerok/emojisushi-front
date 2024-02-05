@@ -256,18 +256,18 @@ export const CartModal = NiceModal.create(() => {
           )}
 
           {items.length !== 0 && (
-            <S.Items>
-              <div
-                style={{
-                  minHeight: isMobile ? "auto" : 362 + "px",
-                  maxHeight: finalHeight + "px",
-                  overflowY: "auto",
-                }}
-              >
-                {items.map((item, i) => (
-                  <CartItem key={item.id} item={item} />
-                ))}
-              </div>
+            <S.Items
+              style={{
+                minHeight: isMobile ? "auto" : 362 + "px",
+                maxHeight: isMobile
+                  ? "calc(100vh - 250px)"
+                  : finalHeight + "px",
+                overflowY: "auto",
+              }}
+            >
+              {items.map((item, i) => (
+                <CartItem key={item.id} item={item} />
+              ))}
             </S.Items>
           )}
 

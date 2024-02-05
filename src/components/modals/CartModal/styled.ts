@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   width: 420px;
   background: #1c1c1c;
   box-shadow: 0 4px 15px rgba(28, 28, 28, 0.3);
-  border-radius: 15px 0 0 15px;
+  border-radius: 0 0 0 15px;
 
   ${media.greaterThan("tablet")`
     min-height: 500px;
@@ -19,7 +19,11 @@ const Wrapper = styled.div`
     height: 100%;
   `}
 
-  padding: 68px 20px 31px 20px;
+  ${media.lessThan("tablet")`
+    padding: 72px 20px 31px 20px;
+  `}
+
+  padding: 31px 20px 31px 20px;
   flex-direction: column;
   justify-content: space-between;
   display: flex;
@@ -35,7 +39,7 @@ const Title = styled.div`
 const CloseIcon = styled.div`
   position: absolute;
   left: -45px;
-  top: 33px;
+  top: 31px;
   cursor: pointer;
 
   ${media.lessThan("tablet")`
@@ -69,26 +73,18 @@ const ItemImg = styled.div<{
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
+  width: 64px;
   height: 64px;
   background-image: url("${prop("src")}");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   flex-shrink: 0;
-
-  ${media.lessThan("tablet")`
-    width: 64px;
-  `}
 `;
 
 const ItemInfo = styled.div`
   margin-left: 10px;
   width: 100%;
-  padding-right: 20px;
-  ${media.lessThan("tablet")`
-    padding-right: 0;
-  `}
 `;
 
 const ItemName = styled.div`
@@ -111,21 +107,12 @@ const ItemCounter = styled.div`
 
 const ItemRemoveIcon = styled.div`
   position: absolute;
-  right: 20px;
+  right: 0;
   top: 0;
-  ${media.lessThan("tablet")`
-     right: 0px;
-  `}
 `;
 
 const Footer = styled.div`
   margin-top: 30px;
-  padding-right: 20px;
-  padding-left: 20px;
-  ${media.lessThan("tablet")`
-     padding-right: 0;
-     padding-left: 0;
-  `}
 `;
 
 const Sum = styled.div`
