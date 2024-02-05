@@ -69,12 +69,14 @@ export const Layout = observer(
         <Footer />
         {!isCartLoading && (
           <Sticky top={"30px"} right={"30px"} show={showStickyCart}>
-            <TinyCartButton
-              onClick={() => {
-                NiceModal.show(ModalIDEnum.CartModal);
-              }}
-              price={cart.total}
-            />
+            <S.TinyCartButtonOverlay>
+              <TinyCartButton
+                onClick={() => {
+                  NiceModal.show(ModalIDEnum.CartModal);
+                }}
+                price={cart.total}
+              />
+            </S.TinyCartButtonOverlay>
           </Sticky>
         )}
         <LocationsModal id={ModalIDEnum.LocationModal} />

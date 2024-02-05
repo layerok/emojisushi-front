@@ -25,4 +25,10 @@ const Content = styled.div`
   `}
 `;
 
-export { Layout, Main, Content };
+const TinyCartButtonOverlay = styled.div({
+  background: "rgba(0, 0, 0, 0.7)",
+  padding: 6,
+  borderRadius: 6,
+});
+
+export { Layout, Main, Content, TinyCartButtonOverlay };
