@@ -11,7 +11,7 @@ type TLanguateSelectorProps = {
 
 export const LanguageSelector = observer(
   ({ loading = false }: TLanguateSelectorProps) => {
-    const [langs] = useState(["uk", "ru"]);
+    const [langs] = useState(["uk", "en"]);
 
     if (loading) {
       return <Skeleton borderRadius={10} height={40} width={75} />;

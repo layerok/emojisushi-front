@@ -3,10 +3,12 @@ import { initReactI18next } from "react-i18next";
 import HttpBackend, { HttpBackendOptions } from "i18next-http-backend";
 import { appStore } from "~stores/appStore";
 
-const getVersion = () => {
+const translationVersion = process.env.REACT_APP_TRANSLATIONS_VERSION;
+
+const getLoadPath = () => {
   // todo: find a way to automatically generate an unique hash on each deployment
-  const version = process.env.REACT_APP_TRANSLATIONS_VERSION;
-  return version ? `?version=${version}` : "";
+  const prefix = translationVersion ? `?version=${translationVersion}` : "";
+  return `/locales/{{lng}}/{{ns}}.json${prefix}`;
 };
 
 i18n
@@ -20,7 +22,7 @@ i18n
     },
     debug: process.env.NODE_ENV === "development",
     backend: {
-      loadPath: "/locales/{{lng}}/{{ns}}.json" + getVersion(),
+      loadPath: getLoadPath(),
     } as HttpBackendOptions,
   });
 

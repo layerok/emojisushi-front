@@ -65,7 +65,6 @@ export const CheckoutFormChernomorsk = observer(
           () => t("checkout.form.errors.ua_phone"),
           isValidUkrainianPhone
         ),
-      email: Yup.string().email("Invalid email"),
     });
 
     const wayforpayFormContainer = useRef(null);
@@ -73,7 +72,6 @@ export const CheckoutFormChernomorsk = observer(
     const formik = useFormik({
       initialValues: {
         name: user ? getUserFullName(user) : "",
-        email: user ? user.email : "",
         phone: user ? user.phone || "" : "",
         address: "",
         address_id: null,
@@ -90,7 +88,6 @@ export const CheckoutFormChernomorsk = observer(
         formik.setErrors({});
         const {
           phone,
-          email,
           name,
           address_id,
           address,
@@ -112,7 +109,7 @@ export const CheckoutFormChernomorsk = observer(
             phone,
             firstname,
             lastname,
-            email,
+            email: user ? user.email : "",
             spot_id: appStore.city.spots[0].id,
 
             address: resultant_address,
@@ -282,16 +279,6 @@ export const CheckoutFormChernomorsk = observer(
               placeholder={t("common.first_name")}
               onChange={formik.handleChange}
               value={formik.values.name}
-            />
-          </S.Control>
-
-          <S.Control>
-            <Input
-              loading={loading}
-              name={"email"}
-              placeholder={t("common.email")}
-              onChange={formik.handleChange}
-              value={formik.values.email}
             />
           </S.Control>
 
