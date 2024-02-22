@@ -14,7 +14,7 @@ import {
   SushiSvg,
 } from "~components";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useBreakpoint2 } from "~common/hooks";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -29,27 +29,58 @@ import { arrImmutableDeleteAt, arrImmutableReplaceAt } from "~utils/arr.utils";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { ROUTES } from "~routes";
 
-const CartItem = ({
-  item,
-  onDelete = () => {},
-}: {
-  item: CartProduct;
-  onDelete?: (item: CartProduct) => void;
-}) => {
-  const key = useRef(0);
+// todo: clear outdated products from the card. You can do it on the frontend or on the backend
+const CartItem = (props: { item: CartProduct }) => {
+  const { item } = props;
+  const [key, setKey] = useState(0);
   const newPrice = item.product.getNewPrice(item.variant)?.price_formatted;
   const oldPrice = item.product.getOldPrice(item.variant)?.price_formatted;
   const nameWithMods = item.nameWithMods;
   const [open, setOpen] = useState(false);
 
+  const removeCartProduct = useMutation({
+    mutationFn: (fnProps: { id: number }) => {
+      const { id } = fnProps;
+      return cartApi.removeCartProduct(id);
+    },
+    onMutate: async ({ id }) => {
+      await queryClient.cancelQueries(cartQuery);
+
+      queryClient.setQueryData(cartQuery.queryKey, (old: IGetCartRes) => {
+        const cartProduct = old.data.find(
+          (cartProduct) => cartProduct.id == id
+        );
+
+        if (cartProduct) {
+          const index = old.data.indexOf(cartProduct);
+
+          const optimisticCartProducts = arrImmutableDeleteAt(old.data, index);
+          const optimisticTotal = optimisticCartProducts.reduce(
+            (acc, cartProduct: ICartProduct) => {
+              return acc + (cartProduct.quantity * cartProduct.price.UAH) / 100;
+            },
+            0
+          );
+
+          return {
+            ...old,
+            data: optimisticCartProducts,
+            total: formatUAHPrice(optimisticTotal),
+            totalQuantity: optimisticCartProducts.reduce(
+              (acc, item: ICartProduct) => acc + item.quantity,
+              0
+            ),
+          };
+        }
+
+        return old;
+      });
+    },
+  });
+
   const updateCartProduct = useMutation({
-    mutationFn: ({
-      item,
-      quantity,
-    }: {
-      item: CartProduct;
-      quantity: number;
-    }) => {
+    mutationFn: (fnProps: { item: CartProduct; quantity: number }) => {
+      const { item, quantity } = fnProps;
       return cartApi.addProduct({
         product_id: item.product.id,
         quantity,
@@ -98,30 +129,6 @@ const CartItem = ({
                 0
               ),
             };
-          } else {
-            onDelete(item);
-            const optimisticCartProducts = arrImmutableDeleteAt(
-              old.data,
-              index
-            );
-            const optimisticTotal = optimisticCartProducts.reduce(
-              (acc, cartProduct: ICartProduct) => {
-                return (
-                  acc + (cartProduct.quantity * cartProduct.price.UAH) / 100
-                );
-              },
-              0
-            );
-
-            return {
-              ...old,
-              data: optimisticCartProducts,
-              total: formatUAHPrice(optimisticTotal),
-              totalQuantity: optimisticCartProducts.reduce(
-                (acc, item: ICartProduct) => acc + item.quantity,
-                0
-              ),
-            };
           }
         }
 
@@ -139,7 +146,7 @@ const CartItem = ({
 
   const changeCartItemQuantity = async (item: CartProduct, quantity) => {
     if (item.quantity + quantity <= 0) {
-      key.current++;
+      setKey((prev) => prev + 1);
       setOpen(true);
     } else {
       updateCartProduct.mutate({
@@ -156,12 +163,11 @@ const CartItem = ({
       <S.ItemRemoveIcon>
         <ConfirmActionPopover
           // Hack: I'am changing key to remount component to reset 'initiallyOpen' state
-          key={key.current}
+          key={key}
           initiallyOpen={open}
           onConfirm={({ close }) => {
-            updateCartProduct.mutate({
-              item: item,
-              quantity: -item.quantity,
+            removeCartProduct.mutate({
+              id: item.id,
             });
             setOpen(false);
             close();
@@ -211,7 +217,6 @@ export const CartModal = NiceModal.create(() => {
   const { data } = cart;
 
   const { isMobile } = useBreakpoint2();
-  console.log("isMObile", isMobile);
 
   const { t } = useTranslation();
 
