@@ -1,7 +1,8 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import i18n from "~i18n";
 import { getFromLocalStorage } from "~utils/ls.utils";
+import { logApi } from "~api/log/log.api";
 // import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 const client = axios.create({
@@ -13,6 +14,23 @@ type IParams = {
   lang?: string;
   session_id?: string;
 };
+
+client.interceptors.response.use(
+  (res) => res,
+  function (error: AxiosError) {
+    // 406 - Token is expired
+    const ignoreStatuses = [406];
+    if (!ignoreStatuses.includes(error.response.status)) {
+      logApi.log({
+        type: "axios error",
+        message: error.message,
+        response: error.response,
+      });
+    }
+
+    return Promise.reject(error);
+  }
+);
 
 client.interceptors.request.use((config = {}) => {
   // send session_id from cookies as parameter for each api request
