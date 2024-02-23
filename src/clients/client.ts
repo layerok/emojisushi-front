@@ -20,13 +20,20 @@ client.interceptors.response.use(
   function (error: AxiosError) {
     // 406 - Token is expired
     const ignoreStatuses = [406];
-    if (!ignoreStatuses.includes(error.response.status)) {
-      logApi.log({
-        type: "axios error",
-        message: error.message,
-        response: error.response,
-      });
+    const ignoredMessages = ["Network Error"];
+
+    if (
+      ignoreStatuses.includes(error.response.status) ||
+      ignoredMessages.includes(error.message)
+    ) {
+      return Promise.reject(error);
     }
+
+    logApi.log({
+      type: "axios error",
+      message: error.message,
+      response: error.response,
+    });
 
     return Promise.reject(error);
   }
