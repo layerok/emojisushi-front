@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { NestedPopover } from "../NestedPopover";
+import { Popover } from "../Popover";
 import { ButtonFilled, ButtonOutline } from "../../buttons/Button";
 import { FlexBox } from "../../FlexBox";
 import { useTranslation } from "react-i18next";
@@ -13,7 +13,7 @@ export const ConfirmActionPopover = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <NestedPopover
+    <Popover
       open={initiallyOpen}
       render={({ close }) => (
         <S.Wrapper>
@@ -33,6 +33,6 @@ export const ConfirmActionPopover = ({
       )}
     >
       {children}
-    </NestedPopover>
+    </Popover>
   );
 };
