@@ -15,22 +15,14 @@ function addCartProduct(data: {
   product_id: number;
   variant_id?: number;
   quantity: number;
-}) {
-  return client.post<{
-    data: ICartProduct[];
-    total: string;
-    totalQuantity: number;
-  }>("cart/add", data, {
+}): Promise<IGetCartRes> {
+  return client.post("cart/add", data, {
     skipAuthRefresh: true,
   } as AxiosAuthRefreshRequestConfig);
 }
 
-function removeCartProduct(cart_product_id) {
-  return client.post<{
-    data: ICartProduct[];
-    total: string;
-    totalQuantity: number;
-  }>(
+function removeCartProduct(cart_product_id): Promise<IGetCartRes> {
+  return client.post(
     "cart/remove",
     {
       cart_product_id,
@@ -42,11 +34,7 @@ function removeCartProduct(cart_product_id) {
 }
 
 function clearCart(data = {}) {
-  return client.post<{
-    data: ICartProduct[];
-    total: string;
-    totalQuantity: number;
-  }>("cart/clear", data, {
+  return client.post<IGetCartRes>("cart/clear", data, {
     skipAuthRefresh: true,
   } as AxiosAuthRefreshRequestConfig);
 }

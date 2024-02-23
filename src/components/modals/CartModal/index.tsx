@@ -19,15 +19,12 @@ import { useBreakpoint2 } from "~common/hooks";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CartProduct } from "~models";
-import { ICartProduct, IGetCartRes } from "~api/types";
-import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { cartApi } from "~api";
-import { formatUAHPrice } from "~utils/price.utils";
-import { arrImmutableDeleteAt, arrImmutableReplaceAt } from "~utils/arr.utils";
+import { useQuery } from "@tanstack/react-query";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { ROUTES } from "~routes";
+import { useRemoveCartProduct } from "~hooks/use-remove-cart-product";
+import { useUpdateCartProduct } from "~hooks/use-update-cart-product";
 
 // todo: clear outdated products from the card. You can do it on the frontend or on the backend
 const CartItem = (props: { item: CartProduct }) => {
@@ -38,111 +35,8 @@ const CartItem = (props: { item: CartProduct }) => {
   const nameWithMods = item.nameWithMods;
   const [open, setOpen] = useState(false);
 
-  const removeCartProduct = useMutation({
-    mutationFn: (fnProps: { id: number }) => {
-      const { id } = fnProps;
-      return cartApi.removeCartProduct(id);
-    },
-    onMutate: async ({ id }) => {
-      await queryClient.cancelQueries(cartQuery);
-
-      queryClient.setQueryData(cartQuery.queryKey, (old: IGetCartRes) => {
-        const cartProduct = old.data.find(
-          (cartProduct) => cartProduct.id == id
-        );
-
-        if (cartProduct) {
-          const index = old.data.indexOf(cartProduct);
-
-          const optimisticCartProducts = arrImmutableDeleteAt(old.data, index);
-          const optimisticTotal = optimisticCartProducts.reduce(
-            (acc, cartProduct: ICartProduct) => {
-              return acc + (cartProduct.quantity * cartProduct.price.UAH) / 100;
-            },
-            0
-          );
-
-          return {
-            ...old,
-            data: optimisticCartProducts,
-            total: formatUAHPrice(optimisticTotal),
-            totalQuantity: optimisticCartProducts.reduce(
-              (acc, item: ICartProduct) => acc + item.quantity,
-              0
-            ),
-          };
-        }
-
-        return old;
-      });
-    },
-  });
-
-  const updateCartProduct = useMutation({
-    mutationFn: (fnProps: { item: CartProduct; quantity: number }) => {
-      const { item, quantity } = fnProps;
-      return cartApi.addProduct({
-        product_id: item.product.id,
-        quantity,
-        variant_id: item?.variant?.id,
-      });
-    },
-    onMutate: async ({ item, quantity }) => {
-      await queryClient.cancelQueries(cartQuery);
-
-      const previousCart = queryClient.getQueryData(cartQuery.queryKey);
-
-      queryClient.setQueryData(cartQuery.queryKey, (old: IGetCartRes) => {
-        const cartProduct = old.data.find(
-          (cartProduct) => cartProduct.product.id === item.product.id
-        );
-
-        if (cartProduct) {
-          const index = old.data.indexOf(cartProduct);
-          const optimisticQuantity = cartProduct.quantity + quantity;
-
-          if (optimisticQuantity > 0) {
-            const optimisticCartProduct = {
-              ...cartProduct,
-              quantity: cartProduct.quantity + quantity,
-            };
-            const optimisticCartProducts = arrImmutableReplaceAt(
-              old.data,
-              index,
-              optimisticCartProduct
-            );
-            const optimisticTotal = optimisticCartProducts.reduce(
-              (acc, cartProduct: ICartProduct) => {
-                return (
-                  acc + (cartProduct.quantity * cartProduct.price.UAH) / 100
-                );
-              },
-              0
-            );
-
-            return {
-              ...old,
-              data: optimisticCartProducts,
-              total: formatUAHPrice(optimisticTotal),
-              totalQuantity: optimisticCartProducts.reduce(
-                (acc, item: ICartProduct) => acc + item.quantity,
-                0
-              ),
-            };
-          }
-        }
-
-        return old;
-      });
-
-      return {
-        previousCart,
-      };
-    },
-    onError: (err, data, context) => {
-      queryClient.setQueryData(cartQuery.queryKey, context.previousCart);
-    },
-  });
+  const removeCartProduct = useRemoveCartProduct();
+  const updateCartProduct = useUpdateCartProduct();
 
   const changeCartItemQuantity = async (item: CartProduct, quantity) => {
     if (item.quantity + quantity <= 0) {
