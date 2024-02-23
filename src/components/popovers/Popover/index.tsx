@@ -11,8 +11,6 @@ import {
   useId,
   useClick,
   FloatingFocusManager,
-  FloatingNode,
-  useFloatingNodeId,
   Placement,
 } from "@floating-ui/react-dom-interactions";
 
@@ -36,7 +34,6 @@ export const Popover = ({
   open?: boolean;
 }) => {
   const [open, setOpen] = useState(passedOpen);
-  const nodeId = useFloatingNodeId();
 
   const { x, y, reference, floating, strategy, refs, update, context } =
     useFloating({
@@ -63,7 +60,7 @@ export const Popover = ({
   }, [open, update, refs.reference, refs.floating]);
 
   return (
-    <FloatingNode id={nodeId}>
+    <>
       {cloneElement(
         children,
         getReferenceProps({ ref: reference, ...children.props })
@@ -99,6 +96,6 @@ export const Popover = ({
           </div>
         </FloatingFocusManager>
       )}
-    </FloatingNode>
+    </>
   );
 };
