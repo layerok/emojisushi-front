@@ -12,7 +12,7 @@ import {
   useClick,
   FloatingFocusManager,
   Placement,
-} from "@floating-ui/react-dom-interactions";
+} from "@floating-ui/react";
 
 export const Popover = ({
   children,
@@ -35,13 +35,12 @@ export const Popover = ({
 }) => {
   const [open, setOpen] = useState(passedOpen);
 
-  const { x, y, reference, floating, strategy, refs, update, context } =
-    useFloating({
-      open: open,
-      onOpenChange: setOpen,
-      middleware: [offset(passedOffset), flip(), shift()],
-      placement,
-    });
+  const { x, y, strategy, refs, update, context } = useFloating({
+    open: open,
+    onOpenChange: setOpen,
+    middleware: [offset(passedOffset), flip(), shift()],
+    placement,
+  });
 
   const id = useId();
   const labelId = `${id}-label`;
@@ -55,6 +54,7 @@ export const Popover = ({
 
   useEffect(() => {
     if (refs.reference.current && refs.floating.current && open) {
+      // todo: polyfill ResizeObserver
       return autoUpdate(refs.reference.current, refs.floating.current, update);
     }
   }, [open, update, refs.reference, refs.floating]);
@@ -63,7 +63,7 @@ export const Popover = ({
     <>
       {cloneElement(
         children,
-        getReferenceProps({ ref: reference, ...children.props })
+        getReferenceProps({ ref: refs.setReference, ...children.props })
       )}
       {open && !disable && (
         <FloatingFocusManager
@@ -75,7 +75,7 @@ export const Popover = ({
           <div
             {...getFloatingProps({
               className: "Popover",
-              ref: floating,
+              ref: refs.setFloating,
               style: {
                 position: strategy,
                 top: y ?? "",

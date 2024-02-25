@@ -7,7 +7,7 @@ import {
   useRole,
   FloatingPortal,
   FloatingOverlay,
-} from "@floating-ui/react-dom-interactions";
+} from "@floating-ui/react";
 
 export type IBaseModalProps = {
   open?: boolean;
@@ -40,7 +40,7 @@ export const BaseModal = ({
     baseSetOpen(state);
   };
 
-  const { floating, context, refs } = useFloating({
+  const { context, refs } = useFloating({
     open,
     onOpenChange: setOpen,
   });
@@ -63,7 +63,7 @@ export const BaseModal = ({
         <FloatingOverlay lockScroll style={{ ...overlayStyles }}>
           <div
             {...getFloatingProps({
-              ref: floating,
+              ref: refs.setFloating,
               "aria-labelledby": labelId,
               "aria-describedby": descriptionId,
             })}

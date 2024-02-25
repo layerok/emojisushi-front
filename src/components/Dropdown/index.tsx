@@ -11,7 +11,7 @@ import {
   useClick,
   useDismiss,
   useRole,
-} from "@floating-ui/react-dom-interactions";
+} from "@floating-ui/react";
 import {
   forwardRef,
   HTMLProps,
@@ -96,8 +96,6 @@ export const Dropdown = ({
   const {
     x,
     y,
-    reference,
-    floating,
     strategy,
     context,
     refs,
@@ -114,6 +112,7 @@ export const Dropdown = ({
 
   useEffect(() => {
     if (open && refs.reference.current && refs.floating.current) {
+      // todo: polyfill ResizeObserver
       return autoUpdate(refs.reference.current, refs.floating.current, update);
     }
   }, [open, update, refs.reference, refs.floating]);
@@ -164,7 +163,7 @@ export const Dropdown = ({
           width={width}
           open={open}
           placement={resultantPlacement}
-          ref={reference}
+          ref={refs.setReference}
           id={buttonId}
           {...getReferenceProps()}
         >
@@ -189,7 +188,7 @@ export const Dropdown = ({
                 width={width}
                 open={open}
                 placement={resultantPlacement}
-                ref={floating}
+                ref={refs.setFloating}
                 style={{
                   position: strategy,
                   left: x ?? 0,
