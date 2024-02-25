@@ -14,7 +14,10 @@ export const DefaultErrorBoundary = () => {
       if (process.env.NODE_ENV === "production") {
         logApi.log({
           location: location,
-          onLine: navigator.onLine,
+          navigator: {
+            onLine: navigator.onLine,
+            userAgent: window.navigator.userAgent,
+          },
           error: error.message,
           stack: error.stack,
         });
