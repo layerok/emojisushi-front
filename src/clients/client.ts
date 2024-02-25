@@ -19,7 +19,8 @@ client.interceptors.response.use(
   (res) => res,
   function (error: AxiosError) {
     // 406 - Token is expired
-    const ignoreStatuses = [406];
+    // 422 - Validation exception
+    const ignoreStatuses = [406, 422];
     const ignoredMessages = ["Network Error"];
 
     if (
