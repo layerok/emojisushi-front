@@ -19,12 +19,11 @@ jobs:
 
       - name: Install dependencies
         run: yarn
-        env:
-          CI: false
 
       - name: Build dependencies
         run: yarn run build
         env:
+          CI: false
           REACT_APP_VERSION: 1.0.0
           REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL }}
           REACT_APP_TRANSLATIONS_VERSION: ${{ github.run_id }}
