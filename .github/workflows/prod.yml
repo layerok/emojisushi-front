@@ -4,28 +4,48 @@ on:
 
 jobs:
   build:
-    environment: prod
     name: Build
+    environment: prod
     env:
       CI: false
-      REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL }}
-      REACT_APP_TRANSLATIONS_VERSION: ${{ github.run_id }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@main
+
+      - name: Get next version
+        uses: reecetech/version-increment@2023.9.3
+        id: version
+        with:
+          scheme: calver
+
       - name: Install dependencies
         run: yarn
+
       - name: Build dependencies
         run: yarn run build
+        env:
+          REACT_APP_VERSION: ${{ steps.version.outputs.version }}
+          REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL }}
+          REACT_APP_TRANSLATIONS_VERSION: ${{ github.run_id }}
+
+      - name: Release version
+        uses: softprops/action-gh-release@v1
+#        if: ${{ github.ref_name == github.event.repository.default_branch }}
+        with:
+          draft: false
+          prerelease: false
+          tag_name: "${{ steps.version-increment.outputs.VERSION }}"
+
       - name: Archive production artifact
         uses: actions/upload-artifact@main
         with:
           name: build
           path: build
+
   deploy:
-    environment: prod
     name: Deploy
+    environment: prod
     needs: build
     runs-on: ubuntu-latest
     steps:
