@@ -35,13 +35,13 @@ jobs:
           name: build
           path: build
 
-      - name: Release version
-        uses: softprops/action-gh-release@v1
+#      - name: Release version
+#        uses: softprops/action-gh-release@v1
 #        if: ${{ github.ref_name == github.event.repository.default_branch }}
-        with:
-          draft: false
-          prerelease: false
-          tag_name: "${{ steps.version.outputs.VERSION }}"
+#        with:
+#          draft: false
+#          prerelease: false
+#          tag_name: "${{ steps.version.outputs.VERSION }}"
 
   deploy:
     name: Deploy
