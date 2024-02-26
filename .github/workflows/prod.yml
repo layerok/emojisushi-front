@@ -35,7 +35,7 @@ jobs:
         with:
           draft: false
           prerelease: false
-          tag_name: "${{ steps.version-increment.outputs.VERSION }}"
+          tag_name: "${{ steps.version.outputs.VERSION }}"
 
       - name: Archive production artifact
         uses: actions/upload-artifact@main
