@@ -41,7 +41,8 @@ export const App = () => {
         })
         .then((res) => {
           if (appConfig.version !== res.version) {
-            // versions doesn't match, user has old version of application
+            // the server version and the local version don't match,
+            // it means that user uses the old version of the application
             // set a flag and reload the page when user navigates to the different url
             window.require_reload = true;
           }
