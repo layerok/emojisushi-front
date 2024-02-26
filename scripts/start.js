@@ -83,7 +83,7 @@ checkBrowsers(paths.appPath, isInteractive)
     console.log("Creating version.json file...");
 
     fs_simple.writeFileSync(`${paths.appPublic}/version.json`, JSON.stringify({
-      version: process.env.REACT_APP_VERSION
+      version: process.env.REACT_APP_VERSION || '1.0.0'
     }))
 
     const config = configFactory("development");

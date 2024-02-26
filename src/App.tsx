@@ -16,37 +16,25 @@ import i18n from "./i18n";
 import { router } from "~router";
 import { ModalIDEnum } from "~common/modal.constants";
 import { AppUpdateModal } from "~components/modals/AppUpdateModal";
-import { appVersionQuery } from "~queries/app-version.query";
 import { appConfig } from "~config/app";
+import { checkAppVersion } from "~checkAppVersion";
 
 console.log("app version", appConfig.version);
 
 export const App = () => {
   useEffect(() => {
     return router.subscribe((state) => {
-      if (window.require_reload) {
-        const { location } = state;
-        const { search, pathname } = location;
-        window.location.href = pathname + search;
-      }
-
-      if (queryClient.getQueryData(appVersionQuery.queryKey)) {
+      if (state.navigation.location) {
+        // don't reload during pending navigation
         return;
       }
-
-      queryClient
-        .fetchQuery({
-          ...appVersionQuery,
-          staleTime: 5 * 60 * 1000, // check every 5 minutes
-        })
-        .then((res) => {
-          if (appConfig.version !== res.version) {
-            // the server version and the local version don't match,
-            // it means that user uses the old version of the application
-            // set a flag and reload the page when user navigates to the different url
-            window.require_reload = true;
-          }
-        });
+      if (window.require_reload) {
+        NiceModal.show(ModalIDEnum.OutdatedAppWarning);
+        //window.location.href = state.location.pathname + state.location.search;
+      }
+      checkAppVersion(() => {
+        window.require_reload = true;
+      });
     });
   }, []);
 
