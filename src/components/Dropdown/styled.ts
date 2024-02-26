@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 import { ifProp, prop } from "styled-tools";
+import { CSSProperties } from "react";
+import { Placement } from "@floating-ui/react";
 
 const Dropdown = styled.div`
   font-weight: 400;
@@ -10,7 +12,11 @@ const Dropdown = styled.div`
   cursor: pointer;
 `;
 
-const Reference = styled.div`
+const Reference = styled.div<{
+  width: CSSProperties["width"];
+  open: boolean;
+  placement: Placement;
+}>`
   position: relative;
   display: flex;
   width: ${prop("width")};
@@ -27,7 +33,11 @@ const Reference = styled.div`
   color: white;
 `;
 
-const Content = styled.div`
+const Content = styled.div<{
+  width: CSSProperties["width"];
+  open: boolean;
+  placement: Placement;
+}>`
   background-color: #1c1c1c;
   width: ${prop("width")};
   ${ifProp(

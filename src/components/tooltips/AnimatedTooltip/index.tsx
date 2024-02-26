@@ -10,7 +10,7 @@ import {
   useRole,
   useDismiss,
   Placement,
-} from "@floating-ui/react-dom-interactions";
+} from "@floating-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const AnimatedTooltip = ({
@@ -24,7 +24,7 @@ export const AnimatedTooltip = ({
 }) => {
   const [open, setOpen] = useState(false);
 
-  const { x, y, reference, floating, strategy, context } = useFloating({
+  const { x, y, refs, strategy, context } = useFloating({
     placement,
     open,
     onOpenChange: setOpen,
@@ -42,7 +42,7 @@ export const AnimatedTooltip = ({
     <>
       {cloneElement(
         children as ReactElement,
-        getReferenceProps({ ref: reference, ...children.props })
+        getReferenceProps({ ref: refs.setReference, ...children.props })
       )}
       <AnimatePresence>
         {open && (
@@ -52,7 +52,7 @@ export const AnimatedTooltip = ({
             exit={{ opacity: 0 }}
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
             {...getFloatingProps({
-              ref: floating,
+              ref: refs.setFloating,
               className: "Tooltip",
               style: {
                 zIndex: 2,
