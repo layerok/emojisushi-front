@@ -31,7 +31,6 @@ client.interceptors.response.use(
     }
 
     logApi.log({
-      type: "axios error",
       message: error.message,
       response: error.response,
     });

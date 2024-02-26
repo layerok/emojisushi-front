@@ -6,4 +6,5 @@ export const appConfig = {
     [10, 0],
     [21, 45],
   ] as WorkingHours,
+  version: process.env.REACT_APP_VERSION,
 };

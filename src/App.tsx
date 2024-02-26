@@ -17,8 +17,9 @@ import { router } from "~router";
 import { ModalIDEnum } from "~common/modal.constants";
 import { AppUpdateModal } from "~components/modals/AppUpdateModal";
 import { appVersionQuery } from "~queries/app-version.query";
+import { appConfig } from "~config/app";
 
-console.log("app version", process.env.REACT_APP_VERSION);
+console.log("app version", appConfig.version);
 
 export const App = () => {
   useEffect(() => {
@@ -39,7 +40,7 @@ export const App = () => {
           staleTime: 5 * 60 * 1000, // check every 5 minutes
         })
         .then((res) => {
-          if (process.env.REACT_APP_VERSION !== res.version) {
+          if (appConfig.version !== res.version) {
             // versions doesn't match, user has old version of application
             // set a flag and reload the page when user navigates to the different url
             window.require_reload = true;
