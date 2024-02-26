@@ -1,103 +1,18 @@
-import { QueryOptions } from "@tanstack/react-query";
 import { Trans } from "react-i18next";
-import {
-  createBrowserRouter,
-  Navigate,
-  Outlet,
-  useLoaderData,
-  useSearchParams,
-} from "react-router-dom";
-import { accessApi } from "~api";
-import { ICity, IGetCategoriesRes } from "~api/types";
+import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
-import { categoriesQuery } from "~queries";
-import { queryClient } from "~query-client";
-import { appStore, useAppStore } from "~stores/appStore";
 import { ROUTES } from "~routes";
-import { CitySlug, LOCATION_CONFIRMED_SEARCH_PARAM } from "~common/constants";
 import { lazy } from "~lazy";
-
-const RootIndexElement = () => {
-  const loaderData = useLoaderData() as Awaited<
-    ReturnType<typeof rootIndexLoader>
-  >;
-  return (
-    <Navigate
-      to={ROUTES.CATEGORY.SHOW.buildPath({
-        categorySlug: loaderData.categories.data[0].slug,
-      })}
-    />
-  );
-};
-
-const rootIndexLoader = async () => {
-  const _categoriesQuery = categoriesQuery();
-
-  const categories =
-    queryClient.getQueryData<IGetCategoriesRes>(_categoriesQuery.queryKey) ??
-    (await queryClient.fetchQuery<IGetCategoriesRes>(_categoriesQuery));
-
-  return {
-    categories,
-  };
-};
-
-const RootElement = () => {
-  const [searchParams] = useSearchParams();
-  const appStore = useAppStore();
-
-  if (searchParams.has(LOCATION_CONFIRMED_SEARCH_PARAM)) {
-    searchParams.delete(LOCATION_CONFIRMED_SEARCH_PARAM);
-    appStore.setUserConfirmedLocation(true);
-    return (
-      <Navigate
-        replace
-        to={{
-          search: searchParams.toString(),
-        }}
-      />
-    );
-  }
-  return <Outlet />;
-};
-
-const rootLoader = async () => {
-  const allowed = [CitySlug.Odesa, CitySlug.Chornomorsk] as string[];
-  const domains = window.location.hostname.split(".");
-  const query: QueryOptions<ICity> = {
-    queryKey: [
-      "main-city",
-      allowed.includes(domains[0]) ? domains[0] : allowed[0],
-    ],
-    queryFn: () =>
-      accessApi
-        .getCity({
-          slug_or_id: allowed.includes(domains[0]) ? domains[0] : allowed[0],
-        })
-        .then((res) => res.data),
-  };
-  const city =
-    queryClient.getQueryData<ICity>(query.queryKey) ??
-    (await queryClient.fetchQuery(query));
-  appStore.setCity(city);
-
-  return {
-    city,
-  };
-};
 
 const routes = [
   {
     path: ROUTES.INDEX.path,
-    ErrorBoundary: DefaultErrorBoundary,
-    loader: rootLoader,
     id: "root",
-    element: <RootElement />,
+    lazy: lazy(() => import("src/pages/RootPage/RootPage")),
     children: [
       {
         index: true,
-        element: <RootIndexElement />,
-        loader: rootIndexLoader,
+        lazy: lazy(() => import("~pages/RootIndexPage/RootIndexPage")),
       },
       {
         id: "layout",
