@@ -17,6 +17,9 @@ import { router } from "~router";
 import { ModalIDEnum } from "~common/modal.constants";
 import { AppUpdateModal } from "~components/modals/AppUpdateModal";
 import { appVersionQuery } from "~queries/app-version.query";
+import * as process from "process";
+
+console.log("app version", process.env.REACT_APP_VERSION);
 
 export const App = () => {
   useEffect(() => {
