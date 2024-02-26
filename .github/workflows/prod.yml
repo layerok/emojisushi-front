@@ -51,7 +51,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@main
       - name: Download artifact
-        uses: actions/download-artifact@main
+        uses: actions/download-artifact@3
         with:
           name: build
           path: build
