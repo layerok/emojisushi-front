@@ -93,7 +93,7 @@ export const Banner = () => {
       <AnimatePresence initial={false} custom={direction}>
         <S.Slide
           key={page}
-          imageSrc={activeImage.src}
+          $imageSrc={activeImage.src}
           custom={direction}
           variants={variants}
           initial="enter"

@@ -1,12 +1,11 @@
 import styled from "styled-components";
-import { prop } from "styled-tools";
 import media from "src/common/custom-media";
 import { motion } from "framer-motion";
 
 const Slide = styled(motion.div)<{
-  imageSrc: string;
+  $imageSrc: string;
 }>`
-  background-image: url("${prop("imageSrc")}");
+  background-image: url("${(props) => props.$imageSrc}");
   background-size: cover;
   background-position: center;
   inset: 0;
