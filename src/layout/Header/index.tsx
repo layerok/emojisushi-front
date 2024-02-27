@@ -90,13 +90,15 @@ export const Header = ({
             <LanguageSelector loading={loading} />
           </S.LanguageSelectorContainer>
 
-          <S.CartBtn
-            onClick={() => {
-              NiceModal.show(ModalIDEnum.CartModal);
-            }}
-          >
+          <S.CartBtn>
             <SkeletonWrap borderRadius={10} loading={loading}>
-              <CartButton count={cart?.totalQuantity} total={cart?.total} />
+              <CartButton
+                onClick={() => {
+                  NiceModal.show(ModalIDEnum.CartModal);
+                }}
+                count={cart?.totalQuantity}
+                total={cart?.total}
+              />
             </SkeletonWrap>
           </S.CartBtn>
 
