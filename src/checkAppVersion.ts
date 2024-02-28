@@ -6,7 +6,7 @@ export const APP_VERSION_STORAGE_KEY = "app_version";
 
 const DEFAULT_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
-export const checkAppVersion = async (
+export const checkAppVersionAsync = async (
   onMismatch: (client: string, server: string) => void,
   options: {
     interval?: number;
@@ -14,26 +14,42 @@ export const checkAppVersion = async (
 ) => {
   const { interval = DEFAULT_INTERVAL } = options;
 
-  const lastTimeChecked = localStorage.getItem(
-    LAST_TIME_VERSION_CHECKED_STORAGE_KEY
-  );
+  persistentThrottle(
+    async () => {
+      const server = await getAppVersion();
 
-  if (lastTimeChecked && +lastTimeChecked + interval > Date.now()) {
+      const clientVersion = localStorage.getItem(APP_VERSION_STORAGE_KEY);
+
+      if (clientVersion && clientVersion !== server.version) {
+        // the server version and the client version don't match,
+        // it means that a user uses the old version of the application
+        onMismatch?.(clientVersion, server.version);
+      }
+
+      localStorage.setItem(APP_VERSION_STORAGE_KEY, server.version);
+    },
+    {
+      key: LAST_TIME_VERSION_CHECKED_STORAGE_KEY,
+      interval,
+    }
+  );
+};
+
+const persistentThrottle = (
+  callback: () => void,
+  options: {
+    key: string;
+    interval: number;
+  }
+) => {
+  const { key, interval } = options;
+  const lastTimeCallbackFired = localStorage.getItem(key);
+
+  if (lastTimeCallbackFired && +lastTimeCallbackFired + interval > Date.now()) {
     return;
   }
 
-  const server = await getAppVersion();
+  callback();
 
-  const clientVersion = localStorage.getItem(APP_VERSION_STORAGE_KEY);
-
-  if (clientVersion && clientVersion !== server.version) {
-    // the server version and the client version don't match,
-    // it means that a user uses the old version of the application
-    onMismatch?.(clientVersion, server.version);
-  }
-
-  console.log("server", server);
-
-  localStorage.setItem(LAST_TIME_VERSION_CHECKED_STORAGE_KEY, Date.now() + "");
-  localStorage.setItem(APP_VERSION_STORAGE_KEY, server.version);
+  localStorage.setItem(key, Date.now() + "");
 };

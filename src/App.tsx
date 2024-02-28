@@ -8,7 +8,7 @@ import { SkeletonTheme } from "react-loading-skeleton";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { queryClient } from "~query-client";
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { Loader } from "~components";
 import NiceModal from "@ebay/nice-modal-react";
 import { I18nextProvider } from "react-i18next";
@@ -17,45 +17,31 @@ import { router } from "~router";
 import { ModalIDEnum } from "~common/modal.constants";
 import { AppUpdateModal } from "~components/modals/AppUpdateModal";
 import { appConfig } from "~config/app";
-import { checkAppVersion } from "~checkAppVersion";
+import { AppVersionChecker } from "~components/AppVersionChecker";
 
 console.log("app version", appConfig.version);
 
 export const App = () => {
-  useEffect(() => {
-    return router.subscribe((state) => {
-      if (state.navigation.location) {
-        // don't reload during pending navigation
-        return;
-      }
-      if (window.require_reload) {
-        NiceModal.show(ModalIDEnum.OutdatedAppWarning);
-        //window.location.href = state.location.pathname + state.location.search;
-      }
-      checkAppVersion(() => {
-        window.require_reload = true;
-      });
-    });
-  }, []);
-
   return (
-    <Suspense fallback={<Loader loading={true} />}>
-      <I18nextProvider i18n={i18n}>
-        <ThemeProvider theme={theme}>
-          <QueryClientProvider client={queryClient}>
-            <SkeletonTheme baseColor="#1F1F1F" highlightColor="#2F2F2F">
-              <NiceModal.Provider>
-                <RouterProvider
-                  fallbackElement={<Preloader />}
-                  router={router}
-                />
-                <AppUpdateModal id={ModalIDEnum.OutdatedAppWarning} />
-              </NiceModal.Provider>
-            </SkeletonTheme>
-            <ReactQueryDevtools initialIsOpen={false} />
-          </QueryClientProvider>
-        </ThemeProvider>
-      </I18nextProvider>
-    </Suspense>
+    <AppVersionChecker>
+      <Suspense fallback={<Loader loading={true} />}>
+        <I18nextProvider i18n={i18n}>
+          <ThemeProvider theme={theme}>
+            <QueryClientProvider client={queryClient}>
+              <SkeletonTheme baseColor="#1F1F1F" highlightColor="#2F2F2F">
+                <NiceModal.Provider>
+                  <RouterProvider
+                    fallbackElement={<Preloader />}
+                    router={router}
+                  />
+                  <AppUpdateModal id={ModalIDEnum.OutdatedAppWarning} />
+                </NiceModal.Provider>
+              </SkeletonTheme>
+              <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
+          </ThemeProvider>
+        </I18nextProvider>
+      </Suspense>
+    </AppVersionChecker>
   );
 };
