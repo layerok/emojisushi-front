@@ -32,7 +32,7 @@ export const MobMenuModal = NiceModal.create(() => {
   const { data: user } = useUser();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const showModal = useShowModal();
+
   if (isCitiesLoading) {
     return null;
   }
@@ -73,7 +73,7 @@ export const MobMenuModal = NiceModal.create(() => {
             <FlexBox
               alignItems={"center"}
               onClick={() => {
-                showModal(ModalIDEnum.AuthModal);
+                NiceModal.show(ModalIDEnum.AuthModal);
                 modal.remove();
               }}
             >
@@ -87,7 +87,7 @@ export const MobMenuModal = NiceModal.create(() => {
         <S.Item>
           <div
             onClick={() => {
-              showModal(ModalIDEnum.ContactsModal);
+              NiceModal.show(ModalIDEnum.ContactsModal);
               modal.remove();
             }}
           >

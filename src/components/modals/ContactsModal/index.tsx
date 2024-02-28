@@ -11,7 +11,6 @@ export const ContactsModal = NiceModal.create(() => {
   const { t } = useTranslation();
   const appStore = useAppStore();
   const modal = useModal();
-  modal.resolve();
 
   return (
     <Modal

@@ -9,7 +9,7 @@ import { useModal } from "~modal";
 export const TelegramModal = NiceModal.create(() => {
   const { t } = useTranslation();
   const modal = useModal();
-  modal.resolve();
+
   return (
     <NotifyModal
       open={modal.visible}

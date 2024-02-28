@@ -36,6 +36,10 @@ export const useRemoveModal = (): typeof NiceModal.remove => {
 
 export const useModal: typeof useNiceModal = (modal?: any, args?: any) => {
   const niceModal = useNiceModal(modal, args);
+  if (!modal) {
+    // we are most probably rendering our modal
+    niceModal.resolve();
+  }
   const remove = useRemoveModal();
   const show = useShowModal();
   const hide = useHideModal();

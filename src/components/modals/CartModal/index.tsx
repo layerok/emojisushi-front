@@ -107,7 +107,7 @@ const CartItem = (props: { item: CartProduct }) => {
 export const CartModal = NiceModal.create(() => {
   const navigate = useNavigate();
   const modal = useModal();
-  modal.resolve();
+
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
 
   const { data } = cart;
