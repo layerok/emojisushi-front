@@ -21,10 +21,11 @@ import { useTranslation } from "react-i18next";
 import { CartProduct } from "~models";
 import { cartQuery } from "~queries";
 import { useQuery } from "@tanstack/react-query";
-import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import NiceModal from "@ebay/nice-modal-react";
 import { ROUTES } from "~routes";
 import { useRemoveCartProduct } from "~hooks/use-remove-cart-product";
 import { useUpdateCartProduct } from "~hooks/use-update-cart-product";
+import { useModal } from "~modal";
 
 // todo: clear outdated products from the card. You can do it on the frontend or on the backend
 const CartItem = (props: { item: CartProduct }) => {
@@ -106,6 +107,7 @@ const CartItem = (props: { item: CartProduct }) => {
 export const CartModal = NiceModal.create(() => {
   const navigate = useNavigate();
   const modal = useModal();
+  modal.resolve();
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
 
   const { data } = cart;

@@ -1,7 +1,8 @@
 import { SvgIcon, NotifyModal, ButtonFilled } from "~components";
 import { useTranslation } from "react-i18next";
 
-import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import NiceModal from "@ebay/nice-modal-react";
+import { useModal } from "~modal";
 
 const ArrowDownSvg = () => {
   return (
@@ -23,6 +24,8 @@ export const AppUpdateModal = NiceModal.create(() => {
   const { t } = useTranslation();
 
   const modal = useModal();
+
+  modal.resolve();
 
   return (
     <NotifyModal

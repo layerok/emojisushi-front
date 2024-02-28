@@ -31,6 +31,7 @@ import { ModalIDEnum } from "~common/modal.constants";
 import { ROUTES } from "~routes";
 import { isValidUkrainianPhone, getUserFullName } from "~domains/order/utils";
 import { DeliveryMethodCode } from "~domains/order/constants";
+import { useShowModal } from "~modal";
 
 type TCheckoutFormProps = {
   loading?: boolean | undefined;
@@ -62,6 +63,7 @@ export const CheckoutFormOdessa = observer(
     const navigate = useNavigate();
     const location = useLocation();
     const appStore = useAppStore();
+    const showModal = useShowModal();
 
     const TakeAwaySchema = Yup.object().shape({
       phone: Yup.string()
@@ -235,7 +237,7 @@ export const CheckoutFormOdessa = observer(
               />
               <S.Login
                 onClick={() => {
-                  NiceModal.show(ModalIDEnum.AuthModal, {
+                  showModal(ModalIDEnum.AuthModal, {
                     redirect_to: location.pathname,
                   });
                 }}

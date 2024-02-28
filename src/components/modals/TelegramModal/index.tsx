@@ -3,11 +3,13 @@ import { TelegramSvg } from "../../svg/TelegramSvg";
 import { ButtonFilled } from "../../buttons/Button";
 import { NotifyModal } from "../NotifyModal";
 import { useTranslation } from "react-i18next";
-import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import NiceModal from "@ebay/nice-modal-react";
+import { useModal } from "~modal";
 
 export const TelegramModal = NiceModal.create(() => {
   const { t } = useTranslation();
   const modal = useModal();
+  modal.resolve();
   return (
     <NotifyModal
       open={modal.visible}

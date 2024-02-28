@@ -1,8 +1,8 @@
 import { PropsWithChildren, useEffect } from "react";
 import { router } from "~router";
-import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
 import { checkAppVersionAsync } from "~checkAppVersion";
+import { useModal, useShowModal } from "~modal";
 
 const DEFAULT_STALE_TIME = 10_000;
 
@@ -12,6 +12,7 @@ export const AppVersionChecker = ({
 }: PropsWithChildren<{
   staleTime?: number;
 }>) => {
+  const modal = useModal(ModalIDEnum.OutdatedAppWarning);
   useEffect(() => {
     return router.subscribe((state) => {
       if (state.navigation.location) {
@@ -19,7 +20,7 @@ export const AppVersionChecker = ({
         return;
       }
       if (window.require_reload) {
-        NiceModal.show(ModalIDEnum.OutdatedAppWarning);
+        modal.show();
         //window.location.href = state.location.pathname + state.location.search;
       }
       checkAppVersionAsync(

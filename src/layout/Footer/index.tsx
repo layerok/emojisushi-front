@@ -12,6 +12,7 @@ import Skeleton from "react-loading-skeleton";
 import { useAppStore } from "~stores/appStore";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
+import { useShowModal } from "~modal";
 
 type FooterProps = {
   loading?: boolean;
@@ -164,6 +165,7 @@ const Instagram = ({ loading = false }: TInstagramProps) => {
 type ITelegramProps = { loading?: boolean };
 
 const Telegram = ({ loading = false }: ITelegramProps) => {
+  const showModal = useShowModal();
   return (
     <FlexBox
       style={{
@@ -171,7 +173,7 @@ const Telegram = ({ loading = false }: ITelegramProps) => {
         width: "100%",
       }}
       onClick={() => {
-        NiceModal.show(ModalIDEnum.TelegramModal);
+        showModal(ModalIDEnum.TelegramModal);
       }}
       alignItems={"center"}
     >

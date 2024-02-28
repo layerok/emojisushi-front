@@ -23,25 +23,25 @@ console.log("app version", appConfig.version);
 
 export const App = () => {
   return (
-    <AppVersionChecker>
-      <Suspense fallback={<Loader loading={true} />}>
-        <I18nextProvider i18n={i18n}>
-          <ThemeProvider theme={theme}>
-            <QueryClientProvider client={queryClient}>
-              <SkeletonTheme baseColor="#1F1F1F" highlightColor="#2F2F2F">
-                <NiceModal.Provider>
+    <Suspense fallback={<Loader loading={true} />}>
+      <I18nextProvider i18n={i18n}>
+        <ThemeProvider theme={theme}>
+          <QueryClientProvider client={queryClient}>
+            <SkeletonTheme baseColor="#1F1F1F" highlightColor="#2F2F2F">
+              <NiceModal.Provider>
+                <AppVersionChecker>
                   <RouterProvider
                     fallbackElement={<Preloader />}
                     router={router}
                   />
-                  <AppUpdateModal id={ModalIDEnum.OutdatedAppWarning} />
-                </NiceModal.Provider>
-              </SkeletonTheme>
-              <ReactQueryDevtools initialIsOpen={false} />
-            </QueryClientProvider>
-          </ThemeProvider>
-        </I18nextProvider>
-      </Suspense>
-    </AppVersionChecker>
+                </AppVersionChecker>
+                <AppUpdateModal id={ModalIDEnum.OutdatedAppWarning} />
+              </NiceModal.Provider>
+            </SkeletonTheme>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
+        </ThemeProvider>
+      </I18nextProvider>
+    </Suspense>
   );
 };

@@ -4,12 +4,14 @@ import { PhoneSvg, InstagramSvg, TelegramSvg } from "~components/svg";
 import { useTranslation } from "react-i18next";
 import { InstagramLink } from "~layout/Footer/styled";
 import { useAppStore } from "~stores/appStore";
-import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import NiceModal from "@ebay/nice-modal-react";
+import { useModal } from "~modal";
 
 export const ContactsModal = NiceModal.create(() => {
   const { t } = useTranslation();
   const appStore = useAppStore();
   const modal = useModal();
+  modal.resolve();
 
   return (
     <Modal

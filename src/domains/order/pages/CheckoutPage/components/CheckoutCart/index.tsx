@@ -8,6 +8,7 @@ import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
 import { PencilSvg } from "~components/svg/PencilSvg";
 import { useTranslation } from "react-i18next";
+import { useShowModal } from "~modal";
 
 type CheckoutCartProps = {
   cart?: IGetCartRes;
@@ -19,6 +20,8 @@ export const CheckoutCart = ({ cart, loading = false }: CheckoutCartProps) => {
   const items = loading
     ? [new CartProduct(dummyCartProduct), new CartProduct(dummyCartProduct)]
     : (cart?.data || []).map((json) => new CartProduct(json));
+
+  const showModal = useShowModal();
 
   return (
     <S.Wrapper>
@@ -38,7 +41,7 @@ export const CheckoutCart = ({ cart, loading = false }: CheckoutCartProps) => {
         <SkeletonWrap loading={loading}>
           <UIButton
             onClick={() => {
-              NiceModal.show(ModalIDEnum.CartModal);
+              showModal(ModalIDEnum.CartModal);
             }}
             text={t("editBtn.edit_order")}
           >

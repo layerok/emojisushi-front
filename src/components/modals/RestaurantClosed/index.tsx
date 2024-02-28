@@ -2,14 +2,19 @@ import { LowKeySvg, NotifyModal, SvgIcon } from "~components";
 import { useTranslation } from "react-i18next";
 import { addLeadingZero } from "~utils/format.utils";
 import { appConfig } from "~config/app";
-import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import NiceModal from "@ebay/nice-modal-react";
+import { useModal } from "~modal";
 
 // todo: reopen this modal every n seconds
 export const RestaurantClosed = NiceModal.create(() => {
   const { t } = useTranslation();
   const modal = useModal();
+  modal.resolve();
   return (
     <NotifyModal
+      onClose={() => {
+        modal.remove();
+      }}
       open={modal.visible}
       renderTitle={() => t("restaurantClosed.closed")}
       renderSubtitle={() =>

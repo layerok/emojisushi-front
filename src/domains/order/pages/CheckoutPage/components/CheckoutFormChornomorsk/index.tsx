@@ -31,6 +31,7 @@ import { ModalIDEnum } from "~common/modal.constants";
 import { ROUTES } from "~routes";
 import { isValidUkrainianPhone, getUserFullName } from "~domains/order/utils";
 import { DeliveryMethodCode } from "~domains/order/constants";
+import { useShowModal } from "~modal";
 
 const DEFAULT_PAYMENT_METHOD_ID = 1;
 const DEFAULT_DELIVERY_METHOD_ID = 1;
@@ -56,6 +57,7 @@ export const CheckoutFormChernomorsk = observer(
     const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
+    const showModal = useShowModal();
 
     const CheckoutSchema = Yup.object().shape({
       phone: Yup.string()
@@ -193,7 +195,7 @@ export const CheckoutFormChernomorsk = observer(
               />
               <S.Login
                 onClick={() => {
-                  NiceModal.show(ModalIDEnum.AuthModal, {
+                  showModal(ModalIDEnum.AuthModal, {
                     redirect_to: location.pathname,
                   });
                 }}

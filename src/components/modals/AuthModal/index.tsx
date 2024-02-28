@@ -19,14 +19,16 @@ import { queryClient } from "~query-client";
 import { cartQuery, wishlistsQuery } from "~queries";
 import { authApi } from "~api";
 import { useMutation } from "@tanstack/react-query";
-import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import NiceModal from "@ebay/nice-modal-react";
 import { ROUTES } from "~routes";
+import { useModal } from "~modal";
 
 export const AuthModal = NiceModal.create(
   ({ redirect_to }: { redirect_to?: string }) => {
     // todo: don't use it
     const { isMobile } = useBreakpoint2();
     const modal = useModal();
+    modal.resolve();
 
     const [showPasswordRecovery, setShowPasswordRecovery] = useState();
     const [showSignUp, setShowSignUp] = useState(false);

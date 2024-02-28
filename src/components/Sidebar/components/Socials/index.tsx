@@ -4,8 +4,8 @@ import * as S from "./styled";
 import { SvgButton } from "~components/SvgButton";
 import { SvgIcon } from "~components/SvgIcon";
 import { InstagramSvg, TelegramSvg } from "~components/svg";
-import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
+import { useShowModal } from "~modal";
 
 type SocialsProps = {
   loading?: boolean;
@@ -13,6 +13,7 @@ type SocialsProps = {
 
 export const Socials = ({ loading = false }: SocialsProps) => {
   const { t } = useTranslation();
+  const showModal = useShowModal();
   return (
     <>
       <S.Text>
@@ -38,7 +39,7 @@ export const Socials = ({ loading = false }: SocialsProps) => {
         ) : (
           <SvgButton
             onClick={() => {
-              NiceModal.show(ModalIDEnum.TelegramModal);
+              showModal(ModalIDEnum.TelegramModal);
             }}
           >
             <SvgIcon color={"black"}>

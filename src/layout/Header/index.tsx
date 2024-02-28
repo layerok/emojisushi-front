@@ -16,11 +16,11 @@ import {
 } from "~components";
 
 import { ICity, IGetCartRes, IUser } from "~api/types";
-import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
 import { ROUTES } from "~routes";
+import { useShowModal } from "~modal";
 
 export const Header = ({
   loading = false,
@@ -34,6 +34,7 @@ export const Header = ({
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const showModal = useShowModal();
   return (
     <S.Container>
       <Container
@@ -59,7 +60,9 @@ export const Header = ({
           </S.HeaderItem>
 
           <S.HeaderItem
-            onClick={() => NiceModal.show(ModalIDEnum.ContactsModal)}
+            onClick={() => {
+              showModal(ModalIDEnum.ContactsModal);
+            }}
           >
             <SkeletonWrap loading={loading}>
               <Trans i18nKey="header.contacts" />
@@ -94,7 +97,7 @@ export const Header = ({
             <SkeletonWrap borderRadius={10} loading={loading}>
               <CartButton
                 onClick={() => {
-                  NiceModal.show(ModalIDEnum.CartModal);
+                  showModal(ModalIDEnum.CartModal);
                 }}
                 count={cart?.totalQuantity}
                 total={cart?.total}
@@ -105,7 +108,7 @@ export const Header = ({
           {cart && (
             <S.TinyCartBtn
               onClick={() => {
-                NiceModal.show(ModalIDEnum.CartModal);
+                showModal(ModalIDEnum.CartModal);
               }}
             >
               <TinyCartButton loading={loading} price={cart?.total} />
@@ -116,7 +119,7 @@ export const Header = ({
             <SkeletonWrap loading={loading}>
               <SvgIcon
                 onClick={() => {
-                  NiceModal.show(ModalIDEnum.MobMenuModal);
+                  showModal(ModalIDEnum.MobMenuModal);
                 }}
                 width={"32px"}
                 color={"white"}
@@ -133,7 +136,7 @@ export const Header = ({
                   if (user) {
                     navigate(ROUTES.ACCOUNT.PROFILE.path);
                   } else {
-                    NiceModal.show(ModalIDEnum.AuthModal);
+                    showModal(ModalIDEnum.AuthModal);
                   }
                 }}
               >

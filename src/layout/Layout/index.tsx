@@ -23,11 +23,12 @@ import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { observer } from "mobx-react";
 import { useAppStore } from "~stores/appStore";
 import { citiesQuery } from "~queries/cities.query";
-import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
 import { isClosed } from "~utils/time.utils";
 import { appConfig } from "~config/app";
-import { AppUpdateModal } from "src/components/modals/AppUpdateModal";
+import { useShowModal } from "~modal";
+import { router } from "~router";
+import { RouterSubscriber, RouterState } from "@remix-run/router";
 
 export const Layout = observer(
   ({ children, ...rest }: { children?: ReactNode }) => {
@@ -37,21 +38,34 @@ export const Layout = observer(
 
     const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
     const { data: user, isLoading: isUserLoading } = useUser();
+    const showModal = useShowModal();
 
     const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
     const appStore = useAppStore();
 
     useEffect(() => {
-      const closed = isClosed({
-        start: appConfig.workingHours[0],
-        end: appConfig.workingHours[1],
+      const routerSubscriber: RouterSubscriber = (state: RouterState) => {
+        if (state.navigation.location) {
+          return;
+        }
+        const closed = isClosed({
+          start: appConfig.workingHours[0],
+          end: appConfig.workingHours[1],
+        });
+
+        if (closed) {
+          showModal(ModalIDEnum.RestaurantClosed);
+        } else if (!appStore.userConfirmedLocation) {
+          showModal(ModalIDEnum.LocationModal);
+        }
+      };
+      // run immediately
+      routerSubscriber(router.state, {
+        unstable_flushSync: false,
+        deletedFetchers: [],
       });
 
-      if (closed) {
-        NiceModal.show(ModalIDEnum.RestaurantClosed);
-      } else if (!appStore.userConfirmedLocation) {
-        NiceModal.show(ModalIDEnum.LocationModal);
-      }
+      return router.subscribe(routerSubscriber);
     }, []);
 
     return (
@@ -72,7 +86,7 @@ export const Layout = observer(
             <S.TinyCartButtonOverlay>
               <TinyCartButton
                 onClick={() => {
-                  NiceModal.show(ModalIDEnum.CartModal);
+                  showModal(ModalIDEnum.CartModal);
                 }}
                 price={cart.total}
               />

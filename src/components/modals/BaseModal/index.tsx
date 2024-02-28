@@ -22,22 +22,23 @@ export type IBaseModalProps = {
         }): ReactNode;
       };
   onClose?: () => void;
+  onOpenChange?: (state: boolean) => void;
 };
 
 export const BaseModal = ({
   children,
   overlayStyles,
-  open: passedOpen = false,
+  open = false,
+  onOpenChange,
   onClose,
 }: IBaseModalProps) => {
-  const [open, baseSetOpen] = useState(passedOpen);
   const [allowDismiss, setAllowDismiss] = useState(true);
 
   const setOpen = (state: boolean) => {
     if (!state) {
       onClose?.();
     }
-    baseSetOpen(state);
+    onOpenChange?.(state);
   };
 
   const { context, refs } = useFloating({
