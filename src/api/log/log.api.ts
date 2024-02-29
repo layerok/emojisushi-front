@@ -1,14 +1,14 @@
 import { client } from "~clients/client";
-import { appConfig } from "~config/app";
+import { APP_VERSION_STORAGE_KEY } from "~checkAppVersion";
 
 const log = (data) => {
   client.post("/log", {
-    ...data,
-    version: appConfig.version,
+    version: localStorage.getItem(APP_VERSION_STORAGE_KEY),
     navigator: {
       userAgent: navigator.userAgent,
       online: navigator.onLine,
     },
+    ...data,
   });
 };
 
