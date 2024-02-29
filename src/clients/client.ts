@@ -64,6 +64,7 @@ client.interceptors.request.use((config = {}) => {
   const debugMode = localStorage.getItem("__debug_mode");
 
   if (debugMode) {
+    // todo: indicate that debug mode is on in the interface
     config.headers["X-DEBUG-MODE"] = true;
   }
 
