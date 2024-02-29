@@ -61,6 +61,12 @@ client.interceptors.request.use((config = {}) => {
     );
   }
 
+  const debugMode = localStorage.getItem("__debug_mode");
+
+  if (debugMode) {
+    config.headers["X-DEBUG-MODE"] = true;
+  }
+
   if (process.env.REACT_APP_XDEBUG_SESSION_START === "true") {
     params.XDEBUG_SESSION_START = true;
   }
