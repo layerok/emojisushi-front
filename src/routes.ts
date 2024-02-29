@@ -15,7 +15,7 @@ export const ROUTES = {
   ),
   THANKYOU: route("thankyou", {
     searchParams: {
-      order_id: string().defined(),
+      order_id: string(),
     },
   }),
   DELIVERYANDPAYMENT: route("dostavka-i-oplata"),

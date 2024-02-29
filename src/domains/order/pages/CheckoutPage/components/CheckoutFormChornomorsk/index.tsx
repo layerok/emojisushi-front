@@ -129,11 +129,12 @@ export const CheckoutFormChernomorsk = observer(
             wayforpayFormContainer.current.innerHTML = res.data.form;
             wayforpayFormContainer.current.querySelector("form").submit();
           } else {
+            const order_id = res.data?.poster_order?.incoming_order_id;
             navigate(
               ROUTES.THANKYOU.buildPath(
                 {},
                 {
-                  order_id: res.data.poster_order.incoming_order_id + "",
+                  order_id: !!order_id ? `${order_id}` : "",
                 }
               )
             );

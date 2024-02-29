@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import i18n from "~i18n";
 import { getFromLocalStorage } from "~utils/ls.utils";
 import { logApi } from "~api/log/log.api";
+import { APP_VERSION_STORAGE_KEY } from "~checkAppVersion";
 // import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 const client = axios.create({
@@ -49,6 +50,15 @@ client.interceptors.request.use((config = {}) => {
 
   if (session_id) {
     config.headers["X-Session-ID"] = session_id;
+  }
+
+  // todo: don't send any request until you have a app's version
+  const clientVersion = localStorage.getItem(APP_VERSION_STORAGE_KEY);
+
+  if (clientVersion) {
+    config.headers["X-WEB-CLIENT-VERSION"] = localStorage.getItem(
+      APP_VERSION_STORAGE_KEY
+    );
   }
 
   if (process.env.REACT_APP_XDEBUG_SESSION_START === "true") {
