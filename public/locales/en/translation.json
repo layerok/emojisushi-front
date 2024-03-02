@@ -146,6 +146,7 @@
   "thankYou": {
     "title": "Thank you for your order!",
     "subtitle": "Your order #{{id}} has been successfully accepted and sent to work!",
+    "subtitleWithoutId": "Your order has been successfully accepted and sent to work!",
     "text": "A manager will call you back shortly to confirm your order. Then the order will be prepared and sent to the address you specified."
   },
   "menu": {

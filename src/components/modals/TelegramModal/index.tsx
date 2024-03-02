@@ -10,6 +10,7 @@ import { useTheme } from "styled-components";
 export const TelegramModal = NiceModal.create(() => {
   const { t } = useTranslation();
   const modal = useModal();
+
   const theme = useTheme();
   modal.resolve();
   return (

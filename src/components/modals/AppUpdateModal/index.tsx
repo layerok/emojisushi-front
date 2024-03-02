@@ -27,8 +27,6 @@ export const AppUpdateModal = NiceModal.create(() => {
   const modal = useModal();
   const theme = useTheme();
 
-  modal.resolve();
-
   return (
     <NotifyModal
       open={modal.visible}

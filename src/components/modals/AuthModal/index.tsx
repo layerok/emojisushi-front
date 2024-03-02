@@ -28,7 +28,6 @@ export const AuthModal = NiceModal.create(
     // todo: don't use it
     const { isMobile } = useBreakpoint2();
     const modal = useModal();
-    modal.resolve();
 
     const [showPasswordRecovery, setShowPasswordRecovery] = useState();
     const [showSignUp, setShowSignUp] = useState(false);

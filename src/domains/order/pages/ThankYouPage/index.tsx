@@ -9,6 +9,7 @@ export const ThankYouPage = () => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const theme = useTheme();
+  const order_id = searchParams.get("order_id");
   return (
     <Container>
       <S.Center>
@@ -19,7 +20,11 @@ export const ThankYouPage = () => {
             textAlign: "center",
           }}
         >
-          {t("thankYou.subtitle", { id: searchParams.get("order_id") })}
+          {!!order_id
+            ? t("thankYou.subtitle", {
+                id: searchParams.get("order_id"),
+              })
+            : t("thankYou.subtitleWithoutId")}
         </Heading>
         <SvgIcon color={theme.colors.brand} style={{ width: "60px" }}>
           <CheckCircleSvg />

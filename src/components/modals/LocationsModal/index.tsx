@@ -15,7 +15,6 @@ import { useModal } from "~modal";
 export const LocationsModal = NiceModal.create(
   observer(() => {
     const modal = useModal();
-    modal.resolve();
 
     const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
     const { t } = useTranslation();
