@@ -37,7 +37,7 @@ const Item = styled.div<{
     "selected",
     css`
       font-weight: 500;
-      color: #ffe600;
+      color: ${(props) => props.theme.colors.brand};
     `
   )}
   cursor: pointer

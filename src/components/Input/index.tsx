@@ -1,6 +1,7 @@
 import * as S from "./styled";
-import React, { CSSProperties, forwardRef } from "react";
+import React, { CSSProperties, forwardRef, useContext } from "react";
 import { If, AsteriskSvg, SvgIcon, SkeletonWrap } from "~components";
+import { ThemeContext } from "styled-components";
 
 export type IInputComponentProps = React.HTMLProps<HTMLInputElement> & {
   name: string;
@@ -33,6 +34,7 @@ export const Input = forwardRef<HTMLInputElement, IInputComponentProps>(
       as,
       ...rest
     } = props;
+    const theme = useContext(ThemeContext);
     return (
       <SkeletonWrap
         style={{
@@ -65,7 +67,7 @@ export const Input = forwardRef<HTMLInputElement, IInputComponentProps>(
           />
           <If condition={required}>
             <S.Asterisk>
-              <SvgIcon width={"10px"} color={"#FFE600"}>
+              <SvgIcon width={"10px"} color={theme.colors.brand}>
                 <AsteriskSvg />
               </SvgIcon>
             </S.Asterisk>

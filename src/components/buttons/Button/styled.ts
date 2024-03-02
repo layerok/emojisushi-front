@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { prop, ifProp } from "styled-tools";
+import { prop, ifProp, theme } from "styled-tools";
 import { CSSProperties } from "react";
 
 const Button = styled.button<{
@@ -17,7 +17,8 @@ const Button = styled.button<{
   backgroundColor?: CSSProperties["backgroundColor"];
   filled?: boolean;
 }>`
-  border: ${ifProp("outline", "1px solid #FFE600", "none")};
+  border: ${(props) =>
+    ifProp("outline", `1px solid ${props.theme.colors.brand}`, "none")(props)};
   border-radius: 10px;
   color: ${prop("color")};
   padding: ${prop("padding", "7px 31px")};
@@ -35,14 +36,19 @@ const Button = styled.button<{
   ${ifProp(
     "filled",
     css`
-      box-shadow: 0px 4px 15px rgba(255, 230, 0, 0.3);
+      box-shadow: 0px 4px 15px ${theme("shadows.brandSofter")};
     `
   )}
 
   :hover {
-    border: ${ifProp("hoverOutline", "1px solid #FFE600", "none")};
+    border: ${(props) =>
+      ifProp(
+        "hoverOutline",
+        `1px solid ${props.theme.colors.brand}`,
+        "none"
+      )(props)};
     background: ${prop("hoverBackgroundColor")};
-    box-shadow: 0px 4px 15px rgba(255, 230, 0, 0.3);
+    box-shadow: 0px 4px 15px ${theme("shadows.brandSofter")};
     color: ${prop("hoverColor")};
   }
 `;

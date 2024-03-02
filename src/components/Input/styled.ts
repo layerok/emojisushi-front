@@ -17,19 +17,19 @@ const Input = styled.input<{
   color: white;
 
   ::-webkit-input-placeholder {
-    color: ${theme("input.placeholder", "#616161")};
+    color: ${theme("components.input.placeholder")};
   }
 
   ::-moz-placeholder {
-    color: ${theme("input.placeholder", "#616161")};
+    color: ${theme("components.input.placeholder")};
   }
 
   :-ms-input-placeholder {
-    color: ${theme("input.placeholder", "#616161")};
+    color: ${theme("components.input.placeholder")};
   }
 
   :-moz-placeholder {
-    color: ${theme("input.placeholder", "#616161")};
+    color: ${theme("components.input.placeholder")};
   }
 `;
 

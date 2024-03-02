@@ -18,6 +18,7 @@ import { useQuery } from "@tanstack/react-query";
 import { citiesQuery } from "~queries/cities.query";
 import { ROUTES } from "~routes";
 import { useModal, useShowModal } from "~modal";
+import { useTheme } from "styled-components";
 
 export const MobMenuModal = NiceModal.create(() => {
   const modal = useModal();
@@ -32,6 +33,7 @@ export const MobMenuModal = NiceModal.create(() => {
   const { data: user } = useUser();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const theme = useTheme();
   const showModal = useShowModal();
   if (isCitiesLoading) {
     return null;
@@ -124,7 +126,7 @@ export const MobMenuModal = NiceModal.create(() => {
                 </HightlightText>
               )}
             </NavLink>
-            <SvgIcon color={"#FFE600"} width={"25px"}>
+            <SvgIcon color={theme.colors.brand} width={"25px"}>
               <HeartSvg />
             </SvgIcon>
           </FlexBox>

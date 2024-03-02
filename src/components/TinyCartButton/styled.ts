@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { theme } from "styled-tools";
 
 const TinyCartButton = styled.div`
   cursor: pointer;
@@ -17,7 +18,7 @@ const Icon = styled.div`
 
 const Price = styled.div`
   position: relative;
-  background-color: #ffe600;
+  background-color: ${theme("colors.brand")};
   color: black;
   padding: 1px 8px;
   border-radius: 3px;

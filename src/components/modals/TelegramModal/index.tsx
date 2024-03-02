@@ -5,10 +5,12 @@ import { NotifyModal } from "../NotifyModal";
 import { useTranslation } from "react-i18next";
 import NiceModal from "@ebay/nice-modal-react";
 import { useModal } from "~modal";
+import { useTheme } from "styled-components";
 
 export const TelegramModal = NiceModal.create(() => {
   const { t } = useTranslation();
   const modal = useModal();
+  const theme = useTheme();
   modal.resolve();
   return (
     <NotifyModal
@@ -19,7 +21,7 @@ export const TelegramModal = NiceModal.create(() => {
         modal.remove();
       }}
       renderIcon={() => (
-        <SvgIcon color={"#FFE600"} width={"60px"}>
+        <SvgIcon color={theme.colors.brand} width={"60px"}>
           <TelegramSvg strokeWidth={1} />
         </SvgIcon>
       )}

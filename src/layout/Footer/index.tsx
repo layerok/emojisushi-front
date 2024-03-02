@@ -13,19 +13,21 @@ import { useAppStore } from "~stores/appStore";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
 import { useShowModal } from "~modal";
+import { useTheme } from "styled-components";
 
 type FooterProps = {
   loading?: boolean;
 };
 
 export const Footer = ({ loading = false }: FooterProps) => {
+  const theme = useTheme();
   return (
     <S.Footer>
       <Container flexDirection={"row"}>
         <S.Left>
           <S.Logo>
             <SkeletonWrap loading={loading}>
-              <SvgIcon color={"#FFE600"}>
+              <SvgIcon color={theme.colors.brand}>
                 <LogoSvg />
               </SvgIcon>
             </SkeletonWrap>

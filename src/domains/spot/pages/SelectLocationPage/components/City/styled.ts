@@ -76,7 +76,7 @@ const Spot = {
     z-index: 2;
     &:hover {
       z-index: 4;
-      border-color: ${theme("link.active")};
+      border-color: ${theme("colors.brand")};
     }
   `,
   Head: styled.div`
@@ -91,7 +91,7 @@ const Spot = {
     font-size: 13px;
     line-height: 16px;
 
-    color: ${theme("link.active")};
+    color: ${theme("colors.brand")};
   `,
   Link: styled(BaseLink)`
     text-decoration: none;

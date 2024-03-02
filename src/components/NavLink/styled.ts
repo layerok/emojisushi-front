@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ifProp } from "styled-tools";
+import { ifProp, theme } from "styled-tools";
 
 const Link = styled.span<{
   isActive: boolean;
@@ -12,9 +12,10 @@ const Link = styled.span<{
   margin-top: 10px;
   display: flex;
   flex-direction: column;
-  color: ${ifProp("isActive", "#FFE600", "#FFFFFF")};
+  color: ${(props) =>
+    ifProp("isActive", props.theme.colors.brand, "#FFFFFF")(props)};
   :hover {
-    color: #ffe600;
+    color: ${theme("colors.brand")};
   }
   :after {
     border-bottom: none;

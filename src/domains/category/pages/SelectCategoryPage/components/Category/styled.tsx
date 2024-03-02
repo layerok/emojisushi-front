@@ -72,11 +72,11 @@ const Link = styled(LinkBase)`
   }
 
   &:hover {
-    color: ${theme("link.active")};
+    color: ${theme("colors.brand")};
   }
   &:active {
-    border-color: ${theme("link.active")};
-    color: ${theme("link.active")};
+    border-color: ${theme("colors.brand")};
+    color: ${theme("colors.brand")};
   }
 
   ${media.lessThan("mobile")`

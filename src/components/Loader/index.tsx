@@ -1,5 +1,6 @@
-import styled from "styled-components";
+import styled, { ThemeContext } from "styled-components";
 import FadeLoader from "react-spinners/FadeLoader";
+import { useContext } from "react";
 
 const Overlay = styled.div`
   position: absolute;
@@ -15,11 +16,12 @@ const override = {
 };
 
 export const Loader = ({ loading }) => {
+  const theme = useContext(ThemeContext);
   return (
     loading && (
       <Overlay>
         <FadeLoader
-          color={"#FFE600"}
+          color={theme.colors.brand}
           width={2}
           height={12}
           margin={10}

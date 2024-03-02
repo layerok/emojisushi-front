@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { theme } from "styled-tools";
 
 const Container = styled.div`
   width: 350px;
@@ -47,7 +48,7 @@ const Total = styled.div`
 `;
 
 const Login = styled.div`
-  color: #ffe600;
+  color: ${theme("colors.brand")};
   margin-left: 5px;
   cursor: pointer;
 `;

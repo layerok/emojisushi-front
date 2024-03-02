@@ -33,8 +33,8 @@ const Chip = styled.span<{
   color: white;
 
   &:hover {
-    color: ${theme("link.active")};
-    border: 1px solid ${theme("link.active")};
+    color: ${theme("colors.brand")};
+    border: 1px solid ${theme("colors.brand")};
   }
 
   border: 1px solid white;
@@ -44,8 +44,8 @@ const Chip = styled.span<{
   ${ifProp(
     "isActive",
     css`
-      color: ${theme("link.active")};
-      border: 1px solid ${theme("link.active")};
+      color: ${theme("colors.brand")};
+      border: 1px solid ${theme("colors.brand")};
     `
   )}
 `;

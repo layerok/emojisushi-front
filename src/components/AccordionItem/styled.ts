@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import media from "../../common/custom-media";
+import { theme } from "styled-tools";
 
 const Container = styled.div`
   padding: 15px;
@@ -41,7 +42,7 @@ const HeaderMobileTextContainer = styled.div`
 `;
 
 const HeaderStatus = styled.p`
-  color: #ffe600;
+  color: ${theme("colors.brand")};
 `;
 
 const Pan = styled.div``;
@@ -107,7 +108,7 @@ const PanStatusValue = styled.p`
   font-weight: 500;
   font-size: 20px;
   line-height: 24px;
-  color: #ffe600;
+  color: ${theme("colors.brand")};
   ${media.lessThan("pc")`
    word-break: break-word;
   `}

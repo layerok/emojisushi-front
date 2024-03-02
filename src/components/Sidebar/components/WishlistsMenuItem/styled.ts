@@ -18,13 +18,13 @@ const Favorite = styled.li`
   width: 100%;
 
   &:hover {
-    color: ${theme("link.active")};
+    color: ${theme("colors.brand")};
   }
 
   ${ifProp(
     "active",
     css`
-      color: ${theme("link.active")};
+      color: ${theme("colors.brand")};
     `
   )}
 `;

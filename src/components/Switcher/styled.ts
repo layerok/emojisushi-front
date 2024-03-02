@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { prop } from "styled-tools";
+import { prop, theme } from "styled-tools";
 
 const Slide = styled.div<{
   length: number;
@@ -8,8 +8,8 @@ const Slide = styled.div<{
   position: absolute;
   width: calc(100% / ${prop("length")});
   height: 100%;
-  background: #ffe600;
-  box-shadow: 0 0 15px rgba(255, 230, 0, 0.3);
+  background: ${theme("colors.brand")};
+  box-shadow: 0 0 15px ${theme("shadows.brandSofter")};
   border-radius: 10px;
   color: black;
   display: flex;
