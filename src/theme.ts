@@ -1,65 +1,5 @@
 import { addAlphaToHexadecimal } from "~utils/addAlphaToHexadecimal";
-// import original module declarations
 import { DefaultTheme } from "styled-components";
-
-declare module "styled-components" {
-  export interface DefaultTheme {
-    colors: {
-      brand: string;
-      brandDelimiter: string;
-      ukrainianFlag: {
-        sky: string;
-        wheat: string;
-      };
-      fg: {
-        default: string;
-        muted: string;
-        brandContrast: string;
-      };
-      danger: {
-        canvas: string;
-      };
-      canvas: {
-        default: string;
-        inset: string;
-        inset2: string;
-        inset3: string;
-        inset4: string;
-        inset5: string;
-      };
-      border: {
-        default: string;
-      };
-      skeleton: {
-        baseColor: string;
-        highlightColor: string;
-      };
-    };
-    borderRadius: {
-      default: string;
-      smooth: string;
-      lessSmooth: string;
-      almostSquare: string;
-    };
-    shadows: {
-      brand: string;
-      brandSofter: string;
-      canvasShadow: string;
-      canvasInset2Shadow: string;
-      canvasInsetShadow: string;
-    };
-
-    components: {
-      input: {
-        placeholder: string;
-      };
-    };
-
-    gradients: {
-      fade: string;
-    };
-  }
-}
 
 const palette = {
   white: "#ffffff",
@@ -152,10 +92,19 @@ const borderRadius = {
   almostSquare: "3px",
 };
 
+const zIndices = {
+  popovers: 999,
+  modals: 999_999,
+  sticky: 999,
+  tooltips: 500,
+  preloader: 99_999_999,
+};
+
 export const theme: DefaultTheme = {
   colors,
   shadows,
   gradients,
   components,
   borderRadius,
+  zIndices,
 };

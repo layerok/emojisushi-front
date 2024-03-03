@@ -10,7 +10,7 @@ const Form = styled.form`
 `;
 
 const ErrorBag = styled.ol`
-  background: #cd3838;
+  background: ${({ theme }) => theme.colors.danger.canvas};
   box-shadow: ${({ theme }) => theme.shadows.canvasShadow};
   border-radius: ${({ theme }) => theme.borderRadius.smooth};
   padding: 12px 12px 12px 28px;

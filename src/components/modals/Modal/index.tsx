@@ -2,6 +2,7 @@ import { BaseModal, IBaseModalProps } from "../BaseModal";
 import * as S from "./styled";
 import { CloseModalIcon } from "../CloseModalIcon";
 import { CSSProperties, ReactNode } from "react";
+import { useTheme } from "styled-components";
 
 export type IModalProps = {
   alignItems?: CSSProperties["alignItems"];
@@ -19,12 +20,13 @@ export const Modal = ({
   alignCenter,
   ...rest
 }: IModalProps) => {
+  const theme = useTheme();
   const overlayStyles = {
     display: "grid",
     justifyContent,
     alignItems,
     background: "rgba(0, 0, 0, 0.4)",
-    zIndex: 999999,
+    zIndex: theme.zIndices.modals,
   };
   return (
     <BaseModal overlayStyles={overlayStyles} {...rest}>

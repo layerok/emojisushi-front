@@ -12,6 +12,7 @@ import {
   Placement,
 } from "@floating-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "styled-components";
 
 export const AnimatedTooltip = ({
   children,
@@ -23,6 +24,7 @@ export const AnimatedTooltip = ({
   children: ReactElement;
 }) => {
   const [open, setOpen] = useState(false);
+  const theme = useTheme();
 
   const { x, y, refs, strategy, context } = useFloating({
     placement,
@@ -55,7 +57,7 @@ export const AnimatedTooltip = ({
               ref: refs.setFloating,
               className: "Tooltip",
               style: {
-                zIndex: 2,
+                zIndex: theme.zIndices.tooltips,
                 position: strategy,
                 top: y ?? "",
                 left: x ?? "",

@@ -23,17 +23,18 @@ import { useTheme } from "styled-components";
 export const MobMenuModal = NiceModal.create(() => {
   const modal = useModal();
   const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
+  const theme = useTheme();
   const overlayStyles = {
     justifyItems: "end",
     alignItems: "start",
     background: "rgba(0, 0, 0, 0.4)",
     display: "grid",
-    zIndex: 999999,
+    zIndex: theme.zIndices.modals,
   };
   const { data: user } = useUser();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const theme = useTheme();
+
   const showModal = useShowModal();
   if (isCitiesLoading) {
     return null;

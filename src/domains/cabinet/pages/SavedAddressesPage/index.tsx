@@ -103,7 +103,7 @@ const Address = ({ address, user }: { address: IAddress; user: IUser }) => {
         <SvgIcon
           width={"25px"}
           clickable={true}
-          hoverColor={"#CD3838;"}
+          hoverColor={theme.colors.danger.canvas}
           style={{ marginLeft: "10px" }}
           onClick={() => {
             deleteAddressMutation.mutate(address.id);

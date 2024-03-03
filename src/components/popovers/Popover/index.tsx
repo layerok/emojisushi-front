@@ -13,6 +13,7 @@ import {
   FloatingFocusManager,
   Placement,
 } from "@floating-ui/react";
+import { useTheme } from "styled-components";
 
 export const Popover = ({
   children,
@@ -59,6 +60,8 @@ export const Popover = ({
     }
   }, [open, update, refs.reference, refs.floating]);
 
+  const theme = useTheme();
+
   return (
     <>
       {cloneElement(
@@ -80,7 +83,7 @@ export const Popover = ({
                 position: strategy,
                 top: y ?? "",
                 left: x ?? "",
-                zIndex: 999,
+                zIndex: theme.zIndices.popovers,
               },
               "aria-labelledby": labelId,
               "aria-describedby": descriptionId,

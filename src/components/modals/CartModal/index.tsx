@@ -26,6 +26,7 @@ import { ROUTES } from "~routes";
 import { useRemoveCartProduct } from "~hooks/use-remove-cart-product";
 import { useUpdateCartProduct } from "~hooks/use-update-cart-product";
 import { useModal } from "~modal";
+import { useTheme } from "styled-components";
 
 // todo: clear outdated products from the card. You can do it on the frontend or on the backend
 const CartItem = (props: { item: CartProduct }) => {
@@ -107,6 +108,7 @@ const CartItem = (props: { item: CartProduct }) => {
 export const CartModal = NiceModal.create(() => {
   const navigate = useNavigate();
   const modal = useModal();
+  const theme = useTheme();
 
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
 
@@ -124,7 +126,7 @@ export const CartModal = NiceModal.create(() => {
   const overlayStyles = {
     background: "rgba(0, 0, 0, 0.4)",
     display: "grid",
-    zIndex: 999999,
+    zIndex: theme.zIndices.modals,
     ...(!isMobile && {
       justifyItems: "end",
       alignItems: "start",
