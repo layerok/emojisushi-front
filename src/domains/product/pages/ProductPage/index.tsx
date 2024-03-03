@@ -1,11 +1,20 @@
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ProductsGrid, Container, LoadMoreButton } from "~components";
 import { Banner } from "./Banner";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { Product } from "src/models";
-import { cartQuery, categoriesQuery, wishlistsQuery } from "src/queries";
+import {
+  cartQuery,
+  categoriesQuery,
+  productsQuery,
+  wishlistsQuery,
+} from "src/queries";
 import { SortKey } from "src/api/types";
-import { PRODUCTS_LIMIT_STEP } from "~domains/category/constants";
+import { CategorySlug, PRODUCTS_LIMIT_STEP } from "~domains/category/constants";
 import { MenuLayout } from "~domains/product/components/MenuLayout";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { observer } from "mobx-react";
@@ -15,33 +24,76 @@ import * as S from "./styled";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 import { ROUTES } from "~routes";
+import {
+  useTypedParams,
+  useTypedSearchParams,
+} from "react-router-typesafe-routes/dom";
 
 export const ProductPage = observer(() => {
   const { ref, inView } = useInView();
 
-  const { categorySlug } = useParams();
+  const { categorySlug } = useTypedParams(ROUTES.CATEGORY.SHOW);
   const { t } = useTranslation();
 
-  const [searchParams] = useSearchParams();
-  const limit = searchParams.get("limit") || PRODUCTS_LIMIT_STEP;
-  const q = searchParams.get("q");
-  const sort = searchParams.get("sort") as SortKey;
+  const [searchParams] = useTypedSearchParams(ROUTES.CATEGORY.SHOW);
+  const { limit = PRODUCTS_LIMIT_STEP, q } = searchParams;
+
+  const sort = searchParams.sort as SortKey;
+
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const filters = {
+    category_slug: q || !categorySlug ? CategorySlug.Menu : categorySlug,
+    search: q,
+    sort: sort,
+  };
+
+  const productQueryKey = productsQuery(filters);
 
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
   const { data: categories, isLoading: isCategoriesLoading } = useQuery({
     ...categoriesQuery(),
+    onSuccess: (data) => {
+      const category = data.data.find(
+        (category) => category.slug === categorySlug
+      );
+
+      if (!category) {
+        // if a user requested a category that doesn't exist,
+        // then redirect him to first existing category
+        queryClient.cancelQueries({
+          queryKey: productQueryKey.queryKey,
+        });
+        navigate(
+          ROUTES.CATEGORY.SHOW.buildPath({
+            categorySlug: data.data[0].slug,
+          })
+        );
+      }
+    },
   });
+
   const { data: wishlists, isLoading: isWishlistLoading } =
     useQuery(wishlistsQuery);
 
-  const fetchProducts = async ({ pageParam = 0 }) => {
-    const res = await menuApi.getProducts({
-      category_slug: q || !categorySlug ? "menu" : categorySlug,
-      search: q,
-      sort: sort,
-      offset: pageParam * PRODUCTS_LIMIT_STEP,
-      limit: PRODUCTS_LIMIT_STEP,
-    });
+  const fetchProducts = async ({
+    pageParam = 0,
+    signal,
+  }: {
+    pageParam: number;
+    signal: AbortSignal;
+  }) => {
+    const res = await menuApi.getProducts(
+      {
+        category_slug: q || !categorySlug ? CategorySlug.Menu : categorySlug,
+        search: q,
+        sort: sort,
+        offset: pageParam * PRODUCTS_LIMIT_STEP,
+        limit: PRODUCTS_LIMIT_STEP,
+      },
+      signal
+    );
     return res.data;
   };
 
@@ -52,15 +104,8 @@ export const ProductPage = observer(() => {
     fetchNextPage,
     status,
   } = useInfiniteQuery(
-    [
-      "products",
-      {
-        category_slug: q || !categorySlug ? "menu" : categorySlug,
-        search: q,
-        sort: sort,
-      },
-    ],
-    fetchProducts,
+    productQueryKey.queryKey,
+    ({ pageParam, signal }) => fetchProducts({ pageParam, signal }),
     {
       getNextPageParam: (lastPage, pages) => {
         if (pages.length * PRODUCTS_LIMIT_STEP >= lastPage.total) {
@@ -68,10 +113,11 @@ export const ProductPage = observer(() => {
         }
         return pages.length;
       },
+      // todo: dependent queries lead to request waterfall
+      // todo: rethink backend endpoints to load categories and products in parallel
+      enabled: !!categories,
     }
   );
-
-  const navigate = useNavigate();
 
   const handleLoadMore = () => {
     navigate(

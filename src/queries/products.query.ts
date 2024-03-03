@@ -3,13 +3,22 @@ import { IGetProductsParams, IGetProductsRes } from "~api/types";
 import { QueryOptions } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
+export const productsQueryKeys = {
+  def: ["products"],
+  lists: () => [...productsQueryKeys.def, "list"],
+  list: (params?: IGetProductsParams) => [
+    ...productsQueryKeys.lists(),
+    params ?? "all",
+  ],
+};
+
 export const productsQuery = (
   params: IGetProductsParams = {}
 ): QueryOptions<IGetProductsRes> => ({
-  queryKey: ["products", "list", params ?? "all"],
-  queryFn: async () => {
+  queryKey: productsQueryKeys.list(params),
+  queryFn: async ({ signal }) => {
     try {
-      const res = await menuApi.getProducts(params);
+      const res = await menuApi.getProducts(params, signal);
       return res.data;
     } catch (e) {
       if (e instanceof AxiosError) {
