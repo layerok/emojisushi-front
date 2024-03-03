@@ -20,7 +20,7 @@ import { ModalIDEnum } from "~common/modal.constants";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
 import { ROUTES } from "~routes";
-import { useShowModal } from "~modal";
+import { useModal, useShowModal } from "~modal";
 import { useTheme } from "styled-components";
 
 export const Header = ({
@@ -37,6 +37,7 @@ export const Header = ({
   const navigate = useNavigate();
   const showModal = useShowModal();
   const theme = useTheme();
+  const contactsModal = useModal(ModalIDEnum.ContactsModal);
   return (
     <S.Container>
       <Container
@@ -67,7 +68,9 @@ export const Header = ({
             }}
           >
             <SkeletonWrap loading={loading}>
-              <Trans i18nKey="header.contacts" />
+              <HightlightText isActive={contactsModal.visible}>
+                <Trans i18nKey="header.contacts" />
+              </HightlightText>
             </SkeletonWrap>
           </S.HeaderItem>
 
