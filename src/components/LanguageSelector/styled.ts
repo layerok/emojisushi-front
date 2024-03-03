@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   background: #141414;
-  border-radius: 10px;
+  border-radius: ${({ theme }) => theme.borderRadius.smooth};
   width: 75px;
   height: 40px;
   display: flex;

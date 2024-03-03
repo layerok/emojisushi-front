@@ -9,7 +9,8 @@ const Options = styled.div<{
   padding: 11px 25px 19px;
   width: ${prop("width")};
   background-color: ${prop("backgroundColor")};
-  border-radius: 0 0 15px 15px;
+  border-bottom-left-radius: ${({ theme }) => theme.borderRadius.default};
+  border-bottom-right-radius: ${({ theme }) => theme.borderRadius.default};
 `;
 
 const Option = styled.div`

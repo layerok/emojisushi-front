@@ -22,7 +22,7 @@ const InputLabel = styled.p`
   font-size: 15px;
   line-height: 18px;
   padding-bottom: 5px;
-  color: #616161;
+  color: ${({ theme }) => theme.colors.fg.muted};
 `;
 
 const InputWrapper = styled.div`
@@ -75,7 +75,7 @@ const ForgotPassText = styled.p`
   font-weight: 500;
   font-size: 12px;
   line-height: 15px;
-  color: #ffffff;
+  color: ${({ theme }) => theme.colors.fg.default};
 
   margin-bottom: 20px;
   margin-top: 10px;

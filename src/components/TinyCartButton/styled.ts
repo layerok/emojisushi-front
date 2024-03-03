@@ -21,7 +21,7 @@ const Price = styled.div`
   background-color: ${theme("colors.brand")};
   color: black;
   padding: 1px 8px;
-  border-radius: 3px;
+  border-radius: ${({ theme }) => theme.borderRadius.almostSquare};
   min-width: 55px;
   text-align: center;
   z-index: 2;

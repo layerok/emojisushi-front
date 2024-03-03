@@ -124,9 +124,9 @@ export const ButtonDark = forwardRef<
   return (
     <Button
       outline={false}
-      color={"#FFFFFF"}
-      backgroundColor={"#272727"}
-      hoverBackgroundColor={"#272727"}
+      color={theme.colors.fg.default}
+      backgroundColor={theme.colors.canvas.inset4}
+      hoverBackgroundColor={theme.colors.canvas.inset4}
       hoverColor={theme.colors.brand}
       hoverOutline={true}
       {...rest}

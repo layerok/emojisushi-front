@@ -6,9 +6,9 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 255px;
-  border-radius: 15px;
-  background-color: #1c1c1c;
-  box-shadow: 0 4px 15px rgba(28, 28, 28, 0.3);
+  border-radius: ${({ theme }) => theme.borderRadius.default};
+  background-color: ${({ theme }) => theme.colors.canvas.inset2};
+  box-shadow: ${({ theme }) => theme.shadows.canvasInset2Shadow};
   padding: 22px 12px 18px;
 
   ${media.lessThan("tablet")`

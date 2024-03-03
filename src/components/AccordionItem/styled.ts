@@ -4,9 +4,9 @@ import { theme } from "styled-tools";
 
 const Container = styled.div`
   padding: 15px;
-  background: #1c1c1c;
-  box-shadow: 0px 4px 15px rgba(28, 28, 28, 0.3);
-  border-radius: 15px;
+  background: ${({ theme }) => theme.colors.canvas.inset2};
+  box-shadow: ${({ theme }) => theme.shadows.canvasInset2Shadow};
+  border-radius: ${({ theme }) => theme.borderRadius.default};
   width: 730px;
   font-size: 15px;
   ${media.lessThan("pc")`
@@ -16,7 +16,7 @@ const Container = styled.div`
 `;
 
 const MutedText = styled.p`
-  color: #616161;
+  color: ${({ theme }) => theme.colors.fg.muted};
 `;
 
 const Header = styled.div`
@@ -162,7 +162,7 @@ const PanProdSect1 = styled.div`
 `;
 
 const PanVerticalStick = styled.div`
-  border: 1px solid #ffffff;
+  border: 1px solid ${({ theme }) => theme.colors.fg.default};
   height: 13px;
   margin-left: 10px;
   margin-right: 10px;
@@ -195,7 +195,7 @@ const PanProdTotalPrice = styled.div`
 const PanProdAmount = styled.p`
   font-size: 12px;
   line-height: 15px;
-  color: #616161;
+  color: ${({ theme }) => theme.colors.fg.muted};
 `;
 
 const PanProdProps = styled.div`

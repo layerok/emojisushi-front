@@ -57,7 +57,7 @@ const LocationsLabel = styled.div`
   font-size: 18px;
   line-height: 22px;
   text-transform: uppercase;
-  color: #fff;
+  color: ${({ theme }) => theme.colors.fg.default};
 
   ${media.lessThan("mobile")`
     font-size: 1rem;

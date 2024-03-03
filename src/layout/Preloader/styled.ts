@@ -17,7 +17,7 @@ const Container = styled.div`
   bottom: 0;
   left: 0;
   opacity: 0;
-  background-color: #141414;
+  background-color: ${({ theme }) => theme.colors.canvas.default};
   z-index: 99999999;
   display: flex;
   justify-content: center;

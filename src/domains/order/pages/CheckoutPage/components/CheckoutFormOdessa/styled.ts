@@ -11,8 +11,8 @@ const Form = styled.form`
 
 const ErrorBag = styled.ol`
   background: #cd3838;
-  box-shadow: 0 0 15px rgba(34, 34, 34, 0.3);
-  border-radius: 10px;
+  box-shadow: ${({ theme }) => theme.shadows.canvasShadow};
+  border-radius: ${({ theme }) => theme.borderRadius.smooth};
   padding: 12px 12px 12px 28px;
 
   li {

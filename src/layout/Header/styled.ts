@@ -2,8 +2,8 @@ import styled from "styled-components";
 import media from "~common/custom-media";
 
 const Container = styled.header`
-  background: #171717;
-  box-shadow: 0 4px 15px rgba(23, 23, 23, 0.4);
+  background: ${({ theme }) => theme.colors.canvas.inset};
+  box-shadow: ${({ theme }) => theme.shadows.canvasInsetShadow};
   height: 91px;
   display: flex;
   align-items: center;

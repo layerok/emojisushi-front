@@ -26,6 +26,7 @@ import * as S from "./styled";
 import { SvgIcon } from "../SvgIcon";
 import { CaretDownSvg } from "../svg/CaretDownSvg";
 import { SkeletonWrap } from "~components";
+import { useTheme } from "styled-components";
 
 type IOptionProps = HTMLProps<HTMLDivElement> &
   PropsWithChildren<{
@@ -39,6 +40,7 @@ const Option = forwardRef<HTMLDivElement, IOptionProps>(function Option(
   ref
 ) {
   const id = useId();
+  const theme = useTheme();
   return (
     <div
       {...props}
@@ -47,7 +49,11 @@ const Option = forwardRef<HTMLDivElement, IOptionProps>(function Option(
       role="option"
       aria-selected={selected}
       style={{
-        background: active ? "#272727" : selected ? "#272727" : "none",
+        background: active
+          ? theme.colors.canvas.inset4
+          : selected
+          ? theme.colors.canvas.inset4
+          : "none",
         borderRadius: 10,
         userSelect: "none",
         padding: "10px 15px",

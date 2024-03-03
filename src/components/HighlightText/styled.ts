@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ifProp, theme } from "styled-tools";
+import { ifProp } from "styled-tools";
 
 const Container = styled.div<{
   isActive: boolean;
@@ -19,8 +19,8 @@ const Container = styled.div<{
     position: absolute;
     width: 100%;
     left: 0;
-    border-bottom: 1px solid ${theme("colors.brand")};
-    box-shadow: 0 0 15px ${theme("colors.brandSofter")};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.brand};
+    box-shadow: ${({ theme }) => theme.shadows.brandSofter};
     margin-top: 10px;
     bottom: -10px;
   }

@@ -4,7 +4,7 @@ const Container = styled.button`
   display: flex;
   align-items: center;
   cursor: pointer;
-  color: white;
+  color: ${({ theme }) => theme.colors.fg.default};
   width: 100%;
   text-align: left;
 `;

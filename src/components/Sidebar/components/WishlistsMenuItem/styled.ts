@@ -5,8 +5,8 @@ const Favorite = styled.li`
   font-size: 16px;
   font-weight: 500;
   text-transform: uppercase;
-  border-top: 1px solid #343434;
-  border-bottom: 1px solid #343434;
+  border-top: 1px solid ${({ theme }) => theme.colors.border.default};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border.default};
   padding-top: 28px;
   padding-bottom: 27px;
   margin-top: 30px;

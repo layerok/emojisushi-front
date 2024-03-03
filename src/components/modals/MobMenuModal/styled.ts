@@ -1,11 +1,12 @@
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  background-color: #1c1c1c;
+  background-color: ${({ theme }) => theme.colors.canvas.inset2};
   padding: 20px 23px;
   width: 267px;
-  box-shadow: 0 4px 15px rgba(28, 28, 28, 0.3);
-  border-radius: 15px 0 0 15px;
+  box-shadow: ${({ theme }) => theme.shadows.canvasInset2Shadow};
+  border-top-left-radius: ${({ theme }) => theme.borderRadius.default};
+  border-bottom-left-radius: ${({ theme }) => theme.borderRadius.default};
   margin-top: 30px;
 `;
 

@@ -14,7 +14,7 @@ const Price = styled.div`
 const Delimiter = styled.div`
   height: 20px;
   width: 1px;
-  background-color: #000;
+  background-color: ${({ theme }) => theme.colors.fg.brandContrast};
   flex-shrink: 0;
 `;
 

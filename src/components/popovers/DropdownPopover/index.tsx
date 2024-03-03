@@ -1,6 +1,7 @@
 import * as S from "./styled";
 import { Popover } from "../Popover";
 import { ReactNode, useEffect, useState } from "react";
+import { useTheme } from "styled-components";
 
 type Props<Option> = {
   options?: Option[];
@@ -22,21 +23,23 @@ type Props<Option> = {
   }) => void;
 };
 
-export function DropdownPopover<Option>({
-  onSelect,
-  options = [],
-  asFlatArray = false,
-  offset = 0,
-  open: initialOpen = false,
-  disable = false,
-  nameAccessor = "name",
-  idAccessor = "id",
-  selectedIndex,
-  children,
-  backgroundColor = "#171717",
-  resolveOptionName: resolveOptionNamePassed,
-  width = "100%",
-}: Props<Option>) {
+export function DropdownPopover<Option>(props: Props<Option>) {
+  const theme = useTheme();
+  const {
+    onSelect,
+    options = [],
+    asFlatArray = false,
+    offset = 0,
+    open: initialOpen = false,
+    disable = false,
+    nameAccessor = "name",
+    idAccessor = "id",
+    selectedIndex,
+    children,
+    backgroundColor = theme.colors.canvas.inset,
+    resolveOptionName: resolveOptionNamePassed,
+    width = "100%",
+  } = props;
   const [selectedOption, setSelectedOption] = useState(options[selectedIndex]);
 
   useEffect(() => {

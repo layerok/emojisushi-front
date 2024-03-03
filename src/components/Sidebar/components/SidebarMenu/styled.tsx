@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ifProp, theme } from "styled-tools";
+import { ifProp } from "styled-tools";
 
 const Categories = styled.nav`
   margin-top: 30px;
@@ -19,7 +19,7 @@ const Category = styled.span<{
     ifProp("isActive", props.theme.colors.brand, "white")(props)};
 
   &:hover {
-    color: ${theme("colors.brand")};
+    color: ${({ theme }) => theme.colors.brand};
   }
 `;
 

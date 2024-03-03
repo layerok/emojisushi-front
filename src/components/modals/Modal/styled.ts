@@ -7,9 +7,9 @@ const Container = styled.div<{
   width?: CSSProperties["width"];
   alignCenter?: boolean;
 }>`
-  background: #1c1c1c;
-  box-shadow: 0 4px 15px rgba(28, 28, 28, 0.3);
-  border-radius: 15px;
+  background: ${({ theme }) => theme.colors.canvas.inset2};
+  box-shadow: ${({ theme }) => theme.shadows.canvasInset2Shadow};
+  border-radius: ${({ theme }) => theme.borderRadius.default};
   width: ${ifProp("width", prop("width"), "540px")};
 
   ${ifProp(
