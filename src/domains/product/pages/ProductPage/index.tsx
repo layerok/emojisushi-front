@@ -115,7 +115,7 @@ export const ProductPage = observer(() => {
         return pages.length;
       },
       // todo: dependent queries lead to request waterfall
-      // todo: rethink backend endpoints to load categories and products in parallel
+      // todo: load products in parallel if requested category is not found, redirect to a categories page
       enabled: !!categories,
     }
   );
