@@ -16,6 +16,7 @@ import { useAppStore } from "~stores/appStore";
 import { useEffect } from "react";
 import { ROUTES } from "~routes";
 import { CitySlug } from "~common/constants";
+import { Page } from "~components/Page";
 
 // todo: scroll the page up when users visits the checkout page
 
@@ -51,47 +52,49 @@ const CheckoutPage = () => {
   }, []);
 
   return (
-    <Container>
-      <Heading>{t("checkout.title")}</Heading>
-      <S.Container>
-        {isCartLoading ||
-        isUserLoading ||
-        isShippingMethodsLoading ||
-        isSpotsLoading ||
-        isPaymentMethodsLoading ? (
-          appStore.city.slug === CitySlug.Odesa ? (
-            <CheckoutFormOdessa loading />
+    <Page>
+      <Container>
+        <Heading>{t("checkout.title")}</Heading>
+        <S.Container>
+          {isCartLoading ||
+          isUserLoading ||
+          isShippingMethodsLoading ||
+          isSpotsLoading ||
+          isPaymentMethodsLoading ? (
+            appStore.city.slug === CitySlug.Odesa ? (
+              <CheckoutFormOdessa loading />
+            ) : (
+              <CheckoutFormChernomorsk loading />
+            )
+          ) : appStore.city.slug === CitySlug.Odesa ? (
+            <CheckoutFormOdessa
+              // remount component after signin to update form
+              key={user ? "one" : "second"}
+              cart={cart}
+              shippingMethods={shippingMethods}
+              paymentMethods={paymentMethods}
+              user={user}
+              spots={spots}
+            />
           ) : (
-            <CheckoutFormChernomorsk loading />
-          )
-        ) : appStore.city.slug === CitySlug.Odesa ? (
-          <CheckoutFormOdessa
-            // remount component after signin to update form
-            key={user ? "one" : "second"}
-            cart={cart}
-            shippingMethods={shippingMethods}
-            paymentMethods={paymentMethods}
-            user={user}
-            spots={spots}
-          />
-        ) : (
-          <CheckoutFormChernomorsk
-            key={user ? "one" : "second"}
-            cart={cart}
-            shippingMethods={shippingMethods}
-            paymentMethods={paymentMethods}
-            user={user}
-            spots={spots}
-          />
-        )}
+            <CheckoutFormChernomorsk
+              key={user ? "one" : "second"}
+              cart={cart}
+              shippingMethods={shippingMethods}
+              paymentMethods={paymentMethods}
+              user={user}
+              spots={spots}
+            />
+          )}
 
-        {isCartLoading ? (
-          <CheckoutCart loading={true} />
-        ) : (
-          <CheckoutCart cart={cart} />
-        )}
-      </S.Container>
-    </Container>
+          {isCartLoading ? (
+            <CheckoutCart loading={true} />
+          ) : (
+            <CheckoutCart cart={cart} />
+          )}
+        </S.Container>
+      </Container>
+    </Page>
   );
 };
 

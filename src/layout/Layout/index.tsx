@@ -76,9 +76,7 @@ export const Layout = observer(
           <Header cities={cities.data} cart={cart} user={user} />
         )}
         <S.Main>
-          <S.Content>
-            <Outlet />
-          </S.Content>
+          <Outlet />
         </S.Main>
         <Footer />
         {!isCartLoading && (

@@ -28,6 +28,7 @@ import {
   useTypedParams,
   useTypedSearchParams,
 } from "react-router-typesafe-routes/dom";
+import { Page } from "~components/Page";
 
 export const ProductPage = observer(() => {
   const { ref, inView } = useInView();
@@ -146,42 +147,51 @@ export const ProductPage = observer(() => {
     .reduce((acc, pageProducts) => [...acc, ...pageProducts], []); // flattening
 
   return (
-    <Container>
-      <Banner />
-      <MenuLayout categories={categories}>
-        {(isWishlistLoading ||
-          isCartLoading ||
-          status === "loading" ||
-          isCategoriesLoading) &&
-        !products ? (
-          <ProductsGrid loading />
-        ) : (
-          <div style={{ flexGrow: 1 }}>
-            <ProductsGrid
-              wishlists={wishlists}
-              cart={cart}
-              title={selectedCategory?.name}
-              loading={false}
-              items={items}
-            />
-            {hasNextPage && (
-              <S.Footer ref={ref}>
-                <LoadMoreButton
-                  loading={isFetchingNextPage}
-                  style={{ cursor: "pointer" }}
-                  text={t("common.show_more")}
-                  onClick={() => {
-                    if (!isFetchingNextPage) {
-                      handleLoadMore();
-                    }
-                  }}
+    <>
+      <Container>
+        <S.BannerContainer>
+          <Banner />
+        </S.BannerContainer>
+      </Container>
+
+      <Page>
+        <Container>
+          <MenuLayout categories={categories}>
+            {(isWishlistLoading ||
+              isCartLoading ||
+              status === "loading" ||
+              isCategoriesLoading) &&
+            !products ? (
+              <ProductsGrid loading />
+            ) : (
+              <div style={{ flexGrow: 1 }}>
+                <ProductsGrid
+                  wishlists={wishlists}
+                  cart={cart}
+                  title={selectedCategory?.name}
+                  loading={false}
+                  items={items}
                 />
-              </S.Footer>
+                {hasNextPage && (
+                  <S.Footer ref={ref}>
+                    <LoadMoreButton
+                      loading={isFetchingNextPage}
+                      style={{ cursor: "pointer" }}
+                      text={t("common.show_more")}
+                      onClick={() => {
+                        if (!isFetchingNextPage) {
+                          handleLoadMore();
+                        }
+                      }}
+                    />
+                  </S.Footer>
+                )}
+              </div>
             )}
-          </div>
-        )}
-      </MenuLayout>
-    </Container>
+          </MenuLayout>
+        </Container>
+      </Page>
+    </>
   );
 });
 

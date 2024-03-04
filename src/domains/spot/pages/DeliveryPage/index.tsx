@@ -6,54 +6,56 @@ import { observer } from "mobx-react";
 import { Link } from "react-router-dom";
 import { ROUTES } from "~routes";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
+import { Page } from "~components/Page";
 
 export const DeliveryPage = observer(() => {
   const { t } = useTranslation();
   const appStore = useAppStore();
-  console.log("update 2");
 
   return (
-    <Container>
-      <S.FlexContainer>
-        <S.Left>
-          <S.HeadingWrapper>
-            <Heading
-              style={{
-                fontWeight: "600",
-              }}
-            >
-              {t("delivery-and-payment.title")}
-            </Heading>
-          </S.HeadingWrapper>
+    <Page>
+      <Container>
+        <S.FlexContainer>
+          <S.Left>
+            <S.HeadingWrapper>
+              <Heading
+                style={{
+                  fontWeight: "600",
+                }}
+              >
+                {t("delivery-and-payment.title")}
+              </Heading>
+            </S.HeadingWrapper>
 
-          {/*<S.AdresText>*/}
-          {/*  <b>{t("common.address")}</b>: {appStore.city.address}*/}
-          {/*</S.AdresText>*/}
+            {/*<S.AdresText>*/}
+            {/*  <b>{t("common.address")}</b>: {appStore.city.address}*/}
+            {/*</S.AdresText>*/}
 
-          <S.DeliveryText
-            dangerouslySetInnerHTML={{ __html: appStore.city.html_content }}
-          />
-          <Link
-            style={{
-              color: "white",
-            }}
-            to={ROUTES.REFUND.path}
-          >
-            {t("payment.refund-rules")}
-          </Link>
-        </S.Left>
-
-        <If condition={!!appStore.city.google_map_url}>
-          <S.Right>
-            <iframe
-              src={appStore.city.google_map_url}
-              width="100%"
-              height="480"
+            <S.DeliveryText
+              dangerouslySetInnerHTML={{ __html: appStore.city.html_content }}
             />
-          </S.Right>
-        </If>
-      </S.FlexContainer>
-    </Container>
+            <Link
+              style={{
+                color: "white",
+              }}
+              to={ROUTES.REFUND.path}
+            >
+              {t("payment.refund-rules")}
+            </Link>
+          </S.Left>
+
+          <If condition={!!appStore.city.google_map_url}>
+            <S.Right>
+              <iframe
+                src={appStore.city.google_map_url}
+                width="100%"
+                height="480"
+              />
+            </S.Right>
+          </If>
+        </S.FlexContainer>
+      </Container>
+    </Page>
   );
 });
 

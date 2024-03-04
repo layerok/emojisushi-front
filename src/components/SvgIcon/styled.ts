@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { CSSProperties } from "react";
 
 const Parent = styled.span<{
-  noDomColor?: CSSProperties["color"];
+  $color?: CSSProperties["color"];
   hoverColor?: CSSProperties["color"];
 }>`
   display: flex;
@@ -15,7 +15,7 @@ const Parent = styled.span<{
     ${({ hoverColor }) => (hoverColor ? `color: ${hoverColor}` : "")};
   }
 
-  ${({ noDomColor }) => (noDomColor ? `color: ${noDomColor}` : "")};
+  ${({ $color }) => ($color ? `color: ${$color}` : "")};
 `;
 
 export { Parent };

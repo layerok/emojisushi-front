@@ -19,6 +19,7 @@ import { observer } from "mobx-react";
 import { CategorySlug } from "~domains/category/constants";
 import { useTypedSearchParams } from "react-router-typesafe-routes/dom";
 import { ROUTES } from "~routes";
+import { Page } from "~components/Page";
 
 const DEFAULT_PRODUCTS_LIMIT = 2000;
 
@@ -43,16 +44,18 @@ export const WishlistPage = observer(() => {
   });
 
   return (
-    <MenuLayout categories={categories}>
-      {isCartLoading ||
-      isProductsLoading ||
-      isCategoriesLoading ||
-      isWishlistLoading ? (
-        <ProductsGrid loading />
-      ) : (
-        <Wishlist cart={cart} products={products} wishlists={wishlists} />
-      )}
-    </MenuLayout>
+    <Page>
+      <MenuLayout categories={categories}>
+        {isCartLoading ||
+        isProductsLoading ||
+        isCategoriesLoading ||
+        isWishlistLoading ? (
+          <ProductsGrid loading />
+        ) : (
+          <Wishlist cart={cart} products={products} wishlists={wishlists} />
+        )}
+      </MenuLayout>
+    </Page>
   );
 });
 

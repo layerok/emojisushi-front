@@ -35,7 +35,7 @@ export const SvgIcon = forwardRef<HTMLSpanElement, ISvgIconProps>(
           cursor: clickable ? "pointer" : "default",
           ...style,
         }}
-        noDomColor={color}
+        $color={color}
         hoverColor={hoverColor}
         {...rest}
         ref={ref}
