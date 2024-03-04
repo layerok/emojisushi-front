@@ -2,10 +2,10 @@ import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { NavLink } from "react-router-dom";
 import * as S from "./styled";
-import { theme } from "~theme";
 import { HeartSvg } from "~components/svg";
 import { SvgIcon } from "~components/SvgIcon";
 import { SkeletonWrap } from "~components";
+import { useTheme } from "styled-components";
 
 type WishlistsMenuItemProps = { loading?: boolean };
 
@@ -14,6 +14,7 @@ export const WishlistsMenuItem = ({
 }: WishlistsMenuItemProps) => {
   const { t } = useTranslation();
   const to = "/wishlist";
+  const theme = useTheme();
 
   return (
     <NavLink
@@ -26,7 +27,7 @@ export const WishlistsMenuItem = ({
       {({ isActive }) => (
         <S.Favorite
           style={{
-            color: isActive ? theme.link.active : "white",
+            color: isActive ? theme.colors.brand : "white",
           }}
         >
           {loading ? (
@@ -40,7 +41,11 @@ export const WishlistsMenuItem = ({
             }}
           >
             <SkeletonWrap loading={loading}>
-              <SvgIcon clickable={true} width={"100%"} color={"#FFE600"}>
+              <SvgIcon
+                clickable={true}
+                width={"100%"}
+                color={theme.colors.brand}
+              >
                 <HeartSvg />
               </SvgIcon>
             </SkeletonWrap>

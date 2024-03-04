@@ -7,6 +7,7 @@ import { queryClient } from "~query-client";
 import { wishlistsQuery } from "~queries";
 import { IGetWishlistRes } from "~api/types";
 import { arrImmutableDeleteAt } from "~utils/arr.utils";
+import { useTheme } from "styled-components";
 
 type FavoriteButtonProps = {
   cartProduct?: CartProduct;
@@ -91,6 +92,8 @@ export const FavoriteButton = ({
     },
   });
 
+  const theme = useTheme();
+
   return (
     <S.Wrapper
       onClick={() => {
@@ -105,8 +108,8 @@ export const FavoriteButton = ({
           <SvgIcon
             clickable={true}
             width={"100%"}
-            color={favorite ? "#FFE600" : "white"}
-            hoverColor={"#FFE600"}
+            color={favorite ? theme.colors.brand : "white"}
+            hoverColor={theme.colors.brand}
           >
             <HeartSvg />
           </SvgIcon>

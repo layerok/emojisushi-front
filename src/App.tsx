@@ -18,16 +18,26 @@ import { ModalIDEnum } from "~common/modal.constants";
 import { AppUpdateModal } from "~components/modals/AppUpdateModal";
 import { appConfig } from "~config/app";
 import { AppVersionChecker } from "~components/AppVersionChecker";
+import { GlobalStyle } from "~components/GlobalStyle/GlobalStyle";
+import { createSession, getSession } from "~utils/session.utils";
+
+if (!getSession()) {
+  createSession();
+}
 
 console.log("app version", appConfig.version);
 
 export const App = () => {
   return (
-    <Suspense fallback={<Loader loading={true} />}>
-      <I18nextProvider i18n={i18n}>
-        <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <Suspense fallback={<Loader loading={true} />}>
+        <I18nextProvider i18n={i18n}>
           <QueryClientProvider client={queryClient}>
-            <SkeletonTheme baseColor="#1F1F1F" highlightColor="#2F2F2F">
+            <SkeletonTheme
+              baseColor={theme.colors.skeleton.baseColor}
+              highlightColor={theme.colors.skeleton.highlightColor}
+            >
               <NiceModal.Provider>
                 <AppVersionChecker>
                   <RouterProvider
@@ -40,8 +50,8 @@ export const App = () => {
             </SkeletonTheme>
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
-        </ThemeProvider>
-      </I18nextProvider>
-    </Suspense>
+        </I18nextProvider>
+      </Suspense>
+    </ThemeProvider>
   );
 };

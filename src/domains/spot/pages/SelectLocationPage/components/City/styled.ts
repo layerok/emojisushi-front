@@ -21,7 +21,7 @@ const City = styled.li`
 
     text-transform: uppercase;
 
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.fg.default};
   }
 `;
 
@@ -56,14 +56,14 @@ const Spot = {
     line-height: 18px;
 
     position: relative;
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.fg.default};
     text-decoration: none;
     position: relative;
   `,
   Content: styled.div`
-    background: #1c1c1c;
-    border: 1px solid #1c1c1c;
-    border-radius: 10px;
+    background: ${({ theme }) => theme.colors.canvas.inset2};
+    border: 1px solid ${({ theme }) => theme.colors.canvas.inset2};
+    border-radius: ${({ theme }) => theme.borderRadius.smooth};
 
     transition: 0.3s ease-out;
 
@@ -76,7 +76,7 @@ const Spot = {
     z-index: 2;
     &:hover {
       z-index: 4;
-      border-color: ${theme("link.active")};
+      border-color: ${theme("colors.brand")};
     }
   `,
   Head: styled.div`
@@ -91,7 +91,7 @@ const Spot = {
     font-size: 13px;
     line-height: 16px;
 
-    color: ${theme("link.active")};
+    color: ${theme("colors.brand")};
   `,
   Link: styled(BaseLink)`
     text-decoration: none;

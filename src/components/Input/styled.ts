@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ifProp, theme, prop } from "styled-tools";
+import { ifProp, prop } from "styled-tools";
 
 const Wrapper = styled.div`
   position: relative;
@@ -8,28 +8,33 @@ const Wrapper = styled.div`
 const Input = styled.input<{
   light: boolean;
 }>`
-  background: ${ifProp("light", "#272727", "#1C1C1C")};
-  box-shadow: 0 0 15px rgba(34, 34, 34, 0.3);
-  border-radius: 10px;
+  background: ${(props) =>
+    ifProp(
+      "light",
+      props.theme.colors.canvas.inset4,
+      props.theme.colors.canvas.inset2
+    )(props)};
+  box-shadow: ${({ theme }) => theme.shadows.canvasShadow};
+  border-radius: ${({ theme }) => theme.borderRadius.smooth};
   padding: 11px 35px 11px 10px;
   border: none;
   width: ${prop("width", "100%")};
-  color: white;
+  color: ${({ theme }) => theme.colors.fg.default};
 
   ::-webkit-input-placeholder {
-    color: ${theme("input.placeholder", "#616161")};
+    color: ${({ theme }) => theme.components.input.placeholder};
   }
 
   ::-moz-placeholder {
-    color: ${theme("input.placeholder", "#616161")};
+    color: ${({ theme }) => theme.components.input.placeholder};
   }
 
   :-ms-input-placeholder {
-    color: ${theme("input.placeholder", "#616161")};
+    color: ${({ theme }) => theme.components.input.placeholder};
   }
 
   :-moz-placeholder {
-    color: ${theme("input.placeholder", "#616161")};
+    color: ${({ theme }) => theme.components.input.placeholder};
   }
 `;
 
@@ -43,8 +48,8 @@ const Error = styled.p`
   font-size: 10px;
   line-height: 12px;
   padding: 2px 5px;
-  background-color: #cd3838;
-  color: white;
+  background-color: ${({ theme }) => theme.colors.danger.canvas};
+  color: ${({ theme }) => theme.colors.fg.default};
   user-select: none;
   position: absolute;
   right: 0;

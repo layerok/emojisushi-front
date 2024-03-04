@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { citiesQuery } from "~queries/cities.query";
 import { LOCATION_CONFIRMED_SEARCH_PARAM } from "~common/constants";
+import { useTheme } from "styled-components";
 
 type LocationPickerPopoverProps = {
   offset?: number;
@@ -17,11 +18,13 @@ type LocationPickerPopoverProps = {
 };
 
 export const LocationPickerPopover = observer(
-  ({
-    offset = 0,
-    backgroundColor = "#171717",
-    width = "211px",
-  }: LocationPickerPopoverProps) => {
+  (props: LocationPickerPopoverProps) => {
+    const theme = useTheme();
+    const {
+      offset = 0,
+      backgroundColor = theme.colors.canvas.inset,
+      width = "211px",
+    } = props;
     const location = useLocation();
     const { data: cities, isLoading } = useQuery(citiesQuery);
 

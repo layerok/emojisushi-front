@@ -21,16 +21,21 @@ const Reference = styled.div<{
   display: flex;
   width: ${prop("width")};
   align-items: center;
-  background-color: #1c1c1c;
+  background-color: ${({ theme }) => theme.colors.canvas.inset2};
   height: 40px;
   padding-left: 15px;
   padding-right: 30px;
+  --border-radius: ${({ theme }) => theme.borderRadius.smooth};
   border-radius: ${ifProp(
     "open",
-    ifProp({ placement: "bottom" }, "10px 10px 0 0", "0 0 10px 10px"),
-    "10px"
+    ifProp(
+      { placement: "bottom" },
+      "var(--border-radius) var(--border-radius) 0 0",
+      "0 0 var(--border-radius) var(--border-radius)"
+    ),
+    "var(--border-radius)"
   )};
-  color: white;
+  color: ${({ theme }) => theme.colors.fg.default};
 `;
 
 const Content = styled.div<{
@@ -38,19 +43,20 @@ const Content = styled.div<{
   open: boolean;
   placement: Placement;
 }>`
-  background-color: #1c1c1c;
+  background-color: ${({ theme }) => theme.colors.canvas.inset2};
   width: ${prop("width")};
+  --border-radius: ${({ theme }) => theme.borderRadius.smooth};
   ${ifProp(
     {
       placement: "bottom",
     },
     css`
       border-top: ${ifProp("open", "1px solid #2D2D2D", "none")};
-      border-radius: 0 0 10px 10px;
+      border-radius: 0 0 var(--border-radius) var(--border-radius);
     `,
     css`
       border-bottom: ${ifProp("open", "1px solid #2D2D2D", "none")};
-      border-radius: 10px 10px 0 0;
+      border-radius: var(--border-radius) var(--border-radius) 0 0;
     `
   )};
 `;

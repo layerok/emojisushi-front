@@ -21,6 +21,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
 import { ROUTES } from "~routes";
 import { useShowModal } from "~modal";
+import { useTheme } from "styled-components";
 
 export const Header = ({
   loading = false,
@@ -35,6 +36,8 @@ export const Header = ({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const showModal = useShowModal();
+  const theme = useTheme();
+
   return (
     <S.Container>
       <Container
@@ -46,7 +49,7 @@ export const Header = ({
           <S.LogoContainer>
             <SkeletonWrap loading={loading}>
               <Link to={ROUTES.INDEX.path}>
-                <SvgIcon clickable={true} color={"#FFE600"}>
+                <SvgIcon clickable={true} color={theme.colors.brand}>
                   <LogoSvg />
                 </SvgIcon>
               </Link>
@@ -65,7 +68,9 @@ export const Header = ({
             }}
           >
             <SkeletonWrap loading={loading}>
-              <Trans i18nKey="header.contacts" />
+              <HightlightText>
+                <Trans i18nKey="header.contacts" />
+              </HightlightText>
             </SkeletonWrap>
           </S.HeaderItem>
 

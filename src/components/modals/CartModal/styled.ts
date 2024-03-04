@@ -5,9 +5,9 @@ import media from "~common/custom-media";
 const Wrapper = styled.div`
   position: relative;
   width: 420px;
-  background: #1c1c1c;
-  box-shadow: 0 4px 15px rgba(28, 28, 28, 0.3);
-  border-radius: 0 0 0 15px;
+  background: ${({ theme }) => theme.colors.canvas.inset2};
+  box-shadow: ${({ theme }) => theme.shadows.canvasInset2Shadow};
+  border-bottom-left-radius: ${({ theme }) => theme.borderRadius.default};
 
   ${media.greaterThan("tablet")`
     min-height: 500px;

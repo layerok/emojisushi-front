@@ -18,21 +18,24 @@ import { useQuery } from "@tanstack/react-query";
 import { citiesQuery } from "~queries/cities.query";
 import { ROUTES } from "~routes";
 import { useModal, useShowModal } from "~modal";
+import { useTheme } from "styled-components";
 
 export const MobMenuModal = NiceModal.create(() => {
   const modal = useModal();
   const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
+  const theme = useTheme();
   const overlayStyles = {
     justifyItems: "end",
     alignItems: "start",
     background: "rgba(0, 0, 0, 0.4)",
     display: "grid",
-    zIndex: 999999,
+    zIndex: theme.zIndices.modals,
   };
   const { data: user } = useUser();
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  const showModal = useShowModal();
   if (isCitiesLoading) {
     return null;
   }
@@ -50,7 +53,10 @@ export const MobMenuModal = NiceModal.create(() => {
           <LanguageSelector />
         </S.Item>
         <S.Item style={{ height: "25px" }}>
-          <LocationPickerPopover width={"226px"} backgroundColor={"#1C1C1C"} />
+          <LocationPickerPopover
+            width={"226px"}
+            backgroundColor={theme.colors.canvas.inset2}
+          />
         </S.Item>
         <S.Item>
           {user ? (
@@ -124,7 +130,7 @@ export const MobMenuModal = NiceModal.create(() => {
                 </HightlightText>
               )}
             </NavLink>
-            <SvgIcon color={"#FFE600"} width={"25px"}>
+            <SvgIcon color={theme.colors.brand} width={"25px"}>
               <HeartSvg />
             </SvgIcon>
           </FlexBox>

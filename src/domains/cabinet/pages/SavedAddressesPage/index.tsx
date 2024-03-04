@@ -11,6 +11,7 @@ import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "~query-client";
 import { AUTHENTICATED_USER_QUERY_KEY } from "~common/constants";
 import { arrImmutableDeleteAt } from "~utils/arr.utils";
+import { useTheme } from "styled-components";
 
 const Address = ({ address, user }: { address: IAddress; user: IUser }) => {
   const isDefault = user.customer.default_shipping_address_id === address.id;
@@ -74,6 +75,8 @@ const Address = ({ address, user }: { address: IAddress; user: IUser }) => {
     },
   });
 
+  const theme = useTheme();
+
   return (
     <S.AddressWrapper>
       <Input
@@ -86,8 +89,8 @@ const Address = ({ address, user }: { address: IAddress; user: IUser }) => {
         <SvgIcon
           clickable={true}
           width={"25px"}
-          color={isDefault ? "#FFE600" : "white"}
-          hoverColor={"#FFE600"}
+          color={isDefault ? theme.colors.brand : "white"}
+          hoverColor={theme.colors.brand}
           style={{ marginLeft: "10px" }}
           onClick={() => {
             if (!isDefault) {
@@ -100,7 +103,7 @@ const Address = ({ address, user }: { address: IAddress; user: IUser }) => {
         <SvgIcon
           width={"25px"}
           clickable={true}
-          hoverColor={"#CD3838;"}
+          hoverColor={theme.colors.danger.canvas}
           style={{ marginLeft: "10px" }}
           onClick={() => {
             deleteAddressMutation.mutate(address.id);

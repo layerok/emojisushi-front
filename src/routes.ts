@@ -9,6 +9,11 @@ export const ROUTES = {
       SHOW: route(":categorySlug", {
         searchParams: {
           limit: number(),
+          q: string(),
+          sort: string(),
+        },
+        params: {
+          categorySlug: string(),
         },
       }),
     }
@@ -20,7 +25,12 @@ export const ROUTES = {
   }),
   DELIVERYANDPAYMENT: route("dostavka-i-oplata"),
   CHECKOUT: route("checkout"),
-  WISHLIST: route("wishlist"),
+  WISHLIST: route("wishlist", {
+    searchParams: {
+      q: string(),
+      sort: string(),
+    },
+  }),
   ACCOUNT: route(
     "account",
     {},

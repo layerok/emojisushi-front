@@ -30,22 +30,22 @@ const Chip = styled.span<{
   line-height: 20px;
   font-weight: 500;
   cursor: pointer;
-  color: white;
+  color: ${({ theme }) => theme.colors.fg.default};
 
   &:hover {
-    color: ${theme("link.active")};
-    border: 1px solid ${theme("link.active")};
+    color: ${({ theme }) => theme.colors.brand};
+    border: 1px solid ${({ theme }) => theme.colors.brand};
   }
 
   border: 1px solid white;
-  border-radius: 5px;
+  border-radius: ${({ theme }) => theme.borderRadius.lessSmooth};
   padding: 9px 23px;
 
   ${ifProp(
     "isActive",
     css`
-      color: ${theme("link.active")};
-      border: 1px solid ${theme("link.active")};
+      color: ${theme("colors.brand")};
+      border: 1px solid ${theme("colors.brand")};
     `
   )}
 `;

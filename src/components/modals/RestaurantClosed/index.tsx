@@ -4,11 +4,14 @@ import { addLeadingZero } from "~utils/format.utils";
 import { appConfig } from "~config/app";
 import NiceModal from "@ebay/nice-modal-react";
 import { useModal } from "~modal";
+import { useTheme } from "styled-components";
 
 // todo: reopen this modal every n seconds
 export const RestaurantClosed = NiceModal.create(() => {
   const { t } = useTranslation();
   const modal = useModal();
+  const theme = useTheme();
+  modal.resolve();
   return (
     <NotifyModal
       onClose={() => {
@@ -27,7 +30,7 @@ export const RestaurantClosed = NiceModal.create(() => {
         })
       }
       renderIcon={() => (
-        <SvgIcon color={"#FFE600"} width={"60px"}>
+        <SvgIcon color={theme.colors.brand} width={"60px"}>
           <LowKeySvg />
         </SvgIcon>
       )}

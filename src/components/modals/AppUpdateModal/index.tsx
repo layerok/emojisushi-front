@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import NiceModal from "@ebay/nice-modal-react";
 import { useModal } from "~modal";
+import { useTheme } from "styled-components";
 
 const ArrowDownSvg = () => {
   return (
@@ -24,6 +25,7 @@ export const AppUpdateModal = NiceModal.create(() => {
   const { t } = useTranslation();
 
   const modal = useModal();
+  const theme = useTheme();
 
   return (
     <NotifyModal
@@ -34,7 +36,7 @@ export const AppUpdateModal = NiceModal.create(() => {
       renderTitle={() => t("appUpdate.title")}
       renderSubtitle={() => t("appUpdate.subtitle")}
       renderIcon={() => (
-        <SvgIcon color={"#FFE600"} width={"60px"}>
+        <SvgIcon color={theme.colors.brand} width={"60px"}>
           <ArrowDownSvg />
         </SvgIcon>
       )}

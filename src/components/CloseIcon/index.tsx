@@ -1,6 +1,7 @@
 import { ISvgIconProps, SvgIcon } from "../SvgIcon";
 import { CloseSvg } from "../svg/CloseSvg";
-import { forwardRef } from "react";
+import { forwardRef, useContext } from "react";
+import { ThemeContext } from "styled-components";
 
 export const CloseIcon = forwardRef<
   HTMLSpanElement,
@@ -10,12 +11,13 @@ export const CloseIcon = forwardRef<
     onClick?: () => void;
   }
 >(({ width = "25px", color = "white", onClick = () => {}, ...rest }, ref) => {
+  const theme = useContext(ThemeContext);
   return (
     <SvgIcon
       width={width}
       color={color}
       onClick={onClick}
-      hoverColor={"#FFE600"}
+      hoverColor={theme.colors.brand}
       style={{
         cursor: "pointer",
       }}

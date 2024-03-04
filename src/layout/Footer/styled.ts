@@ -4,7 +4,7 @@ import media from "../../common/custom-media";
 const Footer = styled.footer`
   width: 100%;
   flex-shrink: 0;
-  background-color: #171717;
+  background-color: ${({ theme }) => theme.colors.canvas.inset};
   height: 239px;
   overflow: hidden;
 
@@ -52,7 +52,7 @@ const List = styled.div``;
 
 const Phone = styled.a`
   text-decoration: none;
-  color: #ffff;
+  color: ${({ theme }) => theme.colors.fg.default};
   margin-bottom: 10px;
   width: 100%;
 `;
@@ -63,7 +63,7 @@ const LinkContainer = styled.div`
 
 const InstagramLink = styled.a`
   text-decoration: none;
-  color: #ffff;
+  color: ${({ theme }) => theme.colors.fg.default};
 `;
 
 const PhoneLabel = styled.div`

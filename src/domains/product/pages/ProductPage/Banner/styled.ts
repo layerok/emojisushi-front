@@ -10,7 +10,7 @@ const Slide = styled(motion.div)<{
   background-position: center;
   inset: 0;
   position: absolute;
-  border-radius: 15px;
+  border-radius: ${({ theme }) => theme.borderRadius.default};
 `;
 
 const Container = styled(motion.div)`

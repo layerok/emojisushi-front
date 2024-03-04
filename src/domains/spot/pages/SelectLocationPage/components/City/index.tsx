@@ -5,10 +5,12 @@ import { MapPinSvg, SvgIcon } from "~components";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "~routes";
+import { useTheme } from "styled-components";
 
 export const Cities = ({ items }: { items: ICity[] }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const theme = useTheme();
   return (
     <S.Cities>
       {items.map((city, index) => (
@@ -29,7 +31,7 @@ export const Cities = ({ items }: { items: ICity[] }) => {
                   <S.Spot.Content>
                     <S.Spot.Head>
                       {t("common.address")}
-                      <SvgIcon width={"15px"} color={"#FFE600"}>
+                      <SvgIcon width={"15px"} color={theme.colors.brand}>
                         <MapPinSvg />
                       </SvgIcon>
                     </S.Spot.Head>
@@ -46,6 +48,7 @@ export const Cities = ({ items }: { items: ICity[] }) => {
 };
 
 export const CitiesSkeleton = () => {
+  const theme = useTheme();
   return (
     <S.Cities>
       <S.City>
@@ -58,7 +61,7 @@ export const CitiesSkeleton = () => {
               <S.Spot.Content>
                 <S.Spot.Head>
                   <Skeleton width={50} />
-                  <SvgIcon width={"15px"} color={"#FFE600"}>
+                  <SvgIcon width={"15px"} color={theme.colors.brand}>
                     <MapPinSvg />
                   </SvgIcon>
                 </S.Spot.Head>
@@ -71,7 +74,7 @@ export const CitiesSkeleton = () => {
               <S.Spot.Content>
                 <S.Spot.Head>
                   <Skeleton width={50} />
-                  <SvgIcon width={"15px"} color={"#FFE600"}>
+                  <SvgIcon width={"15px"} color={theme.colors.brand}>
                     <MapPinSvg />
                   </SvgIcon>
                 </S.Spot.Head>

@@ -12,9 +12,14 @@ const Link = styled.span<{
   margin-top: 10px;
   display: flex;
   flex-direction: column;
-  color: ${ifProp("isActive", "#FFE600", "#FFFFFF")};
+  color: ${(props) =>
+    ifProp(
+      "isActive",
+      props.theme.colors.brand,
+      props.theme.colors.fg.default
+    )(props)};
   :hover {
-    color: #ffe600;
+    color: ${({ theme }) => theme.colors.brand};
   }
   :after {
     border-bottom: none;

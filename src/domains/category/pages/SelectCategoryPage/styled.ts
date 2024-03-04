@@ -30,39 +30,12 @@ const CategoryLabel = styled.div`
   font-size: 18px;
   line-height: 22px;
   text-transform: uppercase;
-  color: #fff;
+  color: ${({ theme }) => theme.colors.fg.default};
 
   ${media.lessThan("mobile")`
     font-size: 16px;
     line-height: 20px;
   `}
-`;
-
-const CategoryImage = styled.div`
-  flex-shrink: 0;
-  width: 100px;
-  height: 100px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  &:before {
-    position: absolute;
-    content: "";
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(270deg, #1c1c1c 0%, rgba(28, 28, 28, 0) 100%);
-    pointer-events: none;
-  }
 `;
 
 const CategoryItems = styled.div`
@@ -92,7 +65,6 @@ width: 20px;
 export {
   Category,
   CategoryList,
-  CategoryImage,
   CategoryItems,
   CategoryLabel,
   CategoryContainer,

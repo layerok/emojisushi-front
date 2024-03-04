@@ -19,8 +19,8 @@ const Container = styled.div<{
     position: absolute;
     width: 100%;
     left: 0;
-    border-bottom: 1px solid #ffe600;
-    box-shadow: 0 0 15px rgba(255, 230, 0, 0.3);
+    border-bottom: 1px solid ${({ theme }) => theme.colors.brand};
+    box-shadow: ${({ theme }) => theme.shadows.brandSofter};
     margin-top: 10px;
     bottom: -10px;
   }

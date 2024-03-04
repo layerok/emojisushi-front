@@ -1,12 +1,6 @@
 import * as ReactDOM from "react-dom/client";
-import "./index.css";
 import { App } from "~App";
 import reportWebVitals from "./reportWebVitals";
-import { createSession, getSession } from "~utils/session.utils";
-
-if (!getSession()) {
-  createSession();
-}
 
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 

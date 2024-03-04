@@ -8,9 +8,9 @@ const Slide = styled.div<{
   position: absolute;
   width: calc(100% / ${prop("length")});
   height: 100%;
-  background: #ffe600;
-  box-shadow: 0 0 15px rgba(255, 230, 0, 0.3);
-  border-radius: 10px;
+  background: ${({ theme }) => theme.colors.brand};
+  box-shadow: ${({ theme }) => theme.shadows.brandSofter};
+  border-radius: ${({ theme }) => theme.borderRadius.smooth};
   color: black;
   display: flex;
   justify-content: center;
@@ -20,9 +20,9 @@ const Slide = styled.div<{
 `;
 const Wrapper = styled.div`
   position: relative;
-  background: #1c1c1c;
-  box-shadow: 0 0 15px rgba(34, 34, 34, 0.3);
-  border-radius: 10px;
+  background: ${({ theme }) => theme.colors.canvas.inset2};
+  box-shadow: ${({ theme }) => theme.shadows.canvasShadow};
+  border-radius: ${({ theme }) => theme.borderRadius.smooth};
   height: 40px;
   width: 100%;
   display: flex;

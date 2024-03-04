@@ -17,8 +17,8 @@ const Container = styled.div`
   bottom: 0;
   left: 0;
   opacity: 0;
-  background-color: #141414;
-  z-index: 99999999;
+  background-color: ${({ theme }) => theme.colors.canvas.default};
+  z-index: ${({ theme }) => theme.zIndices.preloader};
   display: flex;
   justify-content: center;
   align-items: center;

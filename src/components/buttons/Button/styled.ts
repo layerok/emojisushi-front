@@ -17,8 +17,9 @@ const Button = styled.button<{
   backgroundColor?: CSSProperties["backgroundColor"];
   filled?: boolean;
 }>`
-  border: ${ifProp("outline", "1px solid #FFE600", "none")};
-  border-radius: 10px;
+  border: ${(props) =>
+    ifProp("outline", `1px solid ${props.theme.colors.brand}`, "none")(props)};
+  border-radius: ${({ theme }) => theme.borderRadius.smooth};
   color: ${prop("color")};
   padding: ${prop("padding", "7px 31px")};
   width: ${prop("width", "130px")};
@@ -35,14 +36,19 @@ const Button = styled.button<{
   ${ifProp(
     "filled",
     css`
-      box-shadow: 0px 4px 15px rgba(255, 230, 0, 0.3);
+      box-shadow: ${({ theme }) => theme.shadows.brandSofter};
     `
   )}
 
   :hover {
-    border: ${ifProp("hoverOutline", "1px solid #FFE600", "none")};
+    border: ${(props) =>
+      ifProp(
+        "hoverOutline",
+        `1px solid ${props.theme.colors.brand}`,
+        "none"
+      )(props)};
     background: ${prop("hoverBackgroundColor")};
-    box-shadow: 0px 4px 15px rgba(255, 230, 0, 0.3);
+    box-shadow: ${({ theme }) => theme.shadows.brandSofter};
     color: ${prop("hoverColor")};
   }
 `;

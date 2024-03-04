@@ -3,9 +3,9 @@ import media from "~common/custom-media";
 
 const Wrapper = styled.div`
   width: 255px;
-  border-radius: 15px;
-  background: #343434;
-  box-shadow: 0px 4px 15px rgba(28, 28, 28, 0.3);
+  border-radius: ${({ theme }) => theme.borderRadius.default};
+  background: ${({ theme }) => theme.colors.canvas.inset3};
+  box-shadow: ${({ theme }) => theme.shadows.canvasInset2Shadow};
   padding: 10px;
 `;
 

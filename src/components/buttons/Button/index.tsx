@@ -1,15 +1,8 @@
 import * as S from "./styled";
 import { SpinnerSvg, SvgIcon } from "~components";
-import {
-  CSSProperties,
-  forwardRef,
-  ButtonHTMLAttributes,
-  DetailedHTMLProps,
-  PropsWithChildren,
-  ReactNode,
-  HTMLProps,
-} from "react";
+import { CSSProperties, forwardRef, PropsWithChildren, HTMLProps } from "react";
 import Skeleton from "react-loading-skeleton";
+import { useTheme } from "styled-components";
 
 type IProps = PropsWithChildren<
   HTMLProps<HTMLButtonElement> & {
@@ -30,6 +23,7 @@ type IProps = PropsWithChildren<
 >;
 
 export const Button = forwardRef<HTMLButtonElement, IProps>((props, ref) => {
+  const theme = useTheme();
   const {
     children,
     width,
@@ -39,10 +33,10 @@ export const Button = forwardRef<HTMLButtonElement, IProps>((props, ref) => {
     submitting = false,
     justifyContent,
     outline = true,
-    color = "#FFE600",
+    color = theme.colors.brand,
     hoverColor = "black",
     backgroundColor = "transparent",
-    hoverBackgroundColor = "#FFE600",
+    hoverBackgroundColor = theme.colors.brand,
     hoverOutline = true,
     minWidth = "130px",
     ...rest
@@ -58,7 +52,7 @@ export const Button = forwardRef<HTMLButtonElement, IProps>((props, ref) => {
     <S.Button
       minWidth={minWidth}
       outline={outline}
-      backgroundColor={submitting ? "#FFE600" : backgroundColor}
+      backgroundColor={submitting ? theme.colors.brand : backgroundColor}
       hoverBackgroundColor={hoverBackgroundColor}
       hoverOutline={hoverOutline}
       color={color}
@@ -98,11 +92,12 @@ export const ButtonFilled = forwardRef<
   Omit<IProps, "color" | "filled" | "backgroundColor">
 >((props, ref) => {
   const { children, ...rest } = props;
+  const theme = useTheme();
 
   return (
     <Button
       {...rest}
-      backgroundColor={"#FFE600"}
+      backgroundColor={theme.colors.brand}
       color={"black"}
       filled={true}
       ref={ref}
@@ -125,13 +120,14 @@ export const ButtonDark = forwardRef<
   >
 >((props, ref) => {
   const { children, ...rest } = props;
+  const theme = useTheme();
   return (
     <Button
       outline={false}
-      color={"#FFFFFF"}
-      backgroundColor={"#272727"}
-      hoverBackgroundColor={"#272727"}
-      hoverColor={"#FFE600"}
+      color={theme.colors.fg.default}
+      backgroundColor={theme.colors.canvas.inset4}
+      hoverBackgroundColor={theme.colors.canvas.inset4}
+      hoverColor={theme.colors.brand}
       hoverOutline={true}
       {...rest}
       ref={ref}

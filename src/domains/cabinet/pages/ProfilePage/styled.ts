@@ -23,9 +23,9 @@ const BtnWrapper = styled.div`
 const Properties = styled.div`
   width: 634px;
 
-  background: #1c1c1c;
-  box-shadow: 0 4px 15px rgba(28, 28, 28, 0.3);
-  border-radius: 15px;
+  background: ${({ theme }) => theme.colors.canvas.inset2};
+  box-shadow: ${({ theme }) => theme.shadows.canvasInset2Shadow};
+  border-radius: ${({ theme }) => theme.borderRadius.default};
   margin-top: 20px;
   padding: 15px;
   display: flex;
@@ -48,7 +48,7 @@ const Property = styled.div`
 `;
 
 const PropertyLabel = styled.div`
-  color: #616161;
+  color: ${({ theme }) => theme.colors.fg.muted};
   width: 270px;
   flex-shrink: 0;
   ${media.lessThan("pc")`
@@ -58,7 +58,7 @@ const PropertyLabel = styled.div`
 `;
 
 const PropertyValue = styled.div`
-  color: #ffffff;
+  color: ${({ theme }) => theme.colors.fg.default};
   word-break: break-all;
 `;
 
@@ -70,7 +70,7 @@ const BirthHeading = styled.p`
   font-weight: 600;
   font-size: 20px;
   line-height: 24px;
-  color: #ffffff;
+  color: ${({ theme }) => theme.colors.fg.default};
 `;
 
 const BirthLabel = styled.p`
@@ -78,7 +78,7 @@ const BirthLabel = styled.p`
   font-size: 15px;
   line-height: 18px;
 
-  color: #616161;
+  color: ${({ theme }) => theme.colors.fg.muted};
 `;
 
 const BirthProperties = styled.div`
@@ -104,7 +104,7 @@ const SexLabel = styled.p`
   font-size: 15px;
   line-height: 18px;
 
-  color: #616161;
+  color: ${({ theme }) => theme.colors.fg.muted};
 `;
 
 const HorizontalBar = styled.div`

@@ -7,9 +7,10 @@ import {
 } from "./menu.api.types";
 import { AxiosAuthRefreshRequestConfig } from "axios-auth-refresh";
 
-function getProducts(params: IGetProductsParams) {
+function getProducts(params: IGetProductsParams, signal?: AbortSignal) {
   return client.get<IGetProductsRes>("products", {
     params,
+    signal,
     skipAuthRefresh: true,
   } as AxiosAuthRefreshRequestConfig);
 }

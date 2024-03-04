@@ -1,6 +1,5 @@
 import { ProductsGrid } from "~components";
 import { useTranslation } from "react-i18next";
-import { useSearchParams } from "react-router-dom";
 import {
   IGetCartRes,
   IGetProductsRes,
@@ -17,13 +16,16 @@ import {
 import { MenuLayout } from "~domains/product/components/MenuLayout";
 import { useQuery } from "@tanstack/react-query";
 import { observer } from "mobx-react";
+import { CategorySlug } from "~domains/category/constants";
+import { useTypedSearchParams } from "react-router-typesafe-routes/dom";
+import { ROUTES } from "~routes";
 
-// todo: fix layout for wishlist
+const DEFAULT_PRODUCTS_LIMIT = 2000;
 
 export const WishlistPage = observer(() => {
-  const [searchParams] = useSearchParams();
-  const q = searchParams.get("q");
-  const sort = searchParams.get("sort") as SortKey;
+  const [searchParams] = useTypedSearchParams(ROUTES.WISHLIST);
+  const { q } = searchParams;
+  const sort = searchParams.sort as SortKey;
 
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
   const { data: categories, isLoading: isCategoriesLoading } = useQuery({
@@ -33,9 +35,9 @@ export const WishlistPage = observer(() => {
     useQuery(wishlistsQuery);
   const { data: products, isLoading: isProductsLoading } = useQuery({
     ...productsQuery({
-      category_slug: "menu",
+      category_slug: CategorySlug.Menu,
       search: q,
-      limit: 2000,
+      limit: DEFAULT_PRODUCTS_LIMIT,
       sort: sort,
     }),
   });

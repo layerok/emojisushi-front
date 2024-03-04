@@ -4,7 +4,8 @@ import { PlusSvg } from "../svg/PlusSvg";
 import * as S from "./styled";
 import { ButtonFilled } from "../buttons/Button";
 import { FlexBox } from "../FlexBox";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, useContext } from "react";
+import { ThemeContext, useTheme } from "styled-components";
 
 export const Counter = ({
   handleDecrement,
@@ -51,6 +52,7 @@ export const Counter = ({
 };
 
 export const LightCounter = ({ handleDecrement, handleIncrement, count }) => {
+  const theme = useContext(ThemeContext);
   return (
     <Counter
       handleDecrement={handleDecrement}
@@ -59,12 +61,13 @@ export const LightCounter = ({ handleDecrement, handleIncrement, count }) => {
       countColor={"white"}
       controlColor={"#4A4A4A"}
       delimiterColor={"#333333"}
-      hoverControlColor={"#FFE600"}
+      hoverControlColor={theme.colors.brand}
     />
   );
 };
 
 export const DarkCounter = ({ handleDecrement, handleIncrement, count }) => {
+  const theme = useTheme();
   return (
     <Counter
       handleDecrement={handleDecrement}
@@ -72,7 +75,7 @@ export const DarkCounter = ({ handleDecrement, handleIncrement, count }) => {
       count={count}
       countColor={"black"}
       controlColor={"black"}
-      delimiterColor={"#F1DA00"}
+      delimiterColor={theme.colors.brandDelimiter}
     />
   );
 };

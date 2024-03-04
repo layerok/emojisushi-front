@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { theme } from "styled-tools";
 
 const Container = styled.div`
   width: 350px;
@@ -9,9 +10,9 @@ const Form = styled.form`
 `;
 
 const ErrorBag = styled.ol`
-  background: #cd3838;
-  box-shadow: 0 0 15px rgba(34, 34, 34, 0.3);
-  border-radius: 10px;
+  background: ${({ theme }) => theme.colors.danger.canvas};
+  box-shadow: ${({ theme }) => theme.shadows.canvasShadow};
+  border-radius: ${({ theme }) => theme.borderRadius.smooth};
   padding: 12px 12px 12px 28px;
 
   li {
@@ -47,7 +48,7 @@ const Total = styled.div`
 `;
 
 const Login = styled.div`
-  color: #ffe600;
+  color: ${theme("colors.brand")};
   margin-left: 5px;
   cursor: pointer;
 `;
