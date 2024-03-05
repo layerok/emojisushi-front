@@ -21,6 +21,7 @@ export type ISpot = {
   frontend_url: string;
   is_main: boolean;
   district: IDistrict;
+  temporarily_unavailable: boolean;
 };
 
 export type IDistrict = {
@@ -28,6 +29,7 @@ export type IDistrict = {
   name: string;
   spots: ISpot[];
   city: ICity;
+  temporarily_unavailable: boolean;
 };
 
 export type ICity = {
@@ -40,6 +42,7 @@ export type ICity = {
   phones: string;
   html_content: string;
   districts: IDistrict[];
+  temporarily_unavailable: boolean;
 };
 
 export type IGetCitiesParams = {

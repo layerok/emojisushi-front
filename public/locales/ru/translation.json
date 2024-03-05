@@ -125,6 +125,7 @@
         "error": "Пожалуйста, выберите заведение"
       }
     },
+    "temporarilyUnavailable": "Временно недоступно",
     "inputAnotherAddress": "Добавить другой адрес",
     "selectSavedAddress": "Выбрать сохранненый адрес",
     "alreadyHaveAccount": "Уже есть аккаунт?",

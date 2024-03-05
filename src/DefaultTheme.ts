@@ -18,6 +18,9 @@ declare module "styled-components" {
       danger: {
         canvas: string;
       };
+      warning: {
+        fg: string;
+      };
       canvas: {
         default: string;
         inset: string;

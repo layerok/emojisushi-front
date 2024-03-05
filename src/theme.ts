@@ -8,6 +8,9 @@ const palette = {
     400: "#f1da00",
     500: "#ffe600",
   },
+  orange: {
+    500: "#d78403",
+  },
   red: {
     500: "#cd3838",
   },
@@ -55,6 +58,9 @@ const colors = {
     inset3: palette.grey[500],
     inset4: palette.grey[570],
     inset5: palette.grey[573],
+  },
+  warning: {
+    fg: palette.orange[500],
   },
   border: {
     default: palette.grey[500],

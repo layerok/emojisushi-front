@@ -204,6 +204,7 @@ export type IUser = IRainLabUser & {
   offline_mall_customer_group_id: number | null;
   phone: string | null;
   customer: ICustomer | null;
+  is_call_center_admin: boolean;
 };
 
 export type RegisterResData = {

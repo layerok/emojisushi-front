@@ -125,6 +125,7 @@
         "error": "Please select the restaurant address"
       }
     },
+    "temporarilyUnavailable": "Temporarily unavailable",
     "inputAnotherAddress": "Add another address",
     "selectSavedAddress": "Select saved address",
     "alreadyHaveAccount": "Already have an account?",

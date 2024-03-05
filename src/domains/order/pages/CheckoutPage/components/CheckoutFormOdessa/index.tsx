@@ -13,6 +13,7 @@ import * as Yup from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as S from "./styled";
 import {
+  IDistrict,
   IGetCartRes,
   IGetPaymentMethodsRes,
   IGetShippingMethodsRes,
@@ -26,7 +27,6 @@ import { cartQuery } from "~queries";
 import { AxiosError } from "axios";
 import { observer } from "mobx-react";
 import { useAppStore } from "~stores/appStore";
-import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
 import { ROUTES } from "~routes";
 import { isValidUkrainianPhone, getUserFullName } from "~domains/order/utils";
@@ -47,8 +47,22 @@ type TCheckoutFormProps = {
 
 // todo: mark optional fields instead of marking required fields
 
+enum ShippingMethodIdEnum {
+  Takeaway = 1,
+  Courier = 2,
+}
+
+enum FormNames {
+  SpotId = "spot_id",
+  DistrictId = "district_id",
+}
+
 const DEFAULT_PAYMENT_METHOD_ID = 1;
 const DEFAULT_DELIVERY_METHOD_ID = 1;
+
+const getDistrictDefaultSpot = (district: IDistrict) => {
+  return district.spots[0];
+};
 
 export const CheckoutFormOdessa = observer(
   ({
@@ -142,7 +156,7 @@ export const CheckoutFormOdessa = observer(
             const district = appStore.city.districts.find(
               (district) => district.id === district_id
             );
-            return district.spots[0].id;
+            return getDistrictDefaultSpot(district).id;
           }
         }
 
@@ -206,6 +220,7 @@ export const CheckoutFormOdessa = observer(
     const shippingMethodsSwitcher = {
       options: (shippingMethods?.data || []).map((item) => ({
         value: item.id,
+        // todo: don't use dynamic translation keys
         label: t("shippingMethods." + item.code, item.name),
       })),
       selectedMethod: () =>
@@ -217,6 +232,7 @@ export const CheckoutFormOdessa = observer(
     const paymentMethodsSwitcher = {
       options: (paymentMethods?.data || []).map((item) => ({
         value: item.id,
+        // todo: refactor dynamic translations
         label: t("paymentMethods." + item.code, item.name),
       })),
       selectedMethod: () =>
@@ -255,7 +271,7 @@ export const CheckoutFormOdessa = observer(
             options={shippingMethodsSwitcher.options}
             value={+shippingMethodsSwitcher.selectedMethod()?.id}
             handleChange={({ e, index }) => {
-              if (e.target.value === "1") {
+              if (e.target.value === String(ShippingMethodIdEnum.Takeaway)) {
                 setValidationSchema(TakeAwaySchema);
               } else {
                 setValidationSchema(CourierSchema);
@@ -271,32 +287,35 @@ export const CheckoutFormOdessa = observer(
               <Dropdown
                 showSkeleton={loading}
                 placeholder={t("checkout.form.spot.placeholder")}
-                options={(appStore.city.spots || []).map((spot) => {
-                  return {
-                    label: spot.name,
-                    value: spot.id,
-                  };
-                })}
+                options={(appStore.city.spots || []).map((spot) => ({
+                  label: spot.name,
+                  value: spot.id,
+                  disabledText: t("checkout.temporarilyUnavailable"),
+                  disabled:
+                    !user?.is_call_center_admin && spot.temporarily_unavailable,
+                }))}
                 width={"350px"}
-                value={formik.values.spot_id}
-                onChange={(value) => {
-                  formik.setFieldValue("spot_id", value);
-                }}
+                value={formik.values[FormNames.SpotId]}
+                onChange={(value) =>
+                  formik.setFieldValue(FormNames.SpotId, value)
+                }
               />
             ) : (
               <Dropdown
                 showSkeleton={loading}
                 placeholder={t("checkout.form.district.placeholder")}
-                options={(appStore.city.districts || []).map((district) => {
-                  return {
-                    label: district.name,
-                    value: district.id,
-                  };
-                })}
+                options={(appStore.city.districts || []).map((district) => ({
+                  label: district.name,
+                  value: district.id,
+                  disabledText: t("checkout.temporarilyUnavailable"),
+                  disabled:
+                    !user?.is_call_center_admin &&
+                    getDistrictDefaultSpot(district).temporarily_unavailable,
+                }))}
                 width={"350px"}
-                value={formik.values.district_id}
+                value={formik.values[FormNames.DistrictId]}
                 onChange={(value) => {
-                  formik.setFieldValue("district_id", value);
+                  formik.setFieldValue(FormNames.DistrictId, value);
                 }}
               />
             )}

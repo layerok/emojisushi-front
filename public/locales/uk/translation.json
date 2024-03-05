@@ -125,6 +125,7 @@
         "error": "Будь ласка, оберіть найближчий заклад"
       }
     },
+    "temporarilyUnavailable": "Тимчасово недоступно",
     "inputAnotherAddress": "Додати іншу адресу",
     "selectSavedAddress": "Оберіть збережу адресу",
     "alreadyHaveAccount": "Вже маєте акаунт?",
