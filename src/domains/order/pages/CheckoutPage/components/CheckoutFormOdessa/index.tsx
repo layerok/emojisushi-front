@@ -52,9 +52,22 @@ enum ShippingMethodIdEnum {
   Courier = 2,
 }
 
+enum PaymentMethodCode {
+  Cash = "cash",
+}
+
 enum FormNames {
   SpotId = "spot_id",
   DistrictId = "district_id",
+  ShippingMethodId = "shipping_method_id",
+  PaymentMethodId = "payment_method_id",
+  Change = "change",
+  Address = "address",
+  AddressId = "address_id",
+  Name = "name",
+  Phone = "phone",
+  Sticks = "sticks",
+  Comment = "comment",
 }
 
 const DEFAULT_PAYMENT_METHOD_ID = 1;
@@ -109,8 +122,8 @@ export const CheckoutFormOdessa = observer(
 
     const formik = useFormik({
       initialValues: {
-        name: user ? getUserFullName(user) : "",
-        phone: user ? user.phone || "" : "",
+        name: user && !user.is_call_center_admin ? getUserFullName(user) : "",
+        phone: user && !user.is_call_center_admin ? user.phone || "" : "",
         address: "",
         address_id: null,
         comment: "",
@@ -269,7 +282,7 @@ export const CheckoutFormOdessa = observer(
         <S.Form onSubmit={formik.handleSubmit}>
           <Switcher
             showSkeleton={loading}
-            name={"shipping_method_id"}
+            name={FormNames.ShippingMethodId}
             options={shippingMethodsSwitcher.options}
             value={+shippingMethodsSwitcher.selectedMethod()?.id}
             onChange={({ e, index }) => {
@@ -329,7 +342,7 @@ export const CheckoutFormOdessa = observer(
               {showAddressInput ? (
                 <S.Control>
                   <Input
-                    name={"address"}
+                    name={FormNames.Address}
                     placeholder={t("checkout.form.address")}
                     onChange={formik.handleChange}
                     value={formik.values.address}
@@ -342,7 +355,7 @@ export const CheckoutFormOdessa = observer(
                     width={"350px"}
                     value={addressDropdown.selectedAddress?.id}
                     onChange={(id) => {
-                      formik.setFieldValue("address_id", id);
+                      formik.setFieldValue(FormNames.AddressId, id);
                     }}
                   />
                 </S.Control>
@@ -359,15 +372,18 @@ export const CheckoutFormOdessa = observer(
                       );
 
                       if (defaultAddress) {
-                        formik.setFieldValue("address_id", defaultAddress.id);
+                        formik.setFieldValue(
+                          FormNames.AddressId,
+                          defaultAddress.id
+                        );
                       } else {
                         formik.setFieldValue(
-                          "address_id",
+                          FormNames.AddressId,
                           user.customer.addresses[0].id
                         );
                       }
                     } else {
-                      formik.setFieldValue("address_id", null);
+                      formik.setFieldValue(FormNames.AddressId, null);
                     }
                     setShowAddressInput((state) => !state);
                   }}
@@ -383,7 +399,7 @@ export const CheckoutFormOdessa = observer(
           <S.Control>
             <Input
               loading={loading}
-              name={"name"}
+              name={FormNames.Name}
               placeholder={t("common.first_name")}
               onChange={formik.handleChange}
               value={formik.values.name}
@@ -393,7 +409,7 @@ export const CheckoutFormOdessa = observer(
           <S.Control>
             <Input
               loading={loading}
-              name={"phone"}
+              name={FormNames.Phone}
               required={true}
               placeholder={t("common.phone")}
               onChange={formik.handleChange}
@@ -403,7 +419,7 @@ export const CheckoutFormOdessa = observer(
           <S.Control>
             <Input
               loading={loading}
-              name={"sticks"}
+              name={FormNames.Sticks}
               type={"number"}
               min={"0"}
               placeholder={t("checkout.form.persons")}
@@ -414,7 +430,7 @@ export const CheckoutFormOdessa = observer(
           <S.Control>
             <Input
               loading={loading}
-              name={"comment"}
+              name={FormNames.Comment}
               placeholder={t("checkout.form.comment")}
               onChange={formik.handleChange}
               value={formik.values.comment}
@@ -423,7 +439,7 @@ export const CheckoutFormOdessa = observer(
           <S.Control>
             <Switcher
               showSkeleton={loading}
-              name={"payment_method_id"}
+              name={FormNames.PaymentMethodId}
               options={paymentMethodsSwitcher.options}
               onChange={({ e, index }) => {
                 formik.handleChange(e);
@@ -431,11 +447,12 @@ export const CheckoutFormOdessa = observer(
               value={paymentMethodsSwitcher.selectedMethod()?.id}
             />
           </S.Control>
-          {paymentMethodsSwitcher.selectedMethod()?.code === "cash" && (
+          {paymentMethodsSwitcher.selectedMethod()?.code ===
+            PaymentMethodCode.Cash && (
             <S.Control>
               <Input
                 loading={loading}
-                name={"change"}
+                name={FormNames.Change}
                 placeholder={t("checkout.form.change")}
                 onChange={formik.handleChange}
                 value={formik.values.change}
