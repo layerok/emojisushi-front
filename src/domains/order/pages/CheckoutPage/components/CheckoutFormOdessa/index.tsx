@@ -121,6 +121,8 @@ export const CheckoutFormOdessa = observer(
         spot_id: undefined,
         district_id: undefined,
       },
+      validateOnBlur: false,
+      validateOnChange: true,
       validationSchema,
       onSubmit: async (values) => {
         formik.setErrors({});
@@ -270,7 +272,7 @@ export const CheckoutFormOdessa = observer(
             name={"shipping_method_id"}
             options={shippingMethodsSwitcher.options}
             value={+shippingMethodsSwitcher.selectedMethod()?.id}
-            handleChange={({ e, index }) => {
+            onChange={({ e, index }) => {
               if (e.target.value === String(ShippingMethodIdEnum.Takeaway)) {
                 setValidationSchema(TakeAwaySchema);
               } else {
@@ -296,9 +298,9 @@ export const CheckoutFormOdessa = observer(
                 }))}
                 width={"350px"}
                 value={formik.values[FormNames.SpotId]}
-                onChange={(value) =>
-                  formik.setFieldValue(FormNames.SpotId, value)
-                }
+                onChange={(value) => {
+                  formik.setFieldValue(FormNames.SpotId, value);
+                }}
               />
             ) : (
               <Dropdown
@@ -394,9 +396,7 @@ export const CheckoutFormOdessa = observer(
               name={"phone"}
               required={true}
               placeholder={t("common.phone")}
-              onChange={(e) => {
-                formik.handleChange(e);
-              }}
+              onChange={formik.handleChange}
               value={formik.values.phone}
             />
           </S.Control>
@@ -425,7 +425,7 @@ export const CheckoutFormOdessa = observer(
               showSkeleton={loading}
               name={"payment_method_id"}
               options={paymentMethodsSwitcher.options}
-              handleChange={({ e, index }) => {
+              onChange={({ e, index }) => {
                 formik.handleChange(e);
               }}
               value={paymentMethodsSwitcher.selectedMethod()?.id}

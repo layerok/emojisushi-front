@@ -212,7 +212,7 @@ export const CheckoutFormChernomorsk = observer(
             name={"shipping_method_id"}
             options={shippingMethodsSwitcher.options}
             value={+shippingMethodsSwitcher.selectedMethod()?.id}
-            handleChange={({ e, index }) => {
+            onChange={({ e, index }) => {
               formik.handleChange(e);
             }}
           />
@@ -325,7 +325,7 @@ export const CheckoutFormChernomorsk = observer(
               }}
               name={"payment_method_id"}
               options={paymentMethodsSwitcher.options}
-              handleChange={({ e, index }) => {
+              onChange={({ e, index }) => {
                 formik.handleChange(e);
               }}
               value={paymentMethodsSwitcher.selectedMethod()?.id}

@@ -24,7 +24,7 @@ export const Modificators = ({
         <Switcher
           key={group.id}
           style={{ marginTop: "12px" }}
-          handleChange={({ option }) => {
+          onChange={({ option }) => {
             setModificators((state) => {
               return {
                 ...state,

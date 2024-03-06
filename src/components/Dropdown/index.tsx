@@ -157,9 +157,8 @@ export const Dropdown = (props: IDropdownProps) => {
           id={buttonId}
           {...getReferenceProps()}
         >
-          {(value || placeholder) && (
-            <span>{selectedOption?.label || placeholder}</span>
-          )}
+          {value && <span>{selectedOption?.label}</span>}
+          {placeholder && !value && <Placeholder>{placeholder}</Placeholder>}
           <SvgIcon
             style={{
               position: "absolute",
@@ -245,6 +244,10 @@ export const Dropdown = (props: IDropdownProps) => {
     </SkeletonWrap>
   );
 };
+
+const Placeholder = styled.span`
+  color: ${({ theme }) => theme.components.input.placeholder};
+`;
 
 const LabelContainer = styled.div<{
   $blurred: boolean;

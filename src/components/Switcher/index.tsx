@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { ChangeEvent, HTMLProps, ReactElement, useId, forwardRef } from "react";
+import { ChangeEvent, HTMLProps, useId, forwardRef } from "react";
 import { SkeletonWrap } from "~components";
 
 type IOption = {
@@ -11,14 +11,14 @@ const Option = ({
   option,
   index,
   length,
-  handleChange,
+  onChange,
   selected,
   name,
 }: {
   option: IOption;
   index: number;
   length: number;
-  handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   selected: boolean;
   name: string;
 }) => {
@@ -34,17 +34,20 @@ const Option = ({
         type={"radio"}
         name={name}
         checked={selected}
-        onChange={handleChange}
+        onChange={onChange}
       />
       <S.Label htmlFor={internal_id}>{option.label}</S.Label>
     </>
   );
 };
 
-type ISwitcherProps = Omit<HTMLProps<HTMLDivElement>, "selected" | "name"> & {
+type ISwitcherProps = Omit<
+  HTMLProps<HTMLDivElement>,
+  "onChange" | "selected" | "name"
+> & {
   options: IOption[];
   name: string;
-  handleChange: ({
+  onChange: ({
     e,
     index,
     option,
@@ -62,7 +65,7 @@ export const Switcher = forwardRef<HTMLDivElement, ISwitcherProps>(
     const {
       options = [],
       name,
-      handleChange,
+      onChange,
       value,
       showSkeleton = false,
       as,
@@ -82,7 +85,7 @@ export const Switcher = forwardRef<HTMLDivElement, ISwitcherProps>(
               length={options.length}
               index={index}
               name={name}
-              handleChange={(e) => handleChange({ e, index, option })}
+              onChange={(e) => onChange({ e, index, option })}
               selected={option.value === value}
               key={index}
             />
