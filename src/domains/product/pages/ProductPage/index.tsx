@@ -1,11 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ProductsGrid, Container, LoadMoreButton } from "~components";
 import { Banner } from "./Banner";
-import {
-  useInfiniteQuery,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Product } from "src/models";
 import {
   cartQuery,
@@ -29,6 +25,8 @@ import {
   useTypedSearchParams,
 } from "react-router-typesafe-routes/dom";
 import { Page } from "~components/Page";
+import { bannerQuery } from "~queries/banner.query";
+import { AxiosError } from "axios";
 
 export const ProductPage = observer(() => {
   const { ref, inView } = useInView();
@@ -42,7 +40,6 @@ export const ProductPage = observer(() => {
   const sort = searchParams.sort as SortKey;
 
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const filters = {
     category_slug: q || !categorySlug ? CategorySlug.Menu : categorySlug,
@@ -52,27 +49,10 @@ export const ProductPage = observer(() => {
 
   const productQueryKey = productsQuery(filters);
 
+  const { data: banners, isLoading: isBannersLoading } = useQuery(bannerQuery);
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
   const { data: categories, isLoading: isCategoriesLoading } = useQuery({
     ...categoriesQuery(),
-    onSuccess: (data) => {
-      const category = data.data.find(
-        (category) => category.slug === categorySlug
-      );
-
-      if (!category) {
-        // if a user requested a category that doesn't exist,
-        // then redirect him to first existing category
-        queryClient.cancelQueries({
-          queryKey: productQueryKey.queryKey,
-        });
-        navigate(
-          ROUTES.CATEGORY.SHOW.buildPath({
-            categorySlug: data.data[0].slug,
-          })
-        );
-      }
-    },
   });
 
   const { data: wishlists, isLoading: isWishlistLoading } =
@@ -85,17 +65,28 @@ export const ProductPage = observer(() => {
     pageParam: number;
     signal: AbortSignal;
   }) => {
-    const res = await menuApi.getProducts(
-      {
-        category_slug: q || !categorySlug ? CategorySlug.Menu : categorySlug,
-        search: q,
-        sort: sort,
-        offset: pageParam * PRODUCTS_LIMIT_STEP,
-        limit: PRODUCTS_LIMIT_STEP,
-      },
-      signal
-    );
-    return res.data;
+    try {
+      const res = await menuApi.getProducts(
+        {
+          category_slug: q || !categorySlug ? CategorySlug.Menu : categorySlug,
+          search: q,
+          sort: sort,
+          offset: pageParam * PRODUCTS_LIMIT_STEP,
+          limit: PRODUCTS_LIMIT_STEP,
+        },
+        signal
+      );
+      return res.data;
+    } catch (e) {
+      if (e instanceof AxiosError) {
+        // if a requested category doesn't exist
+        // then redirect user to category page
+        if ((e.response.status = 404)) {
+          navigate(ROUTES.CATEGORY.path);
+        }
+      }
+      throw e;
+    }
   };
 
   const {
@@ -114,9 +105,6 @@ export const ProductPage = observer(() => {
         }
         return pages.length;
       },
-      // todo: dependent queries lead to request waterfall
-      // todo: load products in parallel if requested category is not found, redirect to a categories page
-      enabled: !!categories,
     }
   );
 
@@ -148,11 +136,24 @@ export const ProductPage = observer(() => {
 
   return (
     <>
-      <Container>
-        <S.BannerContainer>
-          <Banner />
-        </S.BannerContainer>
-      </Container>
+      {(isBannersLoading || (banners?.data && !!banners.data.length)) && (
+        <Container>
+          <S.BannerContainer>
+            <Banner
+              loading={isBannersLoading}
+              items={(banners?.data || []).map((banner) => ({
+                id: banner.id + "",
+                desktop_image: banner.image.path,
+                mobile_image: banner.image_small.path,
+                onClick: () => {
+                  // todo: redirect to the product page
+                  // todo: build the product page
+                },
+              }))}
+            />
+          </S.BannerContainer>
+        </Container>
+      )}
 
       <Page>
         <Container>

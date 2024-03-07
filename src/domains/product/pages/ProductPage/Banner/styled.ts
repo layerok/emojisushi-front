@@ -29,9 +29,14 @@ const Container = styled.div`
 const ThumbsContainer = styled.div`
   position: absolute;
   left: 50%;
+  display: flex;
   transform-origin: center;
   transform: translateX(-50%);
   bottom: -30px;
+
+  .use-spring-carousel-thumbs-wrapper {
+    column-gap: 5px;
+  }
 `;
 
 const Dot = styled.div<{
@@ -41,7 +46,6 @@ const Dot = styled.div<{
   cursor: pointer;
   width: 10px;
   height: 10px;
-  margin: 0 5px;
   background-color: ${({ theme, $isActive }) =>
     $isActive ? theme.colors.brand : theme.colors.canvas.inset4};
 `;
