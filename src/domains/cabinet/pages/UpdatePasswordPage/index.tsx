@@ -56,64 +56,62 @@ export const UpdatePasswordPage = observer(() => {
   });
 
   return (
-    <>
-      <S.Container>
-        <Form
-          method="post"
-          onSubmit={(e) => {
-            e.preventDefault();
-            transaction(() => {
-              intervalId.current = null;
-              setShowSuccessMessage(false);
-            });
-            const formData = new FormData(e.currentTarget);
-            const password = formData.get("password") + "";
-            const password_old = formData.get("password_old") + "";
-            const password_confirmation =
-              formData.get("password_confirmation") + "";
+    <S.Container>
+      <Form
+        method="post"
+        onSubmit={(e) => {
+          e.preventDefault();
+          transaction(() => {
+            intervalId.current = null;
+            setShowSuccessMessage(false);
+          });
+          const formData = new FormData(e.currentTarget);
+          const password = formData.get("password") + "";
+          const password_old = formData.get("password_old") + "";
+          const password_confirmation =
+            formData.get("password_confirmation") + "";
 
-            mutation.mutate({
-              password,
-              password_confirmation,
-              password_old,
-            });
-          }}
-        >
-          <S.Text>{t("common.oldPassword")}</S.Text>
-          <PasswordInput
-            name="password_old"
-            error={getError(errors?.password_old)}
-          />
-          <S.Text>{t("common.newPassword")}</S.Text>
-          <PasswordInput name="password" error={getError(errors?.password)} />
-          <S.Text>{t("common.confirmPassword")}</S.Text>
-          <PasswordInput
-            name="password_confirmation"
-            error={getError(errors?.password_confirmation)}
-          />
-          <S.ButtonWrapper>
-            <ButtonOutline
-              type="submit"
-              submitting={mutation.isLoading}
-              width={"224px"}
-            >
-              {t("account.changePassword.btnText")}
-            </ButtonOutline>
-          </S.ButtonWrapper>
+          mutation.mutate({
+            password,
+            password_confirmation,
+            password_old,
+          });
+        }}
+      >
+        <S.Text>{t("common.oldPassword")}</S.Text>
+        <PasswordInput
+          name="password_old"
+          error={getError(errors?.password_old)}
+        />
+        <S.Text>{t("common.newPassword")}</S.Text>
+        <PasswordInput name="password" error={getError(errors?.password)} />
+        <S.Text>{t("common.confirmPassword")}</S.Text>
+        <PasswordInput
+          name="password_confirmation"
+          error={getError(errors?.password_confirmation)}
+        />
+        <S.ButtonWrapper>
+          <ButtonOutline
+            type="submit"
+            submitting={mutation.isLoading}
+            width={"224px"}
+          >
+            {t("account.changePassword.btnText")}
+          </ButtonOutline>
+        </S.ButtonWrapper>
 
-          {showSuccessMessage && (
-            <p
-              style={{
-                marginTop: "10px",
-                color: "green",
-              }}
-            >
-              {t("account.changePassword.successMessage")}
-            </p>
-          )}
-        </Form>
-      </S.Container>
-    </>
+        {showSuccessMessage && (
+          <p
+            style={{
+              marginTop: "10px",
+              color: "green",
+            }}
+          >
+            {t("account.changePassword.successMessage")}
+          </p>
+        )}
+      </Form>
+    </S.Container>
   );
 });
 

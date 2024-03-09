@@ -1,6 +1,5 @@
 import { DropdownPopover } from "~components";
 import { SortOrderButton } from "~components/buttons/SortOrderButton";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { SortKey } from "~api/types";
