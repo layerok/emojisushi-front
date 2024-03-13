@@ -1,4 +1,4 @@
-import { APP_VERSION_STORAGE_KEY } from "~checkAppVersion";
+import { getClientAppVersion } from "~components/AppVersionChecker";
 
 export type WorkingHours = [[number, number], [number, number]];
 
@@ -8,5 +8,5 @@ export const appConfig = {
     [10, 0],
     [21, 45],
   ] as WorkingHours,
-  version: localStorage.getItem(APP_VERSION_STORAGE_KEY),
+  version: getClientAppVersion(),
 };

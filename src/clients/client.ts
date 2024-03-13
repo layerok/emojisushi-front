@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import i18n from "~i18n";
 import { getFromLocalStorage } from "~utils/ls.utils";
 import { logApi } from "~api/log/log.api";
-import { APP_VERSION_STORAGE_KEY } from "~checkAppVersion";
+import { appConfig } from "~config/app";
 // import createAuthRefreshInterceptor from "axios-auth-refresh";
 
 const client = axios.create({
@@ -21,11 +21,11 @@ client.interceptors.response.use(
   function (error: AxiosError) {
     // 406 - Token is expired
     // 422 - Validation exception
-    const ignoreStatuses = [406, 422];
+    const ignoredStatuses = [406, 422];
     const ignoredMessages = ["Network Error"];
 
     if (
-      ignoreStatuses.includes(error.response.status) ||
+      ignoredStatuses.includes(error.response.status) ||
       ignoredMessages.includes(error.message)
     ) {
       return Promise.reject(error);
@@ -52,13 +52,8 @@ client.interceptors.request.use((config = {}) => {
     config.headers["X-Session-ID"] = session_id;
   }
 
-  // todo: don't send any request until you have a app's version
-  const clientVersion = localStorage.getItem(APP_VERSION_STORAGE_KEY);
-
-  if (clientVersion) {
-    config.headers["X-WEB-CLIENT-VERSION"] = localStorage.getItem(
-      APP_VERSION_STORAGE_KEY
-    );
+  if (appConfig.version) {
+    config.headers["X-WEB-CLIENT-VERSION"] = appConfig.version;
   }
 
   const debugMode = localStorage.getItem("__debug_mode");
