@@ -69,7 +69,7 @@ export const Sidebar = ({ loading = false, categories = [] }: SidebarProps) => {
     <Root ref={rootRef}>
       <StickyContainer>
         <SearchBarContainer>
-          <Form role="search">
+          <Form role="search" action={location.pathname}>
             {searchParamsInputs}
             <StyledInput
               // I'm changing key to reset input value
