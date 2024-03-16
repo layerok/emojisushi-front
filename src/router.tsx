@@ -33,11 +33,23 @@ const routes = [
                     ),
                   },
                   {
-                    path: ROUTES.CATEGORY.SHOW.path,
-                    lazy: lazy(
-                      () => import("~domains/product/pages/ProductPage")
-                    ),
-                    id: "category",
+                    lazy: lazy(() => import("~layout/MenuLayout/MenuLayout")),
+                    children: [
+                      {
+                        path: ROUTES.CATEGORY.WISHLIST.path,
+                        lazy: lazy(
+                          () => import("~domains/wishlist/pages/WishlistPage")
+                        ),
+                        id: "wishlist",
+                      },
+                      {
+                        path: ROUTES.CATEGORY.SHOW.path,
+                        lazy: lazy(
+                          () => import("~domains/product/pages/ProductPage")
+                        ),
+                        id: "category",
+                      },
+                    ],
                   },
                 ],
               },
@@ -53,14 +65,6 @@ const routes = [
                 path: ROUTES.CHECKOUT.path,
                 lazy: lazy(() => import("~domains/order/pages/CheckoutPage")),
               },
-              {
-                id: "wishlist",
-                path: ROUTES.WISHLIST.path,
-                lazy: lazy(
-                  () => import("~domains/wishlist/pages/WishlistPage")
-                ),
-              },
-
               {
                 path: ROUTES.ACCOUNT.path,
                 lazy: lazy(() => import("~layout/CabinetLayout")),

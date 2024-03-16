@@ -1,9 +1,11 @@
 import * as S from "./styled";
-import React, { CSSProperties, forwardRef, useContext } from "react";
-import { If, AsteriskSvg, SvgIcon, SkeletonWrap } from "~components";
-import { ThemeContext } from "styled-components";
+import React, { CSSProperties, forwardRef, ReactNode, useContext } from "react";
+import { AsteriskSvg, SvgIcon, SkeletonWrap } from "~components";
+import styled, { ThemeContext } from "styled-components";
+import clsx from "clsx";
 
 export type IInputComponentProps = React.HTMLProps<HTMLInputElement> & {
+  endAdornment?: ReactNode;
   name: string;
   placeholder?: string;
   required?: boolean;
@@ -12,9 +14,14 @@ export type IInputComponentProps = React.HTMLProps<HTMLInputElement> & {
   error?: string | null;
   label?: string;
   loading?: boolean;
-  labelStyle?: CSSProperties;
-  inputStyle?: CSSProperties;
   style?: CSSProperties;
+};
+
+const classNamespace = "Emojisushi";
+
+export const inputClasses = {
+  root: `${classNamespace}-Input--root`,
+  input: `${classNamespace}-Input--input`,
 };
 
 export const Input = forwardRef<HTMLInputElement, IInputComponentProps>(
@@ -22,13 +29,13 @@ export const Input = forwardRef<HTMLInputElement, IInputComponentProps>(
     const {
       placeholder,
       required,
+      endAdornment,
       name,
       light = false,
       width,
       label = "",
       error = null,
-      labelStyle = {},
-      inputStyle = {},
+      className,
       style = {},
       loading = false,
       as,
@@ -43,40 +50,34 @@ export const Input = forwardRef<HTMLInputElement, IInputComponentProps>(
         loading={loading}
         borderRadius={10}
       >
-        <S.Wrapper style={style}>
-          <If condition={!!label}>
-            <p
-              style={{
-                fontSize: "15px",
-                color: "rgb(97, 97, 97)",
-                marginBottom: "5px",
-                ...labelStyle,
-              }}
-            >
-              {label}
-            </p>
-          </If>
+        <S.Wrapper className={clsx(inputClasses.root, className)} style={style}>
+          {!!label && <StyledLabel>{label}</StyledLabel>}
           <S.Input
             name={name}
             width={width}
             placeholder={placeholder}
             light={light}
-            style={inputStyle}
+            className={clsx(inputClasses.input)}
             {...rest}
             ref={ref}
           />
-          <If condition={required}>
+          {endAdornment}
+          {required && (
             <S.Asterisk>
               <SvgIcon width={"10px"} color={theme.colors.brand}>
                 <AsteriskSvg />
               </SvgIcon>
             </S.Asterisk>
-          </If>
-          <If condition={!!error}>
-            <S.Error>{error}</S.Error>
-          </If>
+          )}
+          {!!error && <S.Error>{error}</S.Error>}
         </S.Wrapper>
       </SkeletonWrap>
     );
   }
 );
+
+const StyledLabel = styled.p`
+  font-size: 15px;
+  color: ${({ theme }) => theme.colors.fg.muted};
+  margin-bottom: 5px;
+`;

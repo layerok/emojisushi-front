@@ -119,7 +119,7 @@ export const MobMenuModal = NiceModal.create(() => {
           <FlexBox justifyContent={"space-between"} alignItems={"center"}>
             <NavLink
               style={{ color: "white", textDecoration: "none" }}
-              to={ROUTES.WISHLIST.path}
+              to={ROUTES.CATEGORY.WISHLIST.path}
               onClick={() => {
                 modal.remove();
               }}

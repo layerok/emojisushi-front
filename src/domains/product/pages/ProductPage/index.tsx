@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ProductsGrid, Container, LoadMoreButton } from "~components";
-import { Banner } from "./Banner";
+import { ProductsGrid, LoadMoreButton } from "~components";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Product } from "src/models";
 import {
@@ -11,7 +10,6 @@ import {
 } from "src/queries";
 import { SortKey } from "src/api/types";
 import { CategorySlug, PRODUCTS_LIMIT_STEP } from "~domains/category/constants";
-import { MenuLayout } from "~domains/product/components/MenuLayout";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { observer } from "mobx-react";
 import { menuApi } from "~api";
@@ -24,8 +22,6 @@ import {
   useTypedParams,
   useTypedSearchParams,
 } from "react-router-typesafe-routes/dom";
-import { Page } from "~components/Page";
-import { bannerQuery } from "~queries/banner.query";
 import { AxiosError } from "axios";
 
 export const ProductPage = observer(() => {
@@ -49,7 +45,6 @@ export const ProductPage = observer(() => {
 
   const productQueryKey = productsQuery(filters);
 
-  const { data: banners, isLoading: isBannersLoading } = useQuery(bannerQuery);
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
   const { data: categories, isLoading: isCategoriesLoading } = useQuery({
     ...categoriesQuery(),
@@ -134,65 +129,36 @@ export const ProductPage = observer(() => {
     .map((page) => page.data.map((product) => new Product(product)))
     .reduce((acc, pageProducts) => [...acc, ...pageProducts], []); // flattening
 
-  return (
-    <>
-      {(isBannersLoading || (banners?.data && !!banners.data.length)) && (
-        <Container>
-          <S.BannerContainer>
-            <Banner
-              loading={isBannersLoading}
-              items={(banners?.data || []).map((banner) => ({
-                id: banner.id + "",
-                desktop_image: banner.image.path,
-                mobile_image: banner.image_small.path,
-                onClick: () => {
-                  // todo: redirect to the product page
-                  // todo: build the product page
-                },
-              }))}
-            />
-          </S.BannerContainer>
-        </Container>
+  return (isWishlistLoading ||
+    isCartLoading ||
+    status === "loading" ||
+    isCategoriesLoading) &&
+    !products ? (
+    <ProductsGrid loading />
+  ) : (
+    <div style={{ flexGrow: 1 }}>
+      <ProductsGrid
+        wishlists={wishlists}
+        cart={cart}
+        title={selectedCategory?.name}
+        loading={false}
+        items={items}
+      />
+      {hasNextPage && (
+        <S.Footer ref={ref}>
+          <LoadMoreButton
+            loading={isFetchingNextPage}
+            style={{ cursor: "pointer" }}
+            text={t("common.show_more")}
+            onClick={() => {
+              if (!isFetchingNextPage) {
+                handleLoadMore();
+              }
+            }}
+          />
+        </S.Footer>
       )}
-
-      <Page>
-        <Container>
-          <MenuLayout categories={categories}>
-            {(isWishlistLoading ||
-              isCartLoading ||
-              status === "loading" ||
-              isCategoriesLoading) &&
-            !products ? (
-              <ProductsGrid loading />
-            ) : (
-              <div style={{ flexGrow: 1 }}>
-                <ProductsGrid
-                  wishlists={wishlists}
-                  cart={cart}
-                  title={selectedCategory?.name}
-                  loading={false}
-                  items={items}
-                />
-                {hasNextPage && (
-                  <S.Footer ref={ref}>
-                    <LoadMoreButton
-                      loading={isFetchingNextPage}
-                      style={{ cursor: "pointer" }}
-                      text={t("common.show_more")}
-                      onClick={() => {
-                        if (!isFetchingNextPage) {
-                          handleLoadMore();
-                        }
-                      }}
-                    />
-                  </S.Footer>
-                )}
-              </div>
-            )}
-          </MenuLayout>
-        </Container>
-      </Page>
-    </>
+    </div>
   );
 });
 

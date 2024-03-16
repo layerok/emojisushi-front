@@ -4,13 +4,14 @@ import Skeleton from "react-loading-skeleton";
 import { NavLink } from "react-router-dom";
 import { ROUTES } from "~routes";
 
-type TCategoryProps = {
+type CategoryProps = {
   active?: boolean;
   category?: ICategory;
   loading?: boolean;
+  onNavigate?: () => void;
 };
 
-const Category = ({ category, loading = false }: TCategoryProps) => {
+const Category = ({ category, loading = false, onNavigate }: CategoryProps) => {
   if (loading) {
     return (
       <Skeleton
@@ -30,6 +31,9 @@ const Category = ({ category, loading = false }: TCategoryProps) => {
       to={ROUTES.CATEGORY.SHOW.buildPath({
         categorySlug: category.slug,
       })}
+      onClick={(e) => {
+        onNavigate?.();
+      }}
     >
       {({ isActive }) => (
         <S.Category isActive={isActive}>{category.name}</S.Category>
@@ -38,15 +42,17 @@ const Category = ({ category, loading = false }: TCategoryProps) => {
   );
 };
 
-type TVerticalMenuProps = {
+type SidebarMenuProps = {
   categories: ICategory[];
   loading?: boolean;
+  onNavigate?: () => void;
 };
 
 const SidebarMenu = ({
   categories = [],
+  onNavigate,
   loading = true,
-}: TVerticalMenuProps) => {
+}: SidebarMenuProps) => {
   if (loading) {
     return (
       <S.Categories>
@@ -65,13 +71,19 @@ const SidebarMenu = ({
   }
 
   return (
-    <nav style={{ width: "255px", position: "relative" }}>
+    <div style={{ position: "relative" }}>
       <S.Categories>
         {categories.map((category) => {
-          return <Category key={category.id} category={category} />;
+          return (
+            <Category
+              onNavigate={onNavigate}
+              key={category.id}
+              category={category}
+            />
+          );
         })}
       </S.Categories>
-    </nav>
+    </div>
   );
 };
 export { SidebarMenu };

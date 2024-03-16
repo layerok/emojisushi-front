@@ -1,11 +1,6 @@
 import { ProductsGrid } from "~components";
 import { useTranslation } from "react-i18next";
-import {
-  IGetCartRes,
-  IGetProductsRes,
-  IGetWishlistRes,
-  SortKey,
-} from "src/api/types";
+import { SortKey } from "src/api/types";
 import { Product } from "src/models";
 import {
   cartQuery,
@@ -13,23 +8,22 @@ import {
   productsQuery,
   wishlistsQuery,
 } from "src/queries";
-import { MenuLayout } from "~domains/product/components/MenuLayout";
 import { useQuery } from "@tanstack/react-query";
 import { observer } from "mobx-react";
 import { CategorySlug } from "~domains/category/constants";
 import { useTypedSearchParams } from "react-router-typesafe-routes/dom";
 import { ROUTES } from "~routes";
-import { Page } from "~components/Page";
 
 const DEFAULT_PRODUCTS_LIMIT = 2000;
 
 export const WishlistPage = observer(() => {
-  const [searchParams] = useTypedSearchParams(ROUTES.WISHLIST);
+  const { t } = useTranslation();
+  const [searchParams] = useTypedSearchParams(ROUTES.CATEGORY.WISHLIST);
   const { q } = searchParams;
   const sort = searchParams.sort as SortKey;
 
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
-  const { data: categories, isLoading: isCategoriesLoading } = useQuery({
+  const { data, isLoading: isCategoriesLoading } = useQuery({
     ...categoriesQuery(),
   });
   const { data: wishlists, isLoading: isWishlistLoading } =
@@ -43,47 +37,24 @@ export const WishlistPage = observer(() => {
     }),
   });
 
-  return (
-    <Page>
-      <MenuLayout categories={categories}>
-        {isCartLoading ||
-        isProductsLoading ||
-        isCategoriesLoading ||
-        isWishlistLoading ? (
-          <ProductsGrid loading />
-        ) : (
-          <Wishlist cart={cart} products={products} wishlists={wishlists} />
-        )}
-      </MenuLayout>
-    </Page>
-  );
-});
-
-const Wishlist = ({
-  products,
-  wishlists,
-  cart,
-}: {
-  products: IGetProductsRes;
-  wishlists: IGetWishlistRes;
-  cart: IGetCartRes;
-}) => {
-  const { t } = useTranslation();
-
-  const items = products.data
-    .map((json) => new Product(json))
-    .filter((product) => {
-      return product.isInWishlists(wishlists);
-    });
-  return (
+  return isCartLoading ||
+    isProductsLoading ||
+    isCategoriesLoading ||
+    isWishlistLoading ? (
+    <ProductsGrid loading />
+  ) : (
     <ProductsGrid
       wishlists={wishlists}
       cart={cart}
-      items={items}
+      items={products.data
+        .map((json) => new Product(json))
+        .filter((product) => {
+          return product.isInWishlists(wishlists);
+        })}
       title={t("common.favorite")}
     />
   );
-};
+});
 
 export const Component = WishlistPage;
 
