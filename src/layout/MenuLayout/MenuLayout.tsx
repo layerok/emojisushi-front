@@ -49,7 +49,9 @@ const MenuLayout = () => {
                 <MobSidebar categories={categories.data} />
               </>
             )}
-            <Outlet />
+            <div style={{ flexGrow: 1 }}>
+              <Outlet />
+            </div>
           </StyledContainer>
         </Container>
       </Page>
