@@ -1,21 +1,16 @@
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
-
-  html {
-    overflow-x: hidden;
-  }
-
   body {
     margin: 0;
     font-size: 15px;
-    font-family: "Montserrat", sans-serif;
+    font-family: "Montserrat", sans-serif; // todo: move font-family to the theme object
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: ${({ theme }) => theme.colors.fg.default};
     background-color: ${({ theme }) => theme.colors.canvas.default};
     position: relative;
-    overflow-x: hidden;
+    scroll-behavior: smooth;
   }
 
   *,

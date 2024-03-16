@@ -8,6 +8,7 @@ const Wrapper = styled.div`
 const Input = styled.input<{
   light: boolean;
 }>`
+  position: relative;
   background: ${(props) =>
     ifProp(
       "light",

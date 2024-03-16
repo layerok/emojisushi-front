@@ -6,6 +6,12 @@ export const ROUTES = {
     "category",
     {},
     {
+      WISHLIST: route("wishlist", {
+        searchParams: {
+          q: string(),
+          sort: string(),
+        },
+      }),
       SHOW: route(":categorySlug", {
         searchParams: {
           limit: number(),
@@ -25,12 +31,6 @@ export const ROUTES = {
   }),
   DELIVERYANDPAYMENT: route("dostavka-i-oplata"),
   CHECKOUT: route("checkout"),
-  WISHLIST: route("wishlist", {
-    searchParams: {
-      q: string(),
-      sort: string(),
-    },
-  }),
   ACCOUNT: route(
     "account",
     {},

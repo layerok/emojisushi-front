@@ -6,14 +6,16 @@ import { HeartSvg } from "~components/svg";
 import { SvgIcon } from "~components/SvgIcon";
 import { SkeletonWrap } from "~components";
 import { useTheme } from "styled-components";
-
-type WishlistsMenuItemProps = { loading?: boolean };
+import { ROUTES } from "~routes";
 
 export const WishlistsMenuItem = ({
   loading = false,
-}: WishlistsMenuItemProps) => {
+  onNavigate,
+}: {
+  loading?: boolean;
+  onNavigate?: () => void;
+}) => {
   const { t } = useTranslation();
-  const to = "/wishlist";
   const theme = useTheme();
 
   return (
@@ -21,8 +23,11 @@ export const WishlistsMenuItem = ({
       style={{
         textDecoration: "none",
       }}
+      onClick={() => {
+        onNavigate?.();
+      }}
       end
-      to={to}
+      to={ROUTES.CATEGORY.WISHLIST.path}
     >
       {({ isActive }) => (
         <S.Favorite
