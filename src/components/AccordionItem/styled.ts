@@ -50,8 +50,8 @@ const Pan = styled.div``;
 const PanProps = styled.div`
   display: flex;
   justify-content: space-between;
-  border-top: 1px solid #2d2d2d;
-  border-bottom: 1px solid #2d2d2d;
+  border-top: 1px solid ${({ theme }) => theme.colors.border.darker};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border.darker};
   padding-top: 10px;
   padding-bottom: 10px;
   margin-top: 10px;
@@ -63,10 +63,10 @@ const PanProps = styled.div`
 `;
 
 const PanPropsExceptStatus = styled.div`
-  ${media.lessThan("pc")`
-    border-bottom: 1px solid #2D2D2D; 
+  ${({ theme }) => media.lessThan("pc")`
+    border-bottom: 1px solid ${theme.colors.border.darker}; 
     padding-bottom: 10px;
-  `}
+  `};
 `;
 const PanPropsProp = styled.div`
   display: flex;
@@ -90,7 +90,7 @@ const PanStatus = styled.div`
   margin-right: 149px;
   flex-direction: column;
   justify-content: center;
-  border-left: 1px solid #2d2d2d;
+  border-left: 1px solid ${({ theme }) => theme.colors.border.darker};
   padding-left: 15px;
 
   ${media.lessThan("pc")`
@@ -128,7 +128,7 @@ const PanPropsPropValue = styled.p`
 const PanProd = styled.div`
   display: flex;
   margin-top: 10px;
-  border-bottom: 1px solid #2d2d2d;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border.darker};
   padding-bottom: 10px;
 
   &:last-child {

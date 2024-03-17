@@ -29,6 +29,8 @@ import { appConfig } from "~config/app";
 import { useShowModal } from "~modal";
 import { router } from "~router";
 import { RouterSubscriber, RouterState } from "@remix-run/router";
+import { RegisterModal } from "~components/modals/RegisterModal";
+import { ResetPasswordModal } from "~components/modals/ResetPasswordModal";
 
 export const Layout = observer(
   ({ children, ...rest }: { children?: ReactNode }) => {
@@ -98,6 +100,8 @@ export const Layout = observer(
         <CartModal id={ModalIDEnum.CartModal} />
 
         <AuthModal id={ModalIDEnum.AuthModal} />
+        <RegisterModal id={ModalIDEnum.RegisterModal} />
+        <ResetPasswordModal id={ModalIDEnum.ResetPasswordModal} />
         <MobMenuModal id={ModalIDEnum.MobMenuModal} />
         <StickyToTopBtn />
       </S.Layout>

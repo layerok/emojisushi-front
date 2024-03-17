@@ -6,6 +6,7 @@ import clsx from "clsx";
 
 export type IInputComponentProps = React.HTMLProps<HTMLInputElement> & {
   endAdornment?: ReactNode;
+  startAdornment?: ReactNode;
   name: string;
   placeholder?: string;
   required?: boolean;
@@ -30,6 +31,7 @@ export const Input = forwardRef<HTMLInputElement, IInputComponentProps>(
       placeholder,
       required,
       endAdornment,
+      startAdornment,
       name,
       light = false,
       width,
@@ -52,24 +54,31 @@ export const Input = forwardRef<HTMLInputElement, IInputComponentProps>(
       >
         <S.Wrapper className={clsx(inputClasses.root, className)} style={style}>
           {!!label && <StyledLabel>{label}</StyledLabel>}
-          <S.Input
-            name={name}
-            width={width}
-            placeholder={placeholder}
-            light={light}
-            className={clsx(inputClasses.input)}
-            {...rest}
-            ref={ref}
-          />
-          {endAdornment}
-          {required && (
-            <S.Asterisk>
-              <SvgIcon width={"10px"} color={theme.colors.brand}>
-                <AsteriskSvg />
-              </SvgIcon>
-            </S.Asterisk>
-          )}
-          {!!error && <S.Error>{error}</S.Error>}
+          <div
+            style={{
+              position: "relative",
+            }}
+          >
+            {startAdornment}
+            <S.Input
+              name={name}
+              width={width}
+              placeholder={placeholder}
+              light={light}
+              className={clsx(inputClasses.input)}
+              {...rest}
+              ref={ref}
+            />
+            {endAdornment}
+            {required && (
+              <S.Asterisk>
+                <SvgIcon width={"10px"} color={theme.colors.brand}>
+                  <AsteriskSvg />
+                </SvgIcon>
+              </S.Asterisk>
+            )}
+            {!!error && <S.Error>{error}</S.Error>}
+          </div>
         </S.Wrapper>
       </SkeletonWrap>
     );

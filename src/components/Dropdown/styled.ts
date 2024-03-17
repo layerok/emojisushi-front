@@ -46,19 +46,28 @@ const Content = styled.div<{
   background-color: ${({ theme }) => theme.colors.canvas.inset2};
   width: ${prop("width")};
   --border-radius: ${({ theme }) => theme.borderRadius.smooth};
-  ${ifProp(
-    {
-      placement: "bottom",
-    },
-    css`
-      border-top: ${ifProp("open", "1px solid #2D2D2D", "none")};
-      border-radius: 0 0 var(--border-radius) var(--border-radius);
-    `,
-    css`
-      border-bottom: ${ifProp("open", "1px solid #2D2D2D", "none")};
-      border-radius: var(--border-radius) var(--border-radius) 0 0;
-    `
-  )};
+  ${(props) =>
+    ifProp(
+      {
+        placement: "bottom",
+      },
+      css`
+        border-top: ${ifProp(
+          "open",
+          `1px solid ${props.theme.colors.border.darker}`,
+          "none"
+        )};
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+      `,
+      css`
+        border-bottom: ${ifProp(
+          "open",
+          `1px solid ${props.theme.colors.border.darker}`,
+          "none"
+        )};
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+      `
+    )(props)};
 `;
 
 export { Reference, Dropdown, Content };

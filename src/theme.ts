@@ -18,6 +18,7 @@ const palette = {
     400: "#616161",
     500: "#343434",
     550: "#2F2F2F",
+    560: "#2d2d2d",
     570: "#272727",
     573: "#242424",
     575: "#222222",
@@ -64,6 +65,7 @@ const colors = {
   },
   border: {
     default: palette.grey[500],
+    darker: palette.grey[560],
   },
   skeleton: {
     baseColor: palette.grey[600],

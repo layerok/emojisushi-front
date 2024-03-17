@@ -108,7 +108,7 @@ const SexLabel = styled.p`
 `;
 
 const HorizontalBar = styled.div`
-  border: 1px solid #2d2d2d;
+  border: 1px solid ${({ theme }) => theme.colors.border.darker};
   margin-top: 30px;
 `;
 

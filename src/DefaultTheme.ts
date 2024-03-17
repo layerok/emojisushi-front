@@ -31,6 +31,7 @@ declare module "styled-components" {
       };
       border: {
         default: string;
+        darker: string;
       };
       skeleton: {
         baseColor: string;

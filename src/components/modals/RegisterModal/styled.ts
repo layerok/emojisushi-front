@@ -1,5 +1,4 @@
 import styled from "styled-components";
-
 const Wrapper = styled.div`
   display: flex;
   padding: 20px;
@@ -18,4 +17,9 @@ const Form = styled.form`
   width: 100%;
 `;
 
-export { Title, Wrapper, Form };
+const CheckboxWrapper = styled.div`
+  margin-top: 10px;
+  margin-bottom: 24px;
+`;
+
+export { Title, Wrapper, Form, CheckboxWrapper };

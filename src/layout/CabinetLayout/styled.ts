@@ -36,7 +36,7 @@ const NavbarHeader = styled.p`
 `;
 
 const HorizontalBar = styled.div`
-  border: 1px solid #2d2d2d;
+  border: 1px solid ${({ theme }) => theme.colors.border.darker};
   width: 330px;
   margin-top: 10px;
 `;
