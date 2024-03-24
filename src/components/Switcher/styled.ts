@@ -1,22 +1,29 @@
 import styled from "styled-components";
 import { prop } from "styled-tools";
 
+const SLIDE_PADDING_HORIZONTAL = 2;
+const SLIDE_PADDING_VERTICAL = 2;
+
 const Slide = styled.div<{
   length: number;
 }>`
   padding: 0 4px;
   position: absolute;
-  width: calc(100% / ${prop("length")});
-  height: 100%;
-  background: ${({ theme }) => theme.colors.brand};
-  box-shadow: ${({ theme }) => theme.shadows.brandSofter};
+  width: calc(100% / ${prop("length")} - ${SLIDE_PADDING_HORIZONTAL * 2}px);
+  height: calc(100% - ${SLIDE_PADDING_VERTICAL * 2}px);
+  background: #292929;
+  transform-origin: center;
+  top: 50%;
+  transform: translateY(-50%);
   border-radius: ${({ theme }) => theme.borderRadius.smooth};
-  color: black;
+  opacity: 1;
+  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   transition: left 0.3s ease-out;
   user-select: none;
+  z-index: 1;
 `;
 const Wrapper = styled.div`
   position: relative;
@@ -29,6 +36,7 @@ const Wrapper = styled.div`
 `;
 
 const Label = styled.label`
+  position: relative;
   padding: 0 4px;
   width: 100%;
   display: flex;
@@ -36,18 +44,19 @@ const Label = styled.label`
   align-items: center;
   cursor: pointer;
   user-select: none;
+  z-index: 2;
 `;
 
 const Input = styled.input<{
   length: number;
   index: number;
 }>`
-  position: relative;
   display: none;
   :checked {
     ~ ${Slide} {
       left: calc(
-        (100% / ${prop("length")}) * ${(props) => prop("index")(props)}
+        ${SLIDE_PADDING_HORIZONTAL}px + (100% / ${prop("length")}) *
+          ${(props) => prop("index")(props)}
       );
     }
   }
