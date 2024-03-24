@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { prop } from "styled-tools";
 
-const SLIDE_PADDING_HORIZONTAL = 2;
-const SLIDE_PADDING_VERTICAL = 2;
+const SLIDE_PADDING_HORIZONTAL = 0;
+const SLIDE_PADDING_VERTICAL = 0;
 
 const Slide = styled.div<{
   length: number;
