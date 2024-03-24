@@ -90,14 +90,7 @@ export const Switcher = forwardRef<HTMLDivElement, ISwitcherProps>(
               key={index}
             />
           ))}
-          <S.Slide length={options.length}>
-            {options.reduce((acc, option) => {
-              if (option.value === value) {
-                return option.label;
-              }
-              return acc;
-            }, "")}
-          </S.Slide>
+          <S.Slide length={options.length}></S.Slide>
         </S.Wrapper>
       </SkeletonWrap>
     );

@@ -55,10 +55,10 @@ export const AppVersionChecker = ({
         return;
       }
       if (window.require_reload) {
-        modal.show();
+        //modal.show();
 
         // forcefully download new version of the application by reloading a browser during page navigation
-        //window.location.href = state.location.pathname + state.location.search;
+        window.location.href = state.location.pathname + state.location.search;
       }
     });
   }, []);
