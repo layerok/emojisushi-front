@@ -9,6 +9,7 @@ const Slide = styled.div<{
 }>`
   padding: 0 4px;
   position: absolute;
+  // be careful not to divided by zero
   width: calc(100% / ${prop("length")} - ${SLIDE_PADDING_HORIZONTAL * 2}px);
   height: calc(100% - ${SLIDE_PADDING_VERTICAL * 2}px);
   background: #292929;

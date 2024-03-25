@@ -27,7 +27,7 @@ const Option = ({
   return (
     <>
       <S.Input
-        length={length}
+        length={Math.max(1, length)}
         index={index}
         id={internal_id}
         value={option.value}
@@ -90,7 +90,7 @@ export const Switcher = forwardRef<HTMLDivElement, ISwitcherProps>(
               key={index}
             />
           ))}
-          <S.Slide length={options.length}></S.Slide>
+          <S.Slide length={Math.max(1, options.length)}></S.Slide>
         </S.Wrapper>
       </SkeletonWrap>
     );
