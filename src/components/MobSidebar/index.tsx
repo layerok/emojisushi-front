@@ -23,6 +23,8 @@ import { EndAdornment } from "~common/ui/EndAdornment";
 
 type SidebarProps = { loading?: boolean; categories?: ICategory[] };
 
+const SEARCH_QUERY_SEARCH_PARAM = "q";
+
 export const MobSidebar = ({
   loading = false,
   categories = [],
@@ -33,7 +35,7 @@ export const MobSidebar = ({
   const { t } = useTranslation();
 
   const [searchParams] = useSearchParams();
-  const q = searchParams.get("q");
+  const q = searchParams.get(SEARCH_QUERY_SEARCH_PARAM);
 
   const debouncedFetch = useDebounce((form) => {
     const isFirstSearch = q == null;
@@ -49,7 +51,7 @@ export const MobSidebar = ({
     <S.Sidebar>
       <S.Controls>
         <S.SearchContainer>
-          <Form role="search">
+          <Form role="search" action={location.pathname}>
             {Array.from(searchParams.entries())
               .filter(([k]) => k !== "q")
               .map(([k, v], idx) => (
