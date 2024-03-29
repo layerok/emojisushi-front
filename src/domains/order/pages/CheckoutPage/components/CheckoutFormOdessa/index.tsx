@@ -21,7 +21,6 @@ import {
   IUser,
   PaymentMethodCodeEnum,
   ShippingMethodCodeEnum,
-  ShippingMethodIdEnum,
 } from "~api/types";
 import { ChangeEvent, useRef, useState } from "react";
 import { orderApi } from "~api";
@@ -81,6 +80,7 @@ export const CheckoutFormOdessa = observer(
 
     const TakeAwaySchema = Yup.object().shape({
       phone: Yup.string()
+        // todo: show more user friendly validation errors
         .required(t("validation.required", { field: t("common.phone") }))
         .test(
           "is-possible-phone-number",
@@ -250,7 +250,7 @@ export const CheckoutFormOdessa = observer(
       formik.handleChange(e);
       formik.setErrors({});
       formik.setTouched({});
-      if (e.target.value === String(ShippingMethodIdEnum.Takeaway)) {
+      if (e.target.value === ShippingMethodCodeEnum.Takeaway) {
         setValidationSchema(TakeAwaySchema);
       } else {
         setValidationSchema(CourierSchema);

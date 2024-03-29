@@ -1,9 +1,9 @@
 import {
+  ButtonOutline,
+  Dropdown,
   FlexBox,
   Input,
-  ButtonOutline,
   SegmentedControl,
-  Dropdown,
   SkeletonWrap,
   Trans,
 } from "~components";
@@ -18,6 +18,7 @@ import {
   IGetShippingMethodsRes,
   ISpot,
   IUser,
+  PaymentMethodCodeEnum,
   ShippingMethodCodeEnum,
 } from "~api/types";
 import { useRef, useState } from "react";
@@ -29,11 +30,8 @@ import { observer } from "mobx-react";
 import { appStore } from "~stores/appStore";
 import { ModalIDEnum } from "~common/modal.constants";
 import { ROUTES } from "~routes";
-import { isValidUkrainianPhone, getUserFullName } from "~domains/order/utils";
+import { getUserFullName, isValidUkrainianPhone } from "~domains/order/utils";
 import { useShowModal } from "~modal";
-
-const DEFAULT_PAYMENT_METHOD_ID = 1;
-const DEFAULT_DELIVERY_METHOD_ID = 1;
 
 type TCheckoutFormProps = {
   loading?: boolean | undefined;
@@ -45,8 +43,8 @@ type TCheckoutFormProps = {
 };
 
 enum FormNames {
-  ShippingMethodId = "shipping_method_id",
-  PaymentMethodId = "payment_method_id",
+  ShippingMethodCode = "shipping_method_code",
+  PaymentMethodCode = "payment_method_code",
   Change = "change",
   Address = "address",
   AddressId = "address_id",
@@ -90,8 +88,8 @@ export const CheckoutFormChernomorsk = observer(
       comment: "",
       sticks: "",
       change: "",
-      payment_method_id: DEFAULT_PAYMENT_METHOD_ID,
-      shipping_method_id: DEFAULT_DELIVERY_METHOD_ID,
+      payment_method_code: PaymentMethodCodeEnum.Cash,
+      shipping_method_code: ShippingMethodCodeEnum.Takeaway,
       spot_id: undefined,
       district_id: undefined,
     };
@@ -103,8 +101,8 @@ export const CheckoutFormChernomorsk = observer(
         name,
         address_id,
         address,
-        payment_method_id,
-        shipping_method_id,
+        payment_method_code,
+        shipping_method_code,
         change,
         comment,
         sticks,
@@ -116,6 +114,13 @@ export const CheckoutFormChernomorsk = observer(
             .lines
         : address;
 
+      const paymentMethod = paymentMethodsRes.data.find(
+        (method) => method.code === payment_method_code
+      );
+      const shippingMethod = shippingMethodsRes.data.find(
+        (method) => method.code === shipping_method_code
+      );
+
       try {
         const res = await orderApi.place({
           phone,
@@ -125,8 +130,8 @@ export const CheckoutFormChernomorsk = observer(
           spot_id: appStore.city.spots[0].id,
 
           address: resultant_address,
-          payment_method_id: +payment_method_id,
-          shipping_method_id: +shipping_method_id,
+          payment_method_id: paymentMethod.id,
+          shipping_method_id: shippingMethod.id,
 
           change,
           sticks: +sticks,
@@ -180,24 +185,17 @@ export const CheckoutFormChernomorsk = observer(
       label: t("shippingMethods." + item.code, item.name),
     }));
 
-    const selectedShippingMethod = (shippingMethodsRes?.data || []).find(
-      (item) => item.id === +formik.values.shipping_method_id
-    );
-
     const paymentMethods = (paymentMethodsRes?.data || []).map((item) => ({
       value: item.id,
       // todo: refactor dynamic translation keys
       label: t("paymentMethods." + item.code, item.name),
     }));
 
-    const selectedPaymentMethod = (paymentMethodsRes?.data || []).find(
-      (item) => item.id === +formik.values.payment_method_id
-    );
-
-    const isCashPaymentMethod = selectedPaymentMethod?.code === "cash";
+    const isCashPaymentMethod =
+      formik.values.payment_method_code === PaymentMethodCodeEnum.Cash;
 
     const isCourierShippingMethod =
-      selectedShippingMethod?.code === ShippingMethodCodeEnum.Courier;
+      formik.values.shipping_method_code === ShippingMethodCodeEnum.Courier;
 
     const formErrors = Object.keys(formik.errors)
       .filter((key) => {
@@ -249,9 +247,9 @@ export const CheckoutFormChernomorsk = observer(
         <S.Form onSubmit={formik.handleSubmit}>
           <SegmentedControl
             showSkeleton={loading}
-            name={FormNames.ShippingMethodId}
+            name={FormNames.ShippingMethodCode}
             items={shippingMethods}
-            value={+selectedShippingMethod?.id}
+            value={formik.values.shipping_method_code}
             onChange={formik.handleChange}
           />
           {isCourierShippingMethod && (
@@ -340,10 +338,10 @@ export const CheckoutFormChernomorsk = observer(
               style={{
                 width: "100%",
               }}
-              name={FormNames.PaymentMethodId}
+              name={FormNames.PaymentMethodCode}
               items={paymentMethods}
               onChange={formik.handleChange}
-              value={selectedPaymentMethod?.id}
+              value={formik.values.payment_method_code}
             />
           </S.Control>
           {isCashPaymentMethod && (
