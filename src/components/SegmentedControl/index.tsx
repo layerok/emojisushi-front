@@ -4,6 +4,17 @@ import { SkeletonWrap } from "~components";
 import { ReactComponent as Checkmark } from "./checkmark.svg";
 import { useTheme } from "styled-components";
 
+type SegmentedControlProps = Omit<
+  HTMLProps<HTMLDivElement>,
+  "onChange" | "name"
+> & {
+  items: Item[];
+  name: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  value: string | number | null;
+  showSkeleton?: boolean;
+};
+
 export const SegmentedControl = forwardRef<
   HTMLDivElement,
   SegmentedControlProps
@@ -42,7 +53,7 @@ export const SegmentedControl = forwardRef<
 });
 
 type Item = {
-  value: number;
+  value: number | string;
   label: string;
 };
 
@@ -103,15 +114,4 @@ const Segment = (props: {
       </S.Label>
     </>
   );
-};
-
-type SegmentedControlProps = Omit<
-  HTMLProps<HTMLDivElement>,
-  "onChange" | "selected" | "name"
-> & {
-  items: Item[];
-  name: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  value: string | number | null;
-  showSkeleton?: boolean;
 };

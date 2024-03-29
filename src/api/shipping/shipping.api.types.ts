@@ -37,3 +37,17 @@ export type IGetShippingMethodsRes = {
     total: number;
   };
 };
+
+export enum ShippingMethodIdEnum {
+  Takeaway = 1,
+  Courier = 2,
+}
+
+export enum ShippingMethodCodeEnum {
+  Takeaway = "takeaway",
+  Courier = "courier",
+}
+
+export enum PaymentMethodCodeEnum {
+  Cash = "cash",
+}

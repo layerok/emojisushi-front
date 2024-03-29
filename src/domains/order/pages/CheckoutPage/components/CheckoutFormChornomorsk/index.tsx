@@ -18,6 +18,7 @@ import {
   IGetShippingMethodsRes,
   ISpot,
   IUser,
+  ShippingMethodCodeEnum,
 } from "~api/types";
 import { useRef, useState } from "react";
 import { orderApi } from "~api";
@@ -29,7 +30,6 @@ import { appStore } from "~stores/appStore";
 import { ModalIDEnum } from "~common/modal.constants";
 import { ROUTES } from "~routes";
 import { isValidUkrainianPhone, getUserFullName } from "~domains/order/utils";
-import { DeliveryMethodCode } from "~domains/order/constants";
 import { useShowModal } from "~modal";
 
 const DEFAULT_PAYMENT_METHOD_ID = 1;
@@ -59,8 +59,8 @@ enum FormNames {
 export const CheckoutFormChernomorsk = observer(
   ({
     cart,
-    shippingMethods,
-    paymentMethods,
+    shippingMethods: shippingMethodsRes,
+    paymentMethods: paymentMethodsRes,
     user,
     spots,
     loading = false,
@@ -82,153 +82,179 @@ export const CheckoutFormChernomorsk = observer(
 
     const wayforpayFormContainer = useRef(null);
 
-    const formik = useFormik({
-      initialValues: {
-        name: user && !user.is_call_center_admin ? getUserFullName(user) : "",
-        phone: user && !user.is_call_center_admin ? user.phone || "" : "",
-        address: "",
-        address_id: null,
-        comment: "",
-        sticks: "",
-        change: "",
-        payment_method_id: DEFAULT_PAYMENT_METHOD_ID,
-        shipping_method_id: DEFAULT_DELIVERY_METHOD_ID,
-        spot_id: undefined,
-        district_id: undefined,
-      },
-      validationSchema: CheckoutSchema,
-      onSubmit: async (values, formikHelpers) => {
-        formik.setErrors({});
-        const {
+    const initialValues = {
+      name: user && !user.is_call_center_admin ? getUserFullName(user) : "",
+      phone: user && !user.is_call_center_admin ? user.phone || "" : "",
+      address: "",
+      address_id: null,
+      comment: "",
+      sticks: "",
+      change: "",
+      payment_method_id: DEFAULT_PAYMENT_METHOD_ID,
+      shipping_method_id: DEFAULT_DELIVERY_METHOD_ID,
+      spot_id: undefined,
+      district_id: undefined,
+    };
+
+    const handleSubmit = async (values: typeof initialValues) => {
+      formik.setErrors({});
+      const {
+        phone,
+        name,
+        address_id,
+        address,
+        payment_method_id,
+        shipping_method_id,
+        change,
+        comment,
+        sticks,
+      } = values;
+      const [firstname, lastname] = name.split(" ");
+
+      const resultant_address = address_id
+        ? user.customer.addresses.find((address) => address.id === address_id)
+            .lines
+        : address;
+
+      try {
+        const res = await orderApi.place({
           phone,
-          name,
-          address_id,
-          address,
-          payment_method_id,
-          shipping_method_id,
+          firstname,
+          lastname,
+          email: user ? user.email : "",
+          spot_id: appStore.city.spots[0].id,
+
+          address: resultant_address,
+          payment_method_id: +payment_method_id,
+          shipping_method_id: +shipping_method_id,
+
           change,
+          sticks: +sticks,
           comment,
-          sticks,
-        } = values;
-        const [firstname, lastname] = name.split(" ");
+        });
 
-        const resultant_address = address_id
-          ? user.customer.addresses.find((address) => address.id === address_id)
-              .lines
-          : address;
+        await queryClient.removeQueries(cartQuery.queryKey);
 
-        try {
-          const res = await orderApi.place({
-            phone,
-            firstname,
-            lastname,
-            email: user ? user.email : "",
-            spot_id: appStore.city.spots[0].id,
-
-            address: resultant_address,
-            payment_method_id: +payment_method_id,
-            shipping_method_id: +shipping_method_id,
-
-            change,
-            sticks: +sticks,
-            comment,
-          });
-
-          await queryClient.removeQueries(cartQuery.queryKey);
-
-          if (res.data?.form) {
-            wayforpayFormContainer.current.innerHTML = res.data.form;
-            wayforpayFormContainer.current.querySelector("form").submit();
-          } else {
-            const order_id = res.data?.poster_order?.incoming_order_id;
-            navigate(
-              ROUTES.THANKYOU.buildPath(
-                {},
-                {
-                  order_id: !!order_id ? `${order_id}` : "",
-                }
-              )
-            );
-          }
-        } catch (e) {
-          if (e instanceof AxiosError) {
-            if (e.response?.data?.errors) {
-              formik.setErrors(e.response.data.errors);
-            }
+        if (res.data?.form) {
+          wayforpayFormContainer.current.innerHTML = res.data.form;
+          wayforpayFormContainer.current.querySelector("form").submit();
+        } else {
+          const order_id = res.data?.poster_order?.incoming_order_id;
+          navigate(
+            ROUTES.THANKYOU.buildPath(
+              {},
+              {
+                order_id: !!order_id ? `${order_id}` : "",
+              }
+            )
+          );
+        }
+      } catch (e) {
+        if (e instanceof AxiosError) {
+          if (e.response?.data?.errors) {
+            formik.setErrors(e.response.data.errors);
           }
         }
-      },
+      }
+    };
+
+    const formik = useFormik<typeof initialValues>({
+      initialValues,
+      validationSchema: CheckoutSchema,
+      validateOnBlur: true,
+      validateOnChange: true,
+      onSubmit: handleSubmit,
     });
 
-    const addressDropdown = {
-      options: user?.customer.addresses.map((address) => ({
+    const savedAddresses =
+      user?.customer.addresses.map((address) => ({
         label: address.lines,
         value: address.id,
-      })),
-      selectedAddress: (user?.customer.addresses || []).find(
-        (item) => item.id === +formik.values.address_id
-      ),
-    };
+      })) || [];
 
     const [showAddressInput, setShowAddressInput] = useState(true);
 
-    const shippingMethodsSwitcher = {
-      options: (shippingMethods?.data || []).map((item) => ({
-        value: item.id,
-        // todo: refactor dynamic translation keys
-        label: t("shippingMethods." + item.code, item.name),
-      })),
-      selectedMethod: () =>
-        (shippingMethods?.data || []).find(
-          (item) => item.id === +formik.values.shipping_method_id
-        ),
+    const shippingMethods = (shippingMethodsRes?.data || []).map((item) => ({
+      value: item.id,
+      // todo: refactor dynamic translation keys
+      label: t("shippingMethods." + item.code, item.name),
+    }));
+
+    const selectedShippingMethod = (shippingMethodsRes?.data || []).find(
+      (item) => item.id === +formik.values.shipping_method_id
+    );
+
+    const paymentMethods = (paymentMethodsRes?.data || []).map((item) => ({
+      value: item.id,
+      // todo: refactor dynamic translation keys
+      label: t("paymentMethods." + item.code, item.name),
+    }));
+
+    const selectedPaymentMethod = (paymentMethodsRes?.data || []).find(
+      (item) => item.id === +formik.values.payment_method_id
+    );
+
+    const isCashPaymentMethod = selectedPaymentMethod?.code === "cash";
+
+    const isCourierShippingMethod =
+      selectedShippingMethod?.code === ShippingMethodCodeEnum.Courier;
+
+    const formErrors = Object.keys(formik.errors)
+      .filter((key) => {
+        return formik.touched[key];
+      })
+      .map((key, i) => {
+        return formik.errors[key];
+      });
+
+    const showSavedAddresses = () => {
+      if (showAddressInput) {
+        const defaultAddress = user.customer.addresses.find(
+          (address) => address.id === user.customer.default_shipping_address_id
+        );
+
+        if (defaultAddress) {
+          formik.setFieldValue(FormNames.AddressId, defaultAddress.id);
+        } else {
+          formik.setFieldValue(
+            FormNames.AddressId,
+            user.customer.addresses[0].id
+          );
+        }
+      } else {
+        formik.setFieldValue(FormNames.AddressId, null);
+      }
+      setShowAddressInput((state) => !state);
     };
 
-    const paymentMethodsSwitcher = {
-      options: (paymentMethods?.data || []).map((item) => ({
-        value: item.id,
-        // todo: refactor dynamic translation keys
-        label: t("paymentMethods." + item.code, item.name),
-      })),
-      selectedMethod: () =>
-        loading
-          ? null
-          : (paymentMethods?.data || []).find(
-              (item) => item.id === +formik.values.payment_method_id
-            ),
+    const goToLogin = () => {
+      showModal(ModalIDEnum.AuthModal, {
+        redirect_to: location.pathname,
+      });
     };
 
     return (
       <S.Container>
         {!user && (
-          <div style={{ marginBottom: "20px" }}>
-            <FlexBox>
-              <Trans
-                showSkeleton={loading}
-                i18nKey={"checkout.alreadyHaveAccount"}
-              />
-              <S.Login
-                onClick={() => {
-                  showModal(ModalIDEnum.AuthModal, {
-                    redirect_to: location.pathname,
-                  });
-                }}
-              >
-                <Trans showSkeleton={loading} i18nKey={"common.login"} />
-              </S.Login>
-            </FlexBox>
-          </div>
+          <FlexBox style={{ marginBottom: "20px" }}>
+            <Trans
+              showSkeleton={loading}
+              i18nKey={"checkout.alreadyHaveAccount"}
+            />
+            <S.Login onClick={goToLogin}>
+              <Trans showSkeleton={loading} i18nKey={"common.login"} />
+            </S.Login>
+          </FlexBox>
         )}
         <S.Form onSubmit={formik.handleSubmit}>
           <SegmentedControl
             showSkeleton={loading}
             name={FormNames.ShippingMethodId}
-            items={shippingMethodsSwitcher.options}
-            value={+shippingMethodsSwitcher.selectedMethod()?.id}
+            items={shippingMethods}
+            value={+selectedShippingMethod?.id}
             onChange={formik.handleChange}
           />
-          {shippingMethodsSwitcher.selectedMethod()?.code ===
-            DeliveryMethodCode.Courier && (
+          {isCourierShippingMethod && (
             <S.ButtonContainer>
               {showAddressInput ? (
                 <S.Control>
@@ -237,6 +263,7 @@ export const CheckoutFormChernomorsk = observer(
                     name={FormNames.Address}
                     placeholder={t("checkout.form.address")}
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     value={formik.values.address}
                   />
                 </S.Control>
@@ -244,43 +271,17 @@ export const CheckoutFormChernomorsk = observer(
                 <S.Control>
                   <Dropdown
                     showSkeleton={loading}
-                    options={addressDropdown.options}
+                    options={savedAddresses}
                     width={"350px"}
-                    value={addressDropdown.selectedAddress?.id}
+                    value={formik.values.address_id}
                     onChange={(id) => {
                       formik.setFieldValue(FormNames.AddressId, id);
                     }}
                   />
                 </S.Control>
               )}
-              {user && !!user?.customer.addresses.length && (
-                <S.Button
-                  type={"button"}
-                  onClick={() => {
-                    if (showAddressInput) {
-                      const defaultAddress = user.customer.addresses.find(
-                        (address) =>
-                          address.id ===
-                          user.customer.default_shipping_address_id
-                      );
-
-                      if (defaultAddress) {
-                        formik.setFieldValue(
-                          FormNames.AddressId,
-                          defaultAddress.id
-                        );
-                      } else {
-                        formik.setFieldValue(
-                          FormNames.AddressId,
-                          user.customer.addresses[0].id
-                        );
-                      }
-                    } else {
-                      formik.setFieldValue(FormNames.AddressId, null);
-                    }
-                    setShowAddressInput((state) => !state);
-                  }}
-                >
+              {!!savedAddresses.length && (
+                <S.Button type={"button"} onClick={showSavedAddresses}>
                   {showAddressInput
                     ? t("checkout.selectSavedAddress")
                     : t("checkout.inputAnotherAddress")}
@@ -295,6 +296,7 @@ export const CheckoutFormChernomorsk = observer(
               name={FormNames.Name}
               placeholder={t("common.first_name")}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               value={formik.values.name}
             />
           </S.Control>
@@ -305,9 +307,8 @@ export const CheckoutFormChernomorsk = observer(
               name={FormNames.Phone}
               required={true}
               placeholder={t("common.phone")}
-              onChange={(e) => {
-                formik.handleChange(e);
-              }}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               value={formik.values.phone}
             />
           </S.Control>
@@ -319,6 +320,7 @@ export const CheckoutFormChernomorsk = observer(
               min={"0"}
               placeholder={t("checkout.form.persons")}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               value={formik.values.sticks}
             />
           </S.Control>
@@ -328,6 +330,7 @@ export const CheckoutFormChernomorsk = observer(
               name={FormNames.Comment}
               placeholder={t("checkout.form.comment")}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               value={formik.values.comment}
             />
           </S.Control>
@@ -338,28 +341,29 @@ export const CheckoutFormChernomorsk = observer(
                 width: "100%",
               }}
               name={FormNames.PaymentMethodId}
-              items={paymentMethodsSwitcher.options}
+              items={paymentMethods}
               onChange={formik.handleChange}
-              value={paymentMethodsSwitcher.selectedMethod()?.id}
+              value={selectedPaymentMethod?.id}
             />
           </S.Control>
-          {paymentMethodsSwitcher.selectedMethod()?.code === "cash" && (
+          {isCashPaymentMethod && (
             <S.Control>
               <Input
                 loading={loading}
                 name={FormNames.Change}
                 placeholder={t("checkout.form.change")}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 value={formik.values.change}
               />
             </S.Control>
           )}
 
-          {Object.keys(formik.errors).length > 0 && (
+          {formErrors.length > 0 && (
             <S.Control>
               <S.ErrorBag>
-                {Object.keys(formik.errors).map((key, i) => (
-                  <li key={key}>{formik.errors[key]}</li>
+                {formErrors.map((error, i) => (
+                  <li key={i}>{error}</li>
                 ))}
               </S.ErrorBag>
             </S.Control>
