@@ -1,4 +1,4 @@
-import { Switcher } from "~components";
+import { SegmentedControl } from "~components";
 import { Product } from "~models";
 
 type TModificatorsProps = {
@@ -21,19 +21,19 @@ export const Modificators = ({
   return (
     <>
       {(product?.modGroups || []).map((group) => (
-        <Switcher
+        <SegmentedControl
           key={group.id}
           style={{ marginTop: "12px" }}
-          onChange={({ option }) => {
+          onChange={(e) => {
             setModificators((state) => {
               return {
                 ...state,
-                [group.property.id]: option.value,
+                [group.property.id]: e.target.value,
               };
             });
           }}
           name={"modificator_" + group.property.id}
-          options={group.property.options.map((option) => ({
+          items={group.property.options.map((option) => ({
             value: +option.poster_id,
             label: option.value,
           }))}

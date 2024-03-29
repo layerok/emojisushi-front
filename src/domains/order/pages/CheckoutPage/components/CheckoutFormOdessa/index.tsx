@@ -2,7 +2,7 @@ import {
   FlexBox,
   Input,
   ButtonOutline,
-  Switcher,
+  SegmentedControl,
   Dropdown,
   SkeletonWrap,
   Trans,
@@ -280,12 +280,12 @@ export const CheckoutFormOdessa = observer(
           </div>
         )}
         <S.Form onSubmit={formik.handleSubmit}>
-          <Switcher
+          <SegmentedControl
             showSkeleton={loading}
             name={FormNames.ShippingMethodId}
-            options={shippingMethodsSwitcher.options}
+            items={shippingMethodsSwitcher.options}
             value={+shippingMethodsSwitcher.selectedMethod()?.id}
-            onChange={({ e, index }) => {
+            onChange={(e) => {
               if (e.target.value === String(ShippingMethodIdEnum.Takeaway)) {
                 setValidationSchema(TakeAwaySchema);
               } else {
@@ -437,13 +437,11 @@ export const CheckoutFormOdessa = observer(
             />
           </S.Control>
           <S.Control>
-            <Switcher
+            <SegmentedControl
               showSkeleton={loading}
               name={FormNames.PaymentMethodId}
-              options={paymentMethodsSwitcher.options}
-              onChange={({ e, index }) => {
-                formik.handleChange(e);
-              }}
+              items={paymentMethodsSwitcher.options}
+              onChange={formik.handleChange}
               value={paymentMethodsSwitcher.selectedMethod()?.id}
             />
           </S.Control>

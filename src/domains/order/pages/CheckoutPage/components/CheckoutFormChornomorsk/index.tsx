@@ -2,7 +2,7 @@ import {
   FlexBox,
   Input,
   ButtonOutline,
-  Switcher,
+  SegmentedControl,
   Dropdown,
   SkeletonWrap,
   Trans,
@@ -220,14 +220,12 @@ export const CheckoutFormChernomorsk = observer(
           </div>
         )}
         <S.Form onSubmit={formik.handleSubmit}>
-          <Switcher
+          <SegmentedControl
             showSkeleton={loading}
             name={FormNames.ShippingMethodId}
-            options={shippingMethodsSwitcher.options}
+            items={shippingMethodsSwitcher.options}
             value={+shippingMethodsSwitcher.selectedMethod()?.id}
-            onChange={({ e, index }) => {
-              formik.handleChange(e);
-            }}
+            onChange={formik.handleChange}
           />
           {shippingMethodsSwitcher.selectedMethod()?.code ===
             DeliveryMethodCode.Courier && (
@@ -334,16 +332,14 @@ export const CheckoutFormChernomorsk = observer(
             />
           </S.Control>
           <S.Control>
-            <Switcher
+            <SegmentedControl
               showSkeleton={loading}
               style={{
                 width: "100%",
               }}
               name={FormNames.PaymentMethodId}
-              options={paymentMethodsSwitcher.options}
-              onChange={({ e, index }) => {
-                formik.handleChange(e);
-              }}
+              items={paymentMethodsSwitcher.options}
+              onChange={formik.handleChange}
               value={paymentMethodsSwitcher.selectedMethod()?.id}
             />
           </S.Control>
