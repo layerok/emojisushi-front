@@ -1,6 +1,20 @@
 import Skeleton from "react-loading-skeleton";
 import { CSSProperties, PropsWithChildren, ReactNode } from "react";
 
+const styles: Record<string, CSSProperties> = {
+  container: {
+    position: "relative",
+    display: "inline-block",
+  },
+  skeletonWrapper: {
+    position: "absolute",
+    inset: 0,
+  },
+  content: {
+    opacity: 0,
+  },
+};
+
 export const SkeletonWrap = ({
   loading = false,
   borderRadius,
@@ -16,17 +30,11 @@ export const SkeletonWrap = ({
     return (
       <span
         style={{
-          position: "relative",
-          display: "inline-block",
+          ...styles.container,
           ...style,
         }}
       >
-        <span
-          style={{
-            position: "absolute",
-            inset: 0,
-          }}
-        >
+        <span style={styles.skeletonWrapper}>
           <Skeleton
             borderRadius={borderRadius}
             height={"100%"}
@@ -34,13 +42,7 @@ export const SkeletonWrap = ({
           />
         </span>
 
-        <span
-          style={{
-            opacity: 0,
-          }}
-        >
-          {children}
-        </span>
+        <span style={styles.content}>{children}</span>
       </span>
     );
   }

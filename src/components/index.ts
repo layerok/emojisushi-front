@@ -10,7 +10,7 @@ export * from "./SvgIcon";
 export * from "./Loader";
 export * from "./popovers";
 export * from "./InfoTooltip";
-export * from "./Switcher";
+export * from "./SegmentedControl";
 export * from "./tooltips";
 export * from "./Price";
 export * from "./ProductsGrid";
