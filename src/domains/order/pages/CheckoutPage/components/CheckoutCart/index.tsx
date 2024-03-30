@@ -25,32 +25,34 @@ export const CheckoutCart = ({ cart, loading = false }: CheckoutCartProps) => {
 
   return (
     <S.Wrapper>
-      <S.Items>
-        {items.map((item: CartProduct, index) => {
-          return (
-            <CheckoutCartItem
-              key={loading ? index : item.id}
-              loading={loading}
-              item={item}
-            />
-          );
-        })}
-      </S.Items>
+      <S.Inner>
+        <S.Items>
+          {items.map((item: CartProduct, index) => {
+            return (
+              <CheckoutCartItem
+                key={loading ? index : item.id}
+                loading={loading}
+                item={item}
+              />
+            );
+          })}
+        </S.Items>
 
-      <S.EditButton>
-        <SkeletonWrap loading={loading}>
-          <UIButton
-            onClick={() => {
-              showModal(ModalIDEnum.CartModal);
-            }}
-            text={t("editBtn.edit_order")}
-          >
-            <SvgIcon color={"white"} width={"25px"}>
-              <PencilSvg />
-            </SvgIcon>
-          </UIButton>
-        </SkeletonWrap>
-      </S.EditButton>
+        <S.EditButton>
+          <SkeletonWrap loading={loading}>
+            <UIButton
+              onClick={() => {
+                showModal(ModalIDEnum.CartModal);
+              }}
+              text={t("editBtn.edit_order")}
+            >
+              <SvgIcon color={"white"} width={"25px"}>
+                <PencilSvg />
+              </SvgIcon>
+            </UIButton>
+          </SkeletonWrap>
+        </S.EditButton>
+      </S.Inner>
     </S.Wrapper>
   );
 };
