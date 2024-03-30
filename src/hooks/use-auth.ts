@@ -1,9 +1,11 @@
 import Cookies from "js-cookie";
 import { configureAuth } from "react-query-auth";
 import { authApi } from "~api";
+import { AUTHENTICATED_USER_QUERY_KEY } from "~common/constants";
 
 export const { useUser, useLogin, useRegister, useLogout, AuthLoader } =
   configureAuth({
+    userKey: AUTHENTICATED_USER_QUERY_KEY,
     userFn: () =>
       authApi
         .fetchUser()

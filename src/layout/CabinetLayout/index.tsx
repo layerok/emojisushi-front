@@ -3,10 +3,10 @@ import { ButtonDark, NavLink, Container } from "~components";
 import { useTranslation } from "react-i18next";
 import { Outlet, useMatches, useNavigate } from "react-router-dom";
 import { AuthLoader, useLogout } from "~hooks/use-auth";
-import { queryClient } from "~query-client";
 import { cartQuery, wishlistsQuery } from "~queries";
 import { ROUTES } from "~routes";
 import { Page } from "~components/Page";
+import { useQueryClient } from "@tanstack/react-query";
 
 const CabinetLayout = () => {
   const { t } = useTranslation();
@@ -14,6 +14,7 @@ const CabinetLayout = () => {
   const match = matches[matches.length - 1];
   const logout = useLogout();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   return (
     <Page>
@@ -41,8 +42,8 @@ const CabinetLayout = () => {
                     <ButtonDark
                       onClick={async () => {
                         logout.mutate({});
-                        queryClient.invalidateQueries(wishlistsQuery.queryKey);
-                        queryClient.invalidateQueries(cartQuery.queryKey);
+                        queryClient.removeQueries(wishlistsQuery.queryKey);
+                        queryClient.removeQueries(cartQuery.queryKey);
                         navigate(ROUTES.CATEGORY.path);
                       }}
                       minWidth={"201px"}
@@ -57,6 +58,7 @@ const CabinetLayout = () => {
 
           <S.RightSide>
             <S.Heading>{(match.handle as any)?.title()}</S.Heading>
+            {/* todo: move to translations */}
             <AuthLoader
               renderLoading={() => <div>...loading user</div>}
               renderUnauthenticated={() => {
