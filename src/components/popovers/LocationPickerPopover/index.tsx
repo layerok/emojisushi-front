@@ -1,6 +1,6 @@
 import * as S from "./styled";
 import { SvgIcon, CaretDownSvg, FlexBox, DropdownPopover } from "~components";
-import MapLocationPinSrc from "~assets/ui/icons/map-location-pin.svg";
+import MapLocationPinSrc from "~assets/ui-icons/map-location-pin.svg";
 import { ICity } from "~api/types";
 import { observer } from "mobx-react";
 import { appStore } from "~stores/appStore";

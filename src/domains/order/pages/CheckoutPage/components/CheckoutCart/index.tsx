@@ -4,7 +4,6 @@ import { SkeletonWrap, SvgIcon, UIButton } from "~components";
 import { IGetCartRes } from "~api/types";
 import { CheckoutCartItem } from "./components/CheckoutCartItem";
 import { dummyCartProduct } from "~domains/order/mocks";
-import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
 import { PencilSvg } from "~components/svg/PencilSvg";
 import { useTranslation } from "react-i18next";
