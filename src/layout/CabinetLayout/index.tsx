@@ -16,6 +16,13 @@ const CabinetLayout = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const logoutUser = () => {
+    logout.mutate({});
+    queryClient.removeQueries(wishlistsQuery.queryKey);
+    queryClient.removeQueries(cartQuery.queryKey);
+    navigate(ROUTES.CATEGORY.path);
+  };
+
   return (
     <Page>
       <Container>
@@ -39,15 +46,7 @@ const CabinetLayout = () => {
                     {t("account.addresses.title")}
                   </NavLink>
                   <div style={{ marginTop: "10px" }}>
-                    <ButtonDark
-                      onClick={async () => {
-                        logout.mutate({});
-                        queryClient.removeQueries(wishlistsQuery.queryKey);
-                        queryClient.removeQueries(cartQuery.queryKey);
-                        navigate(ROUTES.CATEGORY.path);
-                      }}
-                      minWidth={"201px"}
-                    >
+                    <ButtonDark onClick={logoutUser} minWidth={"201px"}>
                       {t("common.logout")}
                     </ButtonDark>
                   </div>
