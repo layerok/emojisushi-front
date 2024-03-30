@@ -24,7 +24,6 @@ export * from "./CloseIcon";
 export * from "./LanguageSelector";
 export * from "./StickyToTopBtn";
 export * from "./Dropdown";
-export * from "./If";
 export * from "./Heading";
 export * from "./PasswordInput";
 export * from "./Checkbox";

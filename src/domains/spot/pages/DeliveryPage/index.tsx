@@ -1,4 +1,4 @@
-import { Container, Heading, If } from "~components";
+import { Container, Heading } from "~components";
 import * as S from "./styled";
 import { useTranslation } from "react-i18next";
 import { useAppStore } from "~stores/appStore";
@@ -43,8 +43,7 @@ export const DeliveryPage = observer(() => {
               {t("payment.refund-rules")}
             </Link>
           </S.Left>
-
-          <If condition={!!appStore.city.google_map_url}>
+          {!!appStore.city.google_map_url && (
             <S.Right>
               <iframe
                 src={appStore.city.google_map_url}
@@ -52,7 +51,7 @@ export const DeliveryPage = observer(() => {
                 height="480"
               />
             </S.Right>
-          </If>
+          )}
         </S.FlexContainer>
       </Container>
     </Page>

@@ -2,7 +2,6 @@ import { CartProduct } from "~models";
 import * as S from "./styled";
 import {
   FlexBox,
-  If,
   IngredientsTooltip,
   LogoSvg,
   Price,
@@ -31,14 +30,11 @@ export const CheckoutCartItem = ({
         <S.Description>
           <FlexBox>
             <Count loading={loading} quantity={quantity} />
-            <If condition={weight !== 0}>
-              <Delimeter loading={loading} />
-            </If>
+            {weight !== 0 && <Delimeter loading={loading} />}
             <Weight loading={loading} weight={weight} />
           </FlexBox>
-          <If condition={ingredients.length > 0}>
-            <IngredientsTooltip items={ingredients} />
-          </If>
+
+          {ingredients.length > 0 && <IngredientsTooltip items={ingredients} />}
         </S.Description>
         <Price_ loading={loading} item={item} />
       </S.Content>
@@ -77,19 +73,25 @@ const Weight = ({ weight, loading }) => {
 };
 
 const Image = ({ src, loading = false }) => {
-  return (
-    <S.Image src={loading ? undefined : src}>
-      {loading ? (
+  if (loading) {
+    return (
+      <S.Image src={undefined}>
         <Skeleton width="100%" height="100%" />
-      ) : (
-        <If condition={!src}>
-          <SvgIcon color={"white"} width={"80%"} style={{ opacity: 0.05 }}>
-            <LogoSvg />
-          </SvgIcon>
-        </If>
-      )}
-    </S.Image>
-  );
+      </S.Image>
+    );
+  }
+
+  if (!src) {
+    return (
+      <S.Image src={src}>
+        <SvgIcon color={"white"} width={"80%"} style={{ opacity: 0.05 }}>
+          <LogoSvg />
+        </SvgIcon>
+      </S.Image>
+    );
+  }
+
+  return <S.Image src={loading ? undefined : src} />;
 };
 
 const Price_ = ({
