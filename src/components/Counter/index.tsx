@@ -2,7 +2,7 @@ import { SvgIcon } from "../SvgIcon";
 import { MinusSvg } from "../svg/MinusSvg";
 import { PlusSvg } from "../svg/PlusSvg";
 import * as S from "./styled";
-import { Button } from "../buttons/Button";
+import { Button } from "~common/ui-components/Button/Button";
 import { FlexBox } from "../FlexBox";
 import { MouseEventHandler, useContext } from "react";
 import { ThemeContext, useTheme } from "styled-components";

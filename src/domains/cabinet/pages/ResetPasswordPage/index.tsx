@@ -1,10 +1,11 @@
 import { useState } from "react";
 import * as S from "./styled";
-import { FlexBox, Button, Input, PasswordInput } from "~components";
+import { FlexBox, Input, PasswordInput } from "~components";
 import { useParams } from "react-router-dom";
 import { authApi } from "src/api";
 import { useTranslation } from "react-i18next";
 import { Page } from "~components/Page";
+import { Button } from "~common/ui-components/Button/Button";
 
 export const ResetPasswordPage = () => {
   const { t } = useTranslation();

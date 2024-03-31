@@ -1,9 +1,10 @@
 import { DropdownPopover } from "~components";
-import { SortOrderButton } from "~components/buttons/SortOrderButton";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { SortKey } from "~api/types";
 import { useSearchParams, useSubmit } from "react-router-dom";
+import { SortOrderSvg } from "src/components/svg/SortOrderSvg";
+import { UIButton } from "~common/ui-components/UIButton/UIButton";
 
 type TSortingPopoverProps = {
   loading?: boolean;
@@ -67,7 +68,9 @@ const InternalSortingDropdown = ({ options = [] }: { options?: SortKey[] }) => {
       }}
     >
       {({ selectedOption }) => (
-        <SortOrderButton text={t(`sort.${selectedOption}`)} />
+        <UIButton text={t(`sort.${selectedOption}`)}>
+          <SortOrderSvg />
+        </UIButton>
       )}
     </DropdownPopover>
   );

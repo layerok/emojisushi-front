@@ -1,6 +1,6 @@
 import { SvgIcon } from "../../SvgIcon";
 import { TelegramSvg } from "../../svg/TelegramSvg";
-import { Button } from "../../buttons/Button";
+import { Button } from "~common/ui-components/Button/Button";
 import { NotifyModal } from "../NotifyModal";
 import { useTranslation } from "react-i18next";
 import NiceModal from "@ebay/nice-modal-react";

@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { Button, HeartSvg, CloseSvg, Input, SvgIcon } from "~components";
+import { HeartSvg, CloseSvg, Input, SvgIcon } from "~components";
 import { authApi } from "~api";
 import { IAddress, IUser } from "~api/types";
 import { useTranslation } from "react-i18next";
@@ -12,6 +12,7 @@ import { queryClient } from "~query-client";
 import { AUTHENTICATED_USER_QUERY_KEY } from "~common/constants";
 import { arrImmutableDeleteAt } from "~utils/arr.utils";
 import { useTheme } from "styled-components";
+import { Button } from "~common/ui-components/Button/Button";
 
 const Address = ({ address, user }: { address: IAddress; user: IUser }) => {
   const isDefault = user.customer.default_shipping_address_id === address.id;

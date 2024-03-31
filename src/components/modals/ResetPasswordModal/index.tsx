@@ -1,6 +1,6 @@
 import * as S from "./styled";
 import { useState } from "react";
-import { Button, Input, Modal } from "~components";
+import { Input, Modal } from "~components";
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 import { authApi } from "~api";
@@ -8,7 +8,8 @@ import { useMutation } from "@tanstack/react-query";
 import NiceModal from "@ebay/nice-modal-react";
 import { useModal } from "~modal";
 import { ModalIDEnum } from "~common/modal.constants";
-import { TextButton } from "~common/ui/TextButton";
+import { TextButton } from "~common/ui-components/TextButton";
+import { Button } from "~common/ui-components/Button/Button";
 
 export const ResetPasswordModal = NiceModal.create(
   ({ redirect_to }: { redirect_to?: string }) => {

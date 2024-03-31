@@ -1,5 +1,6 @@
 import * as S from "./styled";
-import { FlexBox, SvgIcon, BagSvg, Button } from "~components";
+import { FlexBox, SvgIcon, BagSvg } from "~components";
+import { Button } from "~common/ui-components/Button/Button";
 import { HTMLProps } from "react";
 
 type TCartButton = {

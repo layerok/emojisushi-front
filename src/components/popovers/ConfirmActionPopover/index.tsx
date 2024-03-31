@@ -1,6 +1,6 @@
 import * as S from "./styled";
 import { Popover } from "../Popover";
-import { Button } from "../../buttons/Button";
+import { Button } from "~common/ui-components/Button/Button";
 import { FlexBox } from "../../FlexBox";
 import { useTranslation } from "react-i18next";
 

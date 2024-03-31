@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as S from "./styled";
-import { Button, PasswordInput } from "~components";
+import { PasswordInput } from "~components";
 import { authApi } from "~api";
 import { transaction } from "mobx";
 import { useTranslation } from "react-i18next";
@@ -8,6 +8,7 @@ import { Form } from "react-router-dom";
 import { useRef, useState } from "react";
 import { AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
+import { Button } from "~common/ui-components/Button/Button";
 
 const getError = (error: string | string[] | undefined) => {
   if (Array.isArray(error)) {

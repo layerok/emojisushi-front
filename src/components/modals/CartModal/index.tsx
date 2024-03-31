@@ -6,13 +6,13 @@ import {
   Price,
   CloseModalIcon,
   CloseIcon,
-  Button,
   ConfirmActionPopover,
   SvgIcon,
   LogoSvg,
   // todo: replace SushiSvg because it is fake svg, it is png actually
   SushiSvg,
 } from "~components";
+import { Button } from "~common/ui-components/Button/Button";
 
 import { useState } from "react";
 import { useBreakpoint2 } from "~common/hooks";

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { ProductsGrid, LoadMoreButton } from "~components";
+import { ProductsGrid, ArrowsClockwiseSvg } from "~components";
+import { UIButton } from "~common/ui-components/UIButton/UIButton";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Product } from "src/models";
 import {
@@ -23,6 +24,7 @@ import {
   useTypedSearchParams,
 } from "react-router-typesafe-routes/dom";
 import { AxiosError } from "axios";
+import styled from "styled-components";
 
 export const ProductPage = observer(() => {
   const { ref, inView } = useInView();
@@ -146,21 +148,34 @@ export const ProductPage = observer(() => {
       />
       {hasNextPage && (
         <S.Footer ref={ref}>
-          <LoadMoreButton
-            loading={isFetchingNextPage}
-            style={{ cursor: "pointer" }}
-            text={t("common.show_more")}
+          <UIButton
             onClick={() => {
               if (!isFetchingNextPage) {
                 handleLoadMore();
               }
             }}
-          />
+            style={{ cursor: "pointer" }}
+            text={t("common.show_more")}
+          >
+            {isFetchingNextPage ? (
+              <RotateContainer>
+                <ArrowsClockwiseSvg />
+              </RotateContainer>
+            ) : (
+              <div>
+                <ArrowsClockwiseSvg />
+              </div>
+            )}
+          </UIButton>
         </S.Footer>
       )}
     </div>
   );
 });
+
+const RotateContainer = styled.div`
+  animation: spin 4s linear infinite;
+`;
 
 export const Component = ProductPage;
 

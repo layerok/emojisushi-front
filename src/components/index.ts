@@ -4,7 +4,6 @@ export * from "./Grid";
 export * from "./CartButton";
 export * from "./TinyCartButton";
 export * from "./Counter";
-export * from "./buttons";
 export * from "./svg";
 export * from "./SvgIcon";
 export * from "./Loader";

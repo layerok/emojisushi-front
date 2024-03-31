@@ -1,5 +1,4 @@
 import {
-  Button,
   Dropdown,
   FlexBox,
   Input,
@@ -7,6 +6,7 @@ import {
   SkeletonWrap,
   Trans,
 } from "~components";
+import { Button } from "~common/ui-components/Button/Button";
 import { useTranslation } from "react-i18next";
 import { useFormik } from "formik";
 import * as Yup from "yup";

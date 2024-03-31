@@ -1,4 +1,5 @@
-import { FlexBox, Input, Button } from "src/components";
+import { FlexBox, Input } from "src/components";
+import { Button } from "~common/ui-components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { authApi } from "~api";

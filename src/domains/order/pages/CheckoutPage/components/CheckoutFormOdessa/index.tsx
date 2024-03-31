@@ -1,7 +1,6 @@
 import {
   FlexBox,
   Input,
-  Button,
   SegmentedControl,
   Dropdown,
   SkeletonWrap,
@@ -33,6 +32,7 @@ import { ModalIDEnum } from "~common/modal.constants";
 import { ROUTES } from "~routes";
 import { isValidUkrainianPhone, getUserFullName } from "~domains/order/utils";
 import { useShowModal } from "~modal";
+import { Button } from "~common/ui-components/Button/Button";
 
 type TCheckoutFormProps = {
   loading?: boolean | undefined;

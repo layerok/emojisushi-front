@@ -12,7 +12,7 @@ import {
 } from "./components";
 import { findInCart } from "./utils";
 import { Price } from "~components/Price";
-import { Button } from "~components/buttons";
+import { Button } from "~common/ui-components/Button/Button";
 import { IGetCartRes, IGetWishlistRes } from "~api/types";
 import { ButtonCounter } from "~components";
 import { useTranslation } from "react-i18next";

@@ -1,13 +1,7 @@
 import * as S from "./styled";
 import { useState } from "react";
-import {
-  PasswordInput,
-  Checkbox,
-  Button,
-  Input,
-  FlexBox,
-  Modal,
-} from "~components";
+import { PasswordInput, Checkbox, Input, FlexBox, Modal } from "~components";
+import { Button } from "~common/ui-components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useRegister } from "~hooks/use-auth";
@@ -18,7 +12,7 @@ import NiceModal from "@ebay/nice-modal-react";
 import { ROUTES } from "~routes";
 import { useModal } from "~modal";
 import { ModalIDEnum } from "~common/modal.constants";
-import { TextButton } from "~common/ui/TextButton";
+import { TextButton } from "~common/ui-components/TextButton";
 
 export const RegisterModal = NiceModal.create(
   ({ redirect_to }: { redirect_to?: string }) => {

@@ -1,5 +1,6 @@
-import { SvgIcon, NotifyModal, Button } from "~components";
+import { SvgIcon, NotifyModal } from "~components";
 import { useTranslation } from "react-i18next";
+import { Button } from "~common/ui-components/Button/Button";
 
 import NiceModal from "@ebay/nice-modal-react";
 import { useModal } from "~modal";
