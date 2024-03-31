@@ -19,7 +19,7 @@ import {
 import { ROUTES } from "~routes";
 import { useTranslation } from "react-i18next";
 import { useDebounce } from "~common/hooks";
-import { EndAdornment } from "~common/ui/EndAdornment";
+import { EndAdornment } from "~common/ui-components/EndAdornment";
 
 type SidebarProps = { loading?: boolean; categories?: ICategory[] };
 

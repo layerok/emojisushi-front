@@ -3,7 +3,7 @@ import { EyeSvg } from "../svg/EyeSvg";
 import { forwardRef, useState } from "react";
 import { ClosedEyeSvg } from "../svg/ClosedEyeSvg";
 import { IInputComponentProps, Input } from "../Input";
-import { EndAdornment } from "~common/ui/EndAdornment";
+import { EndAdornment } from "~common/ui-components/EndAdornment";
 
 type IProps = IInputComponentProps & {
   name: string;

@@ -1,8 +1,9 @@
 import { BaseModal, IBaseModalProps } from "../BaseModal";
 import * as S from "./styled";
-import { CloseModalIcon } from "../CloseModalIcon";
 import { CSSProperties, ReactNode } from "react";
 import { useTheme } from "styled-components";
+import { Times } from "~assets/ui-icons";
+import { SvgIcon } from "~components";
 
 export type IModalProps = {
   alignItems?: CSSProperties["alignItems"];
@@ -33,7 +34,17 @@ export const Modal = ({
       {({ close }) => (
         <S.Container width={width} alignCenter={alignCenter}>
           <S.CloseIcon>
-            <CloseModalIcon close={close} />
+            <SvgIcon
+              onClick={close}
+              hoverColor={theme.colors.brand}
+              color={"white"}
+              style={{
+                cursor: "pointer",
+                width: 35,
+              }}
+            >
+              <Times />
+            </SvgIcon>
           </S.CloseIcon>
           {typeof children === "function" ? children({ close }) : children}
         </S.Container>

@@ -1,7 +1,6 @@
 export * from "./AuthModal";
 export * from "./BaseModal";
 export * from "./CartModal";
-export * from "./CloseModalIcon";
 export * from "./ContactsModal";
 export * from "./MobMenuModal";
 export * from "./Modal";

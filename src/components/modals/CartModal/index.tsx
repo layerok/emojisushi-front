@@ -4,8 +4,6 @@ import {
   LightCounter,
   BaseModal,
   Price,
-  CloseModalIcon,
-  CloseIcon,
   ConfirmActionPopover,
   SvgIcon,
   LogoSvg,
@@ -27,6 +25,7 @@ import { useRemoveCartProduct } from "~hooks/use-remove-cart-product";
 import { useUpdateCartProduct } from "~hooks/use-update-cart-product";
 import { useModal } from "~modal";
 import { useTheme } from "styled-components";
+import { Times } from "~assets/ui-icons";
 
 // todo: clear outdated products from the card. You can do it on the frontend or on the backend
 const CartItem = (props: { item: CartProduct }) => {
@@ -53,6 +52,7 @@ const CartItem = (props: { item: CartProduct }) => {
   };
 
   const { t } = useTranslation();
+  const theme = useTheme();
 
   return (
     <S.Item>
@@ -74,7 +74,16 @@ const CartItem = (props: { item: CartProduct }) => {
           }}
           text={t("cartModal.remove")}
         >
-          <CloseIcon color={"#4A4A4A"} />
+          <SvgIcon
+            color={theme.colors.grey[450]}
+            hoverColor={theme.colors.brand}
+            style={{
+              cursor: "pointer",
+              width: 25,
+            }}
+          >
+            <Times />
+          </SvgIcon>
         </ConfirmActionPopover>
       </S.ItemRemoveIcon>
       <S.ItemImg src={item.product.mainImage}>
@@ -148,7 +157,17 @@ export const CartModal = NiceModal.create(() => {
       {({ close }) => (
         <S.Wrapper>
           <S.CloseIcon>
-            <CloseModalIcon close={close} />
+            <SvgIcon
+              onClick={close}
+              color={"white"}
+              hoverColor={theme.colors.brand}
+              style={{
+                cursor: "pointer",
+                width: 35,
+              }}
+            >
+              <Times />
+            </SvgIcon>
           </S.CloseIcon>
 
           {items.length === 0 && (

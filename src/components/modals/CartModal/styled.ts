@@ -60,7 +60,7 @@ const Item = styled.div`
   display: flex;
   padding-bottom: 20px;
   margin-top: 20px;
-  border-bottom: 1px solid #4a4a4a;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.grey[450]};
 
   &:first-child {
     margin-top: 0;

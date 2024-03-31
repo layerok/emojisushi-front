@@ -16,7 +16,9 @@ const palette = {
   },
   grey: {
     400: "#616161",
+    450: "#4A4A4A",
     500: "#343434",
+    510: "#333333",
     550: "#2F2F2F",
     560: "#2d2d2d",
     570: "#272727",
@@ -41,6 +43,7 @@ const components = {
 };
 
 const colors = {
+  ...palette,
   brand: palette.yellow[500],
   brandDelimiter: palette.yellow[400],
   ukrainianFlag: ukrainianFlag,

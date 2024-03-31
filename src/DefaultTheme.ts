@@ -4,6 +4,10 @@ import { DefaultTheme } from "styled-components";
 declare module "styled-components" {
   export interface DefaultTheme {
     colors: {
+      grey: {
+        450: string;
+        510: string;
+      };
       brand: string;
       brandDelimiter: string;
       ukrainianFlag: {

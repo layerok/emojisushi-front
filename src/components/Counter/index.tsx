@@ -59,8 +59,8 @@ export const LightCounter = ({ handleDecrement, handleIncrement, count }) => {
       handleIncrement={handleIncrement}
       count={count}
       countColor={"white"}
-      controlColor={"#4A4A4A"}
-      delimiterColor={"#333333"}
+      controlColor={theme.colors.grey[450]}
+      delimiterColor={theme.colors.grey[510]}
       hoverControlColor={theme.colors.brand}
     />
   );
