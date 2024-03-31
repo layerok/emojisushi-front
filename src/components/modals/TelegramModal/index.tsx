@@ -1,6 +1,6 @@
 import { SvgIcon } from "../../SvgIcon";
 import { TelegramSvg } from "../../svg/TelegramSvg";
-import { ButtonFilled } from "../../buttons/Button";
+import { Button } from "../../buttons/Button";
 import { NotifyModal } from "../NotifyModal";
 import { useTranslation } from "react-i18next";
 import NiceModal from "@ebay/nice-modal-react";
@@ -27,14 +27,18 @@ export const TelegramModal = NiceModal.create(() => {
         </SvgIcon>
       )}
       renderButton={() => (
-        <ButtonFilled
+        <Button
+          filled
+          // @ts-ignore
           as={"a"}
           href={"https://t.me/Emojisushibot"}
           target={"_blank"}
-          width={"250px"}
+          style={{
+            width: 250,
+          }}
         >
           {t("telegramModal.go_to")}
-        </ButtonFilled>
+        </Button>
       )}
     />
   );

@@ -136,7 +136,7 @@ export const RegisterModal = NiceModal.create(
 
               <FlexBox>
                 <FlexBox flexDirection={"column"} alignItems={"center"}>
-                  <Button submitting={register.isLoading}>
+                  <Button loading={register.isLoading}>
                     {t("common.registration")}
                   </Button>
 

@@ -1,5 +1,6 @@
-import { ButtonCounter, ButtonOutline } from "~components";
+import { ButtonCounter, Button } from "~components";
 import { useTranslation } from "react-i18next";
+import { ReactComponent as ShoppingBag } from "src/assets/ui-icons/shopping-bag.svg";
 
 type AddToCartButtonProps = {
   loading: boolean;
@@ -30,14 +31,18 @@ export const AddToCartButton = ({
     );
   }
   return (
-    <ButtonOutline
-      loading={loading}
-      submitting={submitting}
+    <Button
+      style={{
+        width: 130,
+      }}
+      startAdornment={<ShoppingBag />}
+      showSkeleton={loading}
+      loading={submitting}
       onClick={() => {
         handleAdd(1);
       }}
     >
       {t("order.order_btn")}
-    </ButtonOutline>
+    </Button>
   );
 };

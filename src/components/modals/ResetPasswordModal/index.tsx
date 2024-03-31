@@ -90,7 +90,7 @@ export const ResetPasswordModal = NiceModal.create(
                 >
                   {t("common.back")}
                 </TextButton>
-                <Button submitting={resetPassword.isLoading} type="submit">
+                <Button loading={resetPassword.isLoading} type="submit">
                   {t("common.recover")}
                 </Button>
               </S.BtnGroup>

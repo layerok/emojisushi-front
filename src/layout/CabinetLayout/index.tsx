@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { ButtonDark, NavLink, Container } from "~components";
+import { NavLink, Container } from "~components";
 import { useTranslation } from "react-i18next";
 import { Outlet, useMatches, useNavigate } from "react-router-dom";
 import { AuthLoader, useLogout } from "~hooks/use-auth";
@@ -7,6 +7,7 @@ import { cartQuery, wishlistsQuery } from "~queries";
 import { ROUTES } from "~routes";
 import { Page } from "~components/Page";
 import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "~domains/cabinet/components/Button/Button";
 
 const CabinetLayout = () => {
   const { t } = useTranslation();
@@ -46,9 +47,14 @@ const CabinetLayout = () => {
                     {t("account.addresses.title")}
                   </NavLink>
                   <div style={{ marginTop: "10px" }}>
-                    <ButtonDark onClick={logoutUser} minWidth={"201px"}>
+                    <Button
+                      style={{
+                        minWidth: "201px",
+                      }}
+                      onClick={logoutUser}
+                    >
                       {t("common.logout")}
-                    </ButtonDark>
+                    </Button>
                   </div>
                 </S.Navbar>
               </S.Container>

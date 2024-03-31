@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as S from "./styled";
-import { ButtonOutline, PasswordInput } from "~components";
+import { Button, PasswordInput } from "~components";
 import { authApi } from "~api";
 import { transaction } from "mobx";
 import { useTranslation } from "react-i18next";
@@ -91,13 +91,15 @@ export const UpdatePasswordPage = observer(() => {
           error={getError(errors?.password_confirmation)}
         />
         <S.ButtonWrapper>
-          <ButtonOutline
+          <Button
             type="submit"
-            submitting={mutation.isLoading}
-            width={"224px"}
+            loading={mutation.isLoading}
+            style={{
+              width: 224,
+            }}
           >
             {t("account.changePassword.btnText")}
-          </ButtonOutline>
+          </Button>
         </S.ButtonWrapper>
 
         {showSuccessMessage && (

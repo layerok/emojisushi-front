@@ -2,7 +2,7 @@ import { SvgIcon } from "../SvgIcon";
 import { MinusSvg } from "../svg/MinusSvg";
 import { PlusSvg } from "../svg/PlusSvg";
 import * as S from "./styled";
-import { ButtonFilled } from "../buttons/Button";
+import { Button } from "../buttons/Button";
 import { FlexBox } from "../FlexBox";
 import { MouseEventHandler, useContext } from "react";
 import { ThemeContext, useTheme } from "styled-components";
@@ -84,7 +84,7 @@ export const ButtonCounter = ({
   count,
   handleIncrement,
   handleDecrement,
-  width,
+  width = "130px",
 }: {
   count: number;
   handleIncrement: MouseEventHandler<HTMLSpanElement>;
@@ -92,16 +92,19 @@ export const ButtonCounter = ({
   width?: string;
 }) => {
   return (
-    <ButtonFilled
-      justifyContent={"space-around"}
-      padding={"7px 0"}
-      width={width}
+    <Button
+      filled
+      style={{
+        justifyContent: "space-around",
+        padding: "7px 0",
+        width,
+      }}
     >
       <DarkCounter
         count={count}
         handleDecrement={handleDecrement}
         handleIncrement={handleIncrement}
       />
-    </ButtonFilled>
+    </Button>
   );
 };

@@ -1,4 +1,4 @@
-import { SvgIcon, NotifyModal, ButtonFilled } from "~components";
+import { SvgIcon, NotifyModal, Button } from "~components";
 import { useTranslation } from "react-i18next";
 
 import NiceModal from "@ebay/nice-modal-react";
@@ -41,13 +41,14 @@ export const AppUpdateModal = NiceModal.create(() => {
         </SvgIcon>
       )}
       renderButton={() => (
-        <ButtonFilled
+        <Button
+          filled={true}
           onClick={() => {
             window.location.reload();
           }}
         >
           {t("appUpdate.action")}
-        </ButtonFilled>
+        </Button>
       )}
     />
   );

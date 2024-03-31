@@ -1,4 +1,4 @@
-import { FlexBox, Input, ButtonDark, ButtonOutline } from "src/components";
+import { FlexBox, Input, Button } from "src/components";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { authApi } from "~api";
@@ -9,6 +9,7 @@ import { useState } from "react";
 import { queryClient } from "~query-client";
 import { AUTHENTICATED_USER_QUERY_KEY } from "~common/constants";
 import { IUser } from "~api/types";
+import { Button as CabinetSpecificButton } from "~domains/cabinet/components/Button/Button";
 
 export const EditProfilePage = () => {
   const { t } = useTranslation();
@@ -125,17 +126,23 @@ export const EditProfilePage = () => {
           marginTop: "30px",
         }}
       >
-        <ButtonOutline
-          submitting={mutation.isLoading}
+        <Button
+          loading={mutation.isLoading}
           style={{
-            marginRight: "16px",
+            marginRight: 16,
           }}
         >
           {t("common.save")}
-        </ButtonOutline>
-        <ButtonDark type="button" onClick={() => navigate("./../")}>
+        </Button>
+        <CabinetSpecificButton
+          style={{
+            marginLeft: 20,
+          }}
+          type="button"
+          onClick={() => navigate("./../")}
+        >
           {t("common.cancel")}
-        </ButtonDark>
+        </CabinetSpecificButton>
       </FlexBox>
     </form>
   );

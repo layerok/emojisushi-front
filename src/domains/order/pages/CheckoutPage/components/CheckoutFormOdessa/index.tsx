@@ -1,7 +1,7 @@
 import {
   FlexBox,
   Input,
-  ButtonOutline,
+  Button,
   SegmentedControl,
   Dropdown,
   SkeletonWrap,
@@ -462,14 +462,16 @@ export const CheckoutFormOdessa = observer(
 
           <S.Control>
             <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
-              <ButtonOutline
-                submitting={formik.isSubmitting}
-                loading={loading}
+              <Button
+                loading={formik.isSubmitting}
+                showSkeleton={loading}
                 type={"submit"}
-                width={"160px"}
+                style={{
+                  width: 160,
+                }}
               >
                 {t("checkout.order")}
-              </ButtonOutline>
+              </Button>
 
               <S.Total>
                 <Trans showSkeleton={loading} i18nKey={"checkout.to_pay"} />

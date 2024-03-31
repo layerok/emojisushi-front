@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { ButtonOutline, HeartSvg, CloseSvg, Input, SvgIcon } from "~components";
+import { Button, HeartSvg, CloseSvg, Input, SvgIcon } from "~components";
 import { authApi } from "~api";
 import { IAddress, IUser } from "~api/types";
 import { useTranslation } from "react-i18next";
@@ -216,13 +216,9 @@ export const SavedAddressesPage = () => {
           />
         </S.AddressWrapper>
         <S.ButtonWrapper>
-          <ButtonOutline
-            submitting={addMutation.isLoading}
-            type="submit"
-            width={""}
-          >
+          <Button loading={addMutation.isLoading} type="submit">
             {t("account.addresses.addAddress")}
-          </ButtonOutline>
+          </Button>
         </S.ButtonWrapper>
       </Form>
     </>

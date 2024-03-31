@@ -1,6 +1,6 @@
 import * as S from "./styled";
 import { Popover } from "../Popover";
-import { ButtonFilled, ButtonOutline } from "../../buttons/Button";
+import { Button } from "../../buttons/Button";
 import { FlexBox } from "../../FlexBox";
 import { useTranslation } from "react-i18next";
 
@@ -22,12 +22,21 @@ export const ConfirmActionPopover = ({
             style={{ marginTop: "20px" }}
             justifyContent={"space-between"}
           >
-            <ButtonOutline onClick={() => onConfirm({ close })} width={"162px"}>
+            <Button
+              onClick={() => onConfirm({ close })}
+              style={{
+                width: 162,
+              }}
+            >
               {t("confirmAction.yes")}
-            </ButtonOutline>
-            <ButtonFilled onClick={() => onCancel({ close })} width={"162px"}>
+            </Button>
+            <Button
+              filled
+              onClick={() => onCancel({ close })}
+              style={{ width: 162 }}
+            >
               {t("confirmAction.no")}
-            </ButtonFilled>
+            </Button>
           </FlexBox>
         </S.Wrapper>
       )}

@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { FlexBox, SvgIcon, BagSvg, ButtonFilled } from "~components";
+import { FlexBox, SvgIcon, BagSvg, Button } from "~components";
 import { HTMLProps } from "react";
 
 type TCartButton = {
@@ -14,11 +14,14 @@ export const CartButton = ({
   onClick,
 }: TCartButton) => {
   return (
-    <ButtonFilled
+    <Button
+      filled
       onClick={onClick}
-      padding={"0 24px"}
-      minWidth={"170px"}
-      width="auto"
+      style={{
+        padding: "0 24px",
+        minWidth: "170px",
+        width: "auto",
+      }}
     >
       <FlexBox alignItems={"center"}>
         <S.Icon>
@@ -30,6 +33,6 @@ export const CartButton = ({
         <S.Delimiter />
         <S.Count>{count}</S.Count>
       </FlexBox>
-    </ButtonFilled>
+    </Button>
   );
 };

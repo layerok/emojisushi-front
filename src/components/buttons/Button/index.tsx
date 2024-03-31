@@ -1,138 +1,81 @@
-import * as S from "./styled";
-import { SpinnerSvg, SvgIcon } from "~components";
-import { CSSProperties, forwardRef, PropsWithChildren, HTMLProps } from "react";
-import Skeleton from "react-loading-skeleton";
-import { useTheme } from "styled-components";
+import { SkeletonWrap, SpinnerSvg, SvgIcon } from "~components";
+import {
+  forwardRef,
+  PropsWithChildren,
+  ButtonHTMLAttributes,
+  ReactNode,
+} from "react";
+import styled from "styled-components";
 
-type IProps = PropsWithChildren<
-  HTMLProps<HTMLButtonElement> & {
-    width?: string;
-    filled?: boolean;
-    padding?: string;
+type IButtonProps = PropsWithChildren<
+  ButtonHTMLAttributes<HTMLButtonElement> & {
+    showSkeleton?: boolean;
     loading?: boolean;
-    submitting?: boolean;
-    justifyContent?: CSSProperties["justifyContent"];
-    outline?: boolean;
-    color?: string;
-    hoverColor?: string;
-    backgroundColor?: string;
-    hoverOutline?: boolean;
-    minWidth?: string;
-    hoverBackgroundColor?: string;
+    filled?: boolean;
+    startAdornment?: ReactNode;
   }
 >;
 
-export const Button = forwardRef<HTMLButtonElement, IProps>((props, ref) => {
-  const theme = useTheme();
-  const {
-    children,
-    width,
-    filled = false,
-    padding,
-    loading = false,
-    submitting = false,
-    justifyContent,
-    outline = true,
-    color = theme.colors.brand,
-    hoverColor = "black",
-    backgroundColor = "transparent",
-    hoverBackgroundColor = theme.colors.brand,
-    hoverOutline = true,
-    minWidth = "130px",
-    ...rest
-  } = props;
+export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
+  (props, ref) => {
+    const {
+      children,
+      filled = false,
+      startAdornment,
+      showSkeleton = false,
+      loading = false,
+      ...rest
+    } = props;
 
-  if (loading) {
-    return <Skeleton height={40} width={width} borderRadius={10} />;
+    return (
+      <SkeletonWrap loading={showSkeleton}>
+        <BaseButton $filled={filled} $loading={loading} {...rest} ref={ref}>
+          {loading ? (
+            <SvgIcon width={"25px"} color={"black"}>
+              <SpinnerSvg />
+            </SvgIcon>
+          ) : (
+            <>
+              {startAdornment && (
+                <StartAdornment>{startAdornment}</StartAdornment>
+              )}
+              {children}
+            </>
+          )}
+        </BaseButton>
+      </SkeletonWrap>
+    );
   }
+);
 
-  // todo:  this is propsapacalypses, need to refactor
-  return (
-    // @ts-ignore
-    <S.Button
-      minWidth={minWidth}
-      outline={outline}
-      backgroundColor={submitting ? theme.colors.brand : backgroundColor}
-      hoverBackgroundColor={hoverBackgroundColor}
-      hoverOutline={hoverOutline}
-      color={color}
-      hoverColor={hoverColor}
-      padding={padding}
-      filled={filled}
-      width={width}
-      justifyContent={justifyContent}
-      {...rest}
-      ref={ref}
-    >
-      {submitting ? (
-        <SvgIcon width={"25px"} color={"black"}>
-          <SpinnerSvg />
-        </SvgIcon>
-      ) : (
-        children
-      )}
-    </S.Button>
-  );
-});
+const StartAdornment = styled.div`
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+`;
 
-export const ButtonOutline = forwardRef<
-  HTMLButtonElement,
-  Omit<IProps, "filled" | "outline">
->((props, ref) => {
-  const { children, ...rest } = props;
-  return (
-    <Button {...rest} filled={false} outline={true} ref={ref}>
-      {children}
-    </Button>
-  );
-});
+const BaseButton = styled.button<{
+  $loading: boolean;
+  $filled: boolean;
+}>`
+  border: ${(props) => `1px solid ${props.theme.colors.brand}`};
+  border-radius: ${({ theme }) => theme.borderRadius.smooth};
+  padding: 7px 31px;
+  min-width: 130px;
+  height: 40px;
+  color: ${({ theme, $filled }) => ($filled ? "black" : theme.colors.brand)};
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  text-decoration: none;
+  background-color: ${({ $loading, $filled, theme }) =>
+    $loading || $filled ? theme.colors.brand : "transparent"};
 
-export const ButtonFilled = forwardRef<
-  HTMLButtonElement,
-  Omit<IProps, "color" | "filled" | "backgroundColor">
->((props, ref) => {
-  const { children, ...rest } = props;
-  const theme = useTheme();
-
-  return (
-    <Button
-      {...rest}
-      backgroundColor={theme.colors.brand}
-      color={"black"}
-      filled={true}
-      ref={ref}
-    >
-      {children}
-    </Button>
-  );
-});
-
-export const ButtonDark = forwardRef<
-  HTMLButtonElement,
-  Omit<
-    IProps,
-    | "outline"
-    | "color"
-    | "backgroundColor"
-    | "hoverBackgroundColor"
-    | "hoverColor"
-    | "hoverOutline"
-  >
->((props, ref) => {
-  const { children, ...rest } = props;
-  const theme = useTheme();
-  return (
-    <Button
-      outline={false}
-      color={theme.colors.fg.default}
-      backgroundColor={theme.colors.canvas.inset4}
-      hoverBackgroundColor={theme.colors.canvas.inset4}
-      hoverColor={theme.colors.brand}
-      hoverOutline={true}
-      {...rest}
-      ref={ref}
-    >
-      {children}
-    </Button>
-  );
-});
+  :hover {
+    background: ${({ theme }) => theme.colors.brand};
+    box-shadow: ${({ theme }) => theme.shadows.brandSofter};
+    color: black;
+  }
+`;

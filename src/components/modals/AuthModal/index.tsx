@@ -102,7 +102,7 @@ export const AuthModal = NiceModal.create(
               </FlexBox>
 
               <Button
-                submitting={login.isLoading}
+                loading={login.isLoading}
                 type="submit"
                 style={{ marginTop: "20px", display: "flex" }}
               >

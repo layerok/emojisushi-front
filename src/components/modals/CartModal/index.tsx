@@ -6,7 +6,7 @@ import {
   Price,
   CloseModalIcon,
   CloseIcon,
-  ButtonOutline,
+  Button,
   ConfirmActionPopover,
   SvgIcon,
   LogoSvg,
@@ -181,17 +181,19 @@ export const CartModal = NiceModal.create(() => {
                 <Price newPrice={cart.total} />
               </FlexBox>
               <S.Button>
-                <ButtonOutline
+                <Button
                   disabled={items.length === 0}
                   onClick={() => {
                     navigate(ROUTES.CHECKOUT.path);
                     modal.remove();
                     close();
                   }}
-                  width={"100%"}
+                  style={{
+                    width: "100%",
+                  }}
                 >
                   {t("cartModal.checkout")}
-                </ButtonOutline>
+                </Button>
               </S.Button>
             </S.Footer>
           )}

@@ -1,9 +1,9 @@
 import * as S from "./styled";
-import { ButtonDark } from "src/components";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useUser } from "~hooks/use-auth";
 import { ROUTES } from "~routes";
+import { Button } from "~domains/cabinet/components/Button/Button";
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
@@ -30,23 +30,23 @@ export const ProfilePage = () => {
       </S.Property>
 
       <S.BtnGroup>
-        <ButtonDark
+        <Button
           onClick={() => {
             navigate(ROUTES.ACCOUNT.PROFILE.EDIT.path);
           }}
-          minWidth={"309px"}
+          style={{ minWidth: "309px" }}
         >
           {t("account.profile.editProfile")}
-        </ButtonDark>
+        </Button>
         <S.BtnWrapper>
-          <ButtonDark
+          <Button
             onClick={() => {
               navigate(ROUTES.ACCOUNT.PASSWORD_RECOVERY.path);
             }}
-            minWidth={"202px"}
+            style={{ minWidth: "202px" }}
           >
             {t("account.profile.changePassword")}
-          </ButtonDark>
+          </Button>
         </S.BtnWrapper>
       </S.BtnGroup>
     </S.Properties>
