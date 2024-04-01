@@ -142,7 +142,7 @@
     "cash": "Cash"
   },
   "validation": {
-    "required": "Filed '{{field}}' is required"
+    "required": "Please provide your phone number"
   },
   "thankYou": {
     "title": "Thank you for your order!",
