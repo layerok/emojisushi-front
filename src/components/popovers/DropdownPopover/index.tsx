@@ -3,37 +3,34 @@ import { Popover } from "../Popover";
 import { ReactNode, useEffect, useState } from "react";
 import { useTheme } from "styled-components";
 
-type Props<Option> = {
+type Option = {
+  id: string;
+  name: string;
+};
+
+type Props = {
   options?: Option[];
-  asFlatArray?: boolean;
   offset?: number;
   open?: boolean;
   disable?: boolean;
-  nameAccessor?: string;
-  idAccessor?: string;
   selectedIndex: number;
   children: ReactNode | { (props: { selectedOption?: Option }): ReactNode };
   backgroundColor?: string;
-  resolveOptionName?: (props: { option: Option }) => string;
   width?: string;
   onSelect?: (props: { option: Option; index: number }) => void;
 };
 
-export function DropdownPopover<Option>(props: Props<Option>) {
+export function DropdownPopover(props: Props) {
   const theme = useTheme();
   const {
     onSelect = () => {},
     options = [],
-    asFlatArray = false,
     offset = 0,
     open: initialOpen = false,
     disable = false,
-    nameAccessor = "name",
-    idAccessor = "id",
     selectedIndex,
     children,
     backgroundColor = theme.colors.canvas.inset,
-    resolveOptionName: resolveOptionNamePassed,
     width = "100%",
   } = props;
   const [open, setOpen] = useState(initialOpen);
@@ -48,17 +45,6 @@ export function DropdownPopover<Option>(props: Props<Option>) {
     setOpen(false);
   };
 
-  const resolveOptionName = ({ option }) => {
-    if (resolveOptionNamePassed) {
-      return resolveOptionNamePassed({ option });
-    }
-    return asFlatArray ? option : option[nameAccessor];
-  };
-
-  const resolveOptionId = ({ option }) => {
-    return asFlatArray ? option : option[idAccessor];
-  };
-
   return (
     <>
       <Popover
@@ -71,9 +57,9 @@ export function DropdownPopover<Option>(props: Props<Option>) {
             {options.map((option, index) => (
               <S.Option
                 onClick={() => handleSelect({ option, index })}
-                key={resolveOptionId({ option })}
+                key={option.id}
               >
-                {resolveOptionName({ option })}
+                {option.name}
               </S.Option>
             ))}
           </S.Options>

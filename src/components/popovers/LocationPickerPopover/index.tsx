@@ -28,10 +28,9 @@ export const LocationPickerPopover = observer(
     const location = useLocation();
     const { data: cities, isLoading } = useQuery(citiesQuery);
 
-    const options = (cities?.data || []).map((spot) => ({
-      id: spot.slug,
-      name: spot.name,
-      url: spot.frontend_url,
+    const options = (cities?.data || []).map((city) => ({
+      id: city.slug,
+      name: city.name,
     }));
 
     const selectedOption = options.find(
@@ -46,8 +45,9 @@ export const LocationPickerPopover = observer(
         options={options}
         selectedIndex={selectedIndex}
         onSelect={({ option, index }) => {
+          const city = cities.data.find((city) => city.slug === option.id);
           window.location.href =
-            option.url +
+            city.frontend_url +
             location.pathname +
             `?${LOCATION_CONFIRMED_SEARCH_PARAM}=true`;
         }}

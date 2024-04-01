@@ -1,7 +1,16 @@
 import * as S from "./styled";
-import { Chip, FlexBox, Input, MagnifierSvg, SvgIcon } from "~components";
-import { SortingPopover } from "~components/SortingPopover";
-import { ICategory } from "~api/types";
+import {
+  Chip,
+  DropdownPopover,
+  FlexBox,
+  Input,
+  MagnifierSvg,
+  SkeletonWrap,
+  SortOrderSvg,
+  SvgIcon,
+} from "~components";
+
+import { ICategory, SortKey } from "~api/types";
 import { ChipCloud } from "~components";
 import {
   Form,
@@ -14,10 +23,15 @@ import { ROUTES } from "~routes";
 import { useTranslation } from "react-i18next";
 import { useDebounce } from "~common/hooks";
 import { EndAdornment } from "~common/ui-components/EndAdornment";
+import {
+  SEARCH_QUERY_SEARCH_PARAM,
+  SORT_MODE_KEYS,
+  SORT_MODE_SEARCH_PARAM,
+  SortModeEnum,
+} from "~common/constants";
+import { UIButton } from "~common/ui-components/UIButton/UIButton";
 
 type SidebarProps = { loading?: boolean; categories?: ICategory[] };
-
-const SEARCH_QUERY_SEARCH_PARAM = "q";
 
 export const MobSidebar = ({
   loading = false,
@@ -41,13 +55,40 @@ export const MobSidebar = ({
   const handleChange = (event) => {
     debouncedFetch(event.currentTarget.form);
   };
+
+  const options = SORT_MODE_KEYS.map((key) => ({
+    name: t(`sort.${key}`),
+    id: key,
+  }));
+
+  const sortFromUrl = searchParams.get(SORT_MODE_SEARCH_PARAM) as SortKey;
+
+  // todo: validate provided search params from url
+  const initialSelectedIndex = SORT_MODE_KEYS.indexOf(
+    sortFromUrl ? sortFromUrl : SortModeEnum.Default
+  );
+
+  const handleSortModeChange = ({ option, index }) => {
+    const fd = new FormData();
+
+    Array.from(searchParams.entries())
+      .filter(([key]) => key !== SORT_MODE_SEARCH_PARAM)
+      .forEach(([key, val]) => fd.append(key, val));
+
+    fd.append(SORT_MODE_SEARCH_PARAM, option.id);
+
+    submit(fd, {
+      action: location.pathname,
+    });
+  };
+
   return (
     <S.Sidebar>
       <S.Controls>
         <S.SearchContainer>
           <Form role="search" action={location.pathname}>
             {Array.from(searchParams.entries())
-              .filter(([k]) => k !== "q")
+              .filter(([k]) => k !== SEARCH_QUERY_SEARCH_PARAM)
               .map(([k, v], idx) => (
                 <input type="hidden" name={k} defaultValue={v} key={idx} />
               ))}
@@ -55,7 +96,7 @@ export const MobSidebar = ({
               // I'm changing key to reset input value
               key={location.pathname}
               onChange={handleChange}
-              name="q"
+              name={SEARCH_QUERY_SEARCH_PARAM}
               defaultValue={q}
               loading={loading}
               endAdornment={
@@ -71,7 +112,19 @@ export const MobSidebar = ({
         </S.SearchContainer>
 
         <FlexBox justifyContent={"flex-end"}>
-          <SortingPopover loading={loading} />
+          <SkeletonWrap loading={loading}>
+            <DropdownPopover
+              options={options}
+              selectedIndex={initialSelectedIndex}
+              onSelect={handleSortModeChange}
+            >
+              {({ selectedOption }) => (
+                <UIButton text={selectedOption.name}>
+                  <SortOrderSvg />
+                </UIButton>
+              )}
+            </DropdownPopover>
+          </SkeletonWrap>
         </FlexBox>
       </S.Controls>
 
