@@ -1,12 +1,6 @@
 import * as S from "./styled";
-import {
-  Chip,
-  FlexBox,
-  Input,
-  MagnifierSvg,
-  SortingPopover,
-  SvgIcon,
-} from "~components";
+import { Chip, FlexBox, Input, MagnifierSvg, SvgIcon } from "~components";
+import { SortingPopover } from "~components/SortingPopover";
 import { ICategory } from "~api/types";
 import { ChipCloud } from "~components";
 import {

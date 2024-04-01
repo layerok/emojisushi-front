@@ -62,7 +62,7 @@ const CartItem = (props: { item: CartProduct }) => {
       <S.ItemRemoveIcon>
         <ConfirmActionPopover
           open={open}
-          onOpenChange={(open) => setOpen(open)}
+          onOpenChange={setOpen}
           onConfirm={() =>
             removeCartProduct({
               id: item.id,

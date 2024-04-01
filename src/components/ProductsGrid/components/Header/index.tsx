@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { SortingPopover } from "~components";
+import { SortingPopover } from "~components/SortingPopover";
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 

@@ -1,8 +1,10 @@
-import { DropdownPopover } from "~components";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import Skeleton from "react-loading-skeleton";
-import { SortKey } from "~api/types";
 import { useSearchParams, useSubmit } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+
+import { DropdownPopover } from "~components";
+import { SortKey } from "~api/types";
 import { SortOrderSvg } from "src/components/svg/SortOrderSvg";
 import { UIButton } from "~common/ui-components/UIButton/UIButton";
 
@@ -11,9 +13,14 @@ type TSortingPopoverProps = {
 };
 
 export const SortingPopover = ({ loading = false }: TSortingPopoverProps) => {
+  const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
+  const submit = useSubmit();
+
   if (loading) {
     return <Skeleton width={120} height={25} />;
   }
+
   // todo: fetch this options from backend, becase backend is a source of truth
   // but for now, it is ok
   const options: SortKey[] = [
@@ -25,11 +32,6 @@ export const SortingPopover = ({ loading = false }: TSortingPopoverProps) => {
     "price_low",
     "ratings",
   ];
-  return <InternalSortingDropdown options={options} />;
-};
-
-const InternalSortingDropdown = ({ options = [] }: { options?: SortKey[] }) => {
-  const [searchParams] = useSearchParams();
 
   const sortFromUrl = searchParams.get("sort") as SortKey;
 
@@ -37,17 +39,13 @@ const InternalSortingDropdown = ({ options = [] }: { options?: SortKey[] }) => {
   const initialSelectedIndex = options.indexOf(
     sortFromUrl ? sortFromUrl : "default"
   );
-  const submit = useSubmit();
-
-  const { t } = useTranslation();
-
-  // todo: don't build dynamic translations keys
 
   return (
     <DropdownPopover
       asFlatArray={true}
       options={options}
       resolveOptionName={({ option }) => {
+        // todo: don't build dynamic translations keys
         return t(`sort.${option}`);
       }}
       selectedIndex={initialSelectedIndex}

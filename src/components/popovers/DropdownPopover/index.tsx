@@ -64,6 +64,7 @@ export function DropdownPopover<Option>(props: Props<Option>) {
       <Popover
         offset={offset}
         open={open}
+        onOpenChange={setOpen}
         disable={disable}
         render={() => (
           <S.Options width={width} backgroundColor={backgroundColor}>
@@ -78,7 +79,7 @@ export function DropdownPopover<Option>(props: Props<Option>) {
           </S.Options>
         )}
       >
-        <div style={{ cursor: "pointer", width }}>
+        <div onClick={() => setOpen(true)} style={{ cursor: "pointer", width }}>
           {/* @ts-ignore */}
           {typeof children === "function"
             ? children({ selectedOption })
