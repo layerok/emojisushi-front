@@ -1,28 +1,24 @@
-import { Container, Heading } from "~components";
-import {
-  CheckoutFormOdessa,
-  CheckoutFormChernomorsk,
-  CheckoutCart,
-} from "./components";
-import { useTranslation } from "react-i18next";
-import { cartQuery, paymentQuery, shippingQuery } from "~queries";
-import * as S from "./styled";
-import { useQuery } from "@tanstack/react-query";
-import { useUser } from "~hooks/use-auth";
-import { useNavigate } from "react-router-dom";
-import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
-import { spotsQuery } from "~domains/spot/queries/spots.query";
-import { useAppStore } from "~stores/appStore";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+
+import { Container, Heading } from "~components";
+import { cartQuery, paymentQuery, shippingQuery } from "~queries";
 import { ROUTES } from "~routes";
-import { CitySlug } from "~common/constants";
 import { Page } from "~components/Page";
+import { useUser } from "~hooks/use-auth";
+import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
+
+import { spotsQuery } from "~domains/spot/queries/spots.query";
+import { CheckoutForm } from "~domains/order/pages/CheckoutPage/components/CheckoutForm";
+import { CheckoutCart } from "~domains/order/pages/CheckoutPage/components/CheckoutCart";
+import * as S from "./styled";
 
 // todo: scroll the page up when users visits the checkout page
 
 const CheckoutPage = () => {
   const { t } = useTranslation();
-  const appStore = useAppStore();
 
   const { data: user, isLoading: isUserLoading } = useUser();
 
@@ -61,23 +57,10 @@ const CheckoutPage = () => {
           isShippingMethodsLoading ||
           isSpotsLoading ||
           isPaymentMethodsLoading ? (
-            appStore.city.slug === CitySlug.Odesa ? (
-              <CheckoutFormOdessa loading />
-            ) : (
-              <CheckoutFormChernomorsk loading />
-            )
-          ) : appStore.city.slug === CitySlug.Odesa ? (
-            <CheckoutFormOdessa
-              // remount component after signin to update form
-              key={user ? "one" : "second"}
-              cart={cart}
-              shippingMethods={shippingMethods}
-              paymentMethods={paymentMethods}
-              user={user}
-              spots={spots}
-            />
+            <CheckoutForm loading />
           ) : (
-            <CheckoutFormChernomorsk
+            <CheckoutForm
+              // remount component after signin to update form
               key={user ? "one" : "second"}
               cart={cart}
               shippingMethods={shippingMethods}

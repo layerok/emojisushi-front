@@ -63,13 +63,13 @@ const getDistrictDefaultSpot = (district: IDistrict) => {
   return district.spots[0];
 };
 
-export const CheckoutFormOdessa = observer(
+export const CheckoutForm = observer(
   ({
     cart,
     shippingMethods: shippingMethodsRes,
     paymentMethods: paymentMethodsRes,
     user,
-    spots,
+    spots: spotsRes,
     loading = false,
   }: TCheckoutFormProps) => {
     const { t } = useTranslation();
@@ -107,6 +107,22 @@ export const CheckoutFormOdessa = observer(
 
     const wayforpayFormContainer = useRef(null);
 
+    const spots = (appStore.city.spots || []).map((spot) => ({
+      label: spot.name,
+      value: spot.id,
+      disabledText: t("checkout.temporarilyUnavailable"),
+      disabled: !user?.is_call_center_admin && spot.temporarily_unavailable,
+    }));
+
+    const districts = (appStore.city.districts || []).map((district) => ({
+      label: district.name,
+      value: district.id,
+      disabledText: t("checkout.temporarilyUnavailable"),
+      disabled:
+        !user?.is_call_center_admin &&
+        getDistrictDefaultSpot(district).temporarily_unavailable,
+    }));
+
     const initialValues = {
       name: user && !user.is_call_center_admin ? getUserFullName(user) : "",
       phone: user && !user.is_call_center_admin ? user.phone || "" : "",
@@ -117,8 +133,9 @@ export const CheckoutFormOdessa = observer(
       change: "",
       payment_method_code: PaymentMethodCodeEnum.Cash,
       shipping_method_code: ShippingMethodCodeEnum.Takeaway,
-      spot_id: undefined,
-      district_id: undefined,
+      // if only one spot or district is available, then choose it by default
+      spot_id: spots.length === 1 ? spots[0].value : undefined,
+      district_id: districts.length === 1 ? districts[0].value : undefined,
     };
 
     const handleSubmit = async (values: typeof initialValues) => {
@@ -266,22 +283,6 @@ export const CheckoutFormOdessa = observer(
     const isCashPaymentMethod =
       formik.values.payment_method_code === PaymentMethodCodeEnum.Cash;
 
-    const takeawayOptions = (appStore.city.spots || []).map((spot) => ({
-      label: spot.name,
-      value: spot.id,
-      disabledText: t("checkout.temporarilyUnavailable"),
-      disabled: !user?.is_call_center_admin && spot.temporarily_unavailable,
-    }));
-
-    const courierOptions = (appStore.city.districts || []).map((district) => ({
-      label: district.name,
-      value: district.id,
-      disabledText: t("checkout.temporarilyUnavailable"),
-      disabled:
-        !user?.is_call_center_admin &&
-        getDistrictDefaultSpot(district).temporarily_unavailable,
-    }));
-
     const showSavedAddresses = () => {
       if (showAddressInput) {
         const defaultAddress = user.customer.addresses.find(
@@ -325,11 +326,11 @@ export const CheckoutFormOdessa = observer(
           />
 
           <S.Control>
-            {isTakeawayShipmentMethod ? (
+            {isTakeawayShipmentMethod && spots.length !== 1 ? (
               <Dropdown
                 showSkeleton={loading}
                 placeholder={t("checkout.form.spot.placeholder")}
-                options={takeawayOptions}
+                options={spots}
                 width={"350px"}
                 value={formik.values[FormNames.SpotId]}
                 onChange={(value) => {
@@ -337,16 +338,18 @@ export const CheckoutFormOdessa = observer(
                 }}
               />
             ) : (
-              <Dropdown
-                showSkeleton={loading}
-                placeholder={t("checkout.form.district.placeholder")}
-                options={courierOptions}
-                width={"350px"}
-                value={formik.values[FormNames.DistrictId]}
-                onChange={(value) => {
-                  formik.setFieldValue(FormNames.DistrictId, value);
-                }}
-              />
+              districts.length !== 1 && (
+                <Dropdown
+                  showSkeleton={loading}
+                  placeholder={t("checkout.form.district.placeholder")}
+                  options={districts}
+                  width={"350px"}
+                  value={formik.values[FormNames.DistrictId]}
+                  onChange={(value) => {
+                    formik.setFieldValue(FormNames.DistrictId, value);
+                  }}
+                />
+              )
             )}
           </S.Control>
 
