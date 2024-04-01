@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import { ReactComponent as ShoppingBag } from "src/assets/ui-icons/shopping-bag.svg";
 import { useUpdateProduct } from "~hooks/use-update-product";
 import { useAddProduct } from "~hooks/use-add-product";
+import { StartAdornment } from "~common/ui-components/Button/StartAdornment";
 
 type ProductCardProps = {
   product?: Product;
@@ -121,7 +122,11 @@ export const ProductCard = (props: ProductCardProps) => {
             style={{
               width: 130,
             }}
-            startAdornment={<ShoppingBag />}
+            startAdornment={
+              <StartAdornment>
+                <ShoppingBag />
+              </StartAdornment>
+            }
             showSkeleton={loading}
             onClick={() => handleQuantityUpdate(1)}
           >

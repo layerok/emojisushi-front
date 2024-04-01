@@ -36,9 +36,7 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
             </SvgIcon>
           ) : (
             <>
-              {startAdornment && (
-                <StartAdornment>{startAdornment}</StartAdornment>
-              )}
+              {startAdornment}
               {children}
             </>
           )}
@@ -47,12 +45,6 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
     );
   }
 );
-
-const StartAdornment = styled.div`
-  margin-right: 10px;
-  display: flex;
-  align-items: center;
-`;
 
 const BaseButton = styled.button<{
   $loading: boolean;
