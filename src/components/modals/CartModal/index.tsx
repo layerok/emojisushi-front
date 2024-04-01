@@ -1,50 +1,53 @@
+import { CSSProperties, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useTheme } from "styled-components";
+import { useQuery } from "@tanstack/react-query";
+import NiceModal from "@ebay/nice-modal-react";
 import * as S from "./styled";
 import {
   FlexBox,
   LightCounter,
   BaseModal,
   Price,
-  ConfirmActionPopover,
   SvgIcon,
   LogoSvg,
   // todo: replace SushiSvg because it is fake svg, it is png actually
   SushiSvg,
 } from "~components";
-import { Button } from "~common/ui-components/Button/Button";
-
-import { useState } from "react";
-import { useBreakpoint2 } from "~common/hooks";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { CartProduct } from "~models";
 import { cartQuery } from "~queries";
-import { useQuery } from "@tanstack/react-query";
-import NiceModal from "@ebay/nice-modal-react";
+
 import { ROUTES } from "~routes";
+import { useModal } from "~modal";
+
+import { Button } from "~common/ui-components/Button/Button";
+import { ConfirmActionPopover } from "~components/ConfirmActionPopover";
+
+import { useBreakpoint2 } from "~common/hooks";
+
 import { useRemoveCartProduct } from "~hooks/use-remove-cart-product";
 import { useUpdateCartProduct } from "~hooks/use-update-cart-product";
-import { useModal } from "~modal";
-import { useTheme } from "styled-components";
+
 import { Times } from "~assets/ui-icons";
 
 // todo: clear outdated products from the card. You can do it on the frontend or on the backend
 const CartItem = (props: { item: CartProduct }) => {
   const { item } = props;
-  const [key, setKey] = useState(0);
+
   const newPrice = item.product.getNewPrice(item.variant)?.price_formatted;
   const oldPrice = item.product.getOldPrice(item.variant)?.price_formatted;
   const nameWithMods = item.nameWithMods;
   const [open, setOpen] = useState(false);
 
-  const removeCartProduct = useRemoveCartProduct();
-  const updateCartProduct = useUpdateCartProduct();
+  const { mutate: removeCartProduct } = useRemoveCartProduct();
+  const { mutate: updateCartProduct } = useUpdateCartProduct();
 
   const changeCartItemQuantity = async (item: CartProduct, quantity) => {
     if (item.quantity + quantity <= 0) {
-      setKey((prev) => prev + 1);
       setOpen(true);
     } else {
-      updateCartProduct.mutate({
+      updateCartProduct({
         item: item,
         quantity: quantity,
       });
@@ -58,23 +61,17 @@ const CartItem = (props: { item: CartProduct }) => {
     <S.Item>
       <S.ItemRemoveIcon>
         <ConfirmActionPopover
-          // Hack: I'am changing key to remount component to reset 'initiallyOpen' state
-          key={key}
-          initiallyOpen={open}
-          onConfirm={({ close }) => {
-            removeCartProduct.mutate({
+          open={open}
+          onOpenChange={(open) => setOpen(open)}
+          onConfirm={() =>
+            removeCartProduct({
               id: item.id,
-            });
-            setOpen(false);
-            close();
-          }}
-          onCancel={({ close }) => {
-            setOpen(false);
-            close();
-          }}
+            })
+          }
           text={t("cartModal.remove")}
         >
           <SvgIcon
+            onClick={() => setOpen(true)}
             color={theme.colors.grey[450]}
             hoverColor={theme.colors.brand}
             style={{
@@ -98,12 +95,8 @@ const CartItem = (props: { item: CartProduct }) => {
         <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
           <S.ItemCounter>
             <LightCounter
-              handleIncrement={() => {
-                changeCartItemQuantity(item, 1);
-              }}
-              handleDecrement={() => {
-                changeCartItemQuantity(item, -1);
-              }}
+              handleIncrement={() => changeCartItemQuantity(item, 1)}
+              handleDecrement={() => changeCartItemQuantity(item, -1)}
               count={item.quantity}
             />
           </S.ItemCounter>
@@ -146,19 +139,32 @@ export const CartModal = NiceModal.create(() => {
   // 252px is sum of heights another element in cart modal
   const finalHeight = Math.max(Math.min(500 - 252, 500), 300);
 
+  const itemsContainerStyles: CSSProperties = {
+    minHeight: isMobile ? "auto" : 362 + "px",
+    maxHeight: isMobile ? "calc(100vh - 250px)" : finalHeight + "px",
+    overflowY: "auto",
+  };
+
+  const checkout = () => {
+    navigate(ROUTES.CHECKOUT.path);
+    modal.remove();
+  };
+
+  const closeModal = () => {
+    modal.remove();
+  };
+
   return (
     <BaseModal
       open={modal.visible}
-      onClose={() => {
-        modal.remove();
-      }}
+      onClose={closeModal}
       overlayStyles={overlayStyles}
     >
-      {({ close }) => (
+      {() => (
         <S.Wrapper>
           <S.CloseIcon>
             <SvgIcon
-              onClick={close}
+              onClick={closeModal}
               color={"white"}
               hoverColor={theme.colors.brand}
               style={{
@@ -178,15 +184,7 @@ export const CartModal = NiceModal.create(() => {
           )}
 
           {items.length !== 0 && (
-            <S.Items
-              style={{
-                minHeight: isMobile ? "auto" : 362 + "px",
-                maxHeight: isMobile
-                  ? "calc(100vh - 250px)"
-                  : finalHeight + "px",
-                overflowY: "auto",
-              }}
-            >
+            <S.Items style={itemsContainerStyles}>
               {items.map((item, i) => (
                 <CartItem key={item.id} item={item} />
               ))}
@@ -202,11 +200,7 @@ export const CartModal = NiceModal.create(() => {
               <S.Button>
                 <Button
                   disabled={items.length === 0}
-                  onClick={() => {
-                    navigate(ROUTES.CHECKOUT.path);
-                    modal.remove();
-                    close();
-                  }}
+                  onClick={checkout}
                   style={{
                     width: "100%",
                   }}

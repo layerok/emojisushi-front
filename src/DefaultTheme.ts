@@ -62,6 +62,7 @@ declare module "styled-components" {
       sticky: number;
       tooltips: number;
       preloader: number;
+      overModal: number;
     };
 
     components: {

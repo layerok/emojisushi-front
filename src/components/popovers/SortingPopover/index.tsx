@@ -51,9 +51,7 @@ const InternalSortingDropdown = ({ options = [] }: { options?: SortKey[] }) => {
         return t(`sort.${option}`);
       }}
       selectedIndex={initialSelectedIndex}
-      onSelect={({ option, index, close }) => {
-        close();
-
+      onSelect={({ option, index }) => {
         const fd = new FormData();
 
         Array.from(searchParams.entries())

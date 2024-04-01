@@ -16,17 +16,13 @@ type Props<Option> = {
   backgroundColor?: string;
   resolveOptionName?: (props: { option: Option }) => string;
   width?: string;
-  onSelect?: (props: {
-    close: () => void;
-    option: Option;
-    index: number;
-  }) => void;
+  onSelect?: (props: { option: Option; index: number }) => void;
 };
 
 export function DropdownPopover<Option>(props: Props<Option>) {
   const theme = useTheme();
   const {
-    onSelect,
+    onSelect = () => {},
     options = [],
     asFlatArray = false,
     offset = 0,
@@ -40,14 +36,16 @@ export function DropdownPopover<Option>(props: Props<Option>) {
     resolveOptionName: resolveOptionNamePassed,
     width = "100%",
   } = props;
+  const [open, setOpen] = useState(initialOpen);
   const [selectedOption, setSelectedOption] = useState(options[selectedIndex]);
 
   useEffect(() => {
     setSelectedOption(options[selectedIndex]);
   }, [selectedIndex, options]);
 
-  const handleSelect = ({ close, option, index }) => {
-    onSelect && onSelect({ close, option, index });
+  const handleSelect = ({ option, index }) => {
+    onSelect({ option, index });
+    setOpen(false);
   };
 
   const resolveOptionName = ({ option }) => {
@@ -65,13 +63,13 @@ export function DropdownPopover<Option>(props: Props<Option>) {
     <>
       <Popover
         offset={offset}
-        open={initialOpen}
+        open={open}
         disable={disable}
-        render={({ close }) => (
+        render={() => (
           <S.Options width={width} backgroundColor={backgroundColor}>
             {options.map((option, index) => (
               <S.Option
-                onClick={() => handleSelect({ close, option, index })}
+                onClick={() => handleSelect({ option, index })}
                 key={resolveOptionId({ option })}
               >
                 {resolveOptionName({ option })}

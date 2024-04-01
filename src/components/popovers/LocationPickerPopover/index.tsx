@@ -45,13 +45,11 @@ export const LocationPickerPopover = observer(
         offset={offset}
         options={options}
         selectedIndex={selectedIndex}
-        onSelect={({ close, option, index }) => {
+        onSelect={({ option, index }) => {
           window.location.href =
             option.url +
             location.pathname +
             `?${LOCATION_CONFIRMED_SEARCH_PARAM}=true`;
-
-          close();
         }}
       >
         {({ selectedOption }) => (
