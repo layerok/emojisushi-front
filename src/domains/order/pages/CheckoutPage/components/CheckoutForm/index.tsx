@@ -81,24 +81,36 @@ export const CheckoutForm = observer(
     const TakeAwaySchema = Yup.object().shape({
       phone: Yup.string()
         // todo: show more user friendly validation errors
-        .required(t("validation.required", { field: t("common.phone") }))
+        .required(
+          t("checkout.form.validation.phone.required", {
+            field: t("common.phone"),
+          })
+        )
         .test(
           "is-possible-phone-number",
-          () => t("checkout.form.errors.ua_phone"),
+          () => t("checkout.form.validation.phone.uk_format"),
           isValidUkrainianPhone
         ),
-      spot_id: Yup.number().required(t("checkout.form.spot.error")),
+      spot_id: Yup.number().required(
+        t("checkout.form.validation.spot.required")
+      ),
     });
 
     const CourierSchema = Yup.object().shape({
       phone: Yup.string()
-        .required(t("validation.required", { field: t("common.phone") }))
+        .required(
+          t("checkout.form.validation.phone.required", {
+            field: t("common.phone"),
+          })
+        )
         .test(
           "is-possible-phone-number",
-          () => t("checkout.form.errors.ua_phone"),
+          () => t("checkout.form.validation.phone.uk_format"),
           isValidUkrainianPhone
         ),
-      district_id: Yup.number().required(t("checkout.form.district.error")),
+      district_id: Yup.number().required(
+        t("checkout.form.validation.district.required")
+      ),
     });
 
     const [validationSchema, setValidationSchema] = useState<
