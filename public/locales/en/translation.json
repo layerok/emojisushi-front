@@ -113,16 +113,23 @@
       "comment": "Comments on the order",
       "persons": "Number of persons",
       "change": "Prepare change from",
-      "errors": {
-        "ua_phone": "The phone number must be in the format +380xxxxxxxxx"
-      },
       "district": {
-        "placeholder": "Select your nearest area",
-        "error": "Please select your nearest area"
+        "placeholder": "Select your nearest area"
       },
       "spot": {
-        "placeholder": "Select the restaurant address",
-        "error": "Please select the restaurant address"
+        "placeholder": "Select the restaurant address"
+      },
+      "validation": {
+        "phone": {
+          "required": "Please provide your phone number",
+          "uk_format": "The phone number must be in the format +380xxxxxxxxx"
+        },
+        "district": {
+          "required": "Please select your nearest area"
+        },
+        "spot": {
+          "required": "Please select the restaurant address"
+        }
       }
     },
     "temporarilyUnavailable": "Temporarily unavailable",
@@ -142,7 +149,7 @@
     "cash": "Cash"
   },
   "validation": {
-    "required": "Filed '{{field}}' is required"
+    "required": "Please provide your phone number"
   },
   "thankYou": {
     "title": "Thank you for your order!",
