@@ -148,9 +148,6 @@
     "card": "Card",
     "cash": "Cash"
   },
-  "validation": {
-    "required": "Please provide your phone number"
-  },
   "thankYou": {
     "title": "Thank you for your order!",
     "subtitle": "Your order #{{id}} has been successfully accepted and sent to work!",
