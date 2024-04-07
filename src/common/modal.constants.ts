@@ -9,4 +9,5 @@ export enum ModalIDEnum {
   AuthModal = "auth-modal",
   RegisterModal = "register-modal",
   ResetPasswordModal = "reset-password-modal",
+  ProductModal = "product-modal",
 }

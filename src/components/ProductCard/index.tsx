@@ -1,25 +1,31 @@
 import * as S from "./styled";
 import { EqualHeightElement } from "react-equal-height";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { CartProduct, Product } from "~models";
-import {
-  Image,
-  Weight,
-  Modificators,
-  Ingredients,
-  FavoriteButton,
-  Name,
-} from "./components";
+import { Modificators } from "./components";
 import { findInCart } from "./utils";
 import { Price } from "~components/Price";
 import { Button } from "~common/ui-components/Button/Button";
 import { IGetCartRes, IGetWishlistRes } from "~api/types";
-import { ButtonCounter } from "~components";
+import {
+  ButtonCounter,
+  HeartSvg,
+  InfoTooltip,
+  IngredientsTooltip,
+  LogoSvg,
+  SkeletonWrap,
+  SvgIcon,
+} from "~components";
 import { useTranslation } from "react-i18next";
 import { ReactComponent as ShoppingBag } from "src/assets/ui-icons/shopping-bag.svg";
 import { useUpdateProduct } from "~hooks/use-update-product";
 import { useAddProduct } from "~hooks/use-add-product";
 import { StartAdornment } from "~common/ui-components/Button/StartAdornment";
+import { ModalIDEnum } from "~common/modal.constants";
+import { useShowModal } from "~modal";
+import Skeleton from "react-loading-skeleton";
+import { useAddToWishlist } from "~hooks/use-add-to-wishlist";
+import { useTheme } from "styled-components";
 
 type ProductCardProps = {
   product?: Product;
@@ -30,6 +36,8 @@ type ProductCardProps = {
 
 export const ProductCard = (props: ProductCardProps) => {
   const { product, loading = false, cart, wishlists } = props;
+  const theme = useTheme();
+  const showModal = useShowModal();
 
   const { t } = useTranslation();
   const cartProducts = cart?.data.map((json) => new CartProduct(json)) || [];
@@ -64,6 +72,7 @@ export const ProductCard = (props: ProductCardProps) => {
 
   const { mutate: updateProductQuantity } = useUpdateProduct();
   const { mutate: addProductToCart } = useAddProduct();
+  const { mutate: addToWishlist } = useAddToWishlist();
 
   const count = cartProduct?.quantity || 0;
 
@@ -83,18 +92,45 @@ export const ProductCard = (props: ProductCardProps) => {
     }
   };
 
+  const openDetailedProductModal = () => {
+    showModal(ModalIDEnum.ProductModal);
+  };
+  const handleFavouriteButtonClick = () => {
+    addToWishlist({
+      product_id: product.id,
+      quantity: count,
+    });
+  };
+
   return (
     <S.Wrapper>
-      <FavoriteButton
-        loading={loading}
-        cartProduct={cartProduct}
-        product={product}
-        favorite={favorite}
-      />
-      <Image product={product} loading={loading} />
-
+      <S.FavouriteButtonWrapper>
+        <SkeletonWrap borderRadius="100%" loading={loading}>
+          <S.FavouriteButton onClick={handleFavouriteButtonClick}>
+            <SvgIcon
+              clickable={true}
+              width={"100%"}
+              color={favorite ? theme.colors.brand : "white"}
+              hoverColor={theme.colors.brand}
+            >
+              <HeartSvg />
+            </SvgIcon>
+          </S.FavouriteButton>
+        </SkeletonWrap>
+      </S.FavouriteButtonWrapper>
+      <SkeletonWrap loading={loading}>
+        <S.Image onClick={openDetailedProductModal} src={product?.mainImage}>
+          {!product?.mainImage && (
+            <SvgIcon color={"white"} width={"80%"} style={{ opacity: 0.05 }}>
+              <LogoSvg />
+            </SvgIcon>
+          )}
+        </S.Image>
+      </SkeletonWrap>
       <EqualHeightElement name={"product-name"}>
-        <Name loading={loading} product={product} />
+        <S.Name onClick={openDetailedProductModal}>
+          {loading ? <Skeleton /> : product.name}
+        </S.Name>
         <Modificators
           loading={loading}
           product={product}
@@ -104,8 +140,19 @@ export const ProductCard = (props: ProductCardProps) => {
       </EqualHeightElement>
       <EqualHeightElement name={"description"}>
         <S.Description>
-          <Weight product={product} loading={loading} />
-          <Ingredients product={product} loading={loading} />
+          <SkeletonWrap loading={loading}>
+            <InfoTooltip label={t("menu.weightComment")}>
+              <S.Weight>
+                {product?.weight !== 0 ? product?.weight + "г" : ""}
+                {product?.weight !== 0 && (
+                  <S.WeightTooltipMarker>?</S.WeightTooltipMarker>
+                )}
+              </S.Weight>
+            </InfoTooltip>
+          </SkeletonWrap>
+          <SkeletonWrap borderRadius="100%" loading={loading}>
+            <IngredientsTooltip items={product?.ingredients || []} />
+          </SkeletonWrap>
         </S.Description>
       </EqualHeightElement>
 

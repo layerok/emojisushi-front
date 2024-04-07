@@ -31,6 +31,7 @@ import { router } from "~router";
 import { RouterSubscriber, RouterState } from "@remix-run/router";
 import { RegisterModal } from "~components/modals/RegisterModal";
 import { ResetPasswordModal } from "~components/modals/ResetPasswordModal";
+import { ProductModal } from "~components/modals/ProductModal";
 
 export const Layout = observer(
   ({ children, ...rest }: { children?: ReactNode }) => {
@@ -98,6 +99,7 @@ export const Layout = observer(
         <TelegramModal id={ModalIDEnum.TelegramModal} />
         <ContactsModal id={ModalIDEnum.ContactsModal} />
         <CartModal id={ModalIDEnum.CartModal} />
+        <ProductModal id={ModalIDEnum.ProductModal} />
 
         <AuthModal id={ModalIDEnum.AuthModal} />
         <RegisterModal id={ModalIDEnum.RegisterModal} />
