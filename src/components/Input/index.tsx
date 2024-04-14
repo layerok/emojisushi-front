@@ -61,6 +61,7 @@ export const Input = forwardRef<HTMLInputElement, IInputComponentProps>(
           >
             {startAdornment}
             <S.Input
+              title={placeholder}
               hasEndAdornment={!!endAdornment}
               name={name}
               width={width}
