@@ -37,7 +37,13 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
           ) : (
             <>
               {startAdornment}
-              {children}
+              <div
+                style={{
+                  flexShrink: 0,
+                }}
+              >
+                {children}
+              </div>
             </>
           )}
         </BaseButton>

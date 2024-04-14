@@ -51,8 +51,11 @@ enum FormNames {
   ShippingMethodCode = "shipping_method_code",
   PaymentMethodCode = "payment_method_code",
   Change = "change",
-  Address = "address",
-  AddressId = "address_id",
+  Street = "street",
+  House = "house",
+  Apartment = "apartment",
+  Entrance = "entrance",
+  Floor = "floor",
   Name = "name",
   Phone = "phone",
   Sticks = "sticks",
@@ -98,16 +101,18 @@ export const CheckoutForm = observer(
 
     const CourierSchema = Yup.object().shape({
       phone: Yup.string()
-        .required(
-          t("checkout.form.validation.phone.required", {
-            field: t("common.phone"),
-          })
-        )
+        .required(t("checkout.form.validation.phone.required"))
         .test(
           "is-possible-phone-number",
           () => t("checkout.form.validation.phone.uk_format"),
           isValidUkrainianPhone
         ),
+      street: Yup.string().required(
+        t("checkout.form.validation.street.required")
+      ),
+      house: Yup.string().required(
+        t("checkout.form.validation.house.required")
+      ),
       district_id: Yup.number().required(
         t("checkout.form.validation.district.required")
       ),
@@ -138,8 +143,11 @@ export const CheckoutForm = observer(
     const initialValues = {
       name: user && !user.is_call_center_admin ? getUserFullName(user) : "",
       phone: user && !user.is_call_center_admin ? user.phone || "" : "",
-      address: "",
-      address_id: null,
+      street: "",
+      house: "",
+      apartment: "",
+      entrance: "",
+      floor: "",
       comment: "",
       sticks: "",
       change: "",
@@ -156,8 +164,6 @@ export const CheckoutForm = observer(
       const {
         phone,
         name,
-        address_id,
-        address,
         payment_method_code,
         shipping_method_code,
         change,
@@ -165,14 +171,24 @@ export const CheckoutForm = observer(
         sticks,
         spot_id,
         district_id,
+        street,
+        house,
+        apartment,
+        entrance,
+        floor,
       } = values;
 
       const [firstname, lastname] = name.split(" ");
-
-      const resultant_address = address_id
-        ? user.customer.addresses.find((address) => address.id === address_id)
-            .lines
-        : address;
+      const address = [
+        ["Вулиця", street],
+        ["Будинок", house],
+        ["Квартира", apartment],
+        ["Під'їзд", entrance],
+        ["Поверх", floor],
+      ]
+        .filter(([label, value]) => !!value)
+        .map(([label, value]) => `${label}: ${value}`)
+        .join(", ");
 
       const district = appStore.city.districts.find(
         (district) => district.id === district_id
@@ -196,7 +212,7 @@ export const CheckoutForm = observer(
           lastname,
           email: user ? user.email : "",
 
-          address: resultant_address,
+          address,
           payment_method_id: paymentMethod.id,
           shipping_method_id: shippingMethod.id,
           spot_id: resultant_spot_id,
@@ -240,14 +256,6 @@ export const CheckoutForm = observer(
       validationSchema,
       onSubmit: handleSubmit,
     });
-
-    const savedAddresses =
-      user?.customer.addresses.map((address) => ({
-        label: address.lines,
-        value: address.id,
-      })) || [];
-
-    const [showAddressInput, setShowAddressInput] = useState(true);
 
     const shippingMethods = (shippingMethodsRes?.data || []).map((item) => ({
       value: item.code,
@@ -294,26 +302,6 @@ export const CheckoutForm = observer(
 
     const isCashPaymentMethod =
       formik.values.payment_method_code === PaymentMethodCodeEnum.Cash;
-
-    const showSavedAddresses = () => {
-      if (showAddressInput) {
-        const defaultAddress = user.customer.addresses.find(
-          (address) => address.id === user.customer.default_shipping_address_id
-        );
-
-        if (defaultAddress) {
-          formik.setFieldValue(FormNames.AddressId, defaultAddress.id);
-        } else {
-          formik.setFieldValue(
-            FormNames.AddressId,
-            user.customer.addresses[0].id
-          );
-        }
-      } else {
-        formik.setFieldValue(FormNames.AddressId, null);
-      }
-      setShowAddressInput((state) => !state);
-    };
 
     return (
       <S.Container>
@@ -367,35 +355,59 @@ export const CheckoutForm = observer(
 
           {isCourierShipmentMethod && (
             <S.ButtonContainer>
-              {showAddressInput ? (
-                <S.Control>
+              <S.Control>
+                <FlexBox
+                  style={{
+                    gap: 10,
+                  }}
+                >
                   <Input
-                    name={FormNames.Address}
-                    placeholder={t("checkout.form.address")}
+                    required
+                    name={FormNames.Street}
+                    placeholder={"Вулиця"}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.address}
+                    value={formik.values.street}
                   />
-                </S.Control>
-              ) : (
-                <S.Control>
-                  <Dropdown
-                    options={savedAddresses}
-                    width={"350px"}
-                    value={+formik.values.address_id}
-                    onChange={(id) => {
-                      formik.setFieldValue(FormNames.AddressId, id);
-                    }}
+                  <Input
+                    required
+                    name={FormNames.House}
+                    placeholder={"Будинок"}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.house}
                   />
-                </S.Control>
-              )}
-              {!!savedAddresses.length && (
-                <S.Button type={"button"} onClick={showSavedAddresses}>
-                  {showAddressInput
-                    ? t("checkout.selectSavedAddress")
-                    : t("checkout.inputAnotherAddress")}
-                </S.Button>
-              )}
+                </FlexBox>
+              </S.Control>
+              <S.Control>
+                <FlexBox
+                  style={{
+                    gap: 10,
+                  }}
+                >
+                  <Input
+                    name={FormNames.Apartment}
+                    placeholder={"Квартира"}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.apartment}
+                  />
+                  <Input
+                    name={FormNames.Entrance}
+                    placeholder={"Підїзд"}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.entrance}
+                  />
+                  <Input
+                    name={FormNames.Floor}
+                    placeholder={"Поверх"}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.floor}
+                  />
+                </FlexBox>
+              </S.Control>
             </S.ButtonContainer>
           )}
 
@@ -475,7 +487,11 @@ export const CheckoutForm = observer(
             </S.Control>
           )}
 
-          <S.Control>
+          <div
+            style={{
+              marginTop: 20,
+            }}
+          >
             <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
               <Button
                 loading={formik.isSubmitting}
@@ -496,7 +512,7 @@ export const CheckoutForm = observer(
                 </SkeletonWrap>
               </S.Total>
             </FlexBox>
-          </S.Control>
+          </div>
         </S.Form>
         <div style={{ display: "none" }} ref={wayforpayFormContainer}></div>
       </S.Container>

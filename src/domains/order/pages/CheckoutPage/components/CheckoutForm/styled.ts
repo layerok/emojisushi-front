@@ -19,7 +19,7 @@ const ErrorBag = styled.ol`
     margin-top: 8px;
 
     :first-child {
-      margin-top: 0px;
+      margin-top: 0;
     }
   }
 `;

@@ -7,6 +7,7 @@ const Wrapper = styled.div`
 
 const Input = styled.input<{
   light: boolean;
+  hasEndAdornment: boolean;
 }>`
   position: relative;
   background: ${(props) =>
@@ -17,7 +18,8 @@ const Input = styled.input<{
     )(props)};
   box-shadow: ${({ theme }) => theme.shadows.canvasShadow};
   border-radius: ${({ theme }) => theme.borderRadius.smooth};
-  padding: 11px 35px 11px 10px;
+  padding: 11px ${({ hasEndAdornment }) => (hasEndAdornment ? "35px" : "10px")}
+    11px 10px;
   border: none;
   width: ${prop("width", "100%")};
   color: ${({ theme }) => theme.colors.fg.default};

@@ -61,7 +61,7 @@
     "phones": "Phone numbers"
   },
   "order": {
-    "order_btn": "Order"
+    "order_btn": "Add"
   },
   "editBtn": {
     "edit_order": "Edit order"
@@ -109,6 +109,11 @@
   "checkout": {
     "title": "Checkout",
     "form": {
+      "street": "Street",
+      "house": "House",
+      "apartment": "Apartment",
+      "entrance": "Entrance",
+      "floor": "Floor",
       "address": "Delivery address",
       "comment": "Comments on the order",
       "persons": "Number of persons",
@@ -129,6 +134,12 @@
         },
         "spot": {
           "required": "Please select the restaurant address"
+        },
+        "street": {
+          "required": "Please provide street name"
+        },
+        "house": {
+          "required": "Please provide house number"
         }
       }
     },
@@ -136,7 +147,7 @@
     "inputAnotherAddress": "Add another address",
     "selectSavedAddress": "Select saved address",
     "alreadyHaveAccount": "Already have an account?",
-    "order": "Order",
+    "order": "Checkout",
     "to_pay": "To pay:"
   },
   "shippingMethods": {
