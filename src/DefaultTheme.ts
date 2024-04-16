@@ -58,6 +58,7 @@ declare module "styled-components" {
 
     zIndices: {
       popovers: number;
+      dropdowns: number;
       modals: number;
       sticky: number;
       tooltips: number;

@@ -28,10 +28,6 @@ const Control = styled.div`
   margin-top: 20px;
 `;
 
-const ButtonContainer = styled.div`
-  position: relative;
-`;
-
 const Button = styled.button`
   color: rgb(255, 230, 0);
   font-size: 10px;
@@ -53,13 +49,4 @@ const Login = styled.div`
   cursor: pointer;
 `;
 
-export {
-  Form,
-  ErrorBag,
-  Container,
-  ButtonContainer,
-  Button,
-  Control,
-  Total,
-  Login,
-};
+export { Form, ErrorBag, Container, Button, Control, Total, Login };

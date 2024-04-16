@@ -50,6 +50,7 @@ enum FormNames {
   DistrictId = "district_id",
   ShippingMethodCode = "shipping_method_code",
   PaymentMethodCode = "payment_method_code",
+  HouseType = "house_type",
   Change = "change",
   Street = "street",
   House = "house",
@@ -60,6 +61,11 @@ enum FormNames {
   Phone = "phone",
   Sticks = "sticks",
   Comment = "comment",
+}
+
+enum HouseType {
+  PrivateHouse = "private_house",
+  HighRiseBuilding = "high_rise_building",
 }
 
 const getDistrictDefaultSpot = (district: IDistrict) => {
@@ -113,13 +119,37 @@ export const CheckoutForm = observer(
       house: Yup.string().required(
         t("checkout.form.validation.house.required")
       ),
-      district_id: Yup.number().required(
-        t("checkout.form.validation.district.required")
+    });
+
+    const CourierSchemaHighRiseBuilding = Yup.object().shape({
+      phone: Yup.string()
+        .required(t("checkout.form.validation.phone.required"))
+        .test(
+          "is-possible-phone-number",
+          () => t("checkout.form.validation.phone.uk_format"),
+          isValidUkrainianPhone
+        ),
+      street: Yup.string().required(
+        t("checkout.form.validation.street.required")
+      ),
+      house: Yup.string().required(
+        t("checkout.form.validation.house.required")
+      ),
+      apartment: Yup.string().required(
+        t("checkout.form.validation.apartment.required")
+      ),
+      entrance: Yup.string().required(
+        t("checkout.form.validation.entrance.required")
+      ),
+      floor: Yup.number().required(
+        t("checkout.form.validation.floor.required")
       ),
     });
 
     const [validationSchema, setValidationSchema] = useState<
-      typeof TakeAwaySchema | typeof CourierSchema
+      | typeof TakeAwaySchema
+      | typeof CourierSchema
+      | typeof CourierSchemaHighRiseBuilding
     >(TakeAwaySchema);
 
     const wayforpayFormContainer = useRef(null);
@@ -153,6 +183,7 @@ export const CheckoutForm = observer(
       change: "",
       payment_method_code: PaymentMethodCodeEnum.Cash,
       shipping_method_code: ShippingMethodCodeEnum.Takeaway,
+      house_type: HouseType.PrivateHouse,
       // if only one spot or district is available, then choose it by default
       spot_id: spots.length === 1 ? spots[0].value : undefined,
       district_id: districts.length === 1 ? districts[0].value : undefined,
@@ -270,12 +301,8 @@ export const CheckoutForm = observer(
     }));
 
     const formErrors = Object.keys(formik.errors)
-      .filter((key) => {
-        return formik.touched[key];
-      })
-      .map((key, i) => {
-        return formik.errors[key];
-      });
+      .filter((key) => formik.touched[key])
+      .map((key, i) => formik.errors[key]);
 
     const openLoginModal = () => {
       showModal(ModalIDEnum.AuthModal, {
@@ -290,8 +317,23 @@ export const CheckoutForm = observer(
       if (e.target.value === ShippingMethodCodeEnum.Takeaway) {
         setValidationSchema(TakeAwaySchema);
       } else {
-        setValidationSchema(CourierSchema);
+        setValidationSchema(
+          formik.values.house_type === HouseType.HighRiseBuilding
+            ? CourierSchemaHighRiseBuilding
+            : CourierSchema
+        );
       }
+    };
+
+    const handleHouseTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
+      formik.handleChange(e);
+      formik.setErrors({});
+      formik.setTouched({});
+      setValidationSchema(
+        e.target.value === HouseType.HighRiseBuilding
+          ? CourierSchemaHighRiseBuilding
+          : CourierSchema
+      );
     };
 
     const isTakeawayShipmentMethod =
@@ -302,6 +344,17 @@ export const CheckoutForm = observer(
 
     const isCashPaymentMethod =
       formik.values.payment_method_code === PaymentMethodCodeEnum.Cash;
+
+    const houseTypes = [
+      {
+        value: HouseType.PrivateHouse,
+        label: t("checkout.form.privateHouse"),
+      },
+      {
+        value: HouseType.HighRiseBuilding,
+        label: t("checkout.form.highRiseBuilding"),
+      },
+    ];
 
     return (
       <S.Container>
@@ -354,7 +407,7 @@ export const CheckoutForm = observer(
           </S.Control>
 
           {isCourierShipmentMethod && (
-            <S.ButtonContainer>
+            <>
               <S.Control>
                 <FlexBox
                   style={{
@@ -364,7 +417,7 @@ export const CheckoutForm = observer(
                   <Input
                     required
                     name={FormNames.Street}
-                    placeholder={"Вулиця"}
+                    placeholder={t("checkout.form.street.placeholder")}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.street}
@@ -372,7 +425,7 @@ export const CheckoutForm = observer(
                   <Input
                     required
                     name={FormNames.House}
-                    placeholder={"Будинок"}
+                    placeholder={t("checkout.form.house.placeholder")}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.house}
@@ -380,35 +433,50 @@ export const CheckoutForm = observer(
                 </FlexBox>
               </S.Control>
               <S.Control>
-                <FlexBox
-                  style={{
-                    gap: 10,
-                  }}
-                >
-                  <Input
-                    name={FormNames.Apartment}
-                    placeholder={"Квартира"}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.apartment}
-                  />
-                  <Input
-                    name={FormNames.Entrance}
-                    placeholder={"Підїзд"}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.entrance}
-                  />
-                  <Input
-                    name={FormNames.Floor}
-                    placeholder={"Поверх"}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.floor}
-                  />
-                </FlexBox>
+                <SegmentedControl
+                  withIconIndicator={false}
+                  showSkeleton={loading}
+                  name={FormNames.HouseType}
+                  items={houseTypes}
+                  value={formik.values[FormNames.HouseType]}
+                  onChange={handleHouseTypeChange}
+                />
               </S.Control>
-            </S.ButtonContainer>
+              {formik.values.house_type === HouseType.HighRiseBuilding && (
+                <S.Control>
+                  <FlexBox
+                    style={{
+                      gap: 10,
+                    }}
+                  >
+                    <Input
+                      name={FormNames.Apartment}
+                      placeholder={t("checkout.form.apartment.placeholder")}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.apartment}
+                      required
+                    />
+                    <Input
+                      name={FormNames.Entrance}
+                      placeholder={t("checkout.form.entrance.placeholder")}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.entrance}
+                      required
+                    />
+                    <Input
+                      name={FormNames.Floor}
+                      placeholder={t("checkout.form.floor.placeholder")}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.floor}
+                      required
+                    />
+                  </FlexBox>
+                </S.Control>
+              )}
+            </>
           )}
 
           <S.Control>

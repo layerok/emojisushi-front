@@ -25,7 +25,7 @@ import * as S from "./styled";
 import { SvgIcon } from "../SvgIcon";
 import { CaretDownSvg } from "../svg/CaretDownSvg";
 import { SkeletonWrap } from "~components";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 
 type IOptionProps = HTMLProps<HTMLDivElement> &
   PropsWithChildren<{
@@ -75,6 +75,7 @@ export const Dropdown = (props: IDropdownProps) => {
     onChange,
     showSkeleton = false,
   } = props;
+  const theme = useTheme();
   const [open, setOpen] = useState(false);
 
   const [activeIndex, setActiveIndex] = useState(options.length > 0 ? 0 : null);
@@ -182,6 +183,7 @@ export const Dropdown = (props: IDropdownProps) => {
                   position: strategy,
                   left: x ?? 0,
                   top: y ?? 0,
+                  zIndex: theme.zIndices.dropdowns,
                 }}
                 aria-labelledby={buttonId}
                 {...getFloatingProps({

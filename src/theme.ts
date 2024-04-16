@@ -106,6 +106,7 @@ const borderRadius = {
 const zIndices = {
   popovers: 999,
   modals: 999_999,
+  dropdowns: 400,
   overModal: 1_000_000,
   sticky: 999,
   tooltips: 500,

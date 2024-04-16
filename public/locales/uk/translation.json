@@ -109,20 +109,32 @@
   "checkout": {
     "title": "Оформлення замовлення",
     "form": {
-      "street": "Вулиця",
-      "house": "Будинок",
-      "apartment": "Квартира",
-      "entrance": "Під'їзд",
-      "floor": "Поверх",
       "address": "Адреса доставки",
       "comment": "Коментар до замовлення",
       "persons": "Кількість персон",
       "change": "Приготувати решту з",
+      "privateHouse": "Приватний будинок",
+      "highRiseBuilding": "Багатоповерхівка",
       "district": {
         "placeholder": "Оберіть найближчий район"
       },
       "spot": {
         "placeholder": "Оберіть найближчий заклад"
+      },
+      "street": {
+        "placeholder": "Вулиця"
+      },
+      "house": {
+        "placeholder": "Будинок"
+      },
+      "entrance": {
+        "placeholder": "Під'їзд"
+      },
+      "floor": {
+        "placeholder": "Поверх"
+      },
+      "apartment": {
+        "placeholder": "Квартира"
       },
       "validation": {
 
@@ -141,6 +153,15 @@
         },
         "house": {
           "required": "Будь ласка, введіть номер будинку"
+        },
+        "entrance": {
+          "required": "Будь ласка, введіть номер під'їзду"
+        },
+        "floor": {
+          "required": "Будь ласка, введіть поверх"
+        },
+        "apartment": {
+          "required": "Будь ласка, введіть номер квартири"
         }
       }
     },

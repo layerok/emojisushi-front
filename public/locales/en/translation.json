@@ -109,15 +109,27 @@
   "checkout": {
     "title": "Checkout",
     "form": {
-      "street": "Street",
-      "house": "House",
-      "apartment": "Apartment",
-      "entrance": "Entrance",
-      "floor": "Floor",
       "address": "Delivery address",
       "comment": "Comments on the order",
       "persons": "Number of persons",
       "change": "Prepare change from",
+      "privateHouse": "Private house",
+      "highRiseBuilding": "High-rise building",
+      "street": {
+        "placeholder": "Street"
+      },
+      "house": {
+        "placeholder": "House"
+      },
+      "entrance": {
+        "placeholder": "Entrance"
+      },
+      "floor": {
+        "placeholder": "Floor"
+      },
+      "apartment": {
+        "placeholder": "Apartment"
+      },
       "district": {
         "placeholder": "Select your nearest area"
       },
@@ -136,10 +148,24 @@
           "required": "Please select the restaurant address"
         },
         "street": {
-          "required": "Please provide street name"
+          "placeholder": "Street",
+          "required": "Please provide the street name"
         },
         "house": {
-          "required": "Please provide house number"
+          "placeholder": "House",
+          "required": "Please provide the house number"
+        },
+        "entrance": {
+          "placeholder": "Entrance",
+          "required": "Please provide the entrance number"
+        },
+        "floor": {
+          "placeholder": "Floor",
+          "required": "Please provide the floor number"
+        },
+        "apartment": {
+          "placeholder": "Apartment",
+          "required": "Please provide the apartment number"
         }
       }
     },
