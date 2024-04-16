@@ -409,6 +409,16 @@ export const CheckoutForm = observer(
           {isCourierShipmentMethod && (
             <>
               <S.Control>
+                <SegmentedControl
+                  withIconIndicator={false}
+                  showSkeleton={loading}
+                  name={FormNames.HouseType}
+                  items={houseTypes}
+                  value={formik.values[FormNames.HouseType]}
+                  onChange={handleHouseTypeChange}
+                />
+              </S.Control>
+              <S.Control>
                 <FlexBox
                   style={{
                     gap: 10,
@@ -432,16 +442,7 @@ export const CheckoutForm = observer(
                   />
                 </FlexBox>
               </S.Control>
-              <S.Control>
-                <SegmentedControl
-                  withIconIndicator={false}
-                  showSkeleton={loading}
-                  name={FormNames.HouseType}
-                  items={houseTypes}
-                  value={formik.values[FormNames.HouseType]}
-                  onChange={handleHouseTypeChange}
-                />
-              </S.Control>
+
               {formik.values.house_type === HouseType.HighRiseBuilding && (
                 <S.Control>
                   <FlexBox
