@@ -56,3 +56,6 @@ export const ROUTES = {
   ),
   REFUND: route("refund"),
 } as const;
+
+export const LEAVE_REVIEW_LINK =
+  "https://docs.google.com/forms/d/1MVNV7ISzmtkWybXZ9aHovUyk3Ptr0815ismN7d2k4Zw";

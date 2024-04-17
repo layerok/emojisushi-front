@@ -16,8 +16,8 @@ import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
 import { useQuery } from "@tanstack/react-query";
 import { citiesQuery } from "~queries/cities.query";
-import { ROUTES } from "~routes";
-import { useModal, useShowModal } from "~modal";
+import { LEAVE_REVIEW_LINK, ROUTES } from "~routes";
+import { useModal } from "~modal";
 import { useTheme } from "styled-components";
 
 export const MobMenuModal = NiceModal.create(() => {
@@ -35,7 +35,6 @@ export const MobMenuModal = NiceModal.create(() => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const showModal = useShowModal();
   if (isCitiesLoading) {
     return null;
   }
@@ -114,6 +113,17 @@ export const MobMenuModal = NiceModal.create(() => {
               </HightlightText>
             )}
           </NavLink>
+        </S.Item>
+        <S.Item>
+          <a
+            style={{ color: "white", textDecoration: "none" }}
+            href={LEAVE_REVIEW_LINK}
+            target={"_blank"}
+          >
+            <HightlightText>
+              <div>{t("menu-title.leave-review")}</div>
+            </HightlightText>
+          </a>
         </S.Item>
         <S.Item>
           <FlexBox justifyContent={"space-between"} alignItems={"center"}>

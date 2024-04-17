@@ -102,6 +102,9 @@
   "ingredients": {
     "ingredients": "Ingredients"
   },
+  "menu-title": {
+    "leave-review": "Leave a review"
+  },
   "header": {
     "contacts": "Contacts",
     "delivery": "Delivery and payment"

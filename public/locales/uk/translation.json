@@ -102,6 +102,9 @@
   "ingredients": {
     "ingredients": "Інгредієнти"
   },
+  "menu-title": {
+    "leave-review": "Залишити відгук"
+  },
   "header": {
     "contacts": "Контакти",
     "delivery": "Доставка і оплата"

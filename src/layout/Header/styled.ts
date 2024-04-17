@@ -10,7 +10,7 @@ const Container = styled.header`
 `;
 
 const HeaderItem = styled.div`
-  margin-right: 60px;
+  margin-right: 28px;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -62,7 +62,7 @@ const LanguageSelectorContainer = styled.div`
 `;
 
 const LogoContainer = styled.div`
-  margin-right: 95px;
+  margin-right: 75px;
   flex-shrink: 0;
 `;
 
