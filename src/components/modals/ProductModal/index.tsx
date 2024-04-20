@@ -96,7 +96,11 @@ export const ProductModal = NiceModal.create(() => {
           </S.CloseIcon>
           <S.TopWrapper>
             <SkeletonWrap loading={isLoading}>
-              <S.Image src={product?.mainImage} />
+              <S.Image
+                style={{
+                  backgroundImage: `url("${product?.mainImage}")`,
+                }}
+              />
             </SkeletonWrap>
             <S.DescriptionWrapper>
               <S.ProductName>{product?.name || <Skeleton />}</S.ProductName>
