@@ -5,8 +5,10 @@ declare module "styled-components" {
   export interface DefaultTheme {
     colors: {
       grey: {
+        300: string;
         450: string;
         510: string;
+        571: string;
       };
       brand: string;
       brandDelimiter: string;

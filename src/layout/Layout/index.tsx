@@ -15,7 +15,7 @@ import {
   AuthModal,
 } from "~components";
 import { ReactNode, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useSearchParams } from "react-router-dom";
 import { cartQuery } from "~queries";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "~hooks/use-auth";
@@ -31,6 +31,7 @@ import { router } from "~router";
 import { RouterSubscriber, RouterState } from "@remix-run/router";
 import { RegisterModal } from "~components/modals/RegisterModal";
 import { ResetPasswordModal } from "~components/modals/ResetPasswordModal";
+import { ProductModal } from "~components/modals/ProductModal";
 
 export const Layout = observer(
   ({ children, ...rest }: { children?: ReactNode }) => {
@@ -45,6 +46,14 @@ export const Layout = observer(
     const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
     const appStore = useAppStore();
 
+    const [searchParams] = useSearchParams();
+
+    useEffect(() => {
+      if (searchParams.get("product_id")) {
+        showModal(ModalIDEnum.ProductModal);
+      }
+    }, []);
+
     useEffect(() => {
       const routerSubscriber: RouterSubscriber = (state: RouterState) => {
         if (state.navigation.location) {
@@ -56,7 +65,9 @@ export const Layout = observer(
         });
 
         if (closed) {
-          showModal(ModalIDEnum.RestaurantClosed);
+          if (process.env.NODE_ENV !== "development") {
+            showModal(ModalIDEnum.RestaurantClosed);
+          }
         } else if (!appStore.userConfirmedLocation) {
           showModal(ModalIDEnum.LocationModal);
         }
@@ -98,6 +109,7 @@ export const Layout = observer(
         <TelegramModal id={ModalIDEnum.TelegramModal} />
         <ContactsModal id={ModalIDEnum.ContactsModal} />
         <CartModal id={ModalIDEnum.CartModal} />
+        <ProductModal id={ModalIDEnum.ProductModal} />
 
         <AuthModal id={ModalIDEnum.AuthModal} />
         <RegisterModal id={ModalIDEnum.RegisterModal} />
