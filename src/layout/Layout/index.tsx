@@ -15,7 +15,7 @@ import {
   AuthModal,
 } from "~components";
 import { ReactNode, useEffect } from "react";
-import { Outlet, useSearchParams } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { cartQuery } from "~queries";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "~hooks/use-auth";
@@ -46,28 +46,28 @@ export const Layout = observer(
     const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
     const appStore = useAppStore();
 
-    const [searchParams] = useSearchParams();
-
-    useEffect(() => {
-      if (searchParams.get("product_id")) {
-        showModal(ModalIDEnum.ProductModal);
-      }
-    }, []);
-
     useEffect(() => {
       const routerSubscriber: RouterSubscriber = (state: RouterState) => {
         if (state.navigation.location) {
           return;
         }
+        const { location } = state;
+        const searchParams = new URLSearchParams(location.search);
+
+        if (searchParams.get("product_id")) {
+          showModal(ModalIDEnum.ProductModal);
+          return;
+        }
+
         const closed = isClosed({
           start: appConfig.workingHours[0],
           end: appConfig.workingHours[1],
         });
 
         if (closed) {
-          if (process.env.NODE_ENV !== "development") {
-            showModal(ModalIDEnum.RestaurantClosed);
-          }
+          //if (process.env.NODE_ENV !== "development") {
+          showModal(ModalIDEnum.RestaurantClosed);
+          //}
         } else if (!appStore.userConfirmedLocation) {
           showModal(ModalIDEnum.LocationModal);
         }
