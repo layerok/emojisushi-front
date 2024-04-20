@@ -22,9 +22,12 @@ const TopWrapper = styled.div`
   `}
 `;
 
-const Image = styled.img`
+const Image = styled.div`
   width: 160px;
   height: 160px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
 
   ${media.lessThan("tablet")`
     width: 100%;
