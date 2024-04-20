@@ -26,6 +26,7 @@ import { useShowModal } from "~modal";
 import Skeleton from "react-loading-skeleton";
 import { useAddToWishlist } from "~hooks/use-add-to-wishlist";
 import { useTheme } from "styled-components";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 type ProductCardProps = {
   product?: Product;
@@ -74,6 +75,8 @@ export const ProductCard = (props: ProductCardProps) => {
   const { mutate: addProductToCart } = useAddProduct();
   const { mutate: addToWishlist } = useAddToWishlist();
 
+  const navigate = useNavigate();
+
   const count = cartProduct?.quantity || 0;
 
   const handleQuantityUpdate = (quantity: number) => {
@@ -92,8 +95,12 @@ export const ProductCard = (props: ProductCardProps) => {
     }
   };
 
+  const [searchParams] = useSearchParams();
+
   const openDetailedProductModal = () => {
     showModal(ModalIDEnum.ProductModal);
+    searchParams.set("product_id", product.id + "");
+    navigate({ search: searchParams.toString() });
   };
   const handleFavouriteButtonClick = () => {
     addToWishlist({
