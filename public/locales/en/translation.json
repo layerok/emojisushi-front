@@ -61,7 +61,8 @@
     "phones": "Phone numbers"
   },
   "order": {
-    "order_btn": "Add"
+    "order_btn": "Add",
+    "modal_order_btn": "Add to cart"
   },
   "editBtn": {
     "edit_order": "Edit order"
