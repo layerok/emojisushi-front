@@ -1,18 +1,22 @@
 import { Container, MobSidebar, Sidebar } from "~components";
 import { Banner } from "~domains/product/pages/ProductPage/Banner";
 import { Page } from "~components/Page";
-import { Outlet } from "react-router-dom";
+import { Outlet, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { bannerQuery } from "~queries/banner.query";
 import styled from "styled-components";
 import { media } from "~common/custom-media";
 import { categoriesQuery } from "~queries";
+import { useShowModal } from "~modal";
+import { ModalIDEnum } from "~common/modal.constants";
 
 const MenuLayout = () => {
   const { data: banners, isLoading: isBannersLoading } = useQuery(bannerQuery);
   const { data: categories, isLoading: isCategoriesLoading } = useQuery({
     ...categoriesQuery(),
   });
+  const showModal = useShowModal();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   return (
     <>
@@ -25,9 +29,13 @@ const MenuLayout = () => {
                 id: banner.id + "",
                 desktop_image: banner.image.path,
                 mobile_image: banner.image_small.path,
+                clickable: !!banner.product.id,
                 onClick: () => {
-                  // todo: redirect to the product page
-                  // todo: build the product page
+                  if (banner.product.id) {
+                    searchParams.set("product_id", banner.product.id + "");
+                    setSearchParams(searchParams);
+                    showModal(ModalIDEnum.ProductModal);
+                  }
                 },
               }))}
             />
