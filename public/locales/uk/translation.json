@@ -61,7 +61,8 @@
     "phones": "Номери"
   },
   "order": {
-    "order_btn": "Замовити"
+    "order_btn": "Замовити",
+    "modal_order_btn": "До кошика"
   },
   "editBtn": {
     "edit_order": "Відредагувати замовлення"
