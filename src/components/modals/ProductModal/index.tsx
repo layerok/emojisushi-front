@@ -14,10 +14,13 @@ import { CartProduct, Product } from "~models";
 import { useUpdateProduct } from "~hooks/use-update-product";
 import { useAddProduct } from "~hooks/use-add-product";
 import { findInCart } from "~components/ProductCard/utils";
+import { useTranslation } from "react-i18next";
 
 export const ProductModal = NiceModal.create(() => {
   const modal = useModal();
   const theme = useTheme();
+
+  const { t } = useTranslation();
 
   const overlayStyles = {
     zIndex: theme.zIndices.modals,
@@ -130,7 +133,7 @@ export const ProductModal = NiceModal.create(() => {
                 />
               ) : (
                 <S.CartButton onClick={() => handleQuantityUpdate(1)}>
-                  До кошика
+                  {t("order.modal_order_btn")}
                 </S.CartButton>
               )}
             </SkeletonWrap>

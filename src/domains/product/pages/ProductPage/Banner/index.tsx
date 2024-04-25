@@ -14,6 +14,7 @@ type BannerItem = {
   desktop_image: string;
   mobile_image: string;
   onClick?: () => void;
+  clickable: boolean;
 };
 
 enum BannerIdEnum {
@@ -22,6 +23,7 @@ enum BannerIdEnum {
 
 export const Banner = (props: { items: BannerItem[]; loading?: boolean }) => {
   const { items, loading = false } = props;
+
   const { isTablet, isDesktop } = useBreakpoint2();
 
   const [activeItem, setActiveItem] = useState<string>(
@@ -73,7 +75,13 @@ export const Banner = (props: { items: BannerItem[]; loading?: boolean }) => {
 
           return {
             id: item.id,
-            renderItem: <S.Slide onClick={item.onClick} $imageSrc={imageSrc} />,
+            renderItem: (
+              <S.Slide
+                style={{ cursor: item.clickable ? "pointer" : "default" }}
+                onClick={item.onClick}
+                $imageSrc={imageSrc}
+              />
+            ),
             renderThumb: (
               <S.Dot
                 $isActive={item.id === activeItem}
