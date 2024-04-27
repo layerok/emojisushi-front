@@ -40,15 +40,16 @@ export const ConfirmActionPopover = (props: ConfirmActionPopover) => {
       {text}
       <FlexBox style={{ marginTop: "20px" }} justifyContent={"space-between"}>
         <Button
-          onClick={handleConfirm}
+          onClick={handleCancel}
           style={{
             width: 162,
           }}
+          filled
         >
-          {t("confirmAction.yes")}
-        </Button>
-        <Button filled onClick={handleCancel} style={{ width: 162 }}>
           {t("confirmAction.no")}
+        </Button>
+        <Button onClick={handleConfirm} style={{ width: 162 }}>
+          {t("confirmAction.yes")}
         </Button>
       </FlexBox>
     </S.Wrapper>
