@@ -473,7 +473,6 @@ export const CheckoutForm = observer(
                   }}
                 >
                   <Input
-                    required
                     name={FormNames.Street}
                     placeholder={t("checkout.form.street.placeholder")}
                     onChange={handleChange}
@@ -482,7 +481,6 @@ export const CheckoutForm = observer(
                     error={formik.touched["street"] && formik.errors["street"]}
                   />
                   <Input
-                    required
                     name={FormNames.House}
                     placeholder={t("checkout.form.house.placeholder")}
                     onChange={handleChange}
@@ -506,7 +504,6 @@ export const CheckoutForm = observer(
                       onChange={handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.apartment}
-                      required
                       error={
                         formik.touched["apartment"] &&
                         formik.errors["apartment"]
@@ -518,7 +515,6 @@ export const CheckoutForm = observer(
                       onChange={handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.entrance}
-                      required
                       error={
                         formik.touched["entrance"] && formik.errors["entrance"]
                       }
@@ -529,7 +525,6 @@ export const CheckoutForm = observer(
                       onChange={handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.floor}
-                      required
                       error={formik.touched["floor"] && formik.errors["floor"]}
                     />
                   </FlexBox>
