@@ -120,66 +120,42 @@ export const CheckoutForm = observer(
     const TakeAwaySchema = Yup.object().shape({
       phone: Yup.string()
         // todo: show more user friendly validation errors
-        .required(
-          t("checkout.form.validation.phone.required", {
-            field: t("common.phone"),
-          })
-        )
+        .required(t("validation.required"))
         .test(
           "is-possible-phone-number",
           () => t("checkout.form.validation.phone.uk_format"),
           isValidUkrainianPhone
         ),
-      spot_id: Yup.number().required(
-        t("checkout.form.validation.spot.required")
-      ),
+      spot_id: Yup.number().required(t("validation.required")),
     });
 
     const CourierSchema = Yup.object().shape({
       phone: Yup.string()
-        .required(t("checkout.form.validation.phone.required"))
+        .required(t("validation.required"))
         .test(
           "is-possible-phone-number",
           () => t("checkout.form.validation.phone.uk_format"),
           isValidUkrainianPhone
         ),
-      street: Yup.string().required(
-        t("checkout.form.validation.street.required")
-      ),
-      house: Yup.string().required(
-        t("checkout.form.validation.house.required")
-      ),
-      district_id: Yup.number().required(
-        t("checkout.form.validation.district.required")
-      ),
+      street: Yup.string().required(t("validation.required")),
+      house: Yup.string().required(t("validation.required")),
+      district_id: Yup.number().required(t("validation.required")),
     });
 
     const CourierSchemaHighRiseBuilding = Yup.object().shape({
       phone: Yup.string()
-        .required(t("checkout.form.validation.phone.required"))
+        .required(t("validation.required"))
         .test(
           "is-possible-phone-number",
           () => t("checkout.form.validation.phone.uk_format"),
           isValidUkrainianPhone
         ),
-      street: Yup.string().required(
-        t("checkout.form.validation.street.required")
-      ),
-      house: Yup.string().required(
-        t("checkout.form.validation.house.required")
-      ),
-      apartment: Yup.string().required(
-        t("checkout.form.validation.apartment.required")
-      ),
-      entrance: Yup.string().required(
-        t("checkout.form.validation.entrance.required")
-      ),
-      floor: Yup.number().required(
-        t("checkout.form.validation.floor.required")
-      ),
-      district_id: Yup.number().required(
-        t("checkout.form.validation.district.required")
-      ),
+      street: Yup.string().required(t("validation.required")),
+      house: Yup.string().required(t("validation.required")),
+      apartment: Yup.string().required(t("validation.required")),
+      entrance: Yup.string().required(t("validation.required")),
+      floor: Yup.number().required(t("validation.required")),
+      district_id: Yup.number().required(t("validation.required")),
     });
 
     const getValidationSchema = (values: FormValues) => {
@@ -369,10 +345,6 @@ export const CheckoutForm = observer(
       label: t("paymentMethods." + item.code, item.name),
     }));
 
-    const formErrors = Object.keys(formik.errors)
-      .filter((key) => formik.touched[key])
-      .map((key, i) => formik.errors[key]);
-
     const openLoginModal = () => {
       showModal(ModalIDEnum.AuthModal, {
         redirect_to: location.pathname,
@@ -457,6 +429,10 @@ export const CheckoutForm = observer(
                 onChange={(value) => {
                   setFieldValue(FormNames.SpotId, value);
                 }}
+                error={
+                  formik.touched[FormNames.SpotId] &&
+                  formik.errors[FormNames.SpotId]
+                }
               />
             ) : (
               districts.length !== 1 && (
@@ -469,6 +445,10 @@ export const CheckoutForm = observer(
                   onChange={(value) => {
                     setFieldValue(FormNames.DistrictId, value);
                   }}
+                  error={
+                    formik.touched[FormNames.DistrictId] &&
+                    formik.errors[FormNames.DistrictId]
+                  }
                 />
               )
             )}
@@ -499,6 +479,7 @@ export const CheckoutForm = observer(
                     onChange={handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.street}
+                    error={formik.touched["street"] && formik.errors["street"]}
                   />
                   <Input
                     required
@@ -507,6 +488,7 @@ export const CheckoutForm = observer(
                     onChange={handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.house}
+                    error={formik.touched["house"] && formik.errors["house"]}
                   />
                 </FlexBox>
               </S.Control>
@@ -525,6 +507,10 @@ export const CheckoutForm = observer(
                       onBlur={formik.handleBlur}
                       value={formik.values.apartment}
                       required
+                      error={
+                        formik.touched["apartment"] &&
+                        formik.errors["apartment"]
+                      }
                     />
                     <Input
                       name={FormNames.Entrance}
@@ -533,6 +519,9 @@ export const CheckoutForm = observer(
                       onBlur={formik.handleBlur}
                       value={formik.values.entrance}
                       required
+                      error={
+                        formik.touched["entrance"] && formik.errors["entrance"]
+                      }
                     />
                     <Input
                       name={FormNames.Floor}
@@ -541,6 +530,7 @@ export const CheckoutForm = observer(
                       onBlur={formik.handleBlur}
                       value={formik.values.floor}
                       required
+                      error={formik.touched["floor"] && formik.errors["floor"]}
                     />
                   </FlexBox>
                 </S.Control>
@@ -568,6 +558,7 @@ export const CheckoutForm = observer(
               onChange={handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.phone}
+              error={formik.touched["phone"] && formik.errors["phone"]}
             />
           </S.Control>
           <S.Control>
@@ -611,16 +602,6 @@ export const CheckoutForm = observer(
                 onBlur={formik.handleBlur}
                 value={formik.values.change}
               />
-            </S.Control>
-          )}
-
-          {formErrors.length > 0 && (
-            <S.Control>
-              <S.ErrorBag>
-                {formErrors.map((error, i) => (
-                  <li key={i}>{error}</li>
-                ))}
-              </S.ErrorBag>
             </S.Control>
           )}
 

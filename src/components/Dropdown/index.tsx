@@ -12,7 +12,7 @@ import {
   useDismiss,
   useRole,
 } from "@floating-ui/react";
-import {
+import React, {
   HTMLProps,
   PropsWithChildren,
   useId,
@@ -64,6 +64,7 @@ type IDropdownProps = {
   onChange: (value: string | number | null) => void;
   placeholder?: string;
   showSkeleton?: boolean;
+  error?: string | null;
 };
 
 export const Dropdown = (props: IDropdownProps) => {
@@ -71,6 +72,7 @@ export const Dropdown = (props: IDropdownProps) => {
     options = [],
     width = "100px",
     value,
+    error,
     placeholder,
     onChange,
     showSkeleton = false,
@@ -170,6 +172,7 @@ export const Dropdown = (props: IDropdownProps) => {
           >
             <CaretDownSvg />
           </SvgIcon>
+          {!!error && <Error>{error}</Error>}
         </S.Reference>
         <FloatingPortal>
           {open && (
@@ -246,6 +249,19 @@ export const Dropdown = (props: IDropdownProps) => {
     </SkeletonWrap>
   );
 };
+
+const Error = styled.p`
+  font-size: 10px;
+  line-height: 12px;
+  padding: 2px 5px;
+  background-color: ${({ theme }) => theme.colors.danger.canvas};
+  color: ${({ theme }) => theme.colors.fg.default};
+  user-select: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 3;
+`;
 
 const Placeholder = styled.span`
   color: ${({ theme }) => theme.components.input.placeholder};

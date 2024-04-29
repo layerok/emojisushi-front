@@ -8,7 +8,6 @@ const Dropdown = styled.div`
   font-size: 15px;
   line-height: 18px;
   position: relative;
-  overflow: hidden;
   cursor: pointer;
 `;
 
