@@ -70,7 +70,11 @@ client.interceptors.request.use((config = {}) => {
   params.lang =
     i18n.resolvedLanguage ||
     i18n.options.lng ||
-    getFromLocalStorage("i18nextLang", "uk");
+    getFromLocalStorage({
+      name: "i18nextLang",
+      version: "1",
+    }) ||
+    "uk";
 
   if (method === "post") {
     config.data = {
