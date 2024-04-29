@@ -142,34 +142,7 @@
       },
       "validation": {
         "phone": {
-          "required": "Please provide your phone number",
           "uk_format": "The phone number must be in the format +380xxxxxxxxx"
-        },
-        "district": {
-          "required": "Please select your nearest area"
-        },
-        "spot": {
-          "required": "Please select the restaurant address"
-        },
-        "street": {
-          "placeholder": "Street",
-          "required": "Please provide the street name"
-        },
-        "house": {
-          "placeholder": "House",
-          "required": "Please provide the house number"
-        },
-        "entrance": {
-          "placeholder": "Entrance",
-          "required": "Please provide the entrance number"
-        },
-        "floor": {
-          "placeholder": "Floor",
-          "required": "Please provide the floor number"
-        },
-        "apartment": {
-          "placeholder": "Apartment",
-          "required": "Please provide the apartment number"
         }
       }
     },
@@ -267,5 +240,8 @@
   "internetConnectionLost": {
     "title": "Looks like your internet connection has been lost",
     "subtitle": "Check your internet connection and try refreshing the page"
+  },
+  "validation": {
+    "required": "Fill out this field"
   }
 }
