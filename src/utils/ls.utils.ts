@@ -1,20 +1,36 @@
-export const setToLocalStorage = (key: string, value: any) => {
-  localStorage.setItem(key, JSON.stringify(value));
+type Key = {
+  name: string;
+  version: string;
 };
 
-export const getFromLocalStorage = (key: string, defaultValue = undefined) => {
+export const setToLocalStorage = (key: Key, value: any) => {
+  localStorage.setItem(
+    key.name,
+    JSON.stringify({
+      state: value,
+      version: key.version,
+    })
+  );
+};
+
+export const getFromLocalStorage = (key: Key) => {
   try {
-    return JSON.parse(localStorage.getItem(key)) || defaultValue;
+    const result = JSON.parse(localStorage.getItem(key.name));
+    if (result?.version !== key.version) {
+      removeFromLocalStorage(key);
+      return null;
+    }
+    return result?.state;
   } catch (e) {
     console.error("ls error" + e.toString());
-    return defaultValue;
+    return null;
   }
 };
 
-export const removeFromLocalStorage = (key: string) => {
-  localStorage.removeItem(key);
+export const removeFromLocalStorage = (key: Key) => {
+  localStorage.removeItem(key.name);
 };
 
-export const localStorageHas = (key: string) => {
-  return key in localStorage;
+export const localStorageHas = (key: Key) => {
+  return key.name in localStorage;
 };

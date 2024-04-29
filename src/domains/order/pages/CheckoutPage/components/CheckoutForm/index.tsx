@@ -33,6 +33,11 @@ import { ROUTES } from "~routes";
 import { isValidUkrainianPhone, getUserFullName } from "~domains/order/utils";
 import { useShowModal } from "~modal";
 import { Button } from "~common/ui-components/Button/Button";
+import {
+  getFromLocalStorage,
+  removeFromLocalStorage,
+  setToLocalStorage,
+} from "~utils/ls.utils";
 
 type TCheckoutFormProps = {
   loading?: boolean | undefined;
@@ -63,6 +68,13 @@ enum FormNames {
   Comment = "comment",
 }
 
+const localStorageKeys = {
+  draftOrder: {
+    name: "draftOrder",
+    version: "1",
+  },
+};
+
 enum HouseType {
   PrivateHouse = "private_house",
   HighRiseBuilding = "high_rise_building",
@@ -70,6 +82,24 @@ enum HouseType {
 
 const getDistrictDefaultSpot = (district: IDistrict) => {
   return district.spots[0];
+};
+
+type FormValues = {
+  name: string;
+  phone: string;
+  street: string;
+  house: string;
+  apartment: string;
+  entrance: string;
+  floor: string;
+  comment: string;
+  sticks: string;
+  change: string;
+  payment_method_code: PaymentMethodCodeEnum;
+  shipping_method_code: ShippingMethodCodeEnum;
+  house_type: HouseType;
+  spot_id: number | undefined;
+  district_id: number | undefined;
 };
 
 export const CheckoutForm = observer(
@@ -119,6 +149,9 @@ export const CheckoutForm = observer(
       house: Yup.string().required(
         t("checkout.form.validation.house.required")
       ),
+      district_id: Yup.number().required(
+        t("checkout.form.validation.district.required")
+      ),
     });
 
     const CourierSchemaHighRiseBuilding = Yup.object().shape({
@@ -144,13 +177,24 @@ export const CheckoutForm = observer(
       floor: Yup.number().required(
         t("checkout.form.validation.floor.required")
       ),
+      district_id: Yup.number().required(
+        t("checkout.form.validation.district.required")
+      ),
     });
 
-    const [validationSchema, setValidationSchema] = useState<
-      | typeof TakeAwaySchema
-      | typeof CourierSchema
-      | typeof CourierSchemaHighRiseBuilding
-    >(TakeAwaySchema);
+    const getValidationSchema = (values: FormValues) => {
+      if (
+        values.house_type === HouseType.HighRiseBuilding &&
+        values.shipping_method_code === ShippingMethodCodeEnum.Courier
+      ) {
+        return CourierSchemaHighRiseBuilding;
+      }
+      if (values.shipping_method_code === ShippingMethodCodeEnum.Courier) {
+        return CourierSchema;
+      }
+
+      return TakeAwaySchema;
+    };
 
     const wayforpayFormContainer = useRef(null);
 
@@ -170,7 +214,7 @@ export const CheckoutForm = observer(
         getDistrictDefaultSpot(district).temporarily_unavailable,
     }));
 
-    const initialValues = {
+    const initialValues: FormValues = {
       name: user && !user.is_call_center_admin ? getUserFullName(user) : "",
       phone: user && !user.is_call_center_admin ? user.phone || "" : "",
       street: "",
@@ -187,9 +231,10 @@ export const CheckoutForm = observer(
       // if only one spot or district is available, then choose it by default
       spot_id: spots.length === 1 ? spots[0].value : undefined,
       district_id: districts.length === 1 ? districts[0].value : undefined,
+      ...(getFromLocalStorage(localStorageKeys.draftOrder) || {}),
     };
 
-    const handleSubmit = async (values: typeof initialValues) => {
+    const handleSubmit = async (values: FormValues) => {
       formik.setErrors({});
 
       const {
@@ -252,6 +297,7 @@ export const CheckoutForm = observer(
           sticks: +sticks,
           comment,
         });
+        removeFromLocalStorage(localStorageKeys.draftOrder);
 
         // todo: clear cart after you redirected user to thankyou page
         // otherwise user will be redirected to category page
@@ -280,6 +326,12 @@ export const CheckoutForm = observer(
       }
     };
 
+    const [validationSchema, setValidationSchema] = useState<
+      | typeof TakeAwaySchema
+      | typeof CourierSchema
+      | typeof CourierSchemaHighRiseBuilding
+    >(getValidationSchema(initialValues));
+
     const formik = useFormik<typeof initialValues>({
       initialValues,
       validateOnBlur: true,
@@ -287,6 +339,23 @@ export const CheckoutForm = observer(
       validationSchema,
       onSubmit: handleSubmit,
     });
+
+    const handleChange = (e: ChangeEvent<any>) => {
+      setToLocalStorage(localStorageKeys.draftOrder, {
+        ...formik.values,
+        [e.currentTarget.name]: e.currentTarget.value,
+      });
+      formik.handleChange(e);
+    };
+
+    const setFieldValue = (name: string, value: any) => {
+      setToLocalStorage(localStorageKeys.draftOrder, {
+        ...formik.values,
+        ...initialValues,
+        [name]: value,
+      });
+      formik.setFieldValue(name, value);
+    };
 
     const shippingMethods = (shippingMethodsRes?.data || []).map((item) => ({
       value: item.code,
@@ -311,28 +380,27 @@ export const CheckoutForm = observer(
     };
 
     const handleShippingMethodChange = (e: ChangeEvent<HTMLInputElement>) => {
-      formik.handleChange(e);
+      handleChange(e);
       formik.setErrors({});
       formik.setTouched({});
-      if (e.target.value === ShippingMethodCodeEnum.Takeaway) {
-        setValidationSchema(TakeAwaySchema);
-      } else {
-        setValidationSchema(
-          formik.values.house_type === HouseType.HighRiseBuilding
-            ? CourierSchemaHighRiseBuilding
-            : CourierSchema
-        );
-      }
+
+      setValidationSchema(
+        getValidationSchema({
+          ...formik.values,
+          [e.currentTarget.name]: e.currentTarget.value,
+        })
+      );
     };
 
     const handleHouseTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
-      formik.handleChange(e);
+      handleChange(e);
       formik.setErrors({});
       formik.setTouched({});
       setValidationSchema(
-        e.target.value === HouseType.HighRiseBuilding
-          ? CourierSchemaHighRiseBuilding
-          : CourierSchema
+        getValidationSchema({
+          ...formik.values,
+          [e.currentTarget.name]: e.currentTarget.value,
+        })
       );
     };
 
@@ -387,7 +455,7 @@ export const CheckoutForm = observer(
                 width={"350px"}
                 value={formik.values[FormNames.SpotId]}
                 onChange={(value) => {
-                  formik.setFieldValue(FormNames.SpotId, value);
+                  setFieldValue(FormNames.SpotId, value);
                 }}
               />
             ) : (
@@ -399,7 +467,7 @@ export const CheckoutForm = observer(
                   width={"350px"}
                   value={formik.values[FormNames.DistrictId]}
                   onChange={(value) => {
-                    formik.setFieldValue(FormNames.DistrictId, value);
+                    setFieldValue(FormNames.DistrictId, value);
                   }}
                 />
               )
@@ -428,7 +496,7 @@ export const CheckoutForm = observer(
                     required
                     name={FormNames.Street}
                     placeholder={t("checkout.form.street.placeholder")}
-                    onChange={formik.handleChange}
+                    onChange={handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.street}
                   />
@@ -436,7 +504,7 @@ export const CheckoutForm = observer(
                     required
                     name={FormNames.House}
                     placeholder={t("checkout.form.house.placeholder")}
-                    onChange={formik.handleChange}
+                    onChange={handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.house}
                   />
@@ -453,7 +521,7 @@ export const CheckoutForm = observer(
                     <Input
                       name={FormNames.Apartment}
                       placeholder={t("checkout.form.apartment.placeholder")}
-                      onChange={formik.handleChange}
+                      onChange={handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.apartment}
                       required
@@ -461,7 +529,7 @@ export const CheckoutForm = observer(
                     <Input
                       name={FormNames.Entrance}
                       placeholder={t("checkout.form.entrance.placeholder")}
-                      onChange={formik.handleChange}
+                      onChange={handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.entrance}
                       required
@@ -469,7 +537,7 @@ export const CheckoutForm = observer(
                     <Input
                       name={FormNames.Floor}
                       placeholder={t("checkout.form.floor.placeholder")}
-                      onChange={formik.handleChange}
+                      onChange={handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.floor}
                       required
@@ -485,7 +553,7 @@ export const CheckoutForm = observer(
               loading={loading}
               name={FormNames.Name}
               placeholder={t("common.first_name")}
-              onChange={formik.handleChange}
+              onChange={handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.name}
             />
@@ -497,7 +565,7 @@ export const CheckoutForm = observer(
               name={FormNames.Phone}
               required={true}
               placeholder={t("common.phone")}
-              onChange={formik.handleChange}
+              onChange={handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.phone}
             />
@@ -509,7 +577,7 @@ export const CheckoutForm = observer(
               type={"number"}
               min={"0"}
               placeholder={t("checkout.form.persons")}
-              onChange={formik.handleChange}
+              onChange={handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.sticks}
             />
@@ -519,7 +587,7 @@ export const CheckoutForm = observer(
               loading={loading}
               name={FormNames.Comment}
               placeholder={t("checkout.form.comment")}
-              onChange={formik.handleChange}
+              onChange={handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.comment}
             />
@@ -529,7 +597,7 @@ export const CheckoutForm = observer(
               showSkeleton={loading}
               name={FormNames.PaymentMethodCode}
               items={paymentMethods}
-              onChange={formik.handleChange}
+              onChange={handleChange}
               value={formik.values.payment_method_code}
             />
           </S.Control>
@@ -539,7 +607,7 @@ export const CheckoutForm = observer(
                 loading={loading}
                 name={FormNames.Change}
                 placeholder={t("checkout.form.change")}
-                onChange={formik.handleChange}
+                onChange={handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.change}
               />
