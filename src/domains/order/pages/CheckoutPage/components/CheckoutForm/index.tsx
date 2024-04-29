@@ -473,6 +473,7 @@ export const CheckoutForm = observer(
                   }}
                 >
                   <Input
+                    loading={loading}
                     name={FormNames.Street}
                     placeholder={t("checkout.form.street.placeholder")}
                     onChange={handleChange}
@@ -481,6 +482,7 @@ export const CheckoutForm = observer(
                     error={formik.touched["street"] && formik.errors["street"]}
                   />
                   <Input
+                    loading={loading}
                     name={FormNames.House}
                     placeholder={t("checkout.form.house.placeholder")}
                     onChange={handleChange}
@@ -499,6 +501,7 @@ export const CheckoutForm = observer(
                     }}
                   >
                     <Input
+                      loading={loading}
                       name={FormNames.Apartment}
                       placeholder={t("checkout.form.apartment.placeholder")}
                       onChange={handleChange}
@@ -510,6 +513,7 @@ export const CheckoutForm = observer(
                       }
                     />
                     <Input
+                      loading={loading}
                       name={FormNames.Entrance}
                       placeholder={t("checkout.form.entrance.placeholder")}
                       onChange={handleChange}
@@ -520,6 +524,7 @@ export const CheckoutForm = observer(
                       }
                     />
                     <Input
+                      loading={loading}
                       name={FormNames.Floor}
                       placeholder={t("checkout.form.floor.placeholder")}
                       onChange={handleChange}
