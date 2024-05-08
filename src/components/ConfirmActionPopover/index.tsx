@@ -44,7 +44,6 @@ export const ConfirmActionPopover = (props: ConfirmActionPopover) => {
           style={{
             width: 162,
           }}
-          filled
         >
           {t("confirmAction.no")}
         </Button>
