@@ -5,7 +5,7 @@ import { useBreakpoint2 } from "~common/hooks";
 import { useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 import { useTheme } from "styled-components";
-import { FlexBox } from "~components";
+import { CaretDownSvg, FlexBox, SvgIcon } from "~components";
 
 const SLIDE_CHANGE_INTERVAL = 2500;
 
@@ -42,6 +42,7 @@ export const Banner = (props: { items: BannerItem[]; loading?: boolean }) => {
     useListenToCustomEvent,
     slideToItem,
     slideToNextItem,
+    slideToPrevItem,
   } = useTransitionCarousel({
     withLoop: true,
     withThumbs: true,
@@ -110,6 +111,43 @@ export const Banner = (props: { items: BannerItem[]; loading?: boolean }) => {
   return (
     <S.Container>
       {carouselFragment}
+
+      <S.NextSlideBtnOverlay />
+      <S.PrevSlideBtnOverlay />
+
+      <S.PrevSlideBtn
+        onClick={(e) => {
+          e.stopPropagation();
+          slideToPrevItem();
+        }}
+      >
+        <SvgIcon
+          clickable
+          style={{
+            transform: "rotate(90deg)",
+            transformOrigin: "center",
+          }}
+          width={"30px"}
+        >
+          <CaretDownSvg strokeWidth={"1"} />
+        </SvgIcon>
+      </S.PrevSlideBtn>
+
+      <S.NextSlideBtn
+        onClick={(e) => {
+          e.stopPropagation();
+          slideToNextItem();
+        }}
+      >
+        <SvgIcon
+          clickable
+          style={{ transform: "rotate(-90deg)", transformOrigin: "center" }}
+          width={"30px"}
+        >
+          <CaretDownSvg strokeWidth={"1"} />
+        </SvgIcon>
+      </S.NextSlideBtn>
+
       <S.ThumbsContainer>{thumbsFragment}</S.ThumbsContainer>
     </S.Container>
   );
