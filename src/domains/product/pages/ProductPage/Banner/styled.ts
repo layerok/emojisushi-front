@@ -20,14 +20,18 @@ const ThumbsContainer = styled.div`
   transform-origin: center;
   transform: translateX(-50%);
   bottom: -30px;
+  max-width: 75px;
   .use-spring-carousel-thumbs-wrapper {
     column-gap: 5px;
+    overflow: hidden !important;
   }
 `;
 
 const Dot = styled.div<{
   $isActive: boolean;
 }>`
+  overflow: hidden;
+
   border-radius: 100%;
   cursor: pointer;
   width: 10px;
