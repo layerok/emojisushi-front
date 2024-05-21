@@ -68,7 +68,7 @@ const DescriptionWrapper = styled.div`
   margin-left: 30px;
   flex-grow: 1;
   position: relative;
-  padding-bottom: 40px;
+  padding-bottom: 58px;
   ${media.lessThan("tablet")`
     margin-left: 0px;
   `}
