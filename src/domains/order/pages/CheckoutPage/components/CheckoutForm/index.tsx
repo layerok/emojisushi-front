@@ -425,6 +425,7 @@ export const CheckoutForm = observer(
                   }}
                 >
                   <Input
+                    style={{ width: "80%" }}
                     required
                     name={FormNames.Street}
                     placeholder={t("checkout.form.street.placeholder")}
@@ -433,6 +434,7 @@ export const CheckoutForm = observer(
                     value={formik.values.street}
                   />
                   <Input
+                    style={{ width: "20%" }}
                     required
                     name={FormNames.House}
                     placeholder={t("checkout.form.house.placeholder")}
