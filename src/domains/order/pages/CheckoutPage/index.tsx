@@ -45,7 +45,7 @@ const CheckoutPage = () => {
     if (cart?.data && cart.data.length < 1) {
       navigate(ROUTES.CATEGORY.path);
     }
-  }, []);
+  }, [cart]);
 
   return (
     <Page>
