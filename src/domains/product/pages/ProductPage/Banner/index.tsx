@@ -5,7 +5,7 @@ import { useBreakpoint2 } from "~common/hooks";
 import { useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 import { useTheme } from "styled-components";
-import { FlexBox } from "~components";
+import { CaretDownSvg, FlexBox, SvgIcon } from "~components";
 
 const SLIDE_CHANGE_INTERVAL = 2500;
 
@@ -31,6 +31,7 @@ export const Banner = (props: { items: BannerItem[]; loading?: boolean }) => {
   );
 
   const theme = useTheme();
+  const MAX_THUMBS = 5;
 
   useEffect(() => {
     setActiveItem(items[0]?.id);
@@ -41,7 +42,6 @@ export const Banner = (props: { items: BannerItem[]; loading?: boolean }) => {
     thumbsFragment,
     useListenToCustomEvent,
     slideToItem,
-    slideToNextItem,
   } = useTransitionCarousel({
     withLoop: true,
     withThumbs: true,
@@ -62,14 +62,19 @@ export const Banner = (props: { items: BannerItem[]; loading?: boolean }) => {
                   gap: 5,
                 }}
               >
-                <Skeleton width={10} height={10} borderRadius={"100%"} />
-                <Skeleton width={10} height={10} borderRadius={"100%"} />
-                <Skeleton width={10} height={10} borderRadius={"100%"} />
+                {[...Array(MAX_THUMBS)].map((index) => (
+                  <Skeleton
+                    key={index}
+                    width={10}
+                    height={10}
+                    borderRadius={"100%"}
+                  />
+                ))}
               </FlexBox>
             ),
           },
         ]
-      : items.map((item) => {
+      : items.map((item, index) => {
           const imageSrc =
             item[isTablet || isDesktop ? "desktop_image" : "mobile_image"];
 
@@ -92,6 +97,20 @@ export const Banner = (props: { items: BannerItem[]; loading?: boolean }) => {
         }),
   });
 
+  const slideToNextItem = () => {
+    const currentIndex = items.findIndex((item) => item.id === activeItem);
+    const nextIndex = (currentIndex + 1) % items.length;
+
+    slideToItem(items[nextIndex].id);
+  };
+
+  const slideToPrevItem = () => {
+    const currentIndex = items.findIndex((item) => item.id === activeItem);
+    const nextIndex = (currentIndex - 1 + items.length) % items.length;
+
+    slideToItem(items[nextIndex].id);
+  };
+
   useListenToCustomEvent((event) => {
     if (event.eventName === "onSlideStartChange") {
       setActiveItem(event.nextItem.id);
@@ -110,6 +129,43 @@ export const Banner = (props: { items: BannerItem[]; loading?: boolean }) => {
   return (
     <S.Container>
       {carouselFragment}
+
+      <S.NextSlideBtnOverlay />
+      <S.PrevSlideBtnOverlay />
+
+      <S.PrevSlideBtn
+        onClick={(e) => {
+          e.stopPropagation();
+          slideToPrevItem();
+        }}
+      >
+        <SvgIcon
+          clickable
+          style={{
+            transform: "rotate(90deg)",
+            transformOrigin: "center",
+          }}
+          width={"30px"}
+        >
+          <CaretDownSvg strokeWidth={"1"} />
+        </SvgIcon>
+      </S.PrevSlideBtn>
+
+      <S.NextSlideBtn
+        onClick={(e) => {
+          e.stopPropagation();
+          slideToNextItem();
+        }}
+      >
+        <SvgIcon
+          clickable
+          style={{ transform: "rotate(-90deg)", transformOrigin: "center" }}
+          width={"30px"}
+        >
+          <CaretDownSvg strokeWidth={"1"} />
+        </SvgIcon>
+      </S.NextSlideBtn>
+
       <S.ThumbsContainer>{thumbsFragment}</S.ThumbsContainer>
     </S.Container>
   );
