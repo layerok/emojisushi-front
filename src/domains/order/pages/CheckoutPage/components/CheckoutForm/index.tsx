@@ -473,6 +473,7 @@ export const CheckoutForm = observer(
                   }}
                 >
                   <Input
+                    style={{ width: "70%" }}
                     loading={loading}
                     name={FormNames.Street}
                     placeholder={t("checkout.form.street.placeholder")}
@@ -482,6 +483,7 @@ export const CheckoutForm = observer(
                     error={formik.touched["street"] && formik.errors["street"]}
                   />
                   <Input
+                    style={{ width: "30%" }}
                     loading={loading}
                     name={FormNames.House}
                     placeholder={t("checkout.form.house.placeholder")}
