@@ -29,7 +29,7 @@ const MenuLayout = () => {
                 id: banner.id + "",
                 desktop_image: banner.image.path,
                 mobile_image: banner.image_small.path,
-                clickable: !!banner.product.id,
+                clickable: !!banner.product?.id,
                 onClick: () => {
                   if (banner.product.id) {
                     searchParams.set("product_id", banner.product.id + "");
