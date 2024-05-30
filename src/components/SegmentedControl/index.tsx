@@ -13,7 +13,6 @@ type SegmentedControlProps = Omit<
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   value: string | number | null;
   showSkeleton?: boolean;
-  withIconIndicator?: boolean;
 };
 
 export const SegmentedControl = forwardRef<
@@ -24,7 +23,6 @@ export const SegmentedControl = forwardRef<
     items = [],
     name,
     onChange,
-    withIconIndicator = true,
     value,
     showSkeleton = false,
     as,
@@ -40,7 +38,6 @@ export const SegmentedControl = forwardRef<
       <S.Wrapper {...rest} ref={ref}>
         {items.map((option, index) => (
           <Segment
-            withCheckmark={withIconIndicator}
             item={option}
             length={items.length}
             index={index}
@@ -67,17 +64,8 @@ const Segment = (props: {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   selected: boolean;
   name: string;
-  withCheckmark?: boolean;
 }) => {
-  const {
-    item,
-    index,
-    length,
-    onChange,
-    selected,
-    name,
-    withCheckmark = false,
-  } = props;
+  const { item, index, length, onChange, selected, name } = props;
 
   const theme = useTheme();
   const internal_id = useId();
@@ -108,20 +96,13 @@ const Segment = (props: {
         onChange={onChange}
       />
       <S.Label
+        $selected={selected}
         style={{
           ...(isFirstOption && firstOptionStyles),
           ...(isLastOption && lastOptionStyles),
         }}
         htmlFor={internal_id}
       >
-        {selected && withCheckmark && (
-          <Checkmark
-            style={{
-              marginRight: 8,
-            }}
-          />
-        )}
-
         {item.label}
       </S.Label>
     </>

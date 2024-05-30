@@ -458,7 +458,6 @@ export const CheckoutForm = observer(
             <>
               <S.Control>
                 <SegmentedControl
-                  withIconIndicator={false}
                   showSkeleton={loading}
                   name={FormNames.HouseType}
                   items={houseTypes}

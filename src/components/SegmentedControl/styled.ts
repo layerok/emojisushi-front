@@ -11,7 +11,9 @@ const Wrapper = styled.div`
   overflow: hidden;
 `;
 
-const Label = styled.label`
+const Label = styled.label<{
+  $selected: boolean;
+}>`
   position: relative;
   padding: 0 4px;
   margin: 2px;
@@ -23,6 +25,17 @@ const Label = styled.label`
   cursor: pointer;
   user-select: none;
   z-index: 2;
+  :after {
+    content: ${({ $selected }) => ($selected ? '""' : "none")};
+    position: absolute;
+    background-color: ${({ theme }) => theme.colors.brand};
+    width: 15px;
+    height: 2px;
+    border-radius: 20px;
+    top: calc(100% - 5px);
+    left: 50%;
+    transform: translateX(-50%);
+  }
 `;
 
 const Input = styled.input<{
