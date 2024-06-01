@@ -22,6 +22,7 @@ const SEARCH_QUERY_SEARCH_PARAM = "q";
 
 export const Sidebar = ({ loading = false, categories = [] }: SidebarProps) => {
   const rootRef = useRef<null | HTMLDivElement>(null);
+  const stickyContainerRef = useRef<null | HTMLDivElement>(null);
   const submit = useSubmit();
   const location = useLocation();
   const { t } = useTranslation();
@@ -30,6 +31,13 @@ export const Sidebar = ({ loading = false, categories = [] }: SidebarProps) => {
   const q = searchParams.get(SEARCH_QUERY_SEARCH_PARAM);
 
   const goUp = () => {
+    const isUp =
+      rootRef.current.offsetTop >= stickyContainerRef.current.offsetTop;
+
+    if (isUp) {
+      return;
+    }
+
     let top = rootRef.current.offsetTop - STICKY_SIDEBAR_CONTAINER_OFFSET;
 
     window.scrollTo({
@@ -67,7 +75,7 @@ export const Sidebar = ({ loading = false, categories = [] }: SidebarProps) => {
 
   return (
     <Root ref={rootRef}>
-      <StickyContainer>
+      <StickyContainer ref={stickyContainerRef}>
         <SearchBarContainer>
           <Form role="search" action={location.pathname}>
             {searchParamsInputs}
