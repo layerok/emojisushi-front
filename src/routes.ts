@@ -1,4 +1,4 @@
-import { number, route, string } from "react-router-typesafe-routes/dom";
+import { route, string } from "react-router-typesafe-routes/dom";
 
 export const ROUTES = {
   INDEX: route(""),
@@ -14,7 +14,6 @@ export const ROUTES = {
       }),
       SHOW: route(":categorySlug", {
         searchParams: {
-          limit: number(),
           q: string(),
           sort: string(),
         },
