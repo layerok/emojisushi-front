@@ -7,7 +7,7 @@ import {
   productsQuery,
   wishlistsQuery,
 } from "src/queries";
-import { SortKey } from "src/api/types";
+import { IProduct, SortKey } from "src/api/types";
 import { CategorySlug } from "~domains/category/constants";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { observer } from "mobx-react";
@@ -35,18 +35,18 @@ export const ProductPage = observer(() => {
 
   const { data: productQueryRes, isLoading: isProductsLoading } = useQuery(
     productsQuery({
-      category_slug: q || CategorySlug.Menu,
+      category_slug: CategorySlug.Menu,
       search: q,
       sort: sort,
       limit: 9999,
     })
   );
 
+  const belongsToCategory = (product: IProduct) =>
+    !!product.categories.find((category) => category.slug === categorySlug);
+
   const items = (productQueryRes?.data || [])
-    .filter(
-      (product) =>
-        !!product.categories.find((category) => category.slug === categorySlug)
-    )
+    .filter(q ? Boolean : belongsToCategory)
     .map((product) => new Product(product));
 
   const selectedCategory = (categories?.data || []).find((category) => {
