@@ -359,23 +359,29 @@ export const CheckoutForm = observer(
       onSubmit: handleSubmit,
     });
 
-    const lastErrorKey = first(
-      Object.keys(formik.errors).sort(
-        (a, b) => fieldSortOrderMap[a] - fieldSortOrderMap[b]
-      )
+    useEffect(
+      () => {
+        if (formik.isSubmitting) {
+          return;
+        }
+        const scrollToError = first(
+          Object.keys(formik.errors).sort(
+            (a, b) => fieldSortOrderMap[a] - fieldSortOrderMap[b]
+          )
+        );
+
+        if (scrollToError) {
+          fieldsRef.current[scrollToError]?.scrollIntoView({
+            behavior: "smooth",
+          });
+        }
+      },
+      // formik.errors is omitted in dependency array on purpose
+      // we don't want to scroll to a field with an error everytime formik.errors changes
+      // we do want to scroll only when the form is submitted
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [formik.isSubmitting, fieldsRef]
     );
-
-    useEffect(() => {
-      if (formik.isSubmitting) {
-        return;
-      }
-
-      if (lastErrorKey) {
-        fieldsRef.current[lastErrorKey]?.scrollIntoView({
-          behavior: "smooth",
-        });
-      }
-    }, [lastErrorKey, formik.isSubmitting, fieldsRef]);
 
     const handleChange = (e: ChangeEvent<any>) => {
       setToLocalStorage(localStorageKeys.draftOrder, {
