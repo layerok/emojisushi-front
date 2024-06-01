@@ -75,6 +75,24 @@ enum FormNames {
   Comment = "comment",
 }
 
+const fieldSortOrderMap: Record<keyof FormValues, number> = {
+  shipping_method_code: 1,
+  spot_id: 2,
+  district_id: 2,
+  house_type: 3,
+  street: 4,
+  house: 5,
+  apartment: 6,
+  entrance: 7,
+  floor: 8,
+  name: 9,
+  phone: 10,
+  sticks: 11,
+  comment: 12,
+  payment_method_code: 13,
+  change: 14,
+};
+
 const localStorageKeys = {
   draftOrder: {
     name: "draftOrder",
@@ -93,6 +111,10 @@ const getDistrictDefaultSpot = (district: IDistrict) => {
 
 const last = (array) => {
   return array[array.length - 1];
+};
+
+const first = (array) => {
+  return array[0];
 };
 
 type FormValues = {
@@ -344,7 +366,12 @@ export const CheckoutForm = observer(
       onSubmit: handleSubmit,
     });
 
-    const lastErrorKey = last(Object.keys(formik.errors));
+    const lastErrorKey = first(
+      Object.keys(formik.errors).sort(
+        (a, b) => fieldSortOrderMap[a] - fieldSortOrderMap[b]
+      )
+    );
+
     useEffect(() => {
       if (formik.isSubmitting) {
         return;
