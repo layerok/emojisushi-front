@@ -21,14 +21,7 @@ import {
   PaymentMethodCodeEnum,
   ShippingMethodCodeEnum,
 } from "~api/types";
-import {
-  ChangeEvent,
-  MutableRefObject,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { orderApi } from "~api";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
