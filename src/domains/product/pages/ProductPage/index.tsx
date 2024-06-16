@@ -16,6 +16,7 @@ import {
   useTypedParams,
   useTypedSearchParams,
 } from "react-router-typesafe-routes/dom";
+import levenshtein from "js-levenshtein";
 
 export const ProductPage = observer(() => {
   const { categorySlug } = useTypedParams(ROUTES.CATEGORY.SHOW);
@@ -36,17 +37,28 @@ export const ProductPage = observer(() => {
   const { data: productQueryRes, isLoading: isProductsLoading } = useQuery(
     productsQuery({
       category_slug: CategorySlug.Menu,
-      search: q,
       sort: sort,
       limit: 9999,
     })
   );
 
+  const matchSearchString = (product: IProduct) => {
+    const words = product.name.split(" ");
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      const score = levenshtein(q, word);
+      if (score < 3) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const belongsToCategory = (product: IProduct) =>
     !!product.categories.find((category) => category.slug === categorySlug);
 
   const items = (productQueryRes?.data || [])
-    .filter(q ? Boolean : belongsToCategory)
+    .filter(q ? matchSearchString : belongsToCategory)
     .map((product) => new Product(product));
 
   const selectedCategory = (categories?.data || []).find((category) => {
