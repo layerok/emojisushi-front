@@ -27,6 +27,7 @@ import Skeleton from "react-loading-skeleton";
 import { useAddToWishlist } from "~hooks/use-add-to-wishlist";
 import { useTheme } from "styled-components";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { PRODUCT_ID_SEARCH_QUERY_PARAM } from "~queries";
 
 type ProductCardProps = {
   product?: Product;
@@ -99,7 +100,7 @@ export const ProductCard = (props: ProductCardProps) => {
 
   const openDetailedProductModal = () => {
     showModal(ModalIDEnum.ProductModal);
-    searchParams.set("product_id", product.id + "");
+    searchParams.set(PRODUCT_ID_SEARCH_QUERY_PARAM, product.id + "");
     navigate({ search: searchParams.toString() });
   };
   const handleFavouriteButtonClick = () => {

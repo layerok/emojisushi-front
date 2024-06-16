@@ -8,13 +8,19 @@ import { Times } from "~assets/ui-icons";
 import MyCounter from "~components/MyCounter";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { cartQuery, productsQuery } from "~queries";
+import {
+  cartQuery,
+  DEFAULT_PRODUCTS_LIMIT,
+  PRODUCT_ID_SEARCH_QUERY_PARAM,
+  productsQuery,
+} from "~queries";
 import Skeleton from "react-loading-skeleton";
 import { CartProduct, Product } from "~models";
 import { useUpdateProduct } from "~hooks/use-update-product";
 import { useAddProduct } from "~hooks/use-add-product";
 import { findInCart } from "~components/ProductCard/utils";
 import { useTranslation } from "react-i18next";
+import { CategorySlug } from "~domains/category/constants";
 
 export const ProductModal = NiceModal.create(() => {
   const modal = useModal();
@@ -31,22 +37,27 @@ export const ProductModal = NiceModal.create(() => {
     padding: 20,
   };
 
+  const [searchParams] = useSearchParams();
+
   const { data, isLoading } = useQuery(
-    productsQuery({ limit: 999999, category_slug: "menu" })
+    productsQuery({
+      category_slug: CategorySlug.Menu,
+      limit: DEFAULT_PRODUCTS_LIMIT,
+    })
   );
 
   const { data: cart } = useQuery(cartQuery);
 
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+
   const closeModal = () => {
     modal.remove();
-    searchParams.delete("product_id");
+    searchParams.delete(PRODUCT_ID_SEARCH_QUERY_PARAM);
     navigate({ search: searchParams.toString() });
   };
 
   const productRaw = (data?.data || []).find((products) => {
-    return products.id === +searchParams.get("product_id");
+    return products.id === +searchParams.get(PRODUCT_ID_SEARCH_QUERY_PARAM);
   });
   const product = productRaw && new Product(productRaw);
 

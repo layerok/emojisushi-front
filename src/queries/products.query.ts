@@ -18,6 +18,10 @@ export const productsQueryKeys = {
   ],
 };
 
+export const DEFAULT_PRODUCTS_LIMIT = 9999;
+
+export const PRODUCT_ID_SEARCH_QUERY_PARAM = "product_id";
+
 export const fuzzySearch = (
   products: IProduct[],
   search?: string,

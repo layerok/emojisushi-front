@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { bannerQuery } from "~queries/banner.query";
 import styled from "styled-components";
 import { media } from "~common/custom-media";
-import { categoriesQuery } from "~queries";
+import { categoriesQuery, PRODUCT_ID_SEARCH_QUERY_PARAM } from "~queries";
 import { useShowModal } from "~modal";
 import { ModalIDEnum } from "~common/modal.constants";
 
@@ -32,7 +32,10 @@ const MenuLayout = () => {
                 clickable: !!banner.product?.id,
                 onClick: () => {
                   if (banner.product.id) {
-                    searchParams.set("product_id", banner.product.id + "");
+                    searchParams.set(
+                      PRODUCT_ID_SEARCH_QUERY_PARAM,
+                      banner.product.id + ""
+                    );
                     setSearchParams(searchParams);
                     showModal(ModalIDEnum.ProductModal);
                   }

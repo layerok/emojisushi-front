@@ -16,7 +16,7 @@ import {
 } from "~components";
 import { ReactNode, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { cartQuery } from "~queries";
+import { cartQuery, PRODUCT_ID_SEARCH_QUERY_PARAM } from "~queries";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "~hooks/use-auth";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
@@ -54,7 +54,7 @@ export const Layout = observer(
         const { location } = state;
         const searchParams = new URLSearchParams(location.search);
 
-        if (searchParams.get("product_id")) {
+        if (searchParams.get(PRODUCT_ID_SEARCH_QUERY_PARAM)) {
           showModal(ModalIDEnum.ProductModal);
           return;
         }

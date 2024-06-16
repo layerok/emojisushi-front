@@ -4,6 +4,7 @@ import { Product } from "src/models";
 import {
   cartQuery,
   categoriesQuery,
+  DEFAULT_PRODUCTS_LIMIT,
   fuzzySearch,
   productsQuery,
   wishlistsQuery,
@@ -35,7 +36,7 @@ export const ProductPage = () => {
     productsQuery({
       category_slug: CategorySlug.Menu,
       sort: sort as SortKey,
-      limit: 9999,
+      limit: DEFAULT_PRODUCTS_LIMIT,
     })
   );
 
