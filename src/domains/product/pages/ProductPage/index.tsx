@@ -44,13 +44,16 @@ export const ProductPage = observer(() => {
 
   const computeBestScore = (product: IProduct): ClientProduct => {
     const words = product.name.split(" ");
+    const searchWords = q.split(" ");
 
     let bestScore = 1000;
 
     for (let i = 0; i < words.length; i++) {
-      const score = levenshtein(q, words[i]);
-      if (bestScore > score) {
-        bestScore = score;
+      for (let j = 0; j < searchWords.length; j++) {
+        const score = levenshtein(searchWords[j], words[i]);
+        if (bestScore > score) {
+          bestScore = score;
+        }
       }
     }
 
@@ -60,8 +63,12 @@ export const ProductPage = observer(() => {
   const belongsToCategory = (product: IProduct) =>
     !!product.categories.find((category) => category.slug === categorySlug);
 
+  const noopBestScore = (product: IProduct): ClientProduct => {
+    return { ...product, best_score: 0 };
+  };
+
   const items = (productQueryRes?.data || [])
-    .map(computeBestScore)
+    .map(q ? computeBestScore : noopBestScore)
     .filter((product) => product.best_score < 3)
     .filter(q ? Boolean : belongsToCategory)
     .sort((a, b) => a.best_score - b.best_score)
