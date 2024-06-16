@@ -7,7 +7,7 @@ import {
   productsQuery,
   wishlistsQuery,
 } from "src/queries";
-import { IProduct, SortKey } from "src/api/types";
+import { ClientProduct, IProduct, SortKey } from "src/api/types";
 import { CategorySlug } from "~domains/category/constants";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { observer } from "mobx-react";
@@ -42,23 +42,29 @@ export const ProductPage = observer(() => {
     })
   );
 
-  const matchSearchString = (product: IProduct) => {
+  const computeBestScore = (product: IProduct): ClientProduct => {
     const words = product.name.split(" ");
+
+    let bestScore = 1000;
+
     for (let i = 0; i < words.length; i++) {
-      const word = words[i];
-      const score = levenshtein(q, word);
-      if (score < 3) {
-        return true;
+      const score = levenshtein(q, words[i]);
+      if (bestScore > score) {
+        bestScore = score;
       }
     }
-    return false;
+
+    return { ...product, best_score: bestScore };
   };
 
   const belongsToCategory = (product: IProduct) =>
     !!product.categories.find((category) => category.slug === categorySlug);
 
   const items = (productQueryRes?.data || [])
-    .filter(q ? matchSearchString : belongsToCategory)
+    .map(computeBestScore)
+    .filter((product) => product.best_score < 3)
+    .filter(q ? Boolean : belongsToCategory)
+    .sort((a, b) => a.best_score - b.best_score)
     .map((product) => new Product(product));
 
   const selectedCategory = (categories?.data || []).find((category) => {
