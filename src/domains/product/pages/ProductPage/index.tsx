@@ -4,6 +4,7 @@ import { Product } from "src/models";
 import {
   cartQuery,
   categoriesQuery,
+  fuzzySearch,
   productsQuery,
   wishlistsQuery,
 } from "src/queries";
@@ -16,7 +17,6 @@ import {
   useTypedParams,
   useTypedSearchParams,
 } from "react-router-typesafe-routes/dom";
-import levenshtein from "js-levenshtein";
 
 export const ProductPage = observer(() => {
   const { categorySlug } = useTypedParams(ROUTES.CATEGORY.SHOW);
@@ -27,7 +27,7 @@ export const ProductPage = observer(() => {
   const sort = searchParams.sort as SortKey;
 
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
-  const { data: categories, isLoading: isCategoriesLoading } = useQuery({
+  const { data: categoryQueryRes, isLoading: isCategoriesLoading } = useQuery({
     ...categoriesQuery(),
   });
 
@@ -42,26 +42,24 @@ export const ProductPage = observer(() => {
     })
   );
 
-  const matchSearchString = (product: IProduct) => {
-    const words = product.name.split(" ");
-    for (let i = 0; i < words.length; i++) {
-      const word = words[i];
-      const score = levenshtein(q, word);
-      if (score < 3) {
-        return true;
-      }
-    }
-    return false;
-  };
-
   const belongsToCategory = (product: IProduct) =>
     !!product.categories.find((category) => category.slug === categorySlug);
 
-  const items = (productQueryRes?.data || [])
-    .filter(q ? matchSearchString : belongsToCategory)
-    .map((product) => new Product(product));
+  // todo: filter hidden categories on the server
+  const filterHiddenCategories = (product: IProduct) => {
+    return !!product.categories.find((category) =>
+      (categoryQueryRes?.data || [])
+        .map((category) => category.slug)
+        .includes(category.slug)
+    );
+  };
 
-  const selectedCategory = (categories?.data || []).find((category) => {
+  const rawItems = (productQueryRes?.data || []).filter(
+    q ? filterHiddenCategories : belongsToCategory
+  );
+  const items = fuzzySearch(rawItems, q).map((product) => new Product(product));
+
+  const selectedCategory = (categoryQueryRes?.data || []).find((category) => {
     return category.slug === categorySlug;
   });
 
