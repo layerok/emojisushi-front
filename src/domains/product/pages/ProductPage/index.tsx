@@ -5,7 +5,6 @@ import {
   cartQuery,
   categoriesQuery,
   DEFAULT_PRODUCTS_LIMIT,
-  fuzzySearch,
   productsQuery,
   wishlistsQuery,
 } from "src/queries";
@@ -18,6 +17,7 @@ import {
   useTypedParams,
   useTypedSearchParams,
 } from "react-router-typesafe-routes/dom";
+import { fuzzySearch as fuzzySearchBase } from "~utils/fuzzySearch";
 
 export const ProductPage = () => {
   const { categorySlug } = useTypedParams(ROUTES.CATEGORY.SHOW);
@@ -55,7 +55,14 @@ export const ProductPage = () => {
   const rawItems = (productQueryRes?.data || []).filter(
     q ? filterProductsFromHiddenCategories : belongsToCategory
   );
-  const items = fuzzySearch(rawItems, q).map((product) => new Product(product));
+
+  const searchedItems = q
+    ? fuzzySearchBase(rawItems, q, (el) => el.name, {
+        maxAllowedModifications: 1,
+      })
+    : rawItems;
+
+  const items = searchedItems.map((product) => new Product(product));
 
   const selectedCategory = (categoryQueryRes?.data || []).find((category) => {
     return category.slug === categorySlug;

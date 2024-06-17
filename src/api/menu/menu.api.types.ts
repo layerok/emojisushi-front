@@ -168,10 +168,6 @@ export type IProduct = {
   hide_products_in_spot: ISpot[];
 };
 
-export type ClientProduct = IProduct & {
-  best_score: number;
-};
-
 export type IFilter = {
   id: number;
   name: string;
