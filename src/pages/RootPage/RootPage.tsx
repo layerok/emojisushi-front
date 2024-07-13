@@ -2,10 +2,10 @@ import { Navigate, Outlet, useSearchParams } from "react-router-dom";
 import { appStore, useAppStore } from "~stores/appStore";
 import { CitySlug, LOCATION_CONFIRMED_SEARCH_PARAM } from "~common/constants";
 import { QueryOptions } from "@tanstack/react-query";
-import { ICity } from "~api/access/access.api.types";
-import { accessApi } from "~api";
+import { ICity } from "@layerok/emojisushi-js-sdk";
 import { queryClient } from "~query-client";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 const RootPage = () => {
   const [searchParams] = useSearchParams();
@@ -37,11 +37,9 @@ export const loader = async () => {
       allowed.includes(domains[0]) ? domains[0] : allowed[0],
     ],
     queryFn: () =>
-      accessApi
-        .getCity({
-          slug_or_id: allowed.includes(domains[0]) ? domains[0] : allowed[0],
-        })
-        .then((res) => res.data),
+      EmojisushiAgent.getCity({
+        slug_or_id: allowed.includes(domains[0]) ? domains[0] : allowed[0],
+      }).then((res) => res.data),
   };
   const city =
     queryClient.getQueryData<ICity>(query.queryKey) ??

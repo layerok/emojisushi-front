@@ -1,4 +1,4 @@
-import { ICartProduct } from "~api/types";
+import { ICartProduct } from "@layerok/emojisushi-js-sdk";
 import { makeAutoObservable } from "mobx";
 import { Product } from "./Product";
 import { Variant } from "./Variant";

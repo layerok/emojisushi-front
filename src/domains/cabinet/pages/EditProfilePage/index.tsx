@@ -2,15 +2,15 @@ import { FlexBox, Input } from "src/components";
 import { Button } from "~common/ui-components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { authApi } from "~api";
 import { AxiosError } from "axios";
 import { useUser } from "~hooks/use-auth";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { queryClient } from "~query-client";
 import { AUTHENTICATED_USER_QUERY_KEY } from "~common/constants";
-import { IUser } from "~api/types";
+import { IUser } from "@layerok/emojisushi-js-sdk";
 import { Button as CabinetSpecificButton } from "~domains/cabinet/components/Button/Button";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const EditProfilePage = () => {
   const { t } = useTranslation();
@@ -32,7 +32,7 @@ export const EditProfilePage = () => {
       surname: string;
       phone: string;
     }) => {
-      return authApi.updateUser({
+      return EmojisushiAgent.updateUser({
         name,
         surname,
         phone,

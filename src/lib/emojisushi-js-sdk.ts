@@ -1,13 +1,12 @@
-import axios, { AxiosError } from "axios";
+import { createEmojisushiAgent } from "@layerok/emojisushi-js-sdk";
+import { AxiosError } from "axios";
+import { appConfig } from "~config/app";
 import Cookies from "js-cookie";
 import i18n from "~i18n";
 import { getFromLocalStorage } from "~utils/ls.utils";
-import { logApi } from "~api/log/log.api";
-import { appConfig } from "~config/app";
-// import createAuthRefreshInterceptor from "axios-auth-refresh";
 
-const client = axios.create({
-  baseURL: `${process.env.REACT_APP_API_BASE_URL}`,
+export const EmojisushiAgent = createEmojisushiAgent({
+  service: process.env.REACT_APP_API_BASE_URL,
 });
 
 type IParams = {
@@ -16,7 +15,7 @@ type IParams = {
   session_id?: string;
 };
 
-client.interceptors.response.use(
+EmojisushiAgent.axiosClient.interceptors.response.use(
   (res) => res,
   function (error: AxiosError) {
     // 406 - Token is expired
@@ -31,16 +30,19 @@ client.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    logApi.log({
-      message: error.message,
-      response: error.response,
-    });
+    EmojisushiAgent.log(
+      {
+        message: error.message,
+        response: error.response,
+      },
+      appConfig.version
+    );
 
     return Promise.reject(error);
   }
 );
 
-client.interceptors.request.use((config = {}) => {
+EmojisushiAgent.axiosClient.interceptors.request.use((config) => {
   // send session_id from cookies as parameter for each api request
   const { method } = config;
 
@@ -128,5 +130,3 @@ client.interceptors.request.use((config = {}) => {
 // createAuthRefreshInterceptor(client, refreshAuthLogic, {
 //   statusCodes: [401, 406],
 // });
-
-export { client };

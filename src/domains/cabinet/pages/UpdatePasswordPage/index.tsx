@@ -1,7 +1,6 @@
 import { observer } from "mobx-react";
 import * as S from "./styled";
 import { PasswordInput } from "~components";
-import { authApi } from "~api";
 import { transaction } from "mobx";
 import { useTranslation } from "react-i18next";
 import { Form } from "react-router-dom";
@@ -9,6 +8,7 @@ import { useRef, useState } from "react";
 import { AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "~common/ui-components/Button/Button";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 const getError = (error: string | string[] | undefined) => {
   if (Array.isArray(error)) {
@@ -37,7 +37,7 @@ export const UpdatePasswordPage = observer(() => {
       password_confirmation: string;
       password_old: string;
     }) => {
-      return authApi.updateUserPassword({
+      return EmojisushiAgent.updateUserPassword({
         password: password + "",
         password_confirmation: password_confirmation + "",
         password_old: password_old + "",

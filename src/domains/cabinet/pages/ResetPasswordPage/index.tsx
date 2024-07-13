@@ -2,10 +2,10 @@ import { useState } from "react";
 import * as S from "./styled";
 import { FlexBox, Input, PasswordInput } from "~components";
 import { useParams } from "react-router-dom";
-import { authApi } from "src/api";
 import { useTranslation } from "react-i18next";
 import { Page } from "~components/Page";
 import { Button } from "~common/ui-components/Button/Button";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const ResetPasswordPage = () => {
   const { t } = useTranslation();
@@ -69,11 +69,10 @@ export const ResetPasswordPage = () => {
             loading={loading}
             onClick={() => {
               setLoading(true);
-              authApi
-                .resetPassword({
-                  code,
-                  password,
-                })
+              EmojisushiAgent.resetPassword({
+                code,
+                password,
+              })
                 .then((res) => {
                   setIsReset(true);
                 })

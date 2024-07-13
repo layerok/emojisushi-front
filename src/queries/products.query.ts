@@ -1,7 +1,10 @@
-import { menuApi } from "~api";
-import { IGetProductsParams, IGetProductsRes } from "~api/types";
+import {
+  IGetProductsParams,
+  IGetProductsRes,
+} from "@layerok/emojisushi-js-sdk";
 import { QueryOptions } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const productsQueryKeys = {
   def: ["products"],
@@ -24,7 +27,7 @@ export const productsQuery = (
     queryKey: productsQueryKeys.list(restParams),
     queryFn: async ({ signal }) => {
       try {
-        const res = await menuApi.getProducts(restParams, signal);
+        const res = await EmojisushiAgent.getProducts(restParams, signal);
         return res.data;
       } catch (e) {
         if (e instanceof AxiosError) {

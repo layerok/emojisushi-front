@@ -1,6 +1,6 @@
 import * as S from "./styled";
 import Skeleton from "react-loading-skeleton";
-import { ICity } from "~api/types";
+import { ICity } from "@layerok/emojisushi-js-sdk";
 import { MapPinSvg, SvgIcon } from "~components";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";

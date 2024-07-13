@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { ICity, ISpot } from "~api/types";
+import { ICity } from "@layerok/emojisushi-js-sdk";
 
 class AppStore {
   constructor() {

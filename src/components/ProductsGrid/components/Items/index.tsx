@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Product } from "~models";
 import { useSearchParams } from "react-router-dom";
 import { PRODUCTS_LIMIT_STEP } from "~domains/category/constants";
-import { IGetCartRes, IGetWishlistRes } from "~api/types";
+import { IGetCartRes, IGetWishlistRes } from "@layerok/emojisushi-js-sdk";
 import { useMemo } from "react";
 
 type TItemsProps = {

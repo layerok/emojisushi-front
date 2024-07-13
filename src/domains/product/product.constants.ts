@@ -1,5 +1,5 @@
 import { numericSorter } from "~utils/sort.utils";
-import { IProduct } from "~api/menu/menu.api.types";
+import { IProduct } from "@layerok/emojisushi-js-sdk";
 
 export const priceLowSorter = numericSorter<IProduct>(
   (p) => p.prices[0].price,

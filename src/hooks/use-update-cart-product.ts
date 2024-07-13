@@ -1,12 +1,12 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import { CartProduct } from "~models";
-import { cartApi } from "~api";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
-import { ICartProduct, IGetCartRes } from "~api/cart/cart.api.types";
+import { ICartProduct, IGetCartRes } from "@layerok/emojisushi-js-sdk";
 import { arrImmutableReplaceAt } from "~utils/arr.utils";
 import { formatUAHPrice } from "~utils/price.utils";
 import { AxiosError } from "axios";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const useUpdateCartProduct = (
   options: UseMutationOptions<
@@ -24,7 +24,7 @@ export const useUpdateCartProduct = (
   return useMutation({
     mutationFn: (props) => {
       const { item, quantity } = props;
-      return cartApi.addProduct({
+      return EmojisushiAgent.addCartProduct({
         product_id: item.product.id,
         quantity,
         variant_id: item?.variant?.id,

@@ -1,8 +1,8 @@
 import { QueryOptions } from "@tanstack/react-query";
-import { cartApi } from "~api";
-import { IGetCartRes } from "~api/types";
+import { IGetCartRes } from "@layerok/emojisushi-js-sdk";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const cartQuery: QueryOptions<IGetCartRes> = {
   queryKey: ["cart"],
-  queryFn: () => cartApi.getProducts(),
+  queryFn: () => EmojisushiAgent.getCartProducts(),
 };

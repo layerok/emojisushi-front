@@ -1,10 +1,10 @@
 import { QueryOptions } from "@tanstack/react-query";
-import { accessApi } from "~api";
-import { ISpot } from "~api/types";
+import { ISpot } from "@layerok/emojisushi-js-sdk";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const spotsQuery = (): QueryOptions<ISpot[]> => {
   return {
-    queryFn: () => accessApi.getSpots().then((res) => res.data),
+    queryFn: () => EmojisushiAgent.getSpots().then((res) => res.data),
     queryKey: ["spots"],
   };
 };

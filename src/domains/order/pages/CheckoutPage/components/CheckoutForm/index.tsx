@@ -20,9 +20,8 @@ import {
   IUser,
   PaymentMethodCodeEnum,
   ShippingMethodCodeEnum,
-} from "~api/types";
+} from "@layerok/emojisushi-js-sdk";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { orderApi } from "~api";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
 import { AxiosError } from "axios";
@@ -38,6 +37,7 @@ import {
   removeFromLocalStorage,
   setToLocalStorage,
 } from "~utils/ls.utils";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 type TCheckoutFormProps = {
   loading?: boolean | undefined;
@@ -301,7 +301,7 @@ export const CheckoutForm = observer(
       );
 
       try {
-        const res = await orderApi.place({
+        const res = await EmojisushiAgent.placeOrder({
           phone,
           firstname,
           lastname,

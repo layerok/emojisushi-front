@@ -2,7 +2,7 @@ import * as S from "./styled";
 import { CartProduct } from "~models";
 import { SkeletonWrap, SvgIcon } from "~components";
 import { UIButton } from "~common/ui-components/UIButton/UIButton";
-import { IGetCartRes } from "~api/types";
+import { IGetCartRes } from "@layerok/emojisushi-js-sdk";
 import { CheckoutCartItem } from "./components/CheckoutCartItem";
 import { dummyCartProduct } from "~domains/order/mocks";
 import { ModalIDEnum } from "~common/modal.constants";

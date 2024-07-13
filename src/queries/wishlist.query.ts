@@ -1,10 +1,10 @@
-import { wishlistApi } from "~api";
 import { QueryOptions } from "@tanstack/react-query";
-import { IGetWishlistRes } from "~api/types";
+import { IGetWishlistRes } from "@layerok/emojisushi-js-sdk";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const wishlistsQuery: QueryOptions<IGetWishlistRes> = {
   queryKey: ["wishlists", "list", "all"],
   queryFn: () => {
-    return wishlistApi.getList().then((res) => res.data);
+    return EmojisushiAgent.getWishlists().then((res) => res.data);
   },
 };

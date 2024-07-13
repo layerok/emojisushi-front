@@ -3,7 +3,7 @@ import { SvgIcon } from "../SvgIcon";
 import { FlexBox } from "../FlexBox";
 import { CaretUpSvg } from "../svg/CaretUpSvg";
 import { Collapsible } from "../Collapsible";
-import { IOrder } from "~api/types";
+import { IOrder } from "@layerok/emojisushi-js-sdk";
 import { LogoSvg } from "~components/svg/LogoSvg";
 import { useTranslation } from "react-i18next";
 

@@ -6,7 +6,7 @@ import { Modificators } from "./components";
 import { findInCart } from "./utils";
 import { Price } from "~components/Price";
 import { Button } from "~common/ui-components/Button/Button";
-import { IGetCartRes, IGetWishlistRes } from "~api/types";
+import { IGetCartRes, IGetWishlistRes } from "@layerok/emojisushi-js-sdk";
 import {
   ButtonCounter,
   HeartSvg,

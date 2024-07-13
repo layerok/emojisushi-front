@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { Product, Variant } from "~models";
-import { cartApi } from "~api";
 import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
-import { ICartProduct, IGetCartRes } from "~api/cart/cart.api.types";
+import { ICartProduct, IGetCartRes } from "@layerok/emojisushi-js-sdk";
 import { formatUAHPrice } from "~utils/price.utils";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const useAddProduct = () => {
   return useMutation({
@@ -17,7 +17,7 @@ export const useAddProduct = () => {
       quantity: number;
       variant?: Variant;
     }) => {
-      return cartApi.addProduct({
+      return EmojisushiAgent.addCartProduct({
         product_id: product.id,
         quantity,
         variant_id: variant?.id,

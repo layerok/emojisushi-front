@@ -1,5 +1,5 @@
 import Skeleton from "react-loading-skeleton";
-import { ICategory } from "~api/types";
+import { ICategory } from "@layerok/emojisushi-js-sdk";
 import { SvgIcon, LogoSvg } from "~components";
 import * as S from "./styled";
 import { ROUTES } from "~routes";

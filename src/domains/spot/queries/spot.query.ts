@@ -1,15 +1,13 @@
 import { QueryOptions } from "@tanstack/react-query";
-import { accessApi } from "~api";
-import { ISpot } from "~api/types";
+import { ISpot } from "@layerok/emojisushi-js-sdk";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const spotQuery = (slugOrId: string): QueryOptions<ISpot> => {
   return {
     queryFn: () =>
-      accessApi
-        .getSpot({
-          slug_or_id: slugOrId,
-        })
-        .then((res) => res.data),
+      EmojisushiAgent.getSpot({
+        slug_or_id: slugOrId,
+      }).then((res) => res.data),
     queryKey: ["city", slugOrId],
   };
 };

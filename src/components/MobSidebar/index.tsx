@@ -10,7 +10,7 @@ import {
   SvgIcon,
 } from "~components";
 
-import { ICategory, SortKey } from "~api/types";
+import { ICategory, SortKey } from "@layerok/emojisushi-js-sdk";
 import { ChipCloud } from "~components";
 import {
   Form,

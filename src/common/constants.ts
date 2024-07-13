@@ -1,4 +1,4 @@
-import { SortKey } from "~api/menu/menu.api.types";
+import { SortKey } from "@layerok/emojisushi-js-sdk";
 
 export const AUTHENTICATED_USER_QUERY_KEY = ["authenticated-user"];
 

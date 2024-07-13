@@ -1,8 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { useLocation, useRouteError } from "react-router-dom";
-import { logApi } from "~api/log/log.api";
 import { Container } from "~components/Container";
 import { useEffect } from "react";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
+import { appConfig } from "~config/app";
 
 export const DefaultErrorBoundary = () => {
   const error = useRouteError();
@@ -12,11 +13,14 @@ export const DefaultErrorBoundary = () => {
   useEffect(() => {
     if (error instanceof Error) {
       if (process.env.NODE_ENV === "production") {
-        logApi.log({
-          location: location,
-          error: error.message,
-          stack: error.stack,
-        });
+        EmojisushiAgent.log(
+          {
+            location: location,
+            error: error.message,
+            stack: error.stack,
+          },
+          appConfig.version
+        );
       }
     }
   }, [error]);

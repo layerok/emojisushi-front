@@ -15,7 +15,7 @@ import {
   SkeletonWrap,
 } from "~components";
 
-import { ICity, IGetCartRes, IUser } from "~api/types";
+import { ICity, IGetCartRes, IUser } from "@layerok/emojisushi-js-sdk";
 import { ModalIDEnum } from "~common/modal.constants";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";

@@ -1,14 +1,13 @@
 import Cookies from "js-cookie";
 import { configureAuth } from "react-query-auth";
-import { authApi } from "~api";
 import { AUTHENTICATED_USER_QUERY_KEY } from "~common/constants";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const { useUser, useLogin, useRegister, useLogout, AuthLoader } =
   configureAuth({
     userKey: AUTHENTICATED_USER_QUERY_KEY,
     userFn: () =>
-      authApi
-        .fetchUser()
+      EmojisushiAgent.fetchUser()
         .then((res) => res.data)
         .catch((e) => {
           // // 406 simply means that user is not authorzied, no need to throw error in this case
@@ -18,7 +17,7 @@ export const { useUser, useLogin, useRegister, useLogout, AuthLoader } =
           return null;
         }),
     loginFn: async ({ email, password }) => {
-      const res = await authApi.login({
+      const res = await EmojisushiAgent.login({
         email,
         password,
       });
@@ -34,7 +33,7 @@ export const { useUser, useLogin, useRegister, useLogout, AuthLoader } =
       surname,
       agree,
     }) => {
-      const res = await authApi.register({
+      const res = await EmojisushiAgent.register({
         email,
         password,
         password_confirmation,

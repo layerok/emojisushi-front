@@ -2,7 +2,7 @@ import { useBreakpoint, useDebounce } from "~common/hooks";
 import { EqualHeight } from "react-equal-height";
 import { Product } from "~models";
 import { Items, Header } from "./components";
-import { IGetCartRes, IGetWishlistRes } from "~api/types";
+import { IGetCartRes, IGetWishlistRes } from "@layerok/emojisushi-js-sdk";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 

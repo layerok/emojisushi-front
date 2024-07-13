@@ -8,7 +8,7 @@ import {
   productsQuery,
   wishlistsQuery,
 } from "src/queries";
-import { IProduct } from "src/api/types";
+import { IProduct } from "@layerok/emojisushi-js-sdk";
 import { CategorySlug } from "~domains/category/constants";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 

@@ -1,7 +1,7 @@
 import * as S from "./styled";
 import { SvgIcon, CaretDownSvg, FlexBox, DropdownPopover } from "~components";
 import MapLocationPinSrc from "~assets/ui-icons/map-location-pin.svg";
-import { ICity } from "~api/types";
+import { ICity } from "@layerok/emojisushi-js-sdk";
 import { observer } from "mobx-react";
 import { appStore } from "~stores/appStore";
 import { useLocation } from "react-router-dom";

@@ -1,7 +1,6 @@
 import * as S from "./styled";
 import { HeartSvg, CloseSvg, Input, SvgIcon } from "~components";
-import { authApi } from "~api";
-import { IAddress, IUser } from "~api/types";
+import { IAddress, IUser } from "@layerok/emojisushi-js-sdk";
 import { useTranslation } from "react-i18next";
 import { Form } from "react-router-dom";
 import { useRef, useState } from "react";
@@ -13,13 +12,14 @@ import { AUTHENTICATED_USER_QUERY_KEY } from "~common/constants";
 import { arrImmutableDeleteAt } from "~utils/arr.utils";
 import { useTheme } from "styled-components";
 import { Button } from "~common/ui-components/Button/Button";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 const Address = ({ address, user }: { address: IAddress; user: IUser }) => {
   const isDefault = user.customer.default_shipping_address_id === address.id;
 
   const makeAddressDefaultMutation = useMutation({
     mutationFn: (id: number) => {
-      return authApi.makeAddressDefault(id);
+      return EmojisushiAgent.makeAddressDefault(id);
     },
     onSettled: () => {
       queryClient.invalidateQueries(AUTHENTICATED_USER_QUERY_KEY);
@@ -43,7 +43,7 @@ const Address = ({ address, user }: { address: IAddress; user: IUser }) => {
 
   const deleteAddressMutation = useMutation({
     mutationFn: (id: number) => {
-      return authApi.deleteAddress(id);
+      return EmojisushiAgent.deleteAddress(id);
     },
     onSettled: () => {
       queryClient.invalidateQueries(AUTHENTICATED_USER_QUERY_KEY);
@@ -140,7 +140,7 @@ export const SavedAddressesPage = () => {
       city: string;
       two_letters_country_code: string;
     }) => {
-      return authApi.addAddress(data);
+      return EmojisushiAgent.addAddress(data);
     },
     onSettled: () => {
       queryClient.invalidateQueries(AUTHENTICATED_USER_QUERY_KEY);

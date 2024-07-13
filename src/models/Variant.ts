@@ -1,4 +1,4 @@
-import { IVariant } from "~api/types";
+import { IVariant } from "@layerok/emojisushi-js-sdk";
 import { makeAutoObservable } from "mobx";
 
 export class Variant {

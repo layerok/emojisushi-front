@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { ICategory } from "src/api/types";
+import { ICategory } from "@layerok/emojisushi-js-sdk";
 import Skeleton from "react-loading-skeleton";
 import { NavLink } from "react-router-dom";
 import { ROUTES } from "~routes";

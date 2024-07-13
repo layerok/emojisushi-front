@@ -1,10 +1,13 @@
-import { IGetCategoriesParams, IGetCategoriesRes } from "~api/types";
+import {
+  IGetCategoriesParams,
+  IGetCategoriesRes,
+} from "@layerok/emojisushi-js-sdk";
 import { QueryOptions } from "@tanstack/react-query";
-import { menuApi } from "~api";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const categoriesQuery = (
   params: IGetCategoriesParams = {}
 ): QueryOptions<IGetCategoriesRes> => ({
   queryKey: ["categories", "list", params],
-  queryFn: () => menuApi.getCategories(params).then((res) => res.data),
+  queryFn: () => EmojisushiAgent.getCategories(params).then((res) => res.data),
 });

@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import { wishlistApi } from "~api";
 import { queryClient } from "~query-client";
 import { wishlistsQuery } from "~queries";
-import { IGetWishlistRes } from "~api/wishlist/wishlist.api.types";
+import { IGetWishlistRes } from "@layerok/emojisushi-js-sdk";
 import { arrImmutableDeleteAt } from "~utils/arr.utils";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const useAddToWishlist = () => {
   return useMutation({
@@ -14,7 +14,7 @@ export const useAddToWishlist = () => {
       product_id: number;
       quantity: number;
     }) => {
-      return wishlistApi.addItem({
+      return EmojisushiAgent.addWishlistItem({
         product_id,
         quantity,
       });

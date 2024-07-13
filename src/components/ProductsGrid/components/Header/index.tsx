@@ -9,7 +9,7 @@ import {
   SORT_MODE_SEARCH_PARAM,
   SortModeEnum,
 } from "~common/constants";
-import { SortKey } from "~api/menu/menu.api.types";
+import { SortKey } from "@layerok/emojisushi-js-sdk";
 import { useSearchParams, useSubmit } from "react-router-dom";
 
 type THeaderProps = {

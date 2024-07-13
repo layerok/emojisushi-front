@@ -1,8 +1,8 @@
 import { QueryOptions } from "@tanstack/react-query";
-import { paymentApi } from "~api";
-import { IGetPaymentMethodsRes } from "~api/types";
+import { IGetPaymentMethodsRes } from "@layerok/emojisushi-js-sdk";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const paymentQuery: QueryOptions<IGetPaymentMethodsRes> = {
-  queryFn: () => paymentApi.getMethods().then((res) => res.data),
+  queryFn: () => EmojisushiAgent.getPaymentMethods().then((res) => res.data),
   queryKey: ["payment", "list", "all"],
 };

@@ -1,6 +1,6 @@
 import { QueryOptions } from "@tanstack/react-query";
-import { IGetBannersRes } from "~api/banner/banner.api.types";
-import { getBanners } from "~api/banner/banner.api";
+import { IGetBannersRes } from "@layerok/emojisushi-js-sdk";
+import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 const bannerQueryKeys = {
   _def: ["banner"],
@@ -9,5 +9,5 @@ const bannerQueryKeys = {
 
 export const bannerQuery: QueryOptions<IGetBannersRes> = {
   queryKey: bannerQueryKeys.all(),
-  queryFn: getBanners,
+  queryFn: () => EmojisushiAgent.getBanners(),
 };

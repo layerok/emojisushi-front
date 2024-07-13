@@ -2,7 +2,7 @@ import { Navigate, useLoaderData } from "react-router-dom";
 import { ROUTES } from "~routes";
 import { categoriesQuery } from "~queries";
 import { queryClient } from "~query-client";
-import { IGetCategoriesRes } from "~api/menu/menu.api.types";
+import { IGetCategoriesRes } from "@layerok/emojisushi-js-sdk";
 
 const RootIndexPage = () => {
   const loaderData = useLoaderData() as Awaited<ReturnType<typeof loader>>;

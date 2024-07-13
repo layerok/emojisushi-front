@@ -1,4 +1,4 @@
-import { ICategory } from "~api/types";
+import { ICategory } from "@layerok/emojisushi-js-sdk";
 import { SidebarMenu, Socials, WishlistsMenuItem } from "./components";
 import styled from "styled-components";
 import { media } from "~common/custom-media";
