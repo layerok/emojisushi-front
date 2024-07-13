@@ -1,4 +1,12 @@
-import { route, string } from "react-router-typesafe-routes/dom";
+import { route, string, union } from "react-router-typesafe-routes/dom";
+
+const PRODUCT_SORTER_MODES = [
+  "default",
+  "latest",
+  "oldest",
+  "price_low",
+  "price_high",
+] as const;
 
 export const ROUTES = {
   INDEX: route(""),
@@ -9,13 +17,13 @@ export const ROUTES = {
       WISHLIST: route("wishlist", {
         searchParams: {
           q: string(),
-          sort: string(),
+          sort: union(...PRODUCT_SORTER_MODES),
         },
       }),
       SHOW: route(":categorySlug", {
         searchParams: {
           q: string(),
-          sort: string(),
+          sort: union(...PRODUCT_SORTER_MODES),
         },
         params: {
           categorySlug: string(),
