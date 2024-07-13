@@ -8,7 +8,7 @@ import {
   productsQuery,
   wishlistsQuery,
 } from "src/queries";
-import { IProduct, SortKey } from "src/api/types";
+import { IProduct } from "src/api/types";
 import { CategorySlug } from "~domains/category/constants";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 
@@ -18,6 +18,7 @@ import {
   useTypedSearchParams,
 } from "react-router-typesafe-routes/dom";
 import { fuzzySearch as fuzzySearchBase } from "~utils/fuzzySearch";
+import { PRODUCT_SORTERS } from "~domains/product/product.constants";
 
 export const ProductPage = () => {
   const { categorySlug } = useTypedParams(ROUTES.CATEGORY.SHOW);
@@ -35,7 +36,6 @@ export const ProductPage = () => {
   const { data: productQueryRes, isLoading: isProductsLoading } = useQuery(
     productsQuery({
       category_slug: CategorySlug.Menu,
-      sort: sort as SortKey,
       limit: DEFAULT_PRODUCTS_LIMIT,
     })
   );
@@ -62,7 +62,11 @@ export const ProductPage = () => {
       })
     : rawItems;
 
-  const items = searchedItems.map((product) => new Product(product));
+  // todo: implement 'bestseller' and 'rating' sorters
+  const sorter = PRODUCT_SORTERS[sort];
+  const sortedItems = sorter ? searchedItems.sort(sorter) : searchedItems;
+
+  const items = sortedItems.map((product) => new Product(product));
 
   const selectedCategory = (categoryQueryRes?.data || []).find((category) => {
     return category.slug === categorySlug;
