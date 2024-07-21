@@ -18,7 +18,10 @@ export const ResetPasswordModal = NiceModal.create(
 
     const resetPassword = useMutation({
       mutationFn: (email: string) => {
-        return EmojisushiAgent.restorePassword(email);
+        return EmojisushiAgent.restorePassword({
+          email,
+          redirect_url: window.location.origin + "/reset-password",
+        });
       },
     });
 
