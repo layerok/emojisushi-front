@@ -6,8 +6,7 @@ import { Form } from "react-router-dom";
 import { useRef, useState } from "react";
 import { AxiosError } from "axios";
 import { useUser } from "~hooks/use-auth";
-import { useMutation } from "@tanstack/react-query";
-import { queryClient } from "~query-client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AUTHENTICATED_USER_QUERY_KEY } from "~common/constants";
 import { arrImmutableDeleteAt } from "~utils/arr.utils";
 import { useTheme } from "styled-components";
@@ -16,6 +15,7 @@ import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 const Address = ({ address, user }: { address: IAddress; user: IUser }) => {
   const isDefault = user.customer.default_shipping_address_id === address.id;
+  const queryClient = useQueryClient();
 
   const makeAddressDefaultMutation = useMutation({
     mutationFn: (id: number) => {
@@ -119,6 +119,7 @@ const Address = ({ address, user }: { address: IAddress; user: IUser }) => {
 
 export const SavedAddressesPage = () => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const inputRef = useRef(null);
 

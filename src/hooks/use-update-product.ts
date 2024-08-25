@@ -1,6 +1,5 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Product, Variant } from "~models";
-import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
 import { ICartProduct, IGetCartRes } from "@layerok/emojisushi-js-sdk";
 import { arrImmutableDeleteAt, arrImmutableReplaceAt } from "~utils/arr.utils";
@@ -8,6 +7,7 @@ import { formatUAHPrice } from "~utils/price.utils";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const useUpdateProduct = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
       product,

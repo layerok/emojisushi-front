@@ -1,6 +1,9 @@
-import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+import {
+  useMutation,
+  UseMutationOptions,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { CartProduct } from "~models";
-import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
 import { ICartProduct, IGetCartRes } from "@layerok/emojisushi-js-sdk";
 import { arrImmutableReplaceAt } from "~utils/arr.utils";
@@ -21,6 +24,7 @@ export const useUpdateCartProduct = (
     }
   > = {}
 ) => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (props) => {
       const { item, quantity } = props;

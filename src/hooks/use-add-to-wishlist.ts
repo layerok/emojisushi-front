@@ -1,11 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
-import { queryClient } from "~query-client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { wishlistsQuery } from "~queries";
 import { IGetWishlistRes } from "@layerok/emojisushi-js-sdk";
 import { arrImmutableDeleteAt } from "~utils/arr.utils";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const useAddToWishlist = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
       product_id,

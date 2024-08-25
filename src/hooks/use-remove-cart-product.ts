@@ -1,5 +1,8 @@
-import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { queryClient } from "~query-client";
+import {
+  useMutation,
+  UseMutationOptions,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { cartQuery } from "~queries";
 import { ICartProduct, IGetCartRes } from "@layerok/emojisushi-js-sdk";
 import { arrImmutableDeleteAt } from "~utils/arr.utils";
@@ -10,6 +13,7 @@ import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 export const useRemoveCartProduct = (
   options: UseMutationOptions<IGetCartRes, AxiosError, { id: number }> = {}
 ) => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (fnProps) => {
       const { id } = fnProps;

@@ -4,15 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 import { useUser } from "~hooks/use-auth";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { queryClient } from "~query-client";
 import { AUTHENTICATED_USER_QUERY_KEY } from "~common/constants";
 import { IUser } from "@layerok/emojisushi-js-sdk";
 import { Button as CabinetSpecificButton } from "~domains/cabinet/components/Button/Button";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const EditProfilePage = () => {
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: user } = useUser();

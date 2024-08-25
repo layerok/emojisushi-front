@@ -6,16 +6,17 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useRegister } from "~hooks/use-auth";
 import { AxiosError } from "axios";
-import { queryClient } from "~query-client";
 import { cartQuery, wishlistsQuery } from "~queries";
 import NiceModal from "@ebay/nice-modal-react";
 import { ROUTES } from "~routes";
 import { useModal } from "~modal";
 import { ModalIDEnum } from "~common/modal.constants";
 import { TextButton } from "~common/ui-components/TextButton";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const RegisterModal = NiceModal.create(
   ({ redirect_to }: { redirect_to?: string }) => {
+    const queryClient = useQueryClient();
     const modal = useModal();
     const { t } = useTranslation();
     const [checked, setChecked] = useState(false);

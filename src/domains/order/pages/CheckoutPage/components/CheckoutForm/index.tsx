@@ -22,7 +22,6 @@ import {
   ShippingMethodCodeEnum,
 } from "@layerok/emojisushi-js-sdk";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { queryClient } from "~query-client";
 import { cartQuery } from "~queries";
 import { AxiosError } from "axios";
 import { observer } from "mobx-react";
@@ -38,6 +37,7 @@ import {
   setToLocalStorage,
 } from "~utils/ls.utils";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
+import { useQueryClient } from "@tanstack/react-query";
 
 type TCheckoutFormProps = {
   loading?: boolean | undefined;
@@ -142,6 +142,7 @@ export const CheckoutForm = observer(
     const location = useLocation();
     const appStore = useAppStore();
     const showModal = useShowModal();
+    const queryClient = useQueryClient();
 
     const TakeAwaySchema = Yup.object().shape({
       phone: Yup.string()

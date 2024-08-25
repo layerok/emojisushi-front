@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLogin } from "~hooks/use-auth";
 import { AxiosError } from "axios";
-import { queryClient } from "~query-client";
 import { cartQuery, wishlistsQuery } from "~queries";
 import NiceModal from "@ebay/nice-modal-react";
 import { ROUTES } from "~routes";
@@ -13,11 +12,13 @@ import { useModal } from "~modal";
 import { ModalIDEnum } from "~common/modal.constants";
 import { TextButton } from "~common/ui-components/TextButton";
 import { Button } from "~common/ui-components/Button/Button";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const AuthModal = NiceModal.create(
   ({ redirect_to }: { redirect_to?: string }) => {
     const modal = useModal();
     const { t } = useTranslation();
+    const queryClient = useQueryClient();
 
     const login = useLogin();
     const navigate = useNavigate();
