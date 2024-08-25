@@ -36,6 +36,7 @@ export const ROUTES = {
       order_id: string(),
     },
   }),
+  PUBLIC_OFFER: route("public-offer"),
   DELIVERYANDPAYMENT: route("dostavka-i-oplata"),
   CHECKOUT: route("checkout"),
   ACCOUNT: route(

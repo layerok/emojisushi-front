@@ -23,6 +23,12 @@ const routes = [
             ErrorBoundary: DefaultErrorBoundary,
             children: [
               {
+                path: ROUTES.PUBLIC_OFFER.path,
+                lazy: lazy(
+                  () => import("~pages/PublicOfferPage/PublicOfferPage")
+                ),
+              },
+              {
                 path: ROUTES.CATEGORY.path,
                 id: "categories",
                 children: [

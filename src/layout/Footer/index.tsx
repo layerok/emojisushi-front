@@ -5,15 +5,16 @@ import {
   Container,
   SvgIcon,
   SkeletonWrap,
+  NavLink,
 } from "~components";
 import { TelegramSvg, InstagramSvg, PhoneSvg, LogoSvg } from "~components/svg";
-import { Trans } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { useAppStore } from "~stores/appStore";
-import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
 import { useShowModal } from "~modal";
 import { useTheme } from "styled-components";
+import { ROUTES } from "~routes";
 
 type FooterProps = {
   loading?: boolean;
@@ -21,6 +22,7 @@ type FooterProps = {
 
 export const Footer = ({ loading = false }: FooterProps) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   return (
     <S.Footer>
       <Container flexDirection={"row"}>
@@ -32,7 +34,16 @@ export const Footer = ({ loading = false }: FooterProps) => {
               </SvgIcon>
             </SkeletonWrap>
           </S.Logo>
-          <Socials loading={loading} />
+          <S.List>
+            <Phones loading={loading} />
+            <Instagram loading={loading} />
+            <Telegram loading={loading} />
+            <FlexBox flexDirection={"column"}>
+              <NavLink to={ROUTES.PUBLIC_OFFER.path}>
+                {t("public_offer")}
+              </NavLink>
+            </FlexBox>
+          </S.List>
         </S.Left>
         <S.Right>
           <Map loading={loading} />
@@ -60,18 +71,6 @@ const Map = ({ loading = false }: IMapProps) => {
         />
       )}
     </S.StaticMap>
-  );
-};
-
-type ISocialsProps = { loading?: boolean };
-
-const Socials = ({ loading = false }: ISocialsProps) => {
-  return (
-    <S.List>
-      <Phones loading={loading} />
-      <Instagram loading={loading} />
-      <Telegram loading={loading} />
-    </S.List>
   );
 };
 
