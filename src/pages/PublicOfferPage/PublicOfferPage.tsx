@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren } from "react";
 import { flexbox, FlexboxProps } from "styled-system";
 import { media } from "~common/custom-media";
 
@@ -30,9 +30,6 @@ const Paragraph = styled.p`
 `;
 
 export const PublicOfferPage = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
   return (
     <Container>
       <H2>ПУБЛІЧНИЙ ДОГОВІР (ОФЕРТА)</H2>

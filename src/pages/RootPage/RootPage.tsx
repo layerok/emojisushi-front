@@ -1,4 +1,9 @@
-import { Navigate, Outlet, useSearchParams } from "react-router-dom";
+import {
+  Navigate,
+  Outlet,
+  ScrollRestoration,
+  useSearchParams,
+} from "react-router-dom";
 import { appStore, useAppStore } from "~stores/appStore";
 import { CitySlug, LOCATION_CONFIRMED_SEARCH_PARAM } from "~common/constants";
 import { QueryOptions } from "@tanstack/react-query";
@@ -23,7 +28,12 @@ const RootPage = () => {
       />
     );
   }
-  return <Outlet />;
+  return (
+    <>
+      <Outlet />
+      <ScrollRestoration />
+    </>
+  );
 };
 
 export const Component = RootPage;
