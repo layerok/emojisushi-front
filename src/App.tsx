@@ -7,7 +7,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from "react-loading-skeleton";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { queryClient } from "~query-client";
+import { queryClient } from "~lib/query-client";
 import { Suspense } from "react";
 import { Loader } from "~components";
 import NiceModal from "@ebay/nice-modal-react";

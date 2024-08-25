@@ -3,7 +3,7 @@ import { appStore, useAppStore } from "~stores/appStore";
 import { CitySlug, LOCATION_CONFIRMED_SEARCH_PARAM } from "~common/constants";
 import { QueryOptions } from "@tanstack/react-query";
 import { ICity } from "@layerok/emojisushi-js-sdk";
-import { queryClient } from "~query-client";
+import { queryClient } from "~lib/query-client";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
