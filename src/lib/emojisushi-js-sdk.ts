@@ -2,7 +2,7 @@ import { createEmojisushiAgent } from "@layerok/emojisushi-js-sdk";
 import { AxiosError } from "axios";
 import { appConfig } from "~config/app";
 import Cookies from "js-cookie";
-import i18n from "~i18n";
+import i18n from "~lib/react-i18next";
 import { getFromLocalStorage } from "~utils/ls.utils";
 
 export const EmojisushiAgent = createEmojisushiAgent({
