@@ -15,8 +15,6 @@ import { CheckoutForm } from "~domains/order/pages/CheckoutPage/components/Check
 import { CheckoutCart } from "~domains/order/pages/CheckoutPage/components/CheckoutCart";
 import * as S from "./styled";
 
-// todo: scroll the page up when users visits the checkout page
-
 const CheckoutPage = () => {
   const { t } = useTranslation();
 
