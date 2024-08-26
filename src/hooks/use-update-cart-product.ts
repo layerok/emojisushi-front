@@ -5,11 +5,10 @@ import {
 } from "@tanstack/react-query";
 import { CartProduct } from "~models";
 import { cartQuery } from "~queries";
-import { ICartProduct, IGetCartRes } from "@layerok/emojisushi-js-sdk";
-import { arrImmutableReplaceAt } from "~utils/arr.utils";
-import { formatUAHPrice } from "~utils/price.utils";
+import { IGetCartRes } from "@layerok/emojisushi-js-sdk";
 import { AxiosError } from "axios";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
+import { updateCartProductUpdater } from "~common/queryDataUpdaters";
 
 export const useUpdateCartProduct = (
   options: UseMutationOptions<
@@ -39,52 +38,17 @@ export const useUpdateCartProduct = (
 
       const previousCart = queryClient.getQueryData(cartQuery.queryKey);
 
-      queryClient.setQueryData(cartQuery.queryKey, (old: IGetCartRes) => {
-        const cartProduct = old.data.find(
-          (cartProduct) => cartProduct.product.id === item.product.id
-        );
-
-        if (cartProduct) {
-          const index = old.data.indexOf(cartProduct);
-          const optimisticQuantity = cartProduct.quantity + quantity;
-
-          if (optimisticQuantity > 0) {
-            const optimisticCartProduct = {
-              ...cartProduct,
-              quantity: cartProduct.quantity + quantity,
-            };
-            const optimisticCartProducts = arrImmutableReplaceAt(
-              old.data,
-              index,
-              optimisticCartProduct
-            );
-            const optimisticTotal = optimisticCartProducts.reduce(
-              (acc, cartProduct: ICartProduct) => {
-                return (
-                  acc + (cartProduct.quantity * cartProduct.price.UAH) / 100
-                );
-              },
-              0
-            );
-
-            return {
-              ...old,
-              data: optimisticCartProducts,
-              total: formatUAHPrice(optimisticTotal),
-              totalQuantity: optimisticCartProducts.reduce(
-                (acc, item: ICartProduct) => acc + item.quantity,
-                0
-              ),
-            };
-          }
-        }
-
-        return old;
-      });
+      queryClient.setQueryData(
+        cartQuery.queryKey,
+        updateCartProductUpdater(item, quantity)
+      );
 
       return {
         previousCart,
       };
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(cartQuery.queryKey, data);
     },
     onError: (err, data, context) => {
       queryClient.setQueryData(cartQuery.queryKey, context.previousCart);

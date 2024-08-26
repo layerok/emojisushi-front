@@ -4,11 +4,10 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { cartQuery } from "~queries";
-import { ICartProduct, IGetCartRes } from "@layerok/emojisushi-js-sdk";
-import { arrImmutableDeleteAt } from "~utils/arr.utils";
-import { formatUAHPrice } from "~utils/price.utils";
+import { IGetCartRes } from "@layerok/emojisushi-js-sdk";
 import { AxiosError } from "axios";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
+import { removeCartProductUpdater } from "~common/queryDataUpdaters";
 
 export const useRemoveCartProduct = (
   options: UseMutationOptions<IGetCartRes, AxiosError, { id: number }> = {}
@@ -22,35 +21,10 @@ export const useRemoveCartProduct = (
     onMutate: async ({ id }) => {
       await queryClient.cancelQueries(cartQuery);
 
-      queryClient.setQueryData(cartQuery.queryKey, (old: IGetCartRes) => {
-        const cartProduct = old.data.find(
-          (cartProduct) => cartProduct.id == id
-        );
-
-        if (cartProduct) {
-          const index = old.data.indexOf(cartProduct);
-
-          const optimisticCartProducts = arrImmutableDeleteAt(old.data, index);
-          const optimisticTotal = optimisticCartProducts.reduce(
-            (acc, cartProduct: ICartProduct) => {
-              return acc + (cartProduct.quantity * cartProduct.price.UAH) / 100;
-            },
-            0
-          );
-
-          return {
-            ...old,
-            data: optimisticCartProducts,
-            total: formatUAHPrice(optimisticTotal),
-            totalQuantity: optimisticCartProducts.reduce(
-              (acc, item: ICartProduct) => acc + item.quantity,
-              0
-            ),
-          };
-        }
-
-        return old;
-      });
+      queryClient.setQueryData(
+        cartQuery.queryKey,
+        removeCartProductUpdater(id)
+      );
     },
     ...options,
   });
