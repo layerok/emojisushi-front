@@ -31,7 +31,12 @@ const RootPage = () => {
   return (
     <>
       <Outlet />
-      <ScrollRestoration />
+      <ScrollRestoration
+        getKey={(location, matches) => {
+          // default behavior
+          return location.key;
+        }}
+      />
     </>
   );
 };

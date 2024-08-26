@@ -36,11 +36,11 @@ export const useUpdateProduct = () => {
         previousCart,
       };
     },
-    onSuccess: (data) => {
-      queryClient.setQueryData(cartQuery.queryKey, data);
-    },
     onError: (err, newCartProduct, context) => {
       queryClient.setQueryData(cartQuery.queryKey, context.previousCart);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(cartQuery.queryKey);
     },
   });
 };

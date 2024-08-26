@@ -36,7 +36,9 @@ const MenuLayout = () => {
                       PRODUCT_ID_SEARCH_QUERY_PARAM,
                       banner.product.id + ""
                     );
-                    setSearchParams(searchParams);
+                    setSearchParams(searchParams, {
+                      preventScrollReset: true,
+                    });
                     showModal(ModalIDEnum.ProductModal);
                   }
                 },

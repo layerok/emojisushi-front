@@ -53,7 +53,12 @@ export const ProductModal = NiceModal.create(() => {
   const closeModal = () => {
     modal.remove();
     searchParams.delete(PRODUCT_ID_SEARCH_QUERY_PARAM);
-    navigate({ search: searchParams.toString() });
+    navigate(
+      { search: searchParams.toString() },
+      {
+        preventScrollReset: true,
+      }
+    );
   };
 
   const productRaw = (data?.data || []).find((products) => {

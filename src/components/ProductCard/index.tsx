@@ -101,7 +101,12 @@ export const ProductCard = (props: ProductCardProps) => {
   const openDetailedProductModal = () => {
     showModal(ModalIDEnum.ProductModal);
     searchParams.set(PRODUCT_ID_SEARCH_QUERY_PARAM, product.id + "");
-    navigate({ search: searchParams.toString() });
+    navigate(
+      { search: searchParams.toString() },
+      {
+        preventScrollReset: true,
+      }
+    );
   };
   const handleFavouriteButtonClick = () => {
     addToWishlist({
