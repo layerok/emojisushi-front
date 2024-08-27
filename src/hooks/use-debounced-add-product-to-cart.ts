@@ -44,7 +44,7 @@ export function useDebouncedAddProductToCart({
     onSettled: () => {
       if (
         queryClient.isMutating(cartProductUpdateMutation) === 1 &&
-        !waitingForDebounce
+        !waitingForDebounce.current
       ) {
         queryClient.invalidateQueries(cartQuery);
       }
