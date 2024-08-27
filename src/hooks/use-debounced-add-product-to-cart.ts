@@ -15,10 +15,8 @@ const cartProductUpdateMutation = {
 };
 
 export function useDebouncedAddProductToCart({
-  onDelete,
   delay = 1000,
 }: {
-  onDelete?: () => boolean;
   delay?: number;
 } = {}) {
   const queryClient = useQueryClient();
@@ -76,12 +74,6 @@ export function useDebouncedAddProductToCart({
       currentCount: number;
     }) =>
     () => {
-      if (currentCount + delta <= 0) {
-        const preventDefault = onDelete?.();
-        if (preventDefault) {
-          return;
-        }
-      }
       waitingForDebounce.current = true;
       accumulatedQuantityChange.current += delta;
       queryClient.cancelQueries({

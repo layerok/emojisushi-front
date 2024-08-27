@@ -43,17 +43,37 @@ const CartItem = (props: { item: CartProduct }) => {
   const [deleteConfirmationPopoverOpen, setDeleteConfirmationPopoverOpen] =
     useState(false);
 
-  const { mutate: removeCartProduct } = useRemoveCartProduct();
-
   const variant = item.variant;
   const product = item.product;
   const count = item?.quantity || 0;
 
-  const { createUpdateHandler } = useDebouncedAddProductToCart({
-    onDelete: () => {
+  const { createUpdateHandler } = useDebouncedAddProductToCart();
+
+  const handleDecrement = () => {
+    if (count - 1 <= 0) {
       setDeleteConfirmationPopoverOpen(true);
-      return true;
-    },
+      return;
+    }
+    createUpdateHandler({
+      delta: -1,
+      product: product,
+      variant: variant,
+      currentCount: count,
+    })();
+  };
+
+  const handleIncrement = createUpdateHandler({
+    delta: 1,
+    product: product,
+    variant: variant,
+    currentCount: count,
+  });
+
+  const handleDelete = createUpdateHandler({
+    delta: -count,
+    product: product,
+    variant: variant,
+    currentCount: count,
   });
 
   return (
@@ -62,11 +82,7 @@ const CartItem = (props: { item: CartProduct }) => {
         <ConfirmActionPopover
           open={deleteConfirmationPopoverOpen}
           onOpenChange={setDeleteConfirmationPopoverOpen}
-          onConfirm={() =>
-            removeCartProduct({
-              id: item.id,
-            })
-          }
+          onConfirm={handleDelete}
           text={t("cartModal.remove")}
         >
           <SvgIcon
@@ -94,18 +110,8 @@ const CartItem = (props: { item: CartProduct }) => {
         <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
           <S.ItemCounter>
             <LightCounter
-              handleIncrement={createUpdateHandler({
-                delta: 1,
-                product: product,
-                variant: variant,
-                currentCount: count,
-              })}
-              handleDecrement={createUpdateHandler({
-                delta: -1,
-                product: product,
-                variant: variant,
-                currentCount: count,
-              })}
+              handleIncrement={handleIncrement}
+              handleDecrement={handleDecrement}
               count={count}
             />
           </S.ItemCounter>
@@ -195,7 +201,24 @@ export const CartModal = NiceModal.create(() => {
           {items.length !== 0 && (
             <S.Items style={itemsContainerStyles}>
               {items.map((item, i) => (
-                <CartItem key={item.id} item={item} />
+                <CartItem
+                  // don't use item.id as key,
+                  //
+                  // When user clicks "Add to cart" button
+                  // We lie to the user that the item has been added to cart
+                  // In reality we created fake item in the cart on the client side
+                  // as though the server did it.
+                  // So the user doesn't have to wait until server responds.
+                  // In the background we send request to the server to add product to cart for real
+                  // Until server responds we render fake cart item with fake id
+                  // If we use fake id as key for CartItem component,
+                  // then the CartItem component will be fully remounted when server responds, loosing its state.
+                  // we want to avoid that, so we use productId + variantId as key
+                  key={[item.productId, item.variantId]
+                    .filter(Boolean)
+                    .join(".")}
+                  item={item}
+                />
               ))}
             </S.Items>
           )}
