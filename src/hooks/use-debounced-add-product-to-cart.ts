@@ -7,6 +7,9 @@ import { updateProductUpdater } from "~common/queryDataUpdaters";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 let inBatch = 0;
+let waitingForDebounce = {
+  current: false,
+};
 
 export function useDebouncedAddProductToCart({
   onDelete,
@@ -40,8 +43,8 @@ export function useDebouncedAddProductToCart({
   });
   const queryClient = useQueryClient();
 
-  const waitingForDebounce = useRef(false);
   const accumulateQuantityChange = useRef(0);
+
   const [debouncedAddProductToCart, cancelAddingProductToCart] = useDebounce(
     addProductToCart,
     delay,
@@ -68,19 +71,20 @@ export function useDebouncedAddProductToCart({
       currentCount: number;
     }) =>
     () => {
-      waitingForDebounce.current = true;
-      accumulateQuantityChange.current += delta;
-      queryClient.cancelQueries({
-        queryKey: cartQuery.queryKey,
-      });
-      const previousCart = queryClient.getQueryData(cartQuery.queryKey);
-
-      if (currentCount + accumulateQuantityChange.current <= 0) {
+      if (currentCount + delta <= 0) {
         const preventDefault = onDelete?.();
         if (preventDefault) {
           return;
         }
       }
+      queryClient.cancelQueries({
+        queryKey: cartQuery.queryKey,
+      });
+      const previousCart = queryClient.getQueryData(cartQuery.queryKey);
+
+      waitingForDebounce.current = true;
+
+      accumulateQuantityChange.current += delta;
       queryClient.setQueryData(
         cartQuery.queryKey,
         updateProductUpdater(product, delta, variant)

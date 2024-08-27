@@ -47,6 +47,7 @@ const CartItem = (props: { item: CartProduct }) => {
 
   const variant = item.variant;
   const product = item.product;
+  const count = item?.quantity || 0;
 
   const { createUpdateHandler } = useDebouncedAddProductToCart({
     onDelete: () => {
@@ -54,8 +55,6 @@ const CartItem = (props: { item: CartProduct }) => {
       return true;
     },
   });
-
-  const count = item?.quantity || 0;
 
   return (
     <S.Item>
