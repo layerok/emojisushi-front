@@ -6,9 +6,12 @@ import { cartQuery } from "~queries";
 import { updateProductUpdater } from "~common/queryDataUpdaters";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
-let inBatch = 0;
 let waitingForDebounce = {
   current: false,
+};
+
+const cartProductUpdateMutation = {
+  mutationKey: ["updateCartItemQuantity"],
 };
 
 export function useDebouncedAddProductToCart({
@@ -18,7 +21,11 @@ export function useDebouncedAddProductToCart({
   onDelete?: () => boolean;
   delay?: number;
 } = {}) {
+  const queryClient = useQueryClient();
+  const accumulatedQuantityChange = useRef(0);
+
   const { mutate: addProductToCart } = useMutation({
+    ...cartProductUpdateMutation,
     mutationFn: ({
       product,
       quantity,
@@ -35,22 +42,20 @@ export function useDebouncedAddProductToCart({
       });
     },
     onSettled: () => {
-      inBatch -= 1;
-      if (inBatch === 0 && !waitingForDebounce.current) {
-        queryClient.invalidateQueries(cartQuery.queryKey);
+      if (
+        queryClient.isMutating(cartProductUpdateMutation) === 1 &&
+        !waitingForDebounce
+      ) {
+        queryClient.invalidateQueries(cartQuery);
       }
     },
   });
-  const queryClient = useQueryClient();
-
-  const accumulateQuantityChange = useRef(0);
 
   const [debouncedAddProductToCart, cancelAddingProductToCart] = useDebounce(
     addProductToCart,
     delay,
     useCallback(() => {
-      accumulateQuantityChange.current = 0;
-      inBatch += 1;
+      accumulatedQuantityChange.current = 0;
       waitingForDebounce.current = false;
       queryClient.cancelQueries({
         queryKey: cartQuery.queryKey,
@@ -77,35 +82,26 @@ export function useDebouncedAddProductToCart({
           return;
         }
       }
+      waitingForDebounce.current = true;
+      accumulatedQuantityChange.current += delta;
       queryClient.cancelQueries({
         queryKey: cartQuery.queryKey,
       });
-      const previousCart = queryClient.getQueryData(cartQuery.queryKey);
 
-      waitingForDebounce.current = true;
-
-      accumulateQuantityChange.current += delta;
       queryClient.setQueryData(
         cartQuery.queryKey,
         updateProductUpdater(product, delta, variant)
       );
 
-      if (accumulateQuantityChange.current === 0) {
+      if (accumulatedQuantityChange.current === 0) {
         // don't make unnecessary request
         cancelAddingProductToCart();
       } else {
-        debouncedAddProductToCart(
-          {
-            variant: variant,
-            product: product,
-            quantity: accumulateQuantityChange.current,
-          },
-          {
-            onError: () => {
-              queryClient.setQueryData(cartQuery.queryKey, previousCart);
-            },
-          }
-        );
+        debouncedAddProductToCart({
+          variant: variant,
+          product: product,
+          quantity: accumulatedQuantityChange.current,
+        });
       }
     };
 
