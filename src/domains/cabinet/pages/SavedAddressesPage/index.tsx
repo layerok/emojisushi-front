@@ -19,7 +19,9 @@ const Address = ({ address, user }: { address: IAddress; user: IUser }) => {
 
   const makeAddressDefaultMutation = useMutation({
     mutationFn: (id: number) => {
-      return EmojisushiAgent.makeAddressDefault(id);
+      return EmojisushiAgent.makeAddressDefault({
+        id,
+      });
     },
     onSettled: () => {
       queryClient.invalidateQueries(AUTHENTICATED_USER_QUERY_KEY);
@@ -43,7 +45,9 @@ const Address = ({ address, user }: { address: IAddress; user: IUser }) => {
 
   const deleteAddressMutation = useMutation({
     mutationFn: (id: number) => {
-      return EmojisushiAgent.deleteAddress(id);
+      return EmojisushiAgent.deleteAddress({
+        id,
+      });
     },
     onSettled: () => {
       queryClient.invalidateQueries(AUTHENTICATED_USER_QUERY_KEY);

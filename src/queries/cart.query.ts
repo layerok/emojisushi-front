@@ -4,5 +4,11 @@ import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const cartQuery: QueryOptions<IGetCartRes> = {
   queryKey: ["cart"],
-  queryFn: () => EmojisushiAgent.getCartProducts(),
+  queryFn: ({ signal }) =>
+    EmojisushiAgent.getCartProducts(
+      {},
+      {
+        signal,
+      }
+    ),
 };

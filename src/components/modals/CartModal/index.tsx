@@ -24,12 +24,12 @@ import { useModal } from "~modal";
 import { Button } from "~common/ui-components/Button/Button";
 import { ConfirmActionPopover } from "~components/ConfirmActionPopover";
 
-import { useBreakpoint2, useDebounce } from "~common/hooks";
+import { useBreakpoint2 } from "~common/hooks";
 
 import { useRemoveCartProduct } from "~hooks/use-remove-cart-product";
 
 import { Times } from "~assets/ui-icons";
-import { useAddProductToCart } from "~hooks/use-add-product-to-cart";
+import { useDebouncedAddProductToCart } from "~hooks/use-debounced-add-product-to-cart";
 
 // todo: clear outdated products from the card. You can do it on the frontend or on the backend
 const CartItem = (props: { item: CartProduct }) => {
@@ -44,53 +44,18 @@ const CartItem = (props: { item: CartProduct }) => {
     useState(false);
 
   const { mutate: removeCartProduct } = useRemoveCartProduct();
-  const { mutate: addProductToCart } = useAddProductToCart();
 
-  const [debouncedAddProductToCart, cancelAddingProductToCart] = useDebounce(
-    addProductToCart,
-    500
-  );
-
-  const cachedCount = item?.quantity || 0;
-  const [optimisticCount, setOptimisticCount] = useState(cachedCount);
-  const [isOptimistic, setIsOptimistic] = useState(false);
   const variant = item.variant;
   const product = item.product;
 
-  const count = isOptimistic ? optimisticCount : cachedCount;
-
-  const createUpdateHandler = (quantity: number) => () => {
-    const _optimisticCount = isOptimistic ? optimisticCount : cachedCount;
-
-    setIsOptimistic(true);
-    const nextOptimisticCount = _optimisticCount + quantity;
-
-    if (nextOptimisticCount <= 0) {
+  const { createUpdateHandler } = useDebouncedAddProductToCart({
+    onDelete: () => {
       setDeleteConfirmationPopoverOpen(true);
-      return;
-    }
-    setOptimisticCount(nextOptimisticCount);
+      return true;
+    },
+  });
 
-    const diff = nextOptimisticCount - cachedCount;
-
-    if (diff === 0) {
-      // don't make unnecessary request
-      cancelAddingProductToCart();
-    } else {
-      debouncedAddProductToCart(
-        {
-          variant: variant,
-          product: product,
-          quantity: diff,
-        },
-        {
-          onSettled: () => {
-            setIsOptimistic(false);
-          },
-        }
-      );
-    }
-  };
+  const count = item?.quantity || 0;
 
   return (
     <S.Item>
@@ -130,8 +95,18 @@ const CartItem = (props: { item: CartProduct }) => {
         <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
           <S.ItemCounter>
             <LightCounter
-              handleIncrement={createUpdateHandler(1)}
-              handleDecrement={createUpdateHandler(-1)}
+              handleIncrement={createUpdateHandler({
+                delta: 1,
+                product: product,
+                variant: variant,
+                currentCount: count,
+              })}
+              handleDecrement={createUpdateHandler({
+                delta: -1,
+                product: product,
+                variant: variant,
+                currentCount: count,
+              })}
               count={count}
             />
           </S.ItemCounter>

@@ -40,6 +40,8 @@ export const { useUser, useLogin, useRegister, useLogout, AuthLoader } =
         name,
         surname,
         agree,
+        auto_login: true,
+        activate: true,
       });
       const { token } = res.data.data;
       Cookies.set("jwt", token);

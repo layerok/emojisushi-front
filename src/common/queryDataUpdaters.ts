@@ -1,4 +1,4 @@
-import { CartProduct, Product, Variant } from "~models";
+import { Product, Variant } from "~models";
 import {
   ICartProduct,
   IGetCartRes,

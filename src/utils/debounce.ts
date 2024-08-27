@@ -1,9 +1,14 @@
-export function debounce(fn, delay) {
+export function debounce<R, A extends any[]>(
+  fn: (...args: A) => R,
+  delay: number,
+  onFire?: () => void
+) {
   let timer;
   return [
-    (...args) => {
+    (...args: A) => {
       clearTimeout(timer);
       timer = setTimeout(() => {
+        onFire?.();
         fn(...args);
       }, delay);
     },

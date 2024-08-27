@@ -27,7 +27,9 @@ export const productsQuery = (
     queryKey: productsQueryKeys.list(restParams),
     queryFn: async ({ signal }) => {
       try {
-        const res = await EmojisushiAgent.getProducts(restParams, signal);
+        const res = await EmojisushiAgent.getProducts(restParams, {
+          signal,
+        });
         return res.data;
       } catch (e) {
         if (e instanceof AxiosError) {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import NiceModal from "@ebay/nice-modal-react";
 import { useModal } from "~modal";
 import { BaseModal, Price, SkeletonWrap, SvgIcon } from "~components";
@@ -7,7 +7,7 @@ import { useTheme } from "styled-components";
 import { Times } from "~assets/ui-icons";
 import MyCounter from "~components/MyCounter";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   cartQuery,
   DEFAULT_PRODUCTS_LIMIT,
@@ -21,10 +21,12 @@ import { findInCart } from "~components/ProductCard/utils";
 import { useTranslation } from "react-i18next";
 import { CategorySlug } from "~domains/category/constants";
 import { useDebounce } from "~common/hooks";
+import { updateProductUpdater } from "~common/queryDataUpdaters";
 
 export const ProductModal = NiceModal.create(() => {
   const modal = useModal();
   const theme = useTheme();
+  const queryClient = useQueryClient();
 
   const { t } = useTranslation();
 
@@ -75,28 +77,31 @@ export const ProductModal = NiceModal.create(() => {
 
   const cartProduct = product && findInCart(cartProducts, product, undefined);
   const variant = cartProduct?.variant;
-  const cachedCount = cartProduct?.quantity || 0;
 
   const [debouncedAddProductToCart, cancelAddingProductToCart] = useDebounce(
     addProductToCart,
-    500
+    500,
+    useCallback(() => {
+      accumulateQuantityChange.current = 0;
+    }, [])
   );
 
-  const [optimisticCount, setOptimisticCount] = useState(cachedCount);
-  const [isOptimistic, setIsOptimistic] = useState(false);
-
-  const count = isOptimistic ? optimisticCount : cachedCount;
+  const count = cartProduct?.quantity || 0;
+  const accumulateQuantityChange = useRef(0);
 
   const createUpdateHandler = (quantity: number) => () => {
-    const _optimisticCount = isOptimistic ? optimisticCount : cachedCount;
+    accumulateQuantityChange.current += quantity;
 
-    setIsOptimistic(true);
-    const nextOptimisticCount = _optimisticCount + quantity;
-    setOptimisticCount(nextOptimisticCount);
+    queryClient.cancelQueries(cartQuery);
 
-    const diff = nextOptimisticCount - cachedCount;
+    const previousCart = queryClient.getQueryData(cartQuery.queryKey);
 
-    if (diff === 0) {
+    queryClient.setQueryData(
+      cartQuery.queryKey,
+      updateProductUpdater(product, quantity, variant)
+    );
+
+    if (accumulateQuantityChange.current === 0) {
       // don't make unnecessary request
       cancelAddingProductToCart();
     } else {
@@ -104,11 +109,11 @@ export const ProductModal = NiceModal.create(() => {
         {
           variant: variant,
           product: product,
-          quantity: diff,
+          quantity: accumulateQuantityChange.current,
         },
         {
-          onSettled: () => {
-            setIsOptimistic(false);
+          onError: () => {
+            queryClient.setQueryData(cartQuery.queryKey, previousCart);
           },
         }
       );

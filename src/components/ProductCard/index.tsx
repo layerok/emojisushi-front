@@ -1,7 +1,7 @@
 import * as S from "./styled";
 import { EqualHeightElement } from "react-equal-height";
-import React, { useMemo, useState } from "react";
-import { CartProduct, Product } from "~models";
+import React, { useCallback, useMemo, useRef, useState } from "react";
+import { CartProduct, Product, Variant } from "~models";
 import { Modificators } from "./components";
 import { findInCart } from "./utils";
 import { Price } from "~components/Price";
@@ -26,8 +26,11 @@ import Skeleton from "react-loading-skeleton";
 import { useAddToWishlist } from "~hooks/use-add-to-wishlist";
 import { useTheme } from "styled-components";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { PRODUCT_ID_SEARCH_QUERY_PARAM } from "~queries";
+import { cartQuery, PRODUCT_ID_SEARCH_QUERY_PARAM } from "~queries";
 import { useDebounce } from "~common/hooks";
+import { updateProductUpdater } from "~common/queryDataUpdaters";
+import { useQueryClient } from "@tanstack/react-query";
+import { useDebouncedAddProductToCart } from "~hooks/use-debounced-add-product-to-cart";
 
 type ProductCardProps = {
   product?: Product;
@@ -68,52 +71,16 @@ export const ProductCard = (props: ProductCardProps) => {
     [product, variant]
   );
 
+  const count = cartProduct?.quantity || 0;
+
+  const { createUpdateHandler } = useDebouncedAddProductToCart();
+
   const favorite = product?.isInWishlists(wishlists || []);
 
   const oldPrice = product?.getOldPrice(variant)?.price_formatted;
   const newPrice = product?.getNewPrice(variant)?.price_formatted;
 
-  const { mutate: addProductToCart } = useAddProductToCart();
   const { mutate: addToWishlist } = useAddToWishlist();
-
-  const [debouncedAddProductToCart, cancelAddingProductToCart] = useDebounce(
-    addProductToCart,
-    500
-  );
-
-  const cachedCount = cartProduct?.quantity || 0;
-  const [optimisticCount, setOptimisticCount] = useState(cachedCount);
-  const [isOptimistic, setIsOptimistic] = useState(false);
-
-  const count = isOptimistic ? optimisticCount : cachedCount;
-
-  const createUpdateHandler = (quantity: number) => () => {
-    const _optimisticCount = isOptimistic ? optimisticCount : cachedCount;
-
-    setIsOptimistic(true);
-    const nextOptimisticCount = _optimisticCount + quantity;
-    setOptimisticCount(nextOptimisticCount);
-
-    const diff = nextOptimisticCount - cachedCount;
-
-    if (diff === 0) {
-      // don't make unnecessary request
-      cancelAddingProductToCart();
-    } else {
-      debouncedAddProductToCart(
-        {
-          variant: variant,
-          product: product,
-          quantity: diff,
-        },
-        {
-          onSettled: () => {
-            setIsOptimistic(false);
-          },
-        }
-      );
-    }
-  };
 
   const [searchParams] = useSearchParams();
 
@@ -130,7 +97,7 @@ export const ProductCard = (props: ProductCardProps) => {
   const handleFavouriteButtonClick = () => {
     addToWishlist({
       product_id: product.id,
-      quantity: cachedCount,
+      quantity: count,
     });
   };
 
@@ -192,8 +159,18 @@ export const ProductCard = (props: ProductCardProps) => {
         <Price loading={loading} oldPrice={oldPrice} newPrice={newPrice} />
         {count ? (
           <ButtonCounter
-            handleIncrement={createUpdateHandler(1)}
-            handleDecrement={createUpdateHandler(-1)}
+            handleIncrement={createUpdateHandler({
+              delta: 1,
+              product,
+              variant,
+              currentCount: count,
+            })}
+            handleDecrement={createUpdateHandler({
+              delta: -1,
+              product,
+              variant,
+              currentCount: count,
+            })}
             count={count}
           />
         ) : (
@@ -207,7 +184,12 @@ export const ProductCard = (props: ProductCardProps) => {
               </StartAdornment>
             }
             showSkeleton={loading}
-            onClick={createUpdateHandler(1)}
+            onClick={createUpdateHandler({
+              delta: 1,
+              product,
+              variant,
+              currentCount: count,
+            })}
           >
             {t("order.order_btn")}
           </Button>
