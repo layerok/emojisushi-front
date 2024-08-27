@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import NiceModal from "@ebay/nice-modal-react";
 import { useModal } from "~modal";
 import { BaseModal, Price, SkeletonWrap, SvgIcon } from "~components";
@@ -16,11 +16,11 @@ import {
 } from "~queries";
 import Skeleton from "react-loading-skeleton";
 import { CartProduct, Product } from "~models";
-import { useUpdateProduct } from "~hooks/use-update-product";
-import { useAddProduct } from "~hooks/use-add-product";
+import { useAddProductToCart } from "~hooks/use-add-product-to-cart";
 import { findInCart } from "~components/ProductCard/utils";
 import { useTranslation } from "react-i18next";
 import { CategorySlug } from "~domains/category/constants";
+import { useDebounce } from "~common/hooks";
 
 export const ProductModal = NiceModal.create(() => {
   const modal = useModal();
@@ -69,26 +69,49 @@ export const ProductModal = NiceModal.create(() => {
   const oldPrice = product?.getOldPrice(undefined)?.price_formatted;
   const newPrice = product?.getNewPrice(undefined)?.price_formatted;
 
-  const { mutate: updateProductQuantity } = useUpdateProduct();
-  const { mutate: addProductToCart } = useAddProduct();
+  const { mutate: addProductToCart } = useAddProductToCart();
 
   const cartProducts = cart?.data.map((json) => new CartProduct(json)) || [];
 
   const cartProduct = product && findInCart(cartProducts, product, undefined);
+  const variant = cartProduct?.variant;
+  const cachedCount = cartProduct?.quantity || 0;
 
-  const count = cartProduct?.quantity || 0;
+  const [debouncedAddProductToCart, cancelAddingProductToCart] = useDebounce(
+    addProductToCart,
+    500
+  );
 
-  const handleQuantityUpdate = (quantity: number) => {
-    if (count) {
-      updateProductQuantity({
-        product: product,
-        quantity: quantity,
-      });
+  const [optimisticCount, setOptimisticCount] = useState(cachedCount);
+  const [isOptimistic, setIsOptimistic] = useState(false);
+
+  const count = isOptimistic ? optimisticCount : cachedCount;
+
+  const createUpdateHandler = (quantity: number) => () => {
+    const _optimisticCount = isOptimistic ? optimisticCount : cachedCount;
+
+    setIsOptimistic(true);
+    const nextOptimisticCount = _optimisticCount + quantity;
+    setOptimisticCount(nextOptimisticCount);
+
+    const diff = nextOptimisticCount - cachedCount;
+
+    if (diff === 0) {
+      // don't make unnecessary request
+      cancelAddingProductToCart();
     } else {
-      addProductToCart({
-        product: product,
-        quantity: quantity,
-      });
+      debouncedAddProductToCart(
+        {
+          variant: variant,
+          product: product,
+          quantity: diff,
+        },
+        {
+          onSettled: () => {
+            setIsOptimistic(false);
+          },
+        }
+      );
     }
   };
 
@@ -144,11 +167,11 @@ export const ProductModal = NiceModal.create(() => {
               {count ? (
                 <MyCounter
                   count={count}
-                  handleIncrement={() => handleQuantityUpdate(1)}
-                  handleDecrement={() => handleQuantityUpdate(-1)}
+                  handleIncrement={createUpdateHandler(1)}
+                  handleDecrement={createUpdateHandler(-1)}
                 />
               ) : (
-                <S.CartButton onClick={() => handleQuantityUpdate(1)}>
+                <S.CartButton onClick={createUpdateHandler(1)}>
                   {t("order.modal_order_btn")}
                 </S.CartButton>
               )}

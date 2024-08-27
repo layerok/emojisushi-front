@@ -24,45 +24,80 @@ import { useModal } from "~modal";
 import { Button } from "~common/ui-components/Button/Button";
 import { ConfirmActionPopover } from "~components/ConfirmActionPopover";
 
-import { useBreakpoint2 } from "~common/hooks";
+import { useBreakpoint2, useDebounce } from "~common/hooks";
 
 import { useRemoveCartProduct } from "~hooks/use-remove-cart-product";
-import { useUpdateCartProduct } from "~hooks/use-update-cart-product";
 
 import { Times } from "~assets/ui-icons";
+import { useAddProductToCart } from "~hooks/use-add-product-to-cart";
 
 // todo: clear outdated products from the card. You can do it on the frontend or on the backend
 const CartItem = (props: { item: CartProduct }) => {
   const { item } = props;
+  const { t } = useTranslation();
+  const theme = useTheme();
 
   const newPrice = item.product.getNewPrice(item.variant)?.price_formatted;
   const oldPrice = item.product.getOldPrice(item.variant)?.price_formatted;
   const nameWithMods = item.nameWithMods;
-  const [open, setOpen] = useState(false);
+  const [deleteConfirmationPopoverOpen, setDeleteConfirmationPopoverOpen] =
+    useState(false);
 
   const { mutate: removeCartProduct } = useRemoveCartProduct();
-  const { mutate: updateCartProduct } = useUpdateCartProduct();
+  const { mutate: addProductToCart } = useAddProductToCart();
 
-  const changeCartItemQuantity = async (item: CartProduct, quantity) => {
-    if (item.quantity + quantity <= 0) {
-      setOpen(true);
+  const [debouncedAddProductToCart, cancelAddingProductToCart] = useDebounce(
+    addProductToCart,
+    500
+  );
+
+  const cachedCount = item?.quantity || 0;
+  const [optimisticCount, setOptimisticCount] = useState(cachedCount);
+  const [isOptimistic, setIsOptimistic] = useState(false);
+  const variant = item.variant;
+  const product = item.product;
+
+  const count = isOptimistic ? optimisticCount : cachedCount;
+
+  const createUpdateHandler = (quantity: number) => () => {
+    const _optimisticCount = isOptimistic ? optimisticCount : cachedCount;
+
+    setIsOptimistic(true);
+    const nextOptimisticCount = _optimisticCount + quantity;
+
+    if (nextOptimisticCount <= 0) {
+      setDeleteConfirmationPopoverOpen(true);
+      return;
+    }
+    setOptimisticCount(nextOptimisticCount);
+
+    const diff = nextOptimisticCount - cachedCount;
+
+    if (diff === 0) {
+      // don't make unnecessary request
+      cancelAddingProductToCart();
     } else {
-      updateCartProduct({
-        item: item,
-        quantity: quantity,
-      });
+      debouncedAddProductToCart(
+        {
+          variant: variant,
+          product: product,
+          quantity: diff,
+        },
+        {
+          onSettled: () => {
+            setIsOptimistic(false);
+          },
+        }
+      );
     }
   };
-
-  const { t } = useTranslation();
-  const theme = useTheme();
 
   return (
     <S.Item>
       <S.ItemRemoveIcon>
         <ConfirmActionPopover
-          open={open}
-          onOpenChange={setOpen}
+          open={deleteConfirmationPopoverOpen}
+          onOpenChange={setDeleteConfirmationPopoverOpen}
           onConfirm={() =>
             removeCartProduct({
               id: item.id,
@@ -71,7 +106,7 @@ const CartItem = (props: { item: CartProduct }) => {
           text={t("cartModal.remove")}
         >
           <SvgIcon
-            onClick={() => setOpen(true)}
+            onClick={() => setDeleteConfirmationPopoverOpen(true)}
             color={theme.colors.grey[450]}
             hoverColor={theme.colors.brand}
             style={{
@@ -95,9 +130,9 @@ const CartItem = (props: { item: CartProduct }) => {
         <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
           <S.ItemCounter>
             <LightCounter
-              handleIncrement={() => changeCartItemQuantity(item, 1)}
-              handleDecrement={() => changeCartItemQuantity(item, -1)}
-              count={item.quantity}
+              handleIncrement={createUpdateHandler(1)}
+              handleDecrement={createUpdateHandler(-1)}
+              count={count}
             />
           </S.ItemCounter>
           <Price newPrice={newPrice} oldPrice={oldPrice} />

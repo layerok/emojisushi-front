@@ -18,8 +18,7 @@ import {
 } from "~components";
 import { useTranslation } from "react-i18next";
 import { ReactComponent as ShoppingBag } from "src/assets/ui-icons/shopping-bag.svg";
-import { useUpdateProduct } from "~hooks/use-update-product";
-import { useAddProduct } from "~hooks/use-add-product";
+import { useAddProductToCart } from "~hooks/use-add-product-to-cart";
 import { StartAdornment } from "~common/ui-components/Button/StartAdornment";
 import { ModalIDEnum } from "~common/modal.constants";
 import { useShowModal } from "~modal";
@@ -28,6 +27,7 @@ import { useAddToWishlist } from "~hooks/use-add-to-wishlist";
 import { useTheme } from "styled-components";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { PRODUCT_ID_SEARCH_QUERY_PARAM } from "~queries";
+import { useDebounce } from "~common/hooks";
 
 type ProductCardProps = {
   product?: Product;
@@ -40,6 +40,7 @@ export const ProductCard = (props: ProductCardProps) => {
   const { product, loading = false, cart, wishlists } = props;
   const theme = useTheme();
   const showModal = useShowModal();
+  const navigate = useNavigate();
 
   const { t } = useTranslation();
   const cartProducts = cart?.data.map((json) => new CartProduct(json)) || [];
@@ -72,27 +73,45 @@ export const ProductCard = (props: ProductCardProps) => {
   const oldPrice = product?.getOldPrice(variant)?.price_formatted;
   const newPrice = product?.getNewPrice(variant)?.price_formatted;
 
-  const { mutate: updateProductQuantity } = useUpdateProduct();
-  const { mutate: addProductToCart } = useAddProduct();
+  const { mutate: addProductToCart } = useAddProductToCart();
   const { mutate: addToWishlist } = useAddToWishlist();
 
-  const navigate = useNavigate();
+  const [debouncedAddProductToCart, cancelAddingProductToCart] = useDebounce(
+    addProductToCart,
+    500
+  );
 
-  const count = cartProduct?.quantity || 0;
+  const cachedCount = cartProduct?.quantity || 0;
+  const [optimisticCount, setOptimisticCount] = useState(cachedCount);
+  const [isOptimistic, setIsOptimistic] = useState(false);
 
-  const handleQuantityUpdate = (quantity: number) => {
-    if (count) {
-      updateProductQuantity({
-        variant: variant,
-        product: product,
-        quantity: quantity,
-      });
+  const count = isOptimistic ? optimisticCount : cachedCount;
+
+  const createUpdateHandler = (quantity: number) => () => {
+    const _optimisticCount = isOptimistic ? optimisticCount : cachedCount;
+
+    setIsOptimistic(true);
+    const nextOptimisticCount = _optimisticCount + quantity;
+    setOptimisticCount(nextOptimisticCount);
+
+    const diff = nextOptimisticCount - cachedCount;
+
+    if (diff === 0) {
+      // don't make unnecessary request
+      cancelAddingProductToCart();
     } else {
-      addProductToCart({
-        variant: variant,
-        product: product,
-        quantity: quantity,
-      });
+      debouncedAddProductToCart(
+        {
+          variant: variant,
+          product: product,
+          quantity: diff,
+        },
+        {
+          onSettled: () => {
+            setIsOptimistic(false);
+          },
+        }
+      );
     }
   };
 
@@ -111,7 +130,7 @@ export const ProductCard = (props: ProductCardProps) => {
   const handleFavouriteButtonClick = () => {
     addToWishlist({
       product_id: product.id,
-      quantity: count,
+      quantity: cachedCount,
     });
   };
 
@@ -173,8 +192,8 @@ export const ProductCard = (props: ProductCardProps) => {
         <Price loading={loading} oldPrice={oldPrice} newPrice={newPrice} />
         {count ? (
           <ButtonCounter
-            handleIncrement={() => handleQuantityUpdate(1)}
-            handleDecrement={() => handleQuantityUpdate(-1)}
+            handleIncrement={createUpdateHandler(1)}
+            handleDecrement={createUpdateHandler(-1)}
             count={count}
           />
         ) : (
@@ -188,7 +207,7 @@ export const ProductCard = (props: ProductCardProps) => {
               </StartAdornment>
             }
             showSkeleton={loading}
-            onClick={() => handleQuantityUpdate(1)}
+            onClick={createUpdateHandler(1)}
           >
             {t("order.order_btn")}
           </Button>

@@ -5,38 +5,8 @@ import {
   IGetWishlistRes,
 } from "@layerok/emojisushi-js-sdk";
 import { arrImmutableDeleteAt, arrImmutableReplaceAt } from "~utils/arr.utils";
-import { formatUAHPrice } from "~utils/price.utils";
 import { recalculateCartTotals } from "~utils/cart.utils";
-
-export const addProductToCartUpdater = (
-  product: Product,
-  quantity: number,
-  variant: Variant
-) => {
-  return (old: IGetCartRes) => {
-    const price = product.getNewPrice(variant).price;
-    const cartProduct: ICartProduct = {
-      id: Math.round(Math.random() * 10000),
-      price_formatted: formatUAHPrice(price),
-      product: product.json,
-      product_id: product.id,
-      variant: variant?.json,
-      variant_id: variant?.id,
-      quantity: quantity,
-      price: {
-        UAH: price,
-      },
-    };
-
-    const cartProducts = [...old.data, cartProduct];
-
-    return {
-      ...old,
-      data: cartProducts,
-      ...recalculateCartTotals(cartProducts),
-    };
-  };
-};
+import { formatUAHPrice } from "~utils/price.utils";
 
 export function addProductToWishlistUpdater({
   product_id,
@@ -105,39 +75,6 @@ export function removeCartProductUpdater(id: number) {
   };
 }
 
-export function updateCartProductUpdater(item: CartProduct, quantity: number) {
-  return (old: IGetCartRes) => {
-    const cartProduct = old.data.find(
-      (cartProduct) => cartProduct.product.id === item.product.id
-    );
-
-    if (!cartProduct) {
-      return old;
-    }
-
-    const index = old.data.indexOf(cartProduct);
-    const nextQuantity = cartProduct.quantity + quantity;
-
-    if (nextQuantity > 0) {
-      const nextCartProduct = {
-        ...cartProduct,
-        quantity: cartProduct.quantity + quantity,
-      };
-      const cartProducts = arrImmutableReplaceAt(
-        old.data,
-        index,
-        nextCartProduct
-      );
-
-      return {
-        ...old,
-        data: cartProducts,
-        ...recalculateCartTotals(cartProducts),
-      };
-    }
-  };
-}
-
 export function updateProductUpdater(
   product: Product,
   quantity: number,
@@ -151,7 +88,27 @@ export function updateProductUpdater(
     );
 
     if (!cartProduct) {
-      return old;
+      const price = product.getNewPrice(variant).price;
+      const cartProduct: ICartProduct = {
+        id: Math.round(Math.random() * 10000),
+        price_formatted: formatUAHPrice(price),
+        product: product.json,
+        product_id: product.id,
+        variant: variant?.json,
+        variant_id: variant?.id,
+        quantity: quantity,
+        price: {
+          UAH: price,
+        },
+      };
+
+      const cartProducts = [...old.data, cartProduct];
+
+      return {
+        ...old,
+        data: cartProducts,
+        ...recalculateCartTotals(cartProducts),
+      };
     }
     const index = old.data.indexOf(cartProduct);
     const nextQuantity = cartProduct.quantity + quantity;

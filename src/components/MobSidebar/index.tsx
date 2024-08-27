@@ -45,7 +45,7 @@ export const MobSidebar = ({
   const [searchParams] = useSearchParams();
   const q = searchParams.get(SEARCH_QUERY_SEARCH_PARAM);
 
-  const debouncedFetch = useDebounce((form) => {
+  const [debouncedFetch] = useDebounce((form) => {
     const isFirstSearch = q == null;
     submit(form, {
       replace: !isFirstSearch,

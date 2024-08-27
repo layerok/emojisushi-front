@@ -23,7 +23,7 @@ export const ProductsGrid = ({
 }: TProductsGridProps) => {
   const breakpoint = useBreakpoint();
 
-  const debouncedBreakpoint = useDebounce(() => {
+  const [debouncedBreakpoint] = useDebounce(() => {
     return breakpoint;
   }, 300);
 

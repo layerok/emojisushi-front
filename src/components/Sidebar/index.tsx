@@ -46,7 +46,7 @@ export const Sidebar = ({ loading = false, categories = [] }: SidebarProps) => {
     });
   };
 
-  const debouncedFetch = useDebounce((form) => {
+  const [debouncedFetch] = useDebounce((form) => {
     const isFirstSearch = q == null;
     submit(form, {
       replace: !isFirstSearch,

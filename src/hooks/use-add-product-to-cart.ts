@@ -2,9 +2,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Product, Variant } from "~models";
 import { cartQuery } from "~queries";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
-import { addProductToCartUpdater } from "~common/queryDataUpdaters";
+import { updateProductUpdater } from "~common/queryDataUpdaters";
 
-export const useAddProduct = () => {
+export const useAddProductToCart = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
@@ -29,7 +29,7 @@ export const useAddProduct = () => {
 
       queryClient.setQueryData(
         cartQuery.queryKey,
-        addProductToCartUpdater(product, quantity, variant)
+        updateProductUpdater(product, quantity, variant)
       );
 
       return {
