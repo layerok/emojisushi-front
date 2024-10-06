@@ -18,7 +18,6 @@ import {
 } from "~components";
 import { useTranslation } from "react-i18next";
 import { ReactComponent as ShoppingBag } from "src/assets/ui-icons/shopping-bag.svg";
-import { useAddProductToCart } from "~hooks/use-add-product-to-cart";
 import { StartAdornment } from "~common/ui-components/Button/StartAdornment";
 import { ModalIDEnum } from "~common/modal.constants";
 import { useShowModal } from "~modal";
@@ -26,10 +25,8 @@ import Skeleton from "react-loading-skeleton";
 import { useAddToWishlist } from "~hooks/use-add-to-wishlist";
 import { useTheme } from "styled-components";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { cartQuery, PRODUCT_ID_SEARCH_QUERY_PARAM } from "~queries";
-import { useDebounce } from "~common/hooks";
-import { updateProductUpdater } from "~common/queryDataUpdaters";
-import { useQueryClient } from "@tanstack/react-query";
+import { PRODUCT_ID_SEARCH_QUERY_PARAM } from "~domains/product/products.query";
+
 import { useDebouncedAddProductToCart } from "~hooks/use-debounced-add-product-to-cart";
 
 type ProductCardProps = {

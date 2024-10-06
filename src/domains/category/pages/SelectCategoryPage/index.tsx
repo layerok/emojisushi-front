@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Container, SvgIcon, ToteSvg } from "~components";
 import { Category } from "./components/Category";
 import Skeleton from "react-loading-skeleton";
-import { categoriesQuery } from "~queries";
+import { categoriesQuery } from "~domains/category/categories.query";
 import { useQuery } from "@tanstack/react-query";
 import { observer } from "mobx-react";
 import { Page } from "~components/Page";

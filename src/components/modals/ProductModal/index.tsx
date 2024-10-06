@@ -9,11 +9,11 @@ import MyCounter from "~components/MyCounter";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
-  cartQuery,
   DEFAULT_PRODUCTS_LIMIT,
   PRODUCT_ID_SEARCH_QUERY_PARAM,
   productsQuery,
-} from "~queries";
+} from "~domains/product/products.query";
+import { cartQuery } from "~domains/cart/cart.query";
 import Skeleton from "react-loading-skeleton";
 import { CartProduct, Product } from "~models";
 import { findInCart } from "~components/ProductCard/utils";

@@ -16,13 +16,14 @@ import {
 } from "~components";
 import { ReactNode, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { cartQuery, PRODUCT_ID_SEARCH_QUERY_PARAM } from "~queries";
+import { cartQuery } from "~domains/cart/cart.query";
+import { PRODUCT_ID_SEARCH_QUERY_PARAM } from "~domains/product/products.query";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "~hooks/use-auth";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { observer } from "mobx-react";
 import { useAppStore } from "~stores/appStore";
-import { citiesQuery } from "~queries/cities.query";
+import { citiesQuery } from "~domains/city/cities.query";
 import { ModalIDEnum } from "~common/modal.constants";
 import { isClosed } from "~utils/time.utils";
 import { appConfig } from "~config/app";

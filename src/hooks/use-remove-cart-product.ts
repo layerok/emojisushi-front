@@ -3,7 +3,7 @@ import {
   UseMutationOptions,
   useQueryClient,
 } from "@tanstack/react-query";
-import { cartQuery } from "~queries";
+import { cartQuery } from "~domains/cart/cart.query";
 import { IGetCartRes } from "@layerok/emojisushi-js-sdk";
 import { AxiosError } from "axios";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";

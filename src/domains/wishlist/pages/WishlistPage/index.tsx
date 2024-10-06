@@ -1,12 +1,10 @@
 import { ProductsGrid } from "~components";
 import { useTranslation } from "react-i18next";
 import { Product } from "src/models";
-import {
-  cartQuery,
-  categoriesQuery,
-  productsQuery,
-  wishlistsQuery,
-} from "src/queries";
+import { productsQuery } from "~domains/product/products.query";
+import { cartQuery } from "~domains/cart/cart.query";
+import { categoriesQuery } from "~domains/category/categories.query";
+import { wishlistsQuery } from "~domains/wishlist/wishlist.query";
 import { useQuery } from "@tanstack/react-query";
 import { observer } from "mobx-react";
 import { CategorySlug } from "~domains/category/constants";

@@ -4,7 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 import { Container, Heading } from "~components";
-import { cartQuery, paymentQuery, shippingQuery } from "~queries";
+import { cartQuery } from "~domains/cart/cart.query";
+import { paymentQuery } from "~domains/payment/payment.query";
+import { shippingQuery } from "~domains/shipping/shipping.query";
 import { ROUTES } from "~routes";
 import { Page } from "~components/Page";
 import { useUser } from "~hooks/use-auth";

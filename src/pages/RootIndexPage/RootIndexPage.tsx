@@ -1,6 +1,6 @@
 import { Navigate, useLoaderData } from "react-router-dom";
 import { ROUTES } from "~routes";
-import { categoriesQuery } from "~queries";
+import { categoriesQuery } from "~domains/category/categories.query";
 import { queryClient } from "~lib/query-client";
 import { IGetCategoriesRes } from "@layerok/emojisushi-js-sdk";
 

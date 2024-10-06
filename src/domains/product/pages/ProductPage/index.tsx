@@ -2,12 +2,12 @@ import { ProductsGrid } from "~components";
 import { useQuery } from "@tanstack/react-query";
 import { Product } from "src/models";
 import {
-  cartQuery,
-  categoriesQuery,
   DEFAULT_PRODUCTS_LIMIT,
   productsQuery,
-  wishlistsQuery,
-} from "src/queries";
+} from "~domains/product/products.query";
+import { cartQuery } from "~domains/cart/cart.query";
+import { categoriesQuery } from "~domains/category/categories.query";
+import { wishlistsQuery } from "~domains/wishlist/wishlist.query";
 import { IProduct } from "@layerok/emojisushi-js-sdk";
 import { CategorySlug } from "~domains/category/constants";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";

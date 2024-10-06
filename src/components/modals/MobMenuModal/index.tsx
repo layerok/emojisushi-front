@@ -15,7 +15,7 @@ import { useUser } from "~hooks/use-auth";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalIDEnum } from "~common/modal.constants";
 import { useQuery } from "@tanstack/react-query";
-import { citiesQuery } from "~queries/cities.query";
+import { citiesQuery } from "~domains/city/cities.query";
 import { LEAVE_REVIEW_LINK, ROUTES } from "~routes";
 import { useModal } from "~modal";
 import { useTheme } from "styled-components";

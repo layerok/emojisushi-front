@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useAppStore } from "~stores/appStore";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { citiesQuery } from "~queries/cities.query";
+import { citiesQuery } from "~domains/city/cities.query";
 import NiceModal from "@ebay/nice-modal-react";
 import { observer } from "mobx-react-lite";
 import { LOCATION_CONFIRMED_SEARCH_PARAM } from "~common/constants";

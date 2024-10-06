@@ -3,10 +3,11 @@ import { Banner } from "~domains/product/pages/ProductPage/Banner";
 import { Page } from "~components/Page";
 import { Outlet, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { bannerQuery } from "~queries/banner.query";
+import { bannerQuery } from "~domains/banner/banner.query";
 import styled from "styled-components";
 import { media } from "~common/custom-media";
-import { categoriesQuery, PRODUCT_ID_SEARCH_QUERY_PARAM } from "~queries";
+import { PRODUCT_ID_SEARCH_QUERY_PARAM } from "~domains/product/products.query";
+import { categoriesQuery } from "~domains/category/categories.query";
 import { useShowModal } from "~modal";
 import { ModalIDEnum } from "~common/modal.constants";
 

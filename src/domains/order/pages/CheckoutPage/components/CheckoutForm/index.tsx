@@ -22,7 +22,7 @@ import {
   ShippingMethodCodeEnum,
 } from "@layerok/emojisushi-js-sdk";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { cartQuery } from "~queries";
+import { cartQuery } from "~domains/cart/cart.query";
 import { AxiosError } from "axios";
 import { observer } from "mobx-react";
 import { useAppStore } from "~stores/appStore";
@@ -100,10 +100,6 @@ enum HouseType {
 
 const getDistrictDefaultSpot = (district: IDistrict) => {
   return district.spots[0];
-};
-
-const last = (array) => {
-  return array[array.length - 1];
 };
 
 const first = (array) => {

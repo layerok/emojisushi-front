@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { wishlistsQuery } from "~queries";
+import { wishlistsQuery } from "~domains/wishlist/wishlist.query";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 import { addProductToWishlistUpdater } from "~common/queryDataUpdaters";
 

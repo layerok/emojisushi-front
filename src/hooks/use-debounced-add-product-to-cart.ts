@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useRef } from "react";
 import { useDebounce } from "~common/hooks";
 import { Product, Variant } from "~models";
-import { cartQuery } from "~queries";
+import { cartQuery } from "~domains/cart/cart.query";
 import { updateProductUpdater } from "~common/queryDataUpdaters";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 

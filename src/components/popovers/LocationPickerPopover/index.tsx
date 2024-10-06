@@ -6,7 +6,7 @@ import { observer } from "mobx-react";
 import { appStore } from "~stores/appStore";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { citiesQuery } from "~queries/cities.query";
+import { citiesQuery } from "~domains/city/cities.query";
 import { LOCATION_CONFIRMED_SEARCH_PARAM } from "~common/constants";
 import { useTheme } from "styled-components";
 

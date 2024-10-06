@@ -16,7 +16,7 @@ import {
   SushiSvg,
 } from "~components";
 import { CartProduct } from "~models";
-import { cartQuery } from "~queries";
+import { cartQuery } from "~domains/cart/cart.query";
 
 import { ROUTES } from "~routes";
 import { useModal } from "~modal";
