@@ -23,7 +23,7 @@ import { PRODUCT_SORTERS } from "~domains/product/product.constants";
 export const ProductPage = () => {
   const { categorySlug } = useTypedParams(ROUTES.CATEGORY.SHOW);
 
-  const [{ q, sort }] = useTypedSearchParams(ROUTES.CATEGORY.SHOW);
+  const [{ q: query, sort }] = useTypedSearchParams(ROUTES.CATEGORY.SHOW);
 
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
   const { data: categoryQueryRes, isLoading: isCategoriesLoading } = useQuery({
@@ -53,11 +53,11 @@ export const ProductPage = () => {
   };
 
   const rawItems = (productQueryRes?.data || []).filter(
-    q ? filterProductsFromHiddenCategories : belongsToCategory
+    query ? filterProductsFromHiddenCategories : belongsToCategory
   );
 
-  const searchedItems = q
-    ? fuzzySearchBase(rawItems, q, (el) => el.name, {
+  const searchedItems = query
+    ? fuzzySearchBase(rawItems, query, (el) => el.name, {
         maxAllowedModifications: 1,
       })
     : rawItems;

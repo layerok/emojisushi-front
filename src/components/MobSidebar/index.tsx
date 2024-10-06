@@ -43,17 +43,18 @@ export const MobSidebar = ({
   const { t } = useTranslation();
 
   const [searchParams] = useSearchParams();
-  const q = searchParams.get(SEARCH_QUERY_SEARCH_PARAM);
+  const query = searchParams.get(SEARCH_QUERY_SEARCH_PARAM);
 
-  const [debouncedFetch] = useDebounce((form) => {
-    const isFirstSearch = q == null;
+  const [debouncedSearchChange] = useDebounce((form) => {
+    const isFirstSearch = query == null;
     submit(form, {
       replace: !isFirstSearch,
+      preventScrollReset: true,
     });
   }, 500);
 
-  const handleChange = (event) => {
-    debouncedFetch(event.currentTarget.form);
+  const handleSearchChange = (event) => {
+    debouncedSearchChange(event.currentTarget.form);
   };
 
   const options = SORT_MODE_KEYS.map((key) => ({
@@ -79,25 +80,28 @@ export const MobSidebar = ({
 
     submit(fd, {
       action: location.pathname,
+      preventScrollReset: true,
     });
   };
+
+  const inputs = Array.from(searchParams.entries())
+    .filter(([k]) => k !== SEARCH_QUERY_SEARCH_PARAM)
+    .map(([k, v], idx) => (
+      <input type="hidden" name={k} defaultValue={v} key={idx} />
+    ));
 
   return (
     <S.Sidebar>
       <S.Controls>
         <S.SearchContainer>
           <Form role="search" action={location.pathname}>
-            {Array.from(searchParams.entries())
-              .filter(([k]) => k !== SEARCH_QUERY_SEARCH_PARAM)
-              .map(([k, v], idx) => (
-                <input type="hidden" name={k} defaultValue={v} key={idx} />
-              ))}
+            {inputs}
             <Input
               // I'm changing key to reset input value
               key={location.pathname}
-              onChange={handleChange}
+              onChange={handleSearchChange}
               name={SEARCH_QUERY_SEARCH_PARAM}
-              defaultValue={q}
+              defaultValue={query}
               loading={loading}
               endAdornment={
                 <EndAdornment>
@@ -145,6 +149,7 @@ export const MobSidebar = ({
               <NavLink
                 key={item.id}
                 style={{ textDecoration: "none", flexShrink: 0 }}
+                preventScrollReset
                 to={ROUTES.CATEGORY.SHOW.buildPath({
                   categorySlug: item.slug,
                 })}

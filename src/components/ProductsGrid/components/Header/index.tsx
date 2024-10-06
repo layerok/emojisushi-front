@@ -21,9 +21,9 @@ export const Header = ({ title, loading = false }: THeaderProps) => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const submit = useSubmit();
-  const q = searchParams.get(SEARCH_QUERY_SEARCH_PARAM);
+  const query = searchParams.get(SEARCH_QUERY_SEARCH_PARAM);
 
-  const titleOrSearch = q ? `${t("search.everywhere")} "${q}"` : title;
+  const titleOrSearch = query ? `${t("search.everywhere")} "${query}"` : title;
 
   const sorters = SORT_MODE_KEYS.map((key) => ({
     name: t(`sort.${key}`),
@@ -38,17 +38,19 @@ export const Header = ({ title, loading = false }: THeaderProps) => {
   );
 
   const handleSorterChange = ({ option, index }) => {
-    const fd = new FormData();
+    const formData = new FormData();
 
     Array.from(searchParams.entries())
       .filter(([key]) => key !== SORT_MODE_SEARCH_PARAM)
       .forEach(([key, val]) => {
-        fd.append(key, val);
+        formData.append(key, val);
       });
 
-    fd.append(SORT_MODE_SEARCH_PARAM, option.id);
+    formData.append(SORT_MODE_SEARCH_PARAM, option.id);
 
-    submit(fd);
+    submit(formData, {
+      preventScrollReset: true,
+    });
   };
   return (
     <S.Header>
