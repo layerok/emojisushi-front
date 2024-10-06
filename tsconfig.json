@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "jsx": "react-jsx",
     "skipLibCheck": true,
+    "noEmit": true,
     "esModuleInterop": true,
     "sourceMap": true,
     "resolveJsonModule": true,
