@@ -1,7 +1,7 @@
 import * as S from "./styled";
 import { EqualHeightElement } from "react-equal-height";
-import React, { useCallback, useMemo, useRef, useState } from "react";
-import { CartProduct, Product, Variant } from "~models";
+import React, { useMemo, useState } from "react";
+import { CartProduct, Product } from "~models";
 import { Modificators } from "./components";
 import { findInCart } from "./utils";
 import { Price } from "~components/Price";
