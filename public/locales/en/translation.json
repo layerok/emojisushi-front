@@ -68,11 +68,16 @@
     "edit_order": "Edit order"
   },
   "cartModal": {
-    "remove": "Are you sure you want to remove this item from your cart?",
+
     "empty": "Your cart is empty",
     "cart": "Cart",
     "sum_order": "Order price",
-    "checkout": "Checkout"
+    "checkout": "Checkout",
+    "confirmProductDeletionView": {
+      "title": "Are you sure you want to remove this item from your cart?",
+      "confirm": "Remove",
+      "cancel": "Cancel"
+    }
   },
   "contactsModal": {
     "contacts": "Contacts"

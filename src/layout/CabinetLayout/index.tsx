@@ -8,7 +8,7 @@ import { wishlistsQuery } from "~domains/wishlist/wishlist.query";
 import { ROUTES } from "~routes";
 import { Page } from "~components/Page";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button } from "~domains/cabinet/components/Button/Button";
+import { Button } from "~common/ui-components/Button/Button";
 
 const CabinetLayout = () => {
   const { t } = useTranslation();
@@ -49,6 +49,7 @@ const CabinetLayout = () => {
                   </NavLink>
                   <div style={{ marginTop: "10px" }}>
                     <Button
+                      skin={"grey"}
                       style={{
                         minWidth: "201px",
                       }}

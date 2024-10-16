@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useUser } from "~hooks/use-auth";
 import { ROUTES } from "~routes";
-import { Button } from "~domains/cabinet/components/Button/Button";
+import { Button } from "~common/ui-components/Button/Button";
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
@@ -31,6 +31,7 @@ export const ProfilePage = () => {
 
       <S.BtnGroup>
         <Button
+          skin={"grey"}
           onClick={() => {
             navigate(ROUTES.ACCOUNT.PROFILE.EDIT.path);
           }}
@@ -40,6 +41,7 @@ export const ProfilePage = () => {
         </Button>
         <S.BtnWrapper>
           <Button
+            skin={"grey"}
             onClick={() => {
               navigate(ROUTES.ACCOUNT.PASSWORD_RECOVERY.path);
             }}

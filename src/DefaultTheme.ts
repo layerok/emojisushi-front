@@ -10,6 +10,9 @@ declare module "styled-components" {
         510: string;
         571: string;
       };
+      red: {
+        500: string;
+      };
       brand: string;
       brandDelimiter: string;
       ukrainianFlag: {

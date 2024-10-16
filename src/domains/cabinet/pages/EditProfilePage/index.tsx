@@ -8,7 +8,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { AUTHENTICATED_USER_QUERY_KEY } from "~common/constants";
 import { IUser } from "@layerok/emojisushi-js-sdk";
-import { Button as CabinetSpecificButton } from "~domains/cabinet/components/Button/Button";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
 
 export const EditProfilePage = () => {
@@ -135,7 +134,8 @@ export const EditProfilePage = () => {
         >
           {t("common.save")}
         </Button>
-        <CabinetSpecificButton
+        <Button
+          skin={"grey"}
           style={{
             marginLeft: 20,
           }}
@@ -143,7 +143,7 @@ export const EditProfilePage = () => {
           onClick={() => navigate("./../")}
         >
           {t("common.cancel")}
-        </CabinetSpecificButton>
+        </Button>
       </FlexBox>
     </form>
   );

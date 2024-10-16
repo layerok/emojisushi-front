@@ -1,7 +1,7 @@
 import { CSSProperties, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useTheme } from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import NiceModal from "@ebay/nice-modal-react";
 import * as S from "./styled";
@@ -14,6 +14,7 @@ import {
   LogoSvg,
   // todo: replace SushiSvg because it is fake svg, it is png actually
   SushiSvg,
+  Popover,
 } from "~components";
 import { CartProduct } from "~models";
 import { cartQuery } from "~domains/cart/cart.query";
@@ -22,14 +23,12 @@ import { ROUTES } from "~routes";
 import { useModal } from "~modal";
 
 import { Button } from "~common/ui-components/Button/Button";
-import { ConfirmActionPopover } from "~components/ConfirmActionPopover";
 
 import { useBreakpoint2 } from "~common/hooks";
 
-import { useRemoveCartProduct } from "~hooks/use-remove-cart-product";
-
 import { Times } from "~assets/ui-icons";
 import { useDebouncedAddProductToCart } from "~hooks/use-debounced-add-product-to-cart";
+import { DeleteProductFromCartConfirmationView } from "~domains/cart/views/DeleteProductFromCartConfirmationView";
 
 // todo: clear outdated products from the card. You can do it on the frontend or on the backend
 const CartItem = (props: { item: CartProduct }) => {
@@ -76,14 +75,27 @@ const CartItem = (props: { item: CartProduct }) => {
     currentCount: count,
   });
 
+  const handleConfirm = () => {
+    setDeleteConfirmationPopoverOpen(false);
+    handleDelete();
+  };
+
+  const handleCancel = () => {
+    setDeleteConfirmationPopoverOpen(false);
+  };
+
   return (
     <S.Item>
       <S.ItemRemoveIcon>
-        <ConfirmActionPopover
+        <Popover
           open={deleteConfirmationPopoverOpen}
           onOpenChange={setDeleteConfirmationPopoverOpen}
-          onConfirm={handleDelete}
-          text={t("cartModal.remove")}
+          render={() => (
+            <DeleteProductFromCartConfirmationView
+              onCancel={handleCancel}
+              onConfirm={handleConfirm}
+            />
+          )}
         >
           <SvgIcon
             onClick={() => setDeleteConfirmationPopoverOpen(true)}
@@ -96,7 +108,7 @@ const CartItem = (props: { item: CartProduct }) => {
           >
             <Times />
           </SvgIcon>
-        </ConfirmActionPopover>
+        </Popover>
       </S.ItemRemoveIcon>
       <S.ItemImg src={item.product.mainImage}>
         {!item.product.mainImage && (
@@ -135,9 +147,6 @@ export const CartModal = NiceModal.create(() => {
 
   const { t } = useTranslation();
 
-  // we don't unmount deleted cart product right away, because if we do so,
-  // then cart product's fetcher will be aborted,
-  // and therefore revalidation won't be triggered and we will see stale cart products
   const items = data.map((json) => new CartProduct(json));
 
   const overlayStyles = {
