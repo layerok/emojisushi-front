@@ -3,14 +3,19 @@ import { SvgIcon, FlexBox, StaticMap, Modal } from "~components";
 import { PhoneSvg, InstagramSvg, TelegramSvg } from "~components/svg";
 import { useTranslation } from "react-i18next";
 import { InstagramLink } from "~layout/Footer/styled";
-import { useAppStore } from "~stores/appStore";
 import NiceModal from "@ebay/nice-modal-react";
 import { useModal } from "~modal";
+import { useCurrentCitySlug } from "~domains/city/hooks/useCurrentCitySlug";
+import { useQuery } from "@tanstack/react-query";
+import { citiesQuery } from "~domains/city/cities.query";
 
 export const ContactsModal = NiceModal.create(() => {
   const { t } = useTranslation();
-  const appStore = useAppStore();
+
   const modal = useModal();
+  const citySlug = useCurrentCitySlug();
+  const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
+  const city = (cities?.data || []).find((c) => c.slug === citySlug);
 
   return (
     <Modal
@@ -23,7 +28,7 @@ export const ContactsModal = NiceModal.create(() => {
       {() => (
         <div>
           <S.Wrapper>
-            {appStore.city.phones && (
+            {city?.phones && (
               <>
                 <S.Title>{t("contactsModal.contacts")}</S.Title>
                 <S.Phones>
@@ -34,7 +39,7 @@ export const ContactsModal = NiceModal.create(() => {
                   >
                     <PhoneSvg />
                   </SvgIcon>
-                  {appStore.city.phones.split(",").map((phone, i) => (
+                  {city.phones.split(",").map((phone, i) => (
                     <S.Phone key={i}>{phone}</S.Phone>
                   ))}
                 </S.Phones>

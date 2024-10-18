@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { citiesQuery } from "~domains/city/cities.query";
 import { LOCATION_CONFIRMED_SEARCH_PARAM } from "~common/constants";
 import { useTheme } from "styled-components";
+import { useCurrentCitySlug } from "~domains/city/hooks/useCurrentCitySlug";
 
 type LocationPickerPopoverProps = {
   offset?: number;
@@ -27,15 +28,14 @@ export const LocationPickerPopover = observer(
     } = props;
     const location = useLocation();
     const { data: cities, isLoading } = useQuery(citiesQuery);
+    const citySlug = useCurrentCitySlug();
 
     const options = (cities?.data || []).map((city) => ({
       id: city.slug,
       name: city.name,
     }));
 
-    const selectedOption = options.find(
-      (option) => option.id === appStore.city.slug
-    );
+    const selectedOption = options.find((option) => option.id === citySlug);
     const selectedIndex = options.indexOf(selectedOption);
     return (
       <DropdownPopover

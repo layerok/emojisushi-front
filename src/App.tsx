@@ -20,10 +20,14 @@ import { appConfig } from "~config/app";
 import { AppVersionChecker } from "~components/AppVersionChecker";
 import { GlobalStyle } from "~components/GlobalStyle/GlobalStyle";
 import { createSession, getSession } from "~utils/session.utils";
+import { citiesQuery } from "~domains/city/cities.query";
 
 if (!getSession()) {
   createSession();
 }
+
+// prefetch cities
+queryClient.fetchQuery(citiesQuery);
 
 console.log("app version", appConfig.version);
 

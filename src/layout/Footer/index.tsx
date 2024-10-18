@@ -10,77 +10,53 @@ import {
 import { TelegramSvg, InstagramSvg, PhoneSvg, LogoSvg } from "~components/svg";
 import { Trans, useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
-import { useAppStore } from "~stores/appStore";
+
 import { ModalIDEnum } from "~common/modal.constants";
 import { useShowModal } from "~modal";
 import { useTheme } from "styled-components";
 import { ROUTES } from "~routes";
+import { ICity } from "@layerok/emojisushi-js-sdk";
 
 type FooterProps = {
   loading?: boolean;
+  city?: ICity;
 };
 
-export const Footer = ({ loading = false }: FooterProps) => {
+export const Footer = ({ loading = false, city }: FooterProps) => {
   const theme = useTheme();
+  const showModal = useShowModal();
   const { t } = useTranslation();
-  return (
-    <S.Footer>
-      <Container flexDirection={"row"}>
-        <S.Left>
-          <S.Logo>
-            <SkeletonWrap loading={loading}>
-              <SvgIcon color={theme.colors.brand}>
-                <LogoSvg />
-              </SvgIcon>
-            </SkeletonWrap>
-          </S.Logo>
-          <S.List>
-            <Phones loading={loading} />
-            <Instagram loading={loading} />
-            <Telegram loading={loading} />
-            <FlexBox flexDirection={"column"}>
-              <NavLink to={ROUTES.PUBLIC_OFFER.path}>
-                {t("public_offer")}
-              </NavLink>
-            </FlexBox>
-          </S.List>
-        </S.Left>
-        <S.Right>
-          <Map loading={loading} />
-        </S.Right>
-      </Container>
-    </S.Footer>
-  );
-};
 
-type IMapProps = { loading?: boolean };
-
-const Map = ({ loading = false }: IMapProps) => {
-  return (
-    <S.StaticMap>
-      {loading ? (
-        <Skeleton width={"100%"} height={"100%"} />
-      ) : (
-        <StaticMap
-          width={"100%"}
-          height={"100%"}
-          topLeft={"10px"}
-          topRight={"10px"}
-          bottomLeft={"0px"}
-          bottomRight={"0px"}
-        />
-      )}
-    </S.StaticMap>
-  );
-};
-
-type IPhonesProps = { loading?: boolean };
-
-const Phones = ({ loading = false }: IPhonesProps) => {
-  const appStore = useAppStore();
-
-  return (
-    appStore.city?.phones?.length > 0 && (
+  const renderPhoneSection = () => {
+    if (city?.phones?.length < 1) {
+      return null;
+    }
+    const renderPhone = ({ phone }: { phone: string }) => {
+      if (loading) {
+        return (
+          <S.Phone>
+            <Skeleton />
+          </S.Phone>
+        );
+      }
+      return <S.Phone href={`tel:${phone}`}>{phone}</S.Phone>;
+    };
+    const renderPhones = () => {
+      if (loading) {
+        return (
+          <>
+            {renderPhone({
+              phone: "",
+            })}
+            {renderPhone({
+              phone: "",
+            })}
+          </>
+        );
+      }
+      return city.phones.split(",").map((phone, i) => renderPhone({ phone }));
+    };
+    return (
       <>
         <FlexBox
           style={{
@@ -101,92 +77,111 @@ const Phones = ({ loading = false }: IPhonesProps) => {
           </S.PhoneLabel>
         </FlexBox>
 
-        <FlexBox flexDirection={"column"}>
-          {loading ? (
-            <>
-              <Phone loading />
-              <Phone loading />
-            </>
-          ) : (
-            appStore.city.phones
-              .split(",")
-              .map((phone, i) => <Phone key={i} phone={phone} />)
-          )}
-        </FlexBox>
+        <FlexBox flexDirection={"column"}>{renderPhones()}</FlexBox>
       </>
-    )
-  );
-};
-
-type IPhoneProps = {
-  loading?: boolean;
-  phone?: string;
-};
-
-const Phone = ({ loading = false, phone }: IPhoneProps) => {
-  if (loading) {
-    return (
-      <S.Phone>
-        <Skeleton />
-      </S.Phone>
     );
-  }
-  return <S.Phone href={`tel:${phone}`}>{phone}</S.Phone>;
-};
+  };
 
-type TInstagramProps = { loading?: boolean };
+  const renderMap = () => {
+    return (
+      <S.StaticMap>
+        {loading ? (
+          <Skeleton width={"100%"} height={"100%"} />
+        ) : (
+          <StaticMap
+            width={"100%"}
+            height={"100%"}
+            topLeft={"10px"}
+            topRight={"10px"}
+            bottomLeft={"0px"}
+            bottomRight={"0px"}
+          />
+        )}
+      </S.StaticMap>
+    );
+  };
 
-const Instagram = ({ loading = false }: TInstagramProps) => {
-  return (
-    <FlexBox alignItems={"center"}>
-      <SkeletonWrap loading={loading}>
-        <SvgIcon width={"25px"} color={"white"}>
-          <InstagramSvg />
-        </SvgIcon>
-      </SkeletonWrap>
+  const renderInstagram = () => {
+    return (
+      <FlexBox alignItems={"center"}>
+        <SkeletonWrap loading={loading}>
+          <SvgIcon width={"25px"} color={"white"}>
+            <InstagramSvg />
+          </SvgIcon>
+        </SkeletonWrap>
 
-      <S.LinkContainer
+        <S.LinkContainer
+          style={{
+            flexGrow: 1,
+          }}
+        >
+          <SkeletonWrap loading={loading}>
+            <S.InstagramLink
+              href={"https://www.instagram.com/emoji_sushi_/"}
+              target={"_blank"}
+            >
+              emoji_sushi
+            </S.InstagramLink>
+          </SkeletonWrap>
+        </S.LinkContainer>
+      </FlexBox>
+    );
+  };
+
+  const renderTelegram = () => {
+    return (
+      <FlexBox
         style={{
-          flexGrow: 1,
+          marginTop: "10px",
+          width: "100%",
         }}
+        onClick={() => {
+          showModal(ModalIDEnum.TelegramModal);
+        }}
+        alignItems={"center"}
       >
         <SkeletonWrap loading={loading}>
-          <S.InstagramLink
-            href={"https://www.instagram.com/emoji_sushi_/"}
-            target={"_blank"}
-          >
-            emoji_sushi
-          </S.InstagramLink>
+          <SvgIcon width={"25px"} color={"white"}>
+            <TelegramSvg />
+          </SvgIcon>
         </SkeletonWrap>
-      </S.LinkContainer>
-    </FlexBox>
-  );
-};
 
-type ITelegramProps = { loading?: boolean };
-
-const Telegram = ({ loading = false }: ITelegramProps) => {
-  const showModal = useShowModal();
-  return (
-    <FlexBox
-      style={{
-        marginTop: "10px",
-        width: "100%",
-      }}
-      onClick={() => {
-        showModal(ModalIDEnum.TelegramModal);
-      }}
-      alignItems={"center"}
-    >
+        <S.TelegramText>
+          <SkeletonWrap loading={loading}>Telegram</SkeletonWrap>
+        </S.TelegramText>
+      </FlexBox>
+    );
+  };
+  const renderPublicOffer = () => {
+    return (
+      <FlexBox flexDirection={"column"}>
+        <NavLink to={ROUTES.PUBLIC_OFFER.path}>{t("public_offer")}</NavLink>
+      </FlexBox>
+    );
+  };
+  const renderLogo = () => {
+    return (
       <SkeletonWrap loading={loading}>
-        <SvgIcon width={"25px"} color={"white"}>
-          <TelegramSvg />
+        <SvgIcon color={theme.colors.brand}>
+          <LogoSvg />
         </SvgIcon>
       </SkeletonWrap>
-
-      <S.TelegramText>
-        <SkeletonWrap loading={loading}>Telegram</SkeletonWrap>
-      </S.TelegramText>
-    </FlexBox>
+    );
+  };
+  return (
+    <S.Footer>
+      <Container flexDirection={"row"}>
+        <S.Left>
+          <S.Logo>{renderLogo()}</S.Logo>
+          <S.List>
+            {renderPhoneSection()}
+            {renderInstagram()}
+            {renderTelegram()}
+            {renderPublicOffer()}
+          </S.List>
+        </S.Left>
+        <S.Right>{renderMap()}</S.Right>
+      </Container>
+    </S.Footer>
   );
 };

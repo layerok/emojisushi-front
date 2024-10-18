@@ -12,6 +12,7 @@ import * as Yup from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as S from "./styled";
 import {
+  ICity,
   IDistrict,
   IGetCartRes,
   IGetPaymentMethodsRes,
@@ -25,7 +26,6 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { cartQuery } from "~domains/cart/cart.query";
 import { AxiosError } from "axios";
 import { observer } from "mobx-react";
-import { useAppStore } from "~stores/appStore";
 import { ModalIDEnum } from "~common/modal.constants";
 import { ROUTES } from "~routes";
 import { isValidUkrainianPhone, getUserFullName } from "~domains/order/utils";
@@ -46,6 +46,7 @@ type TCheckoutFormProps = {
   shippingMethods?: IGetShippingMethodsRes | undefined;
   paymentMethods?: IGetPaymentMethodsRes | undefined;
   spots?: ISpot[];
+  city?: ICity;
 };
 
 // todo: mark optional fields instead of marking required fields
@@ -130,13 +131,14 @@ export const CheckoutForm = observer(
     shippingMethods: shippingMethodsRes,
     paymentMethods: paymentMethodsRes,
     user,
+    city,
     spots: spotsRes,
     loading = false,
   }: TCheckoutFormProps) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
-    const appStore = useAppStore();
+
     const showModal = useShowModal();
     const queryClient = useQueryClient();
 
@@ -197,14 +199,14 @@ export const CheckoutForm = observer(
 
     const wayforpayFormContainer = useRef(null);
 
-    const spots = (appStore.city.spots || []).map((spot) => ({
+    const spots = (city?.spots || []).map((spot) => ({
       label: spot.name,
       value: spot.id,
       disabledText: t("checkout.temporarilyUnavailable"),
       disabled: !user?.is_call_center_admin && spot.temporarily_unavailable,
     }));
 
-    const districts = (appStore.city.districts || []).map((district) => ({
+    const districts = (city?.districts || []).map((district) => ({
       label: district.name,
       value: district.id,
       disabledText: t("checkout.temporarilyUnavailable"),
@@ -282,7 +284,7 @@ export const CheckoutForm = observer(
         .map(([label, value]) => `${label}: ${value}`)
         .join(", ");
 
-      const district = appStore.city.districts.find(
+      const district = city?.districts.find(
         (district) => district.id === district_id
       );
 

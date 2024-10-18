@@ -1,5 +1,4 @@
 import { makeAutoObservable } from "mobx";
-import { ICity } from "@layerok/emojisushi-js-sdk";
 
 class AppStore {
   constructor() {
@@ -7,14 +6,10 @@ class AppStore {
   }
   lng = "uk";
   userConfirmedLocation = false;
-  city: ICity = null;
   setLng(lng: string) {
     this.lng = lng;
   }
 
-  setCity(city: ICity) {
-    this.city = city;
-  }
   setUserConfirmedLocation(state: boolean) {
     this.userConfirmedLocation = state;
   }

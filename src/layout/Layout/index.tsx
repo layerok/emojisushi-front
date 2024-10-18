@@ -33,19 +33,22 @@ import { RouterSubscriber, RouterState } from "@remix-run/router";
 import { RegisterModal } from "~components/modals/RegisterModal";
 import { ResetPasswordModal } from "~components/modals/ResetPasswordModal";
 import { ProductModal } from "~components/modals/ProductModal";
+import { useCurrentCitySlug } from "~domains/city/hooks/useCurrentCitySlug";
 
 export const Layout = observer(
   ({ children, ...rest }: { children?: ReactNode }) => {
     // todo: debounce it
     const { x, y } = useWindowScroll();
+    const appStore = useAppStore();
     const showStickyCart = y > 100;
 
     const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
     const { data: user, isLoading: isUserLoading } = useUser();
     const showModal = useShowModal();
 
+    const citySlug = useCurrentCitySlug();
     const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
-    const appStore = useAppStore();
+    const city = (cities?.data || []).find((c) => c.slug === citySlug);
 
     useEffect(() => {
       const routerSubscriber: RouterSubscriber = (state: RouterState) => {
@@ -92,7 +95,7 @@ export const Layout = observer(
         <S.Main>
           <Outlet />
         </S.Main>
-        <Footer />
+        <Footer city={city} loading={isCitiesLoading} />
         {!isCartLoading && (
           <Sticky top={"30px"} right={"30px"} show={showStickyCart}>
             <S.TinyCartButtonOverlay>

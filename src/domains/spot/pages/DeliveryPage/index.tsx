@@ -1,16 +1,19 @@
 import { Container, Heading } from "~components";
 import * as S from "./styled";
 import { useTranslation } from "react-i18next";
-import { useAppStore } from "~stores/appStore";
 import { observer } from "mobx-react";
-import { Link } from "react-router-dom";
-import { ROUTES } from "~routes";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { Page } from "~components/Page";
+import { useCurrentCitySlug } from "~domains/city/hooks/useCurrentCitySlug";
+import { useQuery } from "@tanstack/react-query";
+import { citiesQuery } from "~domains/city/cities.query";
 
 export const DeliveryPage = observer(() => {
   const { t } = useTranslation();
-  const appStore = useAppStore();
+
+  const citySlug = useCurrentCitySlug();
+  const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
+  const city = (cities?.data || []).find((c) => c.slug === citySlug);
 
   return (
     <Page>
@@ -28,11 +31,11 @@ export const DeliveryPage = observer(() => {
             </S.HeadingWrapper>
 
             {/*<S.AdresText>*/}
-            {/*  <b>{t("common.address")}</b>: {appStore.city.address}*/}
+            {/*  <b>{t("common.address")}</b>: {city.address}*/}
             {/*</S.AdresText>*/}
 
             <S.DeliveryText
-              dangerouslySetInnerHTML={{ __html: appStore.city.html_content }}
+              dangerouslySetInnerHTML={{ __html: city?.html_content }}
             />
             <p>
               <strong>
@@ -117,13 +120,9 @@ export const DeliveryPage = observer(() => {
               <li>Протягом 1-5 робочих днів повертаємо кошти на ваш рахунок</li>
             </ol>
           </S.Left>
-          {!!appStore.city.google_map_url && (
+          {!!city?.google_map_url && (
             <S.Right>
-              <iframe
-                src={appStore.city.google_map_url}
-                width="100%"
-                height="480"
-              />
+              <iframe src={city.google_map_url} width="100%" height="480" />
             </S.Right>
           )}
         </S.FlexContainer>

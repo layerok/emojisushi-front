@@ -11,15 +11,18 @@ import NiceModal from "@ebay/nice-modal-react";
 import { observer } from "mobx-react-lite";
 import { LOCATION_CONFIRMED_SEARCH_PARAM } from "~common/constants";
 import { useModal } from "~modal";
+import { useCurrentCitySlug } from "~domains/city/hooks/useCurrentCitySlug";
 
 export const LocationsModal = NiceModal.create(
   observer(() => {
     const modal = useModal();
-
-    const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
-    const { t } = useTranslation();
     const appStore = useAppStore();
+
+    const { t } = useTranslation();
     const location = useLocation();
+    const citySlug = useCurrentCitySlug();
+    const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
+    const currentCity = (cities?.data || []).find((c) => c.slug === citySlug);
 
     if (isCitiesLoading) {
       return null;
@@ -45,7 +48,7 @@ export const LocationsModal = NiceModal.create(
                 <S.Item
                   key={city.slug}
                   onClick={() => {
-                    if (appStore.city.slug === city.slug) {
+                    if (currentCity.slug === city.slug) {
                       appStore.setUserConfirmedLocation(true);
                     } else {
                       window.location.href =
@@ -56,7 +59,7 @@ export const LocationsModal = NiceModal.create(
 
                     modal.remove();
                   }}
-                  selected={appStore.city.slug === city.slug}
+                  selected={currentCity.slug === city.slug}
                 >
                   {city.name}
                 </S.Item>
