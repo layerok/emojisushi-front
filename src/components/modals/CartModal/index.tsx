@@ -1,7 +1,7 @@
-import { CSSProperties, useState } from "react";
+import { CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import styled, { useTheme } from "styled-components";
+import { useTheme } from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import NiceModal from "@ebay/nice-modal-react";
 import * as S from "./styled";
@@ -14,7 +14,6 @@ import {
   LogoSvg,
   // todo: replace SushiSvg because it is fake svg, it is png actually
   SushiSvg,
-  Popover,
 } from "~components";
 import { CartProduct } from "~models";
 import { cartQuery } from "~domains/cart/cart.query";
@@ -28,19 +27,15 @@ import { useBreakpoint2 } from "~common/hooks";
 
 import { Times } from "~assets/ui-icons";
 import { useDebouncedAddProductToCart } from "~hooks/use-debounced-add-product-to-cart";
-import { DeleteProductFromCartConfirmationView } from "~domains/cart/views/DeleteProductFromCartConfirmationView";
 
 // todo: clear outdated products from the card. You can do it on the frontend or on the backend
 const CartItem = (props: { item: CartProduct }) => {
   const { item } = props;
-  const { t } = useTranslation();
   const theme = useTheme();
 
   const newPrice = item.product.getNewPrice(item.variant)?.price_formatted;
   const oldPrice = item.product.getOldPrice(item.variant)?.price_formatted;
   const nameWithMods = item.nameWithMods;
-  const [deleteConfirmationPopoverOpen, setDeleteConfirmationPopoverOpen] =
-    useState(false);
 
   const variant = item.variant;
   const product = item.product;
@@ -49,10 +44,6 @@ const CartItem = (props: { item: CartProduct }) => {
   const { createUpdateHandler } = useDebouncedAddProductToCart();
 
   const handleDecrement = () => {
-    if (count - 1 <= 0) {
-      setDeleteConfirmationPopoverOpen(true);
-      return;
-    }
     createUpdateHandler({
       delta: -1,
       product: product,
@@ -75,40 +66,20 @@ const CartItem = (props: { item: CartProduct }) => {
     currentCount: count,
   });
 
-  const handleConfirm = () => {
-    setDeleteConfirmationPopoverOpen(false);
-    handleDelete();
-  };
-
-  const handleCancel = () => {
-    setDeleteConfirmationPopoverOpen(false);
-  };
-
   return (
     <S.Item>
       <S.ItemRemoveIcon>
-        <Popover
-          open={deleteConfirmationPopoverOpen}
-          onOpenChange={setDeleteConfirmationPopoverOpen}
-          render={() => (
-            <DeleteProductFromCartConfirmationView
-              onCancel={handleCancel}
-              onConfirm={handleConfirm}
-            />
-          )}
+        <SvgIcon
+          onClick={handleDelete}
+          color={theme.colors.grey[450]}
+          hoverColor={theme.colors.brand}
+          style={{
+            cursor: "pointer",
+            width: 25,
+          }}
         >
-          <SvgIcon
-            onClick={() => setDeleteConfirmationPopoverOpen(true)}
-            color={theme.colors.grey[450]}
-            hoverColor={theme.colors.brand}
-            style={{
-              cursor: "pointer",
-              width: 25,
-            }}
-          >
-            <Times />
-          </SvgIcon>
-        </Popover>
+          <Times />
+        </SvgIcon>
       </S.ItemRemoveIcon>
       <S.ItemImg src={item.product.mainImage}>
         {!item.product.mainImage && (
