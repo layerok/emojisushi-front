@@ -44,6 +44,9 @@ const CartItem = (props: { item: CartProduct }) => {
   const { createUpdateHandler } = useDebouncedAddProductToCart();
 
   const handleDecrement = () => {
+    if (count === 1) {
+      return;
+    }
     createUpdateHandler({
       delta: -1,
       product: product,
