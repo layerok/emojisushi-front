@@ -9,7 +9,7 @@ import {
   SvgIcon,
 } from "~components";
 import Skeleton from "react-loading-skeleton";
-import { IngredientsTooltipContent } from "~domains/order/pages/CheckoutPage/components/CheckoutCart/components/IngredientsTooltipContent";
+import { IngredientsTooltipContent } from "../IngredientsTooltipContent";
 
 type CheckoutCartItemProps = {
   item: CartProduct;

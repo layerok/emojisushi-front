@@ -20,7 +20,7 @@ const Inner = styled.div`
 `;
 
 const Items = styled.div`
-  max-height: 362px;
+  max-height: 426px;
   overflow-y: auto;
 `;
 
