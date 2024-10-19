@@ -1,6 +1,13 @@
 import * as S from "./styled";
 import { useState } from "react";
-import { PasswordInput, Input, FlexBox, Modal, SvgIcon } from "~components";
+import {
+  PasswordInput,
+  Input,
+  FlexBox,
+  Modal,
+  ModalContent,
+  ModalCloseButton,
+} from "~components";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLogin } from "~hooks/use-auth";
@@ -14,9 +21,6 @@ import { ModalIDEnum } from "~common/modal.constants";
 import { TextButton } from "~common/ui-components/TextButton";
 import { Button } from "~common/ui-components/Button/Button";
 import { useQueryClient } from "@tanstack/react-query";
-import styled, { useTheme } from "styled-components";
-import { Times } from "~assets/ui-icons";
-import { media } from "~common/custom-media";
 
 export const AuthModal = NiceModal.create(
   ({ redirect_to }: { redirect_to?: string }) => {
@@ -31,146 +35,108 @@ export const AuthModal = NiceModal.create(
       password?: string[];
     }>({});
 
-    const theme = useTheme();
+    const closeModal = () => {
+      modal.remove();
+    };
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      // TODO: use formik
+      const formData = new FormData(e.currentTarget);
+      const email = formData.get("email") as string | null;
+      const password = formData.get("password") as string | null;
+      setErrors({});
+      login.mutate(
+        {
+          email,
+          password,
+        },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries(wishlistsQuery.queryKey);
+            queryClient.invalidateQueries(cartQuery.queryKey);
+            navigate(redirect_to || ROUTES.ACCOUNT.PROFILE.path);
+            closeModal();
+          },
+          onError: (error) => {
+            if (error instanceof AxiosError) {
+              // todo: unify the error response
+              if (!error.response.data.errors) {
+                setErrors({
+                  email: [error.response.data.message],
+                });
+              } else {
+                setErrors(error.response.data.errors);
+              }
+            }
+          },
+        }
+      );
+    };
+
+    const openSignupModal = (e) => {
+      e.preventDefault();
+      NiceModal.show(ModalIDEnum.RegisterModal);
+      NiceModal.hide(ModalIDEnum.AuthModal);
+    };
+
+    const openResetPasswordModal = (e) => {
+      e.preventDefault();
+      NiceModal.hide(ModalIDEnum.AuthModal);
+      NiceModal.show(ModalIDEnum.ResetPasswordModal);
+    };
 
     return (
-      <Modal
-        overlayStyles={{
-          display: "grid",
-          justifyContent: "center",
-          alignItems: "center",
-          background: "rgba(0, 0, 0, 0.4)",
-          zIndex: theme.zIndices.modals,
-        }}
-        open={modal.visible}
-        onClose={() => {
-          modal.remove();
-        }}
-      >
-        {({ close }) => (
-          <Container>
-            <CloseIcon>
-              <SvgIcon
-                onClick={close}
-                hoverColor={theme.colors.brand}
-                color={"white"}
+      <Modal open={modal.visible} onClose={closeModal}>
+        <ModalContent>
+          <ModalCloseButton />
+          <S.Wrapper>
+            <S.Form onSubmit={handleSubmit}>
+              <S.Title>{t("authModal.login.title")}</S.Title>
+              <Input
+                label={t("common.email")}
+                name={"email"}
+                error={errors?.email?.[0]}
+                light={true}
+              />
+
+              <PasswordInput
                 style={{
-                  cursor: "pointer",
-                  width: 35,
+                  marginTop: 20,
                 }}
-              >
-                <Times />
-              </SvgIcon>
-            </CloseIcon>
-            <S.Wrapper>
-              <S.Form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  // TODO: use formik
-                  const formData = new FormData(e.currentTarget);
-                  const email = formData.get("email") as string | null;
-                  const password = formData.get("password") as string | null;
-                  setErrors({});
-                  login.mutate(
-                    {
-                      email,
-                      password,
-                    },
-                    {
-                      onSuccess: () => {
-                        queryClient.invalidateQueries(wishlistsQuery.queryKey);
-                        queryClient.invalidateQueries(cartQuery.queryKey);
-                        navigate(redirect_to || ROUTES.ACCOUNT.PROFILE.path);
-                        close();
-                      },
-                      onError: (error) => {
-                        if (error instanceof AxiosError) {
-                          // todo: unify the error response
-                          if (!error.response.data.errors) {
-                            setErrors({
-                              email: [error.response.data.message],
-                            });
-                          } else {
-                            setErrors(error.response.data.errors);
-                          }
-                        }
-                      },
-                    }
-                  );
-                }}
-              >
-                <S.Title>{t("authModal.login.title")}</S.Title>
-                <Input
-                  label={t("common.email")}
-                  name={"email"}
-                  error={errors?.email?.[0]}
-                  light={true}
-                />
+                label={t("common.password")}
+                name={"password"}
+                error={errors?.password?.[0]}
+                light={true}
+              />
 
-                <PasswordInput
-                  style={{
-                    marginTop: 20,
-                  }}
-                  label={t("common.password")}
-                  name={"password"}
-                  error={errors?.password?.[0]}
-                  light={true}
-                />
-
-                <FlexBox justifyContent={"flex-end"}>
-                  <TextButton
-                    style={{ paddingTop: "10px" }}
-                    onClick={(e) => {
-                      NiceModal.hide(ModalIDEnum.AuthModal);
-                      NiceModal.show(ModalIDEnum.ResetPasswordModal);
-                    }}
-                  >
-                    {t("common.forgotPassword")}
-                  </TextButton>
-                </FlexBox>
-
-                <Button
-                  loading={login.isLoading}
-                  type="submit"
-                  style={{ marginTop: "20px", display: "flex" }}
-                >
-                  {t("common.login")}
-                </Button>
-
+              <FlexBox justifyContent={"flex-end"}>
                 <TextButton
                   style={{ paddingTop: "10px" }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    NiceModal.show(ModalIDEnum.RegisterModal);
-                    NiceModal.hide(ModalIDEnum.AuthModal);
-                  }}
+                  onClick={openResetPasswordModal}
                 >
-                  {t("common.registration")}
+                  {t("common.forgotPassword")}
                 </TextButton>
-              </S.Form>
-            </S.Wrapper>
-          </Container>
-        )}
+              </FlexBox>
+
+              <Button
+                loading={login.isLoading}
+                type="submit"
+                style={{ marginTop: "20px", display: "flex" }}
+              >
+                {t("common.login")}
+              </Button>
+
+              <TextButton
+                style={{ paddingTop: "10px" }}
+                onClick={openSignupModal}
+              >
+                {t("common.registration")}
+              </TextButton>
+            </S.Form>
+          </S.Wrapper>
+        </ModalContent>
       </Modal>
     );
   }
 );
-
-const Container = styled.div`
-  position: relative;
-  background: ${({ theme }) => theme.colors.canvas.inset2};
-  box-shadow: ${({ theme }) => theme.shadows.canvasInset2Shadow};
-  border-radius: ${({ theme }) => theme.borderRadius.default};
-`;
-
-const CloseIcon = styled.div`
-  position: absolute;
-  top: 0;
-  right: -35px;
-  cursor: pointer;
-
-  ${media.lessThan("pc")`
-    right: 10px;
-    top: 10px;
-  `}
-`;

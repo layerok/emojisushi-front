@@ -29,11 +29,8 @@ export const MobMenuModal = NiceModal.create(() => {
   const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
   const theme = useTheme();
   const overlayStyles = {
-    justifyItems: "end",
+    justifyContent: "end",
     alignItems: "start",
-    background: "rgba(0, 0, 0, 0.4)",
-    display: "grid",
-    zIndex: theme.zIndices.modals,
   };
   const { data: user } = useUser();
   const { t } = useTranslation();

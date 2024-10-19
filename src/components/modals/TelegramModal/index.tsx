@@ -4,10 +4,8 @@ import { Button } from "~common/ui-components/Button/Button";
 import { useTranslation } from "react-i18next";
 import NiceModal from "@ebay/nice-modal-react";
 import { useModal } from "~modal";
-import styled, { useTheme } from "styled-components";
-import { Modal } from "~components";
-import { Times } from "~assets/ui-icons";
-import { media } from "~common/custom-media";
+import { useTheme } from "styled-components";
+import { Modal, ModalCloseButton, ModalContent } from "~components";
 import * as S from "./styled";
 
 export const TelegramModal = NiceModal.create(() => {
@@ -30,64 +28,31 @@ export const TelegramModal = NiceModal.create(() => {
       }}
       open={modal.visible}
     >
-      {({ close }) => (
-        <Root>
-          <CloseIcon>
-            <SvgIcon
-              onClick={close}
-              hoverColor={theme.colors.brand}
-              color={"white"}
+      <ModalContent>
+        <ModalCloseButton />
+        <S.Root>
+          <SvgIcon color={theme.colors.brand} width={"60px"}>
+            <TelegramSvg strokeWidth={1} />
+          </SvgIcon>
+
+          <S.Title>{t("telegramModal.appeared")}</S.Title>
+          <S.Subtitle>{t("telegramModal.stock")}</S.Subtitle>
+          <S.Footer>
+            <Button
+              filled
+              // @ts-ignore
+              as={"a"}
+              href={"https://t.me/Emojisushibot"}
+              target={"_blank"}
               style={{
-                cursor: "pointer",
-                width: 35,
+                width: 250,
               }}
             >
-              <Times />
-            </SvgIcon>
-          </CloseIcon>
-          <S.Root>
-            <SvgIcon color={theme.colors.brand} width={"60px"}>
-              <TelegramSvg strokeWidth={1} />
-            </SvgIcon>
-
-            <S.Title>{t("telegramModal.appeared")}</S.Title>
-            <S.Subtitle>{t("telegramModal.stock")}</S.Subtitle>
-            <S.Footer>
-              <Button
-                filled
-                // @ts-ignore
-                as={"a"}
-                href={"https://t.me/Emojisushibot"}
-                target={"_blank"}
-                style={{
-                  width: 250,
-                }}
-              >
-                {t("telegramModal.go_to")}
-              </Button>
-            </S.Footer>
-          </S.Root>
-        </Root>
-      )}
+              {t("telegramModal.go_to")}
+            </Button>
+          </S.Footer>
+        </S.Root>
+      </ModalContent>
     </Modal>
   );
 });
-
-const Root = styled.div`
-  position: relative;
-  background: ${({ theme }) => theme.colors.canvas.inset2};
-  box-shadow: ${({ theme }) => theme.shadows.canvasInset2Shadow};
-  border-radius: ${({ theme }) => theme.borderRadius.default};
-`;
-
-const CloseIcon = styled.div`
-  position: absolute;
-  top: 0;
-  right: -35px;
-  cursor: pointer;
-
-  ${media.lessThan("pc")`
-    right: 10px;
-    top: 10px;
-  `}
-`;

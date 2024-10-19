@@ -1,7 +1,7 @@
 import React from "react";
 import NiceModal from "@ebay/nice-modal-react";
 import { useModal } from "~modal";
-import { Modal, Price, SkeletonWrap, SvgIcon } from "~components";
+import { Modal, ModalContent, Price, SkeletonWrap, SvgIcon } from "~components";
 import * as S from "./styled";
 import { useTheme } from "styled-components";
 import { Times } from "~assets/ui-icons";
@@ -25,15 +25,6 @@ export const ProductModal = NiceModal.create(() => {
   const modal = useModal();
   const theme = useTheme();
   const { t } = useTranslation();
-
-  const overlayStyles = {
-    zIndex: theme.zIndices.modals,
-    background: "rgba(0, 0, 0, 0.4)",
-    display: "grid",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  };
 
   const [searchParams] = useSearchParams();
 
@@ -77,11 +68,13 @@ export const ProductModal = NiceModal.create(() => {
   const { createUpdateHandler } = useDebouncedAddProductToCart();
   return (
     <Modal
-      overlayStyles={overlayStyles}
+      overlayStyles={{
+        padding: 20,
+      }}
       open={modal.visible}
       onClose={closeModal}
     >
-      {() => (
+      <ModalContent>
         <S.Wrapper>
           <S.CloseIcon>
             <SvgIcon
@@ -155,7 +148,7 @@ export const ProductModal = NiceModal.create(() => {
             </SkeletonWrap>
           </S.BotWrapper>
         </S.Wrapper>
-      )}
+      </ModalContent>
     </Modal>
   );
 });

@@ -4,10 +4,7 @@ import media from "~common/custom-media";
 const Wrapper = styled.div`
   padding: 40px;
   width: 620px;
-  background: ${({ theme }) => theme.colors.canvas.inset2};
-  box-shadow: ${({ theme }) => theme.shadows.canvasInset2Shadow};
-  border-radius: ${({ theme }) => theme.borderRadius.default};
-  position: relative;
+
   ${media.lessThan("tablet")`
     width: 360px;
   `}

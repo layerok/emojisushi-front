@@ -1,12 +1,10 @@
-import { SvgIcon, Modal } from "~components";
+import { SvgIcon, Modal, ModalContent, ModalCloseButton } from "~components";
 import { useTranslation } from "react-i18next";
 import { Button } from "~common/ui-components/Button/Button";
 
 import NiceModal from "@ebay/nice-modal-react";
 import { useModal } from "~modal";
-import styled, { useTheme } from "styled-components";
-import { Times } from "~assets/ui-icons";
-import { media } from "~common/custom-media";
+import { useTheme } from "styled-components";
 import * as S from "./styled";
 
 const ArrowDownSvg = () => {
@@ -45,59 +43,26 @@ export const AppUpdateModal = NiceModal.create(() => {
         modal.remove();
       }}
     >
-      {({ close }) => (
-        <Root>
-          <CloseIcon>
-            <SvgIcon
-              onClick={close}
-              hoverColor={theme.colors.brand}
-              color={"white"}
-              style={{
-                cursor: "pointer",
-                width: 35,
+      <ModalContent>
+        <ModalCloseButton />
+        <S.Root>
+          <SvgIcon color={theme.colors.brand} width={"60px"}>
+            <ArrowDownSvg />
+          </SvgIcon>
+          <S.Title>{t("appUpdate.title")}</S.Title>
+          <S.Subtitle>{t("appUpdate.subtitle")}</S.Subtitle>
+          <S.Footer>
+            <Button
+              filled={true}
+              onClick={() => {
+                window.location.reload();
               }}
             >
-              <Times />
-            </SvgIcon>
-          </CloseIcon>
-          <S.Root>
-            <SvgIcon color={theme.colors.brand} width={"60px"}>
-              <ArrowDownSvg />
-            </SvgIcon>
-            <S.Title>{t("appUpdate.title")}</S.Title>
-            <S.Subtitle>{t("appUpdate.subtitle")}</S.Subtitle>
-            <S.Footer>
-              <Button
-                filled={true}
-                onClick={() => {
-                  window.location.reload();
-                }}
-              >
-                {t("appUpdate.action")}
-              </Button>
-            </S.Footer>
-          </S.Root>
-        </Root>
-      )}
+              {t("appUpdate.action")}
+            </Button>
+          </S.Footer>
+        </S.Root>
+      </ModalContent>
     </Modal>
   );
 });
-
-const Root = styled.div`
-  position: relative;
-  background: ${({ theme }) => theme.colors.canvas.inset2};
-  box-shadow: ${({ theme }) => theme.shadows.canvasInset2Shadow};
-  border-radius: ${({ theme }) => theme.borderRadius.default};
-`;
-
-const CloseIcon = styled.div`
-  position: absolute;
-  top: 0;
-  right: -35px;
-  cursor: pointer;
-
-  ${media.lessThan("pc")`
-    right: 10px;
-    top: 10px;
-  `}
-`;

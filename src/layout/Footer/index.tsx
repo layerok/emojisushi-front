@@ -16,6 +16,7 @@ import { useShowModal } from "~modal";
 import { useTheme } from "styled-components";
 import { ROUTES } from "~routes";
 import { ICity } from "@layerok/emojisushi-js-sdk";
+import { Fragment } from "react";
 
 type FooterProps = {
   loading?: boolean;
@@ -54,7 +55,9 @@ export const Footer = ({ loading = false, city }: FooterProps) => {
           </>
         );
       }
-      return city.phones.split(",").map((phone, i) => renderPhone({ phone }));
+      return city.phones.split(",").map((phone, i) => {
+        return <Fragment key={i}>{renderPhone({ phone })}</Fragment>;
+      });
     };
     return (
       <>

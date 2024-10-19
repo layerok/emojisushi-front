@@ -124,11 +124,9 @@ export const CartModal = NiceModal.create(() => {
   const items = data.map((json) => new CartProduct(json));
 
   const overlayStyles = {
-    background: "rgba(0, 0, 0, 0.4)",
-    display: "grid",
-    zIndex: theme.zIndices.modals,
     ...(!isMobile && {
       justifyItems: "end",
+      justifyContent: "end",
       alignItems: "start",
     }),
   };
@@ -158,75 +156,71 @@ export const CartModal = NiceModal.create(() => {
       onClose={closeModal}
       overlayStyles={overlayStyles}
     >
-      {() => (
-        <S.Wrapper>
-          <S.CloseIcon>
-            <SvgIcon
-              onClick={closeModal}
-              color={"white"}
-              hoverColor={theme.colors.brand}
-              style={{
-                cursor: "pointer",
-                width: 35,
-              }}
-            >
-              <Times />
-            </SvgIcon>
-          </S.CloseIcon>
+      <S.Wrapper>
+        <S.CloseIcon>
+          <SvgIcon
+            onClick={closeModal}
+            color={"white"}
+            hoverColor={theme.colors.brand}
+            style={{
+              cursor: "pointer",
+              width: 35,
+            }}
+          >
+            <Times />
+          </SvgIcon>
+        </S.CloseIcon>
 
-          {items.length === 0 && (
-            <S.EmptyCartImgContainer>
-              <SushiSvg />
-              <S.Title>{t("cartModal.empty")}</S.Title>
-            </S.EmptyCartImgContainer>
-          )}
+        {items.length === 0 && (
+          <S.EmptyCartImgContainer>
+            <SushiSvg />
+            <S.Title>{t("cartModal.empty")}</S.Title>
+          </S.EmptyCartImgContainer>
+        )}
 
-          {items.length !== 0 && (
-            <S.Items style={itemsContainerStyles}>
-              {items.map((item, i) => (
-                <CartItem
-                  // don't use item.id as key,
-                  //
-                  // When user clicks "Add to cart" button
-                  // We lie to the user that the item has been added to cart
-                  // In reality we created fake item in the cart on the client side
-                  // as though the server did it.
-                  // So the user doesn't have to wait until server responds.
-                  // In the background we send request to the server to add product to cart for real
-                  // Until server responds we render fake cart item with fake id
-                  // If we use fake id as key for CartItem component,
-                  // then the CartItem component will be fully remounted when server responds, loosing its state.
-                  // we want to avoid that, so we use productId + variantId as key
-                  key={[item.productId, item.variantId]
-                    .filter(Boolean)
-                    .join(".")}
-                  item={item}
-                />
-              ))}
-            </S.Items>
-          )}
+        {items.length !== 0 && (
+          <S.Items style={itemsContainerStyles}>
+            {items.map((item, i) => (
+              <CartItem
+                // don't use item.id as key,
+                //
+                // When user clicks "Add to cart" button
+                // We lie to the user that the item has been added to cart
+                // In reality we created fake item in the cart on the client side
+                // as though the server did it.
+                // So the user doesn't have to wait until server responds.
+                // In the background we send request to the server to add product to cart for real
+                // Until server responds we render fake cart item with fake id
+                // If we use fake id as key for CartItem component,
+                // then the CartItem component will be fully remounted when server responds, loosing its state.
+                // we want to avoid that, so we use productId + variantId as key
+                key={[item.productId, item.variantId].filter(Boolean).join(".")}
+                item={item}
+              />
+            ))}
+          </S.Items>
+        )}
 
-          {items.length !== 0 && (
-            <S.Footer>
-              <FlexBox alignItems={"center"} justifyContent={"space-between"}>
-                <S.Sum>{t("cartModal.sum_order")}</S.Sum>
-                <Price newPrice={cart.total} />
-              </FlexBox>
-              <S.Button>
-                <Button
-                  disabled={items.length === 0}
-                  onClick={checkout}
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  {t("cartModal.checkout")}
-                </Button>
-              </S.Button>
-            </S.Footer>
-          )}
-        </S.Wrapper>
-      )}
+        {items.length !== 0 && (
+          <S.Footer>
+            <FlexBox alignItems={"center"} justifyContent={"space-between"}>
+              <S.Sum>{t("cartModal.sum_order")}</S.Sum>
+              <Price newPrice={cart.total} />
+            </FlexBox>
+            <S.Button>
+              <Button
+                disabled={items.length === 0}
+                onClick={checkout}
+                style={{
+                  width: "100%",
+                }}
+              >
+                {t("cartModal.checkout")}
+              </Button>
+            </S.Button>
+          </S.Footer>
+        )}
+      </S.Wrapper>
     </Modal>
   );
 });
