@@ -34,6 +34,7 @@ import { RegisterModal } from "~components/modals/RegisterModal";
 import { ResetPasswordModal } from "~components/modals/ResetPasswordModal";
 import { ProductModal } from "~components/modals/ProductModal";
 import { useCurrentCitySlug } from "~domains/city/hooks/useCurrentCitySlug";
+import { SearchProductsModal } from "~components/modals/SearchProductsModal";
 
 export const Layout = observer(
   ({ children, ...rest }: { children?: ReactNode }) => {
@@ -111,6 +112,7 @@ export const Layout = observer(
         <LocationsModal id={ModalIDEnum.LocationModal} />
         <RestaurantClosed id={ModalIDEnum.RestaurantClosed} />
         <TelegramModal id={ModalIDEnum.TelegramModal} />
+        <SearchProductsModal id={ModalIDEnum.SearchProductsModal} />
         <ContactsModal id={ModalIDEnum.ContactsModal} />
         <CartModal id={ModalIDEnum.CartModal} />
         <ProductModal id={ModalIDEnum.ProductModal} />

@@ -13,7 +13,6 @@ import {
 import { ICategory, SortKey } from "@layerok/emojisushi-js-sdk";
 import { ChipCloud } from "~components";
 import {
-  Form,
   NavLink,
   useLocation,
   useSearchParams,
@@ -21,15 +20,15 @@ import {
 } from "react-router-dom";
 import { ROUTES } from "~routes";
 import { useTranslation } from "react-i18next";
-import { useDebounce } from "~common/hooks";
 import { EndAdornment } from "~common/ui-components/EndAdornment";
 import {
-  SEARCH_QUERY_SEARCH_PARAM,
   SORT_MODE_KEYS,
   SORT_MODE_SEARCH_PARAM,
   SortModeEnum,
 } from "~common/constants";
 import { UIButton } from "~common/ui-components/UIButton/UIButton";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalIDEnum } from "~common/modal.constants";
 
 type SidebarProps = { loading?: boolean; categories?: ICategory[] };
 
@@ -43,19 +42,6 @@ export const MobSidebar = ({
   const { t } = useTranslation();
 
   const [searchParams] = useSearchParams();
-  const query = searchParams.get(SEARCH_QUERY_SEARCH_PARAM);
-
-  const [debouncedSearchChange] = useDebounce((form) => {
-    const isFirstSearch = query == null;
-    submit(form, {
-      replace: !isFirstSearch,
-      preventScrollReset: true,
-    });
-  }, 500);
-
-  const handleSearchChange = (event) => {
-    debouncedSearchChange(event.currentTarget.form);
-  };
 
   const options = SORT_MODE_KEYS.map((key) => ({
     name: t(`sort.${key}`),
@@ -84,35 +70,25 @@ export const MobSidebar = ({
     });
   };
 
-  const inputs = Array.from(searchParams.entries())
-    .filter(([k]) => k !== SEARCH_QUERY_SEARCH_PARAM)
-    .map(([k, v], idx) => (
-      <input type="hidden" name={k} defaultValue={v} key={idx} />
-    ));
-
   return (
     <S.Sidebar>
       <S.Controls>
         <S.SearchContainer>
-          <Form role="search" action={location.pathname}>
-            {inputs}
-            <Input
-              // I'm changing key to reset input value
-              key={location.pathname}
-              onChange={handleSearchChange}
-              name={SEARCH_QUERY_SEARCH_PARAM}
-              defaultValue={query}
-              loading={loading}
-              endAdornment={
-                <EndAdornment>
-                  <SvgIcon color={"white"} width={"25px"} height={"25px"}>
-                    <MagnifierSvg />
-                  </SvgIcon>
-                </EndAdornment>
-              }
-              placeholder={t("search.input_search")}
-            />
-          </Form>
+          <Input
+            inputMode={"none"}
+            onClick={() => {
+              NiceModal.show(ModalIDEnum.SearchProductsModal);
+            }}
+            loading={loading}
+            endAdornment={
+              <EndAdornment>
+                <SvgIcon color={"white"} width={"25px"} height={"25px"}>
+                  <MagnifierSvg />
+                </SvgIcon>
+              </EndAdornment>
+            }
+            placeholder={t("search.input_search")}
+          />
         </S.SearchContainer>
 
         <FlexBox justifyContent={"flex-end"}>

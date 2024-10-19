@@ -32,7 +32,6 @@ import { media } from "~common/custom-media";
 
 export const ProductModal = NiceModal.create(() => {
   const modal = useNiceModal();
-  const theme = useTheme();
   const { t } = useTranslation();
 
   const [searchParams] = useSearchParams();

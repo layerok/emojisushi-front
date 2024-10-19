@@ -7,7 +7,7 @@ import clsx from "clsx";
 export type IInputComponentProps = React.HTMLProps<HTMLInputElement> & {
   endAdornment?: ReactNode;
   startAdornment?: ReactNode;
-  name: string;
+  name?: string;
   placeholder?: string;
   required?: boolean;
   light?: boolean;
