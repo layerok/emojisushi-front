@@ -1,54 +1,84 @@
-import { BaseModal, IBaseModalProps } from "../BaseModal";
-import * as S from "./styled";
-import { CSSProperties, ReactNode } from "react";
-import { useTheme } from "styled-components";
-import { Times } from "~assets/ui-icons";
-import { SvgIcon } from "~components";
+import { CSSProperties, ReactNode, useId, useState } from "react";
+import {
+  useClick,
+  useDismiss,
+  useFloating,
+  useInteractions,
+  useRole,
+  FloatingPortal,
+  FloatingOverlay,
+} from "@floating-ui/react";
 
 export type IModalProps = {
-  alignItems?: CSSProperties["alignItems"];
-  justifyContent?: CSSProperties["justifyContent"];
-  children: ReactNode | { (props: { close: () => void }): ReactNode };
-  width?: string;
-  alignCenter?: boolean;
-} & Omit<IBaseModalProps, "overlayStyles" | "children">;
+  open?: boolean;
+  overlayStyles: CSSProperties;
+  children:
+    | ReactNode
+    | {
+        (props: {
+          close: () => void;
+          labelId: string;
+          descriptionId: string;
+        }): ReactNode;
+      };
+  onClose?: () => void;
+  onOpenChange?: (state: boolean) => void;
+};
 
 export const Modal = ({
-  alignItems = "center",
-  justifyContent = "center",
   children,
-  width,
-  alignCenter,
-  ...rest
+  overlayStyles,
+  open = false,
+  onOpenChange,
+  onClose,
 }: IModalProps) => {
-  const theme = useTheme();
-  const overlayStyles = {
-    display: "grid",
-    justifyContent,
-    alignItems,
-    background: "rgba(0, 0, 0, 0.4)",
-    zIndex: theme.zIndices.modals,
+  const [allowDismiss, setAllowDismiss] = useState(true);
+
+  const setOpen = (state: boolean) => {
+    if (!state) {
+      onClose?.();
+    }
+    onOpenChange?.(state);
   };
+
+  const { context, refs } = useFloating({
+    open,
+    onOpenChange: setOpen,
+  });
+
+  const id = useId();
+  const labelId = `${id}-label`;
+  const descriptionId = `${id}-description`;
+
+  const { getFloatingProps } = useInteractions([
+    useClick(context),
+    useRole(context),
+    useDismiss(context, {
+      enabled: allowDismiss,
+    }),
+  ]);
+
   return (
-    <BaseModal overlayStyles={overlayStyles} {...rest}>
-      {({ close }) => (
-        <S.Container width={width} alignCenter={alignCenter}>
-          <S.CloseIcon>
-            <SvgIcon
-              onClick={close}
-              hoverColor={theme.colors.brand}
-              color={"white"}
-              style={{
-                cursor: "pointer",
-                width: 35,
-              }}
-            >
-              <Times />
-            </SvgIcon>
-          </S.CloseIcon>
-          {typeof children === "function" ? children({ close }) : children}
-        </S.Container>
+    <FloatingPortal>
+      {open && (
+        <FloatingOverlay lockScroll style={{ ...overlayStyles }}>
+          <div
+            {...getFloatingProps({
+              ref: refs.setFloating,
+              "aria-labelledby": labelId,
+              "aria-describedby": descriptionId,
+            })}
+          >
+            {typeof children === "function"
+              ? children({
+                  close: () => setOpen(false),
+                  labelId,
+                  descriptionId,
+                })
+              : children}
+          </div>
+        </FloatingOverlay>
       )}
-    </BaseModal>
+    </FloatingPortal>
   );
 };

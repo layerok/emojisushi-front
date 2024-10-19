@@ -2,7 +2,7 @@ import * as S from "./styled";
 import {
   SvgIcon,
   FlexBox,
-  BaseModal,
+  Modal,
   HeartSvg,
   UserSvg,
   LanguageSelector,
@@ -79,7 +79,7 @@ export const MobMenuModal = NiceModal.create(() => {
   };
 
   return (
-    <BaseModal
+    <Modal
       open={modal.visible}
       onClose={() => {
         modal.remove();
@@ -180,6 +180,6 @@ export const MobMenuModal = NiceModal.create(() => {
           </FlexBox>
         </S.Item>
       </S.Wrapper>
-    </BaseModal>
+    </Modal>
   );
 });

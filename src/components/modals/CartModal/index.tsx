@@ -8,7 +8,7 @@ import * as S from "./styled";
 import {
   FlexBox,
   LightCounter,
-  BaseModal,
+  Modal,
   Price,
   SvgIcon,
   LogoSvg,
@@ -153,7 +153,7 @@ export const CartModal = NiceModal.create(() => {
   };
 
   return (
-    <BaseModal
+    <Modal
       open={modal.visible}
       onClose={closeModal}
       overlayStyles={overlayStyles}
@@ -227,6 +227,6 @@ export const CartModal = NiceModal.create(() => {
           )}
         </S.Wrapper>
       )}
-    </BaseModal>
+    </Modal>
   );
 });

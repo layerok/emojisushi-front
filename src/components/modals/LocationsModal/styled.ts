@@ -1,10 +1,15 @@
 import styled, { css } from "styled-components";
 import { ifProp } from "styled-tools";
+import { media } from "~common/custom-media";
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px;
+  width: 540px;
+  ${media.lessThan("tablet")`
+    width: 350px;
+  `};
 `;
 
 const Text = styled.p`
@@ -43,11 +48,4 @@ const Item = styled.div<{
   cursor: pointer
 `;
 
-const CheckboxWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  padding-left: 18px;
-  padding-top: 30px;
-`;
-
-export { Wrapper, Text, FilterMagnifier, CheckboxWrapper, Content, Item };
+export { Wrapper, Text, FilterMagnifier, Content, Item };
