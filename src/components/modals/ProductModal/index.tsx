@@ -1,9 +1,16 @@
 import React from "react";
 import NiceModal from "@ebay/nice-modal-react";
-import { useModal } from "~modal";
-import { Modal, ModalContent, Price, SkeletonWrap, SvgIcon } from "~components";
+
+import {
+  Modal,
+  ModalContent as BaseModalContent,
+  Price,
+  SkeletonWrap,
+  SvgIcon,
+  useModal,
+} from "~components";
 import * as S from "./styled";
-import { useTheme } from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { Times } from "~assets/ui-icons";
 import MyCounter from "~components/MyCounter";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -20,9 +27,11 @@ import { findInCart } from "~components/ProductCard/utils";
 import { useTranslation } from "react-i18next";
 import { CategorySlug } from "~domains/category/constants";
 import { useDebouncedAddProductToCart } from "~hooks/use-debounced-add-product-to-cart";
+import { useModal as useNiceModal } from "~modal";
+import { media } from "~common/custom-media";
 
 export const ProductModal = NiceModal.create(() => {
-  const modal = useModal();
+  const modal = useNiceModal();
   const theme = useTheme();
   const { t } = useTranslation();
 
@@ -66,29 +75,12 @@ export const ProductModal = NiceModal.create(() => {
   const count = cartProduct?.quantity || 0;
 
   const { createUpdateHandler } = useDebouncedAddProductToCart();
+
   return (
-    <Modal
-      overlayStyles={{
-        padding: 20,
-      }}
-      open={modal.visible}
-      onClose={closeModal}
-    >
+    <Modal open={modal.visible} onClose={closeModal}>
       <ModalContent>
+        <ModalCloseButton />
         <S.Wrapper>
-          <S.CloseIcon>
-            <SvgIcon
-              onClick={closeModal}
-              color={"white"}
-              hoverColor={theme.colors.brand}
-              style={{
-                cursor: "pointer",
-                width: 35,
-              }}
-            >
-              <Times />
-            </SvgIcon>
-          </S.CloseIcon>
           <S.TopWrapper>
             <SkeletonWrap loading={isLoading}>
               <S.Image
@@ -152,3 +144,29 @@ export const ProductModal = NiceModal.create(() => {
     </Modal>
   );
 });
+
+const ModalContent = styled(BaseModalContent)`
+  ${media.lessThan("tablet")`
+  border-radius: 0;
+`}
+`;
+
+const ModalCloseButton = () => {
+  const theme = useTheme();
+  const { close: closeModal } = useModal();
+  return (
+    <S.CloseIcon>
+      <SvgIcon
+        onClick={closeModal}
+        color={"white"}
+        hoverColor={theme.colors.brand}
+        style={{
+          cursor: "pointer",
+          width: 35,
+        }}
+      >
+        <Times />
+      </SvgIcon>
+    </S.CloseIcon>
+  );
+};

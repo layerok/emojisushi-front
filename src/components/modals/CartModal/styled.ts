@@ -3,8 +3,8 @@ import { prop } from "styled-tools";
 import media from "~common/custom-media";
 
 const Wrapper = styled.div`
-  position: relative;
   width: 420px;
+  position: relative;
   background: ${({ theme }) => theme.colors.canvas.inset2};
   box-shadow: ${({ theme }) => theme.shadows.canvasInset2Shadow};
   border-bottom-left-radius: ${({ theme }) => theme.borderRadius.default};

@@ -4,10 +4,15 @@ import media from "~common/custom-media";
 const Wrapper = styled.div`
   padding: 40px;
   width: 620px;
-
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   ${media.lessThan("tablet")`
-    width: 360px;
-  `}
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+  `};
 `;
 
 const TopWrapper = styled.div`
@@ -15,7 +20,6 @@ const TopWrapper = styled.div`
 
   ${media.lessThan("tablet")`
     flex-direction: column;
-    
   `}
 `;
 
@@ -24,6 +28,7 @@ const Image = styled.div`
   height: 160px;
   background-size: contain;
   background-repeat: no-repeat;
+  background-position: center;
   flex-shrink: 0;
 
   ${media.lessThan("tablet")`
