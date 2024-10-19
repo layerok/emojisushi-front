@@ -8,10 +8,11 @@ import { Price } from "~components/Price";
 import { Button } from "~common/ui-components/Button/Button";
 import { IGetCartRes, IGetWishlistRes } from "@layerok/emojisushi-js-sdk";
 import {
+  AnimatedTooltip,
   ButtonCounter,
   HeartSvg,
+  InfoSvg,
   InfoTooltip,
-  IngredientsTooltip,
   LogoSvg,
   SkeletonWrap,
   SvgIcon,
@@ -28,6 +29,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { PRODUCT_ID_SEARCH_QUERY_PARAM } from "~domains/product/products.query";
 
 import { useDebouncedAddProductToCart } from "~hooks/use-debounced-add-product-to-cart";
+import { IngredientsTooltipContent } from "~components/ProductCard/components/IngredientsTooltipContent";
 
 type ProductCardProps = {
   product?: Product;
@@ -147,7 +149,16 @@ export const ProductCard = (props: ProductCardProps) => {
             </InfoTooltip>
           </SkeletonWrap>
           <SkeletonWrap borderRadius="100%" loading={loading}>
-            <IngredientsTooltip items={product?.ingredients || []} />
+            <AnimatedTooltip
+              placement={"bottom-start"}
+              label={
+                <IngredientsTooltipContent items={product?.ingredients || []} />
+              }
+            >
+              <SvgIcon width="25px" color={"#999"}>
+                <InfoSvg />
+              </SvgIcon>
+            </AnimatedTooltip>
           </SkeletonWrap>
         </S.Description>
       </EqualHeightElement>

@@ -13,8 +13,8 @@ import { useUser } from "~hooks/use-auth";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 
 import { spotsQuery } from "~domains/spot/queries/spots.query";
-import { CheckoutForm } from "~domains/order/pages/CheckoutPage/components/CheckoutForm";
-import { CheckoutCart } from "~domains/order/pages/CheckoutPage/components/CheckoutCart";
+import { CheckoutForm } from "src/domains/order/pages/CheckoutPage/components/CheckoutForm";
+import { CheckoutCart } from "src/domains/order/pages/CheckoutPage/components/CheckoutCart";
 import { useCurrentCitySlug } from "~domains/city/hooks/useCurrentCitySlug";
 import { citiesQuery } from "~domains/city/cities.query";
 import * as S from "./styled";
