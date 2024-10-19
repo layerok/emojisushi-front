@@ -5,7 +5,6 @@ import {
   FlexBox,
   HightlightText,
   LanguageSelector,
-  LocationPickerPopover,
   LogoSvg,
   SvgButton,
   SvgIcon,
@@ -13,15 +12,22 @@ import {
   Container,
   UserSvg,
   SkeletonWrap,
+  DropdownPopoverOption,
+  DropdownPopover,
 } from "~components";
 
 import { ICity, IGetCartRes, IUser } from "@layerok/emojisushi-js-sdk";
 import { ModalIDEnum } from "~common/modal.constants";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
 import { LEAVE_REVIEW_LINK, ROUTES } from "~routes";
 import { useShowModal } from "~modal";
 import { useTheme } from "styled-components";
+import { useQuery } from "@tanstack/react-query";
+import { citiesQuery } from "~domains/city/cities.query";
+import { useCurrentCitySlug } from "~domains/city/hooks/useCurrentCitySlug";
+import { LOCATION_CONFIRMED_SEARCH_PARAM } from "~common/constants";
+import { LocationDropdownTrigger } from "~layout/Header/LocationDropdownTrigger";
 
 export const Header = ({
   loading = false,
@@ -37,6 +43,48 @@ export const Header = ({
   const navigate = useNavigate();
   const showModal = useShowModal();
   const theme = useTheme();
+
+  const location = useLocation();
+
+  const { data: cities, isLoading } = useQuery(citiesQuery);
+  const citySlug = useCurrentCitySlug();
+
+  const renderLocationDropdown = () => {
+    const cityOptions = (cities?.data || []).map((city) => ({
+      id: city.slug,
+      name: city.name,
+    }));
+
+    const selectedCityOption = cityOptions.find(
+      (option) => option.id === citySlug
+    );
+    const selectedCityIndex = cityOptions.indexOf(selectedCityOption);
+    const handleLocationSelect = ({
+      option,
+    }: {
+      option: DropdownPopoverOption;
+    }) => {
+      const city = cities.data.find((city) => city.slug === option.id);
+      window.location.href =
+        city.frontend_url +
+        location.pathname +
+        `?${LOCATION_CONFIRMED_SEARCH_PARAM}=true`;
+    };
+    return (
+      <DropdownPopover
+        backgroundColor={theme.colors.canvas.inset}
+        width={"160px"}
+        offset={22}
+        options={cityOptions}
+        selectedIndex={selectedCityIndex}
+        onSelect={handleLocationSelect}
+      >
+        {({ selectedOption }) => (
+          <LocationDropdownTrigger title={selectedOption?.name} />
+        )}
+      </DropdownPopover>
+    );
+  };
 
   return (
     <S.Container>
@@ -58,7 +106,7 @@ export const Header = ({
 
           <S.HeaderItem>
             <SkeletonWrap loading={loading}>
-              <LocationPickerPopover width={"160px"} offset={22} />
+              {renderLocationDropdown()}
             </SkeletonWrap>
           </S.HeaderItem>
 

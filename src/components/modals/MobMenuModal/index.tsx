@@ -1,15 +1,16 @@
 import * as S from "./styled";
 import {
-  LocationPickerPopover,
   SvgIcon,
   FlexBox,
   BaseModal,
   HeartSvg,
   UserSvg,
   LanguageSelector,
+  DropdownPopoverOption,
+  DropdownPopover,
 } from "~components";
 import { useTranslation } from "react-i18next";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { HightlightText } from "~components";
 import { useUser } from "~hooks/use-auth";
 import NiceModal from "@ebay/nice-modal-react";
@@ -19,6 +20,9 @@ import { citiesQuery } from "~domains/city/cities.query";
 import { LEAVE_REVIEW_LINK, ROUTES } from "~routes";
 import { useModal } from "~modal";
 import { useTheme } from "styled-components";
+import { useCurrentCitySlug } from "~domains/city/hooks/useCurrentCitySlug";
+import { LOCATION_CONFIRMED_SEARCH_PARAM } from "~common/constants";
+import { LocationDropdownTrigger } from "~components/modals/MobMenuModal/LocationDropdownTrigger";
 
 export const MobMenuModal = NiceModal.create(() => {
   const modal = useModal();
@@ -35,9 +39,44 @@ export const MobMenuModal = NiceModal.create(() => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  const location = useLocation();
+
+  const citySlug = useCurrentCitySlug();
+
   if (isCitiesLoading) {
     return null;
   }
+
+  const renderCitiesDropdown = () => {
+    const options = (cities?.data || []).map((city) => ({
+      id: city.slug,
+      name: city.name,
+    }));
+
+    const selectedOption = options.find((option) => option.id === citySlug);
+    const selectedIndex = options.indexOf(selectedOption);
+    const handleSelect = ({ option }: { option: DropdownPopoverOption }) => {
+      const city = cities.data.find((city) => city.slug === option.id);
+      window.location.href =
+        city.frontend_url +
+        location.pathname +
+        `?${LOCATION_CONFIRMED_SEARCH_PARAM}=true`;
+    };
+    return (
+      <DropdownPopover
+        backgroundColor={theme.colors.canvas.inset2}
+        width={"226px"}
+        offset={0}
+        options={options}
+        selectedIndex={selectedIndex}
+        onSelect={handleSelect}
+      >
+        {({ selectedOption }) => (
+          <LocationDropdownTrigger title={selectedOption?.name} />
+        )}
+      </DropdownPopover>
+    );
+  };
 
   return (
     <BaseModal
@@ -51,12 +90,7 @@ export const MobMenuModal = NiceModal.create(() => {
         <S.Item>
           <LanguageSelector />
         </S.Item>
-        <S.Item style={{ height: "25px" }}>
-          <LocationPickerPopover
-            width={"226px"}
-            backgroundColor={theme.colors.canvas.inset2}
-          />
-        </S.Item>
+        <S.Item style={{ height: "25px" }}>{renderCitiesDropdown()}</S.Item>
         <S.Item>
           {user ? (
             <FlexBox

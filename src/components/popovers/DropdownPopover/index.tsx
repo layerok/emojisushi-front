@@ -8,6 +8,8 @@ type Option = {
   name: string;
 };
 
+export type DropdownPopoverOption = Option;
+
 type Props = {
   options?: Option[];
   offset?: number;
