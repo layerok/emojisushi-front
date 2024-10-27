@@ -1,4 +1,3 @@
-import { CartProduct } from "~models";
 import * as S from "./styled";
 import {
   AnimatedTooltip,
@@ -10,9 +9,17 @@ import {
 } from "~components";
 import Skeleton from "react-loading-skeleton";
 import { IngredientsTooltipContent } from "../IngredientsTooltipContent";
+import {
+  getCartProductNameWithMods,
+  getNewProductPrice,
+  getOldProductPrice,
+  getProductIngredients,
+  getProductMainImage,
+} from "~domains/product/product.utils";
+import { ICartProduct } from "@layerok/emojisushi-js-sdk";
 
 type CheckoutCartItemProps = {
-  item: CartProduct;
+  item: ICartProduct;
   loading?: boolean;
 };
 
@@ -20,8 +27,11 @@ export const CheckoutCartItem = ({
   item,
   loading = false,
 }: CheckoutCartItemProps) => {
-  const { quantity, product, nameWithMods } = item;
-  const { ingredients, mainImage: img, weight } = product;
+  const { quantity, product } = item;
+
+  const nameWithMods = getCartProductNameWithMods(item.product, item.variant);
+
+  const img = getProductMainImage(product);
 
   const renderDelimeter = () => {
     if (loading) {
@@ -47,6 +57,7 @@ export const CheckoutCartItem = ({
   };
 
   const renderWeight = () => {
+    const weight = product?.weight;
     const formatted = weight === 0 ? "" : weight + "г";
     return (
       <S.Weight>
@@ -81,9 +92,9 @@ export const CheckoutCartItem = ({
     if (loading) {
       return <Skeleton width={50} height={24} />;
     }
-    const { product, variant } = item;
-    const oldPrice = product.getOldPrice(variant)?.price_formatted;
-    const newPrice = product.getNewPrice(variant)?.price_formatted;
+    const { variant } = item;
+    const oldPrice = getOldProductPrice(item.product, variant)?.price_formatted;
+    const newPrice = getNewProductPrice(item.product, variant)?.price_formatted;
     return (
       <S.Price>
         <Price newPrice={newPrice} oldPrice={oldPrice} />
@@ -92,6 +103,7 @@ export const CheckoutCartItem = ({
   };
 
   const renderIngredientsTooltip = () => {
+    const ingredients = product ? getProductIngredients(product) : [];
     if (ingredients.length < 1) {
       return null;
     }
@@ -116,7 +128,7 @@ export const CheckoutCartItem = ({
         <S.Description>
           <FlexBox>
             {renderQuantity()}
-            {weight !== 0 && renderDelimeter()}
+            {product?.weight !== 0 && renderDelimeter()}
             {renderWeight()}
           </FlexBox>
 

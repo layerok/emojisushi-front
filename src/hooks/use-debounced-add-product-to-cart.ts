@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useRef } from "react";
 import { useDebounce } from "~common/hooks";
-import { Product, Variant } from "~models";
 import { cartQuery } from "~domains/cart/cart.query";
 import { updateProductUpdater } from "~common/queryDataUpdaters";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
+import { IProduct, IVariant } from "@layerok/emojisushi-js-sdk";
 
 let waitingForDebounce = {
   current: false,
@@ -29,9 +29,9 @@ export function useDebouncedAddProductToCart({
       quantity,
       variant,
     }: {
-      product: Product;
+      product: IProduct;
       quantity: number;
-      variant?: Variant;
+      variant?: IVariant;
     }) => {
       return EmojisushiAgent.addCartProduct({
         product_id: product.id,
@@ -69,8 +69,8 @@ export function useDebouncedAddProductToCart({
       currentCount,
     }: {
       delta: number;
-      product: Product;
-      variant?: Variant;
+      product: IProduct;
+      variant?: IVariant;
       currentCount: number;
     }) =>
     () => {

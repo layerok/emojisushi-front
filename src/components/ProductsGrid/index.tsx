@@ -1,9 +1,10 @@
 import { useBreakpoint, useDebounce } from "~common/hooks";
 import { EqualHeight } from "react-equal-height";
-import { Product } from "~models";
+
 import {
   IGetCartRes,
   IGetWishlistRes,
+  IProduct,
   SortKey,
 } from "@layerok/emojisushi-js-sdk";
 import { useSearchParams, useSubmit } from "react-router-dom";
@@ -33,7 +34,7 @@ export const ProductsGrid = ({
   wishlists,
 }: {
   title?: string;
-  items?: Product[];
+  items?: IProduct[];
   loading?: boolean;
   cart?: IGetCartRes;
   wishlists?: IGetWishlistRes;

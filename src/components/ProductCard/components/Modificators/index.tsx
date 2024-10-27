@@ -1,8 +1,9 @@
 import { SegmentedControl } from "~components";
-import { Product } from "~models";
+import { getProductModGroups } from "~domains/product/product.utils";
+import { IProduct } from "@layerok/emojisushi-js-sdk";
 
 type TModificatorsProps = {
-  product?: Product;
+  product?: IProduct;
   modificators: any;
   setModificators: any;
   loading?: boolean;
@@ -20,7 +21,7 @@ export const Modificators = ({
 
   return (
     <>
-      {(product?.modGroups || []).map((group) => (
+      {((product && getProductModGroups(product)) || []).map((group) => (
         <SegmentedControl
           key={group.id}
           style={{ marginTop: "12px" }}

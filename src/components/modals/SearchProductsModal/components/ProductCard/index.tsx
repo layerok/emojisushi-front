@@ -1,15 +1,20 @@
-import { CartProduct, Product } from "~models";
 import { useDebouncedAddProductToCart } from "~hooks/use-debounced-add-product-to-cart";
 import * as S from "./styled";
 import { Button } from "~common/ui-components/Button/Button";
 import React from "react";
+import {
+  getNewProductPrice,
+  getOldProductPrice,
+  getProductMainImage,
+} from "~domains/product/product.utils";
+import { ICartProduct, IProduct } from "@layerok/emojisushi-js-sdk";
 
 export const ProductCard = ({
   product,
   cartItem,
 }: {
-  product: Product;
-  cartItem?: CartProduct;
+  product: IProduct;
+  cartItem?: ICartProduct;
 }) => {
   const { createUpdateHandler } = useDebouncedAddProductToCart();
   const addToCart = createUpdateHandler({
@@ -18,12 +23,12 @@ export const ProductCard = ({
     product: product,
     currentCount: cartItem?.quantity || 0,
   });
-  const newPrice = product.getNewPrice(undefined)?.price_formatted;
-  const oldPrice = product.getOldPrice(undefined)?.price_formatted;
+  const newPrice = getNewProductPrice(product, undefined)?.price_formatted;
+  const oldPrice = getOldProductPrice(product, undefined)?.price_formatted;
   return (
     <S.Root key={product.id}>
       <div>
-        <S.Image $src={product.mainImage} />
+        <S.Image $src={getProductMainImage(product)} />
       </div>
       <S.SecondColumn>
         <div>

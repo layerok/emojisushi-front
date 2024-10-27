@@ -1,6 +1,5 @@
 import { ProductsGrid } from "~components";
 import { useQuery } from "@tanstack/react-query";
-import { Product } from "src/models";
 import {
   DEFAULT_PRODUCTS_LIMIT,
   productsQuery,
@@ -64,9 +63,7 @@ export const ProductPage = () => {
 
   // todo: implement 'bestseller' and 'rating' sorters
   const sorter = PRODUCT_SORTERS[sort];
-  const sortedItems = sorter ? searchedItems.sort(sorter) : searchedItems;
-
-  const items = sortedItems.map((product) => new Product(product));
+  const items = sorter ? searchedItems.sort(sorter) : searchedItems;
 
   const selectedCategory = (categoryQueryRes?.data || []).find((category) => {
     return category.slug === categorySlug;

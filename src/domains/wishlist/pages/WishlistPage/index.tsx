@@ -1,6 +1,5 @@
 import { ProductsGrid } from "~components";
 import { useTranslation } from "react-i18next";
-import { Product } from "src/models";
 import { productsQuery } from "~domains/product/products.query";
 import { cartQuery } from "~domains/cart/cart.query";
 import { categoriesQuery } from "~domains/category/categories.query";
@@ -11,6 +10,7 @@ import { CategorySlug } from "~domains/category/constants";
 import { useTypedSearchParams } from "react-router-typesafe-routes/dom";
 import { ROUTES } from "~routes";
 import { PRODUCT_SORTERS } from "~domains/product/product.constants";
+import { isProductInWishlists } from "~domains/product/product.utils";
 
 const DEFAULT_PRODUCTS_LIMIT = 2000;
 
@@ -37,9 +37,9 @@ export const WishlistPage = observer(() => {
   const sorter = PRODUCT_SORTERS[sort];
   const sortedProducts = sorter ? rawProducts.sort(sorter) : rawProducts;
 
-  const items = sortedProducts
-    .map((json) => new Product(json))
-    .filter((product) => product.isInWishlists(wishlists));
+  const items = sortedProducts.filter((product) =>
+    isProductInWishlists(product, wishlists)
+  );
 
   return isCartLoading ||
     isProductsLoading ||

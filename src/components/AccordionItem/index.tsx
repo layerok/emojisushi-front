@@ -6,6 +6,7 @@ import { Collapsible } from "../Collapsible";
 import { IOrder } from "@layerok/emojisushi-js-sdk";
 import { LogoSvg } from "~components/svg/LogoSvg";
 import { useTranslation } from "react-i18next";
+import { getProductMainImage } from "~domains/product/product.utils";
 
 export const AccordionItem = ({ order }: { order: IOrder }) => {
   const { t } = useTranslation();
@@ -91,13 +92,7 @@ export const AccordionItem = ({ order }: { order: IOrder }) => {
 
         <div>
           {order.products.map((product, index) => {
-            const mainImage =
-              product.product &&
-              product.product.image_sets.length > 0 &&
-              product.product.image_sets[0] &&
-              product.product.image_sets[0].images?.length > 0
-                ? product.product.image_sets[0].images[0].path
-                : undefined;
+            const mainImage = getProductMainImage(product.product);
 
             return (
               <S.PanProd key={product.id}>

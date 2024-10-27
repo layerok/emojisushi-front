@@ -15,7 +15,6 @@ import {
   // todo: replace SushiSvg because it is fake svg, it is png actually
   SushiSvg,
 } from "~components";
-import { CartProduct } from "~models";
 import { cartQuery } from "~domains/cart/cart.query";
 
 import { ROUTES } from "~routes";
@@ -27,15 +26,28 @@ import { useBreakpoint2 } from "~common/hooks";
 
 import { Times } from "~assets/ui-icons";
 import { useDebouncedAddProductToCart } from "~hooks/use-debounced-add-product-to-cart";
+import {
+  getCartProductNameWithMods,
+  getNewProductPrice,
+  getOldProductPrice,
+  getProductMainImage,
+} from "~domains/product/product.utils";
+import { ICartProduct } from "@layerok/emojisushi-js-sdk";
 
 // todo: clear outdated products from the card. You can do it on the frontend or on the backend
-const CartItem = (props: { item: CartProduct }) => {
+const CartItem = (props: { item: ICartProduct }) => {
   const { item } = props;
   const theme = useTheme();
 
-  const newPrice = item.product.getNewPrice(item.variant)?.price_formatted;
-  const oldPrice = item.product.getOldPrice(item.variant)?.price_formatted;
-  const nameWithMods = item.nameWithMods;
+  const newPrice = getNewProductPrice(
+    item.product,
+    item.variant
+  )?.price_formatted;
+  const oldPrice = getOldProductPrice(
+    item.product,
+    item.variant
+  )?.price_formatted;
+  const nameWithMods = getCartProductNameWithMods(item.product, item.variant);
 
   const variant = item.variant;
   const product = item.product;
@@ -69,6 +81,8 @@ const CartItem = (props: { item: CartProduct }) => {
     currentCount: count,
   });
 
+  const mainImage = getProductMainImage(item.product);
+
   return (
     <S.Item>
       <S.ItemRemoveIcon>
@@ -84,8 +98,8 @@ const CartItem = (props: { item: CartProduct }) => {
           <Times />
         </SvgIcon>
       </S.ItemRemoveIcon>
-      <S.ItemImg src={item.product.mainImage}>
-        {!item.product.mainImage && (
+      <S.ItemImg src={mainImage}>
+        {!mainImage && (
           <SvgIcon color={"white"} width={"80%"} style={{ opacity: 0.05 }}>
             <LogoSvg />
           </SvgIcon>
@@ -115,13 +129,11 @@ export const CartModal = NiceModal.create(() => {
 
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
 
-  const { data } = cart;
+  const { data: items } = cart;
 
   const { isMobile } = useBreakpoint2();
 
   const { t } = useTranslation();
-
-  const items = data.map((json) => new CartProduct(json));
 
   const overlayStyles = {
     ...(!isMobile && {
@@ -194,7 +206,9 @@ export const CartModal = NiceModal.create(() => {
                 // If we use fake id as key for CartItem component,
                 // then the CartItem component will be fully remounted when server responds, loosing its state.
                 // we want to avoid that, so we use productId + variantId as key
-                key={[item.productId, item.variantId].filter(Boolean).join(".")}
+                key={[item.product_id, item.variant_id]
+                  .filter(Boolean)
+                  .join(".")}
                 item={item}
               />
             ))}

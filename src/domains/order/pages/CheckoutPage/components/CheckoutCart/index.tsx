@@ -1,5 +1,4 @@
 import * as S from "./styled";
-import { CartProduct } from "~models";
 import { SkeletonWrap, SvgIcon } from "~components";
 import { UIButton } from "~common/ui-components/UIButton/UIButton";
 import { IGetCartRes } from "@layerok/emojisushi-js-sdk";
@@ -18,8 +17,8 @@ type CheckoutCartProps = {
 export const CheckoutCart = ({ cart, loading = false }: CheckoutCartProps) => {
   const { t } = useTranslation();
   const items = loading
-    ? [new CartProduct(dummyCartProduct), new CartProduct(dummyCartProduct)]
-    : (cart?.data || []).map((json) => new CartProduct(json));
+    ? [dummyCartProduct, dummyCartProduct]
+    : cart?.data || [];
 
   const showModal = useShowModal();
 
@@ -27,7 +26,7 @@ export const CheckoutCart = ({ cart, loading = false }: CheckoutCartProps) => {
     <S.Wrapper>
       <S.Inner>
         <S.Items>
-          {items.map((item: CartProduct, index) => {
+          {items.map((item, index) => {
             return (
               <CheckoutCartItem
                 key={loading ? index : item.id}

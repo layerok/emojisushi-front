@@ -1,12 +1,14 @@
-import { Product, Variant } from "~models";
 import {
   ICartProduct,
   IGetCartRes,
   IGetWishlistRes,
+  IProduct,
+  IVariant,
 } from "@layerok/emojisushi-js-sdk";
 import { arrImmutableDeleteAt, arrImmutableReplaceAt } from "~utils/arr.utils";
 import { recalculateCartTotals } from "~utils/cart.utils";
 import { formatUAHPrice } from "~utils/price.utils";
+import { getNewProductPrice } from "~domains/product/product.utils";
 
 export function addProductToWishlistUpdater({
   product_id,
@@ -76,9 +78,9 @@ export function removeCartProductUpdater(id: number) {
 }
 
 export function updateProductUpdater(
-  product: Product,
+  product: IProduct,
   quantity: number,
-  variant?: Variant
+  variant?: IVariant
 ) {
   return (old: IGetCartRes) => {
     const cartProduct = old.data.find(
@@ -88,13 +90,13 @@ export function updateProductUpdater(
     );
 
     if (!cartProduct) {
-      const price = product.getNewPrice(variant).price;
+      const price = getNewProductPrice(product, variant).price;
       const cartProduct: ICartProduct = {
         id: Math.round(Math.random() * 10000),
         price_formatted: formatUAHPrice(price),
-        product: product.json,
+        product: product,
         product_id: product.id,
-        variant: variant?.json,
+        variant: variant,
         variant_id: variant?.id,
         quantity: quantity,
         price: {

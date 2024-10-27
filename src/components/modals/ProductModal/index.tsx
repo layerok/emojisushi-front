@@ -22,13 +22,17 @@ import {
 } from "~domains/product/products.query";
 import { cartQuery } from "~domains/cart/cart.query";
 import Skeleton from "react-loading-skeleton";
-import { CartProduct, Product } from "~models";
 import { findInCart } from "~components/ProductCard/utils";
 import { useTranslation } from "react-i18next";
 import { CategorySlug } from "~domains/category/constants";
 import { useDebouncedAddProductToCart } from "~hooks/use-debounced-add-product-to-cart";
 import { useModal as useNiceModal } from "~modal";
 import { media } from "~common/custom-media";
+import {
+  getNewProductPrice,
+  getOldProductPrice,
+  getProductMainImage,
+} from "~domains/product/product.utils";
 
 export const ProductModal = NiceModal.create(() => {
   const modal = useNiceModal();
@@ -58,15 +62,16 @@ export const ProductModal = NiceModal.create(() => {
     );
   };
 
-  const productRaw = (data?.data || []).find((products) => {
+  const product = (data?.data || []).find((products) => {
     return products.id === +searchParams.get(PRODUCT_ID_SEARCH_QUERY_PARAM);
   });
-  const product = productRaw && new Product(productRaw);
 
-  const oldPrice = product?.getOldPrice(undefined)?.price_formatted;
-  const newPrice = product?.getNewPrice(undefined)?.price_formatted;
+  const oldPrice =
+    product && getOldProductPrice(product, undefined)?.price_formatted;
+  const newPrice =
+    product && getNewProductPrice(product, undefined)?.price_formatted;
 
-  const cartProducts = cart?.data.map((json) => new CartProduct(json)) || [];
+  const cartProducts = cart?.data || [];
 
   const cartProduct = product && findInCart(cartProducts, product, undefined);
   const variant = cartProduct?.variant;
@@ -84,15 +89,15 @@ export const ProductModal = NiceModal.create(() => {
             <SkeletonWrap loading={isLoading}>
               <S.Image
                 style={{
-                  backgroundImage: `url("${product?.mainImage}")`,
+                  backgroundImage: `url("${getProductMainImage(product)}")`,
                 }}
               />
             </SkeletonWrap>
             <S.DescriptionWrapper>
               <S.ProductName>{product?.name || <Skeleton />}</S.ProductName>
               <S.Description>
-                {product?.descriptionShort != null ? (
-                  product.descriptionShort
+                {product?.description_short != null ? (
+                  product.description_short
                 ) : (
                   <Skeleton />
                 )}

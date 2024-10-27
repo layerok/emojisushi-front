@@ -20,7 +20,6 @@ import { CategorySlug } from "~domains/category/constants";
 import { useModal as useNiceModal } from "~modal";
 import { media } from "~common/custom-media";
 import { fuzzySearch } from "~utils/fuzzySearch";
-import { CartProduct, Product } from "~models";
 import { ProductCard } from "./components/ProductCard";
 
 export const SearchProductsModal = NiceModal.create(() => {
@@ -36,14 +35,12 @@ export const SearchProductsModal = NiceModal.create(() => {
     })
   );
 
-  const filtered =
+  const products =
     search.length > 2
       ? fuzzySearch(data?.data || [], search, (el) => el.name, {
           maxAllowedModifications: 1,
         })
       : [];
-
-  const products = filtered.map((json) => new Product(json));
 
   const handleSearch = (e) => {
     setSearch(e.currentTarget.value);
@@ -76,12 +73,7 @@ export const SearchProductsModal = NiceModal.create(() => {
             (item) => item.product_id === product.id
           );
 
-          return (
-            <ProductCard
-              product={product}
-              cartItem={cartItem ? new CartProduct(cartItem) : undefined}
-            />
-          );
+          return <ProductCard product={product} cartItem={cartItem} />;
         })}
       </S.Results>
     );
@@ -102,10 +94,10 @@ export const SearchProductsModal = NiceModal.create(() => {
     if (search.length < 3) {
       return `Введіть на ${getLetters(3 - search.length)} більше`;
     }
-    if (filtered.length === 0) {
+    if (products.length === 0) {
       return `Нічого не знайдено`;
     }
-    return `Результати пошуку (${filtered.length}):`;
+    return `Результати пошуку (${products.length}):`;
   };
 
   const renderContent = () => {

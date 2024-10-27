@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { Product, Variant } from "~models";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
+import { IProduct, IVariant } from "@layerok/emojisushi-js-sdk";
 
 export const useAddProductToCart = () => {
   return useMutation({
@@ -9,9 +9,9 @@ export const useAddProductToCart = () => {
       quantity,
       variant,
     }: {
-      product: Product;
+      product: IProduct;
       quantity: number;
-      variant?: Variant;
+      variant?: IVariant;
     }) => {
       return EmojisushiAgent.addCartProduct({
         product_id: product.id,
