@@ -75,6 +75,7 @@ export const ProductModal = NiceModal.create(() => {
 
   const cartProduct = product && findInCart(cartProducts, product, undefined);
   const variant = cartProduct?.variant;
+  const image = product && getProductMainImage(product);
 
   const count = cartProduct?.quantity || 0;
 
@@ -89,7 +90,7 @@ export const ProductModal = NiceModal.create(() => {
             <SkeletonWrap loading={isLoading}>
               <S.Image
                 style={{
-                  backgroundImage: `url("${getProductMainImage(product)}")`,
+                  backgroundImage: `url("${image}")`,
                 }}
               />
             </SkeletonWrap>
