@@ -7,7 +7,6 @@ import NiceModal from "@ebay/nice-modal-react";
 import * as S from "./styled";
 import {
   FlexBox,
-  LightCounter,
   Modal,
   Price,
   SvgIcon,
@@ -33,6 +32,7 @@ import {
   getProductMainImage,
 } from "~domains/product/product.utils";
 import { ICartProduct } from "@layerok/emojisushi-js-sdk";
+import { Counter } from "~components/modals/CartModal/components/Counter";
 
 // todo: clear outdated products from the card. You can do it on the frontend or on the backend
 const CartItem = (props: { item: ICartProduct }) => {
@@ -109,7 +109,7 @@ const CartItem = (props: { item: ICartProduct }) => {
         <S.ItemName title={nameWithMods}>{nameWithMods}</S.ItemName>
         <FlexBox justifyContent={"space-between"} alignItems={"flex-end"}>
           <S.ItemCounter>
-            <LightCounter
+            <Counter
               handleIncrement={handleIncrement}
               handleDecrement={handleDecrement}
               count={count}

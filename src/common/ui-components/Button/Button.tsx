@@ -47,13 +47,7 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
           ) : (
             <>
               {startAdornment}
-              <div
-                style={{
-                  flexShrink: 0,
-                }}
-              >
-                {children}
-              </div>
+              <Inner>{children}</Inner>
             </>
           )}
         </BaseButton>
@@ -196,6 +190,15 @@ const getHoverColor = ({
   }
   return "black";
 };
+
+const Inner = styled.div({
+  flexShrink: 0,
+  height: "100%",
+  flexGrow: 1,
+  justifyContent: "center",
+  display: "flex",
+  alignItems: "center",
+});
 
 const BaseButton = styled.button<{
   $loading: boolean;

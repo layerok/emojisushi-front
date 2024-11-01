@@ -12,7 +12,7 @@ import {
 } from "@layerok/emojisushi-js-sdk";
 import {
   AnimatedTooltip,
-  ButtonCounter,
+  Counter,
   HeartSvg,
   InfoSvg,
   InfoTooltip,
@@ -185,7 +185,7 @@ export const ProductCard = (props: ProductCardProps) => {
       <S.Footer>
         <Price loading={loading} oldPrice={oldPrice} newPrice={newPrice} />
         {count ? (
-          <ButtonCounter
+          <Counter
             handleIncrement={createUpdateHandler({
               delta: 1,
               product,
