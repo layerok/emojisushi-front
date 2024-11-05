@@ -168,6 +168,10 @@ const routes = [
     ],
   },
   {
+    path: ROUTES.REFUND_EXT.path,
+    lazy: lazy(() => import("~domains/payment/pages/RefundPageExt")),
+  },
+  {
     path: "*",
     element: <Navigate to={ROUTES.INDEX.path} />,
   },

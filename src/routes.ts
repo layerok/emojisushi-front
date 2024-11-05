@@ -63,6 +63,7 @@ export const ROUTES = {
     }
   ),
   REFUND: route("refund"),
+  REFUND_EXT: route("refund-policy-ext"),
 } as const;
 
 export const LEAVE_REVIEW_LINK =

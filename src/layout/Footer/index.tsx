@@ -162,6 +162,13 @@ export const Footer = ({ loading = false, city }: FooterProps) => {
       </FlexBox>
     );
   };
+  const renderRefundPolicy = () => {
+    return (
+      <FlexBox flexDirection={"column"}>
+        <NavLink to={ROUTES.REFUND.path}>Правила повернення коштів</NavLink>
+      </FlexBox>
+    );
+  };
   const renderLogo = () => {
     return (
       <SkeletonWrap loading={loading}>
@@ -181,6 +188,7 @@ export const Footer = ({ loading = false, city }: FooterProps) => {
             {renderInstagram()}
             {renderTelegram()}
             {renderPublicOffer()}
+            {renderRefundPolicy()}
           </S.List>
         </S.Left>
         <S.Right>{renderMap()}</S.Right>
