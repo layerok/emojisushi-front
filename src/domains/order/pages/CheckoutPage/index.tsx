@@ -18,10 +18,12 @@ import { CheckoutCart } from "src/domains/order/pages/CheckoutPage/components/Ch
 import { useCurrentCitySlug } from "~domains/city/hooks/useCurrentCitySlug";
 import { citiesQuery } from "~domains/city/cities.query";
 import * as S from "./styled";
+import { useShowBinotel } from "~hooks/use-binotel";
 
 const CheckoutPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  useShowBinotel();
 
   const { data: user, isLoading: isUserLoading } = useUser();
 

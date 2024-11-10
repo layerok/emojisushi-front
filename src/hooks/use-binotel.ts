@@ -4,7 +4,7 @@ let initialized = false;
 
 const BINOTEL_STYLE_TAG_ID = "binotel-styles";
 
-export const useInitializeBinotel = () => {
+export const useBinotel = () => {
   useEffect(() => {
     if (initialized) {
       return;
@@ -21,6 +21,8 @@ export const useInitializeBinotel = () => {
     allScripts[0].parentNode.insertBefore(script, allScripts[0]);
 
     const style = document.createElement("style");
+
+    // make binotel widget hidden by default
     style.innerHTML = `
       #bingc-phone-button, #bingc-active, #bingc-passive {
         display: none!important;

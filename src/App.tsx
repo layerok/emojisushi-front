@@ -21,6 +21,7 @@ import { AppVersionChecker } from "~components/AppVersionChecker";
 import { GlobalStyle } from "~components/GlobalStyle/GlobalStyle";
 import { createSession, getSession } from "~utils/session.utils";
 import { citiesQuery } from "~domains/city/cities.query";
+import { useBinotel } from "~hooks/use-binotel";
 
 if (!getSession()) {
   createSession();
@@ -32,6 +33,7 @@ queryClient.fetchQuery(citiesQuery);
 console.log("app version", appConfig.version);
 
 export const App = () => {
+  useBinotel();
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />

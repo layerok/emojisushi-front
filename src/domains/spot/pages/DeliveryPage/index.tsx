@@ -7,9 +7,11 @@ import { Page } from "~components/Page";
 import { useCurrentCitySlug } from "~domains/city/hooks/useCurrentCitySlug";
 import { useQuery } from "@tanstack/react-query";
 import { citiesQuery } from "~domains/city/cities.query";
+import { useShowBinotel } from "~hooks/use-binotel";
 
 export const DeliveryPage = observer(() => {
   const { t } = useTranslation();
+  useShowBinotel();
 
   const citySlug = useCurrentCitySlug();
   const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);

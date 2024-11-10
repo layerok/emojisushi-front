@@ -18,10 +18,11 @@ import {
 } from "react-router-typesafe-routes/dom";
 import { fuzzySearch as fuzzySearchBase } from "~utils/fuzzySearch";
 import { PRODUCT_SORTERS } from "~domains/product/product.constants";
-import { useBinotel } from "~hooks/use-binotel";
+import { useShowBinotel } from "~hooks/use-binotel";
 
 export const ProductPage = () => {
   const { categorySlug } = useTypedParams(ROUTES.CATEGORY.SHOW);
+  useShowBinotel();
 
   const [{ q: query, sort }] = useTypedSearchParams(ROUTES.CATEGORY.SHOW);
 
@@ -29,8 +30,6 @@ export const ProductPage = () => {
   const { data: categoryQueryRes, isLoading: isCategoriesLoading } = useQuery({
     ...categoriesQuery(),
   });
-
-  useBinotel();
 
   const { data: wishlists, isLoading: isWishlistLoading } =
     useQuery(wishlistsQuery);

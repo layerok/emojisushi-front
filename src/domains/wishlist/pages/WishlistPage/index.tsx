@@ -11,13 +11,13 @@ import { useTypedSearchParams } from "react-router-typesafe-routes/dom";
 import { ROUTES } from "~routes";
 import { PRODUCT_SORTERS } from "~domains/product/product.constants";
 import { isProductInWishlists } from "~domains/product/product.utils";
+import { useShowBinotel } from "~hooks/use-binotel";
 
 const DEFAULT_PRODUCTS_LIMIT = 2000;
 
 export const WishlistPage = observer(() => {
   const { t } = useTranslation();
   const [{ q, sort }] = useTypedSearchParams(ROUTES.CATEGORY.WISHLIST);
-
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
   const { data, isLoading: isCategoriesLoading } = useQuery({
     ...categoriesQuery(),
@@ -31,6 +31,8 @@ export const WishlistPage = observer(() => {
       limit: DEFAULT_PRODUCTS_LIMIT,
     }),
   });
+
+  useShowBinotel();
 
   const rawProducts = productRes?.data || [];
 
