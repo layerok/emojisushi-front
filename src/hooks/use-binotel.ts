@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 
-let mounted = false;
+let initialized = false;
 
-export const useBinotel = () => {
+const BINOTEL_STYLE_TAG_ID = "binotel-styles";
+
+export const useInitializeBinotel = () => {
   useEffect(() => {
-    if (mounted) {
+    if (initialized) {
       return;
     }
     const widgetHash = "sl9ot5v0k4azdxvojyis";
@@ -17,6 +19,30 @@ export const useBinotel = () => {
     const allScripts = document.getElementsByTagName("script");
 
     allScripts[0].parentNode.insertBefore(script, allScripts[0]);
-    mounted = true;
+
+    const style = document.createElement("style");
+    style.innerHTML = `
+      #bingc-phone-button, #bingc-active, #bingc-passive {
+        display: none!important;
+      }
+    `;
+    style.id = BINOTEL_STYLE_TAG_ID;
+
+    document.head.appendChild(style);
+
+    initialized = true;
+  }, []);
+};
+
+export const useShowBinotel = () => {
+  useEffect(() => {
+    const style = document.head.querySelector(`#${BINOTEL_STYLE_TAG_ID}`);
+
+    const prevStyles = style.innerHTML;
+    style.innerHTML = "";
+
+    return () => {
+      style.innerHTML = prevStyles;
+    };
   }, []);
 };
