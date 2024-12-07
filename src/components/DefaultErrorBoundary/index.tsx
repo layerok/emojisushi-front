@@ -11,18 +11,24 @@ export const DefaultErrorBoundary = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (error instanceof Error) {
-      if (process.env.NODE_ENV === "production") {
-        EmojisushiAgent.log(
-          {
-            location: location,
-            error: error.message,
-            stack: error.stack,
-          },
-          appConfig.version
-        );
-      }
+    if (process.env.NODE_ENV !== "production") {
+      return;
     }
+    if (!(error instanceof Error)) {
+      return;
+    }
+    const ignoreErrors = ["queueMicrotask is not defined"]; // @floating-ui uses queueMicrotask
+    if (ignoreErrors.some((pattern) => pattern.includes(error.message))) {
+      return;
+    }
+    EmojisushiAgent.log(
+      {
+        location: location,
+        error: error.message,
+        stack: error.stack,
+      },
+      appConfig.version
+    );
   }, [error]);
 
   let title = t("error-boundary.title");
