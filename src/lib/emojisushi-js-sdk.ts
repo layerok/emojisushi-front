@@ -23,10 +23,12 @@ EmojisushiAgent.axiosClient.interceptors.response.use(
     const ignoredStatuses = [406, 422];
     const ignoredMessages = ["Network Error"];
 
-    if (
-      ignoredStatuses.includes(error.response.status) ||
-      ignoredMessages.includes(error.message)
-    ) {
+    // error.response may be undefined, even it typescript doesn't tell you this
+    if (error.response && ignoredStatuses.includes(error.response.status)) {
+      return Promise.reject(error);
+    }
+
+    if (ignoredMessages.includes(error.message)) {
       return Promise.reject(error);
     }
 
