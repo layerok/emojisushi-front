@@ -39,12 +39,15 @@ export const useBinotel = () => {
 export const useShowBinotel = () => {
   useEffect(() => {
     const style = document.head.querySelector(`#${BINOTEL_STYLE_TAG_ID}`);
+    if (style) {
+      // I don't know why but style element is not found sometimes
+      // It means that user won't see binotel widget
+      const prevStyles = style.innerHTML;
+      style.innerHTML = "";
 
-    const prevStyles = style.innerHTML;
-    style.innerHTML = "";
-
-    return () => {
-      style.innerHTML = prevStyles;
-    };
+      return () => {
+        style.innerHTML = prevStyles;
+      };
+    }
   }, []);
 };
