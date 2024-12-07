@@ -1,5 +1,5 @@
 import { createEmojisushiAgent } from "@layerok/emojisushi-js-sdk";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { appConfig } from "~config/app";
 import Cookies from "js-cookie";
 import i18n from "~lib/react-i18next";
@@ -17,18 +17,32 @@ type IParams = {
 
 EmojisushiAgent.axiosClient.interceptors.response.use(
   (res) => res,
-  function (error: AxiosError) {
+  function (e) {
+    if (!axios.isAxiosError(e)) {
+      return Promise.reject(e);
+    }
+    const error = e as AxiosError<{
+      message?: string;
+    }>;
+
     // 406 - Token is expired
     // 422 - Validation exception
     const ignoredStatuses = [406, 422];
-    const ignoredMessages = ["Network Error"];
 
-    // error.response may be undefined, even it typescript doesn't tell you this
-    if (error.response && ignoredStatuses.includes(error.response.status)) {
+    if (ignoredStatuses.includes(error.response?.status)) {
       return Promise.reject(error);
     }
 
-    if (ignoredMessages.includes(error.message)) {
+    const ignoredResponseDataMessages = [
+      "Пользователь с такими данным не найден.",
+    ];
+
+    if (ignoredResponseDataMessages.includes(error.response?.data?.message)) {
+      return Promise.reject(error);
+    }
+
+    const ignoredErrorMessages = ["Network Error"];
+    if (ignoredErrorMessages.includes(error.message)) {
       return Promise.reject(error);
     }
 

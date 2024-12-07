@@ -2,7 +2,7 @@ import * as S from "./styled";
 import { useState } from "react";
 import { Modal, Input, ModalContent, ModalCloseButton } from "~components";
 import { useTranslation } from "react-i18next";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
 import NiceModal from "@ebay/nice-modal-react";
 import { useModal } from "~modal";
@@ -18,7 +18,7 @@ export const ResetPasswordModal = NiceModal.create(
     const { t } = useTranslation();
     const theme = useTheme();
 
-    const resetPassword = useMutation({
+    const { mutate: resetPassword, isLoading } = useMutation({
       mutationFn: (email: string) => {
         return EmojisushiAgent.restorePassword({
           email,
@@ -27,7 +27,7 @@ export const ResetPasswordModal = NiceModal.create(
       },
     });
 
-    const [errors, setErrors] = useState({
+    const [errors, setErrors] = useState<Record<string, string[]>>({
       email: [""],
     });
     const [isSent, setIsSent] = useState(false);
@@ -50,24 +50,32 @@ export const ResetPasswordModal = NiceModal.create(
           <ModalCloseButton />
           <S.Wrapper>
             <S.Form
-              onSubmit={async (e) => {
+              onSubmit={(e) => {
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
                 const email = formData.get("email") + "";
 
-                resetPassword.mutate(email, {
+                resetPassword(email, {
                   onSuccess: () => {
                     setIsSent(true);
                   },
                   onError: (e) => {
-                    if (e instanceof AxiosError) {
-                      if (!e.response.data?.errors) {
-                        setErrors({
-                          email: [e.response.data.message],
-                        });
-                      } else {
-                        setErrors(e.response.data.errors);
-                      }
+                    if (!axios.isAxiosError(e)) {
+                      return;
+                    }
+                    const error = e as AxiosError<{
+                      message: string;
+                      errors?: Record<string, string[]>;
+                    }>;
+
+                    const errors = error.response?.data?.errors;
+                    const message = error.response?.data?.message;
+                    if (message) {
+                      setErrors({
+                        email: [message],
+                      });
+                    } else if (errors) {
+                      setErrors(errors);
                     }
                   },
                 });
@@ -103,7 +111,7 @@ export const ResetPasswordModal = NiceModal.create(
                 >
                   {t("common.back")}
                 </TextButton>
-                <Button loading={resetPassword.isLoading} type="submit">
+                <Button loading={isLoading} type="submit">
                   {t("common.recover")}
                 </Button>
               </S.BtnGroup>
