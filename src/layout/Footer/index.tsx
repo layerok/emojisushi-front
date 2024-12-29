@@ -55,6 +55,9 @@ export const Footer = ({ loading = false, city }: FooterProps) => {
           </>
         );
       }
+      if (!city.phones) {
+        return null;
+      }
       return city.phones.split(",").map((phone, i) => {
         return <Fragment key={i}>{renderPhone({ phone })}</Fragment>;
       });

@@ -25,6 +25,29 @@ export const ContactsModal = NiceModal.create(() => {
   const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
   const city = (cities?.data || []).find((c) => c.slug === citySlug);
 
+  const renderPhones = () => {
+    if (!city?.phones) {
+      return null;
+    }
+    return (
+      <>
+        <S.Title>{t("contactsModal.contacts")}</S.Title>
+        <S.Phones>
+          <SvgIcon
+            style={{ marginRight: "11px" }}
+            width={"25px"}
+            color={"white"}
+          >
+            <PhoneSvg />
+          </SvgIcon>
+          {city.phones.split(",").map((phone, i) => (
+            <S.Phone key={i}>{phone}</S.Phone>
+          ))}
+        </S.Phones>
+      </>
+    );
+  };
+
   return (
     <Modal
       overlayStyles={{
@@ -44,24 +67,7 @@ export const ContactsModal = NiceModal.create(() => {
 
         <div>
           <S.Wrapper>
-            {city?.phones && (
-              <>
-                <S.Title>{t("contactsModal.contacts")}</S.Title>
-                <S.Phones>
-                  <SvgIcon
-                    style={{ marginRight: "11px" }}
-                    width={"25px"}
-                    color={"white"}
-                  >
-                    <PhoneSvg />
-                  </SvgIcon>
-                  {city.phones.split(",").map((phone, i) => (
-                    <S.Phone key={i}>{phone}</S.Phone>
-                  ))}
-                </S.Phones>
-              </>
-            )}
-
+            {renderPhones()}
             <S.Socials>
               <FlexBox style={{ marginRight: "20px" }} alignItems={"center"}>
                 <SvgIcon
