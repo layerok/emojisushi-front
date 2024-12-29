@@ -10,6 +10,7 @@ const Container = styled.button`
 `;
 
 const Icon = styled.div`
+  width: 25px;
   margin-right: 10px;
   flex-shrink: 0;
 `;
