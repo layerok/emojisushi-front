@@ -56,9 +56,6 @@ const CartItem = (props: { item: ICartProduct }) => {
   const { createUpdateHandler } = useDebouncedAddProductToCart();
 
   const handleDecrement = () => {
-    if (count === 1) {
-      return;
-    }
     createUpdateHandler({
       delta: -1,
       product: product,
