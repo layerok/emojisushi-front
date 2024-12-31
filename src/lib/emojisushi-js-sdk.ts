@@ -41,7 +41,7 @@ EmojisushiAgent.axiosClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    const ignoredErrorMessages = ["Network Error"];
+    const ignoredErrorMessages = ["Network Error", "cancelled"];
     if (ignoredErrorMessages.includes(error.message)) {
       return Promise.reject(error);
     }
