@@ -18,11 +18,8 @@ const RootIndexPage = () => {
 export const Component = RootIndexPage;
 
 export const loader = async () => {
-  const categories =
+  return (
     queryClient.getQueryData<IGetCatalogRes>(catalogQuery.queryKey) ??
-    (await queryClient.fetchQuery<IGetCatalogRes>(catalogQuery));
-
-  return {
-    categories,
-  };
+    (await queryClient.fetchQuery<IGetCatalogRes>(catalogQuery))
+  );
 };
