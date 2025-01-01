@@ -3,17 +3,16 @@ import { useTranslation } from "react-i18next";
 import { Container, SvgIcon, ToteSvg } from "~components";
 import { Category } from "./components/Category";
 import Skeleton from "react-loading-skeleton";
-import { categoriesQuery } from "~domains/category/categories.query";
 import { useQuery } from "@tanstack/react-query";
 import { observer } from "mobx-react";
 import { Page } from "~components/Page";
+import { catalogQuery } from "~domains/catalog/catalog.query";
 
 export const SelectCategoryPage = observer(() => {
   const { t } = useTranslation();
 
-  const { data: categories, isLoading } = useQuery({
-    ...categoriesQuery(),
-  });
+  const { data: catalogData, isLoading: isCatalogLoading } =
+    useQuery(catalogQuery);
 
   return (
     <Page>
@@ -21,7 +20,7 @@ export const SelectCategoryPage = observer(() => {
         <S.Category>
           <S.CategoryContainer>
             <S.CategoryLabel>
-              {isLoading ? (
+              {isCatalogLoading ? (
                 <Skeleton width={220} height={20} />
               ) : (
                 <>
@@ -35,7 +34,7 @@ export const SelectCategoryPage = observer(() => {
               )}
             </S.CategoryLabel>
             <S.CategoryItems>
-              {isLoading ? (
+              {isCatalogLoading ? (
                 <S.CategoryList>
                   <Category />
                   <Category />
@@ -51,7 +50,7 @@ export const SelectCategoryPage = observer(() => {
                 </S.CategoryList>
               ) : (
                 <S.CategoryList>
-                  {categories.data.map((category) => (
+                  {catalogData.categories.map((category) => (
                     <Category key={category.id} category={category} />
                   ))}
                 </S.CategoryList>

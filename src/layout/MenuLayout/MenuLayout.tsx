@@ -7,15 +7,15 @@ import { bannerQuery } from "~domains/banner/banner.query";
 import styled from "styled-components";
 import { media } from "~common/custom-media";
 import { PRODUCT_ID_SEARCH_QUERY_PARAM } from "~domains/product/products.query";
-import { categoriesQuery } from "~domains/category/categories.query";
 import { useShowModal } from "~modal";
 import { ModalIDEnum } from "~common/modal.constants";
+import { catalogQuery } from "~domains/catalog/catalog.query";
 
 const MenuLayout = () => {
   const { data: banners, isLoading: isBannersLoading } = useQuery(bannerQuery);
-  const { data: categories, isLoading: isCategoriesLoading } = useQuery({
-    ...categoriesQuery(),
-  });
+  const { data: catalogData, isLoading: isCatalogLoading } =
+    useQuery(catalogQuery);
+
   const showModal = useShowModal();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -52,15 +52,15 @@ const MenuLayout = () => {
       <Page>
         <Container>
           <StyledContainer>
-            {isCategoriesLoading ? (
+            {isCatalogLoading ? (
               <>
                 <Sidebar loading />
                 <MobSidebar loading />
               </>
             ) : (
               <>
-                <Sidebar categories={categories.data} />
-                <MobSidebar categories={categories.data} />
+                <Sidebar categories={catalogData.categories} />
+                <MobSidebar categories={catalogData.categories} />
               </>
             )}
             <div style={{ flexGrow: 1 }}>
