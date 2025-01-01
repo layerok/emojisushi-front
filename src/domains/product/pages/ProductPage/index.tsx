@@ -1,7 +1,6 @@
 import { ProductsGrid } from "~components";
 import { useQuery } from "@tanstack/react-query";
 import { cartQuery } from "~domains/cart/cart.query";
-import { wishlistsQuery } from "~domains/wishlist/wishlist.query";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
 import { ROUTES } from "~routes";
 import {
@@ -10,7 +9,7 @@ import {
 } from "react-router-typesafe-routes/dom";
 import { useShowBinotel } from "~hooks/use-binotel";
 import { catalogQuery } from "~domains/catalog/catalog.query";
-import { processCatalog } from "~domains/catalog/catalog.utils";
+import { getGridItems } from "~domains/catalog/catalog.utils";
 
 export const ProductPage = () => {
   const { categorySlug } = useTypedParams(ROUTES.CATEGORY.SHOW);
@@ -19,30 +18,29 @@ export const ProductPage = () => {
   const [{ q: query, sort }] = useTypedSearchParams(ROUTES.CATEGORY.SHOW);
 
   const { data: cart, isLoading: isCartLoading } = useQuery(cartQuery);
+
   const { data: catalogData, isLoading: isCatalogLoading } =
     useQuery(catalogQuery);
 
-  const { data: wishlists, isLoading: isWishlistLoading } =
-    useQuery(wishlistsQuery);
-
-  const items = processCatalog({
-    sort,
-    query,
-    categories: catalogData?.categories ?? [],
-    products: catalogData?.products ?? [],
-    categorySlug,
-  });
+  const items = !isCatalogLoading
+    ? getGridItems({
+        data: catalogData,
+        sort,
+        query,
+        category: categorySlug,
+      })
+    : [];
 
   const selectedCategory = (catalogData?.categories || []).find((category) => {
     return category.slug === categorySlug;
   });
 
-  return isWishlistLoading || isCartLoading || isCatalogLoading ? (
+  return isCartLoading || isCatalogLoading ? (
     <ProductsGrid loading />
   ) : (
     <div style={{ flexGrow: 1 }}>
       <ProductsGrid
-        wishlists={wishlists}
+        wishlists={catalogData.wishlists}
         cart={cart}
         title={selectedCategory?.name}
         loading={false}

@@ -1,7 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { wishlistsQuery } from "~domains/wishlist/wishlist.query";
 import { EmojisushiAgent } from "~lib/emojisushi-js-sdk";
-import { addProductToWishlistUpdater } from "~common/queryDataUpdaters";
+import { catalogQuery } from "~domains/catalog/catalog.query";
+
+import { arrImmutableDeleteAt } from "~utils/arr.utils";
+import { IGetCatalogRes } from "@layerok/emojisushi-js-sdk";
 
 export const useAddToWishlist = () => {
   const queryClient = useQueryClient();
@@ -19,14 +21,66 @@ export const useAddToWishlist = () => {
       });
     },
     onMutate: ({ product_id, quantity }) => {
-      queryClient.cancelQueries(wishlistsQuery);
       queryClient.setQueryData(
-        wishlistsQuery.queryKey,
+        catalogQuery.queryKey,
         addProductToWishlistUpdater({ product_id, quantity })
       );
     },
     onError: () => {
-      queryClient.fetchQuery(wishlistsQuery.queryKey);
+      queryClient.fetchQuery(catalogQuery.queryKey);
     },
   });
 };
+
+function addProductToWishlistUpdater({
+  product_id,
+  quantity,
+}: {
+  product_id: number;
+  quantity: number;
+}) {
+  return function (oldCatalog: IGetCatalogRes) {
+    const firstWishlist = oldCatalog.wishlists[0] || {
+      items: [],
+      id: 0,
+    };
+    const wishlistItem = firstWishlist.items.find(
+      (item) => item.product_id === product_id
+    );
+    if (wishlistItem) {
+      const index = firstWishlist.items.indexOf(wishlistItem);
+      const items = arrImmutableDeleteAt(firstWishlist.items, index);
+      return {
+        ...oldCatalog,
+        wishlists: [
+          {
+            ...firstWishlist,
+            items,
+          },
+          ...oldCatalog.wishlists.slice(1),
+        ],
+      };
+    } else {
+      const firstWishlist = oldCatalog.wishlists[0] || {
+        items: [],
+        id: 0,
+      };
+      const item = {
+        product_id: product_id,
+        quantity: quantity,
+        wishlists_id: firstWishlist.id,
+      };
+
+      return {
+        ...oldCatalog,
+        wishlists: [
+          {
+            ...firstWishlist,
+            items: [...firstWishlist.items, item],
+          },
+          ...oldCatalog.wishlists.slice(1),
+        ],
+      };
+    }
+  };
+}

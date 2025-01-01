@@ -1,7 +1,6 @@
 import {
   ICartProduct,
   IGetCartRes,
-  IGetWishlistRes,
   IProduct,
   IVariant,
 } from "@layerok/emojisushi-js-sdk";
@@ -9,53 +8,6 @@ import { arrImmutableDeleteAt, arrImmutableReplaceAt } from "~utils/arr.utils";
 import { recalculateCartTotals } from "~utils/cart.utils";
 import { formatUAHPrice } from "~utils/price.utils";
 import { getNewProductPrice } from "~domains/product/product.utils";
-
-export function addProductToWishlistUpdater({
-  product_id,
-  quantity,
-}: {
-  product_id: number;
-  quantity: number;
-}) {
-  return function (oldWishlists: IGetWishlistRes) {
-    const firstWishlist = oldWishlists[0] || {
-      items: [],
-      id: 0,
-    };
-    const wishlistItem = firstWishlist.items.find(
-      (item) => item.product_id === product_id
-    );
-    if (wishlistItem) {
-      const index = firstWishlist.items.indexOf(wishlistItem);
-      const items = arrImmutableDeleteAt(firstWishlist.items, index);
-      return [
-        {
-          ...firstWishlist,
-          items,
-        },
-        ...oldWishlists.slice(1),
-      ];
-    } else {
-      const firstWishlist = oldWishlists[0] || {
-        items: [],
-        id: 0,
-      };
-      const item = {
-        product_id: product_id,
-        quantity: quantity,
-        wishlists_id: firstWishlist.id,
-      };
-
-      return [
-        {
-          ...firstWishlist,
-          items: [...firstWishlist.items, item],
-        },
-        ...oldWishlists.slice(1),
-      ];
-    }
-  };
-}
 
 export function removeCartProductUpdater(id: number) {
   return (old: IGetCartRes) => {

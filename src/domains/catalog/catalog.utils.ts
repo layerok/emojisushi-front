@@ -1,28 +1,27 @@
-import { ICategory, IProduct, IWishlist } from "@layerok/emojisushi-js-sdk";
+import { IGetCatalogRes, IProduct } from "@layerok/emojisushi-js-sdk";
 import { fuzzySearch as fuzzySearchBase } from "~utils/fuzzySearch";
 import { PRODUCT_SORTERS } from "~domains/product/product.constants";
 import { isProductInWishlists } from "~domains/product/product.utils";
 
-export const processCatalog = ({
-  products,
-  categories,
-  categorySlug,
+export const getGridItems = ({
+  data,
+  category: categorySlug,
   query,
   sort,
-  wishlists,
 }: {
-  categorySlug?: string;
+  category?: string;
   query: string;
   sort: string;
-  products: IProduct[];
-  categories: ICategory[];
-  wishlists?: IWishlist[];
+  data: IGetCatalogRes;
 }) => {
+  // todo: do not hardcode
+  const isWishlistCategory = categorySlug === "wishlist";
+
   const belongsToCategory = (product: IProduct) => {
-    if (!categorySlug) {
+    if (isWishlistCategory) {
       return true;
     }
-    const categoryExists = categories.find(
+    const categoryExists = data.categories.find(
       (category) => category.slug === categorySlug
     );
     if (!categoryExists) {
@@ -35,18 +34,18 @@ export const processCatalog = ({
   };
 
   const filterProductsFromHiddenCategories = (product: IProduct) => {
-    if (!categorySlug) {
+    if (isWishlistCategory) {
       return true;
     }
     return product.categories.some((category) => {
-      const categoryExists = categories.find(
+      const categoryExists = data.categories.find(
         (categoryInner) => categoryInner.slug === category.slug
       );
       return categoryExists;
     });
   };
 
-  const rawItems = (products || []).filter(
+  const rawItems = (data.products || []).filter(
     query ? filterProductsFromHiddenCategories : belongsToCategory
   );
 
@@ -61,11 +60,14 @@ export const processCatalog = ({
 
   const sortedProducts = sorter ? searchedItems.sort(sorter) : searchedItems;
 
-  const items = wishlists?.length
-    ? sortedProducts.filter((product) =>
-        isProductInWishlists(product, wishlists)
-      )
-    : sortedProducts;
+  if (isWishlistCategory) {
+    if (!data.wishlists?.length) {
+      return [];
+    }
+    return sortedProducts.filter((product) =>
+      isProductInWishlists(product, data.wishlists)
+    );
+  }
 
-  return items;
+  return sortedProducts;
 };
