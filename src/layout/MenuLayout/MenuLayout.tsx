@@ -3,7 +3,6 @@ import { Banner } from "~domains/product/pages/ProductPage/Banner";
 import { Page } from "~components/Page";
 import { Outlet, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { bannerQuery } from "~domains/banner/banner.query";
 import styled from "styled-components";
 import { media } from "~common/custom-media";
 import { PRODUCT_ID_SEARCH_QUERY_PARAM } from "~domains/product/products.query";
@@ -12,42 +11,48 @@ import { ModalIDEnum } from "~common/modal.constants";
 import { catalogQuery } from "~domains/catalog/catalog.query";
 
 const MenuLayout = () => {
-  const { data: banners, isLoading: isBannersLoading } = useQuery(bannerQuery);
-  const { data: catalogData, isLoading: isCatalogLoading } =
-    useQuery(catalogQuery);
+  const { data: catalog, isLoading: isCatalogLoading } = useQuery(catalogQuery);
 
   const showModal = useShowModal();
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const renderBanners = () => {
+    if (!catalog?.banners?.length && !isCatalogLoading) {
+      return null;
+    }
+
+    return (
+      <Container>
+        <StyledBannerContainer>
+          <Banner
+            loading={isCatalogLoading}
+            items={(catalog?.banners || []).map((banner) => ({
+              id: banner.id + "",
+              desktop_image: banner.image.path,
+              mobile_image: banner.image_small.path,
+              clickable: !!banner.product?.id,
+              onClick: () => {
+                if (banner.product.id) {
+                  searchParams.set(
+                    PRODUCT_ID_SEARCH_QUERY_PARAM,
+                    banner.product.id + ""
+                  );
+                  setSearchParams(searchParams, {
+                    preventScrollReset: true,
+                  });
+                  showModal(ModalIDEnum.ProductModal);
+                }
+              },
+            }))}
+          />
+        </StyledBannerContainer>
+      </Container>
+    );
+  };
+
   return (
     <>
-      {(isBannersLoading || (banners?.data && !!banners.data.length)) && (
-        <Container>
-          <StyledBannerContainer>
-            <Banner
-              loading={isBannersLoading}
-              items={(banners?.data || []).map((banner) => ({
-                id: banner.id + "",
-                desktop_image: banner.image.path,
-                mobile_image: banner.image_small.path,
-                clickable: !!banner.product?.id,
-                onClick: () => {
-                  if (banner.product.id) {
-                    searchParams.set(
-                      PRODUCT_ID_SEARCH_QUERY_PARAM,
-                      banner.product.id + ""
-                    );
-                    setSearchParams(searchParams, {
-                      preventScrollReset: true,
-                    });
-                    showModal(ModalIDEnum.ProductModal);
-                  }
-                },
-              }))}
-            />
-          </StyledBannerContainer>
-        </Container>
-      )}
+      {renderBanners()}
 
       <Page>
         <Container>
@@ -59,8 +64,8 @@ const MenuLayout = () => {
               </>
             ) : (
               <>
-                <Sidebar categories={catalogData.categories} />
-                <MobSidebar categories={catalogData.categories} />
+                <Sidebar categories={catalog.categories} />
+                <MobSidebar categories={catalog.categories} />
               </>
             )}
             <div style={{ flexGrow: 1 }}>
