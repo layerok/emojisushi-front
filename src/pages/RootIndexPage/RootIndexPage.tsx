@@ -1,25 +1,21 @@
-import { Navigate, useLoaderData } from "react-router-dom";
+import { redirect } from "react-router-dom";
 import { ROUTES } from "~routes";
 import { queryClient } from "~lib/query-client";
 import { IGetCatalogRes } from "@layerok/emojisushi-js-sdk";
 import { catalogQuery } from "~domains/catalog/catalog.query";
 
-const RootIndexPage = () => {
-  const loaderData = useLoaderData() as Awaited<ReturnType<typeof loader>>;
-  return (
-    <Navigate
-      to={ROUTES.CATEGORY.SHOW.buildPath({
-        categorySlug: loaderData.categories[0].slug,
-      })}
-    />
-  );
+export const Component = () => {
+  return null;
 };
 
-export const Component = RootIndexPage;
-
 export const loader = async () => {
-  return (
+  const data =
     queryClient.getQueryData<IGetCatalogRes>(catalogQuery.queryKey) ??
-    (await queryClient.fetchQuery<IGetCatalogRes>(catalogQuery))
+    (await queryClient.fetchQuery<IGetCatalogRes>(catalogQuery));
+
+  return redirect(
+    ROUTES.CATEGORY.SHOW.buildPath({
+      categorySlug: data.categories[0].slug,
+    })
   );
 };
