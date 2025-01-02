@@ -17,6 +17,8 @@ import {
   IGetCartRes,
   IGetPaymentMethodsRes,
   IGetShippingMethodsRes,
+  IPaymentMethod,
+  IShippingMethod,
   ISpot,
   IUser,
   PaymentMethodCodeEnum,
@@ -43,8 +45,8 @@ type TCheckoutFormProps = {
   loading?: boolean | undefined;
   user?: IUser | undefined;
   cart?: IGetCartRes | undefined;
-  shippingMethods?: IGetShippingMethodsRes | undefined;
-  paymentMethods?: IGetPaymentMethodsRes | undefined;
+  shippingMethods?: IShippingMethod[] | undefined;
+  paymentMethods?: IPaymentMethod[] | undefined;
   spots?: ISpot[];
   city?: ICity;
 };
@@ -128,8 +130,8 @@ type FormValues = {
 export const CheckoutForm = observer(
   ({
     cart,
-    shippingMethods: shippingMethodsRes,
-    paymentMethods: paymentMethodsRes,
+    shippingMethods,
+    paymentMethods,
     user,
     city,
     spots: spotsRes,
@@ -292,10 +294,10 @@ export const CheckoutForm = observer(
         ? spot_id
         : getDistrictDefaultSpot(district).id;
 
-      const paymentMethod = paymentMethodsRes.data.find(
+      const paymentMethod = paymentMethods.find(
         (method) => method.code === payment_method_code
       );
-      const shippingMethod = shippingMethodsRes.data.find(
+      const shippingMethod = shippingMethods.find(
         (method) => method.code === shipping_method_code
       );
 
@@ -399,13 +401,13 @@ export const CheckoutForm = observer(
       formik.setFieldValue(name, value);
     };
 
-    const shippingMethods = (shippingMethodsRes?.data || []).map((item) => ({
+    const shippingMethodOptions = (shippingMethods || []).map((item) => ({
       value: item.code,
       // todo: don't use dynamic translation keys
       label: t("shippingMethods." + item.code, item.name),
     }));
 
-    const paymentMethods = (paymentMethodsRes?.data || []).map((item) => ({
+    const paymentMethodOptions = (paymentMethods || []).map((item) => ({
       value: item.code,
       // todo: refactor dynamic translations
       label: t("paymentMethods." + item.code, item.name),
@@ -483,7 +485,7 @@ export const CheckoutForm = observer(
           <SegmentedControl
             showSkeleton={loading}
             name={FormNames.ShippingMethodCode}
-            items={shippingMethods}
+            items={shippingMethodOptions}
             value={formik.values.shipping_method_code}
             onChange={handleShippingMethodChange}
             ref={setFieldRef("shipping_method_code")}
@@ -671,7 +673,7 @@ export const CheckoutForm = observer(
             <SegmentedControl
               showSkeleton={loading}
               name={FormNames.PaymentMethodCode}
-              items={paymentMethods}
+              items={paymentMethodOptions}
               onChange={handleChange}
               value={formik.values.payment_method_code}
               ref={setFieldRef("payment_method_code")}

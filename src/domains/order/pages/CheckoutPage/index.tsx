@@ -5,20 +5,17 @@ import { useNavigate } from "react-router-dom";
 
 import { Container, Heading } from "~components";
 import { cartQuery } from "~domains/cart/cart.query";
-import { paymentQuery } from "~domains/payment/payment.query";
-import { shippingQuery } from "~domains/shipping/shipping.query";
 import { ROUTES } from "~routes";
 import { Page } from "~components/Page";
 import { useUser } from "~hooks/use-auth";
 import { DefaultErrorBoundary } from "~components/DefaultErrorBoundary";
-
-import { spotsQuery } from "~domains/spot/queries/spots.query";
 import { CheckoutForm } from "src/domains/order/pages/CheckoutPage/components/CheckoutForm";
 import { CheckoutCart } from "src/domains/order/pages/CheckoutPage/components/CheckoutCart";
 import { useCurrentCitySlug } from "~domains/city/hooks/useCurrentCitySlug";
 import { citiesQuery } from "~domains/city/cities.query";
 import * as S from "./styled";
 import { useShowBinotel } from "~hooks/use-binotel";
+import { checkoutFormQuery } from "~domains/order/order.query";
 
 const CheckoutPage = () => {
   const { t } = useTranslation();
@@ -36,14 +33,8 @@ const CheckoutPage = () => {
     },
   });
 
-  const { data: spots, isLoading: isSpotsLoading } = useQuery({
-    ...spotsQuery(),
-  });
-
-  const { data: shippingMethods, isLoading: isShippingMethodsLoading } =
-    useQuery(shippingQuery);
-  const { data: paymentMethods, isLoading: isPaymentMethodsLoading } =
-    useQuery(paymentQuery);
+  const { data: checkoutForm, isLoading: isCheckoutFormLoading } =
+    useQuery(checkoutFormQuery);
 
   const citySlug = useCurrentCitySlug();
   const { data: cities, isLoading: isCitiesLoading } = useQuery(citiesQuery);
@@ -60,9 +51,7 @@ const CheckoutPage = () => {
       isCitiesLoading ||
       isCartLoading ||
       isUserLoading ||
-      isShippingMethodsLoading ||
-      isSpotsLoading ||
-      isPaymentMethodsLoading;
+      isCheckoutFormLoading;
 
     if (loading) {
       return <CheckoutForm loading />;
@@ -74,10 +63,10 @@ const CheckoutPage = () => {
         key={user ? "one" : "second"}
         cart={cart}
         city={city}
-        shippingMethods={shippingMethods}
-        paymentMethods={paymentMethods}
+        shippingMethods={checkoutForm.shipping_methods}
+        paymentMethods={checkoutForm.payment_methods}
         user={user}
-        spots={spots}
+        spots={checkoutForm.spots}
       />
     );
   };

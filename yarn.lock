@@ -2376,10 +2376,10 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@layerok/emojisushi-js-sdk@1.0.15":
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/@layerok/emojisushi-js-sdk/-/emojisushi-js-sdk-1.0.15.tgz#c31cf0a33f8f2e13adbd86ae405fdec526f55dc9"
-  integrity sha512-i9ZoqYaKDCLqlDcD7Dn+TRuf/fXSTOgxFUOQ88QsxWaJM/bOfYAo1zwxbW+tdGhLTH60h7vSKs/6qF1yPHXSBQ==
+"@layerok/emojisushi-js-sdk@1.0.16":
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/@layerok/emojisushi-js-sdk/-/emojisushi-js-sdk-1.0.16.tgz#e4103a706cd6bee43e5ca8ad9fe3813ed599754c"
+  integrity sha512-83uC9LPuOpSP45NgxRmUUCr/0YYQVSJhZn+kz1Iwqe8LIElnxG7bmwsrEyy/I5BhqrRbB8PswY39gR8KVydewA==
   dependencies:
     axios "*"
 
