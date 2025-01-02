@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { useState } from "react";
+import { FormEventHandler, useState } from "react";
 import { Modal, Input, ModalContent, ModalCloseButton } from "~components";
 import { useTranslation } from "react-i18next";
 import axios, { AxiosError } from "axios";
@@ -32,6 +32,37 @@ export const ResetPasswordModal = NiceModal.create(
     });
     const [isSent, setIsSent] = useState(false);
 
+    const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.currentTarget);
+      const email = formData.get("email") + "";
+
+      resetPassword(email, {
+        onSuccess: () => {
+          setIsSent(true);
+        },
+        onError: (e) => {
+          if (!axios.isAxiosError(e)) {
+            return;
+          }
+          const error = e as AxiosError<{
+            message: string;
+            errors?: Record<string, string[]>;
+          }>;
+
+          const errors = error.response?.data?.errors;
+          const message = error.response?.data?.message;
+          if (message) {
+            setErrors({
+              email: [message],
+            });
+          } else if (errors) {
+            setErrors(errors);
+          }
+        },
+      });
+    };
+
     return (
       <Modal
         overlayStyles={{
@@ -49,38 +80,7 @@ export const ResetPasswordModal = NiceModal.create(
         <ModalContent>
           <ModalCloseButton />
           <S.Wrapper>
-            <S.Form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                const email = formData.get("email") + "";
-
-                resetPassword(email, {
-                  onSuccess: () => {
-                    setIsSent(true);
-                  },
-                  onError: (e) => {
-                    if (!axios.isAxiosError(e)) {
-                      return;
-                    }
-                    const error = e as AxiosError<{
-                      message: string;
-                      errors?: Record<string, string[]>;
-                    }>;
-
-                    const errors = error.response?.data?.errors;
-                    const message = error.response?.data?.message;
-                    if (message) {
-                      setErrors({
-                        email: [message],
-                      });
-                    } else if (errors) {
-                      setErrors(errors);
-                    }
-                  },
-                });
-              }}
-            >
+            <S.Form onSubmit={handleSubmit}>
               <S.Title>{t("authModal.forgetPassword.title")}</S.Title>
               <Input
                 label={t("common.email")}

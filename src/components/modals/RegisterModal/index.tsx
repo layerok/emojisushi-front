@@ -1,5 +1,5 @@
 import * as S from "./styled";
-import { useState } from "react";
+import { FormEventHandler, useState } from "react";
 import {
   PasswordInput,
   Checkbox,
@@ -13,9 +13,8 @@ import { Button } from "~common/ui-components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useRegister } from "~hooks/use-auth";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { cartQuery } from "~domains/cart/cart.query";
-import { wishlistsQuery } from "~domains/wishlist/wishlist.query";
 import NiceModal from "@ebay/nice-modal-react";
 import { ROUTES } from "~routes";
 import { useModal } from "~modal";
@@ -23,6 +22,7 @@ import { ModalIDEnum } from "~common/modal.constants";
 import { TextButton } from "~common/ui-components/TextButton";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTheme } from "styled-components";
+import { catalogQuery } from "~domains/catalog/catalog.query";
 
 export const RegisterModal = NiceModal.create(
   ({ redirect_to }: { redirect_to?: string }) => {
@@ -41,7 +41,7 @@ export const RegisterModal = NiceModal.create(
       agree?: string[];
     }>({});
 
-    const handleSubmit = (e) => {
+    const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
       e.preventDefault();
       const formData = new FormData(e.currentTarget);
       const email = formData.get("email") + "";
@@ -64,14 +64,27 @@ export const RegisterModal = NiceModal.create(
         },
         {
           onSuccess: () => {
-            queryClient.invalidateQueries(wishlistsQuery.queryKey);
+            queryClient.invalidateQueries(catalogQuery.queryKey);
             queryClient.invalidateQueries(cartQuery.queryKey);
             navigate(ROUTES.ACCOUNT.PROFILE.path);
             closeModal();
           },
-          onError: (error) => {
-            if (error instanceof AxiosError) {
-              setErrors(error.response.data.errors);
+          onError: (err) => {
+            if (!axios.isAxiosError(err)) {
+              return;
+            }
+            const error = err as AxiosError<{
+              message: string;
+              errors?: Record<string, string[]>;
+            }>;
+            const errors = error.response?.data?.errors;
+            const message = error.response?.data?.message;
+            if (errors) {
+              setErrors(errors);
+            } else if (message) {
+              setErrors({
+                email: [error.response.data.message],
+              });
             }
           },
         }

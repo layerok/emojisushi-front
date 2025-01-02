@@ -4,11 +4,11 @@ import { useTranslation } from "react-i18next";
 import { Outlet, useMatches, useNavigate } from "react-router-dom";
 import { AuthLoader, useLogout } from "~hooks/use-auth";
 import { cartQuery } from "~domains/cart/cart.query";
-import { wishlistsQuery } from "~domains/wishlist/wishlist.query";
 import { ROUTES } from "~routes";
 import { Page } from "~components/Page";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "~common/ui-components/Button/Button";
+import { catalogQuery } from "~domains/catalog/catalog.query";
 
 const CabinetLayout = () => {
   const { t } = useTranslation();
@@ -20,7 +20,7 @@ const CabinetLayout = () => {
 
   const logoutUser = () => {
     logout.mutate({});
-    queryClient.removeQueries(wishlistsQuery.queryKey);
+    queryClient.removeQueries(catalogQuery.queryKey);
     queryClient.removeQueries(cartQuery.queryKey);
     navigate(ROUTES.CATEGORY.path);
   };
